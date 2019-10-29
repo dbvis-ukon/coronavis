@@ -1,0 +1,19 @@
+version: '3'
+services:
+
+  # set up GIS database
+  gis-database:
+    ports:
+      - 15432:5432
+    build:
+      context: ./Database
+      dockerfile: Dockerfile
+
+  # set up pgAdmin4
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@gis.com
+      - PGADMIN_DEFAULT_PASSWORD=gis_pass
+    ports:
+      - 8080:80
