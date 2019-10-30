@@ -35,10 +35,9 @@ Of course you may also use your favorite IDE/GUI tool to do this.
 
 > If you run into merge conflicts make sure you resolve them!
 
-## Testing
+## Running
 
-To see if your application is running correctly, a pipeline is run each time you push this project to your repository. 
-This will try to run all of the individual components to detect syntax errors, incorrect paths, etc.
+Please follow the setup instructions in the Tutorial 1 Slide. Afterwards the GIS tutorial project can be run using the command `docker-compose up`!
 
 # Questions?
 Please send us an e-mail: 
