@@ -17,3 +17,13 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=gis_pass
     ports:
       - 8080:80
+
+  # gis backend
+  gis-backend:
+    ports:
+      - 5000:5000
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./Backend/:/var/opt/gis/
