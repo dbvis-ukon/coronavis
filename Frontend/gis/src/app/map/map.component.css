@@ -1,0 +1,12 @@
+#main {
+  width: 100%;
+  height: 100%;
+}
+
+.map-tooltip {
+  background: white;
+  width: 350px;
+  height: 150px;
+  position: absolute;
+  z-index: 999;
+}

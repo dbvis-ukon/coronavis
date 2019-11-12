@@ -1,7 +1,5 @@
 version: '3'
 services:
-
-  # set up GIS database
   gis-database:
     ports:
       - 15432:5432
@@ -9,7 +7,6 @@ services:
       context: ./Database
       dockerfile: Dockerfile
 
-  # set up pgAdmin4
   pgadmin:
     image: dpage/pgadmin4
     environment:
@@ -18,7 +15,6 @@ services:
     ports:
       - 8080:80
 
-  # gis backend
   gis-backend:
     ports:
       - 5000:5000
@@ -27,3 +23,12 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./Backend/:/var/opt/gis/
+
+  gis-frontend:
+    ports:
+      - 4200:4200
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./Frontend/:/var/opt/gis/
