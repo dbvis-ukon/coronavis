@@ -31,4 +31,4 @@ services:
       context: ./Frontend
       dockerfile: Dockerfile
     volumes:
-      - ./Frontend/:/var/opt/gis/
+      - ./Frontend/gis:/var/opt/gis/
