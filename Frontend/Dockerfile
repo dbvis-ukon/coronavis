@@ -15,4 +15,4 @@ WORKDIR ${APP_DIR}
 RUN npm install
 
 # Start development server
-CMD npm run ng serve -- --host=0.0.0.0 --poll=2000
+CMD sh -c "npm install && npm run start:docker"
