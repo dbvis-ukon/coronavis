@@ -6,14 +6,19 @@ services:
     build:
       context: ./Database
       dockerfile: Dockerfile
+    volumes:
+      - gis-db:/var/lib/postgresql
+      - ./Database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=user@gis.com
+      - PGADMIN_DEFAULT_EMAIL=gis_user
       - PGADMIN_DEFAULT_PASSWORD=gis_pass
     ports:
       - 8080:80
+    volumes: 
+      - ./Database/servers.json:/pgadmin4/servers.json
 
   gis-backend:
     ports:
@@ -33,3 +38,7 @@ services:
     volumes:
       - ./Frontend/gis:/var/opt/gis/
     command: sh -c "npm install && npm run start:docker"
+
+volumes: 
+  gis-db:
+    driver: local

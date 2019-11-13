@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "GIS DB Server",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "gis_user",
+            "Host": "gis-database",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres"
+        }
+    }
+}
