@@ -1,1 +1,2 @@
 /Database/docker-entrypoint-initdb.d/.entry_point.lock
+*.idea/
