@@ -33,22 +33,6 @@ export class DataService {
   }
 
   /**
-   * Retrieves the Landkreise from the given api endpoint.
-   */
-  getBardichte(): Observable<FeatureCollection> {
-    const url = `${environment.apiUrl}api/data/bardichte`;
-    return this.http.post<FeatureCollection>(url, null, httpOptions);
-  }
-
-  /**
-   * Retrieves the Landkreise from the given api endpoint.
-   */
-  getAverageBardichte(): Observable<FeatureCollection> {
-    const url = `${environment.apiUrl}api/data/averagebardichte`;
-    return this.http.post<FeatureCollection>(url, null, httpOptions);
-  }
-
-  /**
    * Retrieves the data and constructs a FeatureCollection object from the received data
    */
   private getFeatureCollection(url): Observable<FeatureCollection> {
