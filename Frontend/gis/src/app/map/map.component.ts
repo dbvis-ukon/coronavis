@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation, IterableDiffers, DoCheck, IterableChangeRecord } from '@angular/core';
 
 import * as L from 'leaflet';
-import { Overlay } from '../types/map.types';
+import { Overlay } from './overlays/overlay';
 
 @Component({
   selector: 'app-map',
