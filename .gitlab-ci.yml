@@ -1,0 +1,59 @@
+stages:
+  - build:frontend
+  - build:docker
+  - deploy
+
+build-frontend:
+  stage: build:frontend
+  image: node:alpine
+  script:
+    - cd Frontend/gis
+    - npm ci
+    - npm run-script build
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - ./Frontend/gis/dist
+  tags:
+    - docker
+
+dockerize-frontend:
+  stage: build:docker
+  image: docker:latest
+  variables:
+    IMG: $CI_REGISTRY_IMAGE/frontend:latest
+  services:
+    - docker:dind
+  dependencies:
+    - build-frontend
+  script:
+    - echo "$CI_PASSWORD" | docker login -u "$CI_USERNAME" --password-stdin
+    - cd ./Frontend
+    - docker build -t "$IMG" .
+    - docker push "$IMG"
+  tags:
+    - docker-build
+
+dockerize-backend:
+  stage: build:docker
+  image: docker:latest
+  variables:
+    IMG: $CI_REGISTRY_IMAGE/backend:latest
+  services:
+    - docker:dind
+  dependencies: []
+  script:
+    - echo "$CI_PASSWORD" | docker login -u "$CI_USERNAME" --password-stdin
+    - cd ./Backend
+    - docker build -t "$IMG" .
+    - docker push "$IMG"
+  tags:
+    - docker-build
+
+deploy:
+  stage: deploy
+  image: alpine
+  script:
+    - echo "tbd"
+  tags:
+    - docker
