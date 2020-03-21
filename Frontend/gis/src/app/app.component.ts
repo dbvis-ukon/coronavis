@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './services/data.service';
 import { FeatureCollection } from 'geojson';
-import { Overlay, LandkreisLayer, BardichteLayer, AverageBardichteLayer,  } from './types/map.types';
+import { Overlay } from './map/overlays/overlay';
+import { LandkreisLayer } from './map/overlays/landkreis';
+import { BardichteLayer } from './map/overlays/bardichte';
+import { AverageBardichteLayer } from './map/overlays/avgbardichte';
 
 
 
