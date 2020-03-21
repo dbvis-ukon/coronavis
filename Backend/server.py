@@ -24,6 +24,12 @@ app = Flask(__name__)
 # extend flask with CORS, will be necessary next week
 CORS(app)
 
+@app.route('/health')
+def healthcheck():
+    # FIXME: the database connection should be checked here!
+    return "ok", 200
+
+
 # specify the endpoint and which request methods are allowed. In this case we allow GET and POST requests, 
 # all other requests are not allowed and will results in HTTP Error: 405: Method not allowed"
 @app.route('/api/data/regierungsbezirke', methods=["GET", "POST"])
