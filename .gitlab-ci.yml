@@ -52,8 +52,12 @@ dockerize-backend:
 
 deploy:
   stage: deploy
-  image: alpine
   script:
-    - echo "tbd"
+    - K8_NAMESPACE="covid-19-vis"
+    - HELM_CHART="covid-19-vis"
+    - URL="covid19vis.lingvis.io"
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --force --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8
+  dependencies: []
   tags:
-    - docker
+    - k8-admin
