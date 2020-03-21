@@ -27,7 +27,7 @@ dockerize-frontend:
   dependencies:
     - build-frontend
   script:
-    - echo "$CI_PASSWORD" | docker login -u "$CI_USERNAME" --password-stdin
+    - echo "$CI_PASSWORD" | docker login --username "$CI_USERNAME" --password-stdin
     - cd ./Frontend
     - docker build -t "$IMG" .
     - docker push "$IMG"
@@ -43,7 +43,7 @@ dockerize-backend:
     - docker:dind
   dependencies: []
   script:
-    - echo "$CI_PASSWORD" | docker login -u "$CI_USERNAME" --password-stdin
+    - echo "$CI_PASSWORD" | docker login --username "$CI_USERNAME" --password-stdin
     - cd ./Backend
     - docker build -t "$IMG" .
     - docker push "$IMG"
