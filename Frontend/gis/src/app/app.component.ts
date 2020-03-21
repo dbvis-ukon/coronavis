@@ -23,8 +23,8 @@ export class AppComponent implements OnInit {
    * Retrieve data from server and add it to the overlays arrays
    */
   ngOnInit(): void {
-    this.dataService.getRegierungsBezirke().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new Overlay('Regierunsbezirke', val));
+    this.dataService.getHospitals().toPromise().then((val: FeatureCollection) => {
+      this.overlays.push(new Hospitals('Hospitals', val));
     });
 
     this.dataService.getLandkreise().toPromise().then((val: FeatureCollection) => {
