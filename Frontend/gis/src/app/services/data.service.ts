@@ -28,22 +28,14 @@ export class DataService {
    */
   getLandkreise(): Observable<FeatureCollection> {
     const url = 'http://localhost:5000/api/data/landkreise';
-    return this.getFeatureCollection(url);
-  }
-
-  /**
-   * Retrieves the Landkreise from the given api endpoint.
-   */
-  getBardichte(): Observable<FeatureCollection> {
-    const url = 'http://localhost:5000/api/data/bardichte';
     return this.http.post<FeatureCollection>(url, null, httpOptions);
   }
 
   /**
    * Retrieves the Landkreise from the given api endpoint.
    */
-  getAverageBardichte(): Observable<FeatureCollection> {
-    const url = 'http://localhost:5000/api/data/averagebardichte';
+  getHospitals(): Observable<FeatureCollection> {
+    const url = 'http://localhost:5000/hospitals';
     return this.http.post<FeatureCollection>(url, null, httpOptions);
   }
 
