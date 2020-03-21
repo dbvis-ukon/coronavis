@@ -9,6 +9,7 @@ services:
     volumes:
       - gis-db:/var/lib/postgresql
       - ./Database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./Database/data:/data
 
   pgadmin:
     image: dpage/pgadmin4

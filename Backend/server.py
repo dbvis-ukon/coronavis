@@ -114,3 +114,54 @@ def bardichte():
                     status=200,
                     mimetype="application/json")
     return(resp)
+
+@app.route('/api/data/averagebardichte', methods=["POST"])
+def averagebardichte():
+    query = """
+        WITH bars as (
+                select polygons.osm_id, polygons.name as name, ST_AsGeoJSON(polygons.way) as geojson, 
+                    st_area(polygons.way::geography) / (1000 * 1000) as area, COUNT(points.*) as num_bars
+                from planet_osm_polygon polygons JOIN planet_osm_point points ON ST_Contains(polygons.way, points.way)
+                where polygons.admin_level = '6' and polygons.boundary = 'administrative' AND (points.amenity='bar' OR points.amenity='pub')
+                group by polygons.osm_id, polygons.name, polygons.way
+        )
+        SELECT b.*, l.population
+        from bars b JOIN landkreise l ON b.name LIKE '%'||l.name||'%'
+    """
+
+    with psycopg2.connect(host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASS, dbname=DB_NAME) as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
+            cur.execute(query)
+            records = cur.fetchall()
+
+
+    features = []
+    for r in records:
+        feature = {
+            "type": 'Feature',
+            # careful! r.geojson is of type str, we must convert it to a dictionary
+            "geometry": json.loads(r.geojson),
+            "properties": {
+                "osm_id": r.osm_id,
+                "name": r.name,
+                "area": r.area,
+                "num_bars": r.num_bars,
+                # cast Decimal to float
+                "population": float(r.population)
+            }
+        }
+
+        #print(feature)
+
+        features.append(feature)
+
+    featurecollection = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+    resp = Response(response=json.dumps(featurecollection),
+                    status=200,
+                    mimetype="application/json")
+    return(resp)
+

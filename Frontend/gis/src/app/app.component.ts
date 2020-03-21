@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './services/data.service';
 import { FeatureCollection } from 'geojson';
-import { Overlay, LandkreisLayer, BardichteLayer } from './types/map.types';
+import { Overlay, LandkreisLayer, BardichteLayer, AverageBardichteLayer,  } from './types/map.types';
 
 
 
@@ -30,7 +30,11 @@ export class AppComponent implements OnInit {
     });
 
     this.dataService.getBardichte().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new BardichteLayer('Bardichte', val));
+      this.overlays.push(new BardichteLayer('Bar Density', val));
+    });
+
+    this.dataService.getAverageBardichte().toPromise().then((val: FeatureCollection) => {
+      this.overlays.push(new AverageBardichteLayer('Average Bar Density', val));
     });
   }
 }
