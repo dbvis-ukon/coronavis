@@ -31,6 +31,8 @@ dockerize-frontend:
     - cd ./Frontend
     - docker build -t "$IMG" .
     - docker push "$IMG"
+  only:
+    - master
   tags:
     - docker-build
 
@@ -47,6 +49,8 @@ dockerize-backend:
     - cd ./Backend
     - docker build -t "$IMG" .
     - docker push "$IMG"
+  only:
+    - master
   tags:
     - docker-build
 
@@ -59,5 +63,7 @@ deploy:
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8
     - helm upgrade --namespace=${K8_NAMESPACE} --install --force --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8
   dependencies: []
+  only:
+    - master
   tags:
     - k8-admin
