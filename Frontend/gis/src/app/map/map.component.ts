@@ -113,6 +113,7 @@ export class MapComponent implements OnInit, DoCheck {
     const groups = L.layerGroup();
     this.hospitallayerService.getLayers().subscribe(layers => {
       layers.forEach(layer => {
+        console.log(layer);
         this.layerControl.addOverlay(layer.createOverlay(), layer.name);
       })
     });

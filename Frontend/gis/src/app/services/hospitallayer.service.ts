@@ -11,32 +11,34 @@ import {Layer} from "leaflet";
 @Injectable({
   providedIn: "root"
 })
-export class HospitallayerService implements OnInit {
+export class HospitallayerService {
   private _layers = [];
   private layers = new BehaviorSubject<HospitalLayer[]>(this._layers);
 
   constructor(private http: HttpClient, private dataService: DataService) {
   }
 
-  ngOnInit(): void {
+  public getLayers(): BehaviorSubject<HospitalLayer[]> {
+    console.log("getting layers");
+
     const url = `${environment.apiUrl}hospitals/`;
-    const granularities = ["", "landkreise", "regierungsbezirke", "bundeslander"];
+    const granularities = ["landkreise", "regierungsbezirke", "bundeslander"];
 
     const types = ["icu_low_state", "icu_high_state", "ecmo_state"];
 
     for (let granularity of granularities) {
+      console.log("getting data for granularity", granularity);
       this.http.get<FeatureCollection>(url + granularity)
         .subscribe(data => {
+          console.log(data);
           for (let type of types) {
+            console.log("creating layers for type", type);
             const layer = new AggregationLayer(`Hospitals_${granularity}_${type}`, data, type);
             this._layers.push(layer);
             this.layers.next(this._layers);
           }
         })
     }
-  }
-
-  public getLayers(): BehaviorSubject<HospitalLayer[]> {
     return this.layers;
   }
 }

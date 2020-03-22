@@ -45,13 +45,13 @@ export class SimpleGlyphLayer extends Overlay {
       .on('mouseenter', d1 => {
         console.log('mouseenter', d1);
 
-        this.dataService.getOSHelipads()
-          .subscribe(data => {
-            const heliLayer = new HelipadLayer("heliheli", data, this.tooltipService);
-            this.overlay = heliLayer.createOverlay();
-
-            this.map.addLayer(this.overlay);
-          });
+        // this.dataService.getOSHelipads()
+        //   .subscribe(data => {
+        //     const heliLayer = new HelipadLayer("heliheli", data, this.tooltipService);
+        //     this.overlay = heliLayer.createOverlay();
+        //
+        //     this.map.addLayer(this.overlay);
+        //   });
 
         const evt: MouseEvent = d3.event;
         const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, { x: evt.clientX, y: evt.clientY }, [
@@ -93,7 +93,7 @@ export class SimpleGlyphLayer extends Overlay {
       .on('mouseout', () => {
         this.tooltipService.close();
 
-        this.map.removeLayer(this.overlay);
+        // this.map.removeLayer(this.overlay);
       });
 
 
