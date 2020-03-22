@@ -16,6 +16,11 @@
 
 ## v2
 
+* black curve: used ressources
+* gray curve: available capacities
+* display time of last update at right end of time axis
+* display DIVI self assessment on the right side as ccolored circles
+
 ![](./hospital_tooltip.md.6702.png)
 
 
