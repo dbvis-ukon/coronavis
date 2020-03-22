@@ -70,8 +70,8 @@ def get_hospitals_by_landkreise():
     """
 
     sql_stmt = '''
-select vkv.sn_l, vkv.sn_r, vkv.sn_k, JSON_AGG(hc.icu_low_state) as icu_low_state, JSON_AGG(hc.icu_high_state) as icu_high_state, JSON_AGG(hc.ecmo_state) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
-from vg250_krs_v2 vkv join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
+select vkv.sn_l, vkv.sn_r, vkv.sn_k, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+from vg250_krs vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
 group by vkv.sn_l, vkv.sn_r, vkv.sn_k
     '''
     sql_result = db.engine.execute(sql_stmt)
@@ -120,8 +120,8 @@ def get_hospitals_by_regierungsbezirke():
     """
 
     sql_stmt = '''
-select vkv.sn_l, vkv.sn_r, JSON_AGG(hc.icu_low_state) as icu_low_state, JSON_AGG(hc.icu_high_state) as icu_high_state, JSON_AGG(hc.ecmo_state) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
-from vg250_krs_v2 vkv join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
+select vkv.sn_l, vkv.sn_r, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+from vg250_krs vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
 group by vkv.sn_l, vkv.sn_r
     '''
     sql_result = db.engine.execute(sql_stmt)
@@ -167,8 +167,8 @@ def get_hospitals_by_bundeslander():
     """
 
     sql_stmt = '''
-select vkv.sn_l, JSON_AGG(hc.icu_low_state) as icu_low_state, JSON_AGG(hc.icu_high_state) as icu_high_state, JSON_AGG(hc.ecmo_state) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
-from vg250_krs_v2 vkv join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
+select vkv.sn_l, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+from vg250_krs vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
 group by vkv.sn_l
     '''
     sql_result = db.engine.execute(sql_stmt)

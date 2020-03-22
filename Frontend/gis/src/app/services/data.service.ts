@@ -48,6 +48,30 @@ export class DataService {
   }
 
   /**
+   * Retrieves the Landkreise from the given api endpoint.
+   */
+  getHospitalsLandkreise(): Observable<FeatureCollection> {
+    const url = `${environment.apiUrl}hospitals/landkreise`;
+    return this.http.post<FeatureCollection>(url, null, httpOptions);
+  }
+
+  /**
+   * Retrieves the Landkreise from the given api endpoint.
+   */
+  getHospitalsRegierungsbezirke(): Observable<FeatureCollection> {
+    const url = `${environment.apiUrl}hospitals/regierungsbezirke`;
+    return this.http.post<FeatureCollection>(url, null, httpOptions);
+  }
+
+  /**
+   * Retrieves the Landkreise from the given api endpoint.
+   */
+  getHospitalsBundeslaender(): Observable<FeatureCollection> {
+    const url = `${environment.apiUrl}hospitals/bundeslander`;
+    return this.http.post<FeatureCollection>(url, null, httpOptions);
+  }
+
+  /**
    * Retrieves the data and constructs a FeatureCollection object from the received data
    */
   private getFeatureCollection(url): Observable<FeatureCollection> {
