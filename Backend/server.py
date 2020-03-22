@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, jsonify, make_response
 from flask_compress import Compress
+from flask_cors import CORS
 
 from corona_app.api import backend_api
 from corona_app.model import *
@@ -14,7 +15,8 @@ db.init_app(app)
 # Register Blueprints
 app.register_blueprint(backend_api)
 
-comp = Compress(app)
+CORS(app)
+Compress(app)
 
 if __name__ == "__main__":
     app.run(port=8000, debug=False)
