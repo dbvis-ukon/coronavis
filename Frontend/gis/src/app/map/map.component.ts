@@ -10,6 +10,7 @@ import { SimpleGlyphLayer } from './overlays/simple-glyph.layer';
 import { DiviHospitalsService, DiviHospital } from '../services/divi-hospitals.service';
 import { TooltipService } from '../services/tooltip.service';
 import { GlyphTooltipComponent } from '../glyph-tooltip/glyph-tooltip.component';
+import {SVGOverlay} from 'leaflet';
 
 @Component({
   selector: 'app-map',
@@ -38,6 +39,9 @@ export class MapComponent implements OnInit, DoCheck {
 
   private gHostpitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
 
+  private glyphLayerOverlay: SVGOverlay;
+
+
   ngOnInit() {
     // empty tiles
     const emptyTiles = L.tileLayer('');
@@ -64,7 +68,11 @@ export class MapComponent implements OnInit, DoCheck {
     });
 
     // create map, set initial view to basemap and zoom level to center of BW
-    this.mymap = L.map('main', { layers: [emptyTiles, openstreetmap, mennaMap, juriMap] }).setView([48.6813312, 9.0088299], 9);
+    this.mymap = L.map('main', {
+      minZoom: 6,
+      maxZoom: 12,
+      layers: [emptyTiles, openstreetmap, mennaMap, juriMap]
+    }).setView([48.6813312, 9.0088299], 9);
     // this.mymap.on('viewreset', () => this.updateSvg());
     // this.mymap.on('zoom', () => this.updateSvg());
 
@@ -79,28 +87,29 @@ export class MapComponent implements OnInit, DoCheck {
       // MapTiler: gl
     };
 
+    this.mymap.on('overlayadd', event => {
+      // this.mymap.eachLayer(layer => console.log(layer));
+      if (this.glyphLayerOverlay) {
+        this.glyphLayerOverlay.bringToFront();
+      }
+    });
+
     // add a control which lets us toggle maps and overlays
     this.layerControl = L.control.layers(baseMaps);
     this.layerControl.addTo(this.mymap);
 
-
-    /* We simply pick up the SVG from the map object */
-    this.svg = d3.select(this.mymap.getPanes().overlayPane).append('svg')
-    .attr('width', '4000px')
-    .attr('height', '4000px');
-
-
+    const colorScale = d3.scaleOrdinal<string, string>().domain(['Verfügbar' , 'Begrenzt' , 'Ausgelastet' , 'Nicht verfügbar'])
+        .range(['green', 'yellow', 'red', 'black']);
 
     this.diviHospitalsService.getDiviHospitals().subscribe(data => {
       console.log(data);
-      const glyphs = new SimpleGlyphLayer('Simple Glyphs', this.mymap, data, this.tooltipService);
+      const glyphLayer = new SimpleGlyphLayer('Simple Glyphs', this.mymap, data, this.tooltipService);
+      this.glyphLayerOverlay = glyphLayer.createOverlay();
+
       // this.mymap.addLayer(glyphs.createOverlay());
-      this.layerControl.addOverlay(glyphs.createOverlay(), glyphs.name);
+      this.layerControl.addOverlay(this.glyphLayerOverlay, glyphLayer.name);
+      this.mymap.addLayer(this.glyphLayerOverlay);
     });
-
-
-
-
   }
 
   /**
@@ -116,22 +125,5 @@ export class MapComponent implements OnInit, DoCheck {
         this.layerControl.addOverlay(overlay.createOverlay(), overlay.name);
       });
     }
-  }
-
-  updateSvg() {
-    console.log('update');
-    if (!this.gHostpitals) {
-      return;
-    }
-
-    const zoom = this.mymap.getZoom();
-    console.log('zoomlevel', zoom);
-
-    this.gHostpitals
-      .attr('transform', d => {
-        const p = this.mymap.latLngToLayerPoint(d.Location);
-
-        return `translate(${p.x}, ${p.y})`;
-      });
   }
 }
