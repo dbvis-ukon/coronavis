@@ -67,8 +67,8 @@ dockerize-crawler:
     - cd ./Crawler
     - docker build -t "$IMG" .
     - docker push "$IMG"
-  # only:
-  #   - master
+  only:
+    - master
   tags:
     - docker-build
 
@@ -106,7 +106,7 @@ deploy-crawler:
     - cd k8/crawler
     - kubectl apply -n covid-19-vis -f cronjob.yaml
   dependencies: []
-  # only:
-  #   - master
+  only:
+    - master
   tags:
     - k8-admin
