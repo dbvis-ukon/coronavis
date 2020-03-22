@@ -4,17 +4,17 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
-import { TooltipDemoComponent } from './tooltip-demo/tooltip-demo.component';
+import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
   entryComponents: [
-    TooltipDemoComponent
+    GlyphTooltipComponent
   ],
   declarations: [
     AppComponent,
     MapComponent,
-    TooltipDemoComponent
+    GlyphTooltipComponent
   ],
   imports: [
     BrowserModule,

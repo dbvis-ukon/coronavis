@@ -8,12 +8,14 @@ export class Overlay {
     name: string;
     featureCollection: FeatureCollection;
 
+    enableDefault = false;
+
     constructor(name: string, featureCollection: FeatureCollection) {
         this.name = name;
         this.featureCollection = featureCollection;
     }
 
-    createOverlay(): L.GeoJSON<any> | L.SVGOverlay {
+    createOverlay(map: L.Map): L.GeoJSON<any> | L.SVGOverlay {
         return L.geoJSON(this.featureCollection);
     }
 }
