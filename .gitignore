@@ -1,3 +1,4 @@
 /Database/docker-entrypoint-initdb.d/.entry_point.lock
 
 *code-workspace
+*.idea/

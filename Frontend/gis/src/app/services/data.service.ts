@@ -3,6 +3,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FeatureCollection } from 'geojson';
+import { environment } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -19,7 +20,7 @@ export class DataService {
    * Retrieves the Regierungsbezirke from the given api endpoint.
    */
   getRegierungsBezirke(): Observable<FeatureCollection> {
-    const url = 'http://localhost:5000/api/data/regierungsbezirke';
+    const url = `${environment.apiUrl}api/data/regierungsbezirke`;
     return this.getFeatureCollection(url);
   }
 
@@ -27,24 +28,8 @@ export class DataService {
    * Retrieves the Landkreise from the given api endpoint.
    */
   getLandkreise(): Observable<FeatureCollection> {
-    const url = 'http://localhost:5000/api/data/landkreise';
+    const url = `${environment.apiUrl}api/data/landkreise`;
     return this.getFeatureCollection(url);
-  }
-
-  /**
-   * Retrieves the Landkreise from the given api endpoint.
-   */
-  getBardichte(): Observable<FeatureCollection> {
-    const url = 'http://localhost:5000/api/data/bardichte';
-    return this.http.post<FeatureCollection>(url, null, httpOptions);
-  }
-
-  /**
-   * Retrieves the Landkreise from the given api endpoint.
-   */
-  getAverageBardichte(): Observable<FeatureCollection> {
-    const url = 'http://localhost:5000/api/data/averagebardichte';
-    return this.http.post<FeatureCollection>(url, null, httpOptions);
   }
 
   /**

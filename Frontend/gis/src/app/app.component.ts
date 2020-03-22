@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './services/data.service';
 import { FeatureCollection } from 'geojson';
-import { Overlay, LandkreisLayer, BardichteLayer, AverageBardichteLayer,  } from './types/map.types';
+import { Overlay } from './map/overlays/overlay';
+import { LandkreisLayer } from './map/overlays/landkreis';
+import { TooltipService } from './services/tooltip.service';
 
 
 
@@ -15,7 +17,7 @@ export class AppComponent implements OnInit {
   overlays: Array<Overlay> = new Array<Overlay>();
 
   // constructor is here only used to inject services
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private tooltipService: TooltipService) { }
 
   /**
    * Retrieve data from server and add it to the overlays arrays
@@ -26,15 +28,7 @@ export class AppComponent implements OnInit {
     });
 
     this.dataService.getLandkreise().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new LandkreisLayer('Landkreise', val));
-    });
-
-    this.dataService.getBardichte().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new BardichteLayer('Bar Density', val));
-    });
-
-    this.dataService.getAverageBardichte().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new AverageBardichteLayer('Average Bar Density', val));
+      this.overlays.push(new LandkreisLayer('Landkreise', val, this.tooltipService));
     });
   }
 }

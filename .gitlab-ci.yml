@@ -1,0 +1,69 @@
+stages:
+  - build:frontend
+  - build:docker
+  - deploy
+
+build-frontend:
+  stage: build:frontend
+  image: node:alpine
+  script:
+    - cd Frontend/gis
+    - npm ci
+    - npm run-script build
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - ./Frontend/gis/dist
+  tags:
+    - docker
+
+dockerize-frontend:
+  stage: build:docker
+  image: docker:latest
+  variables:
+    IMG: $CI_REGISTRY_IMAGE/frontend:latest
+  services:
+    - docker:dind
+  dependencies:
+    - build-frontend
+  script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - cd ./Frontend
+    - docker build -t "$IMG" .
+    - docker push "$IMG"
+  only:
+    - master
+  tags:
+    - docker-build
+
+dockerize-backend:
+  stage: build:docker
+  image: docker:latest
+  variables:
+    IMG: $CI_REGISTRY_IMAGE/backend:latest
+  services:
+    - docker:dind
+  dependencies: []
+  script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - cd ./Backend
+    - docker build -t "$IMG" .
+    - docker push "$IMG"
+  only:
+    - master
+  tags:
+    - docker-build
+
+deploy:
+  stage: deploy
+  script:
+    - K8_NAMESPACE="covid-19-vis"
+    - HELM_CHART="covid-19-vis"
+    - URL="covid19vis.lingvis.io"
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --force --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8
+  dependencies: []
+  only:
+    - master
+  tags:
+    - k8-admin
