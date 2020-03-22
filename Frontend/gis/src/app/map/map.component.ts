@@ -37,14 +37,19 @@ export class MapComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
+    // empty tiles
+    const emptyTiles = L.tileLayer('');
+
     // use osm tiles
-    const basemap = L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
+    const openstreetmap = L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
+
+
     // create map, set initial view to basemap and zoom level to center of BW
-    this.mymap = L.map('main', { layers: [basemap] }).setView([48.6813312, 9.0088299], 9);
+    this.mymap = L.map('main', { layers: [emptyTiles, openstreetmap] }).setView([48.6813312, 9.0088299], 9);
     this.mymap.on('viewreset', () => this.updateSvg());
     this.mymap.on('zoom', () => this.updateSvg());
 
@@ -65,7 +70,9 @@ export class MapComponent implements OnInit, DoCheck {
 
     // create maps and overlay objects for leaflet control
     const baseMaps = {
-      OpenStreetMap: basemap,
+      Empty: emptyTiles,
+      OpenStreetMap: openstreetmap
+      // OpenStreetMap: basemap,
       // MapTiler: gl
     };
 
