@@ -9,6 +9,8 @@ import urllib.request
 
 from bs4 import BeautifulSoup
 
+import db
+
 def get_html_content(url, data):
     data = urllib.parse.urlencode(data)
     data = data.encode('utf-8')
@@ -49,3 +51,18 @@ if __name__ == "__main__":
     json_data = crawl_webpage(quote_page, values)
     with open('json_map_data.json', 'w') as f:
         json.dump(json_data, f)
+        
+    crawl = db.Crawl(**{
+        'url': quote_page,
+        'text': json_data,
+        'doc': json_data,
+    })
+    db.sess.add(crawl)
+    
+    vegadata = db.VegaData(**{
+        'text': json_data,
+        'doc': json_data,
+    })
+    db.sess.add(vegadata)
+    
+    db.sess.commit()

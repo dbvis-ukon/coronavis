@@ -57,6 +57,24 @@ class Crawl(Base):
 
     def __repr__(self):
         return self.text
+    
+    
+class VegaData(Base):
+    """
+    Hospital data class
+    """
+    __tablename__ = 'vegadata'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    date = Column(DateTime, default=datetime.datetime.utcnow)
+    text = Column(String)
+    doc = deferred(Column(JSONB))
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def __repr__(self):
+        return self.text
 
 
 class Hospital(Base):

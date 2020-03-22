@@ -12,9 +12,9 @@ from bs4 import BeautifulSoup
 
 from geopy.geocoders import Nominatim
 
-from sqlalchemy import Column, Integer, String, DateTime
+# from sqlalchemy import Column, Integer, String, DateTime
 
-from geoalchemy2 import Geometry
+# from geoalchemy2 import Geometry
 
 import db
 
@@ -52,7 +52,7 @@ def get_geo_location(adress):
     location = geolocator.geocode(adress)
     loc = (None, None)
     if location != None:
-        loc = (location.latitude, location.longitude)
+        loc = (location.longitude, location.latitude)
         
     return loc, location
 
@@ -159,7 +159,7 @@ if __name__ == "__main__":
     else:
         df_to_db.columns = ['name', 'address', 'contact', 'state', 'icu_low_state', 'icu_high_state', 'ecmo_state', 'last_update', 'location']
 
-    df_to_db['location'] = df_to_db['location'].map(lambda x: str(x))
+    df_to_db['location'] = df_to_db['location'].map(lambda x: str(x).replace('None', '0'))
     df_to_db['location'] = df_to_db['location'].map(lambda x: 'POINT' + x.replace(',', ''))
 
     # df_to_db.to_sql('hospitals_crawled', db.engine, if_exists='append', dtype={

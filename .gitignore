@@ -2,3 +2,5 @@
 
 *code-workspace
 *.idea/
+
+__pycache__
