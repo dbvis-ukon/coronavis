@@ -47,6 +47,11 @@ export class SimpleGlyphLayer extends Overlay {
     svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
 
     const self = this;
+    const rectSize = 10;
+
+    const padding = 2;
+    const yOffset = 10;
+
     this.gHospitals = d3.select(svgElement)
       .selectAll('g.hospital')
       .data<DiviHospital>(this.data)
@@ -56,7 +61,7 @@ export class SimpleGlyphLayer extends Overlay {
         .attr('transform', d => {
           const p = this.map.latLngToLayerPoint(d.Location);
           // console.log(p, d.Location);
-          return `translate(${p.x}, ${p.y})`;})
+          return `translate(${p.x}, ${p.y})`; })
       .on('mouseenter', function(d1: DiviHospital) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY}, [
@@ -98,11 +103,6 @@ export class SimpleGlyphLayer extends Overlay {
         d3.select(this).raise();
       })
       .on('mouseleave', () => this.tooltipService.close());
-
-    const rectSize = 10;
-
-    const padding = 2;
-    const yOffset = 10;
 
     this.gHospitals
       .append('rect')
@@ -158,7 +158,10 @@ export class SimpleGlyphLayer extends Overlay {
     const latExtent = d3.extent(this.data, i => i.Location.lat);
     const lngExtent = d3.extent(this.data, i => i.Location.lng);
 
-    return L.svgOverlay(svgElement, [[latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]], {
+    const latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
+    this.onZoomed();
+
+    return L.svgOverlay(svgElement, latLngBounds, {
       interactive: true,
       zIndex: 3
     });
@@ -172,7 +175,7 @@ export class SimpleGlyphLayer extends Overlay {
     //     return `translate(${p.x}, ${p.y})`;
     //   });
     const zoom = this.map.getZoom();
-    const scale = Math.pow(9 / (zoom), 4);
+    const scale = Math.pow(9 / (zoom), 3);
 
     console.log('zoomed', this.map.getZoom(), scale);
 
