@@ -87,9 +87,9 @@ export class MapComponent implements OnInit, DoCheck {
 
     this.diviHospitalsService.getDiviHospitals().subscribe(data => {
       console.log(data);
-      // const glyphs = new SimpleGlyphLayer('Simple Glyphs', this.mymap, d, this.tooltipService);
+      const glyphs = new SimpleGlyphLayer('Simple Glyphs', this.mymap, data, this.tooltipService);
 
-      // this.layerControl.addOverlay(glyphs.createOverlay(), glyphs.name);
+      this.layerControl.addOverlay(glyphs.createOverlay(), glyphs.name);
 
 
 

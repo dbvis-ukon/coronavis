@@ -40,15 +40,17 @@ export class SimpleGlyphLayer extends Overlay {
                 const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, {x: evt.clientX, y: evt.clientY}, []);
                 t.text = d.Name;
             })
-            .on('mouseout', () => this.tooltipService.close());
+            .on('mouseout', () => this.tooltipService.close())
+            .attr('transform', d => {
+                const p = this.map.latLngToLayerPoint(d.Location);
+                return `translate(${p.x}, ${p.y})`;
+            });
 
         gHos
             .append('rect')
             .attr('width', '30px')
             .attr('height', '30px')
-            .style('fill', d => colorScale(d.icuLowCare))
-            .attr('x', d => this.map.latLngToLayerPoint(d.Location).x)
-            .attr('y', d => this.map.latLngToLayerPoint(d.Location).y);
+            .style('fill', d => colorScale(d.icuLowCare));
 
         return L.svgOverlay(svgElement, [[latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]]);
     }
