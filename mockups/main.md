@@ -33,10 +33,15 @@ Search for:
 Top to bottom:
 
 * Capacity glyphs
+  * Regierungsbezirke
+  * Landkreise
   * [Hospitals](hospital_glyph.md)
-* Infections by Landkreis
+* (Severe) Infections by Landkreis
   * Cloropleth  
-  * Total and relative to population
+  * Total
+  * Relative to population
+  * Relative to resources
+  * Relative to capacities
 * Main streets and airports (?)
   * Autobahnen and Bundesstraßen
   * From OSM
@@ -50,7 +55,8 @@ Most aggregated to most detailed:
 
 * Landkreis
   * Aggregated resources and capacities
-  * Infections
+  * Dynamics of used resources
+  * (Severe) Infections including temporal dynamics
   * Contact details  (Gesundheitsamt (?))
   * Population distribution (?)
 * [Hospital](hospital_tooltip.md)
@@ -63,9 +69,15 @@ Most aggregated to most detailed:
 
 ### Capacity view
 
-#### General
+#### General, selected area in map
 
 * Overview on available and used resources
+  * including temporal dynamics
+
+
+#### When Regierungsbezirk, Landkreis selected
+
+* Same as general
 
 
 #### When hospital selected
@@ -73,4 +85,20 @@ Most aggregated to most detailed:
 * Show nearest hospitals with free capacities
   * Capacities (ICU, ECMO…)
   * Distance (km and time) by car and air 
-  
+  * Has helipad
+* Sorting
+  * Free capacity (per type, default)
+  * Distance time air
+  * Distance time land
+* Filtering
+  * exclude hospitals with more than one change of vehicle (i.e., hosp.->airport->airport->hosp)
+  * exclude ospitals without own helipad
+* Interactions
+  * Show route on hover
+  * Select hospital in map on click
+
+
+#### When address selected (?)
+
+* Same as when hospital selected
+
