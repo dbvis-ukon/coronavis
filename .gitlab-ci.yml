@@ -67,8 +67,8 @@ dockerize-crawler:
     - cd ./Crawler
     - docker build -t "$IMG" .
     - docker push "$IMG"
-  only:
-    - master
+  # only:
+  #   - master
   tags:
     - docker-build
 
