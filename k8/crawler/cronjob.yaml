@@ -3,8 +3,8 @@ kind: CronJob
 metadata:
   name: covid19vis-crawler
 spec:
-  # run every hour
-  schedule: "0 */1 * * *"
+  # run every four hours
+  schedule: "0 */4 * * *"
   jobTemplate:
     spec:
       template:

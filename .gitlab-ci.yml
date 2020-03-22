@@ -104,7 +104,7 @@ deploy-crawler:
   stage: deploy
   script:
     - cd k8/crawler
-    - kubectl apply -f cronjob.yaml
+    - kubectl apply -n covid-19-vis -f cronjob.yaml
   dependencies: []
   # only:
   #   - master
