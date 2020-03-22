@@ -12,6 +12,12 @@ from bs4 import BeautifulSoup
 
 from geopy.geocoders import Nominatim
 
+from sqlalchemy import Column, Integer, String, DateTime
+
+from geoalchemy2 import Geometry
+
+import db
+
 
 def legends(class_input):
     if 'green' in class_input:
@@ -103,7 +109,7 @@ def get_hospital_geo_locations(hospital_entries):
             print('Found location: ' + str(location))
             
         except Exception as e:
-            loc = (None, None)
+            loc = (0, 0)
             print('Error ' + str(e))
             
         hospital_entry.append(loc)
@@ -115,6 +121,24 @@ def get_hospital_geo_locations(hospital_entries):
     return hospital_entries
 
 
+def full_fetch(quote_page, values):
+    hospital_entries = crawl_webpage(quote_page, values)
+    hospital_entries = get_hospital_geo_locations(hospital_entries)
+    
+    df = pandas.DataFrame(hospital_entries, columns=['Name', 'Adress', 'String', 'Kontakt', 'Bundesland', 'ICU low care', 'ICU high care', 'ECMO', 'Stand', 'Location'])
+    df['Stand'] =  pandas.to_datetime(df['Stand'], format='%d.%m.%Y %H:%M')
+    
+    return df
+
+
+def update_fetch(quote_page, values):
+    hospital_entries = crawl_webpage(quote_page, values)
+    
+    df = pandas.DataFrame(hospital_entries, columns=['Name', 'Adress', 'String', 'Kontakt', 'Bundesland', 'ICU low care', 'ICU high care', 'ECMO', 'Stand'])
+    df['Stand'] =  pandas.to_datetime(df['Stand'], format='%d.%m.%Y %H:%M')
+    
+    return df
+
 if __name__ == "__main__":
 
     quote_page = 'https://www.divi.de/register/intensivregister?view=items'
@@ -124,12 +148,42 @@ if __name__ == "__main__":
         }
     }
 
-    hospital_entries = crawl_webpage(quote_page, values)
-        
-    print(hospital_entries[0])
-        
-    hospital_entries = get_hospital_geo_locations(hospital_entries)
-
-    df = pandas.DataFrame(hospital_entries, columns=['Name', 'Adress', 'String', 'Kontakt', 'Bundesland', 'ICU low care', 'ICU high care', 'ECMO', 'Stand', 'Location'])
-    df['Stand'] =  pandas.to_datetime(df['Stand'], format='%d.%m.%Y %H:%M')
+    df = full_fetch(quote_page, values)
     df.to_csv('rki_hospitals.csv')
+    
+    # df = pandas.read_csv('rki_hospitals.csv', index_col=0)
+    
+    df_to_db = df.drop(['String'], axis=1)
+    if len(df_to_db.columns) == 8:
+        df_to_db.columns = ['name', 'address', 'contact', 'state', 'icu_low_state', 'icu_high_state', 'ecmo_state', 'last_update']
+    else:
+        df_to_db.columns = ['name', 'address', 'contact', 'state', 'icu_low_state', 'icu_high_state', 'ecmo_state', 'last_update', 'location']
+
+    df_to_db['location'] = df_to_db['location'].map(lambda x: str(x))
+    df_to_db['location'] = df_to_db['location'].map(lambda x: 'POINT' + x.replace(',', ''))
+
+    # df_to_db.to_sql('hospitals_crawled', db.engine, if_exists='append', dtype={
+    #     'name': String,
+    #     'address': String,
+    #     'state': String,
+    #     'contact': String,
+    #     'icu_low_state': String,
+    #     'icu_high_state': String,
+    #     'ecmo_state': String,
+    #     'last_update': DateTime,
+    #     'location': Geometry('POINT')
+    # })
+    
+    crawl = db.Crawl(**{
+        'url': quote_page,
+        'text': df_to_db.to_json(),
+        'doc': df_to_db.to_json(),
+    })
+    db.sess.add(crawl)
+    
+    for index, row in df_to_db.iterrows():
+        hospital = db.Hospital(**row.to_dict())
+        print(hospital)
+        db.sess.add(hospital)
+
+    db.sess.commit()
