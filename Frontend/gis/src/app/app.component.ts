@@ -4,6 +4,8 @@ import { FeatureCollection } from 'geojson';
 import { Overlay } from './map/overlays/overlay';
 import { LandkreisLayer } from './map/overlays/landkreis';
 import { TooltipService } from './services/tooltip.service';
+import { HelipadLayer } from './map/overlays/helipads';
+import { HospitalLayer } from './map/overlays/hospital';
 
 
 
@@ -23,12 +25,12 @@ export class AppComponent implements OnInit {
    * Retrieve data from server and add it to the overlays arrays
    */
   ngOnInit(): void {
-    this.dataService.getHospitals().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new Hospitals('Hospitals', val));
+    this.dataService.getOSMHospitals().toPromise().then((val: FeatureCollection) => {
+      this.overlays.push(new HospitalLayer('Hospitals', val, this.tooltipService));
     });
 
-    this.dataService.getLandkreise().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new LandkreisLayer('Landkreise', val, this.tooltipService));
+    this.dataService.getOSHelipads().toPromise().then((val: FeatureCollection) => {
+      this.overlays.push(new HelipadLayer('Helipads', val, this.tooltipService));
     });
   }
 }
