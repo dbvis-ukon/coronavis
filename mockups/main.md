@@ -4,7 +4,7 @@
 
 Map and Cpaacity views
 
-
+![](/home/u/Dokumente/Konstanz/covid-19-vis/mockups/main.md.5333.png)
 
 ## Map
 
@@ -17,7 +17,7 @@ Map and Cpaacity views
   * Autobahnen and Bundesstraßen from OSM
 * Full Map
   * From OSM
-
+[
 
 #### Tooltips
 
@@ -25,7 +25,7 @@ Map and Cpaacity views
   * Aggregated resources and capacities
   * Infections
   * Population distribution (?)
-* Hospital
+* [Hospital](hospital_tooltip.md)
   * Used resources
   * available ressources (ICU, ECMO…)
   * Has helipad (distance to nearest airport)
