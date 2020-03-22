@@ -14,6 +14,10 @@
   * Contact person/phone number
 
 
+## v2
+
+![](/home/u/Dokumente/Konstanz/covid-19-vis/mockups/hospital_tooltip.md.6702.png)
+
 ## v1
 
 ![](./hospital_tooltip.md.4534.png)
