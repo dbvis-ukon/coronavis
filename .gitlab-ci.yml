@@ -54,14 +54,28 @@ dockerize-backend:
   tags:
     - docker-build
 
-deploy:
+deploy-backend:
   stage: deploy
   script:
     - K8_NAMESPACE="covid-19-vis"
-    - HELM_CHART="covid-19-vis"
+    - HELM_CHART="covid-19-vis-backend"
+    - URL="api.covid19vis.lingvis.io"
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8/backend
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --force --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8/backend
+  dependencies: []
+  only:
+    - master
+  tags:
+    - k8-admin
+
+deploy-frontend:
+  stage: deploy
+  script:
+    - K8_NAMESPACE="covid-19-vis"
+    - HELM_CHART="covid-19-vis-frontend"
     - URL="covid19vis.lingvis.io"
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8
-    - helm upgrade --namespace=${K8_NAMESPACE} --install --force --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8/frontend
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --force --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8/frontend
   dependencies: []
   only:
     - master
