@@ -5,7 +5,7 @@
   * Distance (km and time) by car and air 
   * Has helipad
 * Sorting
-  * Free capacity (per type, default)
+  * Free capacity (per type, default by sum desc)
   * Distance time air
   * Distance time land
 * Filtering

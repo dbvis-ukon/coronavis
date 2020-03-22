@@ -26,15 +26,13 @@ Search for:
 * Adresses (?)
 
 
-### Map
-
-#### Layers
+### Map Layers
 
 Top to bottom:
 
 * Capacity glyphs
   * Regierungsbezirke
-  * Landkreise
+  * Landkreise (grid of hospital glyphs)
   * [Hospitals](hospital_glyph.md)
 * (Severe) Infections by Landkreis
   * Cloropleth  
@@ -42,6 +40,11 @@ Top to bottom:
   * Relative to population
   * Relative to resources
   * Relative to capacities
+* Resources by Landkreis
+  * Cloropleth  
+  * Total
+  * Relative to population
+  * Relative to (severe) infections
 * Main streets and airports (?)
   * Autobahnen and Bundesstraßen
   * From OSM
