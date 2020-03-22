@@ -2,7 +2,7 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import { Overlay } from './overlay';
 import { TooltipService } from 'src/app/services/tooltip.service';
-import { GlyphTooltipComponent } from 'src/app/tooltip-demo/tooltip-demo.component';
+import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { DiviHospital } from 'src/app/services/divi-hospitals.service';
 
 export class SimpleGlyphLayer extends Overlay {
@@ -66,7 +66,7 @@ export class SimpleGlyphLayer extends Overlay {
           const p = this.map.latLngToLayerPoint(d.Location);
           // console.log(p, d.Location);
           return `translate(${p.x}, ${p.y})`})
-      .on('mouseenter', d1 => {
+      .on('mouseenter', (d1: DiviHospital) => {
         const evt: MouseEvent = d3.event;
         const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY}, [
           {
@@ -134,7 +134,7 @@ export class SimpleGlyphLayer extends Overlay {
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
-      .style('fill', d1 => SimpleGlyphLayer.colorScale(d1.icuLowCare));
+      .style('fill', d1 => SimpleGlyphLayer.colorScale(d1.icuLowCare))
       .attr('x', padding)
       .attr('y', yOffset);
 
@@ -143,7 +143,7 @@ export class SimpleGlyphLayer extends Overlay {
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
       .attr('x', `${rectSize}px`)
-      .style('fill', d1 => SimpleGlyphLayer.colorScale(d1.icuHighCare));
+      .style('fill', d1 => SimpleGlyphLayer.colorScale(d1.icuHighCare))
       .attr('y', yOffset)
       .attr('x', `${rectSize + padding * 2}px`);
 
@@ -152,7 +152,7 @@ export class SimpleGlyphLayer extends Overlay {
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
       .attr('x', `${2 * rectSize}px`)
-      .style('fill', d1 => SimpleGlyphLayer.colorScale(d1.ECMO));
+      .style('fill', d1 => SimpleGlyphLayer.colorScale(d1.ECMO))
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`);
 
