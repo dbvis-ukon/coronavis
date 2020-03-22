@@ -7,6 +7,10 @@ backend_api = Blueprint('api', __name__)
 
 logger = logging.getLogger(__name__)
 
+@backend_api.route('/health')
+def healthcheck():
+    # FIXME: the database connection should be checked here!
+    return "ok", 200
 
 # Custom Rest API
 @backend_api.route('/hospital', methods=['GET'])
