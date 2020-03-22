@@ -12,6 +12,7 @@ import { TooltipService } from '../services/tooltip.service';
 import { TooltipDemoComponent } from '../tooltip-demo/tooltip-demo.component';
 import {SVGOverlay} from "leaflet";
 import {DataService} from "../services/data.service";
+import {HospitallayerService} from "../services/hospitallayer.service";
 
 @Component({
   selector: 'app-map',
@@ -38,7 +39,8 @@ export class MapComponent implements OnInit, DoCheck {
     private iterable: IterableDiffers,
     private diviHospitalsService: DiviHospitalsService,
     private dataService: DataService,
-    private tooltipService: TooltipService
+    private tooltipService: TooltipService,
+    private hospitallayerService: HospitallayerService
   ) {
     this.iterableDiffer = this.iterable.find(this.overlays).create();
   }
@@ -105,7 +107,16 @@ export class MapComponent implements OnInit, DoCheck {
 
       // this.mymap.addLayer(glyphs.createOverlay());
       this.layerControl.addOverlay(this.glyphLayerOverlay, glyphLayer.name);
+      this.mymap.addLayer(this.glyphLayerOverlay);
     });
+
+    const groups = L.layerGroup();
+    this.hospitallayerService.getLayers().subscribe(layers => {
+      layers.forEach(layer => {
+        this.layerControl.addOverlay(layer.createOverlay(), layer.name);
+      })
+    });
+
   }
 
   /**

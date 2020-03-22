@@ -46,6 +46,8 @@ export class AppComponent implements OnInit {
 
     });
 
+
+
     this.dataService.getOSMHospitals().toPromise().then((val: FeatureCollection) => {
       this.overlays.push(new HospitalLayer('Hospitals', val, this.tooltipService));
     });
