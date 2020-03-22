@@ -2,6 +2,8 @@ import { Component, OnInit, Input, ViewEncapsulation, IterableDiffers, DoCheck, 
 
 import * as L from 'leaflet';
 import * as d3 from 'd3';
+import 'mapbox-gl';
+import 'mapbox-gl-leaflet';
 // import 'leaflet-mapbox-gl';
 import { Overlay } from './overlays/overlay';
 import { SimpleGlyphLayer } from './overlays/simple-glyph.layer';
@@ -46,32 +48,33 @@ export class MapComponent implements OnInit, DoCheck {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
+    const token = 'pk.eyJ1IjoianVyaWIiLCJhIjoiY2s4MndsZTl0MDR2cDNobGoyY3F2YngyaiJ9.xwBjxEn_grzetKOVZDcyqA';
+    const mennaMap = L.tileLayer(
+      'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=' + token, {
+          tileSize: 512,
+          zoomOffset: -1,
+          attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
+          '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      });
 
+
+    const juriMap = L.mapboxGL({
+      accessToken: 'pk.eyJ1IjoianVyaWIiLCJhIjoiY2s4MndsZTl0MDR2cDNobGoyY3F2YngyaiJ9.xwBjxEn_grzetKOVZDcyqA',
+      style: 'mapbox://styles/jurib/ck82xkh3z3i7b1iodexbt39x9'
+    });
 
     // create map, set initial view to basemap and zoom level to center of BW
-    this.mymap = L.map('main', { layers: [emptyTiles, openstreetmap] }).setView([48.6813312, 9.0088299], 9);
+    this.mymap = L.map('main', { layers: [emptyTiles, openstreetmap, mennaMap, juriMap] }).setView([48.6813312, 9.0088299], 9);
     this.mymap.on('viewreset', () => this.updateSvg());
     this.mymap.on('zoom', () => this.updateSvg());
-
-    /* We simply pick up the SVG from the map object */
-    this.svg = d3.select(this.mymap.getPanes().overlayPane).append('svg')
-    .attr('width', '4000px')
-    .attr('height', '4000px');
-
-
-    // const myL: any = L;
-    // const gl = myL.mapboxGL({
-    //   attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> ' +
-    //   '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>',
-    //   accessToken: 'not-needed',
-    //   style: 'https://api.maptiler.com/maps/72c19f15-b7fe-4f9d-bd65-d4f215e75cb6/style.json?key=yzg9qCdUXACLQHtY2KmW'
-    // });
 
 
     // create maps and overlay objects for leaflet control
     const baseMaps = {
       Empty: emptyTiles,
-      OpenStreetMap: openstreetmap
+      OpenStreetMap: openstreetmap,
+      MennaMap: mennaMap,
+      JuriMap: juriMap
       // OpenStreetMap: basemap,
       // MapTiler: gl
     };
@@ -81,6 +84,10 @@ export class MapComponent implements OnInit, DoCheck {
     this.layerControl.addTo(this.mymap);
 
 
+    /* We simply pick up the SVG from the map object */
+    this.svg = d3.select(this.mymap.getPanes().overlayPane).append('svg')
+    .attr('width', '4000px')
+    .attr('height', '4000px');
 
     const colorScale = d3.scaleOrdinal<string, string>().domain(['Verfügbar' , 'Begrenzt' , 'Ausgelastet' , 'Nicht verfügbar'])
         .range(['green', 'yellow', 'red', 'black']);
