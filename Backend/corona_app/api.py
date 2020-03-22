@@ -27,17 +27,40 @@ from hospitals_crawled hc
     '''
     sql_result = db.engine.execute(sql_stmt)
 
-    d, a = {}, []
+    d, features = {}, []
     for row in sql_result:
         for column, value in row.items():
             # build up the dictionary
             d = {**d, **{column: value}}
 
-        d['geojson'] = json.loads(d['geojson'])
+        feature = {
+            "type": 'Feature',
+            # careful! r.geojson is of type str, we must convert it to a dictionary
+            "geometry": json.loads(d['geojson']),
+            "properties": {
+                'index': d['index'],
+                'name': d['name'],
+                'address': d['address'],
+                'contact': d['contact'],
+                'icu_low_state': d['icu_low_state'],
+                'icu_high_state': d['icu_high_state'],
+                'ecmo_state': d['ecmo_state'],
+                'last_update': d['last_update']
+            }
+        }
 
-        a.append(d)
+        features.append(feature)
 
-    return jsonify(a), 200
+    featurecollection = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype="application/json")
+
+    return resp
 
 # Custom Rest API
 @backend_api.route('/hospitals/landkreise', methods=['GET', 'POST'])
@@ -47,28 +70,47 @@ def get_hospitals_by_landkreise():
     """
 
     sql_stmt = '''
-select vkv.sn_l, vkv.sn_r, vkv.sn_k, JSON_AGG(hc.icu_low_state) as icu_low_state, JSON_AGG(hc.icu_high_state) as icu_high_state, JSON_AGG(hc.ecmo_state) as ecmo_state, ST_AsGeoJSON(ST_Union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+select vkv.sn_l, vkv.sn_r, vkv.sn_k, JSON_AGG(hc.icu_low_state) as icu_low_state, JSON_AGG(hc.icu_high_state) as icu_high_state, JSON_AGG(hc.ecmo_state) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
 from vg250_krs_v2 vkv join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
 group by vkv.sn_l, vkv.sn_r, vkv.sn_k
     '''
     sql_result = db.engine.execute(sql_stmt)
 
-    d, a = {}, []
+
+    d, features = {}, []
     for row in sql_result:
         for column, value in row.items():
             # build up the dictionary
             d = {**d, **{column: value}}
 
-        d['outline'] = json.loads(d['outline'])
-        d['centroid'] = json.loads(d['centroid'])
+        feature = {
+            "type": 'Feature',
+            # careful! r.geojson is of type str, we must convert it to a dictionary
+            "geometry": json.loads(str(d['outline'])),
+            "properties": {
+                'sn_l': d['sn_l'],
+                'sn_r': d['sn_r'],
+                'sn_k': d['sn_k'],
+                'centroid': json.loads(d['centroid']),
+                'icu_low_state': dict(Counter(d['icu_low_state'])),
+                'icu_high_state': dict(Counter(d['icu_high_state'])),
+                'ecmo_state': dict(Counter(d['ecmo_state']))
+            }
+        }
+        
+        features.append(feature)
 
-        d['icu_low_state'] = dict(Counter(d['icu_low_state']))
-        d['icu_high_state'] = dict(Counter(d['icu_high_state']))
-        d['ecmo_state'] = dict(Counter(d['ecmo_state']))
 
-        a.append(d)
+    featurecollection = {
+        "type": "FeatureCollection",
+        "features": features
+    }
 
-    return jsonify(a), 200
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype="application/json")
+
+    return resp
 
 # Custom Rest API
 @backend_api.route('/hospitals/regierungsbezirke', methods=['GET', 'POST'])
@@ -78,28 +120,44 @@ def get_hospitals_by_regierungsbezirke():
     """
 
     sql_stmt = '''
-select vkv.sn_l, vkv.sn_r, JSON_AGG(hc.icu_low_state) as icu_low_state, JSON_AGG(hc.icu_high_state) as icu_high_state, JSON_AGG(hc.ecmo_state) as ecmo_state, ST_AsGeoJSON(ST_Union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+select vkv.sn_l, vkv.sn_r, JSON_AGG(hc.icu_low_state) as icu_low_state, JSON_AGG(hc.icu_high_state) as icu_high_state, JSON_AGG(hc.ecmo_state) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
 from vg250_krs_v2 vkv join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
 group by vkv.sn_l, vkv.sn_r
     '''
     sql_result = db.engine.execute(sql_stmt)
 
-    d, a = {}, []
+    d, features = {}, []
     for row in sql_result:
         for column, value in row.items():
             # build up the dictionary
             d = {**d, **{column: value}}
 
-        d['outline'] = json.loads(d['outline'])
-        d['centroid'] = json.loads(d['centroid'])
+        feature = {
+            "type": 'Feature',
+            # careful! r.geojson is of type str, we must convert it to a dictionary
+            "geometry": json.loads(d['outline']),
+            "properties": {
+                'sn_l': d['sn_l'],
+                'sn_r': d['sn_r'],
+                'centroid': json.loads(d['centroid']),
+                'icu_low_state': dict(Counter(d['icu_low_state'])),
+                'icu_high_state': dict(Counter(d['icu_high_state'])),
+                'ecmo_state': dict(Counter(d['ecmo_state']))
+            }
+        }
 
-        d['icu_low_state'] = dict(Counter(d['icu_low_state']))
-        d['icu_high_state'] = dict(Counter(d['icu_high_state']))
-        d['ecmo_state'] = dict(Counter(d['ecmo_state']))
+        features.append(feature)
 
-        a.append(d)
+    featurecollection = {
+        "type": "FeatureCollection",
+        "features": features
+    }
 
-    return jsonify(a), 200
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype="application/json")
+
+    return resp
 
 # Custom Rest API
 @backend_api.route('/hospitals/bundeslander', methods=['GET', 'POST'])
@@ -109,28 +167,43 @@ def get_hospitals_by_bundeslander():
     """
 
     sql_stmt = '''
-select vkv.sn_l, JSON_AGG(hc.icu_low_state) as icu_low_state, JSON_AGG(hc.icu_high_state) as icu_high_state, JSON_AGG(hc.ecmo_state) as ecmo_state, ST_AsGeoJSON(ST_Union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+select vkv.sn_l, JSON_AGG(hc.icu_low_state) as icu_low_state, JSON_AGG(hc.icu_high_state) as icu_high_state, JSON_AGG(hc.ecmo_state) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
 from vg250_krs_v2 vkv join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
 group by vkv.sn_l
     '''
     sql_result = db.engine.execute(sql_stmt)
 
-    d, a = {}, []
+    d, features = {}, []
     for row in sql_result:
         for column, value in row.items():
             # build up the dictionary
             d = {**d, **{column: value}}
 
-        d['outline'] = json.loads(d['outline'])
-        d['centroid'] = json.loads(d['centroid'])
+        feature = {
+            "type": 'Feature',
+            # careful! r.geojson is of type str, we must convert it to a dictionary
+            "geometry": json.loads(d['outline']),
+            "properties": {
+                'sn_l': d['sn_l'],
+                'centroid': json.loads(d['centroid']),
+                'icu_low_state': dict(Counter(d['icu_low_state'])),
+                'icu_high_state': dict(Counter(d['icu_high_state'])),
+                'ecmo_state': dict(Counter(d['ecmo_state']))
+            }
+        }
 
-        d['icu_low_state'] = dict(Counter(d['icu_low_state']))
-        d['icu_high_state'] = dict(Counter(d['icu_high_state']))
-        d['ecmo_state'] = dict(Counter(d['ecmo_state']))
+        features.append(feature)
 
-        a.append(d)
+    featurecollection = {
+        "type": "FeatureCollection",
+        "features": features
+    }
 
-    return jsonify(a), 200
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype="application/json")
+
+    return resp
 
 @backend_api.route('/person', methods=['GET'])
 def get_persons():
