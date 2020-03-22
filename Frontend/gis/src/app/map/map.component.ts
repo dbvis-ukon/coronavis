@@ -11,6 +11,8 @@ import { DiviHospitalsService, DiviHospital } from '../services/divi-hospitals.s
 import { TooltipService } from '../services/tooltip.service';
 import { TooltipDemoComponent } from '../tooltip-demo/tooltip-demo.component';
 import {SVGOverlay} from 'leaflet';
+import { ColormapService } from '../services/colormap.service';
+import { AggregatedGlyphLayer } from './overlays/aggregated-glyph.layer';
 
 @Component({
   selector: 'app-map',
@@ -33,10 +35,17 @@ export class MapComponent implements OnInit, DoCheck {
 
   private glyphLayerOverlay: SVGOverlay;
 
+  private aggHospitalCounty: SVGOverlay;
+
+  private aggHospitalGovernmentDistrict: SVGOverlay;
+
+  private aggHospitalState: SVGOverlay;
+
   constructor(
     private iterable: IterableDiffers,
     private diviHospitalsService: DiviHospitalsService,
-    private tooltipService: TooltipService
+    private tooltipService: TooltipService,
+    private colormapService: ColormapService
   ) {
     this.iterableDiffer = this.iterable.find(this.overlays).create();
   }
@@ -97,17 +106,33 @@ export class MapComponent implements OnInit, DoCheck {
     this.layerControl = L.control.layers(baseMaps);
     this.layerControl.addTo(this.mymap);
 
-    const colorScale = d3.scaleOrdinal<string, string>().domain(['Verfügbar' , 'Begrenzt' , 'Ausgelastet' , 'Nicht verfügbar'])
-        .range(['green', 'yellow', 'red', 'black']);
-
     this.diviHospitalsService.getDiviHospitals().subscribe(data => {
       console.log(data);
-      const glyphLayer = new SimpleGlyphLayer('Simple Glyphs', this.mymap, data, this.tooltipService);
-      this.glyphLayerOverlay = glyphLayer.createOverlay();
+      const glyphLayer = new SimpleGlyphLayer('Krankenäuser', data, this.tooltipService, this.colormapService);
+      this.glyphLayerOverlay = glyphLayer.createOverlay(this.mymap);
 
       // this.mymap.addLayer(glyphs.createOverlay());
       this.layerControl.addOverlay(this.glyphLayerOverlay, glyphLayer.name);
       this.mymap.addLayer(this.glyphLayerOverlay);
+    });
+
+
+    this.diviHospitalsService.getDiviHospitalsCounties().subscribe(data => {
+      const l = new AggregatedGlyphLayer('Krankenäuser Landkreise', data, this.tooltipService, this.colormapService);
+      this.aggHospitalCounty = l.createOverlay(this.mymap);
+      this.layerControl.addOverlay(this.aggHospitalCounty, l.name);
+    });
+
+    this.diviHospitalsService.getDiviHospitalsGovernmentDistrict().subscribe(data => {
+      const l = new AggregatedGlyphLayer('Krankenäuser Regierungsbezirke', data, this.tooltipService, this.colormapService);
+      this.aggHospitalGovernmentDistrict = l.createOverlay(this.mymap);
+      this.layerControl.addOverlay(this.aggHospitalGovernmentDistrict, l.name);
+    });
+
+    this.diviHospitalsService.getDiviHospitalsStates().subscribe(data => {
+      const l = new AggregatedGlyphLayer('Krankenäuser Bundesländer', data, this.tooltipService, this.colormapService);
+      this.aggHospitalState = l.createOverlay(this.mymap);
+      this.layerControl.addOverlay(this.aggHospitalState, l.name);
     });
   }
 
@@ -121,7 +146,13 @@ export class MapComponent implements OnInit, DoCheck {
 
       changes.forEachAddedItem((newOverlay: IterableChangeRecord<Overlay>) => {
         const overlay = newOverlay.item;
-        this.layerControl.addOverlay(overlay.createOverlay(), overlay.name);
+
+        const overlayLayer = overlay.createOverlay(this.mymap);
+        this.layerControl.addOverlay(overlayLayer, overlay.name);
+
+        if (overlay.enableDefault) {
+          this.mymap.addLayer(overlayLayer);
+        }
       });
     }
   }

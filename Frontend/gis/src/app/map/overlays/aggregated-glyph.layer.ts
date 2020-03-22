@@ -1,35 +1,31 @@
 import * as L from 'leaflet';
 import * as d3 from 'd3';
 import { Overlay } from './overlay';
-import { TooltipService } from 'src/app/services/tooltip.service';
+import {TooltipService} from '../../services/tooltip.service';
+import { DiviAggregatedHospital } from '../../services/divi-hospitals.service';
 import { TooltipDemoComponent } from 'src/app/tooltip-demo/tooltip-demo.component';
-import { DiviHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 
-export class SimpleGlyphLayer extends Overlay {
+export class AggregatedGlyphLayer extends Overlay {
 
-  private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-
+  private gHospitals: d3.Selection<SVGGElement, DiviAggregatedHospital, SVGElement, unknown>;
   private map: L.Map;
 
   constructor(
     name: string,
-    private data: DiviHospital[],
+    private data: DiviAggregatedHospital[],
     private tooltipService: TooltipService,
     private colormapService: ColormapService
-    ) {
+  ) {
     super(name, null);
-    this.enableDefault = true;
   }
 
   createOverlay(map: L.Map) {
     this.map = map;
 
-    this.map.on('zoom', () => {
+    this.map.on('zoom', (e) => {
       this.onZoomed();
     });
-
-    const colorScale = this.colormapService.getSingleHospitalColormap();
 
     const locationPoints = this.data.map(d => this.map.latLngToContainerPoint(d.Location));
     const [xMin, xMax] = d3.extent(locationPoints, d => d.x);
@@ -38,11 +34,11 @@ export class SimpleGlyphLayer extends Overlay {
     const svgElement: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
     svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
+    svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin + 100} ${yMax - yMin + 100}`);
 
     this.gHospitals = d3.select(svgElement)
       .selectAll('g.hospital')
-      .data<DiviHospital>(this.data)
+      .data<DiviAggregatedHospital>(this.data)
       .enter()
       .append<SVGGElement>('g')
       .attr('class', 'hospital')
@@ -104,11 +100,7 @@ export class SimpleGlyphLayer extends Overlay {
 
     this.gHospitals
       .append('text')
-      .text(d1 => {
-        // Hackity hack :)
-        const splitted = d1.Adress.split(' ');
-        return splitted[splitted.length - 1];
-      })
+      .text(d1 => d1.Name)
       .attr('x', padding)
       .attr('y', '8')
       .attr('font-size', '8px');
@@ -119,7 +111,7 @@ export class SimpleGlyphLayer extends Overlay {
       .attr('height', `${rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
-      .style('fill', d1 => colorScale(d1.icuLowCare));
+      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_low_state));
 
     this.gHospitals
       .append('rect')
@@ -127,7 +119,7 @@ export class SimpleGlyphLayer extends Overlay {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${rectSize + padding * 2}px`)
-      .style('fill', d1 => colorScale(d1.icuHighCare));
+      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_high_state));
 
     this.gHospitals
       .append('rect')
@@ -135,7 +127,7 @@ export class SimpleGlyphLayer extends Overlay {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`)
-      .style('fill', d1 => colorScale(d1.ECMO));
+      .style('fill', d1 => this.colormapService.getMaxColor(d1.ecmo_state));
 
 
     // gHos
