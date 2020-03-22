@@ -35,6 +35,7 @@ export class SimpleGlyphLayer extends Overlay {
             .append<SVGGElement>('g')
             .attr('class', 'hospital')
             .on('mouseenter', d => {
+                console.log('mouseenter', d);
                 const evt: MouseEvent = d3.event;
                 const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, {x: evt.clientX, y: evt.clientY}, []);
                 t.text = d.Name;
@@ -49,6 +50,6 @@ export class SimpleGlyphLayer extends Overlay {
             .attr('x', d => this.map.latLngToLayerPoint(d.Location).x)
             .attr('y', d => this.map.latLngToLayerPoint(d.Location).y);
 
-        return L.svgOverlay(svgElement, [latExtent, lngExtent]);
+        return L.svgOverlay(svgElement, [[latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]]);
     }
 }
