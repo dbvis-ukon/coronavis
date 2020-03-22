@@ -50,13 +50,17 @@ export class MapComponent implements OnInit, DoCheck {
 
     // create map, set initial view to basemap and zoom level to center of BW
     this.mymap = L.map('main', { layers: [emptyTiles, openstreetmap] }).setView([48.6813312, 9.0088299], 9);
-    this.mymap.on('viewreset', () => this.updateSvg());
-    this.mymap.on('zoom', () => this.updateSvg());
+    // this.mymap.on('viewreset', () => this.updateSvg());
+    this.mymap.on('zoom', () => {
+      this.updateSvg()
+    });
 
-    /* We simply pick up the SVG from the map object */
-    this.svg = d3.select(this.mymap.getPanes().overlayPane).append('svg')
-    .attr('width', '4000px')
-    .attr('height', '4000px');
+
+
+    // /* We simply pick up the SVG from the map object */
+    // this.svg = d3.select(this.mymap.getPanes().overlayPane).append('svg')
+    // .attr('width', '4000px')
+    // .attr('height', '4000px');
 
 
     // const myL: any = L;
@@ -88,81 +92,8 @@ export class MapComponent implements OnInit, DoCheck {
     this.diviHospitalsService.getDiviHospitals().subscribe(data => {
       console.log(data);
       const glyphs = new SimpleGlyphLayer('Simple Glyphs', this.mymap, data, this.tooltipService);
-
+      // this.mymap.addLayer(glyphs.createOverlay());
       this.layerControl.addOverlay(glyphs.createOverlay(), glyphs.name);
-
-
-
-      this.gHostpitals = this.svg
-            .selectAll('g.hospital')
-            .data<DiviHospital>(data)
-            .enter()
-            .append<SVGGElement>('g')
-            .attr('class', 'hospital')
-            .on('mouseenter', d1 => {
-                console.log('mouseenter', d1);
-                const evt: MouseEvent = d3.event;
-                const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, {x: evt.clientX, y: evt.clientY}, [
-                  {
-                  overlayX: 'start',
-                  overlayY: 'top',
-                  originX: 'end',
-                  originY: 'bottom',
-                  offsetX: 5,
-                  offsetY: 5
-                  },
-                  {
-                  overlayX: 'end',
-                  overlayY: 'top',
-                  originX: 'start',
-                  originY: 'bottom',
-                  offsetX: -5,
-                  offsetY: 5
-                  },
-                  {
-                  overlayX: 'start',
-                  overlayY: 'bottom',
-                  originX: 'end',
-                  originY: 'top',
-                  offsetX: 5,
-                  offsetY: -5
-                  },
-                  {
-                  overlayX: 'end',
-                  overlayY: 'bottom',
-                  originX: 'start',
-                  originY: 'top',
-                  offsetX: -5,
-                  offsetY: -5
-                  },
-              ]);
-                t.text = d1.Name;
-            })
-            .on('mouseout', () => this.tooltipService.close());
-
-      const rectSize = 10;
-
-      this.gHostpitals
-          .append('rect')
-          .attr('width', `${rectSize}px`)
-          .attr('height', `${rectSize}px`)
-          .style('fill', d1 => colorScale(d1.icuLowCare));
-
-      this.gHostpitals
-          .append('rect')
-          .attr('width', `${rectSize}px`)
-          .attr('height', `${rectSize}px`)
-          .attr('x', `${rectSize}px`)
-          .style('fill', d1 => colorScale(d1.icuHighCare));
-
-      this.gHostpitals
-          .append('rect')
-          .attr('width', `${rectSize}px`)
-          .attr('height', `${rectSize}px`)
-          .attr('x', `${2 * rectSize}px`)
-          .style('fill', d1 => colorScale(d1.ECMO));
-
-      this.updateSvg();
     });
 
 
