@@ -8,6 +8,8 @@ import { ColormapService } from 'src/app/services/colormap.service';
 
 export class SimpleGlyphLayer extends Overlay {
 
+  public static colorScaleOrd: d3.ScaleOrdinal<string, string>;
+
   private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
 
   private map: L.Map;
@@ -30,6 +32,7 @@ export class SimpleGlyphLayer extends Overlay {
     });
 
     const colorScale = this.colormapService.getSingleHospitalColormap();
+    SimpleGlyphLayer.colorScaleOrd = colorScale;
     // calculate new color scale
     // .domain expects an array of [min, max] value
     // d3.extent returns exactly this array
@@ -53,7 +56,7 @@ export class SimpleGlyphLayer extends Overlay {
         .attr('transform', d => {
           const p = this.map.latLngToLayerPoint(d.Location);
           // console.log(p, d.Location);
-          return `translate(${p.x}, ${p.y})`})
+          return `translate(${p.x}, ${p.y})`;})
       .on('mouseenter', function(d1: DiviHospital) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY}, [

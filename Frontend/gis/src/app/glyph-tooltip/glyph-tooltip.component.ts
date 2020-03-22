@@ -34,7 +34,7 @@ export class GlyphTooltipComponent implements OnInit {
       .range(['white', '#333', 'white', 'white']);
 
   getCapacityStateColor(capacityState: string): string {
-    return SimpleGlyphLayer.colorScale(capacityState);
+    return SimpleGlyphLayer.colorScaleOrd(capacityState);
   }
 
   constructor() { }

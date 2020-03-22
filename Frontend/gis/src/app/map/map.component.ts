@@ -9,7 +9,6 @@ import { Overlay } from './overlays/overlay';
 import { SimpleGlyphLayer } from './overlays/simple-glyph.layer';
 import { DiviHospitalsService, DiviHospital } from '../services/divi-hospitals.service';
 import { TooltipService } from '../services/tooltip.service';
-import { GlyphTooltipComponent } from '../glyph-tooltip/glyph-tooltip.component';
 import {SVGOverlay} from 'leaflet';
 import { ColormapService } from '../services/colormap.service';
 import { AggregatedGlyphLayer } from './overlays/aggregated-glyph.layer';

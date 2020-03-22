@@ -3,8 +3,8 @@ import * as d3 from 'd3';
 import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
 import { DiviAggregatedHospital } from '../../services/divi-hospitals.service';
-import { TooltipDemoComponent } from 'src/app/tooltip-demo/tooltip-demo.component';
 import { ColormapService } from 'src/app/services/colormap.service';
+import {GlyphTooltipComponent} from '../../glyph-tooltip/glyph-tooltip.component';
 
 export class AggregatedGlyphLayer extends Overlay {
 
@@ -48,7 +48,7 @@ export class AggregatedGlyphLayer extends Overlay {
       })
       .on('mouseenter', d1 => {
         const evt: MouseEvent = d3.event;
-        const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, { x: evt.clientX, y: evt.clientY }, [
+        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY }, [
           {
             overlayX: 'start',
             overlayY: 'top',
@@ -82,7 +82,7 @@ export class AggregatedGlyphLayer extends Overlay {
             offsetY: -5
           },
         ]);
-        t.text = d1.Name;
+        t.name = d1.Name;
       })
       .on('mouseout', () => this.tooltipService.close());
 
