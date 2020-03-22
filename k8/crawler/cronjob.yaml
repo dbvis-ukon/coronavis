@@ -12,6 +12,7 @@ spec:
           containers:
           - name: covid19vis-crawler
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:latest
+            imagePullPolicy: Always
           restartPolicy: OnFailure
           imagePullSecrets:
             - name: regcred-server
