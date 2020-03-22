@@ -7,11 +7,17 @@ import { DiviHospital } from 'src/app/services/divi-hospitals.service';
 
 export class SimpleGlyphLayer extends Overlay {
 
+  private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+
   constructor(name: string, private map: L.Map, private data: DiviHospital[], private tooltipService: TooltipService) {
     super(name, null);
   }
 
   createOverlay() {
+    this.map.on('zoom', (e) => {
+      this.onZoomed();
+    });
+
     // calculate new color scale
     // .domain expects an array of [min, max] value
     // d3.extent returns exactly this array
@@ -27,7 +33,7 @@ export class SimpleGlyphLayer extends Overlay {
     svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
 
-    const gHostpitals = d3.select(svgElement)
+    this.gHospitals = d3.select(svgElement)
       .selectAll('g.hospital')
       .data<DiviHospital>(this.data)
       .enter()
@@ -82,14 +88,14 @@ export class SimpleGlyphLayer extends Overlay {
     const padding = 2;
     const yOffset = 10;
 
-    gHostpitals
+    this.gHospitals
       .append('rect')
       .attr('width', '50')
       .attr('height', '22')
       .attr('fill', 'white')
       .attr('stroke', '#cccccc');
 
-    gHostpitals
+    this.gHospitals
       .append('text')
       .text(d1 => {
         // Hackity hack :)
@@ -100,7 +106,7 @@ export class SimpleGlyphLayer extends Overlay {
       .attr('y', '8')
       .attr('font-size', '8px');
 
-    gHostpitals
+    this.gHospitals
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
@@ -108,7 +114,7 @@ export class SimpleGlyphLayer extends Overlay {
       .attr('y', yOffset)
       .style('fill', d1 => colorScale(d1.icuLowCare));
 
-    gHostpitals
+    this.gHospitals
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
@@ -116,7 +122,7 @@ export class SimpleGlyphLayer extends Overlay {
       .attr('x', `${rectSize + padding * 2}px`)
       .style('fill', d1 => colorScale(d1.icuHighCare));
 
-    gHostpitals
+    this.gHospitals
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
@@ -139,5 +145,25 @@ export class SimpleGlyphLayer extends Overlay {
       zIndex: 3
     });
     // return L.svgOverlay(svgElement, this.map.getBounds());
+  }
+
+  onZoomed() {
+    // this.gHospitals
+    //   .attr('transform', (d, i, n) => {
+    //     const p = this.map.latLngToLayerPoint(d.Location);
+    //     return `translate(${p.x}, ${p.y})`;
+    //   });
+    const zoom = this.map.getZoom();
+    const scale = Math.pow(9 / (zoom), 4);
+
+    console.log('zoomed', this.map.getZoom(), scale);
+
+    this.gHospitals
+      .selectAll('*')
+      .transition()
+      .duration(500)
+      .attr('transform', d => {
+        return `scale(${scale}, ${scale})`;
+      });
   }
 }
