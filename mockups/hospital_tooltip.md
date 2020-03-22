@@ -2,12 +2,13 @@
 
 ## v1.0
 
-* available ressources (ICU, ECMO…)
+* Resources (ICU, ECMO…)
   * Show self assesment from DIVI by colored icon
   * Add barchart showing available and used beds (ensure global scale)
-* Has helipad (distance to nearest airport)
+* Transport Options
   * Helipad and airport
-* km and time
+  * Name of external airport
+  * Distance in km and time
 * Contact details
   * Address
   * Website
