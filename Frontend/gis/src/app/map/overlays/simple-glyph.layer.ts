@@ -56,6 +56,7 @@ export class SimpleGlyphLayer extends Overlay {
     //   });
 
 
+    const self = this;
     this.gHospitals = d3.select(svgElement)
       .selectAll('g.hospital')
       .data<DiviHospital>(this.data)
@@ -66,9 +67,9 @@ export class SimpleGlyphLayer extends Overlay {
           const p = this.map.latLngToLayerPoint(d.Location);
           // console.log(p, d.Location);
           return `translate(${p.x}, ${p.y})`})
-      .on('mouseenter', (d1: DiviHospital) => {
+      .on('mouseenter', function(d1: DiviHospital) {
         const evt: MouseEvent = d3.event;
-        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY}, [
+        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY}, [
           {
             overlayX: 'start',
             overlayY: 'top',
@@ -104,6 +105,7 @@ export class SimpleGlyphLayer extends Overlay {
         ]);
         console.log('mouseenter', d1);
         t.diviHospital = d1;
+        d3.select(this).raise();
       })
       .on('mouseleave', () => this.tooltipService.close());
 
