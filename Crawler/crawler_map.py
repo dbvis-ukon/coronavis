@@ -54,15 +54,17 @@ if __name__ == "__main__":
         
     crawl = db.Crawl(**{
         'url': quote_page,
-        'text': json_data,
-        'doc': json_data,
+        'text': json.dumps(json_data),
+        'doc': json.dumps(json_data),
     })
     db.sess.add(crawl)
     
     vegadata = db.VegaData(**{
-        'text': json_data,
-        'doc': json_data,
+        'text': json.dumps(json_data),
+        'doc': json.dumps(json_data),
     })
     db.sess.add(vegadata)
     
     db.sess.commit()
+    
+    print('Crawling and inserting map done')

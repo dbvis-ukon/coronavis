@@ -12,6 +12,8 @@ from bs4 import BeautifulSoup
 
 from geopy.geocoders import Nominatim
 
+from geoalchemy2.shape import to_shape 
+
 # from sqlalchemy import Column, Integer, String, DateTime
 
 # from geoalchemy2 import Geometry
@@ -104,19 +106,27 @@ def get_hospital_geo_locations(hospital_entries):
         print(str(i + 1) + ' / ' + str(len_))
         print('Crawled location: ' + adress)
         
-        try:
-            loc, location = get_geo_location(adress)
-            print('Found location: ' + str(location))
+        query = db.sess.query(db.Hospital.location).filter_by(address=adress).limit(1).scalar()
+        if query is not None:
+            loc = str(to_shape(query)).replace('POINT', '')
+            print('Entry in Database')
             
-        except Exception as e:
-            loc = (0, 0)
-            print('Error ' + str(e))
+        else:
+            try:
+                loc, location = get_geo_location(adress)
+                print('Found location: ' + str(location))
+                
+            except Exception as e:
+                loc = (0, 0)
+                print('Error ' + str(e))
             
         hospital_entry.append(loc)
         hospital_entries[i] = hospital_entry
         
-        if i % 10:
+        if i % 5 == 0:
             time.sleep(1)
+            
+    input()
             
     return hospital_entries
 
