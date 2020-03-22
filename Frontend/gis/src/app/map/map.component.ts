@@ -26,7 +26,7 @@ export class MapComponent implements OnInit, DoCheck {
   private mymap: L.Map;
   private svg: d3.Selection<SVGElement, unknown, HTMLElement, any>;
 
-  private gHostpitals;
+  private gHostpitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
 
   constructor(
     private iterable: IterableDiffers,
@@ -45,6 +45,8 @@ export class MapComponent implements OnInit, DoCheck {
 
     // create map, set initial view to basemap and zoom level to center of BW
     this.mymap = L.map('main', { layers: [basemap] }).setView([48.6813312, 9.0088299], 9);
+    this.mymap.on('viewreset', () => this.updateSvg());
+    this.mymap.on('zoom', () => this.updateSvg());
 
     /* We simply pick up the SVG from the map object */
     this.svg = d3.select(this.mymap.getPanes().overlayPane).append('svg')
@@ -93,25 +95,72 @@ export class MapComponent implements OnInit, DoCheck {
             .on('mouseenter', d1 => {
                 console.log('mouseenter', d1);
                 const evt: MouseEvent = d3.event;
-                const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, {x: evt.clientX, y: evt.clientY}, []);
+                const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, {x: evt.clientX, y: evt.clientY}, [
+                  {
+                  overlayX: 'start',
+                  overlayY: 'top',
+                  originX: 'end',
+                  originY: 'bottom',
+                  offsetX: 5,
+                  offsetY: 5
+                  },
+                  {
+                  overlayX: 'end',
+                  overlayY: 'top',
+                  originX: 'start',
+                  originY: 'bottom',
+                  offsetX: -5,
+                  offsetY: 5
+                  },
+                  {
+                  overlayX: 'start',
+                  overlayY: 'bottom',
+                  originX: 'end',
+                  originY: 'top',
+                  offsetX: 5,
+                  offsetY: -5
+                  },
+                  {
+                  overlayX: 'end',
+                  overlayY: 'bottom',
+                  originX: 'start',
+                  originY: 'top',
+                  offsetX: -5,
+                  offsetY: -5
+                  },
+              ]);
                 t.text = d1.Name;
             })
             .on('mouseout', () => this.tooltipService.close());
 
+      const rectSize = 10;
+
       this.gHostpitals
           .append('rect')
-          .attr('width', '30px')
-          .attr('height', '30px')
+          .attr('width', `${rectSize}px`)
+          .attr('height', `${rectSize}px`)
           .style('fill', d1 => colorScale(d1.icuLowCare));
-          // .attr('x', d1 => this.mymap.latLngToLayerPoint(d1.Location).x)
-          // .attr('y', d1 => this.mymap.latLngToLayerPoint(d1.Location).y);
+
+      this.gHostpitals
+          .append('rect')
+          .attr('width', `${rectSize}px`)
+          .attr('height', `${rectSize}px`)
+          .attr('x', `${rectSize}px`)
+          .style('fill', d1 => colorScale(d1.icuHighCare));
+
+      this.gHostpitals
+          .append('rect')
+          .attr('width', `${rectSize}px`)
+          .attr('height', `${rectSize}px`)
+          .attr('x', `${2 * rectSize}px`)
+          .style('fill', d1 => colorScale(d1.ECMO));
 
       this.updateSvg();
     });
 
 
 
-    this.mymap.on('viewreset', () => this.updateSvg());
+
   }
 
   /**
@@ -130,6 +179,14 @@ export class MapComponent implements OnInit, DoCheck {
   }
 
   updateSvg() {
+    console.log('update');
+    if (!this.gHostpitals) {
+      return;
+    }
+
+    const zoom = this.mymap.getZoom();
+    console.log('zoomlevel', zoom);
+
     this.gHostpitals
       .attr('transform', d => {
         const p = this.mymap.latLngToLayerPoint(d.Location);
