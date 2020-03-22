@@ -69,36 +69,10 @@ Most aggregated to most detailed:
 
 ### Capacity view
 
-#### General, selected area in map
-
-* Overview on available and used resources
-  * including temporal dynamics
-
-
-#### When Regierungsbezirk, Landkreis selected
-
-* Same as general
-
-
-#### When hospital selected
-
-* Show nearest hospitals with free capacities
-  * Capacities (ICU, ECMO…)
-  * Distance (km and time) by car and air 
-  * Has helipad
-* Sorting
-  * Free capacity (per type, default)
-  * Distance time air
-  * Distance time land
-* Filtering
-  * exclude hospitals with more than one change of vehicle (i.e., hosp.->airport->airport->hosp)
-  * exclude ospitals without own helipad
-* Interactions
-  * Show route on hover
-  * Select hospital in map on click
-
-
-#### When address selected (?)
-
-* Same as when hospital selected
+* [General, selected area in map](capacities_area.md)
+* When Regierungsbezirk, Landkreis selected
+  * Same as general
+* [When hospital selected] (capacities_hospital.md)
+* When address selected (?)
+  * Same as when hospital selected
 
