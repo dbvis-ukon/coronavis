@@ -52,14 +52,14 @@ spec:
           image: registry.dbvis.de/jentner/covid-19-vis/backend:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 5000
+            - containerPort: 8000
           env:
             - name: FOR_GODS_SAKE_PLEASE_REDEPLOY
               value: {{ .Values.uuid | quote }}
           readinessProbe:
             httpGet:
               path: "/health"
-              port: 5000
+              port: 8000
             initialDelaySeconds: 30
             timeoutSeconds: 5
             periodSeconds: 5
@@ -67,7 +67,7 @@ spec:
           livenessProbe:
             httpGet:
               path: "/health"
-              port: 5000
+              port: 8000
             initialDelaySeconds: 60
             timeoutSeconds: 5
             periodSeconds: 5
