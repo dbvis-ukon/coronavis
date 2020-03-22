@@ -146,7 +146,7 @@ group by vkv.sn_l, vkv.sn_r
             }
         }
 
-        features.append(d)
+        features.append(feature)
 
     featurecollection = {
         "type": "FeatureCollection",
@@ -192,7 +192,7 @@ group by vkv.sn_l
             }
         }
 
-        features.append(d)
+        features.append(feature)
 
     featurecollection = {
         "type": "FeatureCollection",
