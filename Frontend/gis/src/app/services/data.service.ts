@@ -27,7 +27,6 @@ export class DataService {
    * Retrieves the Landkreise from the given api endpoint.
    */
   getLandkreise(): Observable<FeatureCollection> {
-<<<<<<< HEAD
     const url = `${environment.apiUrl}api/data/landkreise`;
     return this.getFeatureCollection(url);
   }
@@ -37,22 +36,14 @@ export class DataService {
    */
   getOSMHospitals(): Observable<FeatureCollection> {
     const url = `${environment.apiUrl}osm/hospitals`;
-=======
-    const url = 'http://localhost:5000/api/data/landkreise';
->>>>>>> adf1694bb525378c4cfa68fb3eeb657f477e4abf
     return this.http.post<FeatureCollection>(url, null, httpOptions);
   }
 
   /**
    * Retrieves the Landkreise from the given api endpoint.
    */
-<<<<<<< HEAD
   getOSHelipads(): Observable<FeatureCollection> {
     const url = `${environment.apiUrl}osm/nearby_helipads`;
-=======
-  getHospitals(): Observable<FeatureCollection> {
-    const url = 'http://localhost:5000/hospitals';
->>>>>>> adf1694bb525378c4cfa68fb3eeb657f477e4abf
     return this.http.post<FeatureCollection>(url, null, httpOptions);
   }
 
