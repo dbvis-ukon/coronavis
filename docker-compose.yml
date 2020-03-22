@@ -16,11 +16,7 @@ services:
       - 4200:4200
     working_dir: /app
     volumes:
-<<<<<<< HEAD
       - ./Frontend/gis:/app
-=======
-      - ./Frontend/gis:/var/opt/gis/:z
->>>>>>> remove database and pgadmin from docker-compose
     command: sh -c "npm install && npm run start:docker"
 
 volumes: 
