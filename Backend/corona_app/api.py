@@ -27,17 +27,40 @@ from hospitals_crawled hc
     '''
     sql_result = db.engine.execute(sql_stmt)
 
-    d, a = {}, []
+    d, features = {}, []
     for row in sql_result:
         for column, value in row.items():
             # build up the dictionary
             d = {**d, **{column: value}}
 
-        d['geojson'] = json.loads(d['geojson'])
+        feature = {
+            "type": 'Feature',
+            # careful! r.geojson is of type str, we must convert it to a dictionary
+            "geometry": json.loads(d['geojson']),
+            "properties": {
+                'index': d['index'],
+                'name': d['name'],
+                'address': d['address'],
+                'contact': d['contact'],
+                'icu_low_state': d['icu_low_state'],
+                'icu_high_state': d['icu_high_state'],
+                'ecmo_state': d['ecmo_state'],
+                'last_update': d['last_update']
+            }
+        }
 
-        a.append(d)
+        features.append(feature)
 
-    return jsonify(a), 200
+    featurecollection = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype="application/json")
+
+    return resp
 
 # Custom Rest API
 @backend_api.route('/hospitals/landkreise', methods=['GET', 'POST'])
@@ -83,7 +106,7 @@ group by vkv.sn_l, vkv.sn_r, vkv.sn_k
         "features": features
     }
 
-    resp = Response(response=json.dumps(featurecollection),
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
             status=200,
             mimetype="application/json")
 
@@ -130,7 +153,7 @@ group by vkv.sn_l, vkv.sn_r
         "features": features
     }
 
-    resp = Response(response=json.dumps(featurecollection),
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
             status=200,
             mimetype="application/json")
 
@@ -176,7 +199,7 @@ group by vkv.sn_l
         "features": features
     }
 
-    resp = Response(response=json.dumps(featurecollection),
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
             status=200,
             mimetype="application/json")
 
