@@ -11,6 +11,7 @@ import { DiviHospitalsService, DiviHospital } from '../services/divi-hospitals.s
 import { TooltipService } from '../services/tooltip.service';
 import { TooltipDemoComponent } from '../tooltip-demo/tooltip-demo.component';
 import {SVGOverlay} from "leaflet";
+import {DataService} from "../services/data.service";
 
 @Component({
   selector: 'app-map',
@@ -36,6 +37,7 @@ export class MapComponent implements OnInit, DoCheck {
   constructor(
     private iterable: IterableDiffers,
     private diviHospitalsService: DiviHospitalsService,
+    private dataService: DataService,
     private tooltipService: TooltipService
   ) {
     this.iterableDiffer = this.iterable.find(this.overlays).create();
@@ -98,7 +100,7 @@ export class MapComponent implements OnInit, DoCheck {
 
     this.diviHospitalsService.getDiviHospitals().subscribe(data => {
       console.log(data);
-      const glyphLayer = new SimpleGlyphLayer('Simple Glyphs', this.mymap, data, this.tooltipService);
+      const glyphLayer = new SimpleGlyphLayer('Simple Glyphs', this.mymap, data, this.tooltipService, this.dataService);
       this.glyphLayerOverlay = glyphLayer.createOverlay();
 
       // this.mymap.addLayer(glyphs.createOverlay());

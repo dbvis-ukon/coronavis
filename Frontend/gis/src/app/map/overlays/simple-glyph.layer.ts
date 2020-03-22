@@ -6,11 +6,15 @@ import {Overlay} from './overlay';
 import {TooltipService} from 'src/app/services/tooltip.service';
 import {TooltipDemoComponent} from 'src/app/tooltip-demo/tooltip-demo.component';
 import {DiviHospital} from 'src/app/services/divi-hospitals.service';
-import {LatLng} from "leaflet";
+import {LatLng, Layer} from "leaflet";
+import {DataService} from "../../services/data.service";
+import {HelipadLayer} from "./helipads";
 
 export class SimpleGlyphLayer extends Overlay {
 
-  constructor(name: string, private map: L.Map, private data: DiviHospital[], private tooltipService: TooltipService) {
+  private overlay: Layer;
+
+  constructor(name: string, private map: L.Map, private data: DiviHospital[], private tooltipService: TooltipService, private dataService: DataService) {
     super(name, null);
   }
 
@@ -42,6 +46,15 @@ export class SimpleGlyphLayer extends Overlay {
       })
       .on('mouseenter', d1 => {
         console.log('mouseenter', d1);
+
+        this.dataService.getOSHelipads()
+          .subscribe(data => {
+            const heliLayer = new HelipadLayer("heliheli", data, this.tooltipService);
+            this.overlay = heliLayer.createOverlay();
+
+            this.map.addLayer(this.overlay);
+          });
+
         const evt: MouseEvent = d3.event;
         const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, {x: evt.clientX, y: evt.clientY}, [
           {
@@ -79,7 +92,12 @@ export class SimpleGlyphLayer extends Overlay {
         ]);
         t.text = d1.Name;
       })
-      .on('mouseout', () => this.tooltipService.close());
+      .on('mouseout', () => {
+        this.tooltipService.close();
+
+        this.map.removeLayer(this.overlay);
+      });
+
 
     const rectSize = 10;
 
