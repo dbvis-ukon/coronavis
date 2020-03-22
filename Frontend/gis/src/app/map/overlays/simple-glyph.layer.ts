@@ -36,26 +36,6 @@ export class SimpleGlyphLayer extends Overlay {
     svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
 
-    // const gHos = d3.select(svgElement)
-    //   .selectAll('g.hospital')
-    //   .data<DiviHospital>(this.data)
-    //   .enter()
-    //   .append<SVGGElement>('g')
-    //   .attr('class', 'hospital')
-    //   .on('mouseenter', d => {
-    //     console.log('mouseenter', d);
-    //     const evt: MouseEvent = d3.event;
-    //     const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY}, []);
-    //     t.text = d.Name;
-    //   })
-    //   .on('mouseout', () => this.tooltipService.close())
-    //   .attr('transform', d => {
-    //     const p = this.map.latLngToLayerPoint(d.Location);
-    //     console.log(p, d.Location);
-    //     return `translate(${p.x}, ${p.y})`;
-    //   });
-
-
     const self = this;
     this.gHospitals = d3.select(svgElement)
       .selectAll('g.hospital')
