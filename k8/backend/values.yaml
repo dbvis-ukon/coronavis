@@ -5,7 +5,7 @@
 replicaCount: 1
 
 Group: dbvis
-Project: covid-19-vis
+Project: covid-19-vis-backend
 Branch: master
 
 uuid: 123

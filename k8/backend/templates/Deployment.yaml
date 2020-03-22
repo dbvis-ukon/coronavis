@@ -18,48 +18,18 @@ spec:
         {{- include "lingvis.labels" . | nindent 8 }}
     spec:
       containers:
-        - name: frontend
-          image: registry.dbvis.de/jentner/covid-19-vis/frontend:latest
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 80
-          env:
-            - name: FOR_GODS_SAKE_PLEASE_REDEPLOY
-              value: {{ .Values.uuid | quote }}
-          readinessProbe:
-            httpGet:
-              path: "/"
-              port: 80
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-            periodSeconds: 5
-            failureThreshold: 3
-          livenessProbe:
-            httpGet:
-              path: "/"
-              port: 80
-            initialDelaySeconds: 60
-            timeoutSeconds: 5
-            periodSeconds: 5
-            failureThreshold: 4
-            successThreshold: 1
-          limits:
-            - default:
-                memory: 200M
-              defaultRequest:
-                memory: 50M
         - name: backend
           image: registry.dbvis.de/jentner/covid-19-vis/backend:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8000
+            - containerPort: 5000
           env:
             - name: FOR_GODS_SAKE_PLEASE_REDEPLOY
               value: {{ .Values.uuid | quote }}
           readinessProbe:
             httpGet:
               path: "/health"
-              port: 8000
+              port: 5000
             initialDelaySeconds: 30
             timeoutSeconds: 5
             periodSeconds: 5
@@ -67,7 +37,7 @@ spec:
           livenessProbe:
             httpGet:
               path: "/health"
-              port: 8000
+              port: 5000
             initialDelaySeconds: 60
             timeoutSeconds: 5
             periodSeconds: 5
