@@ -4,11 +4,15 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from 'src/app/services/tooltip.service';
-import {TooltipDemoComponent} from 'src/app/tooltip-demo/tooltip-demo.component';
+import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import {DiviHospital} from 'src/app/services/divi-hospitals.service';
-import {LatLng} from "leaflet";
 
 export class SimpleGlyphLayer extends Overlay {
+
+
+  public static readonly colorScale =
+    d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
+    .range(['green', 'yellow', 'red', 'black']);
 
   constructor(name: string, private map: L.Map, private data: DiviHospital[], private tooltipService: TooltipService) {
     super(name, null);
@@ -18,8 +22,6 @@ export class SimpleGlyphLayer extends Overlay {
     // calculate new color scale
     // .domain expects an array of [min, max] value
     // d3.extent returns exactly this array
-    const colorScale = d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
-      .range(['green', 'yellow', 'red', 'black']);
 
     const locationPoints = this.data.map(d => this.map.latLngToContainerPoint(d.Location));
     const [xMin, xMax] = d3.extent(locationPoints, d => d.x);
@@ -39,7 +41,7 @@ export class SimpleGlyphLayer extends Overlay {
     //   .on('mouseenter', d => {
     //     console.log('mouseenter', d);
     //     const evt: MouseEvent = d3.event;
-    //     const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, {x: evt.clientX, y: evt.clientY}, []);
+    //     const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY}, []);
     //     t.text = d.Name;
     //   })
     //   .on('mouseout', () => this.tooltipService.close())
@@ -60,12 +62,11 @@ export class SimpleGlyphLayer extends Overlay {
       .attr('class', 'hospital')
         .attr('transform', d => {
           const p = this.map.latLngToLayerPoint(d.Location);
-          console.log(p, d.Location);
+          // console.log(p, d.Location);
           return `translate(${p.x}, ${p.y})`})
       .on('mouseenter', d1 => {
-        console.log('mouseenter', d1);
         const evt: MouseEvent = d3.event;
-        const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, {x: evt.clientX, y: evt.clientY}, [
+        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY}, [
           {
             overlayX: 'start',
             overlayY: 'top',
@@ -99,9 +100,10 @@ export class SimpleGlyphLayer extends Overlay {
             offsetY: -5
           },
         ]);
-        t.text = d1.Name;
+        console.log('mouseenter', d1);
+        t.diviHospital = d1;
       })
-      .on('mouseout', () => this.tooltipService.close());
+      .on('mouseleave', () => this.tooltipService.close());
 
     const rectSize = 10;
 
@@ -109,21 +111,21 @@ export class SimpleGlyphLayer extends Overlay {
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
-      .style('fill', d1 => colorScale(d1.icuLowCare));
+      .style('fill', d1 => SimpleGlyphLayer.colorScale(d1.icuLowCare));
 
     gHostpitals
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
       .attr('x', `${rectSize}px`)
-      .style('fill', d1 => colorScale(d1.icuHighCare));
+      .style('fill', d1 => SimpleGlyphLayer.colorScale(d1.icuHighCare));
 
     gHostpitals
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
       .attr('x', `${2 * rectSize}px`)
-      .style('fill', d1 => colorScale(d1.ECMO));
+      .style('fill', d1 => SimpleGlyphLayer.colorScale(d1.ECMO));
 
 
     // gHos

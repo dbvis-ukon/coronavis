@@ -4,7 +4,7 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import { Overlay } from './overlay';
 import { TooltipService } from 'src/app/services/tooltip.service';
-import { TooltipDemoComponent } from 'src/app/tooltip-demo/tooltip-demo.component';
+import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 
 export class LandkreisLayer extends Overlay {
 
@@ -38,7 +38,7 @@ export class LandkreisLayer extends Overlay {
 
                         const tooltipComponent = this.tooltipService
                         .openAtElementRef(
-                            TooltipDemoComponent,
+                            GlyphTooltipComponent,
                             {x: e.originalEvent.clientX, y: e.originalEvent.clientY},
                             [
                                 {
@@ -76,7 +76,7 @@ export class LandkreisLayer extends Overlay {
                             ]
                             );
 
-                        tooltipComponent.text = `County: ${feature.properties.name}`;
+                        tooltipComponent.name = `County: ${feature.properties.name}`;
 
                         // set highlight style
                         const l = e.target;

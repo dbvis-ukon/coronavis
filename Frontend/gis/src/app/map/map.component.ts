@@ -9,7 +9,7 @@ import { Overlay } from './overlays/overlay';
 import { SimpleGlyphLayer } from './overlays/simple-glyph.layer';
 import { DiviHospitalsService, DiviHospital } from '../services/divi-hospitals.service';
 import { TooltipService } from '../services/tooltip.service';
-import { TooltipDemoComponent } from '../tooltip-demo/tooltip-demo.component';
+import { GlyphTooltipComponent } from '../glyph-tooltip/glyph-tooltip.component';
 
 @Component({
   selector: 'app-map',
@@ -20,6 +20,14 @@ import { TooltipDemoComponent } from '../tooltip-demo/tooltip-demo.component';
 })
 export class MapComponent implements OnInit, DoCheck {
 
+  constructor(
+    private iterable: IterableDiffers,
+    private diviHospitalsService: DiviHospitalsService,
+    private tooltipService: TooltipService
+  ) {
+    this.iterableDiffer = this.iterable.find(this.overlays).create();
+  }
+
   @Input() overlays: Array<Overlay> = [];
   iterableDiffer: any;
 
@@ -29,14 +37,6 @@ export class MapComponent implements OnInit, DoCheck {
   private svg: d3.Selection<SVGElement, unknown, HTMLElement, any>;
 
   private gHostpitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-
-  constructor(
-    private iterable: IterableDiffers,
-    private diviHospitalsService: DiviHospitalsService,
-    private tooltipService: TooltipService
-  ) {
-    this.iterableDiffer = this.iterable.find(this.overlays).create();
-  }
 
   ngOnInit() {
     // empty tiles
@@ -89,8 +89,7 @@ export class MapComponent implements OnInit, DoCheck {
     .attr('width', '4000px')
     .attr('height', '4000px');
 
-    const colorScale = d3.scaleOrdinal<string, string>().domain(['Verfügbar' , 'Begrenzt' , 'Ausgelastet' , 'Nicht verfügbar'])
-        .range(['green', 'yellow', 'red', 'black']);
+
 
     this.diviHospitalsService.getDiviHospitals().subscribe(data => {
       console.log(data);

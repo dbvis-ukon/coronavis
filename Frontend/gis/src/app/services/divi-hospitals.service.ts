@@ -27,7 +27,7 @@ export interface DiviHospital {
   'Bundesland': string;
   'icuLowCare': 'Verfügbar' | 'Begrenzt' | 'Ausgelastet' | 'Nicht verfügbar';
   'icuHighCare': 'Verfügbar' | 'Begrenzt' | 'Ausgelastet' | 'Nicht verfügbar';
-  'ECMO': 'Verfügbar' | 'Begrenzt' | 'Ausgelastet' | 'Nicht verfügbar';
+  'ECMO': 'Verfügbar' | 'Begrenzt' | 'Ausgelastet' | 'Nicht verfügbar';  // Extrakorporale Membranoxygenierung --> https://bit.ly/3dnlpyb
   'Stand': string;
   'Location': LatLngLiteral;
 }
