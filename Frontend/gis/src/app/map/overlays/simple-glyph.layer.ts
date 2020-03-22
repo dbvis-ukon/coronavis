@@ -30,38 +30,16 @@ export class SimpleGlyphLayer extends Overlay {
     svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
 
-    // const gHos = d3.select(svgElement)
-    //   .selectAll('g.hospital')
-    //   .data<DiviHospital>(this.data)
-    //   .enter()
-    //   .append<SVGGElement>('g')
-    //   .attr('class', 'hospital')
-    //   .on('mouseenter', d => {
-    //     console.log('mouseenter', d);
-    //     const evt: MouseEvent = d3.event;
-    //     const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, {x: evt.clientX, y: evt.clientY}, []);
-    //     t.text = d.Name;
-    //   })
-    //   .on('mouseout', () => this.tooltipService.close())
-    //   .attr('transform', d => {
-    //     const p = this.map.latLngToLayerPoint(d.Location);
-    //     console.log(p, d.Location);
-    //     return `translate(${p.x}, ${p.y})`;
-    //   });
-
-
-
-
     const gHostpitals = d3.select(svgElement)
       .selectAll('g.hospital')
       .data<DiviHospital>(this.data)
       .enter()
       .append<SVGGElement>('g')
       .attr('class', 'hospital')
-        .attr('transform', d => {
-          const p = this.map.latLngToLayerPoint(d.Location);
-          console.log(p, d.Location);
-          return `translate(${p.x}, ${p.y})`})
+      .attr('transform', d => {
+        const p = this.map.latLngToLayerPoint(d.Location);
+        return `translate(${p.x}, ${p.y})`
+      })
       .on('mouseenter', d1 => {
         console.log('mouseenter', d1);
         const evt: MouseEvent = d3.event;
@@ -135,7 +113,10 @@ export class SimpleGlyphLayer extends Overlay {
     const latExtent = d3.extent(this.data, i => i.Location.lat);
     const lngExtent = d3.extent(this.data, i => i.Location.lng);
 
-    return L.svgOverlay(svgElement, [[latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]], {interactive:true});
+    return L.svgOverlay(svgElement, [[latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]], {
+      interactive: true,
+      zIndex: 3
+    });
     // return L.svgOverlay(svgElement, this.map.getBounds());
   }
 }
