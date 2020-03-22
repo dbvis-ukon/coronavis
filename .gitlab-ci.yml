@@ -99,3 +99,14 @@ deploy-frontend:
     - master
   tags:
     - k8-admin
+
+deploy-crawler:
+  stage: deploy
+  script:
+    - cd k8/crawler
+    - kubectl apply -f cronjob.yaml
+  dependencies: []
+  # only:
+  #   - master
+  tags:
+    - k8-admin

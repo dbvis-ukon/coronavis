@@ -1,0 +1,17 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: covid19vis-crawler
+spec:
+  # run every hour
+  schedule: "0 */1 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: covid19vis-crawler
+            image: registry.dbvis.de/jentner/covid-19-vis/crawler:latest
+          restartPolicy: OnFailure
+          imagePullSecrets:
+            - name: regcred-server
