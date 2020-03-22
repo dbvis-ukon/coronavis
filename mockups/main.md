@@ -33,6 +33,7 @@ Search for:
 Top to bottom:
 
 * Capacity glyphs
+  * [Hospitals](hospital_glyph.md)
 * Infections by Landkreis
   * Cloropleth  
   * Total and relative to population
