@@ -11,7 +11,7 @@ It enables spatial orientation and navigation
 The Capacities View aimss at facilitating the redistribution of capacities and patients.
 Depending on the selected context in the Map VIEW, the Capacity View highilhgts those hospitals that have spare capacities.
 
-![](/home/u/Dokumente/Konstanz/covid-19-vis/mockups/main.md.5333.png)
+![](./main.md.5333.png)
 
 
 
