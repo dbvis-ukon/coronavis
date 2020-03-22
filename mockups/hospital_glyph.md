@@ -8,3 +8,4 @@ From Juri's slides.
 * Extra info space with transport options
 
 ![](./hospital_glyph.md.7453.png)
+x
