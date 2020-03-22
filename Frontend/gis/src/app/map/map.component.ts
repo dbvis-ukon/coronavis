@@ -79,7 +79,7 @@ export class MapComponent implements OnInit, DoCheck {
     this.mymap = L.map('main', {
       minZoom: 6,
       maxZoom: 12,
-      layers: [emptyTiles, openstreetmap, mennaMap, juriMap]
+      layers: [juriMap]
     }).setView([48.6813312, 9.0088299], 9);
     // this.mymap.on('viewreset', () => this.updateSvg());
     // this.mymap.on('zoom', () => this.updateSvg());
@@ -87,10 +87,10 @@ export class MapComponent implements OnInit, DoCheck {
 
     // create maps and overlay objects for leaflet control
     const baseMaps = {
-      Empty: emptyTiles,
-      OpenStreetMap: openstreetmap,
-      MennaMap: mennaMap,
-      JuriMap: juriMap
+      // Empty: emptyTiles,
+      // OpenStreetMap: openstreetmap,
+      // MennaMap: mennaMap,
+      BaseMap: juriMap
       // OpenStreetMap: basemap,
       // MapTiler: gl
     };
@@ -107,13 +107,13 @@ export class MapComponent implements OnInit, DoCheck {
     this.layerControl.addTo(this.mymap);
 
     this.diviHospitalsService.getDiviHospitals().subscribe(data => {
-      console.log(data);
       const glyphLayer = new SimpleGlyphLayer('Krankenäuser', data, this.tooltipService, this.colormapService);
       this.glyphLayerOverlay = glyphLayer.createOverlay(this.mymap);
 
       // this.mymap.addLayer(glyphs.createOverlay());
       this.layerControl.addOverlay(this.glyphLayerOverlay, glyphLayer.name);
       this.mymap.addLayer(this.glyphLayerOverlay);
+      this.semanticZoom();
     });
 
 
@@ -121,19 +121,25 @@ export class MapComponent implements OnInit, DoCheck {
       const l = new AggregatedGlyphLayer('Krankenäuser Landkreise', data, this.tooltipService, this.colormapService);
       this.aggHospitalCounty = l.createOverlay(this.mymap);
       this.layerControl.addOverlay(this.aggHospitalCounty, l.name);
+      this.semanticZoom();
     });
 
     this.diviHospitalsService.getDiviHospitalsGovernmentDistrict().subscribe(data => {
       const l = new AggregatedGlyphLayer('Krankenäuser Regierungsbezirke', data, this.tooltipService, this.colormapService);
       this.aggHospitalGovernmentDistrict = l.createOverlay(this.mymap);
       this.layerControl.addOverlay(this.aggHospitalGovernmentDistrict, l.name);
+      this.semanticZoom();
     });
 
     this.diviHospitalsService.getDiviHospitalsStates().subscribe(data => {
       const l = new AggregatedGlyphLayer('Krankenäuser Bundesländer', data, this.tooltipService, this.colormapService);
       this.aggHospitalState = l.createOverlay(this.mymap);
       this.layerControl.addOverlay(this.aggHospitalState, l.name);
+      this.semanticZoom();
     });
+
+
+    this.mymap.on('zoom', this.semanticZoom);
   }
 
   /**
@@ -155,5 +161,23 @@ export class MapComponent implements OnInit, DoCheck {
         }
       });
     }
+  }
+
+  semanticZoom() {
+    // if (!this.aggHospitalCounty || !this.aggHospitalGovernmentDistrict) {
+    //   return;
+    // }
+    // const zoom = this.mymap.getZoom();
+
+    // if (zoom >= 10) {
+    //   this.mymap.removeLayer(this.aggHospitalCounty);
+    //   this.mymap.removeLayer(this.aggHospitalGovernmentDistrict);
+    // } else if (zoom >= 7 && zoom < 10) {
+    //   this.mymap.addLayer(this.aggHospitalCounty);
+    //   this.mymap.removeLayer(this.aggHospitalGovernmentDistrict);
+    // } else {
+    //   this.mymap.removeLayer(this.aggHospitalCounty);
+    //   this.mymap.addLayer(this.aggHospitalGovernmentDistrict);
+    // }
   }
 }
