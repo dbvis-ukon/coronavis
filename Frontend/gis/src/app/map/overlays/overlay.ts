@@ -13,7 +13,7 @@ export class Overlay {
         this.featureCollection = featureCollection;
     }
 
-    createOverlay() {
+    createOverlay(): L.GeoJSON<any> | L.SVGOverlay {
         return L.geoJSON(this.featureCollection);
     }
 }

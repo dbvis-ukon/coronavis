@@ -1,8 +1,8 @@
-import { FeatureCollection } from "geojson";
+import { FeatureCollection } from 'geojson';
 
-import * as L from "leaflet";
-import { Overlay } from "./overlay";
-import { TooltipService } from "src/app/services/tooltip.service";
+import * as L from 'leaflet';
+import { Overlay } from './overlay';
+import { TooltipService } from 'src/app/services/tooltip.service';
 
 export class HospitalLayer extends Overlay {
   constructor(
@@ -16,8 +16,8 @@ export class HospitalLayer extends Overlay {
   createOverlay() {
     const geojsonMarkerOptions = {
       radius: 8,
-      fillColor: "#d53210",
-      color: "#000",
+      fillColor: '#d53210',
+      color: '#000',
       weight: 1,
       opacity: 1,
       fillOpacity: 0.8
@@ -25,7 +25,7 @@ export class HospitalLayer extends Overlay {
 
     // create geojson layer (looks more complex than it is)
     const hospitalLayer = L.geoJSON(this.featureCollection, {
-      pointToLayer: function(feature, latlng) {
+      pointToLayer: (feature, latlng) => {
         return L.circleMarker(latlng, geojsonMarkerOptions);
       }
     });

@@ -1,8 +1,8 @@
-import { FeatureCollection } from "geojson";
+import { FeatureCollection } from 'geojson';
 
-import * as L from "leaflet";
-import { Overlay } from "./overlay";
-import { TooltipService } from "src/app/services/tooltip.service";
+import * as L from 'leaflet';
+import { Overlay } from './overlay';
+import { TooltipService } from 'src/app/services/tooltip.service';
 
 export class HelipadLayer extends Overlay {
   constructor(
@@ -16,8 +16,8 @@ export class HelipadLayer extends Overlay {
   createOverlay() {
     const geojsonMarkerOptions = {
       radius: 8,
-      fillColor: "#483632",
-      color: "#000",
+      fillColor: '#483632',
+      color: '#000',
       weight: 1,
       opacity: 1,
       fillOpacity: 0.8
@@ -25,11 +25,11 @@ export class HelipadLayer extends Overlay {
 
     // create geojson layer (looks more complex than it is)
     const helipadLayer = L.geoJSON(this.featureCollection, {
-      pointToLayer: function(feature, latlng) {
+      pointToLayer: (feature, latlng) => {
         return L.circleMarker(latlng, geojsonMarkerOptions);
       }
     });
-    
+
     return helipadLayer;
   }
 }
