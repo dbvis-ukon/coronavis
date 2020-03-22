@@ -4,6 +4,10 @@ import { FeatureCollection } from 'geojson';
 import { Overlay } from './map/overlays/overlay';
 import { LandkreisLayer } from './map/overlays/landkreis';
 import { TooltipService } from './services/tooltip.service';
+import { TopoJsonService } from './services/topojson.service';
+import { feature } from 'topojson';
+import { map } from 'rxjs/operators';
+import { StatesLayer } from './map/overlays/states.layer';
 
 
 
@@ -17,18 +21,27 @@ export class AppComponent implements OnInit {
   overlays: Array<Overlay> = new Array<Overlay>();
 
   // constructor is here only used to inject services
-  constructor(private dataService: DataService, private tooltipService: TooltipService) { }
+  constructor(private dataService: DataService, private tooltipService: TooltipService, private topoJsonService: TopoJsonService) { }
 
   /**
    * Retrieve data from server and add it to the overlays arrays
    */
   ngOnInit(): void {
-    this.dataService.getRegierungsBezirke().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new Overlay('Regierunsbezirke', val));
-    });
+    // this.dataService.getRegierungsBezirke().toPromise().then((val: FeatureCollection) => {
+    //   this.overlays.push(new Overlay('Regierunsbezirke', val));
+    // });
 
-    this.dataService.getLandkreise().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new LandkreisLayer('Landkreise', val, this.tooltipService));
+    // this.dataService.getLandkreise().toPromise().then((val: FeatureCollection) => {
+    //   this.overlays.push(new LandkreisLayer('Landkreise', val, this.tooltipService));
+    // });
+
+
+    this.topoJsonService.getTopoJsonGermany()
+    .pipe(
+      map((j: any) => feature(j, j.objects.states))
+    )
+    .subscribe((json: any) => {
+      this.overlays.push(new StatesLayer('Bundesländer', json));
     });
   }
 }
