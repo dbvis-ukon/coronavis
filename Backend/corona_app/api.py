@@ -4,6 +4,7 @@ import json
 from collections import Counter
 from flask import Blueprint, Response, jsonify, request
 from flask_caching import Cache
+from sqlalchemy import func, and_
 
 from .model import *
 
@@ -74,7 +75,9 @@ def get_hospitals():
     """
         Return all Hospitals
     """
-    hospitals = db.session.query(Hospital).all()
+    hospitals = db.session.query(Hospital).distinct(
+                 Hospital.name).order_by(Hospital.name, Hospital.last_update.desc()).all()
+
     features = []
     for elem in hospitals:
         features.append(elem.as_dict())
@@ -91,7 +94,9 @@ def get_hospitals_by_landkreise():
     """
 
     sql_stmt = '''
-select vkv.sn_l, vkv.sn_r, vkv.sn_k, vkv.gen, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+select vkv.sn_l, vkv.sn_r, vkv.sn_k, vkv.gen, 
+	JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, 
+	ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vkv.geom), 0.005))) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
 from vg250_krs vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
 group by vkv.sn_l, vkv.sn_r, vkv.sn_k, vkv.gen
     '''
@@ -143,11 +148,11 @@ def get_hospitals_by_regierungsbezirke():
 
     # use regierungsbezirke if they are available, for the others use bundeslaender
     sql_stmt = '''
-select vkv.sn_l, vkv.sn_r, vkv.gen, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+select vkv.sn_l, vkv.sn_r, vkv.gen, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vkv.geom), 0.005))) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
 from vg250_rbz vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom)
 group by vkv.sn_l, vkv.sn_r, vkv.gen
 union all
-select vkv.sn_l, vkv.sn_r, vkv.gen, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+select vkv.sn_l, vkv.sn_r, vkv.gen, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vkv.geom), 0.005))) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
 from vg250_lan vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom)
 where NOT (vkv.gen = ANY(array['Baden-Württemberg', 'Baden-Württemberg (Bodensee)', 'Bayern', 'Bayern (Bodensee)', 'Hessen', 'Nordrhein-Westfalen']))
 group by vkv.sn_l, vkv.sn_r, vkv.gen
@@ -200,7 +205,7 @@ def get_hospitals_by_bundeslander():
     sql_stmt = '''
 select vkv.sn_l, vkv.gen, 
 	JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, 
-	ST_AsGeoJSON(ST_Union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+	ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vkv.geom), 0.005))) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
 from vg250_lan vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom)
 where vkv.gen not like '%%Bodensee%%'
 group by vkv.sn_l, vkv.gen
@@ -242,6 +247,7 @@ group by vkv.sn_l, vkv.gen
 
 
 @backend_api.route('/cases/landkreise', methods=['GET'])
+@cache.cached()
 def get_cases_by_landkreise():
     """
         Return all Hospitals
@@ -253,7 +259,7 @@ with cases_landkreise as (
 	from cases
 	group by idlandkreis, DATE(meldedatum)
 )
-select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, JSON_AGG(JSON_BUILD_OBJECT('date', c."date" , 'cases', c.cases, 'deaths', c.deaths) ORDER by c."date") as cases, st_asgeojson(st_union(vk.geom)) as outline
+select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, JSON_AGG(JSON_BUILD_OBJECT('date', c."date" , 'cases', c.cases, 'deaths', c.deaths) ORDER by c."date") as cases, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vkv.geom), 0.005))) as outline
 from vg250_krs vk join cases_landkreise c on vk.ags = c.idlandkreis
 group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen 
     '''

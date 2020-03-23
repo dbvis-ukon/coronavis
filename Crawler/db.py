@@ -122,5 +122,70 @@ class Hospital(Base):
             'beds':
             self.beds
         }
+        
+        
+class Covid19CasesLK(Base):
+    """
+    Covid19CasesLK data class
+    """
+    __tablename__ = 'covid19caseslk'
+    
+    # Name,Adress,String,Kontakt,Bundesland,ICU low care,ICU high care,ECMO,Stand,Location
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    date = Column(DateTime, default=datetime.datetime.utcnow)
+    name = Column(String(255), nullable=False)
+    cases = Column(Integer(), nullable=False)
+    deaths = Column(Integer(), nullable=False)
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def __repr__(self):
+        return '<Covid19CasesLK %r>' % (self.name)
+
+    def as_dict(self):
+        return {
+            'id':
+            self.id,
+            'name':
+            self.name,
+            'cases':
+            self.cases,
+            'deaths':
+            self.deaths
+        }
+        
+class Covid19CasesBL(Base):
+    """
+    Covid19CasesBL data class
+    """
+    __tablename__ = 'covid19casesbl'
+    
+    # Name,Adress,String,Kontakt,Bundesland,ICU low care,ICU high care,ECMO,Stand,Location
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    date = Column(DateTime, default=datetime.datetime.utcnow)
+    name = Column(String(255), nullable=False)
+    cases = Column(Integer(), nullable=False)
+    deaths = Column(Integer(), nullable=False)
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def __repr__(self):
+        return '<Covid19CasesLK %r>' % (self.name)
+
+    def as_dict(self):
+        return {
+            'id':
+            self.id,
+            'name':
+            self.name,
+            'cases':
+            self.cases,
+            'deaths':
+            self.deaths
+        }
 
 Base.metadata.create_all(engine)

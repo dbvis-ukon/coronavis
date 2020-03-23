@@ -30,14 +30,13 @@ class Hospital(db.Model):
     """
     Hospital data class
     """
-    __tablename__ = 'hospitals_crawled'
+    __tablename__ = 'hospital'
 
-    index = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     address = db.Column(db.String(255), nullable=False)
     state = db.Column(db.String(255), nullable=False)
     contact = db.Column(db.String(255))
-    geom = db.Column(Geometry('POINT'))
     location = db.Column(Geometry('POINT'))
     icu_low_state = db.Column(db.String(255))
     icu_high_state = db.Column(db.String(255))
@@ -51,10 +50,10 @@ class Hospital(db.Model):
         return '<Hospital %r>' % (self.name)
 
     def as_dict(self):
-        result = geojson.Feature(geometry=(to_shape(self.geom)),
+        result = geojson.Feature(geometry=(to_shape(self.location)),
                                  properties={})
         result['properties'] = {
-            'index': self.index,
+            'index': self.id,
             'name': self.name,
             'address': self.address,
             'contact': self.contact,
