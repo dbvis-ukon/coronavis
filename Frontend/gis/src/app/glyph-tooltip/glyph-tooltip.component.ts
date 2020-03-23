@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {DiviHospital} from '../services/divi-hospitals.service';
-import {SimpleGlyphLayer} from '../map/overlays/simple-glyph.layer';
 import * as d3 from 'd3';
+import { ColormapService } from '../services/colormap.service';
 
 @Component({
   selector: 'app-glyph-tooltip',
@@ -33,11 +33,13 @@ export class GlyphTooltipComponent implements OnInit {
     d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
       .range(['white', '#333', 'white', 'white']);
 
-  getCapacityStateColor(capacityState: string): string {
-    return SimpleGlyphLayer.colorScaleOrd(capacityState);
+  constructor(private colormapService: ColormapService) {
   }
 
-  constructor() { }
+  getCapacityStateColor(capacityState: string): string {
+    return this.colormapService.getSingleHospitalColormap()(capacityState);
+  }
+
 
   ngOnInit() {
   }

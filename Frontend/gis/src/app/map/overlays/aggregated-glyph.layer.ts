@@ -2,7 +2,7 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import { DiviAggregatedHospital } from '../../services/divi-hospitals.service';
+import { DiviAggregatedHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {GlyphTooltipComponent} from '../../glyph-tooltip/glyph-tooltip.component';
 
@@ -53,40 +53,7 @@ export class AggregatedGlyphLayer extends Overlay {
       })
       .on('mouseenter', d1 => {
         const evt: MouseEvent = d3.event;
-        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY }, [
-          {
-            overlayX: 'start',
-            overlayY: 'top',
-            originX: 'end',
-            originY: 'bottom',
-            offsetX: 5,
-            offsetY: 5
-          },
-          {
-            overlayX: 'end',
-            overlayY: 'top',
-            originX: 'start',
-            originY: 'bottom',
-            offsetX: -5,
-            offsetY: 5
-          },
-          {
-            overlayX: 'start',
-            overlayY: 'bottom',
-            originX: 'end',
-            originY: 'top',
-            offsetX: 5,
-            offsetY: -5
-          },
-          {
-            overlayX: 'end',
-            overlayY: 'bottom',
-            originX: 'start',
-            originY: 'top',
-            offsetX: -5,
-            offsetY: -5
-          },
-        ]);
+        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
         t.name = d1.Name;
       })
       .on('mouseout', () => this.tooltipService.close());

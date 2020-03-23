@@ -8,8 +8,6 @@ import { ColormapService } from 'src/app/services/colormap.service';
 
 export class SimpleGlyphLayer extends Overlay {
 
-  public static colorScaleOrd: d3.ScaleOrdinal<string, string>;
-
   private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
 
   private map: L.Map;
@@ -32,7 +30,6 @@ export class SimpleGlyphLayer extends Overlay {
     });
 
     const colorScale = this.colormapService.getSingleHospitalColormap();
-    SimpleGlyphLayer.colorScaleOrd = colorScale;
     // calculate new color scale
     // .domain expects an array of [min, max] value
     // d3.extent returns exactly this array
@@ -64,41 +61,8 @@ export class SimpleGlyphLayer extends Overlay {
           return `translate(${p.x}, ${p.y})`; })
       .on('mouseenter', function(d1: DiviHospital) {
         const evt: MouseEvent = d3.event;
-        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY}, [
-          {
-            overlayX: 'start',
-            overlayY: 'top',
-            originX: 'end',
-            originY: 'bottom',
-            offsetX: 5,
-            offsetY: 5
-          },
-          {
-            overlayX: 'end',
-            overlayY: 'top',
-            originX: 'start',
-            originY: 'bottom',
-            offsetX: -5,
-            offsetY: 5
-          },
-          {
-            overlayX: 'start',
-            overlayY: 'bottom',
-            originX: 'end',
-            originY: 'top',
-            offsetX: 5,
-            offsetY: -5
-          },
-          {
-            overlayX: 'end',
-            overlayY: 'bottom',
-            originX: 'start',
-            originY: 'top',
-            offsetX: -5,
-            offsetY: -5
-          },
-        ]);
-        console.log('mouseenter', d1);
+        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
+        // console.log('mouseenter', d1);
         t.diviHospital = d1;
         d3.select(this).raise();
       })

@@ -37,44 +37,7 @@ export class LandkreisLayer extends Overlay {
                     mouseover: (e: L.LeafletMouseEvent) => {
 
                         const tooltipComponent = this.tooltipService
-                        .openAtElementRef(
-                            GlyphTooltipComponent,
-                            {x: e.originalEvent.clientX, y: e.originalEvent.clientY},
-                            [
-                                {
-                                overlayX: 'start',
-                                overlayY: 'top',
-                                originX: 'end',
-                                originY: 'bottom',
-                                offsetX: 5,
-                                offsetY: 5
-                                },
-                                {
-                                overlayX: 'end',
-                                overlayY: 'top',
-                                originX: 'start',
-                                originY: 'bottom',
-                                offsetX: -5,
-                                offsetY: 5
-                                },
-                                {
-                                overlayX: 'start',
-                                overlayY: 'bottom',
-                                originX: 'end',
-                                originY: 'top',
-                                offsetX: 5,
-                                offsetY: -5
-                                },
-                                {
-                                overlayX: 'end',
-                                overlayY: 'bottom',
-                                originX: 'start',
-                                originY: 'top',
-                                offsetX: -5,
-                                offsetY: -5
-                                },
-                            ]
-                            );
+                        .openAtElementRef(GlyphTooltipComponent, {x: e.originalEvent.clientX, y: e.originalEvent.clientY});
 
                         tooltipComponent.name = `County: ${feature.properties.name}`;
 
