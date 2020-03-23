@@ -28,9 +28,19 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       this.onZoomed();
     });
 
-    const locationPoints = this.data.map(d => this.map.latLngToContainerPoint(d.Location));
-    const [xMin, xMax] = d3.extent(locationPoints, d => d.x);
-    const [yMin, yMax] = d3.extent(locationPoints, d => d.y);
+    const latExtent = d3.extent(this.data, i => i.Location.lat);
+    const lngExtent = d3.extent(this.data, i => i.Location.lng);
+
+    let latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
+
+    latLngBounds = latLngBounds.pad(10);
+
+    const lpMin = this.map.latLngToLayerPoint(latLngBounds.getSouthWest());
+    const lpMax = this.map.latLngToLayerPoint(latLngBounds.getNorthEast());
+
+    // just to make everything bulletproof
+    const [xMin, xMax] = d3.extent([lpMin.x, lpMax.x]);
+    const [yMin, yMax] = d3.extent([lpMin.y, lpMax.y]);
 
     const svgElement: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
@@ -106,12 +116,8 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     //   .attr('height', '30px')
     //   .style('fill', d => colorScale(d.icuLowCare));
     //
-    const latExtent = d3.extent(this.data, i => i.Location.lat);
-    const lngExtent = d3.extent(this.data, i => i.Location.lng);
 
-    const latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
-
-    return L.svgOverlay(svgElement, [[latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]], {
+    return L.svgOverlay(svgElement, latLngBounds, {
       interactive: true,
       zIndex: 3
     });
