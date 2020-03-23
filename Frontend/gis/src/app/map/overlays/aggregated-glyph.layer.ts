@@ -4,7 +4,6 @@ import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
 import { DiviAggregatedHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
-import {GlyphTooltipComponent} from '../../glyph-tooltip/glyph-tooltip.component';
 
 export class AggregatedGlyphLayer extends Overlay {
 
@@ -27,9 +26,7 @@ export class AggregatedGlyphLayer extends Overlay {
   createOverlay(map: L.Map) {
     this.map = map;
 
-    this.map.on('zoom', (e) => {
-      this.onZoomed();
-    });
+    this.map.on('zoom', () => this.onZoomed());
 
     const latExtent = d3.extent(this.data, i => i.Location.lat);
     const lngExtent = d3.extent(this.data, i => i.Location.lng);
