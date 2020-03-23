@@ -72,9 +72,9 @@ def get_hospitals():
         Return all Hospitals
     """
     hospitals = db.session.query(Hospital).all()
-    features = {'features':[]}
+    features = []
     for elem in hospitals:
-        features['features'].append(elem.as_dict())
+        features.append(elem.as_dict())
     featurecollection = {
         "type": "FeatureCollection",
         "features": features
