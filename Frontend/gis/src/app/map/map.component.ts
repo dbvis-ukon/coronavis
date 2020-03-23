@@ -1,4 +1,13 @@
-import { Component, OnInit, Input, ViewEncapsulation, IterableDiffers, DoCheck, IterableChangeRecord } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewEncapsulation,
+  IterableDiffers,
+  DoCheck,
+  IterableChangeRecord,
+  ViewChild
+} from '@angular/core';
 
 import * as L from 'leaflet';
 import * as d3 from 'd3';
@@ -9,9 +18,15 @@ import { Overlay } from './overlays/overlay';
 import { SimpleGlyphLayer } from './overlays/simple-glyph.layer';
 import { DiviHospitalsService, DiviHospital } from '../services/divi-hospitals.service';
 import { TooltipService } from '../services/tooltip.service';
-import {SVGOverlay} from 'leaflet';
+import {GeoJSON, SVGOverlay} from 'leaflet';
 import { ColormapService } from '../services/colormap.service';
 import { AggregatedGlyphLayer } from './overlays/aggregated-glyph.layer';
+import {DataService} from "../services/data.service";
+import {HospitallayerService} from "../services/hospitallayer.service";
+import {ChoroplethLayer} from "./overlays/choropleth";
+import {FeatureCollection} from "geojson";
+import {Subject} from "rxjs";
+import {GlyphHoverEvent} from "./events/glyphhover";
 
 @Component({
   selector: 'app-map',
@@ -22,7 +37,9 @@ import { AggregatedGlyphLayer } from './overlays/aggregated-glyph.layer';
 })
 export class MapComponent implements OnInit, DoCheck {
 
-  @Input() overlays: Array<Overlay> = [];
+  @ViewChild('main') main;
+
+  @Input() overlays: Array<Overlay<FeatureCollection>> = [];
   iterableDiffer: any;
 
   private layerControl: L.Control.Layers;
@@ -40,10 +57,14 @@ export class MapComponent implements OnInit, DoCheck {
 
   private aggHospitalState: SVGOverlay;
 
+  private choroplethLayerMap = new Map<String, GeoJSON>();
+
   constructor(
     private iterable: IterableDiffers,
     private diviHospitalsService: DiviHospitalsService,
+    private dataService: DataService,
     private tooltipService: TooltipService,
+    private hospitallayerService: HospitallayerService,
     private colormapService: ColormapService
   ) {
     this.iterableDiffer = this.iterable.find(this.overlays).create();
@@ -95,15 +116,39 @@ export class MapComponent implements OnInit, DoCheck {
     };
 
     this.mymap.on('overlayadd', event => {
-      // this.mymap.eachLayer(layer => console.log(layer));
       if (this.glyphLayerOverlay) {
         this.glyphLayerOverlay.bringToFront();
+      }
+      if (this.aggHospitalCounty) {
+        this.aggHospitalCounty.bringToFront();
+      }
+      if (this.aggHospitalGovernmentDistrict) {
+        this.aggHospitalGovernmentDistrict.bringToFront();
+      }
+      if (this.aggHospitalState) {
+        this.aggHospitalState.bringToFront();
       }
     });
 
     // add a control which lets us toggle maps and overlays
     this.layerControl = L.control.layers(baseMaps);
     this.layerControl.addTo(this.mymap);
+
+    // Choropleth layers on hover
+    this.hospitallayerService.getLayers().subscribe(layer => {
+      this.choroplethLayerMap.set(layer.name, layer.createOverlay());
+    });
+    const layerEvents: Subject<GlyphHoverEvent> = new Subject<GlyphHoverEvent>();
+    layerEvents.subscribe(event => {
+      const layer = this.choroplethLayerMap.get(event.name);
+      if (layer) {
+        if (event.type === "enter") {
+          this.mymap.addLayer(layer);
+        } else {
+          this.mymap.removeLayer(layer);
+        }
+      }
+    });
 
     this.diviHospitalsService.getDiviHospitals().subscribe(data => {
       const glyphLayer = new SimpleGlyphLayer('Krankenäuser', data, this.tooltipService, this.colormapService);
@@ -117,26 +162,25 @@ export class MapComponent implements OnInit, DoCheck {
 
 
     this.diviHospitalsService.getDiviHospitalsCounties().subscribe(data => {
-      const l = new AggregatedGlyphLayer('Krankenäuser Landkreise', data, this.tooltipService, this.colormapService);
+      const l = new AggregatedGlyphLayer('Krankenäuser Landkreise', "landkreise", data, this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
       this.aggHospitalCounty = l.createOverlay(this.mymap);
       this.layerControl.addOverlay(this.aggHospitalCounty, l.name);
       this.semanticZoom();
     });
 
     this.diviHospitalsService.getDiviHospitalsGovernmentDistrict().subscribe(data => {
-      const l = new AggregatedGlyphLayer('Krankenäuser Regierungsbezirke', data, this.tooltipService, this.colormapService);
+      const l = new AggregatedGlyphLayer('Krankenäuser Regierungsbezirke', "regierungsbezirke", data, this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
       this.aggHospitalGovernmentDistrict = l.createOverlay(this.mymap);
       this.layerControl.addOverlay(this.aggHospitalGovernmentDistrict, l.name);
       this.semanticZoom();
     });
 
     this.diviHospitalsService.getDiviHospitalsStates().subscribe(data => {
-      const l = new AggregatedGlyphLayer('Krankenäuser Bundesländer', data, this.tooltipService, this.colormapService);
+      const l = new AggregatedGlyphLayer('Krankenäuser Bundesländer', "bundeslander", data, this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
       this.aggHospitalState = l.createOverlay(this.mymap);
       this.layerControl.addOverlay(this.aggHospitalState, l.name);
       this.semanticZoom();
     });
-
 
     this.mymap.on('zoom', this.semanticZoom);
   }
@@ -149,7 +193,7 @@ export class MapComponent implements OnInit, DoCheck {
     const changes = this.iterableDiffer.diff(this.overlays);
     if (changes) {
 
-      changes.forEachAddedItem((newOverlay: IterableChangeRecord<Overlay>) => {
+      changes.forEachAddedItem((newOverlay: IterableChangeRecord<Overlay<FeatureCollection>>) => {
         const overlay = newOverlay.item;
 
         const overlayLayer = overlay.createOverlay(this.mymap);

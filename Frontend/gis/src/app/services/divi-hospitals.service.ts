@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LatLngLiteral } from 'leaflet';
 import { environment } from 'src/environments/environment';
+import {Feature, FeatureCollection, MultiPolygon} from "geojson";
 
 
 export interface SingleHospitalGeometry {
@@ -35,9 +36,9 @@ export interface SingleHospital {
 
 
 /* aggregated hospitals */
-export interface AggregatedHospitalsGeometry {
+export interface AggregatedHospitalsGeometry extends MultiPolygon {
   coordinates: number[][][][];
-  type: string;
+  type: "MultiPolygon"
 }
 
 export interface AggregatedHospitalsCentroid {
@@ -63,15 +64,15 @@ export interface AggregatedHospitalsProperties {
   name: string;
 }
 
-export interface AggregatedHospitalsFeature {
+export interface AggregatedHospitalsFeature extends Feature<AggregatedHospitalsGeometry, AggregatedHospitalsProperties>{
   geometry: AggregatedHospitalsGeometry;
   properties: AggregatedHospitalsProperties;
-  type: string;
+  type: "Feature"
 }
 
-export interface AggregatedHospitals {
-  features: AggregatedHospitalsFeature[];
-  type: string;
+export interface AggregatedHospitals extends FeatureCollection {
+  features: Array<AggregatedHospitalsFeature>;
+  type: "FeatureCollection"
 }
 
 export interface DiviHospital {

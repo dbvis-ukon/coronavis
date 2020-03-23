@@ -6,8 +6,12 @@ import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.compo
 import { DiviHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {Point} from 'leaflet';
+import {Feature, FeatureCollection} from "geojson";
+import {Subject} from "rxjs";
+import {HospitallayerService} from "../../services/hospitallayer.service";
+import {GlyphHoverEvent} from "../events/glyphhover";
 
-export class SimpleGlyphLayer extends Overlay {
+export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
   private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private map: L.Map;
@@ -17,7 +21,7 @@ export class SimpleGlyphLayer extends Overlay {
     private data: DiviHospital[],
     private tooltipService: TooltipService,
     private colormapService: ColormapService
-  ) {
+    ) {
     super(name, null);
     this.enableDefault = true;
   }
@@ -26,6 +30,10 @@ export class SimpleGlyphLayer extends Overlay {
   private lastTransform;
 
   private labelLayout;
+
+  private latLngPoint(latlng: L.LatLngExpression): L.Point {
+    return this.map.project(latlng, 9);
+  }
 
   private rectSize = 10;
 
@@ -44,8 +52,8 @@ export class SimpleGlyphLayer extends Overlay {
 
     latLngBounds = latLngBounds.pad(10);
 
-    const lpMin = this.map.latLngToLayerPoint(latLngBounds.getSouthWest());
-    const lpMax = this.map.latLngToLayerPoint(latLngBounds.getNorthEast());
+    const lpMin = this.latLngPoint(latLngBounds.getSouthWest());
+    const lpMax = this.latLngPoint(latLngBounds.getNorthEast());
 
     // just to make everything bulletproof
     const [xMin, xMax] = d3.extent([lpMin.x, lpMax.x]);
@@ -71,15 +79,15 @@ export class SimpleGlyphLayer extends Overlay {
       .append<SVGGElement>('g')
       .attr('class', 'hospital')
       .attr('transform', d => {
-        const p = this.map.latLngToLayerPoint(d.Location);
-        d.x = p.x;
-        d.y = p.y;
-        d._x = p.x;
-        d._y = p.y;
-        d.vx = 1;
-        d.vy = 1;
-        // console.log(p, d.Location);
-        return `translate(${p.x}, ${p.y})`; })
+          const p = this.latLngPoint(d.Location);
+          d.x = p.x;
+          d.y = p.y;
+          d._x = p.x;
+          d._y = p.y;
+          d.vx = 1;
+          d.vy = 1;
+          // console.log(p, d.Location);
+          return `translate(${p.x}, ${p.y})`; })
       .on('mouseenter', function(d1: DiviHospital) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
@@ -150,9 +158,10 @@ export class SimpleGlyphLayer extends Overlay {
     // return L.svgOverlay(svgElement, this.map.getBounds());
   }
 
-  ticked() {
-    // this.gHospitals.each(this.collide(0.3));
-    this.gHospitals.attr('transform', (d, i) => {
+   ticked() {
+    this.gHospitals
+      .transition().duration(100)
+      .attr('transform', (d, i) => {
       return `translate(${d.x},${d.y})`;
     });
   }
