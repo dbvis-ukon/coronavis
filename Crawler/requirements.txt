@@ -12,3 +12,7 @@ GeoAlchemy2
 psycopg2-binary
 
 Flask-SQLAlchemy
+
+numpy
+psycopg2-binary
+requests
