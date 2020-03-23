@@ -9,6 +9,10 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfoboxComponent } from './infobox/infobox.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import {MatCardModule} from '@angular/material/card';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   entryComponents: [
@@ -25,7 +29,11 @@ import { InfoboxComponent } from './infobox/infobox.component';
     BrowserModule,
     HttpClientModule,
     OverlayModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatSlideToggleModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

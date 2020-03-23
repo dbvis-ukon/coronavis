@@ -1,1 +1,36 @@
-<p>infobox works!</p>
+
+
+<mat-card>
+    <!--<mat-card-title>
+        Krankenhäuser - Auslastung
+    </mat-card-title>-->
+    <mat-card-subtitle>
+        <p>Aggregation</p> 
+        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle value="bundeslaender">Bundesländer</mat-button-toggle>
+            <mat-button-toggle value="regierungsbezirke">Regierungsbezirke</mat-button-toggle>
+            <mat-button-toggle value="landkreise">Landkreise</mat-button-toggle>
+            <mat-button-toggle value="ohneaggregation">Ohne Aggregation</mat-button-toggle>
+        </mat-button-toggle-group>  
+    </mat-card-subtitle>
+    <mat-card-content>
+        <p>Legende</p> 
+         <img class="legend" src="/assets/legend.PNG" alt="Legende">
+    </mat-card-content>
+    <mat-card-content>
+            Filter 
+            <mat-list role="list">
+                    <mat-list-item role="listitem">
+                            <mat-slide-toggle>Zeige Alle Krankenhäuser</mat-slide-toggle>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
+                            <mat-slide-toggle>Zeige Hubschrauberlandeplätze</mat-slide-toggle>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
+                            <mat-slide-toggle>Zeige Aktuelle Fallzahlen</mat-slide-toggle>
+                    </mat-list-item>
+            </mat-list>            
+    </mat-card-content>
+
+    
+</mat-card>
