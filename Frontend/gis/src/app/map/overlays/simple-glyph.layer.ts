@@ -169,9 +169,9 @@ export class SimpleGlyphLayer extends Overlay {
       .velocityDecay(0.3)
       .alphaTarget(0.3)
       .force('collision', col)
-      .force('charge', d3.forceManyBody().distanceMin(22 * scale * 2).strength(0.3))
-      .force('x', d3.forceX((d: any) => d._x).strength(0.3))
-      .force('y', d3.forceY((d: any) => d._y).strength(0.3))
+      // .force('charge', d3.forceManyBody())
+      .force('x', d3.forceX((d: any) => d._x).strength(0.1))
+      .force('y', d3.forceY((d: any) => d._y).strength(0.1))
       .on('tick', () => {
         return this.ticked();
       });
