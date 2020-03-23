@@ -72,11 +72,11 @@ export class DataService {
   }
 
   /**
-   * Retrieves hospitals at the given granularity
+   * Retrieves the Landkreise from the given api endpoint.
    */
-  getHospitals(granularity: String): Observable<FeatureCollection> {
-    const url = `${environment.apiUrl}hospitals/${granularity}`;
-    return this.http.post<FeatureCollection>(url, null, httpOptions);
+  getCasesLandkreise(): Observable<FeatureCollection> {
+    const url = `${environment.apiUrl}cases/landkreise`;
+    return this.http.get<FeatureCollection>(url);
   }
 
   /**

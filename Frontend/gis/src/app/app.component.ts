@@ -10,6 +10,8 @@ import { StatesLayer } from './map/overlays/states.layer';
 import { HelipadLayer } from './map/overlays/helipads';
 import { HospitalLayer } from './map/overlays/hospital';
 import { LandkreiseHospitalsLayer } from './map/overlays/landkreishospitals';
+import {CaseChoropleth} from "./map/overlays/casechoropleth";
+import {ColormapService} from "./services/colormap.service";
 
 
 
@@ -23,7 +25,7 @@ export class AppComponent implements OnInit {
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
   // constructor is here only used to inject services
-  constructor(private dataService: DataService, private tooltipService: TooltipService, private topoJsonService: TopoJsonService) { }
+  constructor(private dataService: DataService, private tooltipService: TooltipService, private topoJsonService: TopoJsonService, private colormapService: ColormapService) { }
 
   /**
    * Retrieve data from server and add it to the overlays arrays
@@ -38,25 +40,25 @@ export class AppComponent implements OnInit {
     // });
 
 
-    this.topoJsonService.getTopoJsonGermany()
-    .pipe(
-      map((j: any) => feature(j, j.objects.states))
-    )
-    .subscribe((json: any) => {
-      this.overlays.push(new StatesLayer('Bundesländer', json));
+    // this.topoJsonService.getTopoJsonGermany()
+    // .pipe(
+    //   map((j: any) => feature(j, j.objects.states))
+    // )
+    // .subscribe((json: any) => {
+    //   this.overlays.push(new StatesLayer('Bundesländer', json));
+    //
+    // });
 
-    });
 
 
-
-    this.dataService.getOSMHospitals().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new HospitalLayer('Hospitals', val, this.tooltipService));
-    });
-
-    this.dataService.getOSHelipads().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new HelipadLayer('Helipads', val, this.tooltipService));
-    });
-
+    // this.dataService.getOSMHospitals().toPromise().then((val: FeatureCollection) => {
+    //   this.overlays.push(new HospitalLayer('Hospitals', val, this.tooltipService));
+    // });
+    //
+    // this.dataService.getOSHelipads().toPromise().then((val: FeatureCollection) => {
+    //   this.overlays.push(new HelipadLayer('Helipads', val, this.tooltipService));
+    // });
+    //
     // this.dataService.getHospitalsLandkreise().toPromise().then((val: FeatureCollection) => {
     //   this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Landkreise', val, this.tooltipService));
     //
@@ -69,5 +71,10 @@ export class AppComponent implements OnInit {
     // this.dataService.getHospitalsBundeslaender().toPromise().then((val: FeatureCollection) => {
     //   this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Bundesländer', val, this.tooltipService));
     // });
+
+    this.dataService.getCasesLandkreise().subscribe(data => {
+      this.overlays.push(new CaseChoropleth('Cases Lankreis 24h', data, "cases", "24h", this.tooltipService, this.colormapService));
+      this.overlays.push(new CaseChoropleth('Deaths Lankreis 24h', data, "deaths", "24h", this.tooltipService, this.colormapService));
+    });
   }
 }

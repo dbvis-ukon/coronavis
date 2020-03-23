@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
 
 @NgModule({
   entryComponents: [
@@ -14,7 +15,8 @@ import { OverlayModule } from '@angular/cdk/overlay';
   declarations: [
     AppComponent,
     MapComponent,
-    GlyphTooltipComponent
+    GlyphTooltipComponent,
+    CaseTooltipComponent
   ],
   imports: [
     BrowserModule,

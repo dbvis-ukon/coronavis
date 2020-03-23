@@ -7,7 +7,7 @@ import {ColormapService} from "../../services/colormap.service";
 import {AggregatedHospitals, AggregatedHospitalsProperties} from "../../services/divi-hospitals.service";
 import { ScaleLinear } from 'd3';
 
-export class ChoroplethLayer extends Overlay<AggregatedHospitals> {
+export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
   private colorMap: ScaleLinear<string, string>;
   constructor(name: string, hospitals: AggregatedHospitals, private type: String, colorsService: ColormapService) {
     super(name, hospitals);

@@ -138,7 +138,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`);
 
-    this.labelLayout = this.getForceSimulation();
+    // this.labelLayout = this.getForceSimulation();
 
     // gHos
     //   .append('rect')
@@ -185,9 +185,9 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     const zoom = this.map.getZoom();
     const scale = Math.pow(9 / (zoom), 3);
 
-    this.labelLayout.stop();
-    this.labelLayout.stop();
-    this.labelLayout = this.getForceSimulation(scale);
+    // this.labelLayout.stop();
+    // this.labelLayout.stop();
+    // this.labelLayout = this.getForceSimulation(scale);
 
     console.log('zoomed', this.map.getZoom(), scale);
 

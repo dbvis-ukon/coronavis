@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {DataService} from "./data.service";
 import {environment} from "../../environments/environment";
 import {HospitalLayer} from "../map/overlays/hospital";
-import {ChoroplethLayer} from "../map/overlays/choropleth";
+import {BedStatusChoropleth} from "../map/overlays/bedstatuschoropleth";
 import {FeatureCollection} from "geojson";
 import {BehaviorSubject, Subject} from "rxjs";
 import {Layer} from "leaflet";
@@ -15,12 +15,12 @@ import {AggregatedHospitals} from "./divi-hospitals.service";
 })
 export class HospitallayerService {
   private _layers = [];
-  private layers = new Subject<ChoroplethLayer>();
+  private layers = new Subject<BedStatusChoropleth>();
 
   constructor(private http: HttpClient, private dataService: DataService, private colormapService: ColormapService) {
   }
 
-  public getLayers(): Subject<ChoroplethLayer> {
+  public getLayers(): Subject<BedStatusChoropleth> {
     console.log("getting layers");
 
     const url = `${environment.apiUrl}hospitals/`;
@@ -35,7 +35,7 @@ export class HospitallayerService {
           console.log(data);
           for (let type of types) {
             console.log("creating layers for type", type);
-            const layer = new ChoroplethLayer(this.getName(granularity, type), data, type, this.colormapService);
+            const layer = new BedStatusChoropleth(this.getName(granularity, type), data, type, this.colormapService);
             this.layers.next(layer);
           }
         })
