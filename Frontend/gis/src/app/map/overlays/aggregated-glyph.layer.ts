@@ -4,28 +4,36 @@ import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
 import { DiviAggregatedHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
-import {GlyphTooltipComponent} from '../../glyph-tooltip/glyph-tooltip.component';
+import {FeatureCollection} from "geojson";
+import {GlyphHoverEvent} from "../events/glyphhover";
+import {HospitallayerService} from "../../services/hospitallayer.service";
+import {Subject} from "rxjs";
 
-export class AggregatedGlyphLayer extends Overlay {
+export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
   private gHospitals: d3.Selection<SVGGElement, DiviAggregatedHospital, SVGElement, unknown>;
   private map: L.Map;
 
   constructor(
     name: string,
+    private granularity: String,
     private data: DiviAggregatedHospital[],
     private tooltipService: TooltipService,
-    private colormapService: ColormapService
-  ) {
+    private colormapService: ColormapService,
+    private hospitallayerService: HospitallayerService,
+    private eventEmitter: Subject<GlyphHoverEvent>
+) {
     super(name, null);
+  }
+
+  private latLngPoint(latlng: L.LatLngExpression): L.Point {
+    return this.map.project(latlng, 9);
   }
 
   createOverlay(map: L.Map) {
     this.map = map;
 
-    this.map.on('zoom', (e) => {
-      this.onZoomed();
-    });
+    this.map.on('zoom', () => this.onZoomed());
 
     const latExtent = d3.extent(this.data, i => i.Location.lat);
     const lngExtent = d3.extent(this.data, i => i.Location.lng);
@@ -34,8 +42,8 @@ export class AggregatedGlyphLayer extends Overlay {
 
     latLngBounds = latLngBounds.pad(10);
 
-    const lpMin = this.map.latLngToLayerPoint(latLngBounds.getSouthWest());
-    const lpMax = this.map.latLngToLayerPoint(latLngBounds.getNorthEast());
+    const lpMin = this.latLngPoint(latLngBounds.getSouthWest());
+    const lpMax = this.latLngPoint(latLngBounds.getNorthEast());
 
     // just to make everything bulletproof
     const [xMin, xMax] = d3.extent([lpMin.x, lpMax.x]);
@@ -58,15 +66,15 @@ export class AggregatedGlyphLayer extends Overlay {
       .append<SVGGElement>('g')
       .attr('class', 'hospital')
       .attr('transform', d => {
-        const p = this.map.latLngToLayerPoint(d.Location);
+        const p = this.latLngPoint(d.Location);
         return `translate(${p.x - ((3 * rectSize + padding * 3) / 2)}, ${p.y - (22 / 2)})`;
-      })
-      .on('mouseenter', d1 => {
-        const evt: MouseEvent = d3.event;
-        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
-        t.name = d1.Name;
-      })
-      .on('mouseout', () => this.tooltipService.close());
+      });
+      // .on('mouseenter', d1 => {
+      //   const evt: MouseEvent = d3.event;
+      //   const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
+      //   t.name = d1.Name;
+      // })
+      // .on('mouseout', () => this.tooltipService.close());
 
 
 
@@ -84,13 +92,21 @@ export class AggregatedGlyphLayer extends Overlay {
       .attr('y', '8')
       .attr('font-size', '8px');
 
+
+    const self = this;
     this.gHospitals
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
-      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_low_state));
+      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_low_state))
+      .on("mouseenter", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_low_state"), "enter"));
+      })
+      .on("mouseleave", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_low_state"), "exit"));
+      })
 
     this.gHospitals
       .append('rect')
@@ -98,7 +114,13 @@ export class AggregatedGlyphLayer extends Overlay {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${rectSize + padding * 2}px`)
-      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_high_state));
+      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_high_state))
+      .on("mouseenter", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_high_state"), "enter"));
+      })
+      .on("mouseleave", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_high_state"), "exit"));
+      });
 
     this.gHospitals
       .append('rect')
@@ -106,7 +128,13 @@ export class AggregatedGlyphLayer extends Overlay {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`)
-      .style('fill', d1 => this.colormapService.getMaxColor(d1.ecmo_state));
+      .style('fill', d1 => this.colormapService.getMaxColor(d1.ecmo_state))
+      .on("mouseenter", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "ecmo_state"), "enter"));
+      })
+      .on("mouseleave", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "ecmo_state"), "exit"));
+      });
 
 
     // gHos
@@ -116,6 +144,7 @@ export class AggregatedGlyphLayer extends Overlay {
     //   .style('fill', d => colorScale(d.icuLowCare));
     //
 
+    this.onZoomed();
     return L.svgOverlay(svgElement, latLngBounds, {
       interactive: true,
       zIndex: 3

@@ -72,6 +72,14 @@ export class DataService {
   }
 
   /**
+   * Retrieves hospitals at the given granularity
+   */
+  getHospitals(granularity: String): Observable<FeatureCollection> {
+    const url = `${environment.apiUrl}hospitals/${granularity}`;
+    return this.http.post<FeatureCollection>(url, null, httpOptions);
+  }
+
+  /**
    * Retrieves the data and constructs a FeatureCollection object from the received data
    */
   private getFeatureCollection(url): Observable<FeatureCollection> {
