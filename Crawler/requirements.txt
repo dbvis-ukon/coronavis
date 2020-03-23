@@ -14,3 +14,6 @@ psycopg2-binary
 Flask-SQLAlchemy
 
 requests-html
+numpy
+psycopg2-binary
+requests
