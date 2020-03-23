@@ -4,6 +4,7 @@ import json
 from collections import Counter
 from flask import Blueprint, Response, jsonify, request
 from flask_caching import Cache
+from sqlalchemy import func, and_
 
 from .model import *
 
@@ -74,7 +75,9 @@ def get_hospitals():
     """
         Return all Hospitals
     """
-    hospitals = db.session.query(Hospital).all()
+    hospitals = db.session.query(Hospital).distinct(
+                 Hospital.name).order_by(Hospital.name, Hospital.last_update.desc()).all()
+
     features = []
     for elem in hospitals:
         features.append(elem.as_dict())
