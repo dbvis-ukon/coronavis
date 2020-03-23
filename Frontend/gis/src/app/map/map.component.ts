@@ -218,8 +218,11 @@ export class MapComponent implements OnInit {
     this.mymap = L.map('main', {
       minZoom: 6,
       maxZoom: 12,
-      layers: [juriMap]
+      layers: [juriMap],
+      zoomControl: false
     }).setView([48.6813312, 9.0088299], 9);
+
+    new L.Control.Zoom({ position: 'topright' }).addTo(this.mymap);
     // this.mymap.on('viewreset', () => this.updateSvg());
     // this.mymap.on('zoom', () => this.updateSvg());
 

@@ -20,6 +20,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatButtonModule} from '@angular/material/button';
 
 
 
@@ -49,7 +50,8 @@ import {MatRadioModule} from '@angular/material/radio';
     MatExpansionModule,
     MatTooltipModule,
     MatIconModule,
-    MatRadioModule
+    MatRadioModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

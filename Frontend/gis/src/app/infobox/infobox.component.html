@@ -1,4 +1,10 @@
-<button mat-button (click)="infoboxExtended = !infoboxExtended"><icons-image><span class="material-icons icon-image-preview">{{ infoboxExtended ? 'layers_clear' : 'layers' }}</span></icons-image></button>
+<button 
+    mat-icon-button 
+    (click)="infoboxExtended = !infoboxExtended"
+    >
+    <mat-icon>{{ infoboxExtended ? 'layers_clear' : 'layers' }}</mat-icon>
+</button>
+
 <mat-card *ngIf="infoboxExtended"> 
     <mat-card-title>
         Krankenhäuser - Auslastung
