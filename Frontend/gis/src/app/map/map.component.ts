@@ -6,7 +6,9 @@ import {
   IterableDiffers,
   DoCheck,
   IterableChangeRecord,
-  ViewChild
+  ViewChild,
+  EventEmitter,
+  Output
 } from '@angular/core';
 
 import * as L from 'leaflet';
@@ -25,8 +27,56 @@ import {DataService} from "../services/data.service";
 import {HospitallayerService} from "../services/hospitallayer.service";
 import {ChoroplethLayer} from "./overlays/choropleth";
 import {FeatureCollection} from "geojson";
-import {Subject} from "rxjs";
+import {Subject, forkJoin} from "rxjs";
 import {GlyphHoverEvent} from "./events/glyphhover";
+import { LandkreiseHospitalsLayer } from './overlays/landkreishospitals';
+
+export enum AggregationLevel {
+  none = 'none',
+  county = 'county',
+  governmentDistrict = 'governmentDistrict',
+  state = 'state'
+}
+
+export enum CovidNumberCaseChange {
+  absolute,
+
+  relative
+}
+
+export enum CovidNumberCaseTimeWindow {
+  
+  twentyFourhours,
+  
+  seventyTwoHours,
+  
+  all,
+}
+
+export enum CovidNumberCaseType {
+
+  cases,
+
+  deaths
+
+}
+
+export class CovidNumberCaseOptions {
+
+  change: CovidNumberCaseChange;
+
+  timeWindow: CovidNumberCaseTimeWindow;
+
+  type: CovidNumberCaseType;
+
+  /**
+   * this should be used for maps
+   */
+  getKey(): string {
+    return `${this.change}-${this.timeWindow}-${this.type}`;
+  }
+
+}
 
 @Component({
   selector: 'app-map',
@@ -59,6 +109,15 @@ export class MapComponent implements OnInit, DoCheck {
 
   private choroplethLayerMap = new Map<String, GeoJSON>();
 
+  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<FeatureCollection>>();
+
+  private aggregationLevelToGlyphMap = new Map<AggregationLevel, L.SVGOverlay | L.LayerGroup<any>>();
+
+  private _aggregationLevel: AggregationLevel;
+
+  @Output()
+  aggregationLevelChange: EventEmitter<AggregationLevel> = new EventEmitter();
+
   constructor(
     private iterable: IterableDiffers,
     private diviHospitalsService: DiviHospitalsService,
@@ -68,6 +127,18 @@ export class MapComponent implements OnInit, DoCheck {
     private colormapService: ColormapService
   ) {
     this.iterableDiffer = this.iterable.find(this.overlays).create();
+  }
+
+  @Input()
+  set aggregationLevel(agg: AggregationLevel) {
+    this._aggregationLevel = agg;
+
+    // show new layer
+    this.updateGlyphMapLayers(agg);
+  }
+
+  get aggregationLevel(): AggregationLevel {
+    return this._aggregationLevel;
   }
 
   ngOnInit() {
@@ -143,6 +214,7 @@ export class MapComponent implements OnInit, DoCheck {
       const layer = this.choroplethLayerMap.get(event.name);
       if (layer) {
         if (event.type === "enter") {
+          layer.bringToBack();
           this.mymap.addLayer(layer);
         } else {
           this.mymap.removeLayer(layer);
@@ -150,36 +222,37 @@ export class MapComponent implements OnInit, DoCheck {
       }
     });
 
-    this.diviHospitalsService.getDiviHospitals().subscribe(data => {
-      const glyphLayer = new SimpleGlyphLayer('Krankenäuser', data, this.tooltipService, this.colormapService);
-      this.glyphLayerOverlay = glyphLayer.createOverlay(this.mymap);
+    // init the glyph layers
+    forkJoin([
+      // 0
+      this.diviHospitalsService.getDiviHospitals(),
+      // 1
+      this.diviHospitalsService.getDiviHospitalsCounties(),
+      this.dataService.getHospitalsLandkreise(),
+      // 3
+      this.diviHospitalsService.getDiviHospitalsGovernmentDistrict(),
+      this.dataService.getHospitalsRegierungsbezirke(),
+      // 5
+      this.diviHospitalsService.getDiviHospitalsStates(),
+      this.dataService.getHospitalsBundeslaender()
+    ])
+    .subscribe(result => {
+      const simpleGlyphFactory = new SimpleGlyphLayer('ho_none', result[0] as DiviHospital[], this.tooltipService, this.colormapService);
+      const simpleGlyphLayer = simpleGlyphFactory.createOverlay(this.mymap);
+      this.aggregationLevelToGlyphMap.set(AggregationLevel.none, simpleGlyphLayer);
+      this.layerToFactoryMap.set(simpleGlyphLayer, simpleGlyphFactory);
+      
+      // TODO : this is just for debug
+      this.layerControl.addOverlay(simpleGlyphLayer, simpleGlyphFactory.name);
 
-      // this.mymap.addLayer(glyphs.createOverlay());
-      this.layerControl.addOverlay(this.glyphLayerOverlay, glyphLayer.name);
-      this.mymap.addLayer(this.glyphLayerOverlay);
-      this.semanticZoom();
-    });
 
+      this.addGlyphMap(result, 1, AggregationLevel.county, 'ho_county', 'landkreise', layerEvents);
+      this.addGlyphMap(result, 3, AggregationLevel.governmentDistrict, 'ho_governmentdistrict', 'regierungsbezirke', layerEvents);
+      this.addGlyphMap(result, 5, AggregationLevel.state, 'ho_state', 'bundeslander', layerEvents);
+      
 
-    this.diviHospitalsService.getDiviHospitalsCounties().subscribe(data => {
-      const l = new AggregatedGlyphLayer('Krankenäuser Landkreise', "landkreise", data, this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
-      this.aggHospitalCounty = l.createOverlay(this.mymap);
-      this.layerControl.addOverlay(this.aggHospitalCounty, l.name);
-      this.semanticZoom();
-    });
-
-    this.diviHospitalsService.getDiviHospitalsGovernmentDistrict().subscribe(data => {
-      const l = new AggregatedGlyphLayer('Krankenäuser Regierungsbezirke', "regierungsbezirke", data, this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
-      this.aggHospitalGovernmentDistrict = l.createOverlay(this.mymap);
-      this.layerControl.addOverlay(this.aggHospitalGovernmentDistrict, l.name);
-      this.semanticZoom();
-    });
-
-    this.diviHospitalsService.getDiviHospitalsStates().subscribe(data => {
-      const l = new AggregatedGlyphLayer('Krankenäuser Bundesländer', "bundeslander", data, this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
-      this.aggHospitalState = l.createOverlay(this.mymap);
-      this.layerControl.addOverlay(this.aggHospitalState, l.name);
-      this.semanticZoom();
+      // init map with the current aggregation level
+      this.updateGlyphMapLayers(this._aggregationLevel);
     });
 
     this.mymap.on('zoom', this.semanticZoom);
@@ -222,5 +295,38 @@ export class MapComponent implements OnInit, DoCheck {
     //   this.mymap.removeLayer(this.aggHospitalCounty);
     //   this.mymap.addLayer(this.aggHospitalGovernmentDistrict);
     // }
+  }
+
+  private addGlyphMap(result: any[], index: number, agg: AggregationLevel, name: string, granularity: string, layerEvents: Subject<GlyphHoverEvent>) {
+    const factory = new AggregatedGlyphLayer(name, granularity, result[index], this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
+    const layer = factory.createOverlay(this.mymap);
+
+
+    const factoryBg = new LandkreiseHospitalsLayer(name + '_bg', result[index+1], this.tooltipService);
+    const layerBg = factoryBg.createOverlay();
+
+
+    // Create a layer group
+    const layerGroup = L.layerGroup([layerBg, layer]);
+
+    this.aggregationLevelToGlyphMap.set(agg, layerGroup);
+
+    this.layerToFactoryMap.set(layerGroup, factory);
+
+    // TODO : this is just for debug
+    this.layerControl.addOverlay(layerGroup, factory.name);
+  }
+
+  private updateGlyphMapLayers(agg: AggregationLevel) {
+    // remove all layers
+    this.aggregationLevelToGlyphMap.forEach(l => {
+      this.mymap.removeLayer(l);
+    });
+
+    if(!this.aggregationLevelToGlyphMap.has(agg)) {
+      throw 'No glyph map for aggregation ' + agg + ' found';
+    }
+
+    this.mymap.addLayer(this.aggregationLevelToGlyphMap.get(agg));
   }
 }

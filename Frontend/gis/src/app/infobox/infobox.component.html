@@ -6,11 +6,11 @@
     <mat-card-subtitle>
         <p>Aggregation</p> 
         <!--  use text instead of logos -->
-        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle value="bundeslaender" matTooltip="Bundesländer">Länder</mat-button-toggle>
-            <mat-button-toggle value="regierungsbezirke" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
-            <mat-button-toggle value="landkreise" matTooltip="Landkreise">Kreise</mat-button-toggle>
-            <mat-button-toggle value="ohneaggregation" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
+        <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="aggregationLevel" (change)="emitAggregationLevel($event)">
+            <mat-button-toggle value="state" matTooltip="Bundesländer">Länder</mat-button-toggle>
+            <mat-button-toggle value="governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+            <mat-button-toggle value="county" matTooltip="Landkreise">Kreise</mat-button-toggle>
+            <mat-button-toggle value="none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
         </mat-button-toggle-group>  
         <!--  use logos instead of text -->
         <!--<mat-button-toggle-group class="aggregationsstufen" name="fontStyle" aria-label="Font Style">

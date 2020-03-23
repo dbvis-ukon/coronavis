@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { AggregationLevel } from '../map/map.component';
 
 @Component({
   selector: 'app-infobox',
@@ -11,7 +12,17 @@ export class InfoboxComponent implements OnInit {
   
   infoboxExtended = true;
 
+  @Input()
+  aggregationLevel: AggregationLevel;
+
+  @Output()
+  aggregationLevelChange: EventEmitter<AggregationLevel> = new EventEmitter();
+
   ngOnInit(): void {
+  }
+
+  emitAggregationLevel(evt) {
+    this.aggregationLevelChange.emit(evt.value);
   }
 
 }

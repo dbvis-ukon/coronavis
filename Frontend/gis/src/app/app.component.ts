@@ -10,6 +10,7 @@ import { StatesLayer } from './map/overlays/states.layer';
 import { HelipadLayer } from './map/overlays/helipads';
 import { HospitalLayer } from './map/overlays/hospital';
 import { LandkreiseHospitalsLayer } from './map/overlays/landkreishospitals';
+import { AggregationLevel } from './map/map.component';
 
 
 
@@ -21,6 +22,8 @@ import { LandkreiseHospitalsLayer } from './map/overlays/landkreishospitals';
 export class AppComponent implements OnInit {
 
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
+
+  aggregationLevel: AggregationLevel = AggregationLevel.none;
 
   // constructor is here only used to inject services
   constructor(private dataService: DataService, private tooltipService: TooltipService, private topoJsonService: TopoJsonService) { }
