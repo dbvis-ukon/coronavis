@@ -24,7 +24,7 @@ export class ColormapService {
   }
 
   getCaseColor(normalizedCount: number): string {
-    return d3.interpolateBlues(normalizedCount);
+    return d3.interpolateBlues(normalizedCount)
   }
 
   getDeathsColor(normalizedCount: number): string {

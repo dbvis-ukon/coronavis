@@ -50,7 +50,6 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
         const last = combined[0];
         const prev = combined[1];
         if (this.type === "cases") {
-          console.log(last.cases, prev.cases, ((last.cases - prev.cases) / prev.cases) * 100 || 0);
           return ((last.cases - prev.cases) / prev.cases) * 100 || 0;
         }
         return ((last.deaths - prev.deaths) / prev.deaths) * 100 || 0;
@@ -59,7 +58,6 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
         const last = combined[0];
         const prev = combined[2];
         if (this.type === "cases") {
-          console.log(last.cases, prev.cases, ((last.cases - prev.cases) / prev.cases) * 100 || 0);
           return ((last.cases - prev.cases) / prev.cases) * 100 || 0;
         }
         return ((last.deaths - prev.deaths) / prev.deaths) * 100 || 0;
@@ -72,8 +70,8 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
 
     let normalizeValues;
     if (this.isRelative === false) {
-      normalizeValues = d3.scaleLinear()
-        .domain([0, d3.max(cases)])
+      normalizeValues = d3.scalePow().exponent(0.33)
+        .domain([0, d3.max(cases, d => d)])
         .range([0, 1]);
     } else {
       const [minChange, maxChange] = d3.extent(cases.filter(d => d < Infinity));
