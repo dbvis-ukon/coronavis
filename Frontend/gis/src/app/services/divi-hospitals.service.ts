@@ -85,6 +85,8 @@ export interface DiviHospital {
   'y': number;
   '_x': number;
   '_y': number;
+  'vx': number;
+  'vy': number;
 }
 
 export interface DiviAggregatedHospital {
