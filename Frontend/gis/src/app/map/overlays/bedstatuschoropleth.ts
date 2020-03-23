@@ -47,11 +47,11 @@ export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
       style: (feature) => {
         return {
           fillColor: this.colorMap(normalizeValues(this.getScore(feature.properties))),
-          weight: 2,
+          weight: 0.5,
           opacity: 1,
-          color: 'white',
-          dashArray: '3',
-          fillOpacity: 0.7,
+          color: 'gray',
+          // dashArray: '3',
+          fillOpacity: 1,
           pointerEvents: "none"
         };
       },
