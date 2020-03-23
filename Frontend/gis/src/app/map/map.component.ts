@@ -14,6 +14,8 @@ import { ColormapService } from '../services/colormap.service';
 import { AggregatedGlyphLayer } from './overlays/aggregated-glyph.layer';
 import {DataService} from "../services/data.service";
 import {HospitallayerService} from "../services/hospitallayer.service";
+import {ChoroplethLayer} from "./overlays/choropleth";
+import {FeatureCollection} from "geojson";
 
 @Component({
   selector: 'app-map',
@@ -24,7 +26,7 @@ import {HospitallayerService} from "../services/hospitallayer.service";
 })
 export class MapComponent implements OnInit, DoCheck {
 
-  @Input() overlays: Array<Overlay> = [];
+  @Input() overlays: Array<Overlay<FeatureCollection>> = [];
   iterableDiffer: any;
 
   private layerControl: L.Control.Layers;
@@ -144,12 +146,8 @@ export class MapComponent implements OnInit, DoCheck {
 
     this.mymap.on('zoom', this.semanticZoom);
 
-    const groups = L.layerGroup();
-    this.hospitallayerService.getLayers().subscribe(layers => {
-      layers.forEach(layer => {
-        console.log(layer);
+    this.hospitallayerService.getLayers().subscribe(layer => {
         this.layerControl.addOverlay(layer.createOverlay(), layer.name);
-      })
     });
 
   }
@@ -162,7 +160,7 @@ export class MapComponent implements OnInit, DoCheck {
     const changes = this.iterableDiffer.diff(this.overlays);
     if (changes) {
 
-      changes.forEachAddedItem((newOverlay: IterableChangeRecord<Overlay>) => {
+      changes.forEachAddedItem((newOverlay: IterableChangeRecord<Overlay<FeatureCollection>>) => {
         const overlay = newOverlay.item;
 
         const overlayLayer = overlay.createOverlay(this.mymap);

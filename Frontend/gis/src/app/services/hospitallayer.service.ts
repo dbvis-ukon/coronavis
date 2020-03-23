@@ -3,22 +3,24 @@ import {HttpClient} from "@angular/common/http";
 import {DataService} from "./data.service";
 import {environment} from "../../environments/environment";
 import {HospitalLayer} from "../map/overlays/hospital";
-import {AggregationLayer} from "../map/overlays/aggregations";
+import {ChoroplethLayer} from "../map/overlays/choropleth";
 import {FeatureCollection} from "geojson";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 import {Layer} from "leaflet";
+import {ColormapService} from "./colormap.service";
+import {AggregatedHospitals} from "./divi-hospitals.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class HospitallayerService {
   private _layers = [];
-  private layers = new BehaviorSubject<HospitalLayer[]>(this._layers);
+  private layers = new Subject<ChoroplethLayer>();
 
-  constructor(private http: HttpClient, private dataService: DataService) {
+  constructor(private http: HttpClient, private dataService: DataService, private colormapService: ColormapService) {
   }
 
-  public getLayers(): BehaviorSubject<HospitalLayer[]> {
+  public getLayers(): Subject<ChoroplethLayer> {
     console.log("getting layers");
 
     const url = `${environment.apiUrl}hospitals/`;
@@ -28,14 +30,13 @@ export class HospitallayerService {
 
     for (let granularity of granularities) {
       console.log("getting data for granularity", granularity);
-      this.http.get<FeatureCollection>(url + granularity)
+      this.http.get<AggregatedHospitals>(url + granularity)
         .subscribe(data => {
           console.log(data);
           for (let type of types) {
             console.log("creating layers for type", type);
-            const layer = new AggregationLayer(`Hospitals_${granularity}_${type}`, data, type);
-            this._layers.push(layer);
-            this.layers.next(this._layers);
+            const layer = new ChoroplethLayer(`Hospitals_${granularity}_${type}`, data, type, this.colormapService);
+            this.layers.next(layer);
           }
         })
     }

@@ -4,7 +4,7 @@ import * as L from 'leaflet';
 import { Overlay } from './overlay';
 import { TooltipService } from 'src/app/services/tooltip.service';
 
-export class LandkreiseHospitalsLayer extends Overlay {
+export class LandkreiseHospitalsLayer extends Overlay<FeatureCollection> {
   constructor(
     name: string,
     featureCollection: FeatureCollection,

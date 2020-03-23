@@ -3,7 +3,7 @@ import * as L from 'leaflet';
 import { Overlay } from './overlay';
 import { FeatureCollection } from 'geojson';
 
-export class StatesLayer extends Overlay {
+export class StatesLayer extends Overlay<FeatureCollection> {
     constructor(name: string, featureCollection: FeatureCollection) {
         super(name, featureCollection);
     }

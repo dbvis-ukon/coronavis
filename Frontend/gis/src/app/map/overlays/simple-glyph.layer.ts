@@ -6,8 +6,9 @@ import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.compo
 import { DiviHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {Point} from 'leaflet';
+import {Feature, FeatureCollection} from "geojson";
 
-export class SimpleGlyphLayer extends Overlay {
+export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
   private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private map: L.Map;

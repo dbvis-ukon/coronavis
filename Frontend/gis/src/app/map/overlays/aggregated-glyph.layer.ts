@@ -5,8 +5,9 @@ import {TooltipService} from '../../services/tooltip.service';
 import { DiviAggregatedHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {GlyphTooltipComponent} from '../../glyph-tooltip/glyph-tooltip.component';
+import {FeatureCollection} from "geojson";
 
-export class AggregatedGlyphLayer extends Overlay {
+export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
   private gHospitals: d3.Selection<SVGGElement, DiviAggregatedHospital, SVGElement, unknown>;
   private map: L.Map;
