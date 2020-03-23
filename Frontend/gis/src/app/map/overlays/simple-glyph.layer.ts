@@ -1,15 +1,12 @@
 import * as L from 'leaflet';
 import * as d3 from 'd3';
-import { Overlay } from './overlay';
-import { TooltipService } from 'src/app/services/tooltip.service';
-import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
-import { DiviHospital } from 'src/app/services/divi-hospitals.service';
-import { ColormapService } from 'src/app/services/colormap.service';
-import {Point} from 'leaflet';
+import {Overlay} from './overlay';
+import {TooltipService} from 'src/app/services/tooltip.service';
+import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
+import {DiviHospital} from 'src/app/services/divi-hospitals.service';
+import {ColormapService} from 'src/app/services/colormap.service';
 import {Feature, FeatureCollection} from "geojson";
-import {Subject} from "rxjs";
-import {HospitallayerService} from "../../services/hospitallayer.service";
-import {GlyphHoverEvent} from "../events/glyphhover";
+import {quadtree} from 'd3';
 
 export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
@@ -21,7 +18,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     private data: DiviHospital[],
     private tooltipService: TooltipService,
     private colormapService: ColormapService
-    ) {
+  ) {
     super(name, null);
     this.enableDefault = true;
   }
@@ -36,6 +33,10 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
   }
 
   private rectSize = 10;
+  private glyphSize = {
+    width: 50,
+    height: 22
+  }
 
   createOverlay(map: L.Map) {
     this.map = map;
@@ -79,16 +80,15 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .append<SVGGElement>('g')
       .attr('class', 'hospital')
       .attr('transform', d => {
-          const p = this.latLngPoint(d.Location);
-          d.x = p.x;
-          d.y = p.y;
-          d._x = p.x;
-          d._y = p.y;
-          d.vx = 1;
-          d.vy = 1;
-          // console.log(p, d.Location);
-          return `translate(${p.x}, ${p.y})`; })
-      .on('mouseenter', function(d1: DiviHospital) {
+        const p = this.latLngPoint(d.Location);
+        d.x = p.x;
+        d.y = p.y;
+        d._x = p.x;
+        d._y = p.y;
+        // console.log(p, d.Location);
+        return `translate(${p.x}, ${p.y})`;
+      })
+      .on('mouseenter', function (d1: DiviHospital) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
         // console.log('mouseenter', d1);
@@ -99,8 +99,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     this.gHospitals
       .append('rect')
-      .attr('width', '50')
-      .attr('height', '22')
+      .attr('width', this.glyphSize.width)
+      .attr('height', this.glyphSize.height)
       .attr('fill', 'white')
       .attr('stroke', '#cccccc');
 
@@ -141,14 +141,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('y', yOffset)
       .attr('x', `${2 * this.rectSize + padding * 3}px`);
 
-    this.labelLayout = this.getForceSimulation();
-
-    // gHos
-    //   .append('rect')
-    //   .attr('width', '30px')
-    //   .attr('height', '30px')
-    //   .style('fill', d => colorScale(d.icuLowCare));
-    //
+    // this.startForceSimulation([[-this.glyphSize.width / 2, -this.glyphSize.height / 2], [this.glyphSize.width / 2, this.glyphSize.height / 2]])
     this.onZoomed();
 
     return L.svgOverlay(svgElement, latLngBounds, {
@@ -158,149 +151,239 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     // return L.svgOverlay(svgElement, this.map.getBounds());
   }
 
-   ticked() {
+  startForceSimulation(glyphSizes): d3.Simulation<any, undefined> {
+    return d3.forceSimulation(this.data)
+      .alpha(0.1)
+      .force("collide", this.quadtreeCollide(glyphSizes))
+      // .on('tick', () => this.ticked());
+      .on('end', () => this.ticked());
+  }
+
+  ticked() {
     this.gHospitals
       .transition().duration(100)
       .attr('transform', (d, i) => {
-      return `translate(${d.x},${d.y})`;
-    });
+        return `translate(${d.x},${d.y})`;
+      });
   }
 
-  /*
-   * Rectangular Force Collision
-   * https://bl.ocks.org/cmgiven/547658968d365bcc324f3e62e175709b
-   */
-  getForceSimulation(scale: number = 1): d3.Simulation<any, undefined> {
-    const col = this.rectCollide();
-    col.size([50 * scale, 22 * scale]);
-    col.initialize(this.data);
-    return d3.forceSimulation(this.data)
-      .velocityDecay(0.3)
-      .alphaTarget(0.3)
-      .force('collision', col)
-      // .force('charge', d3.forceManyBody())
-      .force('x', d3.forceX((d: any) => d._x).strength(0.1))
-      .force('y', d3.forceY((d: any) => d._y).strength(0.1))
-      .on('tick', () => {
-        return this.ticked();
-      });
-      // d3.forceCollide( (d) => 30 * scale).iterations(5).strength(0.2) )
-      // .alphaTarget(0.3)
-      // .force('charge', d3.forceManyBody().strength(0.1));
-  }
 
   onZoomed() {
     const zoom = this.map.getZoom();
     const scale = Math.pow(9 / (zoom), 3);
 
-    this.labelLayout.stop();
-    this.labelLayout = this.getForceSimulation(scale);
+    this.data.forEach(d => {
+      d.x = d._x;
+      d.y = d._y;
+    });
+
+    if (this.labelLayout) {
+      this.labelLayout.stop();
+    }
+    this.labelLayout = this.startForceSimulation([[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]]);
+    // this.labelLayout = this.startForceSimulation([[-this.glyphSize.width / 2, -this.glyphSize.height / 2], [this.glyphSize.width / 2, this.glyphSize.height / 2]]);
 
     console.log('zoomed', this.map.getZoom(), scale);
 
     this.gHospitals
       .selectAll('*')
       .transition()
-      .duration(500)
+      .duration(100)
       .attr('transform', d => {
         return `scale(${scale}, ${scale})`;
       });
   }
 
-  rectCollide() {
-    var nodes, sizes;
-    var size = this.constant([0, 0]);
-    var strength = 1;
-    var iterations = 1;
+  private quadtreeCollide(bbox) {
+    bbox = constant(bbox === null ? [[0, 0][1, 1]] : bbox)
+
+    let nodes;
+    let boundingBoxes;
+    let  strength = 1;
+    let iterations = 1;
+
+    force.initialize = function (_) {
+      var i, n = (nodes = _).length;
+      boundingBoxes = new Array(n);
+      for (i = 0; i < n; ++i) boundingBoxes[i] = bbox(nodes[i], i, nodes);
+    };
+
+    force.iterations = function (_) {
+      return arguments.length ? (iterations = +_, force) : iterations;
+    };
+
+    force.strength = function (_) {
+      return arguments.length ? (strength = +_, force) : strength;
+    };
+
+    force.bbox = function (_) {
+      return arguments.length ? (bbox = typeof _ === "function" ? _ : constant(+_), force) : bbox;
+    };
+
+    function x(d) {
+      return d.x + d.vx;
+    }
+
+    function y(d) {
+      return d.y + d.vy;
+    }
+
+    function constant(x) {
+      return function () {
+        return x;
+      };
+    }
 
     function force() {
-      var node, size, xi, yi;
-      var i = -1;
-      while (++i < iterations) { iterate() }
+      var i,
+        tree,
+        node,
+        xi,
+        yi,
+        bbi,
+        nx1,
+        ny1,
+        nx2,
+        ny2
 
-      function iterate() {
-        var j = -1;
-        var tree = d3.quadtree(nodes, xCenter, yCenter).visitAfter(prepare);
+      var cornerNodes = []
+      nodes.forEach(function (d, i) {
+        cornerNodes.push({
+          node: d,
+          vx: d.vx,
+          vy: d.vy,
+          x: d.x + (boundingBoxes[i][1][0] + boundingBoxes[i][0][0]) / 2,
+          y: d.y + (boundingBoxes[i][0][1] + boundingBoxes[i][1][1]) / 2
+        })
+        cornerNodes.push({
+          node: d,
+          vx: d.vx,
+          vy: d.vy,
+          x: d.x + boundingBoxes[i][0][0],
+          y: d.y + boundingBoxes[i][0][1]
+        })
+        cornerNodes.push({
+          node: d,
+          vx: d.vx,
+          vy: d.vy,
+          x: d.x + boundingBoxes[i][0][0],
+          y: d.y + boundingBoxes[i][1][1]
+        })
+        cornerNodes.push({
+          node: d,
+          vx: d.vx,
+          vy: d.vy,
+          x: d.x + boundingBoxes[i][1][0],
+          y: d.y + boundingBoxes[i][0][1]
+        })
+        cornerNodes.push({
+          node: d,
+          vx: d.vx,
+          vy: d.vy,
+          x: d.x + boundingBoxes[i][1][0],
+          y: d.y + boundingBoxes[i][1][1]
+        })
+      })
+      var cn = cornerNodes.length
 
-        while (++j < nodes.length) {
-          node = nodes[j];
-          size = sizes[j];
-          xi = xCenter(node);
-          yi = yCenter(node);
+      for (var k = 0; k < iterations; ++k) {
+        tree = quadtree(cornerNodes, x, y).visitAfter(prepareCorners);
 
+        for (i = 0; i < cn; ++i) {
+          var nodeI = ~~(i / 5);
+          node = nodes[nodeI]
+          bbi = boundingBoxes[nodeI]
+          xi = node.x + node.vx
+          yi = node.y + node.vy
+          nx1 = xi + bbi[0][0]
+          ny1 = yi + bbi[0][1]
+          nx2 = xi + bbi[1][0]
+          ny2 = yi + bbi[1][1]
           tree.visit(apply);
         }
       }
 
       function apply(quad, x0, y0, x1, y1) {
-        var data = quad.data;
-        var xSize = (size[0] + quad.size[0]) / 2;
-        var ySize = (size[1] + quad.size[1]) / 2;
+        var data = quad.data
         if (data) {
-          if (data.index <= node.index) { return }
+          var bWidth = bbLength(bbi, 0),
+            bHeight = bbLength(bbi, 1);
 
-          var x = xi - xCenter(data);
-          var y = yi - yCenter(data);
-          var xd = Math.abs(x) - xSize;
-          var yd = Math.abs(y) - ySize;
+          if (data.node.index !== nodeI) {
+            var dataNode = data.node
+            var bbj = boundingBoxes[dataNode.index],
+              dnx1 = dataNode.x + dataNode.vx + bbj[0][0],
+              dny1 = dataNode.y + dataNode.vy + bbj[0][1],
+              dnx2 = dataNode.x + dataNode.vx + bbj[1][0],
+              dny2 = dataNode.y + dataNode.vy + bbj[1][1],
+              dWidth = bbLength(bbj, 0),
+              dHeight = bbLength(bbj, 1)
 
-          if (xd < 0 && yd < 0) {
-            var l = Math.sqrt(x * x + y * y);
+            if (nx1 <= dnx2 && dnx1 <= nx2 && ny1 <= dny2 && dny1 <= ny2) {
 
-            if (Math.abs(xd) < Math.abs(yd)) {
-              node.vx -= (x *= xd / l * strength);
-              data.vx += x;
-            } else {
-              node.vy -= (y *= yd / l * strength);
-              data.vy += y;
+              var xSize = [Math.min.apply(null, [dnx1, dnx2, nx1, nx2]), Math.max.apply(null, [dnx1, dnx2, nx1, nx2])]
+              var ySize = [Math.min.apply(null, [dny1, dny2, ny1, ny2]), Math.max.apply(null, [dny1, dny2, ny1, ny2])]
+
+              var xOverlap = bWidth + dWidth - (xSize[1] - xSize[0])
+              var yOverlap = bHeight + dHeight - (ySize[1] - ySize[0])
+
+              var xBPush = xOverlap * strength * (yOverlap / bHeight)
+              var yBPush = yOverlap * strength * (xOverlap / bWidth)
+
+              var xDPush = xOverlap * strength * (yOverlap / dHeight)
+              var yDPush = yOverlap * strength * (xOverlap / dWidth)
+
+              if ((nx1 + nx2) / 2 < (dnx1 + dnx2) / 2) {
+                node.vx -= xBPush
+                dataNode.vx += xDPush
+              } else {
+                node.vx += xBPush
+                dataNode.vx -= xDPush
+              }
+              if ((ny1 + ny2) / 2 < (dny1 + dny2) / 2) {
+                node.vy -= yBPush
+                dataNode.vy += yDPush
+              } else {
+                node.vy += yBPush
+                dataNode.vy -= yDPush
+              }
             }
+
           }
+          return;
         }
 
-        return x0 > xi + xSize || y0 > yi + ySize ||
-          x1 < xi - xSize || y1 < yi - ySize;
+        return x0 > nx2 || x1 < nx1 || y0 > ny2 || y1 < ny1;
       }
 
-      function prepare(quad) {
-        if (quad.data) {
-          quad.size = sizes[quad.data.index];
-        } else {
-          quad.size = [0, 0];
-          var i = -1;
-          while (++i < 4) {
-            if (quad[i] && quad[i].size) {
-              quad.size[0] = Math.max(quad.size[0], quad[i].size[0]);
-              quad.size[1] = Math.max(quad.size[1], quad[i].size[1]);
-            }
-          }
+    }
+
+    function prepareCorners(quad) {
+
+      if (quad.data) {
+        return quad.bb = boundingBoxes[quad.data.node.index]
+      }
+      quad.bb = [[0, 0], [0, 0]]
+      for (var i = 0; i < 4; ++i) {
+        if (quad[i] && quad[i].bb[0][0] < quad.bb[0][0]) {
+          quad.bb[0][0] = quad[i].bb[0][0]
+        }
+        if (quad[i] && quad[i].bb[0][1] < quad.bb[0][1]) {
+          quad.bb[0][1] = quad[i].bb[0][1]
+        }
+        if (quad[i] && quad[i].bb[1][0] > quad.bb[1][0]) {
+          quad.bb[1][0] = quad[i].bb[1][0]
+        }
+        if (quad[i] && quad[i].bb[1][1] > quad.bb[1][1]) {
+          quad.bb[1][1] = quad[i].bb[1][1]
         }
       }
     }
 
-    function xCenter(d) { return d.x + d.vx + sizes[d.index][0] / 2; }
-    function yCenter(d) { return d.y + d.vy + sizes[d.index][1] / 2; }
-
-    force.initialize = (_) => {
-      sizes = (nodes = _).map(size);
-    };
-
-    force.size = (_) => {
-      return (arguments.length
-        ? (size = typeof _ === 'function' ? _ : this.constant(_), force) : size);
-    };
-
-    force.strength = (_) => {
-      return (arguments.length ? (strength = +_, force) : strength);
-    };
-
-    force.iterations = (_) => {
-      return (arguments.length ? (iterations = +_, force) : iterations);
-    };
+    function bbLength(bbox, heightWidth) {
+      return bbox[1][heightWidth] - bbox[0][heightWidth]
+    }
 
     return force;
-  }
-
-  constant(_) {
-    return () => _;
   }
 }
