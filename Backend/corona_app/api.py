@@ -19,67 +19,67 @@ def healthcheck():
     return "ok", 200
 
 # # Custom Rest API
-# @backend_api.route('/hospitals', methods=['GET', 'POST'])
-# def get_hospitals():
-#     """
-#         Return all Hospitals
-#     """
-#     sql_stmt = '''
-# select index, name, address, contact, icu_low_state, icu_high_state, ecmo_state, last_update, st_asgeojson(geom) as geojson
-# from hospitals_crawled hc
-#     '''
-#     sql_result = db.engine.execute(sql_stmt)
-
-#     d, features = {}, []
-#     for row in sql_result:
-#         for column, value in row.items():
-#             # build up the dictionary
-#             d = {**d, **{column: value}}
-
-#         feature = {
-#             "type": 'Feature',
-#             # careful! r.geojson is of type str, we must convert it to a dictionary
-#             "geometry": json.loads(d['geojson']),
-#             "properties": {
-#                 'index': d['index'],
-#                 'name': d['name'],
-#                 'address': d['address'],
-#                 'contact': d['contact'],
-#                 'icu_low_state': d['icu_low_state'],
-#                 'icu_high_state': d['icu_high_state'],
-#                 'ecmo_state': d['ecmo_state'],
-#                 'last_update': d['last_update']
-#             }
-#         }
-
-#         features.append(feature)
-
-#     featurecollection = {
-#         "type": "FeatureCollection",
-#         "features": features
-#     }
-
-#     resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-#             status=200,
-#             mimetype="application/json")
-#     return resp
-
-# Custom Rest API
 @backend_api.route('/hospitals', methods=['GET'])
-@cache.cached()
 def get_hospitals():
     """
         Return all Hospitals
     """
-    hospitals = db.session.query(Hospital).all()
-    features = []
-    for elem in hospitals:
-        features.append(elem.as_dict())
+    sql_stmt = '''
+select index, name, address, contact, icu_low_state, icu_high_state, ecmo_state, last_update, st_asgeojson(geom) as geojson
+from hospitals_crawled hc
+    '''
+    sql_result = db.engine.execute(sql_stmt)
+
+    d, features = {}, []
+    for row in sql_result:
+        for column, value in row.items():
+            # build up the dictionary
+            d = {**d, **{column: value}}
+
+        feature = {
+            "type": 'Feature',
+            # careful! r.geojson is of type str, we must convert it to a dictionary
+            "geometry": json.loads(d['geojson']),
+            "properties": {
+                'index': d['index'],
+                'name': d['name'],
+                'address': d['address'],
+                'contact': d['contact'],
+                'icu_low_state': d['icu_low_state'],
+                'icu_high_state': d['icu_high_state'],
+                'ecmo_state': d['ecmo_state'],
+                'last_update': d['last_update']
+            }
+        }
+
+        features.append(feature)
+
     featurecollection = {
         "type": "FeatureCollection",
         "features": features
     }
-    return jsonify(featurecollection)
+
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype="application/json")
+    return resp
+
+# Custom Rest API
+# @backend_api.route('/hospitals', methods=['GET'])
+# @cache.cached()
+# def get_hospitals():
+#     """
+#         Return all Hospitals
+#     """
+#     hospitals = db.session.query(Hospital).all()
+#     features = []
+#     for elem in hospitals:
+#         features.append(elem.as_dict())
+#     featurecollection = {
+#         "type": "FeatureCollection",
+#         "features": features
+#     }
+#     return jsonify(featurecollection)
 
 
 # Custom Rest API
