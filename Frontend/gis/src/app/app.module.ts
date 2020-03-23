@@ -7,6 +7,8 @@ import { MapComponent } from './map/map.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
+import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   entryComponents: [
@@ -16,12 +18,14 @@ import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
     AppComponent,
     MapComponent,
     GlyphTooltipComponent,
-    CaseTooltipComponent
+    CaseTooltipComponent,
+    OverlayBrandComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    OverlayModule
+    OverlayModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

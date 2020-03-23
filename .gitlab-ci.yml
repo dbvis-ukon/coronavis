@@ -5,7 +5,7 @@ stages:
 
 build-frontend:
   stage: build:frontend
-  image: node:alpine
+  image: node:latest
   script:
     - cd Frontend/gis
     - npm ci
