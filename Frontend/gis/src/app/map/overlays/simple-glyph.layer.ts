@@ -59,7 +59,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     const svgElement: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
-    svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    // svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
 
 
@@ -72,10 +72,12 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     const yOffset = 10;
 
     this.gHospitals = d3.select(svgElement)
+      .style("pointer-events", "none")
       .selectAll('g.hospital')
       .data<DiviHospital>(this.data)
       .enter()
       .append<SVGGElement>('g')
+      .style("pointer-events", "all")
       .attr('class', 'hospital')
       .attr('transform', d => {
           const p = this.latLngPoint(d.Location);
@@ -150,6 +152,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     return L.svgOverlay(svgElement, latLngBounds, {
       interactive: true,
+      bubblingMouseEvents: true,
       zIndex: 3
     });
     // return L.svgOverlay(svgElement, this.map.getBounds());

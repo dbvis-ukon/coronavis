@@ -60,10 +60,12 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     const yOffset = 10;
 
     this.gHospitals = d3.select(svgElement)
+      .style("pointer-events", "none")
       .selectAll('g.hospital')
       .data<DiviAggregatedHospital>(this.data)
       .enter()
       .append<SVGGElement>('g')
+      .style("pointer-events", "all")
       .attr('class', 'hospital')
       .attr('transform', d => {
         const p = this.latLngPoint(d.Location);
