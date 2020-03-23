@@ -17,6 +17,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatIconModule} from '@angular/material/icon';
 
 
 
@@ -43,7 +44,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatDividerModule,
     ScrollingModule,
     MatExpansionModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
