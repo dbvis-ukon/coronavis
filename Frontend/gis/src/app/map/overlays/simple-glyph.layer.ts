@@ -27,6 +27,10 @@ export class SimpleGlyphLayer extends Overlay {
 
   private labelLayout;
 
+  private latLngPoint(latlng: L.LatLngExpression): L.Point {
+    return this.map.project(latlng, 9);
+  }
+
   createOverlay(map: L.Map) {
     this.map = map;
 
@@ -42,8 +46,8 @@ export class SimpleGlyphLayer extends Overlay {
 
     latLngBounds = latLngBounds.pad(10);
 
-    const lpMin = this.map.latLngToLayerPoint(latLngBounds.getSouthWest());
-    const lpMax = this.map.latLngToLayerPoint(latLngBounds.getNorthEast());
+    const lpMin = this.latLngPoint(latLngBounds.getSouthWest());
+    const lpMax = this.latLngPoint(latLngBounds.getNorthEast());
 
     // just to make everything bulletproof
     const [xMin, xMax] = d3.extent([lpMin.x, lpMax.x]);
@@ -70,7 +74,7 @@ export class SimpleGlyphLayer extends Overlay {
       .append<SVGGElement>('g')
       .attr('class', 'hospital')
       .attr('transform', d => {
-          const p = this.map.latLngToLayerPoint(d.Location);
+          const p = this.latLngPoint(d.Location);
           d.x = p.x;
           d.y = p.y;
           d._x = p.x;

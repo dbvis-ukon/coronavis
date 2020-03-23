@@ -4,7 +4,6 @@ import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
 import { DiviAggregatedHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
-import {GlyphTooltipComponent} from '../../glyph-tooltip/glyph-tooltip.component';
 
 export class AggregatedGlyphLayer extends Overlay {
 
@@ -20,12 +19,14 @@ export class AggregatedGlyphLayer extends Overlay {
     super(name, null);
   }
 
+  private latLngPoint(latlng: L.LatLngExpression): L.Point {
+    return this.map.project(latlng, 9);
+  }
+
   createOverlay(map: L.Map) {
     this.map = map;
 
-    this.map.on('zoom', (e) => {
-      this.onZoomed();
-    });
+    this.map.on('zoom', () => this.onZoomed());
 
     const latExtent = d3.extent(this.data, i => i.Location.lat);
     const lngExtent = d3.extent(this.data, i => i.Location.lng);
@@ -34,8 +35,8 @@ export class AggregatedGlyphLayer extends Overlay {
 
     latLngBounds = latLngBounds.pad(10);
 
-    const lpMin = this.map.latLngToLayerPoint(latLngBounds.getSouthWest());
-    const lpMax = this.map.latLngToLayerPoint(latLngBounds.getNorthEast());
+    const lpMin = this.latLngPoint(latLngBounds.getSouthWest());
+    const lpMax = this.latLngPoint(latLngBounds.getNorthEast());
 
     // just to make everything bulletproof
     const [xMin, xMax] = d3.extent([lpMin.x, lpMax.x]);
@@ -58,15 +59,15 @@ export class AggregatedGlyphLayer extends Overlay {
       .append<SVGGElement>('g')
       .attr('class', 'hospital')
       .attr('transform', d => {
-        const p = this.map.latLngToLayerPoint(d.Location);
+        const p = this.latLngPoint(d.Location);
         return `translate(${p.x - ((3 * rectSize + padding * 3) / 2)}, ${p.y - (22 / 2)})`;
-      })
-      .on('mouseenter', d1 => {
-        const evt: MouseEvent = d3.event;
-        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
-        t.name = d1.Name;
-      })
-      .on('mouseout', () => this.tooltipService.close());
+      });
+      // .on('mouseenter', d1 => {
+      //   const evt: MouseEvent = d3.event;
+      //   const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
+      //   t.name = d1.Name;
+      // })
+      // .on('mouseout', () => this.tooltipService.close());
 
 
 
@@ -116,6 +117,7 @@ export class AggregatedGlyphLayer extends Overlay {
     //   .style('fill', d => colorScale(d.icuLowCare));
     //
 
+    this.onZoomed();
     return L.svgOverlay(svgElement, latLngBounds, {
       interactive: true,
       zIndex: 3
