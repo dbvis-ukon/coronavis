@@ -72,7 +72,7 @@ if abs((current_update - last_update).total_seconds()) <= 2*60*60:
     print("No new data available (+/- 2h), skip update")
 else:
     print('Insert new data into DB (takes 5-10min)...')
-    #cur.executemany(aquery, entries)
+    cur.executemany(aquery, entries)
     conn.commit()
 
 print('Success')
