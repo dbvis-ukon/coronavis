@@ -13,10 +13,12 @@ backend_api = Blueprint('api', __name__)
 
 logger = logging.getLogger(__name__)
 
+
 @backend_api.route('/health')
 def healthcheck():
     # FIXME: the database connection should be checked here!
     return "ok", 200
+
 
 # # Custom Rest API
 # @backend_api.route('/hospitals', methods=['GET', 'POST'])
@@ -64,6 +66,7 @@ def healthcheck():
 #             mimetype="application/json")
 #     return resp
 
+
 # Custom Rest API
 @backend_api.route('/hospitals', methods=['GET'])
 @cache.cached()
@@ -75,10 +78,7 @@ def get_hospitals():
     features = []
     for elem in hospitals:
         features.append(elem.as_dict())
-    featurecollection = {
-        "type": "FeatureCollection",
-        "features": features
-    }
+    featurecollection = {"type": "FeatureCollection", "features": features}
     return jsonify(featurecollection)
 
 
@@ -96,7 +96,6 @@ from vg250_krs vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.ge
 group by vkv.sn_l, vkv.sn_r, vkv.sn_k, vkv.gen
     '''
     sql_result = db.engine.execute(sql_stmt)
-
 
     d, features = {}, []
     for row in sql_result:
@@ -119,20 +118,20 @@ group by vkv.sn_l, vkv.sn_r, vkv.sn_k, vkv.gen
                 'ecmo_state': dict(Counter(d['ecmo_state']))
             }
         }
-        
+
         features.append(feature)
 
+    featurecollection = {"type": "FeatureCollection", "features": features}
 
-    featurecollection = {
-        "type": "FeatureCollection",
-        "features": features
-    }
-
-    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-            status=200,
-            mimetype="application/json")
+    resp = Response(response=json.dumps(featurecollection,
+                                        indent=4,
+                                        sort_keys=True,
+                                        default=str),
+                    status=200,
+                    mimetype="application/json")
 
     return resp
+
 
 # Custom Rest API
 @backend_api.route('/hospitals/regierungsbezirke', methods=['GET'])
@@ -178,16 +177,17 @@ group by vkv.sn_l, vkv.sn_r, vkv.gen
 
         features.append(feature)
 
-    featurecollection = {
-        "type": "FeatureCollection",
-        "features": features
-    }
+    featurecollection = {"type": "FeatureCollection", "features": features}
 
-    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-            status=200,
-            mimetype="application/json")
+    resp = Response(response=json.dumps(featurecollection,
+                                        indent=4,
+                                        sort_keys=True,
+                                        default=str),
+                    status=200,
+                    mimetype="application/json")
 
     return resp
+
 
 # Custom Rest API
 @backend_api.route('/hospitals/bundeslander', methods=['GET'])
@@ -229,16 +229,17 @@ group by vkv.sn_l, vkv.gen
 
         features.append(feature)
 
-    featurecollection = {
-        "type": "FeatureCollection",
-        "features": features
-    }
+    featurecollection = {"type": "FeatureCollection", "features": features}
 
-    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-            status=200,
-            mimetype="application/json")
+    resp = Response(response=json.dumps(featurecollection,
+                                        indent=4,
+                                        sort_keys=True,
+                                        default=str),
+                    status=200,
+                    mimetype="application/json")
 
     return resp
+
 
 @backend_api.route('/osm/hospitals', methods=['GET'])
 @cache.cached()
@@ -275,16 +276,14 @@ where amenity = 'hospital' and tags -> 'emergency' = 'yes'
 
         features.append(feature)
 
-    featurecollection = {
-        "type": "FeatureCollection",
-        "features": features
-    }
+    featurecollection = {"type": "FeatureCollection", "features": features}
 
     resp = Response(response=json.dumps(featurecollection),
-            status=200,
-            mimetype="application/json")
+                    status=200,
+                    mimetype="application/json")
 
     return resp
+
 
 @backend_api.route('/osm/nearby_helipads', methods=['GET'])
 @cache.cached()
@@ -336,13 +335,10 @@ WHERE st_distance(krankenhaus.geom::geography, b.geom::geography) < 1000
 
         features.append(feature)
 
-    featurecollection = {
-        "type": "FeatureCollection",
-        "features": features
-    }
+    featurecollection = {"type": "FeatureCollection", "features": features}
 
     resp = Response(response=json.dumps(featurecollection),
-            status=200,
-            mimetype="application/json")
+                    status=200,
+                    mimetype="application/json")
 
     return resp
