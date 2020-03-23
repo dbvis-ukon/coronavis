@@ -81,7 +81,7 @@ export interface CovidNumberCaseOptions {
   // super important, otherwise the defined css doesn't get added to dynamically created elements, for example, from D3.
   encapsulation: ViewEncapsulation.None,
 })
-export class MapComponent implements OnInit, DoCheck {
+export class MapComponent implements OnInit {
 
   @ViewChild('main') main;
 
@@ -162,7 +162,7 @@ export class MapComponent implements OnInit, DoCheck {
     return this._caseChoroplethOptions;
   }
 
-  private layerControl: L.Control.Layers;
+  // private layerControl: L.Control.Layers;
 
   private mymap: L.Map;
 
@@ -225,18 +225,18 @@ export class MapComponent implements OnInit, DoCheck {
 
 
     // create maps and overlay objects for leaflet control
-    const baseMaps = {
-      // Empty: emptyTiles,
-      // OpenStreetMap: openstreetmap,
-      // MennaMap: mennaMap,
-      BaseMap: juriMap
-      // OpenStreetMap: basemap,
-      // MapTiler: gl
-    };
+    // const baseMaps = {
+    //   // Empty: emptyTiles,
+    //   // OpenStreetMap: openstreetmap,
+    //   // MennaMap: mennaMap,
+    //   BaseMap: juriMap
+    //   // OpenStreetMap: basemap,
+    //   // MapTiler: gl
+    // };
 
-    // add a control which lets us toggle maps and overlays
-    this.layerControl = L.control.layers(baseMaps);
-    this.layerControl.addTo(this.mymap);
+    // // add a control which lets us toggle maps and overlays
+    // this.layerControl = L.control.layers(baseMaps);
+    // this.layerControl.addTo(this.mymap);
 
     // Choropleth layers on hover
     this.hospitallayerService.getLayers().subscribe(layer => {
@@ -275,10 +275,7 @@ export class MapComponent implements OnInit, DoCheck {
       const l = L.layerGroup([simpleGlyphLayer])
       this.aggregationLevelToGlyphMap.set(AggregationLevel.none, l);
       this.layerToFactoryMap.set(simpleGlyphLayer, simpleGlyphFactory);
-      
-      // TODO : this is just for debug
-      this.layerControl.addOverlay(simpleGlyphLayer, simpleGlyphFactory.name);
-
+    
 
       this.addGlyphMap(result, 1, AggregationLevel.county, 'ho_county', 'landkreise', layerEvents);
       this.addGlyphMap(result, 3, AggregationLevel.governmentDistrict, 'ho_governmentdistrict', 'regierungsbezirke', layerEvents);
@@ -323,27 +320,6 @@ export class MapComponent implements OnInit, DoCheck {
     this.mymap.on('zoom', this.semanticZoom);
   }
 
-  /**
-   * If the input data changes, update the layers
-   * @param changes the angular changes object
-   */
-  ngDoCheck(): void {
-    const changes = this.iterableDiffer.diff(this.overlays);
-    if (changes) {
-
-      changes.forEachAddedItem((newOverlay: IterableChangeRecord<Overlay<FeatureCollection>>) => {
-        const overlay = newOverlay.item;
-
-        const overlayLayer = overlay.createOverlay(this.mymap);
-        this.layerControl.addOverlay(overlayLayer, overlay.name);
-
-        if (overlay.enableDefault) {
-          this.mymap.addLayer(overlayLayer);
-        }
-      });
-    }
-  }
-
   semanticZoom() {
     // if (!this.aggHospitalCounty || !this.aggHospitalGovernmentDistrict) {
     //   return;
@@ -377,9 +353,6 @@ export class MapComponent implements OnInit, DoCheck {
     this.aggregationLevelToGlyphMap.set(agg, layerGroup);
 
     this.layerToFactoryMap.set(layerGroup, factory);
-
-    // TODO : this is just for debug
-    this.layerControl.addOverlay(layerGroup, factory.name);
   }
 
   private updateGlyphMapLayers(agg: AggregationLevel) {
