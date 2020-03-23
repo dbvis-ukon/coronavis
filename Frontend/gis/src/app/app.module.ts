@@ -8,6 +8,7 @@ import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { InfoboxComponent } from './infobox/infobox.component';
 
 @NgModule({
   entryComponents: [
@@ -18,6 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MapComponent,
     GlyphTooltipComponent,
     OverlayBrandComponent,
+    InfoboxComponent,
   ],
   imports: [
     BrowserModule,
