@@ -1,5 +1,14 @@
+pandas
 
 urllib3
 beautifulsoup4
 
+shapely
 geopy
+geojson
+
+SQLAlchemy
+GeoAlchemy2
+psycopg2-binary
+
+Flask-SQLAlchemy

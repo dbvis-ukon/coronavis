@@ -4,7 +4,7 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import { Overlay } from './overlay';
 import { TooltipService } from 'src/app/services/tooltip.service';
-import { TooltipDemoComponent } from 'src/app/tooltip-demo/tooltip-demo.component';
+import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 
 export class LandkreisLayer extends Overlay {
 
@@ -37,46 +37,9 @@ export class LandkreisLayer extends Overlay {
                     mouseover: (e: L.LeafletMouseEvent) => {
 
                         const tooltipComponent = this.tooltipService
-                        .openAtElementRef(
-                            TooltipDemoComponent,
-                            {x: e.originalEvent.clientX, y: e.originalEvent.clientY},
-                            [
-                                {
-                                overlayX: 'start',
-                                overlayY: 'top',
-                                originX: 'end',
-                                originY: 'bottom',
-                                offsetX: 5,
-                                offsetY: 5
-                                },
-                                {
-                                overlayX: 'end',
-                                overlayY: 'top',
-                                originX: 'start',
-                                originY: 'bottom',
-                                offsetX: -5,
-                                offsetY: 5
-                                },
-                                {
-                                overlayX: 'start',
-                                overlayY: 'bottom',
-                                originX: 'end',
-                                originY: 'top',
-                                offsetX: 5,
-                                offsetY: -5
-                                },
-                                {
-                                overlayX: 'end',
-                                overlayY: 'bottom',
-                                originX: 'start',
-                                originY: 'top',
-                                offsetX: -5,
-                                offsetY: -5
-                                },
-                            ]
-                            );
+                        .openAtElementRef(GlyphTooltipComponent, {x: e.originalEvent.clientX, y: e.originalEvent.clientY});
 
-                        tooltipComponent.text = `County: ${feature.properties.name}`;
+                        tooltipComponent.name = `County: ${feature.properties.name}`;
 
                         // set highlight style
                         const l = e.target;

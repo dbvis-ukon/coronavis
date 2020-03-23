@@ -54,6 +54,24 @@ dockerize-backend:
   tags:
     - docker-build
 
+dockerize-crawler:
+  stage: build:docker
+  image: docker:latest
+  variables:
+    IMG: $CI_REGISTRY_IMAGE/crawler:latest
+  services:
+    - docker:dind
+  dependencies: []
+  script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - cd ./Crawler
+    - docker build -t "$IMG" .
+    - docker push "$IMG"
+  only:
+    - master
+  tags:
+    - docker-build
+
 deploy-backend:
   stage: deploy
   script:
@@ -76,6 +94,17 @@ deploy-frontend:
     - URL="covid19vis.lingvis.io"
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8/frontend
     - helm upgrade --namespace=${K8_NAMESPACE} --install --force --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8/frontend
+  dependencies: []
+  only:
+    - master
+  tags:
+    - k8-admin
+
+deploy-crawler:
+  stage: deploy
+  script:
+    - cd k8/crawler
+    - kubectl apply -n covid-19-vis -f cronjob.yaml
   dependencies: []
   only:
     - master

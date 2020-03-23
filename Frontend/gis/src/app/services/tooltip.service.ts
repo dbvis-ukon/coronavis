@@ -43,12 +43,40 @@ export class TooltipService {
   openAtElementRef<T>(
     tooltipComponent: ComponentType<T>,
     elementRef: FlexibleConnectedPositionStrategyOrigin,
-    positions: ConnectedPosition[] = [{
-      originX: 'center',
-      originY: 'top',
-      overlayX: 'center',
-      overlayY: 'bottom',
-    }]
+    positions: ConnectedPosition[] = [
+      {
+        overlayX: 'start',
+        overlayY: 'top',
+        originX: 'end',
+        originY: 'bottom',
+        offsetX: 5,
+        offsetY: 5
+      },
+      {
+        overlayX: 'end',
+        overlayY: 'top',
+        originX: 'start',
+        originY: 'bottom',
+        offsetX: -5,
+        offsetY: 5
+      },
+      {
+        overlayX: 'start',
+        overlayY: 'bottom',
+        originX: 'end',
+        originY: 'top',
+        offsetX: 5,
+        offsetY: -5
+      },
+      {
+        overlayX: 'end',
+        overlayY: 'bottom',
+        originX: 'start',
+        originY: 'top',
+        offsetX: -5,
+        offsetY: -5
+      },
+    ]
   ): T {
     const pos = this.overlayPositionBuilder
     // Create position attached to the elementRef

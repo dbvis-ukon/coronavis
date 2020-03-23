@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { StatesLayer } from './map/overlays/states.layer';
 import { HelipadLayer } from './map/overlays/helipads';
 import { HospitalLayer } from './map/overlays/hospital';
+import { LandkreiseHospitalsLayer } from './map/overlays/landkreishospitals';
 
 
 
@@ -54,6 +55,19 @@ export class AppComponent implements OnInit {
 
     this.dataService.getOSHelipads().toPromise().then((val: FeatureCollection) => {
       this.overlays.push(new HelipadLayer('Helipads', val, this.tooltipService));
+    });
+
+    this.dataService.getHospitalsLandkreise().toPromise().then((val: FeatureCollection) => {
+      this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Landkreise', val, this.tooltipService));
+
+    });
+
+    this.dataService.getHospitalsRegierungsbezirke().toPromise().then((val: FeatureCollection) => {
+      this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Regierungsbezirke', val, this.tooltipService));
+    });
+
+    this.dataService.getHospitalsBundeslaender().toPromise().then((val: FeatureCollection) => {
+      this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Bundesländer', val, this.tooltipService));
     });
   }
 }

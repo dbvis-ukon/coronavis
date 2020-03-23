@@ -1,27 +1,43 @@
 import * as L from 'leaflet';
 import * as d3 from 'd3';
-import {Overlay} from './overlay';
-import {TooltipService} from 'src/app/services/tooltip.service';
-import {TooltipDemoComponent} from 'src/app/tooltip-demo/tooltip-demo.component';
-import {DiviHospital} from 'src/app/services/divi-hospitals.service';
-import {LatLng, Layer} from "leaflet";
-import {DataService} from "../../services/data.service";
-import {HelipadLayer} from "./helipads";
+import { Overlay } from './overlay';
+import { TooltipService } from 'src/app/services/tooltip.service';
+import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
+import { DiviHospital } from 'src/app/services/divi-hospitals.service';
+import { ColormapService } from 'src/app/services/colormap.service';
+import {Point} from 'leaflet';
 
 export class SimpleGlyphLayer extends Overlay {
 
-  private overlay: Layer;
+  private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+  private map: L.Map;
 
-  constructor(name: string, private map: L.Map, private data: DiviHospital[], private tooltipService: TooltipService, private dataService: DataService) {
+  constructor(
+    name: string,
+    private data: DiviHospital[],
+    private tooltipService: TooltipService,
+    private colormapService: ColormapService
+    ) {
     super(name, null);
+    this.enableDefault = true;
   }
 
-  createOverlay() {
+
+  private lastTransform;
+
+  private labelLayout;
+
+  createOverlay(map: L.Map) {
+    this.map = map;
+
+    this.map.on('zoom', (d) => {
+      this.onZoomed();
+    });
+
+    const colorScale = this.colormapService.getSingleHospitalColormap();
     // calculate new color scale
     // .domain expects an array of [min, max] value
     // d3.extent returns exactly this array
-    const colorScale = d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
-      .range(['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)', '#bbbbbb']);
 
     const locationPoints = this.data.map(d => this.map.latLngToContainerPoint(d.Location));
     const [xMin, xMax] = d3.extent(locationPoints, d => d.x);
@@ -32,84 +48,43 @@ export class SimpleGlyphLayer extends Overlay {
     svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
 
-    const gHostpitals = d3.select(svgElement)
+    const self = this;
+    const rectSize = 10;
+
+    const padding = 2;
+    const yOffset = 10;
+
+    this.gHospitals = d3.select(svgElement)
       .selectAll('g.hospital')
       .data<DiviHospital>(this.data)
       .enter()
       .append<SVGGElement>('g')
       .attr('class', 'hospital')
       .attr('transform', d => {
-        const p = this.map.latLngToLayerPoint(d.Location);
-        return `translate(${p.x}, ${p.y})`;
-      })
-      .on('mouseenter', d1 => {
-        console.log('mouseenter', d1);
-
-        // this.dataService.getOSHelipads()
-        //   .subscribe(data => {
-        //     const heliLayer = new HelipadLayer("heliheli", data, this.tooltipService);
-        //     this.overlay = heliLayer.createOverlay();
-        //
-        //     this.map.addLayer(this.overlay);
-        //   });
-
+          const p = this.map.latLngToLayerPoint(d.Location);
+          d.x = p.x;
+          d.y = p.y;
+          d._x = p.x;
+          d._y = p.y;
+          // console.log(p, d.Location);
+          return `translate(${p.x}, ${p.y})`; })
+      .on('mouseenter', function(d1: DiviHospital) {
         const evt: MouseEvent = d3.event;
-        const t = this.tooltipService.openAtElementRef(TooltipDemoComponent, { x: evt.clientX, y: evt.clientY }, [
-          {
-            overlayX: 'start',
-            overlayY: 'top',
-            originX: 'end',
-            originY: 'bottom',
-            offsetX: 5,
-            offsetY: 5
-          },
-          {
-            overlayX: 'end',
-            overlayY: 'top',
-            originX: 'start',
-            originY: 'bottom',
-            offsetX: -5,
-            offsetY: 5
-          },
-          {
-            overlayX: 'start',
-            overlayY: 'bottom',
-            originX: 'end',
-            originY: 'top',
-            offsetX: 5,
-            offsetY: -5
-          },
-          {
-            overlayX: 'end',
-            overlayY: 'bottom',
-            originX: 'start',
-            originY: 'top',
-            offsetX: -5,
-            offsetY: -5
-          },
-        ]);
-        t.text = d1.Name;
+        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
+        // console.log('mouseenter', d1);
+        t.diviHospital = d1;
+        d3.select(this).raise();
       })
-      .on('mouseout', () => {
-        this.tooltipService.close();
+      .on('mouseleave', () => this.tooltipService.close());
 
-        // this.map.removeLayer(this.overlay);
-      });
-
-
-    const rectSize = 10;
-
-    const padding = 2;
-    const yOffset = 10;
-
-    gHostpitals
+    this.gHospitals
       .append('rect')
       .attr('width', '50')
       .attr('height', '22')
       .attr('fill', 'white')
       .attr('stroke', '#cccccc');
 
-    gHostpitals
+    this.gHospitals
       .append('text')
       .text(d1 => {
         // Hackity hack :)
@@ -120,30 +95,33 @@ export class SimpleGlyphLayer extends Overlay {
       .attr('y', '8')
       .attr('font-size', '8px');
 
-    gHostpitals
+    this.gHospitals
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
+      .style('fill', d1 => colorScale(d1.icuLowCare))
       .attr('x', padding)
-      .attr('y', yOffset)
-      .style('fill', d1 => colorScale(d1.icuLowCare));
+      .attr('y', yOffset);
 
-    gHostpitals
+    this.gHospitals
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
+      .attr('x', `${rectSize}px`)
+      .style('fill', d1 => colorScale(d1.icuHighCare))
       .attr('y', yOffset)
-      .attr('x', `${rectSize + padding * 2}px`)
-      .style('fill', d1 => colorScale(d1.icuHighCare));
+      .attr('x', `${rectSize + padding * 2}px`);
 
-    gHostpitals
+    this.gHospitals
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
+      .attr('x', `${2 * rectSize}px`)
+      .style('fill', d1 => colorScale(d1.ECMO))
       .attr('y', yOffset)
-      .attr('x', `${2 * rectSize + padding * 3}px`)
-      .style('fill', d1 => colorScale(d1.ECMO));
+      .attr('x', `${2 * rectSize + padding * 3}px`);
 
+    this.labelLayout = this.getForceSimulation();
 
     // gHos
     //   .append('rect')
@@ -154,10 +132,56 @@ export class SimpleGlyphLayer extends Overlay {
     const latExtent = d3.extent(this.data, i => i.Location.lat);
     const lngExtent = d3.extent(this.data, i => i.Location.lng);
 
-    return L.svgOverlay(svgElement, [[latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]], {
+    const latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
+    this.onZoomed();
+
+    return L.svgOverlay(svgElement, latLngBounds, {
       interactive: true,
       zIndex: 3
     });
     // return L.svgOverlay(svgElement, this.map.getBounds());
+  }
+
+   ticked() {
+    this.gHospitals.attr('transform', (d, i) => {
+      return `translate(${d.x},${d.y})`;
+    });
+
+    this.labelLayout.alphaTarget(0.3).restart();
+  }
+
+  /*
+   * Rectangular Force Collision
+   * https://bl.ocks.org/cmgiven/547658968d365bcc324f3e62e175709b
+   */
+  getForceSimulation(scale: number = 1): d3.Simulation<DiviHospital, undefined> {
+    return d3.forceSimulation(this.data)
+      .force('collision', d3.forceCollide( (d) => 30 * scale)
+        .iterations(5).strength(0.2) )
+      .force('x', d3.forceX((d: any) => d._x).strength(0.5))
+      .force('y', d3.forceY((d: any) => d._y).strength(0.5))
+      // .force('charge', d3.forceManyBody().strength(0.1))
+      .on('tick', () => {
+        return this.ticked();
+      });
+  }
+
+  onZoomed() {
+    const zoom = this.map.getZoom();
+    const scale = Math.pow(9 / (zoom), 3);
+
+    this.labelLayout.stop();
+    this.labelLayout.stop();
+    this.labelLayout = this.getForceSimulation(scale);
+
+    console.log('zoomed', this.map.getZoom(), scale);
+
+    this.gHospitals
+      .selectAll('*')
+      .transition()
+      .duration(500)
+      .attr('transform', d => {
+        return `scale(${scale}, ${scale})`;
+      });
   }
 }
