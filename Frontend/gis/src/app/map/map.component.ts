@@ -1,4 +1,13 @@
-import { Component, OnInit, Input, ViewEncapsulation, IterableDiffers, DoCheck, IterableChangeRecord } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewEncapsulation,
+  IterableDiffers,
+  DoCheck,
+  IterableChangeRecord,
+  ViewChild
+} from '@angular/core';
 
 import * as L from 'leaflet';
 import * as d3 from 'd3';
@@ -9,13 +18,15 @@ import { Overlay } from './overlays/overlay';
 import { SimpleGlyphLayer } from './overlays/simple-glyph.layer';
 import { DiviHospitalsService, DiviHospital } from '../services/divi-hospitals.service';
 import { TooltipService } from '../services/tooltip.service';
-import {SVGOverlay} from 'leaflet';
+import {GeoJSON, SVGOverlay} from 'leaflet';
 import { ColormapService } from '../services/colormap.service';
 import { AggregatedGlyphLayer } from './overlays/aggregated-glyph.layer';
 import {DataService} from "../services/data.service";
 import {HospitallayerService} from "../services/hospitallayer.service";
 import {ChoroplethLayer} from "./overlays/choropleth";
 import {FeatureCollection} from "geojson";
+import {Subject} from "rxjs";
+import {GlyphHoverEvent} from "./events/glyphhover";
 
 @Component({
   selector: 'app-map',
@@ -25,6 +36,8 @@ import {FeatureCollection} from "geojson";
   encapsulation: ViewEncapsulation.None,
 })
 export class MapComponent implements OnInit, DoCheck {
+
+  @ViewChild('main') main;
 
   @Input() overlays: Array<Overlay<FeatureCollection>> = [];
   iterableDiffer: any;
@@ -43,6 +56,8 @@ export class MapComponent implements OnInit, DoCheck {
   private aggHospitalGovernmentDistrict: SVGOverlay;
 
   private aggHospitalState: SVGOverlay;
+
+  private choroplethLayerMap = new Map<String, GeoJSON>();
 
   constructor(
     private iterable: IterableDiffers,
@@ -111,8 +126,24 @@ export class MapComponent implements OnInit, DoCheck {
     this.layerControl = L.control.layers(baseMaps);
     this.layerControl.addTo(this.mymap);
 
+    this.hospitallayerService.getLayers().subscribe(layer => {
+      this.choroplethLayerMap.set(layer.name, layer.createOverlay());
+      this.layerControl.addOverlay(layer.createOverlay(), layer.name);
+    });
+    const layerEvents: Subject<GlyphHoverEvent> = new Subject<GlyphHoverEvent>();
+    layerEvents.subscribe(event => {
+      const layer = this.choroplethLayerMap.get(event.name);
+      if (layer) {
+        if (event.type === "enter") {
+          this.mymap.addLayer(layer);
+        } else {
+          this.mymap.removeLayer(layer);
+        }
+      }
+    });
+
     this.diviHospitalsService.getDiviHospitals().subscribe(data => {
-      const glyphLayer = new SimpleGlyphLayer('Krankenäuser', data, this.tooltipService, this.colormapService);
+      const glyphLayer = new SimpleGlyphLayer('Krankenäuser', data, this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
       this.glyphLayerOverlay = glyphLayer.createOverlay(this.mymap);
 
       // this.mymap.addLayer(glyphs.createOverlay());
@@ -146,9 +177,16 @@ export class MapComponent implements OnInit, DoCheck {
 
     this.mymap.on('zoom', this.semanticZoom);
 
-    this.hospitallayerService.getLayers().subscribe(layer => {
-        this.layerControl.addOverlay(layer.createOverlay(), layer.name);
-    });
+
+    const self = this;
+    L.Handler.extend({
+      addHooks: function () {
+        L.DomEvent.on(self.main, "test", () => {
+          console.log("blubb");
+        }, this);
+      }
+    })
+
 
   }
 

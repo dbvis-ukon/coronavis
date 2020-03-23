@@ -35,11 +35,15 @@ export class HospitallayerService {
           console.log(data);
           for (let type of types) {
             console.log("creating layers for type", type);
-            const layer = new ChoroplethLayer(`Hospitals_${granularity}_${type}`, data, type, this.colormapService);
+            const layer = new ChoroplethLayer(this.getName(granularity, type), data, type, this.colormapService);
             this.layers.next(layer);
           }
         })
     }
     return this.layers;
+  }
+
+  public getName(granularity: String, type: String) {
+    return `Hospitals_${granularity}_${type}`;
   }
 }

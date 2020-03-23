@@ -35,9 +35,7 @@ export class ChoroplethLayer extends Overlay<AggregatedHospitals> {
 
   createOverlay() {
     const scores = this.featureCollection.features.map(d => {
-      const score = this.getScore(d.properties);
-      console.log(d.properties, score);
-      return score;
+      return this.getScore(d.properties);
     });
     const scoreExtent = d3.extent(scores);
     const normalizeValues = d3.scaleLinear()
