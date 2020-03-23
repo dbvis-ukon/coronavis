@@ -2,7 +2,7 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import { DiviAggregatedHospital } from '../../services/divi-hospitals.service';
+import { DiviAggregatedHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {GlyphTooltipComponent} from '../../glyph-tooltip/glyph-tooltip.component';
 
@@ -34,7 +34,12 @@ export class AggregatedGlyphLayer extends Overlay {
     const svgElement: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
     svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin + 100} ${yMax - yMin + 100}`);
+    svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
+
+    const rectSize = 10;
+
+    const padding = 2;
+    const yOffset = 10;
 
     this.gHospitals = d3.select(svgElement)
       .selectAll('g.hospital')
@@ -44,52 +49,16 @@ export class AggregatedGlyphLayer extends Overlay {
       .attr('class', 'hospital')
       .attr('transform', d => {
         const p = this.map.latLngToLayerPoint(d.Location);
-        return `translate(${p.x}, ${p.y})`;
+        return `translate(${p.x - ((3 * rectSize + padding * 3) / 2)}, ${p.y - (22 / 2)})`;
       })
       .on('mouseenter', d1 => {
         const evt: MouseEvent = d3.event;
-        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY }, [
-          {
-            overlayX: 'start',
-            overlayY: 'top',
-            originX: 'end',
-            originY: 'bottom',
-            offsetX: 5,
-            offsetY: 5
-          },
-          {
-            overlayX: 'end',
-            overlayY: 'top',
-            originX: 'start',
-            originY: 'bottom',
-            offsetX: -5,
-            offsetY: 5
-          },
-          {
-            overlayX: 'start',
-            overlayY: 'bottom',
-            originX: 'end',
-            originY: 'top',
-            offsetX: 5,
-            offsetY: -5
-          },
-          {
-            overlayX: 'end',
-            overlayY: 'bottom',
-            originX: 'start',
-            originY: 'top',
-            offsetX: -5,
-            offsetY: -5
-          },
-        ]);
+        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
         t.name = d1.Name;
       })
       .on('mouseout', () => this.tooltipService.close());
 
-    const rectSize = 10;
 
-    const padding = 2;
-    const yOffset = 10;
 
     this.gHospitals
       .append('rect')
@@ -138,6 +107,8 @@ export class AggregatedGlyphLayer extends Overlay {
     //
     const latExtent = d3.extent(this.data, i => i.Location.lat);
     const lngExtent = d3.extent(this.data, i => i.Location.lng);
+
+    const latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
 
     return L.svgOverlay(svgElement, [[latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]], {
       interactive: true,
