@@ -248,7 +248,7 @@ group by vkv.sn_l, vkv.gen
 
 @backend_api.route('/cases/landkreise', methods=['GET'])
 @cache.cached()
-def get_cases_by_landkreise():
+def get_cases_by_landkreise_per_day():
     """
         Return all Hospitals
     """
@@ -259,7 +259,7 @@ with cases_landkreise as (
 	from cases
 	group by idlandkreis, DATE(meldedatum)
 )
-select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, JSON_AGG(JSON_BUILD_OBJECT('date', c."date" , 'cases', c.cases, 'deaths', c.deaths) ORDER by c."date") as cases, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vkv.geom), 0.005))) as outline
+select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, JSON_AGG(JSON_BUILD_OBJECT('date', c."date" , 'cases', c.cases, 'deaths', c.deaths) ORDER by c."date") as cases, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
 from vg250_krs vk join cases_landkreise c on vk.ags = c.idlandkreis
 group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen 
     '''
@@ -297,6 +297,182 @@ group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen
 
     return resp
 
+@backend_api.route('/cases/landkreise/total', methods=['GET'])
+@cache.cached()
+def get_cases_by_landkreise_total():
+    """
+        Return all Hospitals
+    """
+
+    sql_stmt = '''
+with cases_per_landkreis as(
+	select idlandkreis, max(meldedatum) as until, SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
+	from (
+		(select distinct(idlandkreis) from cases_current) landkreise
+		cross join
+		(select generate_series(min(meldedatum), max(meldedatum), '1 day'::interval) as meldedatum from cases_current) dates
+	)
+	left join cases_current using (idlandkreis, meldedatum)
+	group by idlandkreis
+	order by idlandkreis, until
+)
+select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, max(c.until) as until, sum(c.cases) as cases, sum(c.deaths) as deaths, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
+from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis
+group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen 
+    '''
+    sql_result = db.engine.execute(sql_stmt)
+
+    d, features = {}, []
+    for row in sql_result:
+        for column, value in row.items():
+            # build up the dictionary
+            d = {**d, **{column: value}}
+
+        feature = {
+            "type": 'Feature',
+            # careful! r.geojson is of type str, we must convert it to a dictionary
+            "geometry": json.loads(d['outline']),
+            "properties": {
+                'sn_l': d['sn_l'],
+                'sn_r': d['sn_r'],
+                'sn_k': d['sn_k'],
+                'name': d['gen'],
+                'until': d['until'],
+                'cases': d['cases'],
+                'deaths': d['deaths']
+            }
+        }
+
+        features.append(feature)
+
+    featurecollection = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype="application/json")
+
+    return resp
+
+@backend_api.route('/cases/landkreise/yesterday', methods=['GET'])
+@cache.cached()
+def get_cases_by_landkreise_yesterday():
+    """
+        Return all Hospitals
+    """
+
+    sql_stmt = '''
+with cases_per_landkreis as(
+	select idlandkreis, max(meldedatum) as until, SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
+	from (
+		(select distinct(idlandkreis) from cases_current) landkreise
+		cross join
+		(select generate_series(min(meldedatum), max(meldedatum) - '1 day'::interval, '1 day'::interval) as meldedatum from cases_current) dates
+	)
+	left join cases_current using (idlandkreis, meldedatum)
+	group by idlandkreis
+	order by idlandkreis, until
+)
+select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, max(c.until) as until, sum(c.cases) as cases, sum(c.deaths) as deaths, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
+from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis
+group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen 
+'''
+    sql_result = db.engine.execute(sql_stmt)
+
+    d, features = {}, []
+    for row in sql_result:
+        for column, value in row.items():
+            # build up the dictionary
+            d = {**d, **{column: value}}
+
+        feature = {
+            "type": 'Feature',
+            # careful! r.geojson is of type str, we must convert it to a dictionary
+            "geometry": json.loads(d['outline']),
+            "properties": {
+                'sn_l': d['sn_l'],
+                'sn_r': d['sn_r'],
+                'sn_k': d['sn_k'],
+                'name': d['gen'],
+                'until': d['until'],
+                'cases': d['cases'],
+                'deaths': d['deaths']
+            }
+        }
+
+        features.append(feature)
+
+    featurecollection = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype="application/json")
+
+    return resp
+
+@backend_api.route('/cases/landkreise/3daysbefore', methods=['GET'])
+@cache.cached()
+def get_cases_by_landkreise_3daysbefore():
+    """
+        Return all Hospitals
+    """
+
+    sql_stmt = '''
+with cases_per_landkreis as(
+	select idlandkreis, max(meldedatum) as until, SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
+	from (
+		(select distinct(idlandkreis) from cases_current) landkreise
+		cross join
+		(select generate_series(min(meldedatum), max(meldedatum) - '3 day'::interval, '1 day'::interval) as meldedatum from cases_current) dates
+	)
+	left join cases_current using (idlandkreis, meldedatum)
+	group by idlandkreis
+	order by idlandkreis, until
+)
+select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, max(c.until) as until, sum(c.cases) as cases, sum(c.deaths) as deaths, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
+from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis
+group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen 
+'''
+    sql_result = db.engine.execute(sql_stmt)
+
+    d, features = {}, []
+    for row in sql_result:
+        for column, value in row.items():
+            # build up the dictionary
+            d = {**d, **{column: value}}
+
+        feature = {
+            "type": 'Feature',
+            # careful! r.geojson is of type str, we must convert it to a dictionary
+            "geometry": json.loads(d['outline']),
+            "properties": {
+                'sn_l': d['sn_l'],
+                'sn_r': d['sn_r'],
+                'sn_k': d['sn_k'],
+                'name': d['gen'],
+                'until': d['until'],
+                'cases': d['cases'],
+                'deaths': d['deaths']
+            }
+        }
+
+        features.append(feature)
+
+    featurecollection = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype="application/json")
+
+    return resp
 
 @backend_api.route('/osm/hospitals', methods=['GET'])
 @cache.cached()
