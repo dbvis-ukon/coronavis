@@ -51,7 +51,8 @@ export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
           opacity: 1,
           color: 'white',
           dashArray: '3',
-          fillOpacity: 0.7
+          fillOpacity: 0.7,
+          pointerEvents: "none"
         };
       },
     });
