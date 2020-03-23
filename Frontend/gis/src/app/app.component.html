@@ -1,7 +1,17 @@
 <div id="container">
-  <app-map id="map" [overlays]="overlays" [(aggregationLevel)]="aggregationLevel"></app-map>
+  <app-map 
+    id="map" 
+    [(aggregationLevel)]="aggregationLevel" 
+    [showOsmHospitals]="showOsmHospitals" 
+    [showOsmHeliports]="showOsmHeliports"
+  ></app-map>
 
-  <app-infobox class="infobox" [(aggregationLevel)]="aggregationLevel"></app-infobox>
+  <app-infobox 
+    class="infobox" 
+    [(aggregationLevel)]="aggregationLevel"
+    [(showOsmHospitals)]="showOsmHospitals" 
+    [(showOsmHeliports)]="showOsmHeliports"
+  ></app-infobox>
 
   <app-overlay-brand class="overlay-brand"></app-overlay-brand>
 </div>

@@ -30,6 +30,8 @@ import {FeatureCollection} from "geojson";
 import {Subject, forkJoin} from "rxjs";
 import {GlyphHoverEvent} from "./events/glyphhover";
 import { LandkreiseHospitalsLayer } from './overlays/landkreishospitals';
+import { HospitalLayer } from './overlays/hospital';
+import { HelipadLayer } from './overlays/helipads';
 
 export enum AggregationLevel {
   none = 'none',
@@ -92,6 +94,66 @@ export class MapComponent implements OnInit, DoCheck {
   @Input() overlays: Array<Overlay<FeatureCollection>> = [];
   iterableDiffer: any;
 
+  private _aggregationLevel: AggregationLevel;
+
+  @Input()
+  set aggregationLevel(agg: AggregationLevel) {
+    this._aggregationLevel = agg;
+
+    // show new layer
+    this.updateGlyphMapLayers(agg);
+  }
+
+  get aggregationLevel(): AggregationLevel {
+    return this._aggregationLevel;
+  }
+
+  @Output()
+  aggregationLevelChange: EventEmitter<AggregationLevel> = new EventEmitter();
+
+
+  private _showOsmHospitals: boolean;
+
+  @Input()
+  set showOsmHospitals(val: boolean) {
+    this._showOsmHospitals = val;
+
+    if(!this.mymap) {
+      return;
+    }
+
+    if(val) {
+      this.mymap.addLayer(this.osmHospitalsLayer);
+    } else {
+      this.mymap.removeLayer(this.osmHospitalsLayer);
+    }
+  }
+
+  get showOsmHospitals(): boolean {
+    return this._showOsmHospitals;
+  }
+
+  private _showOsmHeliports: boolean;
+
+  @Input()
+  set showOsmHeliports(val: boolean) {
+    this._showOsmHeliports = val;
+
+    if(!this.mymap) {
+      return;
+    }
+
+    if(val) {
+      this.mymap.addLayer(this.osmHeliportsLayer);
+    } else {
+      this.mymap.removeLayer(this.osmHeliportsLayer);
+    }
+  }
+
+  get showOsmHeliports(): boolean {
+    return this._showOsmHeliports;
+  }
+
   private layerControl: L.Control.Layers;
 
   private mymap: L.Map;
@@ -113,10 +175,9 @@ export class MapComponent implements OnInit, DoCheck {
 
   private aggregationLevelToGlyphMap = new Map<AggregationLevel, L.SVGOverlay | L.LayerGroup<any>>();
 
-  private _aggregationLevel: AggregationLevel;
+  private osmHospitalsLayer: L.GeoJSON<any>;
 
-  @Output()
-  aggregationLevelChange: EventEmitter<AggregationLevel> = new EventEmitter();
+  private osmHeliportsLayer: L.GeoJSON<any>;
 
   constructor(
     private iterable: IterableDiffers,
@@ -127,18 +188,6 @@ export class MapComponent implements OnInit, DoCheck {
     private colormapService: ColormapService
   ) {
     this.iterableDiffer = this.iterable.find(this.overlays).create();
-  }
-
-  @Input()
-  set aggregationLevel(agg: AggregationLevel) {
-    this._aggregationLevel = agg;
-
-    // show new layer
-    this.updateGlyphMapLayers(agg);
-  }
-
-  get aggregationLevel(): AggregationLevel {
-    return this._aggregationLevel;
   }
 
   ngOnInit() {
@@ -253,6 +302,16 @@ export class MapComponent implements OnInit, DoCheck {
 
       // init map with the current aggregation level
       this.updateGlyphMapLayers(this._aggregationLevel);
+    });
+
+    this.dataService.getOSMHospitals().toPromise().then((val: FeatureCollection) => {
+      const f = new HospitalLayer('Hospitals', val, this.tooltipService);
+      this.osmHospitalsLayer = f.createOverlay();
+    });
+
+    this.dataService.getOSHelipads().toPromise().then((val: FeatureCollection) => {
+      const f = new HelipadLayer('Helipads', val, this.tooltipService);
+      this.osmHeliportsLayer = f.createOverlay();
     });
 
     this.mymap.on('zoom', this.semanticZoom);

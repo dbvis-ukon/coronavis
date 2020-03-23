@@ -6,7 +6,13 @@
     <mat-card-subtitle>
         <p>Aggregation</p> 
         <!--  use text instead of logos -->
-        <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="aggregationLevel" (change)="emitAggregationLevel($event)">
+        <mat-button-toggle-group 
+            class="btngrp"
+            name="fontStyle" 
+            aria-label="Font Style" 
+            [value]="aggregationLevel" 
+            (change)="aggregationLevelChange.emit($event.value)"
+        >
             <mat-button-toggle value="state" matTooltip="Bundesländer">Länder</mat-button-toggle>
             <mat-button-toggle value="governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
             <mat-button-toggle value="county" matTooltip="Landkreise">Kreise</mat-button-toggle>
@@ -36,10 +42,16 @@
                 
                 <mat-list role="list">
                         <mat-list-item role="listitem">
-                                <mat-slide-toggle>Alle Krankenhäuser</mat-slide-toggle>
+                                <mat-slide-toggle 
+                                    [checked]="showOsmHospitals" 
+                                    (change)="showOsmHospitalsChange.emit($event.checked)"
+                                >Alle Krankenhäuser</mat-slide-toggle>
                         </mat-list-item>
                         <mat-list-item role="listitem">
-                                <mat-slide-toggle>Hubschrauberlandeplätze</mat-slide-toggle>
+                                <mat-slide-toggle 
+                                    [checked]="showOsmHeliports" 
+                                    (change)="showOsmHeliportsChange.emit($event.checked)"
+                                >Hubschrauberlandeplätze</mat-slide-toggle>
                         </mat-list-item>
                         <mat-list-item role="listitem">
                                 <mat-slide-toggle>Aktuelle Fallzahlen</mat-slide-toggle>
