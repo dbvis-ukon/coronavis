@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as d3 from 'd3';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { FeatureCollection } from 'geojson';
-import { environment } from 'src/environments/environment';
 import { AggregatedHospitalsState } from './divi-hospitals.service';
+import { ScaleLinear } from 'd3';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +9,18 @@ import { AggregatedHospitalsState } from './divi-hospitals.service';
 export class ColormapService {
   constructor() {}
 
+   private colors = ['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)'];
+
   getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
       return d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
-      .range(['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)', '#bbbbbb']);
+      .range(this.colors.concat(['#bbbbbb']));
+  }
+
+  getContinousColorMap(): ScaleLinear<string, string> {
+    return d3.scaleLinear<string, string>()
+      .domain([0, 1, 2])
+      .range(this.colors)
+      .interpolate(d3.interpolateRgb.gamma(2.2))
   }
 
   getMaxColor(state: AggregatedHospitalsState): string {
