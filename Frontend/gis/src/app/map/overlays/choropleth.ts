@@ -8,10 +8,8 @@ import {AggregatedHospitals, AggregatedHospitalsProperties} from "../../services
 import { ScaleLinear } from 'd3';
 
 export class ChoroplethLayer extends Overlay<AggregatedHospitals> {
-  private colorMap: ScaleLinear<string, string>;
-  constructor(name: string, hospitals: AggregatedHospitals, private type: String, colorsService: ColormapService) {
+  constructor(name: string, hospitals: AggregatedHospitals, private type: String, private colorsService: ColormapService) {
     super(name, hospitals);
-    this.colorMap = colorsService.getContinousColorMap();
   }
 
   private propertyAccessor(d: AggregatedHospitalsProperties, type: String) {
@@ -46,7 +44,7 @@ export class ChoroplethLayer extends Overlay<AggregatedHospitals> {
     const aggregationLayer = L.geoJSON(this.featureCollection, {
       style: (feature) => {
         return {
-          fillColor: this.colorMap(normalizeValues(this.getScore(feature.properties))),
+          fillColor: this.colorsService.getBedStatusColor(normalizeValues(this.getScore(feature.properties))),
           weight: 2,
           opacity: 1,
           color: 'white',

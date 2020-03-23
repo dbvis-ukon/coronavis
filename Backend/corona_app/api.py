@@ -255,7 +255,7 @@ def get_cases_by_landkreise_per_day():
 
     sql_stmt = '''
 with cases_landkreise as (
-	select idlandkreis, DATE(meldedatum) as "date", SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
+	select case when idlandkreis like '11___' then '11000' else idlandkreis end, DATE(meldedatum) as "date", SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
 	from cases
 	group by idlandkreis, DATE(meldedatum)
 )
@@ -306,7 +306,7 @@ def get_cases_by_landkreise_total():
 
     sql_stmt = '''
 with cases_per_landkreis as(
-	select idlandkreis, max(meldedatum) as until, SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
+	select case when idlandkreis like '11___' then '11000' else idlandkreis end, min(landkreis) as landkreis, max(meldedatum) as until, SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
 	from (
 		(select distinct(idlandkreis) from cases_current) landkreise
 		cross join
@@ -315,10 +315,14 @@ with cases_per_landkreis as(
 	left join cases_current using (idlandkreis, meldedatum)
 	group by idlandkreis
 	order by idlandkreis, until
+), b as (
+	select case when char_length(kreisschluessel::text) = 4 then '0' || kreisschluessel::text else kreisschluessel::text end, sum(anzahl) as bevoelkerung
+	from bevoelkerung
+	group by kreisschluessel
 )
-select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, max(c.until) as until, sum(c.cases) as cases, sum(c.deaths) as deaths, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
-from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis
-group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen 
+select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, max(c.until) as until, sum(c.cases) as cases, sum(c.deaths) as deaths, avg(b.bevoelkerung) as bevoelkerung, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
+from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis join b on vk.ags = b.kreisschluessel
+group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen
     '''
     sql_result = db.engine.execute(sql_stmt)
 
@@ -337,6 +341,7 @@ group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen
                 'sn_r': d['sn_r'],
                 'sn_k': d['sn_k'],
                 'name': d['gen'],
+                'bevoelkerung': d['bevoelkerung'],
                 'until': d['until'],
                 'cases': d['cases'],
                 'deaths': d['deaths']
@@ -365,7 +370,7 @@ def get_cases_by_landkreise_yesterday():
 
     sql_stmt = '''
 with cases_per_landkreis as(
-	select idlandkreis, max(meldedatum) as until, SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
+	select case when idlandkreis like '11___' then '11000' else idlandkreis end, min(landkreis) as landkreis, max(meldedatum) as until, SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
 	from (
 		(select distinct(idlandkreis) from cases_current) landkreise
 		cross join
@@ -374,10 +379,14 @@ with cases_per_landkreis as(
 	left join cases_current using (idlandkreis, meldedatum)
 	group by idlandkreis
 	order by idlandkreis, until
+), b as (
+	select case when char_length(kreisschluessel::text) = 4 then '0' || kreisschluessel::text else kreisschluessel::text end, sum(anzahl) as bevoelkerung
+	from bevoelkerung
+	group by kreisschluessel
 )
-select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, max(c.until) as until, sum(c.cases) as cases, sum(c.deaths) as deaths, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
-from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis
-group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen 
+select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, max(c.until) as until, sum(c.cases) as cases, sum(c.deaths) as deaths, avg(b.bevoelkerung) as bevoelkerung, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
+from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis join b on vk.ags = b.kreisschluessel
+group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen
 '''
     sql_result = db.engine.execute(sql_stmt)
 
@@ -396,6 +405,7 @@ group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen
                 'sn_r': d['sn_r'],
                 'sn_k': d['sn_k'],
                 'name': d['gen'],
+                'bevoelkerung': d['bevoelkerung'],
                 'until': d['until'],
                 'cases': d['cases'],
                 'deaths': d['deaths']
@@ -424,7 +434,7 @@ def get_cases_by_landkreise_3daysbefore():
 
     sql_stmt = '''
 with cases_per_landkreis as(
-	select idlandkreis, max(meldedatum) as until, SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
+	select case when idlandkreis like '11___' then '11000' else idlandkreis end, min(landkreis) as landkreis, max(meldedatum) as until, SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
 	from (
 		(select distinct(idlandkreis) from cases_current) landkreise
 		cross join
@@ -433,10 +443,14 @@ with cases_per_landkreis as(
 	left join cases_current using (idlandkreis, meldedatum)
 	group by idlandkreis
 	order by idlandkreis, until
+), b as (
+	select case when char_length(kreisschluessel::text) = 4 then '0' || kreisschluessel::text else kreisschluessel::text end, sum(anzahl) as bevoelkerung
+	from bevoelkerung
+	group by kreisschluessel
 )
-select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, max(c.until) as until, sum(c.cases) as cases, sum(c.deaths) as deaths, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
-from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis
-group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen 
+select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, max(c.until) as until, sum(c.cases) as cases, sum(c.deaths) as deaths, avg(b.bevoelkerung) as bevoelkerung, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
+from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis join b on vk.ags = b.kreisschluessel
+group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen
 '''
     sql_result = db.engine.execute(sql_stmt)
 
@@ -455,6 +469,7 @@ group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen
                 'sn_r': d['sn_r'],
                 'sn_k': d['sn_k'],
                 'name': d['gen'],
+                'bevoelkerung': d['bevoelkerung'],
                 'until': d['until'],
                 'cases': d['cases'],
                 'deaths': d['deaths']
