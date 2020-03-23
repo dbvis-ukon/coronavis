@@ -32,7 +32,7 @@ export class ColormapService {
   }
 
   getDiff(normalizedDiff: number): string {
-    return d3.interpolateRdYlBu(normalizedDiff);
+    return d3.interpolateRdBu(normalizedDiff);
   }
 
   getMaxColor(state: AggregatedHospitalsState): string {

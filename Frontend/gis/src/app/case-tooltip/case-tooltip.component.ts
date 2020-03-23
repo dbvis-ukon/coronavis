@@ -20,6 +20,8 @@ import {animate, style, transition, trigger} from "@angular/animations";
 export class CaseTooltipComponent implements OnInit {
 
   public name: String;
+  public combined: [];
+  public datum: String;
 
   constructor() { }
 
