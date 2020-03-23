@@ -81,6 +81,10 @@ export interface DiviHospital {
   'ECMO': 'Verfügbar' | 'Begrenzt' | 'Ausgelastet' | 'Nicht verfügbar';  // Extrakorporale Membranoxygenierung --> https://bit.ly/3dnlpyb
   'Stand': string;
   'Location': LatLngLiteral;
+  'x': number;
+  'y': number;
+  '_x': number;
+  '_y': number;
 }
 
 export interface DiviAggregatedHospital {

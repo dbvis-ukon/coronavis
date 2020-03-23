@@ -5,14 +5,9 @@ import { TooltipService } from 'src/app/services/tooltip.service';
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { DiviHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
+import {Point} from 'leaflet';
 
 export class SimpleGlyphLayer extends Overlay {
-
-  public static colorScaleOrd: d3.ScaleOrdinal<string, string>;
-
-  private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-
-  private map: L.Map;
 
   constructor(
     name: string,
@@ -24,10 +19,20 @@ export class SimpleGlyphLayer extends Overlay {
     this.enableDefault = true;
   }
 
+  public static colorScaleOrd: d3.ScaleOrdinal<string, string>;
+
+  private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+
+  private map: L.Map;
+
+  private lastTransform;
+
+  private labelLayout;
+
   createOverlay(map: L.Map) {
     this.map = map;
 
-    this.map.on('zoom', () => {
+    this.map.on('zoom', (d) => {
       this.onZoomed();
     });
 
@@ -53,10 +58,14 @@ export class SimpleGlyphLayer extends Overlay {
       .enter()
       .append<SVGGElement>('g')
       .attr('class', 'hospital')
-        .attr('transform', d => {
+      .attr('transform', d => {
           const p = this.map.latLngToLayerPoint(d.Location);
+          d.x = p.x;
+          d.y = p.y;
+          d._x = p.x;
+          d._y = p.y;
           // console.log(p, d.Location);
-          return `translate(${p.x}, ${p.y})`;})
+          return `translate(${p.x}, ${p.y})`; })
       .on('mouseenter', function(d1: DiviHospital) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY}, [
@@ -98,6 +107,8 @@ export class SimpleGlyphLayer extends Overlay {
         d3.select(this).raise();
       })
       .on('mouseleave', () => this.tooltipService.close());
+
+    console.log(this.data);
 
     const rectSize = 10;
 
@@ -148,6 +159,7 @@ export class SimpleGlyphLayer extends Overlay {
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`);
 
+    this.labelLayout = this.getForceSimulation();
 
     // gHos
     //   .append('rect')
@@ -165,14 +177,37 @@ export class SimpleGlyphLayer extends Overlay {
     // return L.svgOverlay(svgElement, this.map.getBounds());
   }
 
+   ticked() {
+    this.gHospitals.attr('transform', (d, i) => {
+      return `translate(${d.x},${d.y})`;
+    });
+
+    this.labelLayout.alphaTarget(0.3).restart();
+  }
+
+  /*
+   * Rectangular Force Collision
+   * https://bl.ocks.org/cmgiven/547658968d365bcc324f3e62e175709b
+   */
+  getForceSimulation(scale: number = 1): d3.Simulation<DiviHospital, undefined> {
+    return d3.forceSimulation(this.data)
+      .force('collision', d3.forceCollide( (d) => 30 * scale)
+        .iterations(5).strength(0.2) )
+      .force('x', d3.forceX((d: any) => d._x).strength(0.5))
+      .force('y', d3.forceY((d: any) => d._y).strength(0.5))
+      // .force('charge', d3.forceManyBody().strength(0.1))
+      .on('tick', () => {
+        return this.ticked();
+      });
+  }
+
   onZoomed() {
-    // this.gHospitals
-    //   .attr('transform', (d, i, n) => {
-    //     const p = this.map.latLngToLayerPoint(d.Location);
-    //     return `translate(${p.x}, ${p.y})`;
-    //   });
     const zoom = this.map.getZoom();
     const scale = Math.pow(9 / (zoom), 4);
+
+    this.labelLayout.stop();
+    this.labelLayout.stop();
+    this.labelLayout = this.getForceSimulation(scale);
 
     console.log('zoomed', this.map.getZoom(), scale);
 
