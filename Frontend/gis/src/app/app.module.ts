@@ -13,6 +13,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatListModule} from '@angular/material/list';
+import {MatDividerModule} from '@angular/material/divider';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 
 
@@ -35,7 +37,9 @@ import {MatListModule} from '@angular/material/list';
     MatButtonToggleModule,
     MatCardModule,
     MatSlideToggleModule,
-    MatListModule
+    MatListModule,
+    MatDividerModule,
+    ScrollingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
