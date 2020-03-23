@@ -146,8 +146,6 @@ export class SimpleGlyphLayer extends Overlay {
     this.gHospitals.attr('transform', (d, i) => {
       return `translate(${d.x},${d.y})`;
     });
-
-    this.labelLayout.alphaTarget(0.3).restart();
   }
 
   /*
@@ -160,6 +158,7 @@ export class SimpleGlyphLayer extends Overlay {
         .iterations(5).strength(0.2) )
       .force('x', d3.forceX((d: any) => d._x).strength(0.5))
       .force('y', d3.forceY((d: any) => d._y).strength(0.5))
+      .alphaTarget(0.3)
       // .force('charge', d3.forceManyBody().strength(0.1))
       .on('tick', () => {
         return this.ticked();
