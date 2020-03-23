@@ -444,6 +444,8 @@ export class MapComponent implements OnInit, DoCheck {
       throw 'No covidNumberCaseCoropleth for ' + key + ' found';
     }
 
-    this.mymap.addLayer(this.covidNumberCaseOptionsKeyToLayer.get(key));
+    const l = this.covidNumberCaseOptionsKeyToLayer.get(key);
+    this.mymap.addLayer(l);
+    l.bringToBack();
   }
 }

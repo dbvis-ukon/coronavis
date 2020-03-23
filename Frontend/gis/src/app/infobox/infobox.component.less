@@ -68,13 +68,13 @@ a:hover, a:active {
     top: 0px;
 }
 
-::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-    background-color: blue; /*replace with your color*/
-}
+// ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+//     background-color: blue; /*replace with your color*/
+// }
 
-::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-    background-color: skyblue;  /*replace with your color*/
-}
+// ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+//     background-color: skyblue;  /*replace with your color*/
+// }
 
 mat-card {
     max-height: 90vh; 
@@ -89,4 +89,12 @@ mat-card {
 
 .aggregationsstufen img{
     width: 100px;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+.covid-form div {
+    padding-top: 10px;
 }
