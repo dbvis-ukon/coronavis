@@ -1,9 +1,9 @@
 
 
 <mat-card>
-    <!--<mat-card-title>
+    <mat-card-title>
         Krankenhäuser - Auslastung
-    </mat-card-title>-->
+    </mat-card-title>
     <mat-card-subtitle>
         <p>Aggregation</p> 
         <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
@@ -13,6 +13,8 @@
             <mat-button-toggle value="ohneaggregation">Ohne Aggregation</mat-button-toggle>
         </mat-button-toggle-group>  
     </mat-card-subtitle>
+    <mat-divider></mat-divider>
+    <br />
     <mat-card-content>
             Filter 
             <mat-list role="list">
@@ -27,10 +29,14 @@
                     </mat-list-item>
             </mat-list>            
     </mat-card-content>
+    <mat-divider></mat-divider>
+    <br />
     <mat-card-content>
             <p>Legende</p> 
              <img class="legend" src="/assets/Legende.png" alt="Legende">
-        </mat-card-content>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <br />
     <mat-card-content>
             Quellen
             <mat-list role="list">
@@ -39,9 +45,13 @@
                     </mat-list-item>
             </mat-list>            
     </mat-card-content>
-    <a href="http://vis.uni.kn">
-        <img class="logo" src="/assets/dbvis.png" alt="DBVIS Logo">
-    </a>
+    
+    <div class="logocontainer">
+        <a href="http://vis.uni.kn" target="_blank">
+            <img class="logo" src="/assets/dbvis.png" alt="DBVIS Logo">
+        </a>
+    </div>
+    
 
     
 
