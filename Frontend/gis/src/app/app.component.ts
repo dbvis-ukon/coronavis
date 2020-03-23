@@ -3,8 +3,6 @@ import { FeatureCollection } from 'geojson';
 import { Overlay } from './map/overlays/overlay';
 import { AggregationLevel, CovidNumberCaseOptions, CovidNumberCaseType, CovidNumberCaseChange, CovidNumberCaseTimeWindow } from './map/map.component';
 
-
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
