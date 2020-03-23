@@ -116,9 +116,17 @@ export class MapComponent implements OnInit, DoCheck {
     };
 
     this.mymap.on('overlayadd', event => {
-      // this.mymap.eachLayer(layer => console.log(layer));
       if (this.glyphLayerOverlay) {
         this.glyphLayerOverlay.bringToFront();
+      }
+      if (this.aggHospitalCounty) {
+        this.aggHospitalCounty.bringToFront();
+      }
+      if (this.aggHospitalGovernmentDistrict) {
+        this.aggHospitalGovernmentDistrict.bringToFront();
+      }
+      if (this.aggHospitalState) {
+        this.aggHospitalState.bringToFront();
       }
     });
 
@@ -126,9 +134,9 @@ export class MapComponent implements OnInit, DoCheck {
     this.layerControl = L.control.layers(baseMaps);
     this.layerControl.addTo(this.mymap);
 
+    // Choropleth layers on hover
     this.hospitallayerService.getLayers().subscribe(layer => {
       this.choroplethLayerMap.set(layer.name, layer.createOverlay());
-      this.layerControl.addOverlay(layer.createOverlay(), layer.name);
     });
     const layerEvents: Subject<GlyphHoverEvent> = new Subject<GlyphHoverEvent>();
     layerEvents.subscribe(event => {
@@ -143,7 +151,7 @@ export class MapComponent implements OnInit, DoCheck {
     });
 
     this.diviHospitalsService.getDiviHospitals().subscribe(data => {
-      const glyphLayer = new SimpleGlyphLayer('Krankenäuser', data, this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
+      const glyphLayer = new SimpleGlyphLayer('Krankenäuser', data, this.tooltipService, this.colormapService);
       this.glyphLayerOverlay = glyphLayer.createOverlay(this.mymap);
 
       // this.mymap.addLayer(glyphs.createOverlay());
@@ -154,40 +162,27 @@ export class MapComponent implements OnInit, DoCheck {
 
 
     this.diviHospitalsService.getDiviHospitalsCounties().subscribe(data => {
-      const l = new AggregatedGlyphLayer('Krankenäuser Landkreise', data, this.tooltipService, this.colormapService);
+      const l = new AggregatedGlyphLayer('Krankenäuser Landkreise', "landkreise", data, this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
       this.aggHospitalCounty = l.createOverlay(this.mymap);
       this.layerControl.addOverlay(this.aggHospitalCounty, l.name);
       this.semanticZoom();
     });
 
     this.diviHospitalsService.getDiviHospitalsGovernmentDistrict().subscribe(data => {
-      const l = new AggregatedGlyphLayer('Krankenäuser Regierungsbezirke', data, this.tooltipService, this.colormapService);
+      const l = new AggregatedGlyphLayer('Krankenäuser Regierungsbezirke', "regierungsbezirke", data, this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
       this.aggHospitalGovernmentDistrict = l.createOverlay(this.mymap);
       this.layerControl.addOverlay(this.aggHospitalGovernmentDistrict, l.name);
       this.semanticZoom();
     });
 
     this.diviHospitalsService.getDiviHospitalsStates().subscribe(data => {
-      const l = new AggregatedGlyphLayer('Krankenäuser Bundesländer', data, this.tooltipService, this.colormapService);
+      const l = new AggregatedGlyphLayer('Krankenäuser Bundesländer', "bundeslander", data, this.tooltipService, this.colormapService, this.hospitallayerService, layerEvents);
       this.aggHospitalState = l.createOverlay(this.mymap);
       this.layerControl.addOverlay(this.aggHospitalState, l.name);
       this.semanticZoom();
     });
 
-
     this.mymap.on('zoom', this.semanticZoom);
-
-
-    const self = this;
-    L.Handler.extend({
-      addHooks: function () {
-        L.DomEvent.on(self.main, "test", () => {
-          console.log("blubb");
-        }, this);
-      }
-    })
-
-
   }
 
   /**

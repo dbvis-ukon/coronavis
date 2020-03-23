@@ -21,8 +21,6 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     private data: DiviHospital[],
     private tooltipService: TooltipService,
     private colormapService: ColormapService,
-    private hospitallayerService: HospitallayerService,
-    private eventEmitter: Subject<GlyphHoverEvent>
     ) {
     super(name, null);
     this.enableDefault = true;
@@ -116,13 +114,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .style('fill', d1 => colorScale(d1.icuLowCare))
       .attr('x', padding)
-      .attr('y', yOffset)
-      .on("mouseenter", () => {
-        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName("landkreise", "icu_low_state"), "enter"));
-      })
-      .on("mouseleave", () => {
-        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName("landkreise", "icu_low_state"), "exit"));
-      });
+      .attr('y', yOffset);
 
     this.gHospitals
       .append('rect')
@@ -131,13 +123,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('x', `${rectSize}px`)
       .style('fill', d1 => colorScale(d1.icuHighCare))
       .attr('y', yOffset)
-      .attr('x', `${rectSize + padding * 2}px`)
-      .on("mouseenter", () => {
-        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName("landkreise", "icu_high_state"), "enter"));
-      })
-      .on("mouseleave", () => {
-        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName("landkreise", "icu_high_state"), "exit"));
-      });
+      .attr('x', `${rectSize + padding * 2}px`);
 
     this.gHospitals
       .append('rect')
@@ -146,13 +132,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('x', `${2 * rectSize}px`)
       .style('fill', d1 => colorScale(d1.ECMO))
       .attr('y', yOffset)
-      .attr('x', `${2 * rectSize + padding * 3}px`)
-      .on("mouseenter", () => {
-        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName("landkreise", "ecmo_state"), "enter"));
-      })
-      .on("mouseleave", () => {
-        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName("landkreise", "ecmo_state"), "exit"));
-      });
+      .attr('x', `${2 * rectSize + padding * 3}px`);
 
     this.labelLayout = this.getForceSimulation();
 
