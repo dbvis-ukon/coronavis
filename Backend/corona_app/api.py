@@ -83,7 +83,8 @@ def get_hospitals():
 
 
 # Custom Rest API
-@backend_api.route('/hospitals/landkreise', methods=['GET', 'POST'])
+@backend_api.route('/hospitals/landkreise', methods=['GET'])
+@cache.cached()
 def get_hospitals_by_landkreise():
     """
         Return all Hospitals
@@ -133,7 +134,8 @@ group by vkv.sn_l, vkv.sn_r, vkv.sn_k
     return resp
 
 # Custom Rest API
-@backend_api.route('/hospitals/regierungsbezirke', methods=['GET', 'POST'])
+@backend_api.route('/hospitals/regierungsbezirke', methods=['GET'])
+@cache.cached()
 def get_hospitals_by_regierungsbezirke():
     """
         Return all Hospitals
@@ -180,7 +182,8 @@ group by vkv.sn_l, vkv.sn_r
     return resp
 
 # Custom Rest API
-@backend_api.route('/hospitals/bundeslander', methods=['GET', 'POST'])
+@backend_api.route('/hospitals/bundeslander', methods=['GET'])
+@cache.cached()
 def get_hospitals_by_bundeslander():
     """
         Return all Hospitals
@@ -225,7 +228,8 @@ group by vkv.sn_l
 
     return resp
 
-@backend_api.route('/osm/hospitals', methods=['GET', 'POST'])
+@backend_api.route('/osm/hospitals', methods=['GET'])
+@cache.cached()
 def get_osm_hospitals():
     """
         Return all Hospitals
@@ -270,7 +274,8 @@ where amenity = 'hospital' and tags -> 'emergency' = 'yes'
 
     return resp
 
-@backend_api.route('/osm/nearby_helipads', methods=['GET', 'POST'])
+@backend_api.route('/osm/nearby_helipads', methods=['GET'])
+@cache.cached()
 def get_osm_nearby_helipads():
     """
         Return all Hospitals
