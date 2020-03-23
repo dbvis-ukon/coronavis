@@ -4,18 +4,25 @@ import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
 import { DiviAggregatedHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
+import {FeatureCollection} from "geojson";
+import {GlyphHoverEvent} from "../events/glyphhover";
+import {HospitallayerService} from "../../services/hospitallayer.service";
+import {Subject} from "rxjs";
 
-export class AggregatedGlyphLayer extends Overlay {
+export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
   private gHospitals: d3.Selection<SVGGElement, DiviAggregatedHospital, SVGElement, unknown>;
   private map: L.Map;
 
   constructor(
     name: string,
+    private granularity: String,
     private data: DiviAggregatedHospital[],
     private tooltipService: TooltipService,
-    private colormapService: ColormapService
-  ) {
+    private colormapService: ColormapService,
+    private hospitallayerService: HospitallayerService,
+    private eventEmitter: Subject<GlyphHoverEvent>
+) {
     super(name, null);
   }
 
@@ -85,13 +92,21 @@ export class AggregatedGlyphLayer extends Overlay {
       .attr('y', '8')
       .attr('font-size', '8px');
 
+
+    const self = this;
     this.gHospitals
       .append('rect')
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
-      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_low_state));
+      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_low_state))
+      .on("mouseenter", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_low_state"), "enter"));
+      })
+      .on("mouseleave", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_low_state"), "exit"));
+      })
 
     this.gHospitals
       .append('rect')
@@ -99,7 +114,13 @@ export class AggregatedGlyphLayer extends Overlay {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${rectSize + padding * 2}px`)
-      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_high_state));
+      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_high_state))
+      .on("mouseenter", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_high_state"), "enter"));
+      })
+      .on("mouseleave", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_high_state"), "exit"));
+      });
 
     this.gHospitals
       .append('rect')
@@ -107,7 +128,13 @@ export class AggregatedGlyphLayer extends Overlay {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`)
-      .style('fill', d1 => this.colormapService.getMaxColor(d1.ecmo_state));
+      .style('fill', d1 => this.colormapService.getMaxColor(d1.ecmo_state))
+      .on("mouseenter", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "ecmo_state"), "enter"));
+      })
+      .on("mouseleave", () => {
+        self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "ecmo_state"), "exit"));
+      });
 
 
     // gHos

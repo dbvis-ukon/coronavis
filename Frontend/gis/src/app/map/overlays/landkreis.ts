@@ -6,7 +6,7 @@ import { Overlay } from './overlay';
 import { TooltipService } from 'src/app/services/tooltip.service';
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 
-export class LandkreisLayer extends Overlay {
+export class LandkreisLayer extends Overlay<FeatureCollection> {
 
     constructor(name: string, featureCollection: FeatureCollection, private tooltipService: TooltipService) {
         super(name, featureCollection);

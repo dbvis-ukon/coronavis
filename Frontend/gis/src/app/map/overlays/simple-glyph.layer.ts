@@ -6,8 +6,12 @@ import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.compo
 import { DiviHospital } from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {Point} from 'leaflet';
+import {Feature, FeatureCollection} from "geojson";
+import {Subject} from "rxjs";
+import {HospitallayerService} from "../../services/hospitallayer.service";
+import {GlyphHoverEvent} from "../events/glyphhover";
 
-export class SimpleGlyphLayer extends Overlay {
+export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
   private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private map: L.Map;
@@ -16,7 +20,7 @@ export class SimpleGlyphLayer extends Overlay {
     name: string,
     private data: DiviHospital[],
     private tooltipService: TooltipService,
-    private colormapService: ColormapService
+    private colormapService: ColormapService,
     ) {
     super(name, null);
     this.enableDefault = true;
@@ -152,11 +156,13 @@ export class SimpleGlyphLayer extends Overlay {
   }
 
    ticked() {
-    this.gHospitals.attr('transform', (d, i) => {
+    this.gHospitals
+      .transition().duration(100)
+      .attr('transform', (d, i) => {
       return `translate(${d.x},${d.y})`;
     });
 
-    this.labelLayout.alphaTarget(0.3).restart();
+    // this.labelLayout.alphaTarget(0.3).restart();
   }
 
   /*
@@ -166,11 +172,11 @@ export class SimpleGlyphLayer extends Overlay {
   getForceSimulation(scale: number = 1): d3.Simulation<DiviHospital, undefined> {
     return d3.forceSimulation(this.data)
       .force('collision', d3.forceCollide( (d) => 30 * scale)
-        .iterations(5).strength(0.2) )
+        .iterations(1).strength(0.2) )
       .force('x', d3.forceX((d: any) => d._x).strength(0.5))
       .force('y', d3.forceY((d: any) => d._y).strength(0.5))
       // .force('charge', d3.forceManyBody().strength(0.1))
-      .on('tick', () => {
+      .on('end', () => {
         return this.ticked();
       });
   }
