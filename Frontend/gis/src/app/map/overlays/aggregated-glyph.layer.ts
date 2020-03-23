@@ -60,13 +60,13 @@ export class AggregatedGlyphLayer extends Overlay {
       .attr('transform', d => {
         const p = this.map.latLngToLayerPoint(d.Location);
         return `translate(${p.x - ((3 * rectSize + padding * 3) / 2)}, ${p.y - (22 / 2)})`;
-      })
-      .on('mouseenter', d1 => {
-        const evt: MouseEvent = d3.event;
-        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
-        t.name = d1.Name;
-      })
-      .on('mouseout', () => this.tooltipService.close());
+      });
+      // .on('mouseenter', d1 => {
+      //   const evt: MouseEvent = d3.event;
+      //   const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
+      //   t.name = d1.Name;
+      // })
+      // .on('mouseout', () => this.tooltipService.close());
 
 
 
