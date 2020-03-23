@@ -61,11 +61,19 @@ for el in data:
 print('current cases', len(entries))
 
 
-print('Insert into DB (takes 5-10min)...')
 aquery = 'INSERT INTO cases(datenbestand, idbundesland, bundesland, landkreis, idlandkreis, objectid, meldedatum, gender, agegroup, casetype) VALUES(%(datenbestand)s, %(idbundesland)s, %(bundesland)s, %(landkreis)s, %(idlandkreis)s, %(objectid)s, %(meldedatum)s, %(gender)s, %(agegroup)s, %(casetype)s)'  
 conn, cur = get_connection()
-cur.executemany(aquery, entries)
-conn.commit()
+cur.execute("Select Max(datenbestand) from cases")
+last_update = cur.fetchone()[0]
+current_update = entries[0]['datenbestand'].replace(tzinfo=datetime.timezone(datetime.timedelta(hours=+1)))
+print("db data version:", last_update)
+print("fetched data version:", current_update)
+if abs((current_update - last_update).total_seconds()) <= 2*60*60:
+    print("No new data available (+/- 2h), skip update")
+else:
+    print('Insert new data into DB (takes 5-10min)...')
+    #cur.executemany(aquery, entries)
+    conn.commit()
 
 print('Success')
 
