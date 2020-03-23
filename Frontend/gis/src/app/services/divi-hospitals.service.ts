@@ -59,6 +59,9 @@ export interface AggregatedHospitalsProperties {
   icu_high_state: AggregatedHospitalsState;
   icu_low_state: AggregatedHospitalsState;
   sn_l: string;
+  sn_k: string;
+  sn_r: string;
+  name: string;
 }
 
 export interface AggregatedHospitalsFeature extends Feature<AggregatedHospitalsGeometry, AggregatedHospitalsProperties>{
@@ -151,7 +154,7 @@ export class DiviHospitalsService {
     return input.features.map((i, index) => {
       return {
         ID: index,
-        Name: 'Unknown',
+        Name: i.properties.name,
         Location: {
           lat: i.properties.centroid.coordinates[1],
           lng: i.properties.centroid.coordinates[0]

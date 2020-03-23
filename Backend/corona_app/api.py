@@ -1,9 +1,13 @@
+import time
 import logging
 import json
 from collections import Counter
 from flask import Blueprint, Response, jsonify, request
+from flask_caching import Cache
 
 from .model import *
+
+cache = Cache(config={'CACHE_TYPE': 'simple', 'CACHE_DEFAULT_TIMEOUT': 3600})
 
 backend_api = Blueprint('api', __name__)
 
@@ -14,65 +18,82 @@ def healthcheck():
     # FIXME: the database connection should be checked here!
     return "ok", 200
 
+# # Custom Rest API
+# @backend_api.route('/hospitals', methods=['GET', 'POST'])
+# def get_hospitals():
+#     """
+#         Return all Hospitals
+#     """
+#     sql_stmt = '''
+# select index, name, address, contact, icu_low_state, icu_high_state, ecmo_state, last_update, st_asgeojson(geom) as geojson
+# from hospitals_crawled hc
+#     '''
+#     sql_result = db.engine.execute(sql_stmt)
+
+#     d, features = {}, []
+#     for row in sql_result:
+#         for column, value in row.items():
+#             # build up the dictionary
+#             d = {**d, **{column: value}}
+
+#         feature = {
+#             "type": 'Feature',
+#             # careful! r.geojson is of type str, we must convert it to a dictionary
+#             "geometry": json.loads(d['geojson']),
+#             "properties": {
+#                 'index': d['index'],
+#                 'name': d['name'],
+#                 'address': d['address'],
+#                 'contact': d['contact'],
+#                 'icu_low_state': d['icu_low_state'],
+#                 'icu_high_state': d['icu_high_state'],
+#                 'ecmo_state': d['ecmo_state'],
+#                 'last_update': d['last_update']
+#             }
+#         }
+
+#         features.append(feature)
+
+#     featurecollection = {
+#         "type": "FeatureCollection",
+#         "features": features
+#     }
+
+#     resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+#             status=200,
+#             mimetype="application/json")
+#     return resp
+
 # Custom Rest API
-@backend_api.route('/hospitals', methods=['GET', 'POST'])
+@backend_api.route('/hospitals', methods=['GET'])
+@cache.cached()
 def get_hospitals():
     """
         Return all Hospitals
     """
-
-    sql_stmt = '''
-select index, name, address, contact, icu_low_state, icu_high_state, ecmo_state, last_update, st_asgeojson(geom) as geojson
-from hospitals_crawled hc
-    '''
-    sql_result = db.engine.execute(sql_stmt)
-
-    d, features = {}, []
-    for row in sql_result:
-        for column, value in row.items():
-            # build up the dictionary
-            d = {**d, **{column: value}}
-
-        feature = {
-            "type": 'Feature',
-            # careful! r.geojson is of type str, we must convert it to a dictionary
-            "geometry": json.loads(d['geojson']),
-            "properties": {
-                'index': d['index'],
-                'name': d['name'],
-                'address': d['address'],
-                'contact': d['contact'],
-                'icu_low_state': d['icu_low_state'],
-                'icu_high_state': d['icu_high_state'],
-                'ecmo_state': d['ecmo_state'],
-                'last_update': d['last_update']
-            }
-        }
-
-        features.append(feature)
-
+    hospitals = db.session.query(Hospital).all()
+    features = {'features':[]}
+    for elem in hospitals:
+        features['features'].append(elem.as_dict())
     featurecollection = {
         "type": "FeatureCollection",
         "features": features
     }
+    return jsonify(featurecollection)
 
-    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-            status=200,
-            mimetype="application/json")
-
-    return resp
 
 # Custom Rest API
-@backend_api.route('/hospitals/landkreise', methods=['GET', 'POST'])
+@backend_api.route('/hospitals/landkreise', methods=['GET'])
+@cache.cached()
 def get_hospitals_by_landkreise():
     """
         Return all Hospitals
     """
 
     sql_stmt = '''
-select vkv.sn_l, vkv.sn_r, vkv.sn_k, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+select vkv.sn_l, vkv.sn_r, vkv.sn_k, vkv.gen, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
 from vg250_krs vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
-group by vkv.sn_l, vkv.sn_r, vkv.sn_k
+group by vkv.sn_l, vkv.sn_r, vkv.sn_k, vkv.gen
     '''
     sql_result = db.engine.execute(sql_stmt)
 
@@ -91,6 +112,7 @@ group by vkv.sn_l, vkv.sn_r, vkv.sn_k
                 'sn_l': d['sn_l'],
                 'sn_r': d['sn_r'],
                 'sn_k': d['sn_k'],
+                'name': d['gen'],
                 'centroid': json.loads(d['centroid']),
                 'icu_low_state': dict(Counter(d['icu_low_state'])),
                 'icu_high_state': dict(Counter(d['icu_high_state'])),
@@ -113,16 +135,23 @@ group by vkv.sn_l, vkv.sn_r, vkv.sn_k
     return resp
 
 # Custom Rest API
-@backend_api.route('/hospitals/regierungsbezirke', methods=['GET', 'POST'])
+@backend_api.route('/hospitals/regierungsbezirke', methods=['GET'])
+@cache.cached()
 def get_hospitals_by_regierungsbezirke():
     """
         Return all Hospitals
     """
 
+    # use regierungsbezirke if they are available, for the others use bundeslaender
     sql_stmt = '''
-select vkv.sn_l, vkv.sn_r, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
-from vg250_krs vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
-group by vkv.sn_l, vkv.sn_r
+select vkv.sn_l, vkv.sn_r, vkv.gen, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+from vg250_rbz vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom)
+group by vkv.sn_l, vkv.sn_r, vkv.gen
+union all
+select vkv.sn_l, vkv.sn_r, vkv.gen, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+from vg250_lan vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom)
+where NOT (vkv.gen = ANY(array['Baden-Württemberg', 'Baden-Württemberg (Bodensee)', 'Bayern', 'Bayern (Bodensee)', 'Hessen', 'Nordrhein-Westfalen']))
+group by vkv.sn_l, vkv.sn_r, vkv.gen
     '''
     sql_result = db.engine.execute(sql_stmt)
 
@@ -139,6 +168,7 @@ group by vkv.sn_l, vkv.sn_r
             "properties": {
                 'sn_l': d['sn_l'],
                 'sn_r': d['sn_r'],
+                'name': d['gen'],
                 'centroid': json.loads(d['centroid']),
                 'icu_low_state': dict(Counter(d['icu_low_state'])),
                 'icu_high_state': dict(Counter(d['icu_high_state'])),
@@ -160,16 +190,20 @@ group by vkv.sn_l, vkv.sn_r
     return resp
 
 # Custom Rest API
-@backend_api.route('/hospitals/bundeslander', methods=['GET', 'POST'])
+@backend_api.route('/hospitals/bundeslander', methods=['GET'])
+@cache.cached()
 def get_hospitals_by_bundeslander():
     """
         Return all Hospitals
     """
 
     sql_stmt = '''
-select vkv.sn_l, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
-from vg250_krs vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom) 
-group by vkv.sn_l
+select vkv.sn_l, vkv.gen, 
+	JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, 
+	ST_AsGeoJSON(ST_Union(vkv.geom)) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
+from vg250_lan vkv left join hospitals_crawled hc on ST_Contains(vkv.geom, hc.geom)
+where vkv.gen not like '%%Bodensee%%'
+group by vkv.sn_l, vkv.gen
     '''
     sql_result = db.engine.execute(sql_stmt)
 
@@ -185,6 +219,7 @@ group by vkv.sn_l
             "geometry": json.loads(d['outline']),
             "properties": {
                 'sn_l': d['sn_l'],
+                'name': d['gen'],
                 'centroid': json.loads(d['centroid']),
                 'icu_low_state': dict(Counter(d['icu_low_state'])),
                 'icu_high_state': dict(Counter(d['icu_high_state'])),
@@ -205,61 +240,8 @@ group by vkv.sn_l
 
     return resp
 
-@backend_api.route('/person', methods=['GET'])
-def get_persons():
-    """
-        Return all persons
-    """
-    persons = db.session.query(Person).all()
-    results = []
-    for elem in persons:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/person/<int:id>', methods=['GET'])
-def get_person(id=None):
-    """
-        Return a specific person
-        :param id: id of the specific person
-    """
-    if not id:
-        return jsonify({})
-    persons = db.session.query(Person).filter_by(id=id)
-    results = []
-    for elem in persons:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/bed', methods=['GET'])
-def get_beds():
-    """
-        Return all beds
-    """
-    beds = db.session.query(Bed).all()
-    results = []
-    for elem in beds:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/bed/<int:id>', methods=['GET'])
-def get_bed(id=None):
-    """
-        Return a specific bed
-        :param id: id of the specific bed
-    """
-    if not id:
-        return jsonify({})
-    beds = db.session.query(Bed).filter_by(id=id)
-    results = []
-    for elem in beds:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/osm/hospitals', methods=['GET', 'POST'])
+@backend_api.route('/osm/hospitals', methods=['GET'])
+@cache.cached()
 def get_osm_hospitals():
     """
         Return all Hospitals
@@ -304,7 +286,8 @@ where amenity = 'hospital' and tags -> 'emergency' = 'yes'
 
     return resp
 
-@backend_api.route('/osm/nearby_helipads', methods=['GET', 'POST'])
+@backend_api.route('/osm/nearby_helipads', methods=['GET'])
+@cache.cached()
 def get_osm_nearby_helipads():
     """
         Return all Hospitals
