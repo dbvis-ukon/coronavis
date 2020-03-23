@@ -12,7 +12,6 @@ import {
 } from '@angular/core';
 
 import * as L from 'leaflet';
-import * as d3 from 'd3';
 import 'mapbox-gl';
 import 'mapbox-gl-leaflet';
 // import 'leaflet-mapbox-gl';
@@ -25,13 +24,13 @@ import { ColormapService } from '../services/colormap.service';
 import { AggregatedGlyphLayer } from './overlays/aggregated-glyph.layer';
 import {DataService} from "../services/data.service";
 import {HospitallayerService} from "../services/hospitallayer.service";
-import {BedStatusChoropleth} from "./overlays/bedstatuschoropleth";
 import {FeatureCollection} from "geojson";
 import {Subject, forkJoin} from "rxjs";
 import {GlyphHoverEvent} from "./events/glyphhover";
 import { LandkreiseHospitalsLayer } from './overlays/landkreishospitals';
 import { HospitalLayer } from './overlays/hospital';
 import { HelipadLayer } from './overlays/helipads';
+import { CaseChoropleth } from './overlays/casechoropleth';
 
 export enum AggregationLevel {
   none = 'none',
@@ -41,42 +40,37 @@ export enum AggregationLevel {
 }
 
 export enum CovidNumberCaseChange {
-  absolute,
+  absolute = 'abs',
 
-  relative
+  relative = 'rel'
 }
 
 export enum CovidNumberCaseTimeWindow {
   
-  twentyFourhours,
+  twentyFourhours = '24h',
   
-  seventyTwoHours,
+  seventyTwoHours = '72h',
   
-  all,
+  all = 'all',
 }
 
 export enum CovidNumberCaseType {
 
-  cases,
+  cases = 'cases',
 
-  deaths
+  deaths = 'deaths'
 
 }
 
-export class CovidNumberCaseOptions {
+export interface CovidNumberCaseOptions {
+
+  enabled?: boolean;
 
   change: CovidNumberCaseChange;
 
   timeWindow: CovidNumberCaseTimeWindow;
 
   type: CovidNumberCaseType;
-
-  /**
-   * this should be used for maps
-   */
-  getKey(): string {
-    return `${this.change}-${this.timeWindow}-${this.type}`;
-  }
 
 }
 
@@ -154,12 +148,23 @@ export class MapComponent implements OnInit, DoCheck {
     return this._showOsmHeliports;
   }
 
+  private _caseChoroplethOptions: CovidNumberCaseOptions;
+
+  @Input()
+  set caseChoroplethOptions(opt: CovidNumberCaseOptions) {
+    this._caseChoroplethOptions = opt;
+
+    // show new layer
+    this.updateCaseChoroplethLayers(opt);
+  }
+
+  get caseChoroplethOptions(): CovidNumberCaseOptions {
+    return this._caseChoroplethOptions;
+  }
+
   private layerControl: L.Control.Layers;
 
   private mymap: L.Map;
-  private svg: d3.Selection<SVGElement, unknown, HTMLElement, any>;
-
-  private gHostpitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
 
   private glyphLayerOverlay: SVGOverlay;
 
@@ -179,6 +184,8 @@ export class MapComponent implements OnInit, DoCheck {
 
   private osmHeliportsLayer: L.GeoJSON<any>;
 
+  private covidNumberCaseOptionsKeyToLayer = new Map<String, L.GeoJSON<any>>();
+
   constructor(
     private iterable: IterableDiffers,
     private diviHospitalsService: DiviHospitalsService,
@@ -191,23 +198,23 @@ export class MapComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
-    // empty tiles
-    const emptyTiles = L.tileLayer('');
+    // // empty tiles
+    // const emptyTiles = L.tileLayer('');
 
-    // use osm tiles
-    const openstreetmap = L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
+    // // use osm tiles
+    // const openstreetmap = L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
+    //   maxZoom: 19,
+    //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    // });
 
-    const token = 'pk.eyJ1IjoianVyaWIiLCJhIjoiY2s4MndsZTl0MDR2cDNobGoyY3F2YngyaiJ9.xwBjxEn_grzetKOVZDcyqA';
-    const mennaMap = L.tileLayer(
-      'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=' + token, {
-          tileSize: 512,
-          zoomOffset: -1,
-          attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
-          '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      });
+    // const token = 'pk.eyJ1IjoianVyaWIiLCJhIjoiY2s4MndsZTl0MDR2cDNobGoyY3F2YngyaiJ9.xwBjxEn_grzetKOVZDcyqA';
+    // const mennaMap = L.tileLayer(
+    //   'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=' + token, {
+    //       tileSize: 512,
+    //       zoomOffset: -1,
+    //       attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
+    //       '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    //   });
 
 
     const juriMap = L.mapboxGL({
@@ -314,6 +321,27 @@ export class MapComponent implements OnInit, DoCheck {
       this.osmHeliportsLayer = f.createOverlay();
     });
 
+
+    // CASE Maps
+    this.dataService.getCaseData().subscribe(data => {
+
+      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.all, change: CovidNumberCaseChange.absolute}, data);
+      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.all, change: CovidNumberCaseChange.absolute}, data);
+
+      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.absolute}, data);
+      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.absolute}, data);
+
+      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.absolute}, data);
+      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.absolute}, data);
+      
+      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.relative}, data);
+      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.relative}, data);
+
+      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.relative}, data);
+      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.relative}, data);
+
+    });
+
     this.mymap.on('zoom', this.semanticZoom);
   }
 
@@ -387,5 +415,35 @@ export class MapComponent implements OnInit, DoCheck {
     }
 
     this.mymap.addLayer(this.aggregationLevelToGlyphMap.get(agg));
+  }
+
+  private getKeyCovidNumberCaseOptions(v: CovidNumberCaseOptions) {
+    return `${v.change}-${v.timeWindow}-${v.type}`;
+  }
+
+  private initCaseChoroplethLayer(o: CovidNumberCaseOptions, data: FeatureCollection) {
+    const key = this.getKeyCovidNumberCaseOptions(o);
+    const f = new CaseChoropleth(key, data, o, this.tooltipService, this.colormapService);
+
+    this.covidNumberCaseOptionsKeyToLayer.set(key, f.createOverlay());
+  }
+
+  private updateCaseChoroplethLayers(opt: CovidNumberCaseOptions) {
+    // remove all layers
+    this.covidNumberCaseOptionsKeyToLayer.forEach(l => {
+      this.mymap.removeLayer(l);
+    });
+
+    if(!opt || !opt.enabled) {
+      return;
+    }
+
+    const key = this.getKeyCovidNumberCaseOptions(opt);
+
+    if(!this.covidNumberCaseOptionsKeyToLayer.has(key)) {
+      throw 'No covidNumberCaseCoropleth for ' + key + ' found';
+    }
+
+    this.mymap.addLayer(this.covidNumberCaseOptionsKeyToLayer.get(key));
   }
 }

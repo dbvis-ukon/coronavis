@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { AggregationLevel } from '../map/map.component';
+import { AggregationLevel, CovidNumberCaseOptions, CovidNumberCaseType, CovidNumberCaseChange, CovidNumberCaseTimeWindow } from '../map/map.component';
 
 @Component({
   selector: 'app-infobox',
@@ -30,15 +30,29 @@ export class InfoboxComponent implements OnInit {
   @Output()
   showOsmHeliportsChange: EventEmitter<boolean> = new EventEmitter();
 
+  @Input()
+  caseChoroplethOptions: CovidNumberCaseOptions;
+
+  @Output()
+  caseChoroplethOptionsChange: EventEmitter<CovidNumberCaseOptions> = new EventEmitter();
+
+  covidNumberCaseTimeWindow = CovidNumberCaseTimeWindow;
+
+  covidNumberCaseChange = CovidNumberCaseChange;
+
+  covidNumberCaseType = CovidNumberCaseType;
+
   ngOnInit(): void {
   }
 
-  emitAggregationLevel(evt) {
-    this.aggregationLevelChange.emit(evt.value);
-  }
+  emitCaseChoroplethOptions() {
+    console.log('emit', this.caseChoroplethOptions);
 
-  emitHospitals(evt) {
-    console.log(evt);
+    if(this.caseChoroplethOptions.change === CovidNumberCaseChange.relative
+      && this.caseChoroplethOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
+        this.caseChoroplethOptions.timeWindow = CovidNumberCaseTimeWindow.twentyFourhours;
+      }
+    this.caseChoroplethOptionsChange.emit({...this.caseChoroplethOptions});
   }
 
 }

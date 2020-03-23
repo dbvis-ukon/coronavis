@@ -33,7 +33,7 @@
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
                 <mat-panel-title>
-                    Filter
+                    Optionen
                 </mat-panel-title>
                 <mat-panel-description>
                     <!-- description -->
@@ -53,10 +53,71 @@
                                     (change)="showOsmHeliportsChange.emit($event.checked)"
                                 >Hubschrauberlandeplätze</mat-slide-toggle>
                         </mat-list-item>
-                        <mat-list-item role="listitem">
-                                <mat-slide-toggle>Aktuelle Fallzahlen</mat-slide-toggle>
-                        </mat-list-item>
                 </mat-list>            
+
+                <form>
+                    <mat-slide-toggle 
+                                    [checked]="caseChoroplethOptions.enabled" 
+                                    (change)="caseChoroplethOptions.enabled = $event.checked; emitCaseChoroplethOptions()"
+                                >Anzeigen</mat-slide-toggle>
+
+                    <div *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled">
+                        <div>
+                            <mat-radio-group *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled"
+                                (change)="caseChoroplethOptions.change = $event.value; emitCaseChoroplethOptions()">
+                                <mat-radio-button 
+                                    *ngFor="let enum of covidNumberCaseChange | keyvalue" 
+                                    [value]="enum.value"
+                                    [checked]="enum.value == caseChoroplethOptions.change"
+                                >
+                                        {{enum.key}}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <div>
+                            <mat-radio-group *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled"
+                                (change)="caseChoroplethOptions.timeWindow = $event.value; emitCaseChoroplethOptions()">
+                                
+                                <mat-radio-button 
+                                    [value]="covidNumberCaseTimeWindow.all"
+                                    [checked]="covidNumberCaseTimeWindow.all == caseChoroplethOptions.timeWindow"
+                                    [disabled]="caseChoroplethOptions.change == covidNumberCaseChange.relative"
+                                >
+                                    ALL    
+                                </mat-radio-button>
+
+                                <mat-radio-button 
+                                    [value]="covidNumberCaseTimeWindow.twentyFourhours"
+                                    [checked]="covidNumberCaseTimeWindow.twentyFourhours == caseChoroplethOptions.timeWindow"
+                                >
+                                    24 Stunden
+                                </mat-radio-button>
+
+                                <mat-radio-button 
+                                    [value]="covidNumberCaseTimeWindow.seventyTwoHours"
+                                    [checked]="covidNumberCaseTimeWindow.seventyTwoHours == caseChoroplethOptions.timeWindow"
+                                >
+                                    72 Stunden
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <div>
+                            <mat-radio-group 
+                                (change)="caseChoroplethOptions.type = $event.value; emitCaseChoroplethOptions()">
+                                <mat-radio-button 
+                                    *ngFor="let enum of covidNumberCaseType | keyvalue" 
+                                    [value]="enum.value"
+                                    [checked]="enum.value == caseChoroplethOptions.type"
+                                >
+                                        {{enum.key}}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+
+                </form>
                               
             </mat-expansion-panel>
             <mat-expansion-panel>

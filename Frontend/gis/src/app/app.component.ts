@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FeatureCollection } from 'geojson';
 import { Overlay } from './map/overlays/overlay';
-import { AggregationLevel } from './map/map.component';
+import { AggregationLevel, CovidNumberCaseOptions, CovidNumberCaseType, CovidNumberCaseChange, CovidNumberCaseTimeWindow } from './map/map.component';
 
 
 
@@ -20,30 +20,13 @@ export class AppComponent {
 
   showOsmHeliports: boolean = false;
 
+  caseChoroplethOptions: CovidNumberCaseOptions = {
+    enabled: false,
+    type: CovidNumberCaseType.cases,
+    timeWindow: CovidNumberCaseTimeWindow.all,
+    change: CovidNumberCaseChange.absolute
+  };
+
   // constructor is here only used to inject services
   constructor() { }
-
-  /**
-   * Retrieve data from server and add it to the overlays arrays
-   */
-  ngOnInit(): void {
-    // this.dataService.getRegierungsBezirke().toPromise().then((val: FeatureCollection) => 
-
-    this.dataService.getCaseData().subscribe(data => {
-      this.overlays.push(new CaseChoropleth('Cases Lankreis latest', data, "cases", "latest", false, this.tooltipService, this.colormapService));
-      this.overlays.push(new CaseChoropleth('Deaths Lankreis latest', data, "deaths", "latest", false, this.tooltipService, this.colormapService));
-
-      this.overlays.push(new CaseChoropleth('Cases Lankreis 24h', data, "cases", "24h", false, this.tooltipService, this.colormapService));
-      this.overlays.push(new CaseChoropleth('Deaths Lankreis 24h', data, "deaths", "24h", false, this.tooltipService, this.colormapService));
-
-      this.overlays.push(new CaseChoropleth('Cases Lankreis 72h', data, "cases", "72h", false, this.tooltipService, this.colormapService));
-      this.overlays.push(new CaseChoropleth('Deaths Lankreis 72h', data, "deaths", "72h", false, this.tooltipService, this.colormapService));
-
-      this.overlays.push(new CaseChoropleth('Cases Lankreis 24h %', data, "cases", "24h", true, this.tooltipService, this.colormapService));
-      this.overlays.push(new CaseChoropleth('Deaths Lankreis 24h %', data, "deaths", "24h", true, this.tooltipService, this.colormapService));
-
-      this.overlays.push(new CaseChoropleth('Cases Lankreis 72h %', data, "cases", "72h", true, this.tooltipService, this.colormapService));
-      this.overlays.push(new CaseChoropleth('Deaths Lankreis 72h %', data, "deaths", "72h", true, this.tooltipService, this.colormapService));
-    })
-  }
 }

@@ -19,6 +19,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
+import {MatRadioModule} from '@angular/material/radio';
 
 
 
@@ -47,7 +48,8 @@ import {MatIconModule} from '@angular/material/icon';
     ScrollingModule,
     MatExpansionModule,
     MatTooltipModule,
-    MatIconModule
+    MatIconModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]
