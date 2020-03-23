@@ -1,4 +1,4 @@
-<button (click)="infoboxExtended = !infoboxExtended"><icons-image><span class="material-icons icon-image-preview">{{ infoboxExtended ? 'layers_clear' : 'layers' }}</span></icons-image></button>
+<button mat-button (click)="infoboxExtended = !infoboxExtended"><icons-image><span class="material-icons icon-image-preview">{{ infoboxExtended ? 'layers_clear' : 'layers' }}</span></icons-image></button>
 <mat-card *ngIf="infoboxExtended"> 
     <mat-card-title>
         Krankenhäuser - Auslastung
@@ -6,7 +6,7 @@
     <mat-card-subtitle>
         <p>Aggregation</p> 
         <!--  use text instead of logos -->
-        <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="aggregationLevel" (change)="emitAggregationLevel($event)">
+        <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="aggregationLevel" (change)="emitAggregationLevel($event)">
             <mat-button-toggle value="state" matTooltip="Bundesländer">Länder</mat-button-toggle>
             <mat-button-toggle value="governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
             <mat-button-toggle value="county" matTooltip="Landkreise">Kreise</mat-button-toggle>
