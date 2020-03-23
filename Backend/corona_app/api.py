@@ -241,6 +241,94 @@ group by vkv.sn_l, vkv.gen
     return resp
 
 
+@backend_api.route('/cases/landkreise', methods=['GET'])
+def get_cases_by_landkreise():
+    """
+        Return all Hospitals
+    """
+
+    sql_stmt = '''
+with cases_landkreise as (
+	select idlandkreis, DATE(meldedatum) as "date", SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
+	from cases
+	group by idlandkreis, DATE(meldedatum)
+)
+select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, JSON_AGG(JSON_BUILD_OBJECT('date', c."date" , 'cases', c.cases, 'deaths', c.deaths) ORDER by c."date") as cases, st_asgeojson(st_union(vk.geom)) as outline
+from vg250_krs vk join cases_landkreise c on vk.ags = c.idlandkreis
+group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen 
+    '''
+    sql_result = db.engine.execute(sql_stmt)
+
+    d, features = {}, []
+    for row in sql_result:
+        for column, value in row.items():
+            # build up the dictionary
+            d = {**d, **{column: value}}
+
+        feature = {
+            "type": 'Feature',
+            # careful! r.geojson is of type str, we must convert it to a dictionary
+            "geometry": json.loads(d['outline']),
+            "properties": {
+                'sn_l': d['sn_l'],
+                'sn_r': d['sn_r'],
+                'sn_k': d['sn_k'],
+                'name': d['gen'],
+                'cases': d['cases']
+            }
+        }
+
+        features.append(feature)
+
+    featurecollection = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype="application/json")
+
+    return resp
+
+@backend_api.route('/person', methods=['GET'])
+def get_persons():
+    """
+        Return all persons
+    """
+    persons = db.session.query(Person).all()
+    results = []
+    for elem in persons:
+        results.append(elem.as_dict())
+    return jsonify(results)
+
+
+@backend_api.route('/person/<int:id>', methods=['GET'])
+def get_person(id=None):
+    """
+        Return a specific person
+        :param id: id of the specific person
+    """
+    if not id:
+        return jsonify({})
+    persons = db.session.query(Person).filter_by(id=id)
+    results = []
+    for elem in persons:
+        results.append(elem.as_dict())
+    return jsonify(results)
+
+
+@backend_api.route('/bed', methods=['GET'])
+def get_beds():
+    """
+        Return all beds
+    """
+    beds = db.session.query(Bed).all()
+    results = []
+    for elem in beds:
+        results.append(elem.as_dict())
+    return jsonify(results)
+
 @backend_api.route('/osm/hospitals', methods=['GET'])
 @cache.cached()
 def get_osm_hospitals():
