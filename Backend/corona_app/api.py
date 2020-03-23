@@ -75,15 +75,8 @@ def get_hospitals():
     """
         Return all Hospitals
     """
-    subq = db.session.query(
-        Hospital.name,
-        func.max(Hospital.last_update).label('maxdate')).group_by(
-            Hospital.name).subquery()
-    hospitals = db.session.query(Hospital).join(
-        subq,
-        and_(Hospital.name == subq.c.name,
-             Hospital.last_update == subq.c.maxdate)).distinct(
-                 Hospital.name).all()
+    hospitals = db.session.query(Hospital).distinct(
+                 Hospital.name).order_by(Hospital.name, Hospital.last_update.desc()).all()
 
     features = []
     for elem in hospitals:
