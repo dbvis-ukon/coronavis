@@ -159,7 +159,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     //     return `translate(${p.x}, ${p.y})`;
     //   });
     const zoom = this.map.getZoom();
-    const scale = Math.pow(9 / (zoom), 4);
+    const scale = Math.pow(9 / (zoom), 3);
 
     console.log('zoomed', this.map.getZoom(), scale);
 
