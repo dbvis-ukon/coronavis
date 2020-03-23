@@ -119,7 +119,7 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
             // set highlight style
             const l = e.target;
             l.setStyle({
-              weight: 5,
+              weight: 3,
               color: '#666',
               dashArray: '',
               fillOpacity: 0.7
