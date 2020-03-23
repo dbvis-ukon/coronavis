@@ -3,8 +3,11 @@ import logging
 import json
 from collections import Counter
 from flask import Blueprint, Response, jsonify, request
+from flask_caching import Cache
 
 from .model import *
+
+cache = Cache(config={'CACHE_TYPE': 'simple', 'CACHE_DEFAULT_TIMEOUT': 3600})
 
 backend_api = Blueprint('api', __name__)
 
@@ -15,69 +18,68 @@ def healthcheck():
     # FIXME: the database connection should be checked here!
     return "ok", 200
 
+# # Custom Rest API
+# @backend_api.route('/hospitals', methods=['GET', 'POST'])
+# def get_hospitals():
+#     """
+#         Return all Hospitals
+#     """
+#     sql_stmt = '''
+# select index, name, address, contact, icu_low_state, icu_high_state, ecmo_state, last_update, st_asgeojson(geom) as geojson
+# from hospitals_crawled hc
+#     '''
+#     sql_result = db.engine.execute(sql_stmt)
+
+#     d, features = {}, []
+#     for row in sql_result:
+#         for column, value in row.items():
+#             # build up the dictionary
+#             d = {**d, **{column: value}}
+
+#         feature = {
+#             "type": 'Feature',
+#             # careful! r.geojson is of type str, we must convert it to a dictionary
+#             "geometry": json.loads(d['geojson']),
+#             "properties": {
+#                 'index': d['index'],
+#                 'name': d['name'],
+#                 'address': d['address'],
+#                 'contact': d['contact'],
+#                 'icu_low_state': d['icu_low_state'],
+#                 'icu_high_state': d['icu_high_state'],
+#                 'ecmo_state': d['ecmo_state'],
+#                 'last_update': d['last_update']
+#             }
+#         }
+
+#         features.append(feature)
+
+#     featurecollection = {
+#         "type": "FeatureCollection",
+#         "features": features
+#     }
+
+#     resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+#             status=200,
+#             mimetype="application/json")
+#     return resp
+
 # Custom Rest API
-@backend_api.route('/hospitals', methods=['GET', 'POST'])
+@backend_api.route('/hospitals', methods=['GET'])
+@cache.cached()
 def get_hospitals():
     """
         Return all Hospitals
     """
-    start = time.time()
-    sql_stmt = '''
-select index, name, address, contact, icu_low_state, icu_high_state, ecmo_state, last_update, st_asgeojson(geom) as geojson
-from hospitals_crawled hc
-    '''
-    sql_result = db.engine.execute(sql_stmt)
-
-    d, features = {}, []
-    for row in sql_result:
-        for column, value in row.items():
-            # build up the dictionary
-            d = {**d, **{column: value}}
-
-        feature = {
-            "type": 'Feature',
-            # careful! r.geojson is of type str, we must convert it to a dictionary
-            "geometry": json.loads(d['geojson']),
-            "properties": {
-                'index': d['index'],
-                'name': d['name'],
-                'address': d['address'],
-                'contact': d['contact'],
-                'icu_low_state': d['icu_low_state'],
-                'icu_high_state': d['icu_high_state'],
-                'ecmo_state': d['ecmo_state'],
-                'last_update': d['last_update']
-            }
-        }
-
-        features.append(feature)
-
+    hospitals = db.session.query(Hospital).all()
+    features = {'features':[]}
+    for elem in hospitals:
+        features['features'].append(elem.as_dict())
     featurecollection = {
         "type": "FeatureCollection",
         "features": features
     }
-
-    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-            status=200,
-            mimetype="application/json")
-    end = time.time()
-    print('Time: ', end - start)
-    return resp
-
-# Custom Rest API
-@backend_api.route('/hospitals_2', methods=['GET'])
-def get_hospitals_2():
-    """
-        Return all Hospitals
-    """
-    start = time.time()
-    hospitals = db.session.query(Hospital).all() #.options(FromCache(cache)).all()
-    results = {'features':[]}
-    for elem in hospitals:
-        results['features'].append(elem.as_dict())
-    end = time.time()
-    print('Time: ', end - start)
-    return jsonify(results)
+    return jsonify(featurecollection)
 
 
 # Custom Rest API

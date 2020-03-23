@@ -3,7 +3,6 @@ Flask==1.1.1
 Flask-Compress==1.4.0
 Flask-Cors==3.0.8
 Flask-SQLAlchemy==2.4.1
-Flask-SQLAlchemy-Caching==1.0.4
 GeoAlchemy2==0.7.0
 geojson==2.5.0
 itsdangerous==1.1.0
