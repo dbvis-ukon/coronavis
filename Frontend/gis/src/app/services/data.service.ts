@@ -36,7 +36,7 @@ export class DataService {
    */
   getOSMHospitals(): Observable<FeatureCollection> {
     const url = `${environment.apiUrl}osm/hospitals`;
-    return this.http.post<FeatureCollection>(url, null, httpOptions);
+    return this.http.get<FeatureCollection>(url);
   }
 
   /**
@@ -44,7 +44,7 @@ export class DataService {
    */
   getOSHelipads(): Observable<FeatureCollection> {
     const url = `${environment.apiUrl}osm/nearby_helipads`;
-    return this.http.post<FeatureCollection>(url, null, httpOptions);
+    return this.http.get<FeatureCollection>(url);
   }
 
   /**
@@ -52,7 +52,7 @@ export class DataService {
    */
   getHospitalsLandkreise(): Observable<FeatureCollection> {
     const url = `${environment.apiUrl}hospitals/landkreise`;
-    return this.http.post<FeatureCollection>(url, null, httpOptions);
+    return this.http.get<FeatureCollection>(url);
   }
 
   /**
@@ -60,7 +60,7 @@ export class DataService {
    */
   getHospitalsRegierungsbezirke(): Observable<FeatureCollection> {
     const url = `${environment.apiUrl}hospitals/regierungsbezirke`;
-    return this.http.post<FeatureCollection>(url, null, httpOptions);
+    return this.http.get<FeatureCollection>(url);
   }
 
   /**
@@ -68,14 +68,14 @@ export class DataService {
    */
   getHospitalsBundeslaender(): Observable<FeatureCollection> {
     const url = `${environment.apiUrl}hospitals/bundeslander`;
-    return this.http.post<FeatureCollection>(url, null, httpOptions);
+    return this.http.get<FeatureCollection>(url);
   }
 
   /**
    * Retrieves the data and constructs a FeatureCollection object from the received data
    */
   private getFeatureCollection(url): Observable<FeatureCollection> {
-    return this.http.post<any>(url, null, httpOptions).pipe(
+    return this.http.get<any>(url).pipe(
       map(unparsed => {
         const f: FeatureCollection = {
           type: 'FeatureCollection',

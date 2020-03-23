@@ -1,9 +1,13 @@
+import time
 import logging
 import json
 from collections import Counter
 from flask import Blueprint, Response, jsonify, request
+from flask_caching import Cache
 
 from .model import *
+
+cache = Cache(config={'CACHE_TYPE': 'simple', 'CACHE_DEFAULT_TIMEOUT': 3600})
 
 backend_api = Blueprint('api', __name__)
 
@@ -14,56 +18,73 @@ def healthcheck():
     # FIXME: the database connection should be checked here!
     return "ok", 200
 
+# # Custom Rest API
+# @backend_api.route('/hospitals', methods=['GET', 'POST'])
+# def get_hospitals():
+#     """
+#         Return all Hospitals
+#     """
+#     sql_stmt = '''
+# select index, name, address, contact, icu_low_state, icu_high_state, ecmo_state, last_update, st_asgeojson(geom) as geojson
+# from hospitals_crawled hc
+#     '''
+#     sql_result = db.engine.execute(sql_stmt)
+
+#     d, features = {}, []
+#     for row in sql_result:
+#         for column, value in row.items():
+#             # build up the dictionary
+#             d = {**d, **{column: value}}
+
+#         feature = {
+#             "type": 'Feature',
+#             # careful! r.geojson is of type str, we must convert it to a dictionary
+#             "geometry": json.loads(d['geojson']),
+#             "properties": {
+#                 'index': d['index'],
+#                 'name': d['name'],
+#                 'address': d['address'],
+#                 'contact': d['contact'],
+#                 'icu_low_state': d['icu_low_state'],
+#                 'icu_high_state': d['icu_high_state'],
+#                 'ecmo_state': d['ecmo_state'],
+#                 'last_update': d['last_update']
+#             }
+#         }
+
+#         features.append(feature)
+
+#     featurecollection = {
+#         "type": "FeatureCollection",
+#         "features": features
+#     }
+
+#     resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
+#             status=200,
+#             mimetype="application/json")
+#     return resp
+
 # Custom Rest API
-@backend_api.route('/hospitals', methods=['GET', 'POST'])
+@backend_api.route('/hospitals', methods=['GET'])
+@cache.cached()
 def get_hospitals():
     """
         Return all Hospitals
     """
-
-    sql_stmt = '''
-select index, name, address, contact, icu_low_state, icu_high_state, ecmo_state, last_update, st_asgeojson(geom) as geojson
-from hospitals_crawled hc
-    '''
-    sql_result = db.engine.execute(sql_stmt)
-
-    d, features = {}, []
-    for row in sql_result:
-        for column, value in row.items():
-            # build up the dictionary
-            d = {**d, **{column: value}}
-
-        feature = {
-            "type": 'Feature',
-            # careful! r.geojson is of type str, we must convert it to a dictionary
-            "geometry": json.loads(d['geojson']),
-            "properties": {
-                'index': d['index'],
-                'name': d['name'],
-                'address': d['address'],
-                'contact': d['contact'],
-                'icu_low_state': d['icu_low_state'],
-                'icu_high_state': d['icu_high_state'],
-                'ecmo_state': d['ecmo_state'],
-                'last_update': d['last_update']
-            }
-        }
-
-        features.append(feature)
-
+    hospitals = db.session.query(Hospital).all()
+    features = []
+    for elem in hospitals:
+        features.append(elem.as_dict())
     featurecollection = {
         "type": "FeatureCollection",
         "features": features
     }
+    return jsonify(featurecollection)
 
-    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-            status=200,
-            mimetype="application/json")
-
-    return resp
 
 # Custom Rest API
-@backend_api.route('/hospitals/landkreise', methods=['GET', 'POST'])
+@backend_api.route('/hospitals/landkreise', methods=['GET'])
+@cache.cached()
 def get_hospitals_by_landkreise():
     """
         Return all Hospitals
@@ -114,7 +135,8 @@ group by vkv.sn_l, vkv.sn_r, vkv.sn_k, vkv.gen
     return resp
 
 # Custom Rest API
-@backend_api.route('/hospitals/regierungsbezirke', methods=['GET', 'POST'])
+@backend_api.route('/hospitals/regierungsbezirke', methods=['GET'])
+@cache.cached()
 def get_hospitals_by_regierungsbezirke():
     """
         Return all Hospitals
@@ -168,7 +190,8 @@ group by vkv.sn_l, vkv.sn_r, vkv.gen
     return resp
 
 # Custom Rest API
-@backend_api.route('/hospitals/bundeslander', methods=['GET', 'POST'])
+@backend_api.route('/hospitals/bundeslander', methods=['GET'])
+@cache.cached()
 def get_hospitals_by_bundeslander():
     """
         Return all Hospitals
@@ -217,61 +240,8 @@ group by vkv.sn_l, vkv.gen
 
     return resp
 
-@backend_api.route('/person', methods=['GET'])
-def get_persons():
-    """
-        Return all persons
-    """
-    persons = db.session.query(Person).all()
-    results = []
-    for elem in persons:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/person/<int:id>', methods=['GET'])
-def get_person(id=None):
-    """
-        Return a specific person
-        :param id: id of the specific person
-    """
-    if not id:
-        return jsonify({})
-    persons = db.session.query(Person).filter_by(id=id)
-    results = []
-    for elem in persons:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/bed', methods=['GET'])
-def get_beds():
-    """
-        Return all beds
-    """
-    beds = db.session.query(Bed).all()
-    results = []
-    for elem in beds:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/bed/<int:id>', methods=['GET'])
-def get_bed(id=None):
-    """
-        Return a specific bed
-        :param id: id of the specific bed
-    """
-    if not id:
-        return jsonify({})
-    beds = db.session.query(Bed).filter_by(id=id)
-    results = []
-    for elem in beds:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/osm/hospitals', methods=['GET', 'POST'])
+@backend_api.route('/osm/hospitals', methods=['GET'])
+@cache.cached()
 def get_osm_hospitals():
     """
         Return all Hospitals
@@ -316,7 +286,8 @@ where amenity = 'hospital' and tags -> 'emergency' = 'yes'
 
     return resp
 
-@backend_api.route('/osm/nearby_helipads', methods=['GET', 'POST'])
+@backend_api.route('/osm/nearby_helipads', methods=['GET'])
+@cache.cached()
 def get_osm_nearby_helipads():
     """
         Return all Hospitals
