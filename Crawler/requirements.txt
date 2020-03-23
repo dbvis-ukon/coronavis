@@ -12,3 +12,5 @@ GeoAlchemy2
 psycopg2-binary
 
 Flask-SQLAlchemy
+
+requests-html
