@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from "@angular/animations";
 
 @Component({
@@ -8,11 +8,11 @@ import {animate, style, transition, trigger} from "@angular/animations";
   animations: [
     trigger('tooltip', [
       transition(':enter', [
-        style({ opacity: 0 }),
-        animate(300, style({ opacity: 1 })),
+        style({opacity: 0}),
+        animate(300, style({opacity: 1})),
       ]),
       transition(':leave', [
-        animate(300, style({ opacity: 0 })),
+        animate(300, style({opacity: 0})),
       ]),
     ]),
   ],
@@ -20,10 +20,11 @@ import {animate, style, transition, trigger} from "@angular/animations";
 export class CaseTooltipComponent implements OnInit {
 
   public name: String;
-  public combined: [{ cases: number, deaths: number}];
+  public combined: [{ cases: number, deaths: number }, { cases: number, deaths: number }, { cases: number, deaths: number }];
   public datum: String;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
