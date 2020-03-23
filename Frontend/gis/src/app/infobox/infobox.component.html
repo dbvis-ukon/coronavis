@@ -7,10 +7,10 @@
         <p>Aggregation</p> 
         <!--  use text instead of logos -->
         <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle value="bundeslaender">Bundesländer</mat-button-toggle>
-            <mat-button-toggle value="regierungsbezirke">Regierungsbezirke</mat-button-toggle>
-            <mat-button-toggle value="landkreise">Landkreise</mat-button-toggle>
-            <mat-button-toggle value="ohneaggregation">Ohne Aggregation</mat-button-toggle>
+            <mat-button-toggle value="bundeslaender" matTooltip="Bundesländer">Länder</mat-button-toggle>
+            <mat-button-toggle value="regierungsbezirke" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+            <mat-button-toggle value="landkreise" matTooltip="Landkreise">Kreise</mat-button-toggle>
+            <mat-button-toggle value="ohneaggregation" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
         </mat-button-toggle-group>  
         <!--  use logos instead of text -->
         <!--<mat-button-toggle-group class="aggregationsstufen" name="fontStyle" aria-label="Font Style">
@@ -36,13 +36,13 @@
                 
                 <mat-list role="list">
                         <mat-list-item role="listitem">
-                                <mat-slide-toggle>Zeige Alle Krankenhäuser</mat-slide-toggle>
+                                <mat-slide-toggle>Alle Krankenhäuser</mat-slide-toggle>
                         </mat-list-item>
                         <mat-list-item role="listitem">
-                                <mat-slide-toggle>Zeige Hubschrauberlandeplätze</mat-slide-toggle>
+                                <mat-slide-toggle>Hubschrauberlandeplätze</mat-slide-toggle>
                         </mat-list-item>
                         <mat-list-item role="listitem">
-                                <mat-slide-toggle>Zeige Aktuelle Fallzahlen</mat-slide-toggle>
+                                <mat-slide-toggle>Aktuelle Fallzahlen</mat-slide-toggle>
                         </mat-list-item>
                 </mat-list>            
                               
