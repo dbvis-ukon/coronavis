@@ -19,7 +19,6 @@ def create_session():
     session.configure(bind=engine, autoflush=False, expire_on_commit=False, autocommit=False)
     return session
 
-
 db = SQLAlchemy()
  
 def query_to_list(query, include_field_names=True):
