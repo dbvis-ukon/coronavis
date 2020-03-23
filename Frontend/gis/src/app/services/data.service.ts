@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { FeatureCollection } from 'geojson';
-import { environment } from 'src/environments/environment';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {forkJoin, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {FeatureCollection} from 'geojson';
+import {environment} from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -72,11 +72,43 @@ export class DataService {
   }
 
   /**
-   * Retrieves hospitals at the given granularity
+   * Retrieves the Landkreise from the given api endpoint.
    */
-  getHospitals(granularity: String): Observable<FeatureCollection> {
-    const url = `${environment.apiUrl}hospitals/${granularity}`;
-    return this.http.post<FeatureCollection>(url, null, httpOptions);
+  getCasesLandkreise(): Observable<FeatureCollection> {
+    const url = `${environment.apiUrl}cases/landkreise`;
+    return this.http.get<FeatureCollection>(url);
+  }
+
+  /**
+   * Retrieves the Landkreise from the given api endpoint.
+   */
+  getCaseData(): Observable<FeatureCollection> {
+    const total = this.http.get<FeatureCollection>(`${environment.apiUrl}cases/landkreise/total`);
+    const yesterday = this.http.get<FeatureCollection>(`${environment.apiUrl}cases/landkreise/yesterday`);
+    const threedays = this.http.get<FeatureCollection>(`${environment.apiUrl}cases/landkreise/3daysbefore`);
+
+    return forkJoin([total, yesterday, threedays])
+      .pipe(
+        map(e => {
+          for (let i = 0; i < e[0].features.length; i++) {
+            const last = e[0].features[i];
+            const y = e[1].features[i];
+            const t = e[2].features[i];
+
+            last.properties.deaths = +last.properties.deaths;
+            last.properties.cases = +last.properties.cases;
+
+            y.properties.deaths = +y.properties.deaths;
+            y.properties.cases = +y.properties.cases;
+
+            t.properties.deaths = +t.properties.deaths;
+            t.properties.cases = +t.properties.cases;
+
+            e[0].features[i].properties.combined = [last.properties, y.properties, t.properties]
+          }
+          return e[0];
+        })
+      )
   }
 
   /**

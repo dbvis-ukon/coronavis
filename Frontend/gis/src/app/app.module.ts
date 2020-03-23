@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfoboxComponent } from './infobox/infobox.component';
@@ -29,6 +30,7 @@ import {MatIconModule} from '@angular/material/icon';
     AppComponent,
     MapComponent,
     GlyphTooltipComponent,
+    CaseTooltipComponent,
     OverlayBrandComponent,
     InfoboxComponent,
   ],

@@ -25,7 +25,7 @@ import { ColormapService } from '../services/colormap.service';
 import { AggregatedGlyphLayer } from './overlays/aggregated-glyph.layer';
 import {DataService} from "../services/data.service";
 import {HospitallayerService} from "../services/hospitallayer.service";
-import {ChoroplethLayer} from "./overlays/choropleth";
+import {BedStatusChoropleth} from "./overlays/bedstatuschoropleth";
 import {FeatureCollection} from "geojson";
 import {Subject, forkJoin} from "rxjs";
 import {GlyphHoverEvent} from "./events/glyphhover";

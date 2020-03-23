@@ -1,0 +1,15 @@
+<div #main class="main">
+  <h3>{{ this.name }}</h3>
+  <p><strong>Fälle: </strong> {{ this.combined[0].cases }}</p>
+  <p><strong>Tote: </strong> {{ this.combined[0].deaths }}</p>
+
+  <h4>Veränderung 24h:</h4>
+  <p><strong>Neue Fälle: </strong> {{ this.combined[0].cases - this.combined[1].cases }} ({{ (((this.combined[0].cases - this.combined[1].cases) / this.combined[1].cases) * 100 || 0).toFixed(1) }}%)</p>
+  <p><strong>Neue Tote: </strong> {{ this.combined[0].deaths - this.combined[1].deaths }} ({{ (((this.combined[0].deaths - this.combined[1].deaths) / this.combined[1].deaths) * 100 || 0).toFixed(1) }}%)</p>
+
+  <h4>Veränderung 72h:</h4>
+  <p><strong>Neue Fälle: </strong> {{ this.combined[0].cases - this.combined[2].cases }} ({{ (((this.combined[0].cases - this.combined[2].cases) / this.combined[2].cases) * 100 || 0).toFixed(1) }}%)</p>
+  <p><strong>Neue Tote: </strong> {{ this.combined[0].deaths - this.combined[2].deaths }} ({{ (((this.combined[0].deaths - this.combined[2].deaths) / this.combined[2].deaths) * 100 || 0).toFixed(1) }}%)</p>
+
+  <span>Stand: {{ this.datum | date:"d.M.y" }}</span>
+</div>
