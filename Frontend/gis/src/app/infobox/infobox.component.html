@@ -1,4 +1,4 @@
-<button (click)="infoboxExtended = !infoboxExtended">Toggle infobox {{ infoboxExtended ? 'hide' : 'show' }}</button>
+<button (click)="infoboxExtended = !infoboxExtended"><icons-image><span class="material-icons icon-image-preview">{{ infoboxExtended ? 'layers_clear' : 'layers' }}</span></icons-image></button>
 <mat-card *ngIf="infoboxExtended"> 
     <mat-card-title>
         Krankenhäuser - Auslastung

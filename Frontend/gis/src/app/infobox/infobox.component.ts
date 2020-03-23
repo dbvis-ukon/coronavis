@@ -8,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class InfoboxComponent implements OnInit {
 
   constructor() { }
+  
+  infoboxExtended = true;
 
   ngOnInit(): void {
   }
