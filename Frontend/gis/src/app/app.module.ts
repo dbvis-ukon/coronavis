@@ -15,6 +15,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatListModule} from '@angular/material/list';
 import {MatDividerModule} from '@angular/material/divider';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 
 
@@ -39,7 +40,8 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     MatSlideToggleModule,
     MatListModule,
     MatDividerModule,
-    ScrollingModule
+    ScrollingModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

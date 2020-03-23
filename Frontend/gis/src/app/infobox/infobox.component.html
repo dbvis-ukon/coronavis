@@ -1,74 +1,106 @@
 
 <mat-card> 
+        <div class="logocontainer">
+                <a href="http://vis.uni.kn" target="_blank">
+                    <img class="logo" src="/assets/dbvis.png" alt="DBVIS Logo">
+                </a>
+            </div>
     <mat-card-title>
         Krankenhäuser - Auslastung
     </mat-card-title>
     <mat-card-subtitle>
         <p>Aggregation</p> 
+        <!--  use text instead of logos
         <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
             <mat-button-toggle value="bundeslaender">Bundesländer</mat-button-toggle>
             <mat-button-toggle value="regierungsbezirke">Regierungsbezirke</mat-button-toggle>
             <mat-button-toggle value="landkreise">Landkreise</mat-button-toggle>
             <mat-button-toggle value="ohneaggregation">Ohne Aggregation</mat-button-toggle>
-        </mat-button-toggle-group>  
-        <!--  use logos instead of text
+        </mat-button-toggle-group>  -->
+        <!--  use logos instead of text -->
          <mat-button-toggle-group class="aggregationsstufen" name="fontStyle" aria-label="Font Style">
             <mat-button-toggle value="bundeslaender"> <img src="/assets/agg_b1.png" alt="Bundesländer"></mat-button-toggle>
             <mat-button-toggle value="regierungsbezirke"><img src="/assets/agg_b2.png" alt="Regierungsbezirke"></mat-button-toggle>
             <mat-button-toggle value="landkreise"><img src="/assets/agg_b3.png" alt="Landkreise"></mat-button-toggle>
             <mat-button-toggle value="ohneaggregation"><img src="/assets/agg_b4.png" alt="Ohne Aggregation"></mat-button-toggle>
         </mat-button-toggle-group>  
-        -->
+        
     </mat-card-subtitle>
     <mat-divider></mat-divider>
     <br />
-    <mat-card-content>
-            Filter 
-            <mat-list role="list">
-                    <mat-list-item role="listitem">
-                            <mat-slide-toggle>Zeige Alle Krankenhäuser</mat-slide-toggle>
-                    </mat-list-item>
-                    <mat-list-item role="listitem">
-                            <mat-slide-toggle>Zeige Hubschrauberlandeplätze</mat-slide-toggle>
-                    </mat-list-item>
-                    <mat-list-item role="listitem">
-                            <mat-slide-toggle>Zeige Aktuelle Fallzahlen</mat-slide-toggle>
-                    </mat-list-item>
-            </mat-list>            
-    </mat-card-content>
-    <mat-divider></mat-divider>
-    <br />
-    <mat-card-content>
-            <p>Legende</p> 
-             <img class="legend" src="/assets/Legende.png" alt="Legende">
+    <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Filter
+                </mat-panel-title>
+                <mat-panel-description>
+                    <!-- description -->
+                </mat-panel-description>
+                </mat-expansion-panel-header>
+                
+                <mat-list role="list">
+                        <mat-list-item role="listitem">
+                                <mat-slide-toggle>Zeige Alle Krankenhäuser</mat-slide-toggle>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
+                                <mat-slide-toggle>Zeige Hubschrauberlandeplätze</mat-slide-toggle>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
+                                <mat-slide-toggle>Zeige Aktuelle Fallzahlen</mat-slide-toggle>
+                        </mat-list-item>
+                </mat-list>            
+                              
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Legende
+                </mat-panel-title>
+                </mat-expansion-panel-header>
+              
 
-             <div class="legendebeschreibung">
-                 <ul style="list-style-type:none;">
+                <img class="legend" src="/assets/Legende.png" alt="Legende">
+
+                <div class="legendebeschreibung">
+                    <ul style="list-style-type:none;">
                         <li>¹ ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie</li>
                         <li>² ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten</li>
                         <li>³ ECMO = Zusätzlich ECMO</li>
-                 </ul>
-            </div>
-             
-    </mat-card-content>
+                    </ul>
+                </div>       
 
+            </mat-expansion-panel>
 
-    <mat-divider></mat-divider>
-    <br />
-    <mat-card-content>
-            Quellen
-            <mat-list role="list">
-                    <mat-list-item role="listitem">
-                            <a href="https://www.divi.de/register/intensivregister" target="_blank">DIVI Intensivregister</a> 
-                    </mat-list-item>
-            </mat-list>            
-    </mat-card-content>
+            <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Quellen
+                    </mat-panel-title>
+                    </mat-expansion-panel-header>
+                  
     
-    <div class="logocontainer">
-        <a href="http://vis.uni.kn" target="_blank">
-            <img class="logo" src="/assets/dbvis.png" alt="DBVIS Logo">
-        </a>
-    </div>
+                    
+                    <mat-list role="list">
+                            <mat-list-item role="listitem">
+                                    <a href="https://www.divi.de/register/intensivregister" target="_blank">DIVI Intensivregister</a> 
+                            </mat-list-item>
+                    </mat-list>            
+     
+    
+                </mat-expansion-panel>
+        </mat-accordion>
+
+    
+    
+
+
+  
+            
+    
+    
+
+   
     
 
     
