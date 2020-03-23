@@ -95,6 +95,15 @@ export class DataService {
             const y = e[1].features[i];
             const t = e[2].features[i];
 
+            last.properties.deaths = +last.properties.deaths;
+            last.properties.cases = +last.properties.cases;
+
+            y.properties.deaths = +y.properties.deaths;
+            y.properties.cases = +y.properties.cases;
+
+            t.properties.deaths = +t.properties.deaths;
+            t.properties.cases = +t.properties.cases;
+
             e[0].features[i].properties.combined = [last.properties, y.properties, t.properties]
           }
           return e[0];
