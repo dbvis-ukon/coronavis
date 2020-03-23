@@ -37,6 +37,7 @@ class Hospital(db.Model):
     address = db.Column(db.String(255), nullable=False)
     state = db.Column(db.String(255), nullable=False)
     contact = db.Column(db.String(255))
+    geom = db.Column(Geometry('POINT'))
     location = db.Column(Geometry('POINT'))
     icu_low_state = db.Column(db.String(255))
     icu_high_state = db.Column(db.String(255))
@@ -50,7 +51,7 @@ class Hospital(db.Model):
         return '<Hospital %r>' % (self.name)
 
     def as_dict(self):
-        result = geojson.Feature(geometry=(to_shape(self.location)),
+        result = geojson.Feature(geometry=(to_shape(self.geom)),
                                  properties={})
         result['properties'] = {
             'index': self.index,
