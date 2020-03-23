@@ -166,19 +166,11 @@ export class MapComponent implements OnInit, DoCheck {
 
   private mymap: L.Map;
 
-  private glyphLayerOverlay: SVGOverlay;
-
-  private aggHospitalCounty: SVGOverlay;
-
-  private aggHospitalGovernmentDistrict: SVGOverlay;
-
-  private aggHospitalState: SVGOverlay;
-
   private choroplethLayerMap = new Map<String, GeoJSON>();
 
   private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<FeatureCollection>>();
 
-  private aggregationLevelToGlyphMap = new Map<AggregationLevel, L.SVGOverlay | L.LayerGroup<any>>();
+  private aggregationLevelToGlyphMap = new Map<AggregationLevel, L.LayerGroup<any>>();
 
   private osmHospitalsLayer: L.GeoJSON<any>;
 
@@ -242,21 +234,6 @@ export class MapComponent implements OnInit, DoCheck {
       // MapTiler: gl
     };
 
-    this.mymap.on('overlayadd', event => {
-      if (this.glyphLayerOverlay) {
-        this.glyphLayerOverlay.bringToFront();
-      }
-      if (this.aggHospitalCounty) {
-        this.aggHospitalCounty.bringToFront();
-      }
-      if (this.aggHospitalGovernmentDistrict) {
-        this.aggHospitalGovernmentDistrict.bringToFront();
-      }
-      if (this.aggHospitalState) {
-        this.aggHospitalState.bringToFront();
-      }
-    });
-
     // add a control which lets us toggle maps and overlays
     this.layerControl = L.control.layers(baseMaps);
     this.layerControl.addTo(this.mymap);
@@ -295,7 +272,8 @@ export class MapComponent implements OnInit, DoCheck {
     .subscribe(result => {
       const simpleGlyphFactory = new SimpleGlyphLayer('ho_none', result[0] as DiviHospital[], this.tooltipService, this.colormapService);
       const simpleGlyphLayer = simpleGlyphFactory.createOverlay(this.mymap);
-      this.aggregationLevelToGlyphMap.set(AggregationLevel.none, simpleGlyphLayer);
+      const l = L.layerGroup([simpleGlyphLayer])
+      this.aggregationLevelToGlyphMap.set(AggregationLevel.none, l);
       this.layerToFactoryMap.set(simpleGlyphLayer, simpleGlyphFactory);
       
       // TODO : this is just for debug
@@ -414,7 +392,21 @@ export class MapComponent implements OnInit, DoCheck {
       throw 'No glyph map for aggregation ' + agg + ' found';
     }
 
-    this.mymap.addLayer(this.aggregationLevelToGlyphMap.get(agg));
+    const l = this.aggregationLevelToGlyphMap.get(agg);
+    this.mymap.addLayer(l);
+
+    if(l.getLayers().length > 1) {
+      
+      // aggregation glyph layer groups
+      (l.getLayers()[1] as SVGOverlay).bringToFront();
+
+
+    } else {
+
+      // single glyph layer group (only contains one item)
+      (l.getLayers()[0] as SVGOverlay).bringToFront();
+    }
+    
   }
 
   private getKeyCovidNumberCaseOptions(v: CovidNumberCaseOptions) {
@@ -447,5 +439,8 @@ export class MapComponent implements OnInit, DoCheck {
     const l = this.covidNumberCaseOptionsKeyToLayer.get(key);
     this.mymap.addLayer(l);
     l.bringToBack();
+
+    // update the glyph map to put it in the front:
+    this.updateGlyphMapLayers(this._aggregationLevel);
   }
 }
