@@ -244,6 +244,7 @@ group by vkv.sn_l, vkv.gen
 
 
 @backend_api.route('/cases/landkreise', methods=['GET'])
+@cache.cached()
 def get_cases_by_landkreise():
     """
         Return all Hospitals
@@ -255,7 +256,7 @@ with cases_landkreise as (
 	from cases
 	group by idlandkreis, DATE(meldedatum)
 )
-select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, JSON_AGG(JSON_BUILD_OBJECT('date', c."date" , 'cases', c.cases, 'deaths', c.deaths) ORDER by c."date") as cases, st_asgeojson(st_union(vk.geom)) as outline
+select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, JSON_AGG(JSON_BUILD_OBJECT('date', c."date" , 'cases', c.cases, 'deaths', c.deaths) ORDER by c."date") as cases, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vkv.geom), 0.005))) as outline
 from vg250_krs vk join cases_landkreise c on vk.ags = c.idlandkreis
 group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen 
     '''
