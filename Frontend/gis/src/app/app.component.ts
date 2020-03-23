@@ -20,7 +20,7 @@ import { LandkreiseHospitalsLayer } from './map/overlays/landkreishospitals';
 })
 export class AppComponent implements OnInit {
 
-  overlays: Array<Overlay> = new Array<Overlay>();
+  overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
   // constructor is here only used to inject services
   constructor(private dataService: DataService, private tooltipService: TooltipService, private topoJsonService: TopoJsonService) { }
@@ -47,6 +47,8 @@ export class AppComponent implements OnInit {
 
     });
 
+
+
     this.dataService.getOSMHospitals().toPromise().then((val: FeatureCollection) => {
       this.overlays.push(new HospitalLayer('Hospitals', val, this.tooltipService));
     });
@@ -55,17 +57,17 @@ export class AppComponent implements OnInit {
       this.overlays.push(new HelipadLayer('Helipads', val, this.tooltipService));
     });
 
-    this.dataService.getHospitalsLandkreise().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Landkreise', val, this.tooltipService));
-
-    });
-
-    this.dataService.getHospitalsRegierungsbezirke().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Regierungsbezirke', val, this.tooltipService));
-    });
-
-    this.dataService.getHospitalsBundeslaender().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Bundesländer', val, this.tooltipService));
-    });
+    // this.dataService.getHospitalsLandkreise().toPromise().then((val: FeatureCollection) => {
+    //   this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Landkreise', val, this.tooltipService));
+    //
+    // });
+    //
+    // this.dataService.getHospitalsRegierungsbezirke().toPromise().then((val: FeatureCollection) => {
+    //   this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Regierungsbezirke', val, this.tooltipService));
+    // });
+    //
+    // this.dataService.getHospitalsBundeslaender().toPromise().then((val: FeatureCollection) => {
+    //   this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Bundesländer', val, this.tooltipService));
+    // });
   }
 }
