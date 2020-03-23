@@ -10,7 +10,8 @@
           "skipTests": true
         },
         "@schematics/angular:component": {
-          "skipTests": true
+          "skipTests": true,
+          "style": "less"
         },
         "@schematics/angular:directive": {
           "skipTests": true
@@ -46,8 +47,7 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/leaflet/dist/leaflet.css",
-              "src/styles.css"
+              "src/styles.less"
             ],
             "scripts": []
           },
@@ -112,7 +112,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.less"
             ],
             "scripts": []
           }
