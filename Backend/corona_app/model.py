@@ -8,7 +8,6 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql import func
 
 
-
 class Crawl(db.Model):
     """
     Hospital data class
@@ -26,13 +25,14 @@ class Crawl(db.Model):
     def __repr__(self):
         return self.text
 
+
 class Hospital(db.Model):
     """
     Hospital data class
     """
-    __tablename__ = 'hospital'
+    __tablename__ = 'hospitals_crawled'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    index = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     address = db.Column(db.String(255), nullable=False)
     state = db.Column(db.String(255), nullable=False)
@@ -43,7 +43,6 @@ class Hospital(db.Model):
     ecmo_state = db.Column(db.String(255))
     last_update = db.Column(db.DateTime())
 
-
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
@@ -51,15 +50,16 @@ class Hospital(db.Model):
         return '<Hospital %r>' % (self.name)
 
     def as_dict(self):
-        result = geojson.Feature(geometry=(to_shape(self.location)), properties={})
+        result = geojson.Feature(geometry=(to_shape(self.location)),
+                                 properties={})
         result['properties'] = {
-                'index': self.id,
-                'name': self.name,
-                'address': self.address,
-                'contact': self.contact,
-                'icu_low_state': self.icu_low_state,
-                'icu_high_state': self.icu_high_state,
-                'ecmo_state':self.ecmo_state,
-                'last_update': self.last_update
-            }
+            'index': self.index,
+            'name': self.name,
+            'address': self.address,
+            'contact': self.contact,
+            'icu_low_state': self.icu_low_state,
+            'icu_high_state': self.icu_high_state,
+            'ecmo_state': self.ecmo_state,
+            'last_update': self.last_update
+        }
         return result
