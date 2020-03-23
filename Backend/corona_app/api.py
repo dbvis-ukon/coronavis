@@ -291,43 +291,6 @@ group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen
 
     return resp
 
-@backend_api.route('/person', methods=['GET'])
-def get_persons():
-    """
-        Return all persons
-    """
-    persons = db.session.query(Person).all()
-    results = []
-    for elem in persons:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/person/<int:id>', methods=['GET'])
-def get_person(id=None):
-    """
-        Return a specific person
-        :param id: id of the specific person
-    """
-    if not id:
-        return jsonify({})
-    persons = db.session.query(Person).filter_by(id=id)
-    results = []
-    for elem in persons:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/bed', methods=['GET'])
-def get_beds():
-    """
-        Return all beds
-    """
-    beds = db.session.query(Bed).all()
-    results = []
-    for elem in beds:
-        results.append(elem.as_dict())
-    return jsonify(results)
 
 @backend_api.route('/osm/hospitals', methods=['GET'])
 @cache.cached()
