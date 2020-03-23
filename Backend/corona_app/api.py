@@ -1,3 +1,4 @@
+import time
 import logging
 import json
 from collections import Counter
@@ -20,7 +21,7 @@ def get_hospitals():
     """
         Return all Hospitals
     """
-
+    start = time.time()
     sql_stmt = '''
 select index, name, address, contact, icu_low_state, icu_high_state, ecmo_state, last_update, st_asgeojson(geom) as geojson
 from hospitals_crawled hc
@@ -59,8 +60,25 @@ from hospitals_crawled hc
     resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
             status=200,
             mimetype="application/json")
-
+    end = time.time()
+    print('Time: ', end - start)
     return resp
+
+# Custom Rest API
+@backend_api.route('/hospitals_2', methods=['GET'])
+def get_hospitals_2():
+    """
+        Return all Hospitals
+    """
+    start = time.time()
+    hospitals = db.session.query(Hospital).all() #.options(FromCache(cache)).all()
+    results = {'features':[]}
+    for elem in hospitals:
+        results['features'].append(elem.as_dict())
+    end = time.time()
+    print('Time: ', end - start)
+    return jsonify(results)
+
 
 # Custom Rest API
 @backend_api.route('/hospitals/landkreise', methods=['GET', 'POST'])
@@ -204,60 +222,6 @@ group by vkv.sn_l
             mimetype="application/json")
 
     return resp
-
-@backend_api.route('/person', methods=['GET'])
-def get_persons():
-    """
-        Return all persons
-    """
-    persons = db.session.query(Person).all()
-    results = []
-    for elem in persons:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/person/<int:id>', methods=['GET'])
-def get_person(id=None):
-    """
-        Return a specific person
-        :param id: id of the specific person
-    """
-    if not id:
-        return jsonify({})
-    persons = db.session.query(Person).filter_by(id=id)
-    results = []
-    for elem in persons:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/bed', methods=['GET'])
-def get_beds():
-    """
-        Return all beds
-    """
-    beds = db.session.query(Bed).all()
-    results = []
-    for elem in beds:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
-
-@backend_api.route('/bed/<int:id>', methods=['GET'])
-def get_bed(id=None):
-    """
-        Return a specific bed
-        :param id: id of the specific bed
-    """
-    if not id:
-        return jsonify({})
-    beds = db.session.query(Bed).filter_by(id=id)
-    results = []
-    for elem in beds:
-        results.append(elem.as_dict())
-    return jsonify(results)
-
 
 @backend_api.route('/osm/hospitals', methods=['GET', 'POST'])
 def get_osm_hospitals():
