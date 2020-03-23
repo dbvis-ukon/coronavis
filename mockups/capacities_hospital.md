@@ -2,6 +2,7 @@
 
 * Show nearest hospitals with free capacities
   * Capacities (ICU, ECMO…)
+  * Time of last update of capacities
   * Distance (km and time) by car and air 
   * Has helipad
 * Sorting
@@ -16,6 +17,11 @@
 * Interactions
   * Show route and link table row to position in map on hover
   * Select hospital in map on click
+
+
+## v2
+
+* Add colomn indicating last update of data between capacities and distances
 
 
 ## v1
