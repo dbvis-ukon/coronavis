@@ -10,6 +10,10 @@ export class ColormapService {
   constructor() {
   }
 
+  public static CChoroplethColorMap = d3.scaleQuantize<string>()
+    .domain([-1, 1])
+    .range([...d3.schemeGreens[6].slice(0, 5).reverse(), "#fff", ...d3.schemeBlues[6].slice(0, 5)]);
+
   private colors = ['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)'];
 
   private continousColorMap = d3.scaleLinear<string, string>()

@@ -1,4 +1,5 @@
 import * as L from 'leaflet';
+import {ColormapService} from '../../services/colormap.service';
 
 export class Legend {
   constructor(
@@ -10,8 +11,6 @@ export class Legend {
     this.normalizeValues = normalizeFunction;
     this.colorMap = colorMap;
     this.steps = steps;
-    console.log(colorMap, colorMap(0.3));
-    console.log(normalizeFunction);
   }
   private minMaxValues: [number, number];
   private minMaxNormValues: [number, number];
@@ -32,11 +31,13 @@ export class Legend {
         grades.push(this.minMaxValues[0] + ((this.minMaxValues[1] - this.minMaxValues[0]) / this.steps) * i);
       }
 
+      console.log(grades, this.minMaxNormValues, this.minMaxValues);
+
       // loop through our density intervals and generate a label with a colored square for each interval
-      for (let i = 0; i < grades.length; i++) {
+      for (let i = 0; i < grades.length - 1; i++) {
         div.innerHTML +=
-          '<i style="background:' + this.colorMap(this.normalizeValues(grades[i] + 1)) + '"></i> ' +
-          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+          '<i style="background:' + ColormapService.CChoroplethColorMap(this.normalizeValues(grades[i])) + '"></i> ' +
+          grades[i].toFixed(1) + (grades[i + 1] ? ' &ndash; ' + grades[i + 1].toFixed(1) + '<br>' : '+');
       }
 
       return div;
