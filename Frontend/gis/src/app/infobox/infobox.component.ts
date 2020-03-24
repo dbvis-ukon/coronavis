@@ -7,6 +7,8 @@ import {
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from '../map/options/covid-number-case-options';
+import { ColormapService } from '../services/colormap.service';
+import { GlyphState } from '../map/options/glyph-state';
 
 @Component({
   selector: 'app-infobox',
@@ -15,7 +17,13 @@ import {
 })
 export class InfoboxComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private colormapService: ColormapService
+  ) { }
+
+  glyphLegend;
+
+  glyphLegendColors = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'];
 
   infoboxExtended = true;
 
@@ -24,6 +32,12 @@ export class InfoboxComponent implements OnInit {
 
   @Output()
   aggregationLevelChange: EventEmitter<AggregationLevel> = new EventEmitter();
+
+  @Input()
+  glyphState: GlyphState;
+
+  @Output()
+  glyphStateChange: EventEmitter<GlyphState> = new EventEmitter();
 
   @Input()
   showOsmHospitals: boolean;
@@ -51,7 +65,14 @@ export class InfoboxComponent implements OnInit {
 
   covidNumberCaseNormalization = CovidNumberCaseNormalization;
 
+  internalGlyphState: GlyphState = GlyphState.none;
+
   ngOnInit(): void {
+    this.glyphLegend = [
+      {name: 'ICU low', state: GlyphState.icuLow, color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'}, 
+      {name: 'ICU high', state: GlyphState.icuHigh, color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'}, 
+      {name: 'ECMO', state: GlyphState.ecmo, color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
+    ];
   }
 
   emitCaseChoroplethOptions() {
@@ -67,4 +88,28 @@ export class InfoboxComponent implements OnInit {
     this.caseChoroplethOptionsChange.emit({...this.caseChoroplethOptions});
   }
 
+  getGlyphColor(str: string) {
+    return this.colormapService.getSingleHospitalColormap()(str);
+  }
+
+  updateGlyphState(state: GlyphState) {
+    // user clicked on same glyph, disable
+    if(this.internalGlyphState === state) {
+      this.internalGlyphState = GlyphState.none;
+    } else {
+      this.internalGlyphState = state;
+    }
+
+    console.log(this.internalGlyphState);
+
+    this.glyphStateChange.emit(this.internalGlyphState);
+  }
+
+  getBorderColor(state: GlyphState) {
+    if(this.aggregationLevel === AggregationLevel.none) {
+      return 'white';
+    }
+
+    return state === this.internalGlyphState ? 'gray' : 'lightgrey'
+  }
 }

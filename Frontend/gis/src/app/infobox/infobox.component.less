@@ -39,6 +39,61 @@
         }
         
     }
+
+    .glyph-legend {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        .glyph-tile {
+            cursor: pointer;
+            margin-left: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .rect {
+                width: 30px;
+                height: 30px;
+                border-color: rgb(204, 204, 204);
+                border-width: 5px;
+                border-style: solid;
+            }
+
+            .text {
+                font-size: 11px;
+            }
+        }
+    }
+
+    .glyph-color-legend {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        .glyph-tile {
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
+
+            .circle {
+                border-radius: 50%;
+                width: 10px;
+                height: 10px;
+            }
+    
+            .text {
+                margin-left: 2px;
+                margin-right: 5px;
+                font-size: 11px;
+                line-height: 10px;
+            }
+        }
+
+        
+    }
 }
 
 .legend {
