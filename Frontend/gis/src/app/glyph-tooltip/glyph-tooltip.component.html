@@ -1,22 +1,3 @@
 <div class="main">
-  <h3>{{ name ? name : diviHospital.Name }}</h3>
-  <mat-divider></mat-divider>
-  <table>
-    <tbody>
-    <tr>
-      <td><strong>ICU - Low Care:</strong> </td>
-      <td style="background-color: {{ getCapacityStateColor(diviHospital.icuLowCare) }};">{{ diviHospital.icuLowCare }}</td>
-    </tr>
-    <tr>
-      <td><strong>ICU - High Care: </strong></td>
-      <td style="background-color: {{ getCapacityStateColor(diviHospital.icuHighCare) }};">{{ diviHospital.icuHighCare }}</td>
-    </tr>
-    <tr>
-      <td><strong>ECMO: </strong></td>
-      <td style="background-color: {{ getCapacityStateColor(diviHospital.ECMO) }};">{{ diviHospital.ECMO }}</td>
-    </tr>
-    </tbody>
-  </table>
-  <br>
   <app-hospital-info [data]="diviHospital" mode="tooltip"></app-hospital-info>
 </div>

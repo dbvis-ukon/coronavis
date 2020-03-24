@@ -1,11 +1,35 @@
+<h3>{{ diviHospital.Name }}</h3>
+<mat-divider></mat-divider>
+<table>
+  <tbody>
+  <tr>
+    <td><strong>ICU - Low Care:</strong> </td>
+    <td style="background-color: {{ getCapacityStateColor(diviHospital.icuLowCare) }};">{{ diviHospital.icuLowCare }}</td>
+  </tr>
+  <tr>
+    <td><strong>ICU - High Care: </strong></td>
+    <td style="background-color: {{ getCapacityStateColor(diviHospital.icuHighCare) }};">{{ diviHospital.icuHighCare }}</td>
+  </tr>
+  <tr>
+    <td><strong>ECMO: </strong></td>
+    <td style="background-color: {{ getCapacityStateColor(diviHospital.ECMO) }};">{{ diviHospital.ECMO }}</td>
+  </tr>
+  </tbody>
+</table>
+<br>
+
 <span *ngIf="mode === 'dialog'">
   <!--h3>{{ data.Name }}</h3>
   <mat-divider></mat-divider-->
-  <p style="margin-top: 10px;"><strong>Address: </strong> {{ data.Adress }}</p>
-  <span><strong>Contact: </strong> <a *ngIf="url" href="{{ contact }}">{{ contact }}</a> <p *ngIf="!url">{{ contact }}</p></span>
+  <p style="margin-top: 10px;">
+    <strong>Adresse: </strong> {{ data.Adress }}
+  </p>
+  <span>
+    <strong>Kontakt: </strong> <a *ngIf="url" href="{{ contact }}">{{ contact }}</a> <p *ngIf="!url">{{ contact }}</p>
+  </span>
 </span>
 
 <span *ngIf="mode === 'tooltip'">
-  <p><strong>Date: </strong> {{ data.Stand }}</p>
+  <p><strong>Letzter Stand: </strong> {{ data.Stand }}</p>
 </span>
 
