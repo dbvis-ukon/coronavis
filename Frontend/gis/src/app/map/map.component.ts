@@ -499,7 +499,6 @@ export class MapComponent implements OnInit {
 
     if (this.currentLegend) { this.mymap.removeControl(this.currentLegend); }
     const legend = this.choroplethLayerLegends.get(key);
-    console.log(legend);
     this.currentLegend = legend.createLegend();
     this.currentLegend.addTo(this.mymap);
 
