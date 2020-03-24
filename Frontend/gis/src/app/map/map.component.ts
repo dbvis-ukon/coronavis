@@ -28,7 +28,7 @@ import {GlyphHoverEvent} from './events/glyphhover';
 import {LandkreiseHospitalsLayer} from './overlays/landkreishospitals';
 import {HospitalLayer} from './overlays/hospital';
 import {HelipadLayer} from './overlays/helipads';
-import { Legends } from './overlays/legends';
+import { Legend } from './overlays/legend';
 import {CaseChoropleth} from './overlays/casechoropleth';
 import {AggregationLevel} from './options/aggregation-level';
 import {
@@ -394,17 +394,9 @@ export class MapComponent implements OnInit {
     });
 
     this.mymap.on('zoom', this.semanticZoom);
-    this.updateLegend();
   }
 
-  private legend: Legends;
-  updateLegend(): void {
-    if (!this.legend) {
-      this.legend = new Legends('legend', this.tooltipService);
-    }
-    const l = this.legend.createLegend();
-    l.addTo(this.mymap);
-  }
+  private legend: Legend;
 
   semanticZoom() {
     // if (!this.aggHospitalCounty || !this.aggHospitalGovernmentDistrict) {
@@ -477,10 +469,14 @@ export class MapComponent implements OnInit {
     const f = new CaseChoropleth(key, data, o, this.tooltipService, this.colormapService);
 
     this.covidNumberCaseOptionsKeyToLayer.set(key, f.createOverlay());
-    this.choroplethLayerLegends.set(key, )
+
+    this.choroplethLayerLegends.set(key, new Legend(f.MinMax, f.NormMinMax,
+      f.NormValuesFunc, this.colormapService.getChoroplethCaseColor, f.Steps));
   }
 
-  private choroplethLayerLegends = new Map<string, Legends>();
+  private currentLegend;
+
+  private choroplethLayerLegends = new Map<string, Legend>();
 
   private updateCaseChoroplethLayers(opt: CovidNumberCaseOptions) {
     // remove all layers
@@ -500,7 +496,13 @@ export class MapComponent implements OnInit {
 
     const l = this.covidNumberCaseOptionsKeyToLayer.get(key);
     this.mymap.addLayer(l);
-    this.legend.updateLegend(l);
+
+    if (this.currentLegend) { this.mymap.removeControl(this.currentLegend); }
+    const legend = this.choroplethLayerLegends.get(key);
+    console.log(legend);
+    this.currentLegend = legend.createLegend();
+    this.currentLegend.addTo(this.mymap);
+
     l.bringToBack();
 
     // update the glyph map to put it in the front:

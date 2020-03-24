@@ -25,6 +25,10 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
     super(name, hospitals);
   }
 
+  private minMaxValues: [number, number];
+  private minMaxNormValues: [number, number];
+  private normalizeValues;
+
   private getCaseNumbers(d: GeoJsonProperties): number {
     const combined = d.combined;
     if (this.options.change === CovidNumberCaseChange.absolute) {
@@ -114,20 +118,44 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
     }
   }
 
+  public get MinMax(): [number, number] {
+    return this.minMaxValues;
+  }
+
+  public get NormMinMax(): [number, number] {
+    return this.minMaxNormValues;
+  }
+
+  public get NormValuesFunc() {
+    return this.normalizeValues;
+  }
+
+  public get Steps(): number {
+    return this.steps;
+  }
+
+  private steps: number;
+
   createOverlay() {
     const cases = this.featureCollection.features.map(d => this.getCaseNumbers(d.properties));
 
-    let normalizeValues;
     if (this.options.change === CovidNumberCaseChange.absolute) {
-      normalizeValues = d3.scalePow().exponent(0.33)
-        .domain([0, d3.max(cases, d => d)])
-        .range([0, 1]);
+
+      this.minMaxValues = [0, d3.max(cases, d => d)];
+      this.minMaxNormValues = [0, 1];
+      this.steps = 5;
+      this.normalizeValues = d3.scalePow().exponent(0.33)
+        .domain(this.minMaxValues)
+        .range(this.minMaxNormValues);
     } else {
       const [minChange, maxChange] = d3.extent(cases.filter(d => d < Infinity));
       const max = Math.max(Math.abs(minChange), Math.abs(maxChange));
-      normalizeValues = d3.scaleLinear()
-        .domain([-max, max])
-        .range([-1, 1])
+      this.steps = 11;
+      this.minMaxValues = [-max, max];
+      this.minMaxNormValues = [-1, 1];
+      this.normalizeValues = d3.scaleLinear()
+        .domain(this.minMaxValues)
+        .range(this.minMaxNormValues)
         .clamp(true);
     }
 
@@ -136,7 +164,7 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
     const aggregationLayer = L.geoJSON(this.featureCollection, {
       style: (feature) => {
         return {
-          fillColor: this.colorsService.getChoroplethCaseColor(normalizeValues(this.getCaseNumbers(feature.properties))),
+          fillColor: this.colorsService.getChoroplethCaseColor(this.normalizeValues(this.getCaseNumbers(feature.properties))),
           weight: 0.5,
           opacity: 1,
           color: 'gray',
@@ -155,7 +183,7 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
             tooltipComponent.name = feature.properties.name;
             tooltipComponent.combined = feature.properties.combined;
             tooltipComponent.datum = feature.properties.until;
-            tooltipComponent.einwohner = +feature.properties.bevoelkerung
+            tooltipComponent.einwohner = +feature.properties.bevoelkerung;
 
             // set highlight style
             const l = e.target;
