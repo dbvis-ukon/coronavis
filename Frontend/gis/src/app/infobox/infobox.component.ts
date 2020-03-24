@@ -1,6 +1,12 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { AggregationLevel } from '../map/options/aggregation-level';
-import { CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseChange, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AggregationLevel} from '../map/options/aggregation-level';
+import {
+  CovidNumberCaseChange,
+  CovidNumberCaseNormalization,
+  CovidNumberCaseOptions,
+  CovidNumberCaseTimeWindow,
+  CovidNumberCaseType
+} from '../map/options/covid-number-case-options';
 
 @Component({
   selector: 'app-infobox',
@@ -43,16 +49,21 @@ export class InfoboxComponent implements OnInit {
 
   covidNumberCaseType = CovidNumberCaseType;
 
+  covidNumberCaseNormalization = CovidNumberCaseNormalization;
+
   ngOnInit(): void {
   }
 
   emitCaseChoroplethOptions() {
     // console.log('emit', this.caseChoroplethOptions);
 
-    if(this.caseChoroplethOptions.change === CovidNumberCaseChange.relative
-      && this.caseChoroplethOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
+    if(this.caseChoroplethOptions.change === CovidNumberCaseChange.relative) {
+      this.caseChoroplethOptions.normalization = CovidNumberCaseNormalization.absolut;
+
+      if (this.caseChoroplethOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
         this.caseChoroplethOptions.timeWindow = CovidNumberCaseTimeWindow.twentyFourhours;
       }
+    }
     this.caseChoroplethOptionsChange.emit({...this.caseChoroplethOptions});
   }
 

@@ -22,6 +22,11 @@ export class CaseTooltipComponent implements OnInit {
   public name: String;
   public combined: [{ cases: number, deaths: number }, { cases: number, deaths: number }, { cases: number, deaths: number }];
   public datum: String;
+  public einwohner: number;
+
+  public getCasesPer100kInhabitants(count: number): string {
+    return ((count / this.einwohner) * 100000).toFixed(2);
+  }
 
   public getPercentageChange(curr: number, old: number): string {
     if (curr === old) {

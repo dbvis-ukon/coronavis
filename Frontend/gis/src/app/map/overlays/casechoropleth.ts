@@ -1,12 +1,18 @@
 import {FeatureCollection, GeoJsonProperties} from 'geojson';
 
 import * as L from 'leaflet';
-import { Overlay } from './overlay';
+import {Overlay} from './overlay';
 import * as d3 from "d3";
 import {ColormapService} from "../../services/colormap.service";
 import {TooltipService} from "../../services/tooltip.service";
 import {CaseTooltipComponent} from "../../case-tooltip/case-tooltip.component";
-import { CovidNumberCaseOptions, CovidNumberCaseChange, CovidNumberCaseType, CovidNumberCaseTimeWindow } from '../options/covid-number-case-options';
+import {
+  CovidNumberCaseChange,
+  CovidNumberCaseNormalization,
+  CovidNumberCaseOptions,
+  CovidNumberCaseTimeWindow,
+  CovidNumberCaseType
+} from '../options/covid-number-case-options';
 
 export class CaseChoropleth extends Overlay<FeatureCollection> {
   constructor(
@@ -25,25 +31,49 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.all) {
         const last = combined[0];
         if (this.options.type === CovidNumberCaseType.cases) {
-          return last.cases;
+          if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
+            return last.cases;
+          } else {
+            return last.cases / last.bevoelkerung;
+          }
         }
-        return last.deaths;
+        if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
+          return last.deaths;
+        } else {
+          return last.deaths / last.bevoelkerung;
+        }
       }
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours) {
         const last = combined[0];
         const prev = combined[1];
         if (this.options.type === CovidNumberCaseType.cases) {
-          return last.cases - prev.cases;
+          if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
+            return last.cases - prev.cases;
+          } else {
+            return (last.cases - prev.cases) / last.bevoelkerung;
+          }
         }
-        return last.deaths - prev.deaths;
+        if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
+          return last.deaths - prev.deaths;
+        } else {
+          return (last.deaths - prev.deaths) / last.bevoelkerung;
+        }
       }
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.seventyTwoHours) {
         const last = combined[0];
         const prev = combined[2];
         if (this.options.type === CovidNumberCaseType.cases) {
-          return last.cases - prev.cases;
+          if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
+            return last.cases - prev.cases;
+          } else {
+            return (last.cases - prev.cases) / last.bevoelkerung;
+          }
         }
-        return last.deaths - prev.deaths;
+        if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
+          return last.deaths - prev.deaths;
+        } else {
+          return (last.deaths - prev.deaths) / last.bevoelkerung;
+        }
       }
     } else {
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.all) {
@@ -53,17 +83,33 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
         const last = combined[0];
         const prev = combined[1];
         if (this.options.type === CovidNumberCaseType.cases) {
-          return ((last.cases - prev.cases) / prev.cases) * 100 || 0;
+          if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
+            return ((last.cases - prev.cases) / prev.cases) * 100 || 0;
+          } else {
+            return (((last.cases - prev.cases) / prev.cases) * 100 || 0) / last.bevoelkerung;
+          }
         }
-        return ((last.deaths - prev.deaths) / prev.deaths) * 100 || 0;
+        if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
+          return ((last.deaths - prev.deaths) / prev.deaths) * 100 || 0;
+        } else {
+          return (((last.deaths - prev.deaths) / prev.deaths) * 100 || 0) / last.bevoelkerung;
+        }
       }
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.seventyTwoHours) {
         const last = combined[0];
         const prev = combined[2];
         if (this.options.type === CovidNumberCaseType.cases) {
-          return ((last.cases - prev.cases) / prev.cases) * 100 || 0;
+          if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
+            return ((last.cases - prev.cases) / prev.cases) * 100 || 0;
+          } else {
+            return (((last.cases - prev.cases) / prev.cases) * 100 || 0) / last.bevoelkerung;
+          }
         }
-        return ((last.deaths - prev.deaths) / prev.deaths) * 100 || 0;
+        if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
+          return ((last.deaths - prev.deaths) / prev.deaths) * 100 || 0;
+        } else {
+          return (((last.deaths - prev.deaths) / prev.deaths) * 100 || 0) / last.bevoelkerung;
+        }
       }
     }
   }
@@ -81,7 +127,7 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
       const max = Math.max(Math.abs(minChange), Math.abs(maxChange));
       normalizeValues = d3.scaleLinear()
         .domain([-max, max])
-        .range([1, 0])
+        .range([-1, 1])
         .clamp(true);
     }
 
@@ -89,16 +135,8 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
     // create geojson layer (looks more complex than it is)
     const aggregationLayer = L.geoJSON(this.featureCollection, {
       style: (feature) => {
-        let color;
-        if (this.options.change === CovidNumberCaseChange.absolute) {
-          color = this.options.type === CovidNumberCaseType.cases ?
-            this.colorsService.getCaseColor(normalizeValues(this.getCaseNumbers(feature.properties))) :
-            this.colorsService.getDeathsColor(normalizeValues(this.getCaseNumbers(feature.properties)));
-        } else {
-          color = this.colorsService.getDiff(normalizeValues(this.getCaseNumbers(feature.properties)));
-        }
         return {
-          fillColor: color,
+          fillColor: this.colorsService.getChoroplethCaseColor(normalizeValues(this.getCaseNumbers(feature.properties))),
           weight: 0.5,
           opacity: 1,
           color: 'gray',
@@ -117,6 +155,7 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
             tooltipComponent.name = feature.properties.name;
             tooltipComponent.combined = feature.properties.combined;
             tooltipComponent.datum = feature.properties.until;
+            tooltipComponent.einwohner = +feature.properties.bevoelkerung
 
             // set highlight style
             const l = e.target;
