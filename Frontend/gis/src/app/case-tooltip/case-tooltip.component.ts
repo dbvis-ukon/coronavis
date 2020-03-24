@@ -23,7 +23,7 @@ export class CaseTooltipComponent implements OnInit {
   public combined: [{ cases: number, deaths: number }, { cases: number, deaths: number }, { cases: number, deaths: number }];
   public datum: String;
 
-  private getPercentageChange(curr: number, old: number): string {
+  public getPercentageChange(curr: number, old: number): string {
     if (curr === old) {
       return "0%";
     }
