@@ -216,7 +216,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
   onZoomed() {
     const zoom = this.map.getZoom();
-    const scale = Math.pow(9 / (zoom), 3);
+    const scale = Math.pow(9 / (zoom), 4);
 
     if (this.map.getZoom() > 9) {
       this.glyphSize.height = 40;
