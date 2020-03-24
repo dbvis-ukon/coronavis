@@ -1,13 +1,10 @@
-import { FeatureCollection } from 'geojson';
-
 import * as L from 'leaflet';
 import { Overlay } from './overlay';
 import * as d3 from "d3";
 import {ColormapService} from "../../services/colormap.service";
 import {AggregatedHospitals, AggregatedHospitalsProperties} from "../../services/divi-hospitals.service";
-import { ScaleLinear } from 'd3';
 
-export class ChoroplethLayer extends Overlay<AggregatedHospitals> {
+export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
   constructor(name: string, hospitals: AggregatedHospitals, private type: String, private colorsService: ColormapService) {
     super(name, hospitals);
   }
@@ -45,11 +42,12 @@ export class ChoroplethLayer extends Overlay<AggregatedHospitals> {
       style: (feature) => {
         return {
           fillColor: this.colorsService.getBedStatusColor(normalizeValues(this.getScore(feature.properties))),
-          weight: 2,
+          weight: 0.5,
           opacity: 1,
-          color: 'white',
-          dashArray: '3',
-          fillOpacity: 0.7
+          color: 'gray',
+          // dashArray: '3',
+          fillOpacity: 1,
+          pointerEvents: "none"
         };
       },
     });

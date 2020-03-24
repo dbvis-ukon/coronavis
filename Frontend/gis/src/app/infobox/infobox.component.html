@@ -1,8 +1,10 @@
 <button 
-    mat-button 
+    mat-icon-button 
     (click)="infoboxExtended = !infoboxExtended"
-><mat-icon>{{ infoboxExtended ? 'layers_clear' : 'layers' }}</mat-icon>
+    >
+    <mat-icon>{{ infoboxExtended ? 'layers_clear' : 'layers' }}</mat-icon>
 </button>
+
 <mat-card *ngIf="infoboxExtended"> 
     <mat-card-title>
         Krankenhäuser - Auslastung
@@ -10,11 +12,17 @@
     <mat-card-subtitle>
         <p>Aggregation</p> 
         <!--  use text instead of logos -->
-        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle value="bundeslaender" matTooltip="Bundesländer">Länder</mat-button-toggle>
-            <mat-button-toggle value="regierungsbezirke" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
-            <mat-button-toggle value="landkreise" matTooltip="Landkreise">Kreise</mat-button-toggle>
-            <mat-button-toggle value="ohneaggregation" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
+        <mat-button-toggle-group 
+            class="btngrp"
+            name="fontStyle" 
+            aria-label="Font Style" 
+            [value]="aggregationLevel" 
+            (change)="aggregationLevelChange.emit($event.value)"
+        >
+            <mat-button-toggle value="state" matTooltip="Bundesländer">Länder</mat-button-toggle>
+            <mat-button-toggle value="governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+            <mat-button-toggle value="county" matTooltip="Landkreise">Kreise</mat-button-toggle>
+            <mat-button-toggle value="none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
         </mat-button-toggle-group>  
         <!--  use logos instead of text -->
         <!--<mat-button-toggle-group class="aggregationsstufen" name="fontStyle" aria-label="Font Style">
@@ -31,24 +39,117 @@
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
                 <mat-panel-title>
-                    Filter
+                    Optionen
                 </mat-panel-title>
                 <mat-panel-description>
                     <!-- description -->
                 </mat-panel-description>
                 </mat-expansion-panel-header>
                 
-                <mat-list role="list">
-                        <mat-list-item role="listitem">
-                                <mat-slide-toggle>Alle Krankenhäuser</mat-slide-toggle>
-                        </mat-list-item>
-                        <mat-list-item role="listitem">
-                                <mat-slide-toggle>Hubschrauberlandeplätze</mat-slide-toggle>
-                        </mat-list-item>
-                        <mat-list-item role="listitem">
-                                <mat-slide-toggle>Aktuelle Fallzahlen</mat-slide-toggle>
-                        </mat-list-item>
-                </mat-list>            
+                <div>
+                    <mat-slide-toggle 
+                        [checked]="showOsmHospitals" 
+                        (change)="showOsmHospitalsChange.emit($event.checked)"
+                    >Alle Krankenhäuser</mat-slide-toggle>
+                </div>
+                <div>
+                    <mat-slide-toggle 
+                        [checked]="showOsmHeliports" 
+                        (change)="showOsmHeliportsChange.emit($event.checked)"
+                    >Hubschrauberlandeplätze</mat-slide-toggle>
+                </div>
+
+                <form class="covid-form">
+                    <mat-slide-toggle 
+                                    [checked]="caseChoroplethOptions.enabled" 
+                                    (change)="caseChoroplethOptions.enabled = $event.checked; emitCaseChoroplethOptions()"
+                                >Covid-19 Fallansicht</mat-slide-toggle>
+
+                    <div *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled">
+                        <div>
+                            <mat-radio-group *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled"
+                                (change)="caseChoroplethOptions.change = $event.value; emitCaseChoroplethOptions()">
+                                <!-- <mat-radio-button 
+                                    *ngFor="let enum of covidNumberCaseChange | keyvalue" 
+                                    [value]="enum.value"
+                                    [checked]="enum.value == caseChoroplethOptions.change"
+                                >
+                                        {{enum.key}}
+                                </mat-radio-button> -->
+
+                                <mat-radio-button 
+                                    [value]="covidNumberCaseChange.absolute"
+                                    [checked]="covidNumberCaseChange.absolute == caseChoroplethOptions.change"
+                                >
+                                    Absolut
+                                </mat-radio-button>
+
+                                <mat-radio-button 
+                                    [value]="covidNumberCaseChange.relative"
+                                    [checked]="covidNumberCaseChange.relative == caseChoroplethOptions.change"
+                                >
+                                    Relativ (%)
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <div>
+                            <mat-radio-group *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled"
+                                (change)="caseChoroplethOptions.timeWindow = $event.value; emitCaseChoroplethOptions()">
+                                
+                                <mat-radio-button 
+                                    [value]="covidNumberCaseTimeWindow.all"
+                                    [checked]="covidNumberCaseTimeWindow.all == caseChoroplethOptions.timeWindow"
+                                    [disabled]="caseChoroplethOptions.change == covidNumberCaseChange.relative"
+                                >
+                                    Aktuell    
+                                </mat-radio-button>
+
+                                <mat-radio-button 
+                                    [value]="covidNumberCaseTimeWindow.twentyFourhours"
+                                    [checked]="covidNumberCaseTimeWindow.twentyFourhours == caseChoroplethOptions.timeWindow"
+                                >
+                                    24 Stunden (Veränderung)
+                                </mat-radio-button>
+
+                                <mat-radio-button 
+                                    [value]="covidNumberCaseTimeWindow.seventyTwoHours"
+                                    [checked]="covidNumberCaseTimeWindow.seventyTwoHours == caseChoroplethOptions.timeWindow"
+                                >
+                                    72 Stunden (Veränderung)
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <div>
+                            <mat-radio-group 
+                                (change)="caseChoroplethOptions.type = $event.value; emitCaseChoroplethOptions()">
+                                <!-- <mat-radio-button 
+                                    *ngFor="let enum of covidNumberCaseType | keyvalue" 
+                                    [value]="enum.value"
+                                    [checked]="enum.value == caseChoroplethOptions.type"
+                                >
+                                        {{enum.key}}
+                                </mat-radio-button> -->
+
+                                <mat-radio-button 
+                                    [value]="covidNumberCaseType.cases"
+                                    [checked]="covidNumberCaseType.cases == caseChoroplethOptions.type"
+                                >
+                                    Erkrankte
+                                </mat-radio-button>
+
+                                <mat-radio-button 
+                                    [value]="covidNumberCaseType.deaths"
+                                    [checked]="covidNumberCaseType.deaths == caseChoroplethOptions.type"
+                                >
+                                    Todesfälle
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+
+                </form>
                               
             </mat-expansion-panel>
             <mat-expansion-panel>

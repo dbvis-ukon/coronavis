@@ -1,6 +1,44 @@
 :host {
     background-color: white;
     color: black;
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    /* Track */
+    // ::-webkit-scrollbar-track {
+        // box-shadow: inset 0 0 5px grey; 
+        // border-radius: 10px;
+    // }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.25); 
+        // border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.3);  
+    }
+
+    .btngrp {
+        width: 100%;
+        flex: 1 1 100%;
+        box-sizing: border-box;
+        align-items: center;
+        flex-direction: row;
+        display: flex;
+        height: 2.5em;
+        
+        .mat-button-toggle {
+            text-align: center;
+            flex: 1 1 100%;
+        }
+        
+    }
 }
 
 .legend {
@@ -30,13 +68,13 @@ a:hover, a:active {
     top: 0px;
 }
 
-::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-    background-color: blue; /*replace with your color*/
-}
+// ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+//     background-color: blue; /*replace with your color*/
+// }
 
-::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-    background-color: skyblue;  /*replace with your color*/
-}
+// ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+//     background-color: skyblue;  /*replace with your color*/
+// }
 
 mat-card {
     max-height: 90vh; 
@@ -51,4 +89,12 @@ mat-card {
 
 .aggregationsstufen img{
     width: 100px;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+.covid-form div {
+    padding-top: 10px;
 }

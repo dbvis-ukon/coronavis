@@ -90,43 +90,31 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     const padding = 2;
     const yOffset = 10;
 
-    if (this.granularity === "landkreise") {
-      this.data.forEach(d => console.log(d));
-    }
-
     const icu_low_scores = this.data.map(d => this.getIcuLowScore(d));
-    if (this.granularity === "landkreise") {
-      console.log(icu_low_scores);
-    }
     const icu_low_extent = d3.extent(icu_low_scores);
-    console.log(icu_low_extent);
     const icu_low_normalizer = d3.scaleLinear()
       .domain(icu_low_extent)
       .range([0, 1]);
+
     const icu_high_scores = this.data.map(d => this.getIcuHighScore(d));
-    if (this.granularity === "landkreise") {
-      console.log(icu_high_scores);
-    }
     const icu_high_extent = d3.extent(icu_high_scores);
-    console.log(icu_high_extent);
     const icu_high_normalizer = d3.scaleLinear()
       .domain(icu_high_extent)
       .range([0, 1]);
+
     const ecmo_scores = this.data.map(d => this.getEcmoScore(d));
-    if (this.granularity === "landkreise") {
-      console.log(ecmo_scores);
-    }
     const ecmo_extent = d3.extent(ecmo_scores);
-    console.log(ecmo_extent);
     const ecmo_normalizer = d3.scaleLinear()
       .domain(ecmo_extent)
       .range([0, 1]);
 
     this.gHospitals = d3.select(svgElement)
+      .style("pointer-events", "none")
       .selectAll('g.hospital')
       .data<DiviAggregatedHospital>(this.data)
       .enter()
       .append<SVGGElement>('g')
+      .style("pointer-events", "all")
       .attr('class', 'hospital')
       .attr('transform', d => {
         const p = this.latLngPoint(d.Location);
@@ -225,7 +213,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
   onZoomed() {
     const zoom = this.map.getZoom();
-    const scale = Math.pow(9 / (zoom), 4);
+    const scale = Math.pow(9 / (zoom), 3);
 
     this.data.forEach(d => {
       d.x = d._x;
@@ -237,7 +225,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     }
     this.labelLayout = this.startForceSimulation([[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]]);
 
-    console.log('zoomed', this.map.getZoom(), scale);
+    // console.log('zoomed', this.map.getZoom(), scale);
 
     this.gHospitals
       .selectAll('*')

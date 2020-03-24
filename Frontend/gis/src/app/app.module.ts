@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfoboxComponent } from './infobox/infobox.component';
@@ -18,6 +19,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
+import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
 
 
@@ -30,6 +32,7 @@ import {MatButtonModule} from '@angular/material/button';
     AppComponent,
     MapComponent,
     GlyphTooltipComponent,
+    CaseTooltipComponent,
     OverlayBrandComponent,
     InfoboxComponent,
   ],
@@ -47,7 +50,8 @@ import {MatButtonModule} from '@angular/material/button';
     MatExpansionModule,
     MatTooltipModule,
     MatIconModule,
-    MatButtonModule,
+    MatRadioModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

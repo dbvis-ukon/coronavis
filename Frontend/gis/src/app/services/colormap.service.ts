@@ -18,8 +18,27 @@ export class ColormapService {
     .interpolate(d3.interpolateRgb.gamma(2.2))
 
   getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
-    return d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
-      .range(this.colors.concat(['#bbbbbb']));
+      return d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
+      .range([...this.colors, '#bbbbbb']);
+  }
+
+  getContinousColorMap(): ScaleLinear<string, string> {
+    return d3.scaleLinear<string, string>()
+      .domain([0, 0.5, 1])
+      .range(this.colors)
+      .interpolate(d3.interpolateRgb.gamma(2.2))
+  }
+
+  getCaseColor(normalizedCount: number): string {
+    return d3.interpolateBlues(normalizedCount)
+  }
+
+  getDeathsColor(normalizedCount: number): string {
+    return d3.interpolateReds(normalizedCount);
+  }
+
+  getDiff(normalizedDiff: number): string {
+    return d3.interpolateRdBu(normalizedDiff);
   }
 
   getBedStatusColor(normalizedScore: number): string {

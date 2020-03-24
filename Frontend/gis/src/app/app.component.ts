@@ -1,73 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-import { DataService } from './services/data.service';
+import { Component } from '@angular/core';
 import { FeatureCollection } from 'geojson';
 import { Overlay } from './map/overlays/overlay';
-import { TooltipService } from './services/tooltip.service';
-import { TopoJsonService } from './services/topojson.service';
-import { feature } from 'topojson';
-import { map } from 'rxjs/operators';
-import { StatesLayer } from './map/overlays/states.layer';
-import { HelipadLayer } from './map/overlays/helipads';
-import { HospitalLayer } from './map/overlays/hospital';
-import { LandkreiseHospitalsLayer } from './map/overlays/landkreishospitals';
-
-
+import { AggregationLevel } from './map/options/aggregation-level';
+import { CovidNumberCaseOptions, CovidNumberCaseType, CovidNumberCaseTimeWindow, CovidNumberCaseChange } from './map/options/covid-number-case-options';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
+  aggregationLevel: AggregationLevel = AggregationLevel.none;
+
+  showOsmHospitals: boolean = false;
+
+  showOsmHeliports: boolean = false;
+
+  caseChoroplethOptions: CovidNumberCaseOptions = {
+    enabled: false,
+    type: CovidNumberCaseType.cases,
+    timeWindow: CovidNumberCaseTimeWindow.all,
+    change: CovidNumberCaseChange.absolute
+  };
+
   // constructor is here only used to inject services
-  constructor(private dataService: DataService, private tooltipService: TooltipService, private topoJsonService: TopoJsonService) { }
-
-  /**
-   * Retrieve data from server and add it to the overlays arrays
-   */
-  ngOnInit(): void {
-    // this.dataService.getRegierungsBezirke().toPromise().then((val: FeatureCollection) => {
-    //   this.overlays.push(new Overlay('Regierunsbezirke', val));
-    // });
-
-    // this.dataService.getLandkreise().toPromise().then((val: FeatureCollection) => {
-    //   this.overlays.push(new LandkreisLayer('Landkreise', val, this.tooltipService));
-    // });
-
-
-    this.topoJsonService.getTopoJsonGermany()
-    .pipe(
-      map((j: any) => feature(j, j.objects.states))
-    )
-    .subscribe((json: any) => {
-      this.overlays.push(new StatesLayer('Bundesländer', json));
-
-    });
-
-
-
-    this.dataService.getOSMHospitals().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new HospitalLayer('Hospitals', val, this.tooltipService));
-    });
-
-    this.dataService.getOSHelipads().toPromise().then((val: FeatureCollection) => {
-      this.overlays.push(new HelipadLayer('Helipads', val, this.tooltipService));
-    });
-
-    // this.dataService.getHospitalsLandkreise().toPromise().then((val: FeatureCollection) => {
-    //   this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Landkreise', val, this.tooltipService));
-    //
-    // });
-    //
-    // this.dataService.getHospitalsRegierungsbezirke().toPromise().then((val: FeatureCollection) => {
-    //   this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Regierungsbezirke', val, this.tooltipService));
-    // });
-    //
-    // this.dataService.getHospitalsBundeslaender().toPromise().then((val: FeatureCollection) => {
-    //   this.overlays.push(new LandkreiseHospitalsLayer('Hospitals Bundesländer', val, this.tooltipService));
-    // });
-  }
+  constructor() { }
 }
