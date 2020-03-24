@@ -10,7 +10,6 @@
     Krankenhäuser - Auslastung
   </mat-card-title>
   <mat-card-subtitle>
-    <p>Aggregation</p>
     <!--  use text instead of logos -->
     <mat-button-toggle-group
       class="btngrp"
@@ -24,6 +23,27 @@
       <mat-button-toggle value="county" matTooltip="Landkreise">Kreise</mat-button-toggle>
       <mat-button-toggle value="none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
     </mat-button-toggle-group>
+    <div class="glyph-legend">
+        <div 
+            *ngFor="let t of glyphLegend" 
+            class="glyph-tile" 
+            [matTooltip]="t.description"
+            (click)="updateGlyphState(t.state)"
+        >
+            <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color), 'border-color': getBorderColor(t.state), 'cursor': aggregationLevel === 'none' ? 'initial' : 'pointer'}"></div>
+            <div class="text">{{ t.name }}</div>
+        </div>
+    </div>
+    <div class="glyph-color-legend">
+        <div 
+            *ngFor="let t of glyphLegendColors" 
+            class="glyph-tile" 
+            
+        >
+            <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
+            <div class="text">{{ t }}</div>
+        </div>
+    </div>
     <!--  use logos instead of text -->
     <!--<mat-button-toggle-group class="aggregationsstufen" name="fontStyle" aria-label="Font Style">
         <mat-button-toggle value="bundeslaender"> <img src="/assets/agg_b1.png" alt="Bundesländer"></mat-button-toggle>
@@ -181,27 +201,6 @@
           (change)="showOsmHeliportsChange.emit($event.checked)"
         >Hubschrauberlandeplätze
         </mat-slide-toggle>
-      </div>
-
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Legende
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-
-
-      <img class="legend" src="/assets/Legende2.png" alt="Legende">
-
-      <div class="legendebeschreibung">
-        <ul style="list-style-type:none;">
-          <li>¹ ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie</li>
-          <li>² ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische
-            Therapiemöglichkeiten
-          </li>
-          <li>³ ECMO = Zusätzlich ECMO</li>
-        </ul>
       </div>
 
     </mat-expansion-panel>
