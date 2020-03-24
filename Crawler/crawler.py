@@ -126,8 +126,6 @@ def get_hospital_geo_locations(hospital_entries):
         if i % 5 == 0:
             time.sleep(1)
             
-    input()
-            
     return hospital_entries
 
 
