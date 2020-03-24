@@ -501,6 +501,7 @@ export class MapComponent implements OnInit {
     });
 
     if (!opt || !opt.enabled) {
+      this.caseChoroplethLayerChange.emit(null);
       return;
     }
 
