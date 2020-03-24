@@ -4,6 +4,13 @@ import * as L from 'leaflet';
 import { Overlay } from './overlay';
 import { TooltipService } from 'src/app/services/tooltip.service';
 
+// const helipadIcon = L.icon({
+//   iconUrl: 'Helipad.png',
+
+//   iconSize:     [16, 16], // size of the iconow
+//   iconAnchor:   [8, 8], // point of the icon which will correspond to marker's location
+// });
+
 export class HelipadLayer extends Overlay<FeatureCollection> {
   constructor(
     name: string,
@@ -15,9 +22,10 @@ export class HelipadLayer extends Overlay<FeatureCollection> {
 
   createOverlay() {
     const geojsonMarkerOptions = {
-      radius: 8,
-      fillColor: '#483632',
-      color: '#000',
+      radius: 4,
+      fillColor: '#8461c4',
+      // icon: helipadIcon,
+      color: '#8461c4',
       weight: 1,
       opacity: 1,
       fillOpacity: 0.8
