@@ -8,6 +8,9 @@ import { DiviHospital } from '../services/divi-hospitals.service';
 })
 export class HospitalInfoComponent implements OnInit {
 
+  contact: string;
+  url: boolean;
+
   @Input()
   mode: 'dialog' | 'tooltip';
   @Input()
@@ -16,6 +19,13 @@ export class HospitalInfoComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    if(this.data.Kontakt.indexOf('http')>-1){
+      this.contact = 'http' + this.data.Kontakt.split('http')[1];
+      this.url = true;
+    }else{
+      this.contact = this.data.Kontakt;
+      this.url = false;
+    }
   }
 
 }

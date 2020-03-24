@@ -480,7 +480,6 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
   private openDialog(data: DiviHospital): void {
     this.dialog.open(HospitalInfoDialogComponent, {
-      width: '250px',
       data: data
     });
   }
