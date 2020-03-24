@@ -471,7 +471,7 @@ export class MapComponent implements OnInit {
     this.covidNumberCaseOptionsKeyToLayer.set(key, f.createOverlay());
 
     this.choroplethLayerLegends.set(key, new Legend(f.MinMax, f.NormMinMax,
-      f.NormValuesFunc, this.colormapService.getChoroplethCaseColor, f.Steps));
+      f.NormValuesFunc, this.colormapService.getChoroplethCaseColor, f.Steps, o));
   }
 
   private currentLegend;
