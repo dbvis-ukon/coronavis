@@ -227,7 +227,13 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
   onZoomed() {
     const zoom = this.map.getZoom();
-    const scale = Math.pow(9 / (zoom), 3);
+    let level = 9;
+    if(this.granularity === 'regierungsbezirke'){
+      level = 11;
+    } else if (this.granularity === 'bundeslander'){
+      level = 12;
+    }
+    const scale = Math.pow(level / (zoom), 3);
 
     this.data.forEach(d => {
       d.x = d._x;
