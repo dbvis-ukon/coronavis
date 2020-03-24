@@ -2,7 +2,7 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import {AggregatedHospitalsState, DiviAggregatedHospital} from 'src/app/services/divi-hospitals.service';
+import {AggregatedHospitalsState, DiviAggregatedHospital, DiviHospital} from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
 import {GlyphHoverEvent} from "../events/glyphhover";
@@ -29,9 +29,9 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
   }
 
   private glyphSize = {
-    width: 50,
-    height: 22
-  }
+    width: 38,
+    height: 28
+  };
 
   private latLngPoint(latlng: L.LatLngExpression): L.Point {
     return this.map.project(latlng, 9);
@@ -88,7 +88,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     const rectSize = 10;
 
     const padding = 2;
-    const yOffset = 10;
+    const yOffset = 2;
 
     const icu_low_scores = this.data.map(d => this.getIcuLowScore(d));
     const icu_low_normalizer = d3.scaleLinear()
@@ -130,16 +130,31 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
     this.gHospitals
       .append('rect')
-      .attr('width', '50')
-      .attr('height', '22')
+      .attr('width', this.glyphSize.width)
+      .attr('height', this.glyphSize.height/2)
       .attr('fill', 'white')
       .attr('stroke', '#cccccc');
+
+    // adds white shadow
+    this.gHospitals
+      .append('text')
+      .text(d1 => {
+        return d1.Name;
+      })
+      .attr('x', (padding + 3 * rectSize + 4 * padding) / 2)
+      .attr('y', '22')
+      .attr('font-size', '8px')
+      .style('text-anchor', 'middle')
+      .style('stroke', 'white')
+      .style('stroke-width', '4px')
+      .style('opacity', '0.8');
 
     this.gHospitals
       .append('text')
       .text(d1 => d1.Name)
-      .attr('x', padding)
-      .attr('y', '8')
+      .attr('x', (padding + 3 * rectSize + 4 * padding) / 2)
+      .style('text-anchor', 'middle')
+      .attr('y', '22')
       .attr('font-size', '8px');
 
     const self = this;
@@ -151,6 +166,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('y', yOffset)
       .style('fill', d1 => this.colormapService.getBedStatusColor(icu_low_normalizer(this.getIcuLowScore(d1))))
       .on("mouseenter", () => {
+
         self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_low_state"), "enter"));
       })
       .on("mouseleave", () => {
@@ -211,7 +227,13 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
   onZoomed() {
     const zoom = this.map.getZoom();
-    const scale = Math.pow(9 / (zoom), 3);
+    let level = 9;
+    if(this.granularity === 'regierungsbezirke'){
+      level = 11;
+    } else if (this.granularity === 'bundeslander'){
+      level = 12;
+    }
+    const scale = Math.pow(level / (zoom), 3);
 
     this.data.forEach(d => {
       d.x = d._x;
