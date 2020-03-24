@@ -9,6 +9,7 @@ import {
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from './map/options/covid-number-case-options';
+import { GlyphState } from './map/options/glyph-state';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,8 @@ export class AppComponent {
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
   aggregationLevel: AggregationLevel = AggregationLevel.none;
+
+  glyphState: GlyphState = GlyphState.none;
 
   showOsmHospitals: boolean = false;
 

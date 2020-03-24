@@ -9,6 +9,8 @@ import {BehaviorSubject, Subject} from "rxjs";
 import {Layer} from "leaflet";
 import {ColormapService} from "./colormap.service";
 import {AggregatedHospitals} from "./divi-hospitals.service";
+import { AggregationLevel } from '../map/options/aggregation-level';
+import { GlyphState } from '../map/options/glyph-state';
 
 @Injectable({
   providedIn: "root"
@@ -23,15 +25,27 @@ export class HospitallayerService {
   public getLayers(): Subject<BedStatusChoropleth> {
 
     const url = `${environment.apiUrl}hospitals/`;
-    const granularities = ["landkreise", "regierungsbezirke", "bundeslander"];
+    const granularities = [
+      {
+        api: "landkreise",
+        state: AggregationLevel.county,
+      },
+      {
+        api: "regierungsbezirke",
+        state: AggregationLevel.governmentDistrict
+      },
+      {
+        api: "bundeslander",
+        state: AggregationLevel.state
+      }];
 
-    const types = ["icu_low_state", "icu_high_state", "ecmo_state"];
+    const types = Object.values(GlyphState).filter(i => GlyphState.none !== i);
 
     for (let granularity of granularities) {
-      this.http.get<AggregatedHospitals>(url + granularity)
+      this.http.get<AggregatedHospitals>(url + granularity.api)
         .subscribe(data => {
           for (let type of types) {
-            const layer = new BedStatusChoropleth(this.getName(granularity, type), data, type, this.colormapService);
+            const layer = new BedStatusChoropleth(this.getName(granularity.state, type), data, granularity.state, type, this.colormapService);
             this.layers.next(layer);
           }
         })
@@ -39,7 +53,7 @@ export class HospitallayerService {
     return this.layers;
   }
 
-  public getName(granularity: String, type: String) {
+  public getName(granularity: AggregationLevel, type: GlyphState) {
     return `Hospitals_${granularity}_${type}`;
   }
 }
