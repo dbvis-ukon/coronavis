@@ -6,6 +6,7 @@
     [showOsmHeliports]="showOsmHeliports"
     [caseChoroplethOptions]="caseChoroplethOptions"
     [glyphState]="glyphState"
+    (caseChoroplethLayerChange)="currentCaseChoropleth = $event"
   ></app-map>
 
   <app-infobox
@@ -18,5 +19,11 @@
   ></app-infobox>
 
   <app-overlay-brand class="overlay-brand"></app-overlay-brand>
-  <app-legend class="legend" [aggregationLevel]="aggregationLevel" [bedType]="glyphState"></app-legend>
+  <app-legend 
+    class="legend" 
+    [aggregationLevel]="aggregationLevel" 
+    [bedType]="glyphState"
+    [choroplethLayer]="currentCaseChoropleth"
+    [caseChoroplethOptions]="caseChoroplethOptions"
+  ></app-legend>
 </div>

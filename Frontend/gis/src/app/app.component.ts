@@ -10,6 +10,7 @@ import {
   CovidNumberCaseType
 } from './map/options/covid-number-case-options';
 import { GlyphState } from './map/options/glyph-state';
+import { CaseChoropleth } from './map/overlays/casechoropleth';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,8 @@ export class AppComponent {
   showOsmHospitals: boolean = false;
 
   showOsmHeliports: boolean = false;
+
+  currentCaseChoropleth: CaseChoropleth;
 
   caseChoroplethOptions: CovidNumberCaseOptions = {
     enabled: false,

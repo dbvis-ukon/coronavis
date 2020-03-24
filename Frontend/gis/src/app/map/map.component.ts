@@ -28,7 +28,6 @@ import {GlyphHoverEvent} from './events/glyphhover';
 import {LandkreiseHospitalsLayer} from './overlays/landkreishospitals';
 import {HospitalLayer} from './overlays/hospital';
 import {HelipadLayer} from './overlays/helipads';
-import { Legend } from './overlays/legend';
 import {CaseChoropleth} from './overlays/casechoropleth';
 import {AggregationLevel} from './options/aggregation-level';
 import {
@@ -144,6 +143,9 @@ export class MapComponent implements OnInit {
     return this._caseChoroplethOptions;
   }
 
+  @Output()
+  caseChoroplethLayerChange: EventEmitter<CaseChoropleth> = new EventEmitter();
+
   // private layerControl: L.Control.Layers;
 
   private mymap: L.Map;
@@ -222,8 +224,6 @@ export class MapComponent implements OnInit {
       const key = this.getBedChoroplethKey(layer.getAggregationLevel(), layer.getGlyphState());
       this.choroplethLayerMap.set(key, layer.createOverlay());
 
-      this.legendsMap.set(key, new Legend(layer.MinMax, layer.NormMinMax,
-        layer.NormValuesFunc, this.colormapService.getChoroplethCaseColor, 'bed'));
     });
     // const layerEvents: Subject<GlyphHoverEvent> = new Subject<GlyphHoverEvent>();
     // layerEvents.subscribe(event => {
@@ -418,8 +418,6 @@ export class MapComponent implements OnInit {
     this.mymap.on('zoom', this.semanticZoom);
   }
 
-  private legend: Legend;
-
   semanticZoom() {
     // if (!this.aggHospitalCounty || !this.aggHospitalGovernmentDistrict) {
     //   return;
@@ -490,15 +488,13 @@ export class MapComponent implements OnInit {
   private initCaseChoroplethLayer(o: CovidNumberCaseOptions, data: FeatureCollection) {
     const key = this.getKeyCovidNumberCaseOptions(o);
     const f = new CaseChoropleth(key, data, o, this.tooltipService, this.colormapService);
-    this.covidNumberCaseOptionsKeyToLayer.set(key, f.createOverlay());
+    const l = f.createOverlay();
+    this.covidNumberCaseOptionsKeyToLayer.set(key, l);
 
-    this.legendsMap.set(key, new Legend(f.MinMax, f.NormMinMax,
-      f.NormValuesFunc, this.colormapService, 'case', o));
+    this.layerToFactoryMap.set(l, f);
   }
 
   private currentLegend;
-
-  private legendsMap = new Map<string, Legend>();
 
   private updateCaseChoroplethLayers(opt: CovidNumberCaseOptions) {
     // remove all layers
@@ -519,10 +515,8 @@ export class MapComponent implements OnInit {
     const l = this.covidNumberCaseOptionsKeyToLayer.get(key);
     this.mymap.addLayer(l);
 
-    if (this.currentLegend) { this.mymap.removeControl(this.currentLegend); }
-    const legend = this.legendsMap.get(key);
-    this.currentLegend = legend.createLegend();
-    this.currentLegend.addTo(this.mymap);
+    const factory = this.layerToFactoryMap.get(l);
+    this.caseChoroplethLayerChange.emit(factory as CaseChoropleth);
 
     l.bringToBack();
 
@@ -542,11 +536,6 @@ export class MapComponent implements OnInit {
         console.log(e);
       }
       const key = this.getBedChoroplethKey(this._aggregationLevel, st);
-
-      console.log(this.legendsMap, key);
-      const legend = this.legendsMap.get(key);
-      this.currentLegend = legend.createLegend();
-      this.currentLegend.addTo(this.mymap);
 
       const layer = this.choroplethLayerMap.get(key);
       layer.bringToBack();
