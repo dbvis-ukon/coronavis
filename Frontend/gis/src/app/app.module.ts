@@ -21,6 +21,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
+import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
 
 
 
@@ -35,6 +38,8 @@ import {MatButtonModule} from '@angular/material/button';
     CaseTooltipComponent,
     OverlayBrandComponent,
     InfoboxComponent,
+    HospitalInfoComponent,
+    HospitalInfoDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +56,8 @@ import {MatButtonModule} from '@angular/material/button';
     MatTooltipModule,
     MatIconModule,
     MatRadioModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

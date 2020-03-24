@@ -37,6 +37,7 @@ import {
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from './options/covid-number-case-options';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -149,7 +150,8 @@ export class MapComponent implements OnInit {
     private dataService: DataService,
     private tooltipService: TooltipService,
     private hospitallayerService: HospitallayerService,
-    private colormapService: ColormapService
+    private colormapService: ColormapService,
+    private matDialog: MatDialog
   ) {
     this.iterableDiffer = this.iterable.find(this.overlays).create();
   }
@@ -230,7 +232,7 @@ export class MapComponent implements OnInit {
       this.dataService.getHospitalsBundeslaender()
     ])
       .subscribe(result => {
-        const simpleGlyphFactory = new SimpleGlyphLayer('ho_none', result[0] as DiviHospital[], this.tooltipService, this.colormapService);
+        const simpleGlyphFactory = new SimpleGlyphLayer('ho_none', result[0] as DiviHospital[], this.tooltipService, this.colormapService, this.matDialog);
         const simpleGlyphLayer = simpleGlyphFactory.createOverlay(this.mymap);
         const l = L.layerGroup([simpleGlyphLayer]);
         this.aggregationLevelToGlyphMap.set(AggregationLevel.none, l);

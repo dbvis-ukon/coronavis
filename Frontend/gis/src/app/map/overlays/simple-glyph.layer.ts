@@ -7,6 +7,8 @@ import {DiviHospital} from 'src/app/services/divi-hospitals.service';
 import {ColormapService} from 'src/app/services/colormap.service';
 import {Feature, FeatureCollection} from "geojson";
 import {quadtree} from 'd3';
+import { MatDialog } from '@angular/material/dialog';
+import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
 
 export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
@@ -21,7 +23,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     name: string,
     private data: DiviHospital[],
     private tooltipService: TooltipService,
-    private colormapService: ColormapService
+    private colormapService: ColormapService,
+    private dialog: MatDialog
   ) {
     super(name, null);
     this.enableDefault = true;
@@ -99,7 +102,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
         t.diviHospital = d1;
         d3.select(this).raise();
       })
-      .on('mouseleave', () => this.tooltipService.close());
+      .on('mouseleave', () => this.tooltipService.close())
+      .on('click', d => this.openDialog(d));
 
     this.gHospitals
       .append('rect')
@@ -471,6 +475,13 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
           tspan = text.append('tspan').attr('x', x).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
         }
       }
+    });
+  }
+
+  private openDialog(data: DiviHospital): void {
+    this.dialog.open(HospitalInfoDialogComponent, {
+      width: '250px',
+      data: data
     });
   }
 
