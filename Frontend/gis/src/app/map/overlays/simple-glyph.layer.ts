@@ -11,6 +11,8 @@ import {quadtree} from 'd3';
 export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
   private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+  private nameHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+  private cityHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private map: L.Map;
 
   constructor(
@@ -34,9 +36,9 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
   private rectSize = 10;
   private glyphSize = {
-    width: 50,
-    height: 22
-  }
+    width: 38,
+    height: 28
+  };
 
   createOverlay(map: L.Map) {
     this.map = map;
@@ -71,7 +73,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     const self = this;
 
     const padding = 2;
-    const yOffset = 10;
+    const yOffset = 2;
 
     this.gHospitals = d3.select(svgElement)
       .style("pointer-events", "none")
@@ -100,20 +102,33 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     this.gHospitals
       .append('rect')
       .attr('width', this.glyphSize.width)
-      .attr('height', this.glyphSize.height)
+      .attr('height', this.glyphSize.height/2)
       .attr('fill', 'white')
       .attr('stroke', '#cccccc');
 
-    this.gHospitals
+    this.nameHospitals = this.gHospitals
+      .append('text')
+      .text(d1 => {
+        return d1.Name;
+      })
+      .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
+      .style('text-anchor', 'middle')
+      .attr('y', '12')
+      .attr('font-size', '7px')
+      .call(this.wrap, '50');
+
+    this.cityHospitals = this.gHospitals
       .append('text')
       .text(d1 => {
         // Hackity hack :)
         const splitted = d1.Adress.split(' ');
         return splitted[splitted.length - 1];
       })
-      .attr('x', padding)
-      .attr('y', '8')
-      .attr('font-size', '8px');
+      .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
+      .style('text-anchor', 'middle')
+      .attr('y', '22')
+      .attr('font-size', '10px')
+      .classed('hiddenLabel', true);
 
     this.gHospitals
       .append('rect')
@@ -169,6 +184,23 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     const zoom = this.map.getZoom();
     const scale = Math.pow(9 / (zoom), 3);
 
+    if (this.map.getZoom() > 9) {
+      this.glyphSize.height = 40;
+      this.glyphSize.width = 70;
+      this.cityHospitals.classed('hiddenLabel', true);
+      this.nameHospitals.classed('hiddenLabel', false);
+    } else if (this.map.getZoom() < 10 && this.map.getZoom() > 6) {
+      this.cityHospitals.classed('hiddenLabel', false);
+      this.nameHospitals.classed('hiddenLabel', true);
+      this.glyphSize.height = 28;
+      this.glyphSize.width = 38;
+    } else if (this.map.getZoom() < 7) {
+      this.cityHospitals.classed('hiddenLabel', true);
+      this.nameHospitals.classed('hiddenLabel', true);
+      this.glyphSize.height = 22;
+      this.glyphSize.width = 38;
+    }
+
     this.data.forEach(d => {
       d.x = d._x;
       d.y = d._y;
@@ -188,6 +220,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('transform', d => {
         return `scale(${scale}, ${scale})`;
       });
+
   }
 
   private quadtreeCollide(bbox) {
@@ -370,4 +403,30 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     return force;
   }
+
+  wrap(text, width) {
+    text.each(function() {
+      let text = d3.select(this),
+        words = text.text().split(' ').reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 1.1, // ems
+        x = text.attr('x'),
+        y = text.attr('y'),
+        dy = 1.1,
+        tspan = text.text(null).append('tspan').attr('x', x).attr('y', y).attr('dy', dy + 'em');
+      while (word = words.pop()) {
+        line.push(word);
+        tspan.text(line.join(' '));
+        if (tspan.text().length > 25) {
+          line.pop();
+          tspan.text(line.join(' '));
+          line = [word];
+          tspan = text.append('tspan').attr('x', x).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
+        }
+      }
+    });
+  }
+
 }
