@@ -13,7 +13,7 @@ export class HospitalInfoDialogComponent {
     public dialogRef: MatDialogRef<HospitalInfoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DiviHospital) {}
 
-  onNoClick(): void {
+  close(): void {
     this.dialogRef.close();
   }
 

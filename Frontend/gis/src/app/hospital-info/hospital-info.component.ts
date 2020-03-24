@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DiviHospital } from '../services/divi-hospitals.service';
 
 @Component({
   selector: 'app-hospital-info',
@@ -9,6 +10,8 @@ export class HospitalInfoComponent implements OnInit {
 
   @Input()
   mode: 'dialog' | 'tooltip';
+  @Input()
+  data: DiviHospital
 
   constructor() { }
 

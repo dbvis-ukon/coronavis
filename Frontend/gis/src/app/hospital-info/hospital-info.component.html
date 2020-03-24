@@ -1,3 +1,10 @@
-<p *ngIf="mode === 'dialog'">dialog</p>
+<span *ngIf="mode === 'dialog'">
+  <!--h3>{{ data.Name }}</h3>
+  <mat-divider></mat-divider-->
+  <p style="margin-top: 10px;"><strong>Address: </strong> {{ data.Adress }}</p>
+  <p><strong>Contact: </strong> {{ data.Kontakt }}</p>
+</span>
 
-<p *ngIf="mode === 'tooltip'">tooltip</p>
+<span *ngIf="mode === 'tooltip'">
+  <p><strong>Date: </strong> {{ data.Stand }}</p>
+</span>

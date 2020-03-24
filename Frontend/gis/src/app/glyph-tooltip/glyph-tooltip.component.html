@@ -18,7 +18,5 @@
     </tbody>
   </table>
   <br>
-  <p><strong>Address: </strong> {{ diviHospital.Adress }}</p>
-  <p><strong>Contact: </strong> {{ diviHospital.Kontakt }}</p>
-  <p><strong>Date: </strong> {{ diviHospital.Stand }}</p>
+  <app-hospital-info [data]="diviHospital" mode="tooltip"></app-hospital-info>
 </div>
