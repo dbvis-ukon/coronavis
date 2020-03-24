@@ -1,6 +1,14 @@
 <div #main class="main">
   <h3>{{ this.name }}</h3>
   <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>{{ this.datum | date:"d.M.y" }}</th>
+        <th colspan="2">Seit 24h</th>
+        <th colspan="2">Seit 72h</th>
+      </tr>
+    </thead>
     <tbody>
       <tr>
         <td>Erkrankte</td>
@@ -19,13 +27,5 @@
         <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[2].deaths)}})</td>
       </tr>
     </tbody>
-    <thead>
-      <tr>
-        <th></th>
-        <th>{{ this.datum | date:"d.M.y" }}</th>
-        <th colspan="2">Neu in 24h</th>
-        <th colspan="2">Neu in 72h</th>
-      </tr>
-    </thead>
   </table>
 </div>
