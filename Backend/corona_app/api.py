@@ -93,18 +93,7 @@ def get_hospitals_by_landkreise():
         Return all Hospitals
     """
 
-    sql_stmt = '''
-with last_hospital_data as (
-	select distinct on (name) *
-	from hospital
-	order by name, last_update DESC
-)
-select vkv.sn_l, vkv.sn_r, vkv.sn_k, vkv.gen, 
-	JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, 
-	ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vkv.geom), 0.005))) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
-from vg250_krs vkv left join last_hospital_data hc on ST_Contains(vkv.geom, hc.location) 
-group by vkv.sn_l, vkv.sn_r, vkv.sn_k, vkv.gen
-    '''
+    sql_stmt = "select name, ids, icu_low_state, icu_high_state, ecmo_state, outline, centroid from hospitals_per_landkreis"
     sql_result = db.engine.execute(sql_stmt)
 
     d, features = {}, []
@@ -118,10 +107,8 @@ group by vkv.sn_l, vkv.sn_r, vkv.sn_k, vkv.gen
             # careful! r.geojson is of type str, we must convert it to a dictionary
             "geometry": json.loads(str(d['outline'])),
             "properties": {
-                'sn_l': d['sn_l'],
-                'sn_r': d['sn_r'],
-                'sn_k': d['sn_k'],
-                'name': d['gen'],
+                'name': d['name'],
+                'ids': d['ids'],
                 'centroid': json.loads(d['centroid']),
                 'icu_low_state': dict(Counter(d['icu_low_state'])),
                 'icu_high_state': dict(Counter(d['icu_high_state'])),
@@ -151,22 +138,7 @@ def get_hospitals_by_regierungsbezirke():
         Return all Hospitals
     """
 
-    # use regierungsbezirke if they are available, for the others use bundeslaender
-    sql_stmt = '''
-with last_hospital_data as (
-	select distinct on (name) *
-	from hospital
-	order by name, last_update DESC
-)
-select vkv.sn_l, vkv.sn_r, vkv.gen, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vkv.geom), 0.005))) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
-from vg250_rbz vkv left join last_hospital_data hc on ST_Contains(vkv.geom, hc.location)
-group by vkv.sn_l, vkv.sn_r, vkv.gen
-union all
-select vkv.sn_l, vkv.sn_r, vkv.gen, JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vkv.geom), 0.005))) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
-from vg250_lan vkv left join last_hospital_data hc on ST_Contains(vkv.geom, hc.location)
-where NOT (vkv.gen = ANY(array['Baden-Württemberg', 'Baden-Württemberg (Bodensee)', 'Bayern', 'Bayern (Bodensee)', 'Hessen', 'Nordrhein-Westfalen']))
-group by vkv.sn_l, vkv.sn_r, vkv.gen
-    '''
+    sql_stmt = "select name, ids, icu_low_state, icu_high_state, ecmo_state, outline, centroid from hospitals_per_regierungsbezirk"
     sql_result = db.engine.execute(sql_stmt)
 
     d, features = {}, []
@@ -178,11 +150,10 @@ group by vkv.sn_l, vkv.sn_r, vkv.gen
         feature = {
             "type": 'Feature',
             # careful! r.geojson is of type str, we must convert it to a dictionary
-            "geometry": json.loads(d['outline']),
+            "geometry": json.loads(str(d['outline'])),
             "properties": {
-                'sn_l': d['sn_l'],
-                'sn_r': d['sn_r'],
-                'name': d['gen'],
+                'name': d['name'],
+                'ids': d['ids'],
                 'centroid': json.loads(d['centroid']),
                 'icu_low_state': dict(Counter(d['icu_low_state'])),
                 'icu_high_state': dict(Counter(d['icu_high_state'])),
@@ -212,19 +183,7 @@ def get_hospitals_by_bundeslander():
         Return all Hospitals
     """
 
-    sql_stmt = '''
-with last_hospital_data as (
-	select distinct on (name) *
-	from hospital
-	order by name, last_update DESC
-)
-select vkv.sn_l, vkv.gen, 
-	JSON_AGG(coalesce(hc.icu_low_state, '')) as icu_low_state, JSON_AGG(coalesce(hc.icu_high_state, '')) as icu_high_state, JSON_AGG(coalesce(hc.ecmo_state, '')) as ecmo_state, 
-	ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vkv.geom), 0.005))) as outline, ST_AsGeoJSON(ST_Centroid(ST_Union(vkv.geom))) as centroid
-from vg250_lan vkv left join last_hospital_data hc on ST_Contains(vkv.geom, hc.location)
-where vkv.gen not like '%%Bodensee%%'
-group by vkv.sn_l, vkv.gen
-    '''
+    sql_stmt = "select name, ids, icu_low_state, icu_high_state, ecmo_state, outline, centroid from hospitals_per_bundeslaender"
     sql_result = db.engine.execute(sql_stmt)
 
     d, features = {}, []
@@ -236,10 +195,10 @@ group by vkv.sn_l, vkv.gen
         feature = {
             "type": 'Feature',
             # careful! r.geojson is of type str, we must convert it to a dictionary
-            "geometry": json.loads(d['outline']),
+            "geometry": json.loads(str(d['outline'])),
             "properties": {
-                'sn_l': d['sn_l'],
-                'name': d['gen'],
+                'name': d['name'],
+                'ids': d['ids'],
                 'centroid': json.loads(d['centroid']),
                 'icu_low_state': dict(Counter(d['icu_low_state'])),
                 'icu_high_state': dict(Counter(d['icu_high_state'])),
@@ -362,7 +321,7 @@ def get_cases_by_landkreise_yesterday():
         Return all Hospitals
     """
 
-    sql_stmt = 'SELECT name, ids, until, cases, deaths, bevoelkerung, outline FROM cases_per_county_until_yesterday'
+    sql_stmt = "SELECT name, ids, until, cases, deaths, bevoelkerung, outline FROM cases_per_county_until_yesterday"
     sql_result = db.engine.execute(sql_stmt)
 
     d, features = {}, []
