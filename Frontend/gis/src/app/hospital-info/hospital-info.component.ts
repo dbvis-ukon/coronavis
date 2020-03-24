@@ -12,10 +12,14 @@ export class HospitalInfoComponent implements OnInit {
   contact: string;
   url: boolean;
 
+  contactMsg: string;
+
   @Input()
   mode: 'dialog' | 'tooltip';
   @Input()
   data: DiviHospital
+
+
 
   constructor(private colormapService: ColormapService) { }
 
@@ -23,9 +27,17 @@ export class HospitalInfoComponent implements OnInit {
     if(this.data.Kontakt.indexOf('http')>-1){
       this.contact = 'http' + this.data.Kontakt.split('http')[1];
       this.url = true;
+
+      this.contactMsg = this.data.Kontakt.replace(this.contact, '').replace('Website', '').trim();
+
+      if(this.contactMsg === '') {
+        this.contactMsg = 'Webseite';
+      }
     }else{
       this.contact = this.data.Kontakt;
       this.url = false;
+
+      this.contactMsg = this.data.Kontakt;
     }
   }
 

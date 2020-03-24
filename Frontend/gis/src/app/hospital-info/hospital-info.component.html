@@ -18,18 +18,18 @@
 </table>
 <br>
 
-<span *ngIf="mode === 'dialog'">
+<div *ngIf="mode === 'dialog'">
   <!--h3>{{ data.Name }}</h3>
   <mat-divider></mat-divider-->
   <p style="margin-top: 10px;">
     <strong>Adresse: </strong> {{ data.Adress }}
   </p>
-  <span>
-    <strong>Kontakt: </strong> <a *ngIf="url" href="{{ contact }}">{{ contact }}</a> <p *ngIf="!url">{{ contact }}</p>
-  </span>
-</span>
+  <p>
+    <strong>Kontakt: </strong> 
+    <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a> 
+    <span *ngIf="!url">{{ contactMsg }}</span>
+  </p>
+</div>
 
-<span *ngIf="mode === 'tooltip'">
-  <p><strong>Letzter Stand: </strong> {{ data.Stand }}</p>
-</span>
+<p><strong>Letzter Stand: </strong> {{ data.Stand }}</p>
 
