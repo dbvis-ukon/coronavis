@@ -19,7 +19,8 @@ export class ColormapService {
 
   private caseChoroplethColorMap = d3.scaleQuantize<string>()
     .domain([-1, 1])
-    .range([...d3.schemeRdBu[11]].reverse());
+    .range([...d3.schemeGreens[6].slice(0, 5).reverse(), "#fff", ...d3.schemeBlues[6].slice(0, 5)])
+    // .range([...d3.schemeRdBu[11]].reverse());
 
   getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
       return d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
