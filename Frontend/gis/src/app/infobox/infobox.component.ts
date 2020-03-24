@@ -47,7 +47,7 @@ export class InfoboxComponent implements OnInit {
   }
 
   emitCaseChoroplethOptions() {
-    console.log('emit', this.caseChoroplethOptions);
+    // console.log('emit', this.caseChoroplethOptions);
 
     if(this.caseChoroplethOptions.change === CovidNumberCaseChange.relative
       && this.caseChoroplethOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
