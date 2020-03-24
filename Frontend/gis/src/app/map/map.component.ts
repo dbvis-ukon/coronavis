@@ -20,11 +20,11 @@ import {DiviHospital, DiviHospitalsService} from '../services/divi-hospitals.ser
 import {TooltipService} from '../services/tooltip.service';
 import {ColormapService} from '../services/colormap.service';
 import {AggregatedGlyphLayer} from './overlays/aggregated-glyph.layer';
-import {DataService} from "../services/data.service";
-import {HospitallayerService} from "../services/hospitallayer.service";
-import {FeatureCollection} from "geojson";
-import {forkJoin, Subject} from "rxjs";
-import {GlyphHoverEvent} from "./events/glyphhover";
+import {DataService} from '../services/data.service';
+import {HospitallayerService} from '../services/hospitallayer.service';
+import {FeatureCollection} from 'geojson';
+import {forkJoin, Subject} from 'rxjs';
+import {GlyphHoverEvent} from './events/glyphhover';
 import {LandkreiseHospitalsLayer} from './overlays/landkreishospitals';
 import {HospitalLayer} from './overlays/hospital';
 import {HelipadLayer} from './overlays/helipads';
@@ -77,11 +77,11 @@ export class MapComponent implements OnInit {
   set showOsmHospitals(val: boolean) {
     this._showOsmHospitals = val;
 
-    if(!this.mymap) {
+    if (!this.mymap) {
       return;
     }
 
-    if(val) {
+    if (val) {
       this.mymap.addLayer(this.osmHospitalsLayer);
     } else {
       this.mymap.removeLayer(this.osmHospitalsLayer);
@@ -98,11 +98,11 @@ export class MapComponent implements OnInit {
   set showOsmHeliports(val: boolean) {
     this._showOsmHeliports = val;
 
-    if(!this.mymap) {
+    if (!this.mymap) {
       return;
     }
 
-    if(val) {
+    if (val) {
       this.mymap.addLayer(this.osmHeliportsLayer);
     } else {
       this.mymap.removeLayer(this.osmHeliportsLayer);
@@ -155,39 +155,31 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit() {
-    // // empty tiles
-    // const emptyTiles = L.tileLayer('');
+    const apiToken = 'pk.eyJ1IjoianVyaWIiLCJhIjoiY2s4MndsZTl0MDR2cDNobGoyY3F2YngyaiJ9.xwBjxEn_grzetKOVZDcyqA';
+    const styleToken = 'jurib/ck82xkh3z3i7b1iodexbt39x9';
+    const tiledMap = L.tileLayer(
+      `https://api.mapbox.com/styles/v1/${styleToken}/tiles/{z}/{x}/{y}?access_token=${apiToken}`,
+      {
+        tileSize: 512,
+        zoomOffset: -1,
+        attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
+          '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      });
 
-    // // use osm tiles
-    // const openstreetmap = L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
-    //   maxZoom: 19,
-    //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    // });
-
-    // const token = 'pk.eyJ1IjoianVyaWIiLCJhIjoiY2s4MndsZTl0MDR2cDNobGoyY3F2YngyaiJ9.xwBjxEn_grzetKOVZDcyqA';
-    // const mennaMap = L.tileLayer(
-    //   'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=' + token, {
-    //       tileSize: 512,
-    //       zoomOffset: -1,
-    //       attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
-    //       '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    //   });
-
-
-    const juriMap = L.mapboxGL({
+    /*const webGlMap = L.mapboxGL({
       accessToken: 'pk.eyJ1IjoianVyaWIiLCJhIjoiY2s4MndsZTl0MDR2cDNobGoyY3F2YngyaiJ9.xwBjxEn_grzetKOVZDcyqA',
       style: 'mapbox://styles/jurib/ck82xkh3z3i7b1iodexbt39x9'
-    });
+    });*/
 
     // create map, set initial view to basemap and zoom level to center of BW
     this.mymap = L.map('main', {
       minZoom: 6,
       maxZoom: 12,
-      layers: [juriMap],
+      layers: [tiledMap],
       zoomControl: false
     }).setView([48.6813312, 9.0088299], 9);
 
-    new L.Control.Zoom({ position: 'topright' }).addTo(this.mymap);
+    new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
     // this.mymap.on('viewreset', () => this.updateSvg());
     // this.mymap.on('zoom', () => this.updateSvg());
 
@@ -214,7 +206,7 @@ export class MapComponent implements OnInit {
     layerEvents.subscribe(event => {
       const layer = this.choroplethLayerMap.get(event.name);
       if (layer) {
-        if (event.type === "enter") {
+        if (event.type === 'enter') {
           layer.bringToBack();
           this.mymap.addLayer(layer);
         } else {
@@ -237,22 +229,22 @@ export class MapComponent implements OnInit {
       this.diviHospitalsService.getDiviHospitalsStates(),
       this.dataService.getHospitalsBundeslaender()
     ])
-    .subscribe(result => {
-      const simpleGlyphFactory = new SimpleGlyphLayer('ho_none', result[0] as DiviHospital[], this.tooltipService, this.colormapService);
-      const simpleGlyphLayer = simpleGlyphFactory.createOverlay(this.mymap);
-      const l = L.layerGroup([simpleGlyphLayer])
-      this.aggregationLevelToGlyphMap.set(AggregationLevel.none, l);
-      this.layerToFactoryMap.set(simpleGlyphLayer, simpleGlyphFactory);
+      .subscribe(result => {
+        const simpleGlyphFactory = new SimpleGlyphLayer('ho_none', result[0] as DiviHospital[], this.tooltipService, this.colormapService);
+        const simpleGlyphLayer = simpleGlyphFactory.createOverlay(this.mymap);
+        const l = L.layerGroup([simpleGlyphLayer]);
+        this.aggregationLevelToGlyphMap.set(AggregationLevel.none, l);
+        this.layerToFactoryMap.set(simpleGlyphLayer, simpleGlyphFactory);
 
 
-      this.addGlyphMap(result, 1, AggregationLevel.county, 'ho_county', 'landkreise', layerEvents);
-      this.addGlyphMap(result, 3, AggregationLevel.governmentDistrict, 'ho_governmentdistrict', 'regierungsbezirke', layerEvents);
-      this.addGlyphMap(result, 5, AggregationLevel.state, 'ho_state', 'bundeslander', layerEvents);
+        this.addGlyphMap(result, 1, AggregationLevel.county, 'ho_county', 'landkreise', layerEvents);
+        this.addGlyphMap(result, 3, AggregationLevel.governmentDistrict, 'ho_governmentdistrict', 'regierungsbezirke', layerEvents);
+        this.addGlyphMap(result, 5, AggregationLevel.state, 'ho_state', 'bundeslander', layerEvents);
 
 
-      // init map with the current aggregation level
-      this.updateGlyphMapLayers(this._aggregationLevel);
-    });
+        // init map with the current aggregation level
+        this.updateGlyphMapLayers(this._aggregationLevel);
+      });
 
     this.dataService.getOSMHospitals().toPromise().then((val: FeatureCollection) => {
       const f = new HospitalLayer('Hospitals', val, this.tooltipService);
@@ -268,35 +260,135 @@ export class MapComponent implements OnInit {
     // CASE Maps
     this.dataService.getCaseData().subscribe(data => {
 
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.all, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.absolut}, data);
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.all, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.absolut}, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.cases,
+        timeWindow: CovidNumberCaseTimeWindow.all,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.absolut
+      }, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.deaths,
+        timeWindow: CovidNumberCaseTimeWindow.all,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.absolut
+      }, data);
 
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.absolut}, data);
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.absolut}, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.cases,
+        timeWindow: CovidNumberCaseTimeWindow.twentyFourhours,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.absolut
+      }, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.deaths,
+        timeWindow: CovidNumberCaseTimeWindow.twentyFourhours,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.absolut
+      }, data);
 
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.absolut}, data);
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.absolut}, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.cases,
+        timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.absolut
+      }, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.deaths,
+        timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.absolut
+      }, data);
 
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.relative, normalization: CovidNumberCaseNormalization.absolut}, data);
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.relative, normalization: CovidNumberCaseNormalization.absolut}, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.cases,
+        timeWindow: CovidNumberCaseTimeWindow.twentyFourhours,
+        change: CovidNumberCaseChange.relative,
+        normalization: CovidNumberCaseNormalization.absolut
+      }, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.deaths,
+        timeWindow: CovidNumberCaseTimeWindow.twentyFourhours,
+        change: CovidNumberCaseChange.relative,
+        normalization: CovidNumberCaseNormalization.absolut
+      }, data);
 
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.relative, normalization: CovidNumberCaseNormalization.absolut}, data);
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.relative, normalization: CovidNumberCaseNormalization.absolut}, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.cases,
+        timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours,
+        change: CovidNumberCaseChange.relative,
+        normalization: CovidNumberCaseNormalization.absolut
+      }, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.deaths,
+        timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours,
+        change: CovidNumberCaseChange.relative,
+        normalization: CovidNumberCaseNormalization.absolut
+      }, data);
 
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.all, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.per100k}, data);
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.all, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.per100k}, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.cases,
+        timeWindow: CovidNumberCaseTimeWindow.all,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.per100k
+      }, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.deaths,
+        timeWindow: CovidNumberCaseTimeWindow.all,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.per100k
+      }, data);
 
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.per100k}, data);
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.per100k}, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.cases,
+        timeWindow: CovidNumberCaseTimeWindow.twentyFourhours,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.per100k
+      }, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.deaths,
+        timeWindow: CovidNumberCaseTimeWindow.twentyFourhours,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.per100k
+      }, data);
 
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.per100k}, data);
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.absolute, normalization: CovidNumberCaseNormalization.per100k}, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.cases,
+        timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.per100k
+      }, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.deaths,
+        timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours,
+        change: CovidNumberCaseChange.absolute,
+        normalization: CovidNumberCaseNormalization.per100k
+      }, data);
 
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.relative, normalization: CovidNumberCaseNormalization.per100k}, data);
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.relative, normalization: CovidNumberCaseNormalization.per100k}, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.cases,
+        timeWindow: CovidNumberCaseTimeWindow.twentyFourhours,
+        change: CovidNumberCaseChange.relative,
+        normalization: CovidNumberCaseNormalization.per100k
+      }, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.deaths,
+        timeWindow: CovidNumberCaseTimeWindow.twentyFourhours,
+        change: CovidNumberCaseChange.relative,
+        normalization: CovidNumberCaseNormalization.per100k
+      }, data);
 
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.relative, normalization: CovidNumberCaseNormalization.per100k}, data);
-      this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.relative, normalization: CovidNumberCaseNormalization.per100k}, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.cases,
+        timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours,
+        change: CovidNumberCaseChange.relative,
+        normalization: CovidNumberCaseNormalization.per100k
+      }, data);
+      this.initCaseChoroplethLayer({
+        type: CovidNumberCaseType.deaths,
+        timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours,
+        change: CovidNumberCaseChange.relative,
+        normalization: CovidNumberCaseNormalization.per100k
+      }, data);
 
     });
 
@@ -326,7 +418,7 @@ export class MapComponent implements OnInit {
     const layer = factory.createOverlay(this.mymap);
 
 
-    const factoryBg = new LandkreiseHospitalsLayer(name + '_bg', result[index+1], this.tooltipService);
+    const factoryBg = new LandkreiseHospitalsLayer(name + '_bg', result[index + 1], this.tooltipService);
     const layerBg = factoryBg.createOverlay();
 
 
@@ -344,14 +436,14 @@ export class MapComponent implements OnInit {
       this.mymap.removeLayer(l);
     });
 
-    if(!this.aggregationLevelToGlyphMap.has(agg)) {
+    if (!this.aggregationLevelToGlyphMap.has(agg)) {
       throw 'No glyph map for aggregation ' + agg + ' found';
     }
 
     const l = this.aggregationLevelToGlyphMap.get(agg);
     this.mymap.addLayer(l);
 
-    if(l.getLayers().length > 1) {
+    if (l.getLayers().length > 1) {
 
       // aggregation glyph layer groups
       (l.getLayers()[1] as SVGOverlay).bringToFront();
@@ -382,13 +474,13 @@ export class MapComponent implements OnInit {
       this.mymap.removeLayer(l);
     });
 
-    if(!opt || !opt.enabled) {
+    if (!opt || !opt.enabled) {
       return;
     }
 
     const key = this.getKeyCovidNumberCaseOptions(opt);
 
-    if(!this.covidNumberCaseOptionsKeyToLayer.has(key)) {
+    if (!this.covidNumberCaseOptionsKeyToLayer.has(key)) {
       throw 'No covidNumberCaseCoropleth for ' + key + ' found';
     }
 
