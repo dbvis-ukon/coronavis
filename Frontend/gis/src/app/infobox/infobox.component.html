@@ -31,7 +31,7 @@
                 [matTooltip]="t.description"
                 (click)="updateGlyphState(t.state)"
             >
-                <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color), 'border-color': t.state === internalGlyphState ? 'gray' : 'white'}"></div>
+                <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color), 'border-color': getBorderColor(t.state), 'cursor': aggregationLevel === 'none' ? 'initial' : 'pointer'}"></div>
                 <div class="text">{{ t.name }}</div>
             </div>
         </div>

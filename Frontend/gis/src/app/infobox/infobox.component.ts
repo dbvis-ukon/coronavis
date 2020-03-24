@@ -104,4 +104,12 @@ export class InfoboxComponent implements OnInit {
 
     this.glyphStateChange.emit(this.internalGlyphState);
   }
+
+  getBorderColor(state: GlyphState) {
+    if(this.aggregationLevel === AggregationLevel.none) {
+      return 'white';
+    }
+
+    return state === this.internalGlyphState ? 'gray' : 'lightgrey'
+  }
 }
