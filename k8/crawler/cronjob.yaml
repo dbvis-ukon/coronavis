@@ -19,6 +19,8 @@ spec:
           imagePullSecrets:
             - name: regcred-server
 
+---
+
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -40,6 +42,8 @@ spec:
           imagePullSecrets:
             - name: regcred-server
 
+---
+
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -60,6 +64,8 @@ spec:
           restartPolicy: OnFailure
           imagePullSecrets:
             - name: regcred-server
+
+---
 
 apiVersion: batch/v1beta1
 kind: CronJob
