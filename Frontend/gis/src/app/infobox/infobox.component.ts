@@ -93,14 +93,16 @@ export class InfoboxComponent implements OnInit {
   }
 
   updateGlyphState(state: GlyphState) {
+    if(this.aggregationLevel === AggregationLevel.none) {
+      return;
+    }
+
     // user clicked on same glyph, disable
     if(this.internalGlyphState === state) {
       this.internalGlyphState = GlyphState.none;
     } else {
       this.internalGlyphState = state;
     }
-
-    console.log(this.internalGlyphState);
 
     this.glyphStateChange.emit(this.internalGlyphState);
   }
