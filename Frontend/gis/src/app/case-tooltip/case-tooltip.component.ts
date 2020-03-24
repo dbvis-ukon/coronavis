@@ -39,17 +39,6 @@ export class CaseTooltipComponent implements OnInit {
     return `${change.toFixed(1)}%`
   }
 
-  public getPercentageChange(curr: number, old: number): string {
-    if (curr === old) {
-      return "0%";
-    }
-    const change = ((curr - old) / old) * 100;
-    if (change === Infinity) {
-      return ("war 0");
-    }
-    return `${change.toFixed(1)}%`
-  }
-
   constructor() {
   }
 
