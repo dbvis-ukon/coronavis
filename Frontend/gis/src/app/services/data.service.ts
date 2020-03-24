@@ -97,12 +97,15 @@ export class DataService {
 
             last.properties.deaths = +last.properties.deaths;
             last.properties.cases = +last.properties.cases;
+            last.properties.bevoelkerung = + last.properties.bevoelkerung;
 
             y.properties.deaths = +y.properties.deaths;
             y.properties.cases = +y.properties.cases;
+            y.properties.bevoelkerung = + y.properties.bevoelkerung;
 
             t.properties.deaths = +t.properties.deaths;
             t.properties.cases = +t.properties.cases;
+            t.properties.bevoelkerung = + t.properties.bevoelkerung;
 
             e[0].features[i].properties.combined = [last.properties, y.properties, t.properties]
           }
