@@ -34,7 +34,7 @@ export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
     });
 
     const range = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
-    const normalizeValues = d3.scaleLinear()
+    const normalizeValues = d3.scaleQuantize()
       .domain([0, d3.max(scores)])
       .range(range);
 
