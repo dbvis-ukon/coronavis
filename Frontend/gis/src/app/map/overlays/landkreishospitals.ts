@@ -20,6 +20,7 @@ export class LandkreiseHospitalsLayer extends Overlay<FeatureCollection> {
       style: () => {
           return {
               fillColor: 'transparent',
+              interactive: false,
               weight: 0.5,
               opacity: 1,
               color: 'grey',

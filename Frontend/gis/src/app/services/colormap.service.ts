@@ -13,7 +13,7 @@ export class ColormapService {
   private colors = ['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)'];
 
   private continousColorMap = d3.scaleLinear<string, string>()
-    .domain([0, 1, 2])
+    .domain([0, 0.5, 1])
     .range(this.colors)
     .interpolate(d3.interpolateRgb.gamma(2.2))
 
