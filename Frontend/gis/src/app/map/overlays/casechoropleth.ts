@@ -130,12 +130,6 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
     return this.normalizeValues;
   }
 
-  public get Steps(): number {
-    return this.steps;
-  }
-
-  private steps: number;
-
   createOverlay() {
     const cases = this.featureCollection.features.map(d => this.getCaseNumbers(d.properties));
 
@@ -143,14 +137,12 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
 
       this.minMaxValues = [0, d3.max(cases, d => d)];
       this.minMaxNormValues = [0, 1];
-      this.steps = 6;
       this.normalizeValues = d3.scalePow().exponent(0.33)
         .domain(this.minMaxValues)
         .range(this.minMaxNormValues);
     } else {
       const [minChange, maxChange] = d3.extent(cases.filter(d => d < Infinity));
       const max = Math.max(Math.abs(minChange), Math.abs(maxChange));
-      this.steps = 11;
       this.minMaxValues = [-max, max];
       this.minMaxNormValues = [-1, 1];
       this.normalizeValues = d3.scaleLinear()

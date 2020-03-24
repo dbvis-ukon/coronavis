@@ -219,7 +219,11 @@ export class MapComponent implements OnInit {
 
     // Choropleth layers on hover
     this.hospitallayerService.getLayers().subscribe(layer => {
-      this.choroplethLayerMap.set(this.getBedChoroplethKey(layer.getAggregationLevel(), layer.getGlyphState()), layer.createOverlay());
+      const key = this.getBedChoroplethKey(layer.getAggregationLevel(), layer.getGlyphState());
+      this.choroplethLayerMap.set(key, layer.createOverlay());
+
+      this.legendsMap.set(key, new Legend(layer.MinMax, layer.NormMinMax,
+        layer.NormValuesFunc, this.colormapService.getChoroplethCaseColor, 'bed'));
     });
     // const layerEvents: Subject<GlyphHoverEvent> = new Subject<GlyphHoverEvent>();
     // layerEvents.subscribe(event => {
@@ -256,9 +260,9 @@ export class MapComponent implements OnInit {
         this.layerToFactoryMap.set(simpleGlyphLayer, simpleGlyphFactory);
 
 
-      this.addGlyphMap(result, 1, AggregationLevel.county, 'ho_county', 'landkreise');
-      this.addGlyphMap(result, 3, AggregationLevel.governmentDistrict, 'ho_governmentdistrict', 'regierungsbezirke');
-      this.addGlyphMap(result, 5, AggregationLevel.state, 'ho_state', 'bundeslander');
+        this.addGlyphMap(result, 1, AggregationLevel.county, 'ho_county', 'landkreise');
+        this.addGlyphMap(result, 3, AggregationLevel.governmentDistrict, 'ho_governmentdistrict', 'regierungsbezirke');
+        this.addGlyphMap(result, 5, AggregationLevel.state, 'ho_state', 'bundeslander');
 
 
         // init map with the current aggregation level
@@ -435,7 +439,9 @@ export class MapComponent implements OnInit {
   }
 
   private addGlyphMap(result: any[], index: number, agg: AggregationLevel, name: string, granularity: string) {
-    const factory = new AggregatedGlyphLayer(name, granularity, result[index], this.tooltipService, this.colormapService, this.hospitallayerService);
+    const factory = new AggregatedGlyphLayer(name, granularity, result[index],
+      this.tooltipService, this.colormapService, this.hospitallayerService);
+
     const layer = factory.createOverlay(this.mymap);
 
 
@@ -487,14 +493,13 @@ export class MapComponent implements OnInit {
     const f = new CaseChoropleth(key, data, o, this.tooltipService, this.colormapService);
 
     this.covidNumberCaseOptionsKeyToLayer.set(key, f.createOverlay());
-
-    this.choroplethLayerLegends.set(key, new Legend(f.MinMax, f.NormMinMax,
-      f.NormValuesFunc, this.colormapService.getChoroplethCaseColor, f.Steps, o));
+    this.legendsMap.set(key, new Legend(f.MinMax, f.NormMinMax,
+      f.NormValuesFunc, this.colormapService.getChoroplethCaseColor, 'case', o));
   }
 
   private currentLegend;
 
-  private choroplethLayerLegends = new Map<string, Legend>();
+  private legendsMap = new Map<string, Legend>();
 
   private updateCaseChoroplethLayers(opt: CovidNumberCaseOptions) {
     // remove all layers
@@ -516,7 +521,7 @@ export class MapComponent implements OnInit {
     this.mymap.addLayer(l);
 
     if (this.currentLegend) { this.mymap.removeControl(this.currentLegend); }
-    const legend = this.choroplethLayerLegends.get(key);
+    const legend = this.legendsMap.get(key);
     this.currentLegend = legend.createLegend();
     this.currentLegend.addTo(this.mymap);
 
@@ -531,10 +536,20 @@ export class MapComponent implements OnInit {
       this.mymap.removeLayer(this._lastBedCoroplethLayer);
     }
 
-
-
     if(this._aggregationLevel !== AggregationLevel.none && st !== GlyphState.none) {
-      const layer = this.choroplethLayerMap.get(this.getBedChoroplethKey(this._aggregationLevel, st));
+      try {
+        if (this.currentLegend) { this.mymap.removeControl(this.currentLegend); }
+      } catch (e) {
+        console.log(e);
+      }
+      const key = this.getBedChoroplethKey(this._aggregationLevel, st);
+
+      console.log(this.legendsMap, key);
+      const legend = this.legendsMap.get(key);
+      this.currentLegend = legend.createLegend();
+      this.currentLegend.addTo(this.mymap);
+
+      const layer = this.choroplethLayerMap.get(key);
       layer.bringToBack();
       this.mymap.addLayer(layer);
 
