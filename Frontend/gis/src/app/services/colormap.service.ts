@@ -17,35 +17,23 @@ export class ColormapService {
     .range(this.colors)
     .interpolate(d3.interpolateRgb.gamma(2.2))
 
+  private caseChoroplethColorMap = d3.scaleQuantize<string>()
+    .domain([-1, 1])
+    .range([...d3.schemeRdBu[11]].reverse());
+
   getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
       return d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
       .range([...this.colors, '#bbbbbb']);
   }
 
-  getContinousColorMap(): ScaleLinear<string, string> {
-    return d3.scaleLinear<string, string>()
-      .domain([0, 0.5, 1])
-      .range(this.colors)
-      .interpolate(d3.interpolateRgb.gamma(2.2))
-  }
-
-  getCaseColor(normalizedCount: number): string {
-    return d3.interpolateBlues(normalizedCount)
-  }
-
-  getDeathsColor(normalizedCount: number): string {
-    return d3.interpolateReds(normalizedCount);
-  }
-
-  getDiff(normalizedDiff: number): string {
-    return d3.interpolateRdBu(normalizedDiff);
+  getChoroplethCaseColor(normalizedDiff: number): string {
+    return this.caseChoroplethColorMap(normalizedDiff);
   }
 
   getBedStatusColor(normalizedScore: number): string {
     if (isNaN(normalizedScore)) {
       return "#bbb";
     }
-    // console.log(normalizedScore, this.continousColorMap(normalizedScore));
     return this.continousColorMap(normalizedScore);
   }
 }

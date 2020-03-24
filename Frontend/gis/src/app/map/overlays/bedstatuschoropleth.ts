@@ -32,9 +32,11 @@ export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
     const scores = this.featureCollection.features.map(d => {
       return this.getScore(d.properties);
     });
+
+    const range = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
     const normalizeValues = d3.scaleLinear()
       .domain([0, d3.max(scores)])
-      .range([0, 1]);
+      .range(range);
 
     // create geojson layer (looks more complex than it is)
     const aggregationLayer = L.geoJSON(this.featureCollection, {
