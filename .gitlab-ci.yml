@@ -21,7 +21,7 @@ dockerize-frontend:
   stage: build:docker
   image: docker:latest
   variables:
-    IMG: $CI_REGISTRY_IMAGE/frontend:latest
+    IMG: $CI_REGISTRY_IMAGE/frontend:${CI_COMMIT_SHORT_SHA}
   services:
     - docker:dind
   dependencies:
@@ -40,7 +40,7 @@ dockerize-backend:
   stage: build:docker
   image: docker:latest
   variables:
-    IMG: $CI_REGISTRY_IMAGE/backend:latest
+    IMG: $CI_REGISTRY_IMAGE/backend:${CI_COMMIT_SHORT_SHA}
   services:
     - docker:dind
   dependencies: []
@@ -58,7 +58,7 @@ dockerize-crawler:
   stage: build:docker
   image: docker:latest
   variables:
-    IMG: $CI_REGISTRY_IMAGE/crawler:latest
+    IMG: $CI_REGISTRY_IMAGE/crawler:${CI_COMMIT_SHORT_SHA}
   services:
     - docker:dind
   dependencies: []
@@ -78,8 +78,8 @@ deploy-backend:
     - K8_NAMESPACE="covid-19-vis"
     - HELM_CHART="covid-19-vis-backend"
     - URL="api.covid19vis.lingvis.io"
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8/backend
-    - helm upgrade --namespace=${K8_NAMESPACE} --install --force --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8/backend
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/backend
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/backend
   dependencies: []
   only:
     - master
@@ -92,8 +92,8 @@ deploy-frontend:
     - K8_NAMESPACE="covid-19-vis"
     - HELM_CHART="covid-19-vis-frontend"
     - URL="covid19vis.lingvis.io"
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8/frontend
-    - helm upgrade --namespace=${K8_NAMESPACE} --install --force --set uuid=${CI_JOB_ID} ${HELM_CHART} ./k8/frontend
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/frontend
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/frontend
   dependencies: []
   only:
     - master
@@ -103,6 +103,10 @@ deploy-frontend:
 deploy-crawler:
   stage: deploy
   script:
+    - K8_NAMESPACE="covid-19-vis"
+    - HELM_CHART="covid-19-vis-crawler"
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/frontend
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/frontend
     - cd k8/crawler
     - kubectl apply -n covid-19-vis -f cronjob.yaml
   dependencies: []

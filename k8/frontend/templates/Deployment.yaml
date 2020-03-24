@@ -19,18 +19,15 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: registry.dbvis.de/jentner/covid-19-vis/frontend:latest
+          image: registry.dbvis.de/jentner/covid-19-vis/frontend:{{ .Values.sha }}
           imagePullPolicy: Always
           ports:
             - containerPort: 80
-          env:
-            - name: FOR_GODS_SAKE_PLEASE_REDEPLOY
-              value: {{ .Values.uuid | quote }}
           readinessProbe:
             httpGet:
               path: "/"
               port: 80
-            initialDelaySeconds: 30
+            initialDelaySeconds: 5
             timeoutSeconds: 5
             periodSeconds: 5
             failureThreshold: 3
@@ -38,7 +35,7 @@ spec:
             httpGet:
               path: "/"
               port: 80
-            initialDelaySeconds: 60
+            initialDelaySeconds: 6
             timeoutSeconds: 5
             periodSeconds: 5
             failureThreshold: 4
