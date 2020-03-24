@@ -1,8 +1,14 @@
-import { Component } from '@angular/core';
-import { FeatureCollection } from 'geojson';
-import { Overlay } from './map/overlays/overlay';
-import { AggregationLevel } from './map/options/aggregation-level';
-import { CovidNumberCaseOptions, CovidNumberCaseType, CovidNumberCaseTimeWindow, CovidNumberCaseChange } from './map/options/covid-number-case-options';
+import {Component} from '@angular/core';
+import {FeatureCollection} from 'geojson';
+import {Overlay} from './map/overlays/overlay';
+import {AggregationLevel} from './map/options/aggregation-level';
+import {
+  CovidNumberCaseChange,
+  CovidNumberCaseNormalization,
+  CovidNumberCaseOptions,
+  CovidNumberCaseTimeWindow,
+  CovidNumberCaseType
+} from './map/options/covid-number-case-options';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +29,8 @@ export class AppComponent {
     enabled: false,
     type: CovidNumberCaseType.cases,
     timeWindow: CovidNumberCaseTimeWindow.all,
-    change: CovidNumberCaseChange.absolute
+    change: CovidNumberCaseChange.absolute,
+    normalization: CovidNumberCaseNormalization.per100k
   };
 
   // constructor is here only used to inject services
