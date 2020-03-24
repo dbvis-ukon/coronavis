@@ -10,3 +10,7 @@
   position: absolute;
   z-index: 999;
 }
+
+.hiddenLabel{
+  visibility: hidden;
+}
