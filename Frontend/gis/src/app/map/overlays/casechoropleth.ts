@@ -127,7 +127,7 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
       const max = Math.max(Math.abs(minChange), Math.abs(maxChange));
       normalizeValues = d3.scaleLinear()
         .domain([-max, max])
-        .range([1, 0])
+        .range([-1, 1])
         .clamp(true);
     }
 
@@ -135,16 +135,8 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
     // create geojson layer (looks more complex than it is)
     const aggregationLayer = L.geoJSON(this.featureCollection, {
       style: (feature) => {
-        let color;
-        if (this.options.change === CovidNumberCaseChange.absolute) {
-          color = this.options.type === CovidNumberCaseType.cases ?
-            this.colorsService.getCaseColor(normalizeValues(this.getCaseNumbers(feature.properties))) :
-            this.colorsService.getDeathsColor(normalizeValues(this.getCaseNumbers(feature.properties)));
-        } else {
-          color = this.colorsService.getDiff(normalizeValues(this.getCaseNumbers(feature.properties)))
-        }
         return {
-          fillColor: color,
+          fillColor: this.colorsService.getChoroplethCaseColor(normalizeValues(this.getCaseNumbers(feature.properties))),
           weight: 0.5,
           opacity: 1,
           color: 'gray',
