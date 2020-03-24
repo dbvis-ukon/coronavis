@@ -10,7 +10,6 @@
         Krankenhäuser - Auslastung
     </mat-card-title>
     <mat-card-subtitle>
-        <p>Aggregation</p>
         <!--  use text instead of logos -->
         <mat-button-toggle-group
             class="btngrp"
@@ -24,6 +23,10 @@
             <mat-button-toggle value="county" matTooltip="Landkreise">Kreise</mat-button-toggle>
             <mat-button-toggle value="none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
         </mat-button-toggle-group>
+
+        <div>
+            <div class="glyph-tile"></div>
+        </div>
         <!--  use logos instead of text -->
         <!--<mat-button-toggle-group class="aggregationsstufen" name="fontStyle" aria-label="Font Style">
             <mat-button-toggle value="bundeslaender"> <img src="/assets/agg_b1.png" alt="Bundesländer"></mat-button-toggle>

@@ -7,6 +7,7 @@ import {
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from '../map/options/covid-number-case-options';
+import { ColormapService } from '../services/colormap.service';
 
 @Component({
   selector: 'app-infobox',
@@ -15,7 +16,16 @@ import {
 })
 export class InfoboxComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private colormapService: ColormapService
+  ) { }
+
+  glyphLegend = [
+    {name: 'ICU low', description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'}, 
+    {name: 'ICU high', description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'}, 
+    {name: 'ECMO', description: 'ECMO = Zusätzlich ECMO'}
+  ];
+  glyphLegendColors = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'];
 
   infoboxExtended = true;
 
