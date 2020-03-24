@@ -28,6 +28,7 @@ import {GlyphHoverEvent} from "./events/glyphhover";
 import { LandkreiseHospitalsLayer } from './overlays/landkreishospitals';
 import { HospitalLayer } from './overlays/hospital';
 import { HelipadLayer } from './overlays/helipads';
+import { Legends } from './overlays/legends';
 import { CaseChoropleth } from './overlays/casechoropleth';
 import { AggregationLevel } from './options/aggregation-level';
 import { CovidNumberCaseOptions, CovidNumberCaseType, CovidNumberCaseTimeWindow, CovidNumberCaseChange } from './options/covid-number-case-options';
@@ -238,12 +239,10 @@ export class MapComponent implements OnInit {
       const l = L.layerGroup([simpleGlyphLayer])
       this.aggregationLevelToGlyphMap.set(AggregationLevel.none, l);
       this.layerToFactoryMap.set(simpleGlyphLayer, simpleGlyphFactory);
-    
 
       this.addGlyphMap(result, 1, AggregationLevel.county, 'ho_county', 'landkreise', layerEvents);
       this.addGlyphMap(result, 3, AggregationLevel.governmentDistrict, 'ho_governmentdistrict', 'regierungsbezirke', layerEvents);
       this.addGlyphMap(result, 5, AggregationLevel.state, 'ho_state', 'bundeslander', layerEvents);
-      
 
       // init map with the current aggregation level
       this.updateGlyphMapLayers(this._aggregationLevel);
@@ -271,7 +270,7 @@ export class MapComponent implements OnInit {
 
       this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.absolute}, data);
       this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.seventyTwoHours, change: CovidNumberCaseChange.absolute}, data);
-      
+
       this.initCaseChoroplethLayer({type: CovidNumberCaseType.cases, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.relative}, data);
       this.initCaseChoroplethLayer({type: CovidNumberCaseType.deaths, timeWindow: CovidNumberCaseTimeWindow.twentyFourhours, change: CovidNumberCaseChange.relative}, data);
 
@@ -281,6 +280,16 @@ export class MapComponent implements OnInit {
     });
 
     this.mymap.on('zoom', this.semanticZoom);
+    this.updateLegend();
+  }
+
+  private legend: Legends;
+  updateLegend(): void {
+    if (!this.legend) {
+      this.legend = new Legends('legend', this.tooltipService);
+    }
+    const l = this.legend.createLegend();
+    l.addTo(this.mymap);
   }
 
   semanticZoom() {
@@ -332,7 +341,7 @@ export class MapComponent implements OnInit {
     this.mymap.addLayer(l);
 
     if(l.getLayers().length > 1) {
-      
+
       // aggregation glyph layer groups
       (l.getLayers()[1] as SVGOverlay).bringToFront();
 
@@ -342,7 +351,7 @@ export class MapComponent implements OnInit {
       // single glyph layer group (only contains one item)
       (l.getLayers()[0] as SVGOverlay).bringToFront();
     }
-    
+
   }
 
   private getKeyCovidNumberCaseOptions(v: CovidNumberCaseOptions) {
@@ -354,7 +363,10 @@ export class MapComponent implements OnInit {
     const f = new CaseChoropleth(key, data, o, this.tooltipService, this.colormapService);
 
     this.covidNumberCaseOptionsKeyToLayer.set(key, f.createOverlay());
+    this.choroplethLayerLegends.set(key, )
   }
+
+  private choroplethLayerLegends = new Map<string, Legends>();
 
   private updateCaseChoroplethLayers(opt: CovidNumberCaseOptions) {
     // remove all layers
@@ -374,6 +386,7 @@ export class MapComponent implements OnInit {
 
     const l = this.covidNumberCaseOptionsKeyToLayer.get(key);
     this.mymap.addLayer(l);
+    this.legend.updateLegend(l);
     l.bringToBack();
 
     // update the glyph map to put it in the front:

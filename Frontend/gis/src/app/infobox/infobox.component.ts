@@ -10,7 +10,7 @@ import { CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseChang
 export class InfoboxComponent implements OnInit {
 
   constructor() { }
-  
+
   infoboxExtended = true;
 
   @Input()

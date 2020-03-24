@@ -10,8 +10,8 @@ import { CovidNumberCaseOptions, CovidNumberCaseChange, CovidNumberCaseType, Cov
 
 export class CaseChoropleth extends Overlay<FeatureCollection> {
   constructor(
-    name: string, 
-    hospitals: FeatureCollection, 
+    name: string,
+    hospitals: FeatureCollection,
     private options: CovidNumberCaseOptions,
     private tooltipService: TooltipService,
     private colorsService: ColormapService
@@ -95,7 +95,7 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
             this.colorsService.getCaseColor(normalizeValues(this.getCaseNumbers(feature.properties))) :
             this.colorsService.getDeathsColor(normalizeValues(this.getCaseNumbers(feature.properties)));
         } else {
-          color = this.colorsService.getDiff(normalizeValues(this.getCaseNumbers(feature.properties)))
+          color = this.colorsService.getDiff(normalizeValues(this.getCaseNumbers(feature.properties)));
         }
         return {
           fillColor: color,
