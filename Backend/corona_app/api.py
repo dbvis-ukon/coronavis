@@ -319,25 +319,7 @@ def get_cases_by_landkreise_total():
         Return all Hospitals
     """
 
-    sql_stmt = '''
-with cases_per_landkreis as(
-	select case when t.idlandkreis like '11___' then '11000' else t.idlandkreis end, min(c.landkreis) as landkreis, max(t.meldedatum) as until, SUM(case when c.casetype = 'case' then 1 else 0 end) as cases, SUM(case when c.casetype = 'death' then 1 else 0 end) as deaths
-	from (
-		(select distinct(idlandkreis) from cases_current) landkreise
-		cross join
-		(select generate_series(min(meldedatum), max(meldedatum), '1 day'::interval) as meldedatum from cases_current) dates
-	) t
-	left join cases_current c on t.idlandkreis = c.idlandkreis and t.meldedatum = date(c.meldedatum)
-	group by t.idlandkreis
-	order by idlandkreis, until
-), b as (
-	select case when char_length(kreisschluessel::text) = 4 then '0' || kreisschluessel::text else kreisschluessel::text end, sum(anzahl) as bevoelkerung
-	from bevoelkerung
-	group by kreisschluessel
-)
-select distinct on (vk.sn_l, vk.sn_r, vk.sn_k) vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, until, c.cases, c.deaths, b.bevoelkerung, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(vk.geom, 0.005))) as outline
-from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis join b on vk.ags = b.kreisschluessel
-    '''
+    sql_stmt = 'SELECT name, ids, until, cases, deaths, bevoelkerung, outline FROM cases_per_county_until_today'
     sql_result = db.engine.execute(sql_stmt)
 
     d, features = {}, []
@@ -351,14 +333,12 @@ from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis join b on
             # careful! r.geojson is of type str, we must convert it to a dictionary
             "geometry": json.loads(d['outline']),
             "properties": {
-                'sn_l': d['sn_l'],
-                'sn_r': d['sn_r'],
-                'sn_k': d['sn_k'],
-                'name': d['gen'],
-                'bevoelkerung': d['bevoelkerung'],
+                'name': d['name'],
+                'id': d['ids'],
                 'until': d['until'],
                 'cases': d['cases'],
-                'deaths': d['deaths']
+                'deaths': d['deaths'],
+                'bevoelkerung': d['bevoelkerung']
             }
         }
 
@@ -382,25 +362,7 @@ def get_cases_by_landkreise_yesterday():
         Return all Hospitals
     """
 
-    sql_stmt = '''
-with cases_per_landkreis as(
-	select case when t.idlandkreis like '11___' then '11000' else t.idlandkreis end, min(c.landkreis) as landkreis, max(t.meldedatum) as until, SUM(case when c.casetype = 'case' then 1 else 0 end) as cases, SUM(case when c.casetype = 'death' then 1 else 0 end) as deaths
-	from (
-		(select distinct(idlandkreis) from cases_current) landkreise
-		cross join
-		(select generate_series(min(meldedatum), max(meldedatum)  - '1 day'::interval, '1 day'::interval) as meldedatum from cases_current) dates
-	) t
-	left join cases_current c on t.idlandkreis = c.idlandkreis and t.meldedatum = date(c.meldedatum)
-	group by t.idlandkreis
-	order by idlandkreis, until
-), b as (
-	select case when char_length(kreisschluessel::text) = 4 then '0' || kreisschluessel::text else kreisschluessel::text end, sum(anzahl) as bevoelkerung
-	from bevoelkerung
-	group by kreisschluessel
-)
-select distinct on (vk.sn_l, vk.sn_r, vk.sn_k) vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, until, c.cases, c.deaths, b.bevoelkerung, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(vk.geom, 0.005))) as outline
-from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis join b on vk.ags = b.kreisschluessel
-'''
+    sql_stmt = 'SELECT name, ids, until, cases, deaths, bevoelkerung, outline FROM cases_per_county_until_yesterday'
     sql_result = db.engine.execute(sql_stmt)
 
     d, features = {}, []
@@ -414,14 +376,12 @@ from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis join b on
             # careful! r.geojson is of type str, we must convert it to a dictionary
             "geometry": json.loads(d['outline']),
             "properties": {
-                'sn_l': d['sn_l'],
-                'sn_r': d['sn_r'],
-                'sn_k': d['sn_k'],
-                'name': d['gen'],
-                'bevoelkerung': d['bevoelkerung'],
+                'name': d['name'],
+                'id': d['ids'],
                 'until': d['until'],
                 'cases': d['cases'],
-                'deaths': d['deaths']
+                'deaths': d['deaths'],
+                'bevoelkerung': d['bevoelkerung']
             }
         }
 
@@ -445,25 +405,7 @@ def get_cases_by_landkreise_3daysbefore():
         Return all Hospitals
     """
 
-    sql_stmt = '''
-with cases_per_landkreis as(
-	select case when t.idlandkreis like '11___' then '11000' else t.idlandkreis end, min(c.landkreis) as landkreis, max(t.meldedatum) as until, SUM(case when c.casetype = 'case' then 1 else 0 end) as cases, SUM(case when c.casetype = 'death' then 1 else 0 end) as deaths
-	from (
-		(select distinct(idlandkreis) from cases_current) landkreise
-		cross join
-		(select generate_series(min(meldedatum), max(meldedatum)  - '3 day'::interval, '1 day'::interval) as meldedatum from cases_current) dates
-	) t
-	left join cases_current c on t.idlandkreis = c.idlandkreis and t.meldedatum = date(c.meldedatum)
-	group by t.idlandkreis
-	order by idlandkreis, until
-), b as (
-	select case when char_length(kreisschluessel::text) = 4 then '0' || kreisschluessel::text else kreisschluessel::text end, sum(anzahl) as bevoelkerung
-	from bevoelkerung
-	group by kreisschluessel
-)
-select distinct on (vk.sn_l, vk.sn_r, vk.sn_k) vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, until, c.cases, c.deaths, b.bevoelkerung, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(vk.geom, 0.005))) as outline
-from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis join b on vk.ags = b.kreisschluessel
-'''
+    sql_stmt = 'SELECT name, ids, until, cases, deaths, bevoelkerung, outline FROM cases_per_county_until_3daysbefore'
     sql_result = db.engine.execute(sql_stmt)
 
     d, features = {}, []
@@ -477,14 +419,12 @@ from vg250_krs vk join cases_per_landkreis c on vk.ags = c.idlandkreis join b on
             # careful! r.geojson is of type str, we must convert it to a dictionary
             "geometry": json.loads(d['outline']),
             "properties": {
-                'sn_l': d['sn_l'],
-                'sn_r': d['sn_r'],
-                'sn_k': d['sn_k'],
-                'name': d['gen'],
-                'bevoelkerung': d['bevoelkerung'],
+                'name': d['name'],
+                'id': d['ids'],
                 'until': d['until'],
                 'cases': d['cases'],
-                'deaths': d['deaths']
+                'deaths': d['deaths'],
+                'bevoelkerung': d['bevoelkerung']
             }
         }
 
