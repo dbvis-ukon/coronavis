@@ -21,6 +21,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
+import { LegendComponent } from './legend/legend.component';
 
 
 
@@ -35,6 +36,7 @@ import {MatButtonModule} from '@angular/material/button';
     CaseTooltipComponent,
     OverlayBrandComponent,
     InfoboxComponent,
+    LegendComponent,
   ],
   imports: [
     BrowserModule,

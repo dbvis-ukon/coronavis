@@ -490,10 +490,10 @@ export class MapComponent implements OnInit {
   private initCaseChoroplethLayer(o: CovidNumberCaseOptions, data: FeatureCollection) {
     const key = this.getKeyCovidNumberCaseOptions(o);
     const f = new CaseChoropleth(key, data, o, this.tooltipService, this.colormapService);
-
     this.covidNumberCaseOptionsKeyToLayer.set(key, f.createOverlay());
+
     this.legendsMap.set(key, new Legend(f.MinMax, f.NormMinMax,
-      f.NormValuesFunc, this.colormapService.getChoroplethCaseColor, 'case', o));
+      f.NormValuesFunc, this.colormapService, 'case', o));
   }
 
   private currentLegend;

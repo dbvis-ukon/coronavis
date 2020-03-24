@@ -134,7 +134,6 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
     const cases = this.featureCollection.features.map(d => this.getCaseNumbers(d.properties));
 
     if (this.options.change === CovidNumberCaseChange.absolute) {
-
       this.minMaxValues = [0, d3.max(cases, d => d)];
       this.minMaxNormValues = [0, 1];
       this.normalizeValues = d3.scalePow().exponent(0.33)

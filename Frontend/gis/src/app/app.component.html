@@ -1,21 +1,22 @@
 <div id="container">
-  <app-map 
-    id="map" 
-    [(aggregationLevel)]="aggregationLevel" 
-    [showOsmHospitals]="showOsmHospitals" 
+  <app-map
+    id="map"
+    [(aggregationLevel)]="aggregationLevel"
+    [showOsmHospitals]="showOsmHospitals"
     [showOsmHeliports]="showOsmHeliports"
     [caseChoroplethOptions]="caseChoroplethOptions"
     [glyphState]="glyphState"
   ></app-map>
 
-  <app-infobox 
-    class="infobox" 
+  <app-infobox
+    class="infobox"
     [(aggregationLevel)]="aggregationLevel"
-    [(showOsmHospitals)]="showOsmHospitals" 
+    [(showOsmHospitals)]="showOsmHospitals"
     [(showOsmHeliports)]="showOsmHeliports"
     [(caseChoroplethOptions)]="caseChoroplethOptions"
     [(glyphState)]="glyphState"
   ></app-infobox>
 
   <app-overlay-brand class="overlay-brand"></app-overlay-brand>
+  <app-legend class="legend" [aggregationLevel]="aggregationLevel" [bedType]="glyphState"></app-legend>
 </div>
