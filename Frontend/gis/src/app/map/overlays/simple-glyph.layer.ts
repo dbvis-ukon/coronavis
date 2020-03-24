@@ -114,7 +114,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
         return d1.Name;
       })
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
-      .attr('y', '12')
+      .attr('y', '13')
       .attr('font-size', '7px')
       .style('text-anchor', 'middle')
       .style('stroke', 'white')
@@ -128,7 +128,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
         return d1.Name;
       })
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
-      .attr('y', '12')
+      .attr('y', '13')
       .attr('font-size', '7px')
       .style('text-anchor', 'middle')
       .call(this.wrap, '50');
@@ -221,24 +221,29 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     if (this.map.getZoom() > 9) {
       this.glyphSize.height = 40;
       this.glyphSize.width = 80;
+
       this.cityHospitals.classed('hiddenLabel', true);
       this.cityHospitalsShadow.classed('hiddenLabel', true);
+
       this.nameHospitals.classed('hiddenLabel', false);
       this.nameHospitalsShadow.classed('hiddenLabel', false);
     } else if (this.map.getZoom() < 10 && this.map.getZoom() > 6) {
-      this.cityHospitals.classed('hiddenLabel', false);
-      this.cityHospitalsShadow.classed('hiddenLabel', false);
-      this.nameHospitals.classed('hiddenLabel', true);
-      this.nameHospitalsShadow.classed('hiddenLabel', true);
       this.glyphSize.height = 28;
       this.glyphSize.width = 38;
-    } else if (this.map.getZoom() < 7) {
-      this.cityHospitals.classed('hiddenLabel', true);
-      this.cityHospitalsShadow.classed('hiddenLabel', true);
+
+      this.cityHospitals.classed('hiddenLabel', false);
+      this.cityHospitalsShadow.classed('hiddenLabel', false);
+
       this.nameHospitals.classed('hiddenLabel', true);
       this.nameHospitalsShadow.classed('hiddenLabel', true);
+    } else if (this.map.getZoom() < 7) {
       this.glyphSize.height = 22;
       this.glyphSize.width = 38;
+
+      /*this.cityHospitals.classed('hiddenLabel', true);
+      this.cityHospitalsShadow.classed('hiddenLabel', true);
+      this.nameHospitals.classed('hiddenLabel', true);
+      this.nameHospitalsShadow.classed('hiddenLabel', true);*/
     }
 
     this.data.forEach(d => {
