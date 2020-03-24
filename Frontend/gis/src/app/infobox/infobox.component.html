@@ -6,57 +6,99 @@
 </button>
 
 <mat-card *ngIf="infoboxExtended">
-  <mat-card-title>
-    Krankenhäuser - Auslastung
-  </mat-card-title>
-  <mat-card-subtitle>
-    <!--  use text instead of logos -->
-    <mat-button-toggle-group
+
+  <mat-accordion>
+
+    <mat-expansion-panel expanded="true">
+      <mat-expansion-panel-header>
+          <mat-panel-title>Krankenhäuser - Bettenauslatung</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <p>
+        <mat-slide-toggle
+            [checked]="caseChoroplethOptions.enabled"
+            (change)="caseChoroplethOptions.enabled = $event.checked; emitCaseChoroplethOptions()"
+          >Bettenauslatung anzeigen / ausblenden
+          </mat-slide-toggle>
+      </p>
+
+      <mat-divider></mat-divider>
+
+      <h5>Aggregation</h5>
+
+      <mat-button-toggle-group
       class="btngrp"
       name="fontStyle"
       aria-label="Font Style"
       [value]="aggregationLevel"
       (change)="aggregationLevelChange.emit($event.value)"
     >
-      <mat-button-toggle value="state" matTooltip="Bundesländer">Länder</mat-button-toggle>
-      <mat-button-toggle value="governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
-      <mat-button-toggle value="county" matTooltip="Landkreise">Kreise</mat-button-toggle>
-      <mat-button-toggle value="none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
-    </mat-button-toggle-group>
-    <div class="glyph-legend">
-        <div 
-            *ngFor="let t of glyphLegend" 
-            class="glyph-tile" 
-            [matTooltip]="t.description"
-            (click)="updateGlyphState(t.state)"
-        >
-            <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color), 'border-color': getBorderColor(t.state), 'cursor': aggregationLevel === 'none' ? 'initial' : 'pointer'}"></div>
-            <div class="text">{{ t.name }}</div>
-        </div>
-    </div>
-    <div class="glyph-color-legend">
-        <div 
-            *ngFor="let t of glyphLegendColors" 
-            class="glyph-tile" 
-            
-        >
-            <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
-            <div class="text">{{ t }}</div>
-        </div>
-    </div>
-    <!--  use logos instead of text -->
-    <!--<mat-button-toggle-group class="aggregationsstufen" name="fontStyle" aria-label="Font Style">
-        <mat-button-toggle value="bundeslaender"> <img src="/assets/agg_b1.png" alt="Bundesländer"></mat-button-toggle>
-        <mat-button-toggle value="regierungsbezirke"><img src="/assets/agg_b2.png" alt="Regierungsbezirke"></mat-button-toggle>
-        <mat-button-toggle value="landkreise"><img src="/assets/agg_b3.png" alt="Landkreise"></mat-button-toggle>
-        <mat-button-toggle value="ohneaggregation"><img src="/assets/agg_b4.png" alt="Ohne Aggregation"></mat-button-toggle>
-    </mat-button-toggle-group>  -->
+        <mat-button-toggle value="state" matTooltip="Bundesländer">Länder</mat-button-toggle>
+        <mat-button-toggle value="governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+        <mat-button-toggle value="county" matTooltip="Landkreise">Kreise</mat-button-toggle>
+        <mat-button-toggle value="none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
+      </mat-button-toggle-group>
 
-  </mat-card-subtitle>
-  <mat-divider></mat-divider>
-  <br/>
-  <mat-accordion>
-    <mat-expansion-panel style="position:relative">
+      <mat-divider></mat-divider>
+
+      <h5>Glyph</h5>
+
+      <div class="glyph-legend">
+          <div 
+              *ngFor="let t of glyphLegend" 
+              class="glyph-tile" 
+              [matTooltip]="t.description"
+              (click)="updateGlyphState(t.state)"
+          >
+              <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color), 'border-color': getBorderColor(t.state), 'cursor': aggregationLevel === 'none' ? 'initial' : 'pointer'}"></div>
+              <div class="text">{{ t.name }}</div>
+          </div>
+      </div>
+      <div class="glyph-color-legend">
+          <div 
+              *ngFor="let t of glyphLegendColors" 
+              class="glyph-tile" 
+              
+          >
+              <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
+              <div class="text">{{ t }}</div>
+          </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <h5>Hintergrund</h5>
+
+        <mat-slide-toggle
+              [disabled]="aggregationLevel === aggregationLevels.none"
+              [checked]="internalGlyphState !== glyphStates.none"
+              (change)="$event.checked ? updateGlyphState(glyphStates.icuLow) : updateGlyphState(glyphStates.none)"
+            >Bettenauslatung im Hintergrund anzeigen / ausblenden
+            </mat-slide-toggle>
+        <div *ngIf="aggregationLevel === aggregationLevels.none">
+          <mat-error>Bitte eine Aggregation Länder, Bezirke, oder Kreise auswählen.</mat-error>
+        </div>
+        
+
+      <mat-button-toggle-group
+        *ngIf="internalGlyphState !== glyphStates.none"
+        class="btngrp"
+        name="fontStyle"
+        aria-label="Font Style"
+        [value]="internalGlyphState"
+        (change)="updateGlyphState($event.value)"
+        [disabled]="aggregationLevel === aggregationLevels.none"
+      >
+        <mat-button-toggle [value]="glyphStates.icuLow">ICU low</mat-button-toggle>
+        <mat-button-toggle [value]="glyphStates.icuHigh">ICU high</mat-button-toggle>
+        <mat-button-toggle [value]="glyphStates.ecmo">ECMO</mat-button-toggle>
+      </mat-button-toggle-group>
+    </mat-expansion-panel>
+
+
+
+
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>Fallansicht</mat-panel-title>
       </mat-expansion-panel-header>
@@ -64,7 +106,7 @@
         <mat-slide-toggle
           [checked]="caseChoroplethOptions.enabled"
           (change)="caseChoroplethOptions.enabled = $event.checked; emitCaseChoroplethOptions()"
-        >Covid-19 Fallansicht aktivieren / deaktivieren
+        >Covid-19 Fallansicht anzeigen / ausblenden
         </mat-slide-toggle>
 
         <div *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled">
@@ -181,7 +223,7 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Optionen
+          Diverse Ansichten
         </mat-panel-title>
         <mat-panel-description>
           <!-- description -->

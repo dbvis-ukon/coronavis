@@ -23,6 +23,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
 import { LegendComponent } from './legend/legend.component';
 import { PlusminusPipe } from './plusminus.pipe';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 
 
@@ -55,7 +56,8 @@ import { PlusminusPipe } from './plusminus.pipe';
     MatTooltipModule,
     MatIconModule,
     MatRadioModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]

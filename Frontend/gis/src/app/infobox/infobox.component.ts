@@ -65,6 +65,10 @@ export class InfoboxComponent implements OnInit {
 
   covidNumberCaseNormalization = CovidNumberCaseNormalization;
 
+  glyphStates = GlyphState;
+
+  aggregationLevels = AggregationLevel;
+
   internalGlyphState: GlyphState = GlyphState.none;
 
   ngOnInit(): void {
@@ -114,4 +118,5 @@ export class InfoboxComponent implements OnInit {
 
     return state === this.internalGlyphState ? 'gray' : 'lightgrey'
   }
+
 }
