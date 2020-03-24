@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FeatureCollection } from 'geojson';
 import { Overlay } from './map/overlays/overlay';
-import { AggregationLevel, CovidNumberCaseOptions, CovidNumberCaseType, CovidNumberCaseChange, CovidNumberCaseTimeWindow } from './map/map.component';
+import { AggregationLevel } from './map/options/aggregation-level';
+import { CovidNumberCaseOptions, CovidNumberCaseType, CovidNumberCaseTimeWindow, CovidNumberCaseChange } from './map/options/covid-number-case-options';
 
 @Component({
   selector: 'app-root',

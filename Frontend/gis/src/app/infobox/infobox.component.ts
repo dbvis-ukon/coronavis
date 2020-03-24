@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { AggregationLevel, CovidNumberCaseOptions, CovidNumberCaseType, CovidNumberCaseChange, CovidNumberCaseTimeWindow } from '../map/map.component';
+import { AggregationLevel } from '../map/options/aggregation-level';
+import { CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseChange, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 
 @Component({
   selector: 'app-infobox',

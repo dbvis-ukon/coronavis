@@ -6,7 +6,7 @@ import * as d3 from "d3";
 import {ColormapService} from "../../services/colormap.service";
 import {TooltipService} from "../../services/tooltip.service";
 import {CaseTooltipComponent} from "../../case-tooltip/case-tooltip.component";
-import { CovidNumberCaseOptions, CovidNumberCaseChange, CovidNumberCaseType, CovidNumberCaseTimeWindow } from '../map.component';
+import { CovidNumberCaseOptions, CovidNumberCaseChange, CovidNumberCaseType, CovidNumberCaseTimeWindow } from '../options/covid-number-case-options';
 
 export class CaseChoropleth extends Overlay<FeatureCollection> {
   constructor(

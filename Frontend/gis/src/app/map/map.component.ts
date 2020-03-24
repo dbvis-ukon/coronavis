@@ -4,8 +4,6 @@ import {
   Input,
   ViewEncapsulation,
   IterableDiffers,
-  DoCheck,
-  IterableChangeRecord,
   ViewChild,
   EventEmitter,
   Output
@@ -31,48 +29,10 @@ import { LandkreiseHospitalsLayer } from './overlays/landkreishospitals';
 import { HospitalLayer } from './overlays/hospital';
 import { HelipadLayer } from './overlays/helipads';
 import { CaseChoropleth } from './overlays/casechoropleth';
+import { AggregationLevel } from './options/aggregation-level';
+import { CovidNumberCaseOptions, CovidNumberCaseType, CovidNumberCaseTimeWindow, CovidNumberCaseChange } from './options/covid-number-case-options';
 
-export enum AggregationLevel {
-  none = 'none',
-  county = 'county',
-  governmentDistrict = 'governmentDistrict',
-  state = 'state'
-}
 
-export enum CovidNumberCaseChange {
-  absolute = 'abs',
-
-  relative = 'rel'
-}
-
-export enum CovidNumberCaseTimeWindow {
-  
-  twentyFourhours = '24h',
-  
-  seventyTwoHours = '72h',
-  
-  all = 'all',
-}
-
-export enum CovidNumberCaseType {
-
-  cases = 'cases',
-
-  deaths = 'deaths'
-
-}
-
-export interface CovidNumberCaseOptions {
-
-  enabled?: boolean;
-
-  change: CovidNumberCaseChange;
-
-  timeWindow: CovidNumberCaseTimeWindow;
-
-  type: CovidNumberCaseType;
-
-}
 
 @Component({
   selector: 'app-map',

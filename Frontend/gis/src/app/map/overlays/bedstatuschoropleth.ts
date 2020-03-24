@@ -4,7 +4,7 @@ import * as d3 from "d3";
 import {ColormapService} from "../../services/colormap.service";
 import {AggregatedHospitals, AggregatedHospitalsProperties} from "../../services/divi-hospitals.service";
 
-export class ChoroplethLayer extends Overlay<AggregatedHospitals> {
+export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
   constructor(name: string, hospitals: AggregatedHospitals, private type: String, private colorsService: ColormapService) {
     super(name, hospitals);
   }
