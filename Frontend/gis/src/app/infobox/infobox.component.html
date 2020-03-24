@@ -1,229 +1,228 @@
 <button
-    mat-icon-button
-    (click)="infoboxExtended = !infoboxExtended"
-    >
-    <mat-icon>{{ infoboxExtended ? 'layers_clear' : 'layers' }}</mat-icon>
+  mat-icon-button
+  (click)="infoboxExtended = !infoboxExtended"
+>
+  <mat-icon>{{ infoboxExtended ? 'layers_clear' : 'layers' }}</mat-icon>
 </button>
 
 <mat-card *ngIf="infoboxExtended">
-    <mat-card-title>
-        Krankenhäuser - Auslastung
-    </mat-card-title>
-    <mat-card-subtitle>
-        <p>Aggregation</p>
-        <!--  use text instead of logos -->
-        <mat-button-toggle-group
-            class="btngrp"
-            name="fontStyle"
-            aria-label="Font Style"
-            [value]="aggregationLevel"
-            (change)="aggregationLevelChange.emit($event.value)"
-        >
-            <mat-button-toggle value="state" matTooltip="Bundesländer">Länder</mat-button-toggle>
-            <mat-button-toggle value="governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
-            <mat-button-toggle value="county" matTooltip="Landkreise">Kreise</mat-button-toggle>
-            <mat-button-toggle value="none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
-        </mat-button-toggle-group>
-        <!--  use logos instead of text -->
-        <!--<mat-button-toggle-group class="aggregationsstufen" name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle value="bundeslaender"> <img src="/assets/agg_b1.png" alt="Bundesländer"></mat-button-toggle>
-            <mat-button-toggle value="regierungsbezirke"><img src="/assets/agg_b2.png" alt="Regierungsbezirke"></mat-button-toggle>
-            <mat-button-toggle value="landkreise"><img src="/assets/agg_b3.png" alt="Landkreise"></mat-button-toggle>
-            <mat-button-toggle value="ohneaggregation"><img src="/assets/agg_b4.png" alt="Ohne Aggregation"></mat-button-toggle>
-        </mat-button-toggle-group>  -->
+  <mat-card-title>
+    Krankenhäuser - Auslastung
+  </mat-card-title>
+  <mat-card-subtitle>
+    <p>Aggregation</p>
+    <!--  use text instead of logos -->
+    <mat-button-toggle-group
+      class="btngrp"
+      name="fontStyle"
+      aria-label="Font Style"
+      [value]="aggregationLevel"
+      (change)="aggregationLevelChange.emit($event.value)"
+    >
+      <mat-button-toggle value="state" matTooltip="Bundesländer">Länder</mat-button-toggle>
+      <mat-button-toggle value="governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+      <mat-button-toggle value="county" matTooltip="Landkreise">Kreise</mat-button-toggle>
+      <mat-button-toggle value="none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
+    </mat-button-toggle-group>
+    <!--  use logos instead of text -->
+    <!--<mat-button-toggle-group class="aggregationsstufen" name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle value="bundeslaender"> <img src="/assets/agg_b1.png" alt="Bundesländer"></mat-button-toggle>
+        <mat-button-toggle value="regierungsbezirke"><img src="/assets/agg_b2.png" alt="Regierungsbezirke"></mat-button-toggle>
+        <mat-button-toggle value="landkreise"><img src="/assets/agg_b3.png" alt="Landkreise"></mat-button-toggle>
+        <mat-button-toggle value="ohneaggregation"><img src="/assets/agg_b4.png" alt="Ohne Aggregation"></mat-button-toggle>
+    </mat-button-toggle-group>  -->
 
-    </mat-card-subtitle>
-    <mat-divider></mat-divider>
-    <br />
-    <mat-accordion>
-            <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Optionen
-                </mat-panel-title>
-                <mat-panel-description>
-                    <!-- description -->
-                </mat-panel-description>
-                </mat-expansion-panel-header>
+  </mat-card-subtitle>
+  <mat-divider></mat-divider>
+  <br/>
+  <mat-accordion>
+    <mat-expansion-panel style="position:relative">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Fallansicht</mat-panel-title>
+      </mat-expansion-panel-header>
+      <form class="covid-form">
+        <mat-slide-toggle
+          [checked]="caseChoroplethOptions.enabled"
+          (change)="caseChoroplethOptions.enabled = $event.checked; emitCaseChoroplethOptions()"
+        >Covid-19 Fallansicht aktivieren / deaktivieren
+        </mat-slide-toggle>
 
-                <div>
-                    <mat-slide-toggle
-                        [checked]="showOsmHospitals"
-                        (change)="showOsmHospitalsChange.emit($event.checked)"
-                    >Alle Krankenhäuser</mat-slide-toggle>
-                </div>
-                <div>
-                    <mat-slide-toggle
-                        [checked]="showOsmHeliports"
-                        (change)="showOsmHeliportsChange.emit($event.checked)"
-                    >Hubschrauberlandeplätze</mat-slide-toggle>
-                </div>
+        <div *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled">
+          <div class="toggleGroup">
+            <h5>Zeitraum</h5>
+            <mat-radio-group *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled"
+                             (change)="caseChoroplethOptions.timeWindow = $event.value; emitCaseChoroplethOptions()">
 
-                <form class="covid-form">
-                    <mat-slide-toggle
-                                    [checked]="caseChoroplethOptions.enabled"
-                                    (change)="caseChoroplethOptions.enabled = $event.checked; emitCaseChoroplethOptions()"
-                                >Covid-19 Fallansicht</mat-slide-toggle>
+              <mat-radio-button
+                [value]="covidNumberCaseTimeWindow.all"
+                [checked]="covidNumberCaseTimeWindow.all == caseChoroplethOptions.timeWindow"
+                [disabled]="caseChoroplethOptions.change == covidNumberCaseChange.relative"
+              >
+                Alle Daten
+              </mat-radio-button>
 
-                    <div *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled">
-                        <div>
-                            <mat-radio-group *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled"
-                                (change)="caseChoroplethOptions.change = $event.value; emitCaseChoroplethOptions()">
-                                <!-- <mat-radio-button
-                                    *ngFor="let enum of covidNumberCaseChange | keyvalue"
-                                    [value]="enum.value"
-                                    [checked]="enum.value == caseChoroplethOptions.change"
-                                >
-                                        {{enum.key}}
-                                </mat-radio-button> -->
+              <mat-radio-button
+                [value]="covidNumberCaseTimeWindow.twentyFourhours"
+                [checked]="covidNumberCaseTimeWindow.twentyFourhours == caseChoroplethOptions.timeWindow"
+              >
+                letze 24 Stunden
+              </mat-radio-button>
 
-                                <mat-radio-button
-                                    [value]="covidNumberCaseChange.absolute"
-                                    [checked]="covidNumberCaseChange.absolute == caseChoroplethOptions.change"
-                                >
-                                    Absolut
-                                </mat-radio-button>
+              <mat-radio-button
+                [value]="covidNumberCaseTimeWindow.seventyTwoHours"
+                [checked]="covidNumberCaseTimeWindow.seventyTwoHours == caseChoroplethOptions.timeWindow"
+              >
+                letzte 72 Stunden
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
 
-                                <mat-radio-button
-                                    [value]="covidNumberCaseChange.relative"
-                                    [checked]="covidNumberCaseChange.relative == caseChoroplethOptions.change"
-                                >
-                                    Relativer Zuwachs
-                                </mat-radio-button>
-                            </mat-radio-group>
-                        </div>
+          <mat-divider></mat-divider>
 
-                        <div>
-                            <mat-radio-group *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled"
-                                (change)="caseChoroplethOptions.timeWindow = $event.value; emitCaseChoroplethOptions()">
+          <div class="toggleGroup">
+            <h5>Fallzahlen</h5>
+            <mat-radio-group *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled"
+                             (change)="caseChoroplethOptions.change = $event.value; emitCaseChoroplethOptions()">
+              <mat-radio-button
+                [value]="covidNumberCaseChange.absolute"
+                [checked]="covidNumberCaseChange.absolute == caseChoroplethOptions.change"
+              >
+                Alle erfassen Fälle
+              </mat-radio-button>
 
-                                <mat-radio-button
-                                    [value]="covidNumberCaseTimeWindow.all"
-                                    [checked]="covidNumberCaseTimeWindow.all == caseChoroplethOptions.timeWindow"
-                                    [disabled]="caseChoroplethOptions.change == covidNumberCaseChange.relative"
-                                >
-                                    Aktuell
-                                </mat-radio-button>
+              <mat-radio-button
+                [value]="covidNumberCaseChange.relative"
+                [checked]="covidNumberCaseChange.relative == caseChoroplethOptions.change"
+                [disabled]="covidNumberCaseTimeWindow.all == caseChoroplethOptions.timeWindow"
+              >
+                Veränderung im gewählten Zeitraum
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
 
-                                <mat-radio-button
-                                    [value]="covidNumberCaseTimeWindow.twentyFourhours"
-                                    [checked]="covidNumberCaseTimeWindow.twentyFourhours == caseChoroplethOptions.timeWindow"
-                                >
-                                    24 Stunden (Veränderung)
-                                </mat-radio-button>
+          <mat-divider></mat-divider>
 
-                                <mat-radio-button
-                                    [value]="covidNumberCaseTimeWindow.seventyTwoHours"
-                                    [checked]="covidNumberCaseTimeWindow.seventyTwoHours == caseChoroplethOptions.timeWindow"
-                                >
-                                    72 Stunden (Veränderung)
-                                </mat-radio-button>
-                            </mat-radio-group>
-                        </div>
+          <div class="toggleGroup">
+            <h5>Art</h5>
+            <mat-radio-group
+              (change)="caseChoroplethOptions.type = $event.value; emitCaseChoroplethOptions()">
+              <!-- <mat-radio-button
+                  *ngFor="let enum of covidNumberCaseType | keyvalue"
+                  [value]="enum.value"
+                  [checked]="enum.value == caseChoroplethOptions.type"
+              >
+                      {{enum.key}}
+              </mat-radio-button> -->
 
-                        <div>
-                            <mat-radio-group
-                                (change)="caseChoroplethOptions.type = $event.value; emitCaseChoroplethOptions()">
-                                <!-- <mat-radio-button
-                                    *ngFor="let enum of covidNumberCaseType | keyvalue"
-                                    [value]="enum.value"
-                                    [checked]="enum.value == caseChoroplethOptions.type"
-                                >
-                                        {{enum.key}}
-                                </mat-radio-button> -->
+              <mat-radio-button
+                [value]="covidNumberCaseType.cases"
+                [checked]="covidNumberCaseType.cases == caseChoroplethOptions.type"
+              >
+                Erkrankungen
+              </mat-radio-button>
 
-                                <mat-radio-button
-                                    [value]="covidNumberCaseType.cases"
-                                    [checked]="covidNumberCaseType.cases == caseChoroplethOptions.type"
-                                >
-                                    Erkrankte
-                                </mat-radio-button>
+              <mat-radio-button
+                [value]="covidNumberCaseType.deaths"
+                [checked]="covidNumberCaseType.deaths == caseChoroplethOptions.type"
+              >
+                Todesfälle
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
 
-                                <mat-radio-button
-                                    [value]="covidNumberCaseType.deaths"
-                                    [checked]="covidNumberCaseType.deaths == caseChoroplethOptions.type"
-                                >
-                                    Todesfälle
-                                </mat-radio-button>
-                            </mat-radio-group>
-                        </div>
+          <mat-divider></mat-divider>
 
-                      <div>
-                        <mat-radio-group
-                          (change)="caseChoroplethOptions.normalization = $event.value; emitCaseChoroplethOptions()">
-                          <mat-radio-button
-                            [value]="covidNumberCaseNormalization.absolut"
-                            [checked]="covidNumberCaseNormalization.absolut == caseChoroplethOptions.normalization"
-                          >
-                            Absolute Fallzahlen
-                          </mat-radio-button>
+          <div class="toggleGroup">
+            <h5>Normalisierung</h5>
+            <mat-radio-group
+              (change)="caseChoroplethOptions.normalization = $event.value; emitCaseChoroplethOptions()">
+              <mat-radio-button
+                [value]="covidNumberCaseNormalization.absolut"
+                [checked]="covidNumberCaseNormalization.absolut == caseChoroplethOptions.normalization"
+              >
+                Keine Normalisierung
+              </mat-radio-button>
 
-                          <mat-radio-button
-                            [value]="covidNumberCaseNormalization.per100k"
-                            [checked]="covidNumberCaseNormalization.per100k == caseChoroplethOptions.normalization"
-                            [disabled]="caseChoroplethOptions.change == covidNumberCaseChange.relative"
-                          >
-                            Je 100.000 Einwohner
-                          </mat-radio-button>
-                        </mat-radio-group>
-                      </div>
-                    </div>
+              <mat-radio-button
+                [value]="covidNumberCaseNormalization.per100k"
+                [checked]="covidNumberCaseNormalization.per100k == caseChoroplethOptions.normalization"
+                [disabled]="caseChoroplethOptions.change == covidNumberCaseChange.relative"
+              >
+                Je 100.000 Einwohner
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
 
-                </form>
+      </form>
 
-            </mat-expansion-panel>
-      <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Legende
-                </mat-panel-title>
-                </mat-expansion-panel-header>
+    </mat-expansion-panel>
 
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Optionen
+        </mat-panel-title>
+        <mat-panel-description>
+          <!-- description -->
+        </mat-panel-description>
+      </mat-expansion-panel-header>
 
-                <img class="legend" src="/assets/Legende2.png" alt="Legende">
+      <div>
+        <mat-slide-toggle
+          [checked]="showOsmHospitals"
+          (change)="showOsmHospitalsChange.emit($event.checked)"
+        >Alle Krankenhäuser
+        </mat-slide-toggle>
+      </div>
+      <div>
+        <mat-slide-toggle
+          [checked]="showOsmHeliports"
+          (change)="showOsmHeliportsChange.emit($event.checked)"
+        >Hubschrauberlandeplätze
+        </mat-slide-toggle>
+      </div>
 
-                <div class="legendebeschreibung">
-                    <ul style="list-style-type:none;">
-                        <li>¹ ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie</li>
-                        <li>² ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten</li>
-                        <li>³ ECMO = Zusätzlich ECMO</li>
-                    </ul>
-                </div>
-
-            </mat-expansion-panel>
-
-            <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        Quellen
-                    </mat-panel-title>
-                    </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Legende
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
 
+      <img class="legend" src="/assets/Legende2.png" alt="Legende">
 
-                    <mat-list role="list">
-                            <mat-list-item role="listitem">
-                                    <a href="https://www.divi.de/register/intensivregister" target="_blank">DIVI Intensivregister</a>
-                            </mat-list-item>
-                    </mat-list>
+      <div class="legendebeschreibung">
+        <ul style="list-style-type:none;">
+          <li>¹ ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie</li>
+          <li>² ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische
+            Therapiemöglichkeiten
+          </li>
+          <li>³ ECMO = Zusätzlich ECMO</li>
+        </ul>
+      </div>
 
+    </mat-expansion-panel>
 
-                </mat-expansion-panel>
-        </mat-accordion>
-
-
-
-
-
-
-
-
-
-
-
-
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Quellen
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
 
+      <mat-list role="list">
+        <mat-list-item role="listitem">
+          <a href="https://www.divi.de/register/intensivregister" target="_blank">DIVI Intensivregister</a>
+        </mat-list-item>
+      </mat-list>
+
+
+    </mat-expansion-panel>
+  </mat-accordion>
 
 
 </mat-card>
