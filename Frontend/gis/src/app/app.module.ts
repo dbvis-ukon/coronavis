@@ -21,6 +21,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
+import { LegendComponent } from './legend/legend.component';
 import { PlusminusPipe } from './plusminus.pipe';
 
 
@@ -36,6 +37,7 @@ import { PlusminusPipe } from './plusminus.pipe';
     CaseTooltipComponent,
     OverlayBrandComponent,
     InfoboxComponent,
+    LegendComponent,
     PlusminusPipe,
   ],
   imports: [
