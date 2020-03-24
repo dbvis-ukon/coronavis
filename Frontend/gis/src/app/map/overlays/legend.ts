@@ -25,8 +25,7 @@ export class Legend {
     this.legend.onAdd = (map) => {
 
       const div = L.DomUtil.create('div', 'info legend color-map-legend');
-      const grades = []; // [0, 10, 20, 50, 100, 200, 500, 1000];
-      const labels = [];
+      const grades = [];
       for (let i = 0; i <= this.steps; i++) {
         grades.push(this.minMaxValues[0] + ((this.minMaxValues[1] - this.minMaxValues[0]) / this.steps) * i);
       }
@@ -34,10 +33,29 @@ export class Legend {
       console.log(grades, this.minMaxNormValues, this.minMaxValues);
 
       // loop through our density intervals and generate a label with a colored square for each interval
+      let prevColor;
+      let prevD;
+      let lastColor = true;
+      ColormapService.CChoroplethColorMap.range().map((color, i) => {
+        const d = ColormapService.CChoroplethColorMap.invertExtent(color);
+        d[0] = this.normalizeValues.invert(d[0]);
+        d[1] = this.normalizeValues.invert(d[1]);
+        if (this.minMaxValues[0] < d[0] && this.minMaxValues[1] > d[1] ) {
+          div.innerHTML +=
+            '<i style="background:' + color + '"></i> ' +
+            d[0].toFixed(0) + (d[1] ? ' &ndash; ' + d[1].toFixed(0) + '<br>' : '+');
+        }
+        if (this.minMaxValues[1] < d[1] && lastColor) {
+          lastColor = false;
+          div.innerHTML +=
+            '<i style="background:' + color + '"></i> ' +
+            d[0].toFixed(0) + (d[1] ? ' &ndash; ' + d[1].toFixed(0) + '<br>' : '+');
+        }
+        prevColor = color;
+        prevD = d;
+      });
+
       for (let i = 0; i < grades.length - 1; i++) {
-        div.innerHTML +=
-          '<i style="background:' + ColormapService.CChoroplethColorMap(this.normalizeValues(grades[i])) + '"></i> ' +
-          grades[i].toFixed(1) + (grades[i + 1] ? ' &ndash; ' + grades[i + 1].toFixed(1) + '<br>' : '+');
       }
 
       return div;

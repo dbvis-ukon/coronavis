@@ -143,7 +143,7 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
 
       this.minMaxValues = [0, d3.max(cases, d => d)];
       this.minMaxNormValues = [0, 1];
-      this.steps = 5;
+      this.steps = 6;
       this.normalizeValues = d3.scalePow().exponent(0.33)
         .domain(this.minMaxValues)
         .range(this.minMaxNormValues);
