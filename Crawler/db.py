@@ -6,7 +6,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 import geojson
 import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Float
 
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import deferred
@@ -124,25 +124,32 @@ class Hospital(Base):
         }
         
         
-class Covid19CasesLK(Base):
+class CasesLK(Base):
     """
-    Covid19CasesLK data class
+    CasesLK data class
     """
-    __tablename__ = 'covid19caseslk'
+    __tablename__ = 'caseslk'
     
     # Name,Adress,String,Kontakt,Bundesland,ICU low care,ICU high care,ECMO,Stand,Location
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(DateTime, default=datetime.datetime.utcnow)
     name = Column(String(255), nullable=False)
+    desc = Column(String(255), nullable=False)
+    bl = Column(String(255), nullable=False)
+    county = Column(String(255), nullable=False)
     cases = Column(Integer(), nullable=False)
     deaths = Column(Integer(), nullable=False)
+    population = Column(Integer(), nullable=False)
+    death_rate = Column(Float(), nullable=False)
+    cases_per_100k = Column(Float(), nullable=False)
+    cases_per_population = Column(Float(), nullable=False)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        return '<Covid19CasesLK %r>' % (self.name)
+        return '<CasesLK %r>' % (self.name)
 
     def as_dict(self):
         return {
@@ -156,25 +163,27 @@ class Covid19CasesLK(Base):
             self.deaths
         }
         
-class Covid19CasesBL(Base):
+class CasesBL(Base):
     """
-    Covid19CasesBL data class
+    CasesBL data class
     """
-    __tablename__ = 'covid19casesbl'
+    __tablename__ = 'casesbl'
     
     # Name,Adress,String,Kontakt,Bundesland,ICU low care,ICU high care,ECMO,Stand,Location
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(DateTime, default=datetime.datetime.utcnow)
     name = Column(String(255), nullable=False)
+    desc = Column(String(255), nullable=False)
     cases = Column(Integer(), nullable=False)
     deaths = Column(Integer(), nullable=False)
+    population = Column(Integer(), nullable=False)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        return '<Covid19CasesLK %r>' % (self.name)
+        return '<CasesBL %r>' % (self.name)
 
     def as_dict(self):
         return {

@@ -1,17 +1,12 @@
-import { FeatureCollection } from 'geojson';
-
 import * as L from 'leaflet';
 import { Overlay } from './overlay';
 import * as d3 from "d3";
 import {ColormapService} from "../../services/colormap.service";
 import {AggregatedHospitals, AggregatedHospitalsProperties} from "../../services/divi-hospitals.service";
-import { ScaleLinear } from 'd3';
 
-export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
-  private colorMap: ScaleLinear<string, string>;
-  constructor(name: string, hospitals: AggregatedHospitals, private type: String, colorsService: ColormapService) {
+export class ChoroplethLayer extends Overlay<AggregatedHospitals> {
+  constructor(name: string, hospitals: AggregatedHospitals, private type: String, private colorsService: ColormapService) {
     super(name, hospitals);
-    this.colorMap = colorsService.getContinousColorMap();
   }
 
   private propertyAccessor(d: AggregatedHospitalsProperties, type: String) {
@@ -46,7 +41,7 @@ export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
     const aggregationLayer = L.geoJSON(this.featureCollection, {
       style: (feature) => {
         return {
-          fillColor: this.colorMap(normalizeValues(this.getScore(feature.properties))),
+          fillColor: this.colorsService.getBedStatusColor(normalizeValues(this.getScore(feature.properties))),
           weight: 0.5,
           opacity: 1,
           color: 'gray',

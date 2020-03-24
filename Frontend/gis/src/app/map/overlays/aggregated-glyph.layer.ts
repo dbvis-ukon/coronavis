@@ -2,7 +2,7 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import { DiviAggregatedHospital } from 'src/app/services/divi-hospitals.service';
+import {AggregatedHospitalsState, DiviAggregatedHospital} from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
 import {GlyphHoverEvent} from "../events/glyphhover";
@@ -28,6 +28,30 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
   private latLngPoint(latlng: L.LatLngExpression): L.Point {
     return this.map.project(latlng, 9);
+  }
+
+  private getIcuLowScore(d: DiviAggregatedHospital) {
+    const v = d.icu_low_state.Verfügbar || 0;
+    const b = d.icu_low_state.Begrenzt || 0;
+    const a = d.icu_low_state.Ausgelastet || 0;
+
+    return (b * 2 + a * 3) / (v + b + a);
+  }
+
+  private getIcuHighScore(d: DiviAggregatedHospital) {
+    const v = d.icu_high_state.Verfügbar || 0;
+    const b = d.icu_high_state.Begrenzt || 0;
+    const a = d.icu_high_state.Ausgelastet || 0;
+
+    return (b * 2 + a * 3) / (v + b + a);
+  }
+
+  private getEcmoScore(d: DiviAggregatedHospital) {
+    const v = d.ecmo_state.Verfügbar || 0;
+    const b = d.ecmo_state.Begrenzt || 0;
+    const a = d.ecmo_state.Ausgelastet || 0;
+
+    return (b * 2 + a * 3) / (v + b + a);
   }
 
   createOverlay(map: L.Map) {
@@ -58,6 +82,38 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
     const padding = 2;
     const yOffset = 10;
+
+    if (this.granularity === "landkreise") {
+      this.data.forEach(d => console.log(d));
+    }
+
+    const icu_low_scores = this.data.map(d => this.getIcuLowScore(d));
+    if (this.granularity === "landkreise") {
+      console.log(icu_low_scores);
+    }
+    const icu_low_extent = d3.extent(icu_low_scores);
+    console.log(icu_low_extent);
+    const icu_low_normalizer = d3.scaleLinear()
+      .domain(icu_low_extent)
+      .range([0, 1]);
+    const icu_high_scores = this.data.map(d => this.getIcuHighScore(d));
+    if (this.granularity === "landkreise") {
+      console.log(icu_high_scores);
+    }
+    const icu_high_extent = d3.extent(icu_high_scores);
+    console.log(icu_high_extent);
+    const icu_high_normalizer = d3.scaleLinear()
+      .domain(icu_high_extent)
+      .range([0, 1]);
+    const ecmo_scores = this.data.map(d => this.getEcmoScore(d));
+    if (this.granularity === "landkreise") {
+      console.log(ecmo_scores);
+    }
+    const ecmo_extent = d3.extent(ecmo_scores);
+    console.log(ecmo_extent);
+    const ecmo_normalizer = d3.scaleLinear()
+      .domain(ecmo_extent)
+      .range([0, 1]);
 
     this.gHospitals = d3.select(svgElement)
       .style("pointer-events", "none")
@@ -102,7 +158,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
-      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_low_state))
+      .style('fill', d1 => this.colormapService.getBedStatusColor(icu_low_normalizer(this.getIcuLowScore(d1))))
       .on("mouseenter", () => {
         self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_low_state"), "enter"));
       })
@@ -116,7 +172,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${rectSize + padding * 2}px`)
-      .style('fill', d1 => this.colormapService.getMaxColor(d1.icu_high_state))
+      .style('fill', d1 => this.colormapService.getBedStatusColor(icu_high_normalizer(this.getIcuHighScore(d1))))
       .on("mouseenter", () => {
         self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_high_state"), "enter"));
       })
@@ -130,7 +186,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`)
-      .style('fill', d1 => this.colormapService.getMaxColor(d1.ecmo_state))
+      .style('fill', d1 => this.colormapService.getBedStatusColor(ecmo_normalizer(this.getEcmoScore(d1))))
       .on("mouseenter", () => {
         self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "ecmo_state"), "enter"));
       })
