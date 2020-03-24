@@ -24,6 +24,8 @@ import {MatButtonModule} from '@angular/material/button';
 import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
+import { LegendComponent } from './legend/legend.component';
+import { PlusminusPipe } from './plusminus.pipe';
 
 
 
@@ -40,6 +42,8 @@ import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-inf
     InfoboxComponent,
     HospitalInfoComponent,
     HospitalInfoDialogComponent,
+    LegendComponent,
+    PlusminusPipe,
   ],
   imports: [
     BrowserModule,
