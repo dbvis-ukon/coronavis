@@ -1,62 +1,24 @@
-<div>
+<div class="main">
   <h3>{{ name ? name : diviHospital.Name }}</h3>
-  <div class="table">
-    <div class="table-row">
-      <div class="table-cell">
-        Address
-      </div>
-      <div class="table-cell">
-        {{ diviHospital.Adress }}
-      </div>
-    </div>
-
-    <div class="table-row">
-      <div class="table-cell">
-        ICU - Low Care
-      </div>
-      <div class="table-cell" style="color: {{ getCapacityStateColor(diviHospital.icuLowCare) }};
-      background: {{ backgroundColScale(diviHospital.icuLowCare) }}">
-
-        {{ diviHospital.icuLowCare }}
-      </div>
-    </div>
-
-    <div class="table-row">
-      <div class="table-cell">
-        ICU - High Care
-      </div>
-      <div class="table-cell" style="color: {{ getCapacityStateColor(diviHospital.icuHighCare) }};
-      background: {{ backgroundColScale(diviHospital.icuHighCare) }}">
-        {{ diviHospital.icuHighCare }}
-      </div>
-    </div>
-
-    <div class="table-row">
-      <div class="table-cell">
-        ECMO <!-- <a href="https://de.wikipedia.org/wiki/Extrakorporale_Membranoxygenierung">ECMO</a>  -->
-      </div>
-      <div class="table-cell" style="color: {{ getCapacityStateColor(diviHospital.ECMO) }};
-      background: {{ backgroundColScale(diviHospital.ECMO) }}">
-        {{ diviHospital.ECMO }}
-      </div>
-    </div>
-
-    <div class="table-row">
-      <div class="table-cell">
-        Contact
-      </div>
-      <div class="table-cell">
-        {{ diviHospital.Kontakt }}
-      </div>
-    </div>
-
-    <div class="table-row">
-      <div class="table-cell">
-        Date
-      </div>
-      <div class="table-cell">
-        {{ diviHospital.Stand }}
-      </div>
-    </div>
-  </div>
+  <mat-divider></mat-divider>
+  <table>
+    <tbody>
+    <tr>
+      <td><strong>ICU - Low Care:</strong> </td>
+      <td style="background-color: {{ getCapacityStateColor(diviHospital.icuLowCare) }};">{{ diviHospital.icuLowCare }}</td>
+    </tr>
+    <tr>
+      <td><strong>ICU - High Care: </strong></td>
+      <td style="background-color: {{ getCapacityStateColor(diviHospital.icuHighCare) }};">{{ diviHospital.icuHighCare }}</td>
+    </tr>
+    <tr>
+      <td><strong>ECMO: </strong></td>
+      <td style="background-color: {{ getCapacityStateColor(diviHospital.ECMO) }};">{{ diviHospital.ECMO }}</td>
+    </tr>
+    </tbody>
+  </table>
+  <br>
+  <p><strong>Address: </strong> {{ diviHospital.Adress }}</p>
+  <p><strong>Contact: </strong> {{ diviHospital.Kontakt }}</p>
+  <p><strong>Date: </strong> {{ diviHospital.Stand }}</p>
 </div>
