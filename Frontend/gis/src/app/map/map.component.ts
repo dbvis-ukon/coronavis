@@ -221,9 +221,7 @@ export class MapComponent implements OnInit {
 
     // Choropleth layers on hover
     this.hospitallayerService.getLayers().subscribe(layer => {
-      const key = this.getBedChoroplethKey(layer.getAggregationLevel(), layer.getGlyphState());
-      this.choroplethLayerMap.set(key, layer.createOverlay());
-
+      this.choroplethLayerMap.set(this.getBedChoroplethKey(layer.getAggregationLevel(), layer.getGlyphState()), layer.createOverlay());
     });
     // const layerEvents: Subject<GlyphHoverEvent> = new Subject<GlyphHoverEvent>();
     // layerEvents.subscribe(event => {

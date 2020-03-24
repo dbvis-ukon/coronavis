@@ -1,10 +1,12 @@
 .main {
   background: #fff;
   padding: 15px;
+  border-radius: 4px;
 }
 
 table {
   border-spacing: 0;
+  margin-top: 5px;
 }
 
 th {

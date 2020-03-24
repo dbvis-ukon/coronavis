@@ -1,30 +1,36 @@
 <div #main class="main">
   <h3>{{ this.name }}</h3>
+  <mat-divider></mat-divider>
   {{ this.einwohner }} Einwohner
   <table>
     <thead>
       <tr>
         <th></th>
-        <th>{{ this.datum | date:"d.M.y" }}</th>
-        <th colspan="2">Seit 24h</th>
-        <th colspan="2">Seit 72h</th>
+        <th>Fälle Total</th>
+        <th colspan="4">Veränderung</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>{{ this.datum | date:"d.M.y HH:mm" }}</th>
+        <th colspan="2">letzte 24h</th>
+        <th colspan="2">letzte 72h</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>Erkrankte</td>
         <td>{{ this.combined[0].cases }}</td>
-        <td>{{ this.combined[0].cases - this.combined[1].cases }}</td>
+        <td>{{ this.combined[0].cases - this.combined[1].cases | plusminus }}</td>
         <td>({{ this.getPercentageChange(this.combined[0].cases, this.combined[1].cases)}})</td>
-        <td>{{ this.combined[0].cases - this.combined[2].cases }}</td>
+        <td>{{ this.combined[0].cases - this.combined[2].cases | plusminus }}</td>
         <td>({{ this.getPercentageChange(this.combined[0].cases, this.combined[2].cases)}})</td>
       </tr>
       <tr>
         <td>Todesfälle</td>
         <td>{{ this.combined[0].deaths }}</td>
-        <td>{{ this.combined[0].deaths - this.combined[1].deaths }}</td>
+        <td>{{ this.combined[0].deaths - this.combined[1].deaths | plusminus }}</td>
         <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[1].deaths)}})</td>
-        <td>{{ this.combined[0].deaths - this.combined[2].deaths }}</td>
+        <td>{{ this.combined[0].deaths - this.combined[2].deaths | plusminus }}</td>
         <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[2].deaths)}})</td>
       </tr>
       <tr>

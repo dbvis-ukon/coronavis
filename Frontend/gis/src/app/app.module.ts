@@ -22,6 +22,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
 import { LegendComponent } from './legend/legend.component';
+import { PlusminusPipe } from './plusminus.pipe';
 
 
 
@@ -37,6 +38,7 @@ import { LegendComponent } from './legend/legend.component';
     OverlayBrandComponent,
     InfoboxComponent,
     LegendComponent,
+    PlusminusPipe,
   ],
   imports: [
     BrowserModule,

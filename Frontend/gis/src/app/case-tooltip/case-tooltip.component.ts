@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from "@angular/animations";
+import { PlusminusPipe } from '../plusminus.pipe';
 
 @Component({
   selector: 'app-case-tooltip',
@@ -24,8 +25,12 @@ export class CaseTooltipComponent implements OnInit {
   public datum: String;
   public einwohner: number;
 
+  constructor() {}
+
   public getCasesPer100kInhabitants(count: number): string {
-    return ((count / this.einwohner) * 100000).toFixed(2);
+    const v = ((count / this.einwohner) * 100000);
+
+    return `${v > 0 ? '+' : ''}${v.toFixed(2)}`;
   }
 
   public getPercentageChange(curr: number, old: number): string {
@@ -36,10 +41,7 @@ export class CaseTooltipComponent implements OnInit {
     if (change === Infinity) {
       return ("war 0");
     }
-    return `${change.toFixed(1)}%`
-  }
-
-  constructor() {
+    return `${change > 0 ? '+' : ''}${change.toFixed(1)}%`
   }
 
   ngOnInit(): void {
