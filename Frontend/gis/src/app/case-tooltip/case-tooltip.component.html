@@ -1,5 +1,7 @@
 <div #main class="main">
   <h3>{{ this.name }}</h3>
+  <mat-divider></mat-divider>
+  {{ this.einwohner }} Einwohner
   <table>
     <thead>
       <tr>
@@ -24,6 +26,22 @@
         <td>{{ this.combined[0].deaths - this.combined[1].deaths }}</td>
         <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[1].deaths)}})</td>
         <td>{{ this.combined[0].deaths - this.combined[2].deaths }}</td>
+        <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[2].deaths)}})</td>
+      </tr>
+      <tr>
+        <td>Erkrankte je 100.000 Einwohner</td>
+        <td>{{ this.getCasesPer100kInhabitants(this.combined[0].cases) }}</td>
+        <td>{{ this.getCasesPer100kInhabitants(this.combined[0].cases - this.combined[1].cases) }}</td>
+        <td>({{ this.getPercentageChange(this.combined[0].cases, this.combined[1].cases)}})</td>
+        <td>{{ this.getCasesPer100kInhabitants(this.combined[0].cases - this.combined[2].cases) }}</td>
+        <td>({{ this.getPercentageChange(this.combined[0].cases, this.combined[2].cases)}})</td>
+      </tr>
+      <tr>
+        <td>Todesfälle je 100.000 Einwohner</td>
+        <td>{{ this.getCasesPer100kInhabitants(this.combined[0].deaths) }}</td>
+        <td>{{ this.getCasesPer100kInhabitants(this.combined[0].deaths - this.combined[1].deaths) }}</td>
+        <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[1].deaths)}})</td>
+        <td>{{ this.getCasesPer100kInhabitants(this.combined[0].deaths - this.combined[2].deaths) }}</td>
         <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[2].deaths)}})</td>
       </tr>
     </tbody>
