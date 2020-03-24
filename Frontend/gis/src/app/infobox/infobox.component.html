@@ -29,8 +29,9 @@
                 *ngFor="let t of glyphLegend" 
                 class="glyph-tile" 
                 [matTooltip]="t.description"
+                (click)="updateGlyphState(t.state)"
             >
-                <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color)}"></div>
+                <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color), 'border-color': t.state === internalGlyphState ? 'gray' : 'white'}"></div>
                 <div class="text">{{ t.name }}</div>
             </div>
         </div>
