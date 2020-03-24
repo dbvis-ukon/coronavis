@@ -2,3 +2,32 @@
   background: #fff;
   padding: 15px;
 }
+
+table {
+  border-spacing: 0;
+}
+
+th {
+  text-align: center;
+  margin: 0;
+  padding: 2px;
+}
+
+td {
+  text-align: right;
+  margin: 0;
+  padding: 2px;
+}
+
+td:first-child {
+  text-align: left;
+}
+
+/* Color columns */
+th:nth-child(2),
+th:nth-child(4),
+td:nth-child(2),
+td:nth-child(5),
+td:nth-child(6) {
+  background-color: #f2f2f2;
+}
