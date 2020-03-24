@@ -27,10 +27,10 @@ export class CaseTooltipComponent implements OnInit {
 
   constructor() {}
 
-  public getCasesPer100kInhabitants(count: number): string {
+  public getCasesPer100kInhabitants(count: number, addPlus: boolean = false): string {
     const v = ((count / this.einwohner) * 100000);
 
-    return `${v > 0 ? '+' : ''}${v.toFixed(2)}`;
+    return `${v > 0 && addPlus ? '+' : ''}${v.toFixed(2)}`;
   }
 
   public getPercentageChange(curr: number, old: number): string {
