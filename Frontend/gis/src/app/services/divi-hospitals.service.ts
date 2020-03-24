@@ -100,6 +100,12 @@ export interface DiviAggregatedHospital {
   'Location': LatLngLiteral;
   'ID': number;
   'Name': string;
+  'x': number;
+  'y': number;
+  '_x': number;
+  '_y': number;
+  'vx': number;
+  'vy': number;
 }
 
 @Injectable({

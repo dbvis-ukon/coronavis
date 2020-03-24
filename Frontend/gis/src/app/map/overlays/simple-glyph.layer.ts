@@ -141,21 +141,18 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('y', yOffset)
       .attr('x', `${2 * this.rectSize + padding * 3}px`);
 
-    // this.startForceSimulation([[-this.glyphSize.width / 2, -this.glyphSize.height / 2], [this.glyphSize.width / 2, this.glyphSize.height / 2]])
     this.onZoomed();
 
     return L.svgOverlay(svgElement, latLngBounds, {
       interactive: true,
       zIndex: 3
     });
-    // return L.svgOverlay(svgElement, this.map.getBounds());
   }
 
   startForceSimulation(glyphSizes): d3.Simulation<any, undefined> {
     return d3.forceSimulation(this.data)
       .alpha(0.1)
       .force("collide", this.quadtreeCollide(glyphSizes))
-      // .on('tick', () => this.ticked());
       .on('end', () => this.ticked());
   }
 
@@ -166,7 +163,6 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
         return `translate(${d.x},${d.y})`;
       });
   }
-
 
   onZoomed() {
     const zoom = this.map.getZoom();
@@ -181,7 +177,6 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       this.labelLayout.stop();
     }
     this.labelLayout = this.startForceSimulation([[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]]);
-    // this.labelLayout = this.startForceSimulation([[-this.glyphSize.width / 2, -this.glyphSize.height / 2], [this.glyphSize.width / 2, this.glyphSize.height / 2]]);
 
     console.log('zoomed', this.map.getZoom(), scale);
 
@@ -195,29 +190,17 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
   }
 
   private quadtreeCollide(bbox) {
-    bbox = constant(bbox === null ? [[0, 0][1, 1]] : bbox)
+    bbox = constant(bbox)
 
     let nodes;
     let boundingBoxes;
-    let  strength = 1;
+    let strength = 0.1;
     let iterations = 1;
 
     force.initialize = function (_) {
       var i, n = (nodes = _).length;
       boundingBoxes = new Array(n);
       for (i = 0; i < n; ++i) boundingBoxes[i] = bbox(nodes[i], i, nodes);
-    };
-
-    force.iterations = function (_) {
-      return arguments.length ? (iterations = +_, force) : iterations;
-    };
-
-    force.strength = function (_) {
-      return arguments.length ? (strength = +_, force) : strength;
-    };
-
-    force.bbox = function (_) {
-      return arguments.length ? (bbox = typeof _ === "function" ? _ : constant(+_), force) : bbox;
     };
 
     function x(d) {
@@ -228,7 +211,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       return d.y + d.vy;
     }
 
-    function constant(x) {
+    function constant(x: [[number, number], [number, number]]) {
       return function () {
         return x;
       };
@@ -327,10 +310,10 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
               var xOverlap = bWidth + dWidth - (xSize[1] - xSize[0])
               var yOverlap = bHeight + dHeight - (ySize[1] - ySize[0])
 
-              var xBPush = xOverlap * strength * (yOverlap / bHeight)
+              var xBPush = xOverlap * strength / 5 * (yOverlap / bHeight)
               var yBPush = yOverlap * strength * (xOverlap / bWidth)
 
-              var xDPush = xOverlap * strength * (yOverlap / dHeight)
+              var xDPush = xOverlap * strength / 5 * (yOverlap / dHeight)
               var yDPush = yOverlap * strength * (xOverlap / dWidth)
 
               if ((nx1 + nx2) / 2 < (dnx1 + dnx2) / 2) {
