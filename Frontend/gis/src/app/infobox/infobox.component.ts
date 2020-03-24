@@ -20,11 +20,8 @@ export class InfoboxComponent implements OnInit {
     private colormapService: ColormapService
   ) { }
 
-  glyphLegend = [
-    {name: 'ICU low', description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'}, 
-    {name: 'ICU high', description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'}, 
-    {name: 'ECMO', description: 'ECMO = Zusätzlich ECMO'}
-  ];
+  glyphLegend;
+
   glyphLegendColors = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'];
 
   infoboxExtended = true;
@@ -62,6 +59,11 @@ export class InfoboxComponent implements OnInit {
   covidNumberCaseNormalization = CovidNumberCaseNormalization;
 
   ngOnInit(): void {
+    this.glyphLegend = [
+      {name: 'ICU low', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'}, 
+      {name: 'ICU high', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'}, 
+      {name: 'ECMO', color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
+    ];
   }
 
   emitCaseChoroplethOptions() {
@@ -77,4 +79,7 @@ export class InfoboxComponent implements OnInit {
     this.caseChoroplethOptionsChange.emit({...this.caseChoroplethOptions});
   }
 
+  getGlyphColor(str: string) {
+    return this.colormapService.getSingleHospitalColormap()(str);
+  }
 }

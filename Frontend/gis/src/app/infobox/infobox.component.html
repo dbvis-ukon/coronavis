@@ -24,8 +24,25 @@
             <mat-button-toggle value="none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
         </mat-button-toggle-group>
 
-        <div>
-            <div class="glyph-tile"></div>
+        <div class="glyph-legend">
+            <div 
+                *ngFor="let t of glyphLegend" 
+                class="glyph-tile" 
+                [matTooltip]="t.description"
+            >
+                <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color)}"></div>
+                <div class="text">{{ t.name }}</div>
+            </div>
+        </div>
+        <div class="glyph-color-legend">
+            <div 
+                *ngFor="let t of glyphLegendColors" 
+                class="glyph-tile" 
+                
+            >
+                <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
+                <div class="text">{{ t }}</div>
+            </div>
         </div>
         <!--  use logos instead of text -->
         <!--<mat-button-toggle-group class="aggregationsstufen" name="fontStyle" aria-label="Font Style">
