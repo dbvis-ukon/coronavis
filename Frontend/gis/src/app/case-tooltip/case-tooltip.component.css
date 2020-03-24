@@ -10,13 +10,13 @@ table {
 th {
   text-align: center;
   margin: 0;
-  padding: 2px;
+  padding: 8px;
 }
 
 td {
   text-align: right;
   margin: 0;
-  padding: 2px;
+  padding: 8px;
 }
 
 td:first-child {

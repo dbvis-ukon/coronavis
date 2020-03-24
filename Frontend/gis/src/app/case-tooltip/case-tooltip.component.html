@@ -3,25 +3,25 @@
   <table>
     <tbody>
       <tr>
-        <td>Fälle</td>
+        <td>Erkrankte</td>
         <td>{{ this.combined[0].cases }}</td>
         <td>{{ this.combined[0].cases - this.combined[1].cases }}</td>
-        <td>({{ (((this.combined[0].cases - this.combined[1].cases) / this.combined[1].cases) * 100 || 0).toFixed(0) }}%)</td>
+        <td>({{ this.getPercentageChange(this.combined[0].cases, this.combined[1].cases)}})</td>
         <td>{{ this.combined[0].cases - this.combined[2].cases }}</td>
-        <td>({{ (((this.combined[0].cases - this.combined[2].cases) / this.combined[2].cases) * 100 || 0).toFixed(0) }}%)</td>
+        <td>({{ this.getPercentageChange(this.combined[0].cases, this.combined[2].cases)}})</td>
       </tr>
       <tr>
-        <td>Tote</td>
+        <td>Todesfälle</td>
         <td>{{ this.combined[0].deaths }}</td>
         <td>{{ this.combined[0].deaths - this.combined[1].deaths }}</td>
-        <td>({{ (((this.combined[0].deaths - this.combined[1].deaths) / this.combined[1].deaths) * 100 || 0).toFixed(0) }}%)</td>
+        <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[1].deaths)}})</td>
         <td>{{ this.combined[0].deaths - this.combined[2].deaths }}</td>
-        <td>({{ (((this.combined[0].deaths - this.combined[2].deaths) / this.combined[2].deaths) * 100 || 0).toFixed(0) }}%)</td>
+        <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[2].deaths)}})</td>
       </tr>
     </tbody>
     <thead>
       <tr>
-        <th>Art</th>
+        <th></th>
         <th>{{ this.datum | date:"d.M.y" }}</th>
         <th colspan="2">Neu in 24h</th>
         <th colspan="2">Neu in 72h</th>
