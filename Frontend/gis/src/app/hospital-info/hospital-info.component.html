@@ -1,18 +1,18 @@
-<h3>{{ diviHospital.Name }}</h3>
+<h3>{{ data.Name }}</h3>
 <mat-divider></mat-divider>
 <table>
   <tbody>
   <tr>
     <td><strong>ICU - Low Care:</strong> </td>
-    <td style="background-color: {{ getCapacityStateColor(diviHospital.icuLowCare) }};">{{ diviHospital.icuLowCare }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuLowCare) }">{{ data.icuLowCare }}</td>
   </tr>
   <tr>
     <td><strong>ICU - High Care: </strong></td>
-    <td style="background-color: {{ getCapacityStateColor(diviHospital.icuHighCare) }};">{{ diviHospital.icuHighCare }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuHighCare) }">{{ data.icuHighCare }}</td>
   </tr>
   <tr>
     <td><strong>ECMO: </strong></td>
-    <td style="background-color: {{ getCapacityStateColor(diviHospital.ECMO) }};">{{ diviHospital.ECMO }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(data.ECMO) }">{{ data.ECMO }}</td>
   </tr>
   </tbody>
 </table>
