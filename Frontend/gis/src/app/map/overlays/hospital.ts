@@ -15,8 +15,8 @@ export class HospitalLayer extends Overlay<FeatureCollection> {
 
   createOverlay() {
     const geojsonMarkerOptions = {
-      radius: 8,
-      fillColor: '#d53210',
+      radius: 3,
+      fillColor: '#666',
       color: '#000',
       weight: 1,
       opacity: 1,
