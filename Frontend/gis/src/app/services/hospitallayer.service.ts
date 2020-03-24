@@ -21,7 +21,6 @@ export class HospitallayerService {
   }
 
   public getLayers(): Subject<BedStatusChoropleth> {
-    console.log("getting layers");
 
     const url = `${environment.apiUrl}hospitals/`;
     const granularities = ["landkreise", "regierungsbezirke", "bundeslander"];
@@ -29,12 +28,9 @@ export class HospitallayerService {
     const types = ["icu_low_state", "icu_high_state", "ecmo_state"];
 
     for (let granularity of granularities) {
-      console.log("getting data for granularity", granularity);
       this.http.get<AggregatedHospitals>(url + granularity)
         .subscribe(data => {
-          console.log(data);
           for (let type of types) {
-            console.log("creating layers for type", type);
             const layer = new BedStatusChoropleth(this.getName(granularity, type), data, type, this.colormapService);
             this.layers.next(layer);
           }

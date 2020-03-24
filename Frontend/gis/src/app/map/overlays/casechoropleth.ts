@@ -24,7 +24,6 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
     if (this.options.change === CovidNumberCaseChange.absolute) {
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.all) {
         const last = combined[0];
-        // console.log(cases, last, last.cases);
         if (this.options.type === CovidNumberCaseType.cases) {
           return last.cases;
         }
@@ -80,7 +79,6 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
     } else {
       const [minChange, maxChange] = d3.extent(cases.filter(d => d < Infinity));
       const max = Math.max(Math.abs(minChange), Math.abs(maxChange));
-      console.log(minChange, maxChange, max);
       normalizeValues = d3.scaleLinear()
         .domain([-max, max])
         .range([1, 0])

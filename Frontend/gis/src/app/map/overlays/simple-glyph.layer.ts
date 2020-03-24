@@ -85,12 +85,10 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
           d.y = p.y;
           d._x = p.x;
           d._y = p.y;
-          // console.log(p, d.Location);
           return `translate(${p.x}, ${p.y})`; })
       .on('mouseenter', function(d1: DiviHospital) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
-        // console.log('mouseenter', d1);
         t.diviHospital = d1;
         d3.select(this).raise();
       })
@@ -192,7 +190,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     // this.labelLayout.stop();
     // this.labelLayout = this.getForceSimulation(scale);
 
-    console.log('zoomed', this.map.getZoom(), scale);
+    // console.log('zoomed', this.map.getZoom(), scale);
 
     this.gHospitals
       .selectAll('*')
