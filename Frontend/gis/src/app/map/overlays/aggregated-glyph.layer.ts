@@ -13,8 +13,6 @@ import {quadtree} from "d3";
 export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
   private gHospitals: d3.Selection<SVGGElement, DiviAggregatedHospital, SVGElement, unknown>;
-  private nameHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-  private cityHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private map: L.Map;
   private labelLayout;
 
@@ -136,6 +134,20 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', this.glyphSize.height/2)
       .attr('fill', 'white')
       .attr('stroke', '#cccccc');
+
+    // adds white shadow
+    this.gHospitals
+      .append('text')
+      .text(d1 => {
+        return d1.Name;
+      })
+      .attr('x', (padding + 3 * rectSize + 4 * padding) / 2)
+      .attr('y', '22')
+      .attr('font-size', '8px')
+      .style('text-anchor', 'middle')
+      .style('stroke', 'white')
+      .style('stroke-width', '4px')
+      .style('opacity', '0.8');
 
     this.gHospitals
       .append('text')

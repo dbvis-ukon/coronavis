@@ -13,6 +13,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
   private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private nameHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private cityHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+  private nameHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+  private cityHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private map: L.Map;
 
   constructor(
@@ -106,16 +108,48 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('fill', 'white')
       .attr('stroke', '#cccccc');
 
+    this.nameHospitalsShadow = this.gHospitals
+      .append('text')
+      .text(d1 => {
+        return d1.Name;
+      })
+      .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
+      .attr('y', '12')
+      .attr('font-size', '7px')
+      .style('text-anchor', 'middle')
+      .style('stroke', 'white')
+      .style('stroke-width', '4px')
+      .style('opacity', '0.8')
+      .call(this.wrap, '50');
+
     this.nameHospitals = this.gHospitals
       .append('text')
       .text(d1 => {
         return d1.Name;
       })
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
-      .style('text-anchor', 'middle')
       .attr('y', '12')
       .attr('font-size', '7px')
+      .style('text-anchor', 'middle')
       .call(this.wrap, '50');
+
+
+    this.cityHospitalsShadow = this.gHospitals
+      .append('text')
+      .text(d1 => {
+        // Hackity hack :)
+        const splitted = d1.Adress.split(' ');
+        return splitted[splitted.length - 1];
+      })
+      .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
+      .style('text-anchor', 'middle')
+      .attr('y', '22')
+      .attr('font-size', '10px')
+      .style('text-anchor', 'middle')
+      .style('stroke', 'white')
+      .style('stroke-width', '4px')
+      .style('opacity', '0.8')
+      .classed('hiddenLabel', true);
 
     this.cityHospitals = this.gHospitals
       .append('text')
@@ -186,17 +220,23 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     if (this.map.getZoom() > 9) {
       this.glyphSize.height = 40;
-      this.glyphSize.width = 70;
+      this.glyphSize.width = 80;
       this.cityHospitals.classed('hiddenLabel', true);
+      this.cityHospitalsShadow.classed('hiddenLabel', true);
       this.nameHospitals.classed('hiddenLabel', false);
+      this.nameHospitalsShadow.classed('hiddenLabel', false);
     } else if (this.map.getZoom() < 10 && this.map.getZoom() > 6) {
       this.cityHospitals.classed('hiddenLabel', false);
+      this.cityHospitalsShadow.classed('hiddenLabel', false);
       this.nameHospitals.classed('hiddenLabel', true);
+      this.nameHospitalsShadow.classed('hiddenLabel', true);
       this.glyphSize.height = 28;
       this.glyphSize.width = 38;
     } else if (this.map.getZoom() < 7) {
       this.cityHospitals.classed('hiddenLabel', true);
+      this.cityHospitalsShadow.classed('hiddenLabel', true);
       this.nameHospitals.classed('hiddenLabel', true);
+      this.nameHospitalsShadow.classed('hiddenLabel', true);
       this.glyphSize.height = 22;
       this.glyphSize.width = 38;
     }
