@@ -91,21 +91,18 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     const yOffset = 10;
 
     const icu_low_scores = this.data.map(d => this.getIcuLowScore(d));
-    const icu_low_extent = d3.extent(icu_low_scores);
     const icu_low_normalizer = d3.scaleLinear()
-      .domain(icu_low_extent)
+      .domain([0, d3.max(icu_low_scores)])
       .range([0, 1]);
 
     const icu_high_scores = this.data.map(d => this.getIcuHighScore(d));
-    const icu_high_extent = d3.extent(icu_high_scores);
     const icu_high_normalizer = d3.scaleLinear()
-      .domain(icu_high_extent)
+      .domain([0, d3.max(icu_high_scores)])
       .range([0, 1]);
 
     const ecmo_scores = this.data.map(d => this.getEcmoScore(d));
-    const ecmo_extent = d3.extent(ecmo_scores);
     const ecmo_normalizer = d3.scaleLinear()
-      .domain(ecmo_extent)
+      .domain([0, d3.max(ecmo_scores)])
       .range([0, 1]);
 
     this.gHospitals = d3.select(svgElement)
@@ -192,6 +189,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
     return L.svgOverlay(svgElement, latLngBounds, {
       interactive: true,
+      bubblingMouseEvents: true,
       zIndex: 3
     });
   }
