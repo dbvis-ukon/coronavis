@@ -481,7 +481,6 @@ export class MapComponent implements OnInit {
       // single glyph layer group (only contains one item)
       (l.getLayers()[0] as SVGOverlay).bringToFront();
     }
-
   }
 
   private getKeyCovidNumberCaseOptions(v: CovidNumberCaseOptions) {
@@ -532,7 +531,7 @@ export class MapComponent implements OnInit {
   }
 
   private updateGlyphState(st: GlyphState) {
-    if(this._lastBedCoroplethLayer) {
+    if (this._lastBedCoroplethLayer) {
       this.mymap.removeLayer(this._lastBedCoroplethLayer);
     }
 
