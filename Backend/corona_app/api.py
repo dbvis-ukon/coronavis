@@ -8,7 +8,7 @@ from sqlalchemy import func, and_
 
 from .model import *
 
-cache = Cache(config={'CACHE_TYPE': 'simple', 'CACHE_DEFAULT_TIMEOUT': 3600})
+cache = Cache(config={'CACHE_TYPE': 'simple', 'CACHE_DEFAULT_TIMEOUT': 5*60})
 
 backend_api = Blueprint('api', __name__)
 
@@ -256,7 +256,7 @@ def get_cases_by_landkreise_per_day():
     sql_stmt = '''
 with cases_landkreise as (
 	select case when idlandkreis like '11___' then '11000' else idlandkreis end, DATE(meldedatum) as "date", SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
-	from cases
+	from cases_current
 	group by idlandkreis, DATE(meldedatum)
 )
 select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, JSON_AGG(JSON_BUILD_OBJECT('date', c."date" , 'cases', c.cases, 'deaths', c.deaths) ORDER by c."date") as cases, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
