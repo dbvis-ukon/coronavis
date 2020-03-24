@@ -45,7 +45,7 @@ export class Legend {
             '<i style="background:' + color + '"></i> ' +
             d[0].toFixed(0) + (d[1] ? ' &ndash; ' + d[1].toFixed(0) + '<br>' : '+');
         }
-        if (this.minMaxValues[1] < d[1] && lastColor) {
+        if (this.minMaxValues[1] <= d[1] && lastColor) {
           lastColor = false;
           div.innerHTML +=
             '<i style="background:' + color + '"></i> ' +
