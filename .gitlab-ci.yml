@@ -3,6 +3,29 @@ stages:
   - build:docker
   - deploy
 
+variables:
+  K8_NAMESPACE: covid-19-vis
+
+.rules: &rules
+  rules:     
+  # do not run pipelines for merge requests (gets rid of "detatched pipelines")
+  - if: $CI_MERGE_REQUEST_ID
+    when: never
+  # run if files changed; no branch restrictions
+  - changes:
+      - ${FOLDER}/**
+      - ${FOLDER}/**/*
+      - k8/${FOLDER}/**
+      - k8/${FOLDER}/**/*
+    if: $CI_COMMIT_BRANCH == "master"
+    when: always
+  # default is on_success, so explicitly set job not to run if none of the above rules matched
+  - when: never
+
+###########################################
+# BUILD
+###########################################
+
 build-frontend:
   stage: build:frontend
   image: node:latest
@@ -17,98 +40,101 @@ build-frontend:
   tags:
     - docker
 
-dockerize-frontend:
+###########################################
+# DOCKERIZE
+###########################################
+
+.dockerize-template: &dockerize-template
   stage: build:docker
   image: docker:latest
-  variables:
-    IMG: $CI_REGISTRY_IMAGE/frontend:${CI_COMMIT_SHORT_SHA}
-  services:
+  services: 
     - docker:dind
-  dependencies:
-    - build-frontend
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-    - cd ./Frontend
+    - cd ${FOLDER}
     - docker build -t "$IMG" .
     - docker push "$IMG"
-  only:
-    - master
+  <<: *rules
   tags:
     - docker-build
+
 
 dockerize-backend:
-  stage: build:docker
-  image: docker:latest
   variables:
     IMG: $CI_REGISTRY_IMAGE/backend:${CI_COMMIT_SHORT_SHA}
-  services:
-    - docker:dind
+    FOLDER: Backend
+  <<: *dockerize-template
   dependencies: []
-  script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-    - cd ./Backend
-    - docker build -t "$IMG" .
-    - docker push "$IMG"
-  only:
-    - master
-  tags:
-    - docker-build
+
+dockerize-frontend:
+  variables:
+    IMG: $CI_REGISTRY_IMAGE/frontend:${CI_COMMIT_SHORT_SHA}
+    FOLDER: Frontend
+  <<: *dockerize-template
+  dependencies:
+    - build-frontend
 
 dockerize-crawler:
-  stage: build:docker
-  image: docker:latest
   variables:
     IMG: $CI_REGISTRY_IMAGE/crawler:${CI_COMMIT_SHORT_SHA}
-  services:
-    - docker:dind
+    FOLDER: Crawler
+  <<: *dockerize-template
   dependencies: []
-  script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-    - cd ./Crawler
-    - docker build -t "$IMG" .
-    - docker push "$IMG"
-  only:
-    - master
-  tags:
-    - docker-build
 
-deploy-backend:
+dockerize-tileserver:
+  variables:
+    IMG: $CI_REGISTRY_IMAGE/tileserver:${CI_COMMIT_SHORT_SHA}
+    FOLDER: Tiles
+  <<: *dockerize-template
+  dependencies: []
+
+
+
+###########################################
+# DEPLOY
+###########################################
+
+.deploy-script: &deploy-template
   stage: deploy
   script:
-    - K8_NAMESPACE="covid-19-vis"
-    - HELM_CHART="covid-19-vis-backend"
-    - URL="api.covid19vis.lingvis.io"
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/backend
-    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/backend
-  dependencies: []
-  only:
-    - master
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/${FOLDER}
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/${FOLDER}
+  <<: *rules
   tags:
     - k8-admin
+
+    
+deploy-backend:
+  variables:
+    HELM_CHART: covid-19-vis-backend
+    URL: api.covid19vis.lingvis.io
+    FOLDER: Backend
+  <<: *deploy-template
+  dependencies: 
+    - dockerize-backend
 
 deploy-frontend:
-  stage: deploy
-  script:
-    - K8_NAMESPACE="covid-19-vis"
-    - HELM_CHART="covid-19-vis-frontend"
-    - URL="covid19vis.lingvis.io"
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/frontend
-    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/frontend
-  dependencies: []
-  only:
-    - master
-  tags:
-    - k8-admin
+  variables:
+    HELM_CHART: covid-19-vis-frontend
+    URL: covid19vis.lingvis.io
+    FOLDER: Frontend
+  <<: *deploy-template
+  dependencies: 
+    - dockerize-frontend
 
 deploy-crawler:
-  stage: deploy
-  script:
-    - K8_NAMESPACE="covid-19-vis"
-    - HELM_CHART="covid-19-vis-crawler"
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/crawler
-    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/crawler
-  dependencies: []
-  only:
-    - master
-  tags:
-    - k8-admin
+  variables:
+    HELM_CHART: covid-19-vis-crawler
+    FOLDER: Crawler
+  <<: *deploy-template
+  dependencies: 
+    - dockerize-crawler
+
+deploy-tileserver:
+  variables:
+    HELM_CHART: covid-19-vis-tileserver
+    URL: tiles.covid19vis.lingvis.io
+    FOLDER: Tiles
+  <<: *deploy-template
+  dependencies: 
+    - dockerize-tileserver
