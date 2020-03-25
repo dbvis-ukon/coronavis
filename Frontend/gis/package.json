@@ -29,6 +29,9 @@
     "rxjs": "~6.5.4",
     "topojson": "^3.0.2",
     "tslib": "^1.11.1",
+    "vega": "^5.10.0",
+    "vega-embed": "^6.5.2",
+    "vega-lite": "^4.8.1",
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
