@@ -14,16 +14,6 @@
           <mat-panel-title>Krankenhäuser - Bettenauslastung</mat-panel-title>
       </mat-expansion-panel-header>
 
-      <p>
-        <mat-slide-toggle
-            [checked]="mo.bedGlyphOptions.enabled"
-            (change)="mo.bedGlyphOptions.enabled = $event.checked; emitMapOptions()"
-          >Bettenauslastung anzeigen / ausblenden
-          </mat-slide-toggle>
-      </p>
-
-      <mat-divider></mat-divider>
-
       <h5>Aggregation</h5>
 
       <mat-button-toggle-group
@@ -40,6 +30,20 @@
       </mat-button-toggle-group>
 
       <mat-divider></mat-divider>
+
+      <p>
+        <mat-slide-toggle
+            [checked]="mo.bedGlyphOptions.enabled"
+            (change)="mo.bedGlyphOptions.enabled = $event.checked; emitMapOptions()"
+          >Bettenauslastung anzeigen / ausblenden
+          </mat-slide-toggle>
+      </p>
+
+      <div *ngIf="mo.bedGlyphOptions.enabled">
+
+      <mat-divider></mat-divider>
+
+      
 
       <h5>Glyph</h5>
 
@@ -65,6 +69,8 @@
           </div>
       </div>
 
+      </div>
+
       <mat-divider></mat-divider>
 
       <h5>Hintergrund</h5>
@@ -72,7 +78,7 @@
         <mat-slide-toggle
               [disabled]="mo.bedGlyphOptions.aggregationLevel === eAggregationLevels.none"
               [checked]="mo.bedBackgroundOptions.enabled"
-              (change)="mo.bedBackgroundOptions.enabled = !mo.bedBackgroundOptions.enabled; emitMapOptions()"
+              (change)="updateBedBackgroundOptionsEnabled($event.checked)"
             >Bettenauslastung im Hintergrund anzeigen / ausblenden
             </mat-slide-toggle>
         <div *ngIf="mo.bedGlyphOptions.aggregationLevel === eAggregationLevels.none">

@@ -107,6 +107,16 @@ export class InfoboxComponent implements OnInit {
     this.emitMapOptions()
   }
 
+  updateBedBackgroundOptionsEnabled(enabled: boolean) {
+    this.mo.bedBackgroundOptions.enabled = enabled;
+
+    if(enabled) {
+      this.mo.covidNumberCaseOptions.enabled = false;
+    }
+
+    this.emitMapOptions()
+  }
+
   emitMapOptions() {
     console.log('emit map options', this.mo);
     this.mapOptionsChange.emit({...this.mo});
