@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
           - name: covid19vis-crawler
-            image: registry.dbvis.de/jentner/covid-19-vis/crawler:latest
+            image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
             args: ['crawler.py']
@@ -34,7 +34,7 @@ spec:
         spec:
           containers:
           - name: covid19vis-crawler-map
-            image: registry.dbvis.de/jentner/covid-19-vis/crawler:latest
+            image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
             args: ['crawler_map.py']
@@ -57,7 +57,7 @@ spec:
         spec:
           containers:
           - name: covid19vis-crawler-rki
-            image: registry.dbvis.de/jentner/covid-19-vis/crawler:latest
+            image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
             args: ['crawler_rki_dashboard.py']
@@ -80,7 +80,7 @@ spec:
         spec:
           containers:
           - name: covid19vis-crawler-cases
-            image: registry.dbvis.de/jentner/covid-19-vis/crawler:latest
+            image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
             args: ['crawl_rki_cases.py']
