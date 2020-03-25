@@ -205,8 +205,10 @@ dockerize-tileserver:
   stage: deploy
   script:
     - source var.env
+    - cat var.env
     - echo ${HELM_CHART}
     - echo ${ENV_NAME}
+    - echo ${URL}
     - CHART_NAME=$(echo ${ENV_NAME}-${HELM_CHART} | tr / -)
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${FOLDER}
 #    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${FOLDER}
