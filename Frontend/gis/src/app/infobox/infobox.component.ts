@@ -37,17 +37,17 @@ export class InfoboxComponent implements OnInit {
 
   // ENUM MAPPING
   // because in HTML, this stuff cannot be accessed
-  covidNumberCaseTimeWindow = CovidNumberCaseTimeWindow;
+  eCovidNumberCaseTimeWindow = CovidNumberCaseTimeWindow;
 
-  covidNumberCaseChange = CovidNumberCaseChange;
+  eCovidNumberCaseChange = CovidNumberCaseChange;
 
-  covidNumberCaseType = CovidNumberCaseType;
+  eCovidNumberCaseType = CovidNumberCaseType;
 
-  covidNumberCaseNormalization = CovidNumberCaseNormalization;
+  eCovidNumberCaseNormalization = CovidNumberCaseNormalization;
 
-  glyphStates = BedType;
+  eBedTypes = BedType;
 
-  aggregationLevels = AggregationLevel;
+  eAggregationLevels = AggregationLevel;
 
   ngOnInit(): void {
     this.glyphLegend = [

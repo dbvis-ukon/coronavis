@@ -33,10 +33,10 @@
         [value]="mo.bedGlyphOptions.aggregationLevel"
         (change)="updateBedGlyphAggregationLevel($event.value)"
       >
-        <mat-button-toggle [value]="aggregationLevels.state" matTooltip="Bundesländer">Länder</mat-button-toggle>
-        <mat-button-toggle [value]="aggregationLevels.governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
-        <mat-button-toggle [value]="aggregationLevels.county" matTooltip="Landkreise">Kreise</mat-button-toggle>
-        <mat-button-toggle [value]="aggregationLevels.none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.state" matTooltip="Bundesländer">Länder</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.county" matTooltip="Landkreise">Kreise</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
       </mat-button-toggle-group>
 
       <mat-divider></mat-divider>
@@ -70,12 +70,12 @@
       <h5>Hintergrund</h5>
 
         <mat-slide-toggle
-              [disabled]="mo.bedGlyphOptions.aggregationLevel === aggregationLevels.none"
+              [disabled]="mo.bedGlyphOptions.aggregationLevel === eAggregationLevels.none"
               [checked]="mo.bedBackgroundOptions.enabled"
               (change)="mo.bedBackgroundOptions.enabled = !mo.bedBackgroundOptions.enabled; emitMapOptions()"
             >Bettenauslatung im Hintergrund anzeigen / ausblenden
             </mat-slide-toggle>
-        <div *ngIf="mo.bedGlyphOptions.aggregationLevel === aggregationLevels.none">
+        <div *ngIf="mo.bedGlyphOptions.aggregationLevel === eAggregationLevels.none">
           <mat-error>Bitte eine Aggregation Länder, Bezirke, oder Kreise auswählen.</mat-error>
         </div>
         
@@ -87,11 +87,11 @@
         aria-label="Font Style"
         [value]="mo.bedBackgroundOptions.bedType"
         (change)="updateBedBackgroundBedType($event.value)"
-        [disabled]="mo.bedGlyphOptions.aggregationLevel === aggregationLevels.none"
+        [disabled]="mo.bedGlyphOptions.aggregationLevel === eAggregationLevels.none"
       >
-        <mat-button-toggle [value]="glyphStates.icuLow">ICU low</mat-button-toggle>
-        <mat-button-toggle [value]="glyphStates.icuHigh">ICU high</mat-button-toggle>
-        <mat-button-toggle [value]="glyphStates.ecmo">ECMO</mat-button-toggle>
+        <mat-button-toggle [value]="eBedTypes.icuLow">ICU low</mat-button-toggle>
+        <mat-button-toggle [value]="eBedTypes.icuHigh">ICU high</mat-button-toggle>
+        <mat-button-toggle [value]="eBedTypes.ecmo">ECMO</mat-button-toggle>
       </mat-button-toggle-group>
     </mat-expansion-panel>
 
@@ -120,9 +120,9 @@
             [value]="mo.covidNumberCaseOptions.timeWindow"
             (change)="mo.covidNumberCaseOptions.timeWindow = $event.value; emitMapOptions()"
           >
-            <mat-button-toggle [value]="covidNumberCaseTimeWindow.all" [disabled]="mo.covidNumberCaseOptions.change == covidNumberCaseChange.relative">Alle Daten</mat-button-toggle>
-            <mat-button-toggle [value]="covidNumberCaseTimeWindow.twentyFourhours">letze 24 Stunden</mat-button-toggle>
-            <mat-button-toggle [value]="covidNumberCaseTimeWindow.seventyTwoHours">letzte 72 Stunden</mat-button-toggle>
+            <mat-button-toggle [value]="eCovidNumberCaseTimeWindow.all" [disabled]="mo.covidNumberCaseOptions.change == eCovidNumberCaseChange.relative">Alle Daten</mat-button-toggle>
+            <mat-button-toggle [value]="eCovidNumberCaseTimeWindow.twentyFourhours">letze 24 Stunden</mat-button-toggle>
+            <mat-button-toggle [value]="eCovidNumberCaseTimeWindow.seventyTwoHours">letzte 72 Stunden</mat-button-toggle>
           </mat-button-toggle-group>
           </div>
 
@@ -138,8 +138,8 @@
             [value]="mo.covidNumberCaseOptions.change"
             (change)="mo.covidNumberCaseOptions.change = $event.value; emitMapOptions()"
           >
-            <mat-button-toggle [value]="covidNumberCaseChange.absolute">Alle erfassen Fälle</mat-button-toggle>
-            <mat-button-toggle [value]="covidNumberCaseChange.relative" [disabled]="covidNumberCaseTimeWindow.all == mo.covidNumberCaseOptions.timeWindow">Veränderung im gewählten Zeitraum</mat-button-toggle>
+            <mat-button-toggle [value]="eCovidNumberCaseChange.absolute">Alle erfassen Fälle</mat-button-toggle>
+            <mat-button-toggle [value]="eCovidNumberCaseChange.relative" [disabled]="eCovidNumberCaseTimeWindow.all == mo.covidNumberCaseOptions.timeWindow">Veränderung im gewählten Zeitraum</mat-button-toggle>
           </mat-button-toggle-group>
           </div>
 
@@ -155,8 +155,8 @@
             [value]="mo.covidNumberCaseOptions.type"
             (change)="mo.covidNumberCaseOptions.type = $event.value; emitMapOptions()"
           >
-            <mat-button-toggle [value]="covidNumberCaseType.cases">Erkrankungen</mat-button-toggle>
-            <mat-button-toggle [value]="covidNumberCaseType.deaths">Todesfälle</mat-button-toggle>
+            <mat-button-toggle [value]="eCovidNumberCaseType.cases">Erkrankungen</mat-button-toggle>
+            <mat-button-toggle [value]="eCovidNumberCaseType.deaths">Todesfälle</mat-button-toggle>
           </mat-button-toggle-group>
           </div>
 
@@ -172,8 +172,8 @@
             [value]="mo.covidNumberCaseOptions.normalization"
             (change)="mo.covidNumberCaseOptions.normalization = $event.value; emitMapOptions()"
           >
-            <mat-button-toggle [value]="covidNumberCaseNormalization.absolut">Keine Normalisierung</mat-button-toggle>
-            <mat-button-toggle [value]="covidNumberCaseNormalization.per100k" [disabled]="mo.covidNumberCaseOptions.change == covidNumberCaseChange.relative">Je 100.000 Einwohner</mat-button-toggle>
+            <mat-button-toggle [value]="eCovidNumberCaseNormalization.absolut">Keine Normalisierung</mat-button-toggle>
+            <mat-button-toggle [value]="eCovidNumberCaseNormalization.per100k" [disabled]="mo.covidNumberCaseOptions.change == eCovidNumberCaseChange.relative">Je 100.000 Einwohner</mat-button-toggle>
           </mat-button-toggle-group>
           </div>
         </div>
