@@ -43,14 +43,14 @@
 
       <mat-divider></mat-divider>
 
-      
+
 
       <h5>Glyph</h5>
 
       <div class="glyph-legend">
-          <div 
-              *ngFor="let t of glyphLegend" 
-              class="glyph-tile" 
+          <div
+              *ngFor="let t of glyphLegend"
+              class="glyph-tile"
               [matTooltip]="t.description"
               (click)="mo.bedGlyphOptions[t.accessor] = !mo.bedGlyphOptions[t.accessor]; emitMapOptions()"
           >
@@ -59,10 +59,10 @@
           </div>
       </div>
       <div class="glyph-color-legend">
-          <div 
-              *ngFor="let t of glyphLegendColors" 
-              class="glyph-tile" 
-              
+          <div
+              *ngFor="let t of glyphLegendColors"
+              class="glyph-tile"
+
           >
               <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
               <div class="text">{{ t }}</div>
@@ -84,7 +84,7 @@
         <div *ngIf="mo.bedGlyphOptions.aggregationLevel === eAggregationLevels.none">
           <mat-error>Bitte eine Aggregation Länder, Bezirke, oder Kreise auswählen.</mat-error>
         </div>
-        
+
 
       <mat-button-toggle-group
         *ngIf="mo.bedBackgroundOptions.enabled"
@@ -136,7 +136,7 @@
 
           <div class="toggleGroup">
             <h5>Fallzahlen</h5>
-            
+
             <mat-button-toggle-group
             class="btngrp"
             name="fontStyle"
@@ -153,7 +153,7 @@
 
           <div class="toggleGroup">
             <h5>Art</h5>
-            
+
             <mat-button-toggle-group
             class="btngrp"
             name="fontStyle"
@@ -229,15 +229,11 @@
         </mat-list-item>
 
         <mat-list-item>
-          <a href="https://rki.de" target="_blank">Robert Koch Institut</a> 
+          <a href="https://rki.de" target="_blank">Robert Koch Institut</a>
         </mat-list-item>
-      
+
         <mat-list-item role="listitem">
           <a href="https://corona.rki.de/" target="_blank">- Fallzahlen</a>
-        </mat-list-item>
-      
-        <mat-list-item role="listitem">
-          <a href="https://www.divi.de/register/intensivregister" target="_blank">- DIVI Intensivregister</a>
         </mat-list-item>
       </mat-list>
 
