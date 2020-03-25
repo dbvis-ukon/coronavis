@@ -136,7 +136,7 @@
             name="fontStyle"
             aria-label="Font Style"
             [value]="mo.covidNumberCaseOptions.change"
-            (change)="mo.covidNumberCaseOptions.change = $event.value; emitmo.covidNumberCaseOptions()"
+            (change)="mo.covidNumberCaseOptions.change = $event.value; emitMapOptions()"
           >
             <mat-button-toggle [value]="covidNumberCaseChange.absolute">Alle erfassen Fälle</mat-button-toggle>
             <mat-button-toggle [value]="covidNumberCaseChange.relative" [disabled]="covidNumberCaseTimeWindow.all == mo.covidNumberCaseOptions.timeWindow">Veränderung im gewählten Zeitraum</mat-button-toggle>
