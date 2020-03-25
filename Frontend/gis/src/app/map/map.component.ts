@@ -117,16 +117,14 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit() {
-    const apiToken = 'pk.eyJ1IjoiOTA2M2RlMTBlMWQ5IiwiYSI6ImNrODZicXpseTBjcHQzbW84d213aXBiOGgifQ.St1C8STbyTrHF7HwzIkUPg';
-    const styleToken = '9063de10e1d9/ck86c318i021d1iqfgvhln1ap';
     const tiledMap = L.tileLayer(
-      `https://api.mapbox.com/styles/v1/${styleToken}/tiles/{z}/{x}/{y}?access_token=${apiToken}`,
-      {
-        tileSize: 512,
-        zoomOffset: -1,
-        attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
-          '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      });
+        `https://tiles.covid19vis.lingvis.io/{z}/{x}/{y}.png`,
+        {
+          tileSize: 512,
+          zoomOffset: -1,
+          attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
+            '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        });
 
     /*const webGlMap = L.mapboxGL({
       accessToken: 'pk.eyJ1IjoianVyaWIiLCJhIjoiY2s4MndsZTl0MDR2cDNobGoyY3F2YngyaiJ9.xwBjxEn_grzetKOVZDcyqA',
