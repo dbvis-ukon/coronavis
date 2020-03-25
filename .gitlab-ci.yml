@@ -212,15 +212,23 @@ dockerize-tileserver:
   stage: deploy
   script:
     - source var.env
+    # DEBUG
     - cat var.env
-    - echo ${ENV_NAME}
+    # using the app name converted to uppercase to generate the url accessor, result: URL_BACKEND
     - URL_ACCESSOR="URL_$(echo ${APP} | tr [:lower:] [:upper:])"
+    # DEBUG
     - echo $URL_ACCESSOR
+    # this will retrieve the content of the actual URL_BACKEND variable
     - URL=${!URL_ACCESSOR}
+    # DEBUG
     - echo ${URL}
-    - CHART_NAME=$(echo ${ENV_NAME} | tr / -)
+    # generates the chart name using the environment name, replace all / with -; result: review-backend-100-fancify-pipeline
+    - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / -)
+    # DEBUG
     - echo ${CHART_NAME}
+    # write the url into the var.env file for the dynamic env url generation
     - echo "URL=${URL}" >> var.env
+    # use chart name and the folder by uppercasing the first character of the app name; result: Backend
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${APP^}
     - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${APP^}
   tags:
@@ -345,9 +353,9 @@ deploy-tileserver:
     GIT_STRATEGY: none
   script:
     - source var.env
-    - CHART_NAME=$(echo ${ENV_NAME}-${HELM_CHART} | tr / -)
-    - helm delete --dry-run --debug --purge ${HELM_CHART}-${ENV_NAME}
-    - helm delete --purge ${HELM_CHART}-${ENV_NAME}
+    - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / -)
+    - helm delete --dry-run --debug --purge ${CHART_NAME}
+    - helm delete --purge ${CHART_NAME}
   when: manual
   dependencies:
     - export-environment
