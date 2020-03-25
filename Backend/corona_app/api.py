@@ -29,7 +29,7 @@ def get_hospitals():
     """
     hospitals = db.session.query(Hospital).distinct(Hospital.name).order_by(
         Hospital.name, Hospital.last_update.desc()).all()
-    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+    return jsonify(__as_feature_collection(hospitals)), 200
 
 
 @backend_api.route('/hospitals/landkreise', methods=['GET'])
