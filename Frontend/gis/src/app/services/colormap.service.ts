@@ -15,7 +15,7 @@ export class ColormapService {
     .range([...d3.schemeGreens[6].slice(0, 5).reverse(), '#fff', ...d3.schemeBlues[6].slice(0, 5)]);
 
   public static bedStatusColors = ['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)'];
-  public static bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht Verfügbar'];
+  public static bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'];
 
   public static BedStatusColor = d3.scaleLinear<string, string>()
       .domain([0, 0.5, 1])
