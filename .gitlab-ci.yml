@@ -15,6 +15,8 @@ variables:
   - changes:
       - ${FOLDER}/**
       - ${FOLDER}/**/*
+      - k8/${FOLDER}/**
+      - k8/${FOLDER}/**/*
     if: $CI_COMMIT_BRANCH == "master"
     when: always
   # default is on_success, so explicitly set job not to run if none of the above rules matched
@@ -60,14 +62,14 @@ build-frontend:
 dockerize-backend:
   variables:
     IMG: $CI_REGISTRY_IMAGE/backend:${CI_COMMIT_SHORT_SHA}
-    FOLDER: ./Backend
+    FOLDER: Backend
   <<: *dockerize-template
   dependencies: []
 
 dockerize-frontend:
   variables:
     IMG: $CI_REGISTRY_IMAGE/frontend:${CI_COMMIT_SHORT_SHA}
-    FOLDER: ./Frontend
+    FOLDER: Frontend
   <<: *dockerize-template
   dependencies:
     - build-frontend
@@ -75,14 +77,14 @@ dockerize-frontend:
 dockerize-crawler:
   variables:
     IMG: $CI_REGISTRY_IMAGE/crawler:${CI_COMMIT_SHORT_SHA}
-    FOLDER: ./Crawler
+    FOLDER: Crawler
   <<: *dockerize-template
   dependencies: []
 
 dockerize-tileserver:
   variables:
     IMG: $CI_REGISTRY_IMAGE/tileserver:${CI_COMMIT_SHORT_SHA}
-    FOLDER: ./Tiles
+    FOLDER: Tiles
   <<: *dockerize-template
   dependencies: []
 
@@ -95,8 +97,8 @@ dockerize-tileserver:
 .deploy-script: &deploy-template
   stage: deploy
   script:
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ${CHART_FOLDER}
-    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ${CHART_FOLDER}
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/${FOLDER}
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/${FOLDER}
   <<: *rules
   tags:
     - k8-admin
@@ -106,8 +108,7 @@ deploy-backend:
   variables:
     HELM_CHART: covid-19-vis-backend
     URL: api.covid19vis.lingvis.io
-    CHART_FOLDER: ./k8/backend
-    FOLDER: ./Backend
+    FOLDER: Backend
   <<: *deploy-template
   dependencies: 
     - dockerize-backend
@@ -116,8 +117,7 @@ deploy-frontend:
   variables:
     HELM_CHART: covid-19-vis-frontend
     URL: covid19vis.lingvis.io
-    CHART_FOLDER: ./k8/frontend
-    FOLDER: ./Frontend
+    FOLDER: Frontend
   <<: *deploy-template
   dependencies: 
     - dockerize-frontend
@@ -125,8 +125,7 @@ deploy-frontend:
 deploy-crawler:
   variables:
     HELM_CHART: covid-19-vis-crawler
-    CHART_FOLDER: ./k8/crawler
-    FOLDER: ./Crawler
+    FOLDER: Crawler
   <<: *deploy-template
   dependencies: 
     - dockerize-crawler
@@ -135,8 +134,7 @@ deploy-tileserver:
   variables:
     HELM_CHART: covid-19-vis-tileserver
     URL: tiles.covid19vis.lingvis.io
-    CHART_FOLDER: ./k8/tiles
-    FOLDER: ./Tiles
+    FOLDER: Tiles
   <<: *deploy-template
   dependencies: 
     - dockerize-tileserver
