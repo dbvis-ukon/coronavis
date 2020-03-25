@@ -118,7 +118,6 @@ export class InfoboxComponent implements OnInit {
   }
 
   emitMapOptions() {
-    console.log('emit map options', this.mo);
     this.mapOptionsChange.emit({...this.mo});
   }
 
