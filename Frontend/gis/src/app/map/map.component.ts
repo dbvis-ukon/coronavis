@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  IterableDiffers,
   OnInit,
   Output,
   ViewChild,
@@ -24,7 +23,6 @@ import {DataService} from '../services/data.service';
 import {HospitallayerService} from '../services/hospitallayer.service';
 import {FeatureCollection} from 'geojson';
 import {forkJoin, Subject} from 'rxjs';
-import {GlyphHoverEvent} from './events/glyphhover';
 import {LandkreiseHospitalsLayer} from './overlays/landkreishospitals';
 import {HospitalLayer} from './overlays/hospital';
 import {HelipadLayer} from './overlays/helipads';
@@ -38,10 +36,10 @@ import {
   CovidNumberCaseType
 } from './options/covid-number-case-options';
 import { BedType } from './options/bed-type.enum';
-import { BedStatusChoropleth } from './overlays/bedstatuschoropleth';
 import { MapOptions } from './options/map-options';
 import { BedBackgroundOptions } from './options/bed-background-options';
 import { BedGlyphOptions } from './options/bed-glyph-options';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -119,7 +117,8 @@ export class MapComponent implements OnInit {
     private dataService: DataService,
     private tooltipService: TooltipService,
     private hospitallayerService: HospitallayerService,
-    private colormapService: ColormapService
+    private colormapService: ColormapService,
+    private matDialog: MatDialog
   ) {
   }
 
@@ -204,7 +203,8 @@ export class MapComponent implements OnInit {
           result[0] as DiviHospital[], 
           this.tooltipService, 
           this.colormapService,
-          this.bedGlyphOptions$
+          this.bedGlyphOptions$,
+          this.matDialog
           );
         const simpleGlyphLayer = simpleGlyphFactory.createOverlay(this.mymap);
         const l = L.layerGroup([simpleGlyphLayer]);

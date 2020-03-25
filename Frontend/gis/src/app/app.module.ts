@@ -21,6 +21,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
+import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
 import { LegendComponent } from './legend/legend.component';
 import { PlusminusPipe } from './plusminus.pipe';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -38,6 +41,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     CaseTooltipComponent,
     OverlayBrandComponent,
     InfoboxComponent,
+    HospitalInfoComponent,
+    HospitalInfoDialogComponent,
     LegendComponent,
     PlusminusPipe,
   ],
@@ -57,7 +62,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     MatIconModule,
     MatRadioModule,
     MatButtonModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
