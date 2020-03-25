@@ -70,7 +70,7 @@ export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
     const aggregationLayer = L.geoJSON(this.featureCollection, {
       style: (feature) => {
         return {
-          fillColor: this.colorsService.getBedStatusColor(this.normalizeValues(this.getScore(feature.properties))),
+          fillColor: this.colorsService.getBedStatusColor(this.normalizeValues(this.getScore(feature.properties)), this.propertyAccessor(feature.properties, this.type)["Nicht verfügbar"] > 0),
           weight: 0.5,
           opacity: 1,
           color: 'gray',
