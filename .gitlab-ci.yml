@@ -222,7 +222,8 @@ deploy-backend:
   <<: *deploy-template
   <<: *rules-backend
   before_script:
-    - echo "URL=${URL_BACKEND}" >> var.env
+    - source var.env
+    - URL=${URL_BACKEND}
   # environment:
   #   url: $URL_BACKEND
   #   name: $ENV_NAME_BACKEND
@@ -244,7 +245,8 @@ deploy-frontend:
   <<: *deploy-template
   <<: *rules-frontend
   before_script:
-    - echo "URL=${URL_FRONTEND}" >> var.env
+    - source var.env
+    - URL=${URL_FRONTEND}
   environment:
     url: $URL_FRONTEND
     name: $ENV_NAME_FRONTEND
@@ -288,7 +290,8 @@ deploy-tileserver:
   <<: *deploy-template
   <<: *rules-tileserver
   before_script:
-    - echo "URL=${URL_TILES}" >> var.env
+    - source var.env
+    - URL=${URL_TILES}
   # environment:
   #   url: $URL_TILES
   #   name: $ENV_NAME_TILES
