@@ -479,10 +479,6 @@ export class MapComponent implements OnInit {
       throw 'AggregationLevel must not be none on bed background layer';
     }
 
-    if(o.bedType === BedType.none) {
-      throw 'BedType must not be none on bed background layer';
-    }
-
     if(o.enabled) {
 
       const key = this.getBedChoroplethKey(o.aggregationLevel, o.bedType);

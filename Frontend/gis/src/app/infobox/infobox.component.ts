@@ -36,6 +36,7 @@ export class InfoboxComponent implements OnInit {
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
 
   // ENUM MAPPING
+  // because in HTML, this stuff cannot be accessed
   covidNumberCaseTimeWindow = CovidNumberCaseTimeWindow;
 
   covidNumberCaseChange = CovidNumberCaseChange;
@@ -47,8 +48,6 @@ export class InfoboxComponent implements OnInit {
   glyphStates = BedType;
 
   aggregationLevels = AggregationLevel;
-
-  internalBedType: BedType = BedType.none;
 
   ngOnInit(): void {
     this.glyphLegend = [
@@ -81,14 +80,7 @@ export class InfoboxComponent implements OnInit {
       return;
     }
 
-    // user clicked on same glyph, disable
-    if(this.internalBedType === state) {
-      this.internalBedType = BedType.none;
-    } else {
-      this.internalBedType = state;
-    }
-
-    this.mo.bedBackgroundOptions.bedType = this.internalBedType;
+    this.mo.bedBackgroundOptions.bedType = state;
 
     this.emitMapOptions();
   }
@@ -113,14 +105,6 @@ export class InfoboxComponent implements OnInit {
     }
     
     this.emitMapOptions()
-  }
-
-  getBorderColor(state: BedType) {
-    if(this.mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
-      return 'white';
-    }
-
-    return state === this.internalBedType ? 'gray' : 'lightgrey'
   }
 
   emitMapOptions() {

@@ -39,7 +39,7 @@ export class HospitallayerService {
         state: AggregationLevel.state
       }];
 
-    const types = Object.values(BedType).filter(i => BedType.none !== i);
+    const types = Object.values(BedType);
 
     for (let granularity of granularities) {
       this.http.get<AggregatedHospitals>(url + granularity.api)
