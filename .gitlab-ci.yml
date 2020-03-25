@@ -31,8 +31,6 @@ export-environment:
     - echo "ENV_NAME_TILES=tiles/${ENV_NAME}" >> var.env
     - echo "ENV_NAME_CRAWLER=crawler/${ENV_NAME}" >> var.env
   artifacts:
-    reports:
-      dotenv: var.env
     paths:
       - var.env
     expire_in: 3000 days
@@ -211,6 +209,9 @@ dockerize-tileserver:
     - echo ${ENV_NAME}
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} ${ENV_NAME}-${HELM_CHART} ./k8/${FOLDER}
 #    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} ${ENV_NAME}-${HELM_CHART} ./k8/${FOLDER}
+  artifacts:
+    reports:
+      dotenv: var.env
   tags:
     - k8-admin
 
