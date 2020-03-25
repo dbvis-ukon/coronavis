@@ -1,0 +1,35 @@
+<h3>{{ data.Name }}</h3>
+<mat-divider></mat-divider>
+<table>
+  <tbody>
+  <tr>
+    <td><strong>ICU - Low Care:</strong> </td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuLowCare) }">{{ data.icuLowCare }}</td>
+  </tr>
+  <tr>
+    <td><strong>ICU - High Care: </strong></td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuHighCare) }">{{ data.icuHighCare }}</td>
+  </tr>
+  <tr>
+    <td><strong>ECMO: </strong></td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(data.ECMO) }">{{ data.ECMO }}</td>
+  </tr>
+  </tbody>
+</table>
+<br>
+
+<div *ngIf="mode === 'dialog'">
+  <!--h3>{{ data.Name }}</h3>
+  <mat-divider></mat-divider-->
+  <p style="margin-top: 10px;">
+    <strong>Adresse: </strong> {{ data.Adress }}
+  </p>
+  <p>
+    <strong>Kontakt: </strong> 
+    <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a> 
+    <span *ngIf="!url">{{ contactMsg }}</span>
+  </p>
+</div>
+
+<p><strong>Letzter Stand: </strong> {{ data.Stand }}</p>
+

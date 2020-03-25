@@ -1,0 +1,27 @@
+
+
+<div class="legend bedlegend" *ngIf="bedType === bed.none && choroplethLayer">
+
+    <div class="row" *ngFor="let b of caseColors">
+
+        <div class="rect" [ngStyle]="{ 'background-color': b.color }"></div>
+
+        <div class="text" [innerHtml]="b.text"></div>
+
+    </div>
+
+</div>
+
+
+<div class="legend bedlegend" *ngIf="aggregationLevel!==agg.none && bedType !== bed.none" >
+
+    <div class="row" *ngFor="let b of bedStatusColors">
+
+        <div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div>
+
+        <div class="text">{{ b }}</div>
+
+    </div>
+
+</div>
+

@@ -23,8 +23,7 @@ import {AggregatedGlyphLayer} from './overlays/aggregated-glyph.layer';
 import {DataService} from '../services/data.service';
 import {HospitallayerService} from '../services/hospitallayer.service';
 import {FeatureCollection} from 'geojson';
-import {forkJoin, Subject} from 'rxjs';
-import {GlyphHoverEvent} from './events/glyphhover';
+import {forkJoin} from 'rxjs';
 import {LandkreiseHospitalsLayer} from './overlays/landkreishospitals';
 import {HospitalLayer} from './overlays/hospital';
 import {HelipadLayer} from './overlays/helipads';
@@ -37,8 +36,8 @@ import {
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from './options/covid-number-case-options';
+import { MatDialog } from '@angular/material/dialog';
 import { GlyphState } from './options/glyph-state';
-import { BedStatusChoropleth } from './overlays/bedstatuschoropleth';
 
 
 @Component({
@@ -143,6 +142,9 @@ export class MapComponent implements OnInit {
     return this._caseChoroplethOptions;
   }
 
+  @Output()
+  caseChoroplethLayerChange: EventEmitter<CaseChoropleth> = new EventEmitter();
+
   // private layerControl: L.Control.Layers;
 
   private mymap: L.Map;
@@ -167,14 +169,15 @@ export class MapComponent implements OnInit {
     private dataService: DataService,
     private tooltipService: TooltipService,
     private hospitallayerService: HospitallayerService,
-    private colormapService: ColormapService
+    private colormapService: ColormapService,
+    private matDialog: MatDialog
   ) {
     this.iterableDiffer = this.iterable.find(this.overlays).create();
   }
 
   ngOnInit() {
-    const apiToken = 'pk.eyJ1IjoianVyaWIiLCJhIjoiY2s4MndsZTl0MDR2cDNobGoyY3F2YngyaiJ9.xwBjxEn_grzetKOVZDcyqA';
-    const styleToken = 'jurib/ck82xkh3z3i7b1iodexbt39x9';
+    const apiToken = 'pk.eyJ1IjoiOTA2M2RlMTBlMWQ5IiwiYSI6ImNrODZicXpseTBjcHQzbW84d213aXBiOGgifQ.St1C8STbyTrHF7HwzIkUPg';
+    const styleToken = '9063de10e1d9/ck86c318i021d1iqfgvhln1ap';
     const tiledMap = L.tileLayer(
       `https://api.mapbox.com/styles/v1/${styleToken}/tiles/{z}/{x}/{y}?access_token=${apiToken}`,
       {
@@ -248,16 +251,16 @@ export class MapComponent implements OnInit {
       this.dataService.getHospitalsBundeslaender()
     ])
       .subscribe(result => {
-        const simpleGlyphFactory = new SimpleGlyphLayer('ho_none', result[0] as DiviHospital[], this.tooltipService, this.colormapService);
+        const simpleGlyphFactory = new SimpleGlyphLayer('ho_none', result[0] as DiviHospital[], this.tooltipService, this.colormapService, this.matDialog);
         const simpleGlyphLayer = simpleGlyphFactory.createOverlay(this.mymap);
         const l = L.layerGroup([simpleGlyphLayer]);
         this.aggregationLevelToGlyphMap.set(AggregationLevel.none, l);
         this.layerToFactoryMap.set(simpleGlyphLayer, simpleGlyphFactory);
 
 
-      this.addGlyphMap(result, 1, AggregationLevel.county, 'ho_county', 'landkreise');
-      this.addGlyphMap(result, 3, AggregationLevel.governmentDistrict, 'ho_governmentdistrict', 'regierungsbezirke');
-      this.addGlyphMap(result, 5, AggregationLevel.state, 'ho_state', 'bundeslander');
+        this.addGlyphMap(result, 1, AggregationLevel.county, 'ho_county', 'landkreise');
+        this.addGlyphMap(result, 3, AggregationLevel.governmentDistrict, 'ho_governmentdistrict', 'regierungsbezirke');
+        this.addGlyphMap(result, 5, AggregationLevel.state, 'ho_state', 'bundeslander');
 
 
         // init map with the current aggregation level
@@ -432,7 +435,9 @@ export class MapComponent implements OnInit {
   }
 
   private addGlyphMap(result: any[], index: number, agg: AggregationLevel, name: string, granularity: string) {
-    const factory = new AggregatedGlyphLayer(name, granularity, result[index], this.tooltipService, this.colormapService, this.hospitallayerService);
+    const factory = new AggregatedGlyphLayer(name, granularity, result[index],
+      this.tooltipService, this.colormapService, this.hospitallayerService);
+
     const layer = factory.createOverlay(this.mymap);
 
 
@@ -472,7 +477,6 @@ export class MapComponent implements OnInit {
       // single glyph layer group (only contains one item)
       (l.getLayers()[0] as SVGOverlay).bringToFront();
     }
-
   }
 
   private getKeyCovidNumberCaseOptions(v: CovidNumberCaseOptions) {
@@ -482,9 +486,13 @@ export class MapComponent implements OnInit {
   private initCaseChoroplethLayer(o: CovidNumberCaseOptions, data: FeatureCollection) {
     const key = this.getKeyCovidNumberCaseOptions(o);
     const f = new CaseChoropleth(key, data, o, this.tooltipService, this.colormapService);
+    const l = f.createOverlay();
+    this.covidNumberCaseOptionsKeyToLayer.set(key, l);
 
-    this.covidNumberCaseOptionsKeyToLayer.set(key, f.createOverlay());
+    this.layerToFactoryMap.set(l, f);
   }
+
+  private currentLegend;
 
   private updateCaseChoroplethLayers(opt: CovidNumberCaseOptions) {
     // remove all layers
@@ -493,6 +501,7 @@ export class MapComponent implements OnInit {
     });
 
     if (!opt || !opt.enabled) {
+      this.caseChoroplethLayerChange.emit(null);
       return;
     }
 
@@ -504,6 +513,10 @@ export class MapComponent implements OnInit {
 
     const l = this.covidNumberCaseOptionsKeyToLayer.get(key);
     this.mymap.addLayer(l);
+
+    const factory = this.layerToFactoryMap.get(l);
+    this.caseChoroplethLayerChange.emit(factory as CaseChoropleth);
+
     l.bringToBack();
 
     // update the glyph map to put it in the front:
@@ -511,14 +524,19 @@ export class MapComponent implements OnInit {
   }
 
   private updateGlyphState(st: GlyphState) {
-    if(this._lastBedCoroplethLayer) {
+    if (this._lastBedCoroplethLayer) {
       this.mymap.removeLayer(this._lastBedCoroplethLayer);
     }
-  
-
 
     if(this._aggregationLevel !== AggregationLevel.none && st !== GlyphState.none) {
-      const layer = this.choroplethLayerMap.get(this.getBedChoroplethKey(this._aggregationLevel, st));
+      try {
+        if (this.currentLegend) { this.mymap.removeControl(this.currentLegend); }
+      } catch (e) {
+        console.log(e);
+      }
+      const key = this.getBedChoroplethKey(this._aggregationLevel, st);
+
+      const layer = this.choroplethLayerMap.get(key);
       layer.bringToBack();
       this.mymap.addLayer(layer);
 
