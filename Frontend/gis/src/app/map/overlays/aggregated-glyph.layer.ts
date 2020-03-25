@@ -11,6 +11,8 @@ import {Subject, Observable} from "rxjs";
 import {quadtree} from "d3";
 import { BedGlyphOptions } from '../options/bed-glyph-options';
 import { BedType } from '../options/bed-type.enum';
+import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
+import {AggregatedGlyphTooltipComponent} from "../../aggregated-glyph-tooltip/aggregated-glyph-tooltip.component";
 
 export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
@@ -44,7 +46,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
       this.gHospitals
         .selectAll(`.bed.${BedType.ecmo}`)
-        .style('opacity', opt.showEcmo ? '1' : '0');  
+        .style('opacity', opt.showEcmo ? '1' : '0');
 
 
     });
@@ -144,7 +146,14 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
         d._x = p.x;
         d._y = p.y;
         return `translate(${p.x - ((3 * rectSize + padding * 3) / 2)}, ${p.y - (22 / 2)})`;
-      });
+      })
+      .on('mouseenter', function (d1: DiviAggregatedHospital) {
+        const evt: MouseEvent = d3.event;
+        const t = self.tooltipService.openAtElementRef(AggregatedGlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
+        t.diviAggregatedHospital = d1;
+        d3.select(this).raise();
+      })
+      .on('mouseleave', () => this.tooltipService.close());
       // .on('mouseenter', d1 => {
       //   const evt: MouseEvent = d3.event;
       //   const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });

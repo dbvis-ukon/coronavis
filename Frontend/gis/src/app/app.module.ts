@@ -27,7 +27,7 @@ import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-inf
 import { LegendComponent } from './legend/legend.component';
 import { PlusminusPipe } from './plusminus.pipe';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
+import {AggregatedGlyphTooltipComponent} from './aggregated-glyph-tooltip/aggregated-glyph-tooltip.component';
 
 
 @NgModule({
@@ -45,6 +45,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     HospitalInfoDialogComponent,
     LegendComponent,
     PlusminusPipe,
+    AggregatedGlyphTooltipComponent
   ],
   imports: [
     BrowserModule,
