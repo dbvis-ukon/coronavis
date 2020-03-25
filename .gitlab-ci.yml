@@ -142,10 +142,12 @@ build-frontend:
   image: docker:latest
   services: 
     - docker:dind
+  before_script:
+    - apk add bash
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
     - cd ${FOLDER}
-    - IMG=$CI_REGISTRY_IMAGE/${FOLDER,,}:${VERSION}
+    - IMG=$(bash -c "echo ${CI_REGISTRY_IMAGE}/${FOLDER,,}:${VERSION}")
     - docker build -t "$IMG" .
     - docker push "$IMG"
   tags:
