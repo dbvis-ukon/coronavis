@@ -117,6 +117,24 @@
 
         <div *ngIf="mo.covidNumberCaseOptions && mo.covidNumberCaseOptions.enabled">
           <div class="toggleGroup">
+            <h5>Aggregation</h5>
+
+            <mat-button-toggle-group
+              class="btngrp"
+              name="fontStyle"
+              aria-label="Font Style"
+              [value]="mo.covidNumberCaseOptions.aggregationLevel"
+              (change)="mo.covidNumberCaseOptions.aggregationLevel = $event.value; emitMapOptions()"
+            >
+              <mat-button-toggle [value]="eAggregationLevels.state" matTooltip="Bundesländer">Länder</mat-button-toggle>
+              <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+              <mat-button-toggle [value]="eAggregationLevels.county" matTooltip="Landkreise">Kreise</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="toggleGroup">
             <h5>Zeitraum</h5>
             <mat-button-toggle-group
             *ngIf="mo.covidNumberCaseOptions && mo.covidNumberCaseOptions.enabled"
@@ -227,7 +245,7 @@
         <mat-list-item role="listitem">
           <a href="https://www.divi.de/register/intensivregister" target="_blank">DIVI Intensivregister</a>
         </mat-list-item>
-        
+
         <mat-list-item>
           <a href="https://rki.de" target="_blank">Robert Koch Institut</a>
         </mat-list-item>
@@ -239,7 +257,7 @@
         <mat-list-item role="listitem">
           <a href="https://www.openstreetmap.org/" target="_blank">OpenStreetMap</a>
         </mat-list-item>
-        
+
       </mat-list>
 
 
