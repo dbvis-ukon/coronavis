@@ -5,9 +5,6 @@ import { VisualizationSpec } from 'vega-embed';
 @Component({
   selector: 'app-vega',
   template: `
-  <ng-template #tpl>
-        <!-- any HTML elements can go here -->
-    </ng-template>
   <div>
     <div #chart></div>
   </div>
@@ -15,8 +12,6 @@ import { VisualizationSpec } from 'vega-embed';
   styleUrls: ['./vega.component.less']
 })
 export class VegaComponent implements AfterViewInit {
-
-  @ViewChild('tpl', {read: TemplateRef}) tpl: TemplateRef<null>;
 
   @ViewChild('chart', {static: true})
   chartRef: ElementRef<HTMLDivElement>;
