@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ColormapService} from '../services/colormap.service';
-import {AggregationLevel} from '../map/options/aggregation-level';
-import {GlyphState} from '../map/options/glyph-state';
+import {AggregationLevel} from '../map/options/aggregation-level.enum';
+import {BedType} from '../map/options/bed-type.enum';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { CovidNumberCaseOptions, CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
+import { MapOptions } from '../map/options/map-options';
 
 @Component({
   selector: 'app-legend',
@@ -12,37 +13,11 @@ import { CovidNumberCaseOptions, CovidNumberCaseNormalization } from '../map/opt
 })
 export class LegendComponent implements OnInit {
 
-  /**
-  private _aggregationLevel: AggregationLevel;
-  private _bedStatus: GlyphState;
-
-  @Input()
-  set aggregationLevel(val: AggregationLevel) {
-    this._aggregationLevel = val;
-  }
-
-  get aggregationLevel(): AggregationLevel {
-    return this._aggregationLevel;
-  }
-
-  @Input()
-  set bedType(state: GlyphState) {
-    this._bedStatus = state;
-  }
-
-  get bedType(): GlyphState {
-    return this._bedStatus;
-  }
-   **/
-
-  @Input()
-  bedType: GlyphState;
-
-  @Input()
-  aggregationLevel: AggregationLevel;
+  @Input('mapOptions')
+  mo: MapOptions;
 
   agg = AggregationLevel;
-  bed = GlyphState;
+  bed = BedType;
 
   bedStatusColors = ColormapService.bedStati;
 
@@ -58,10 +33,6 @@ export class LegendComponent implements OnInit {
   get choroplethLayer(): CaseChoropleth {
     return this._choroplethLayer;
   }
-
-  @Input()
-  caseChoroplethOptions: CovidNumberCaseOptions;
-
 
   caseColors = [];
 
@@ -85,7 +56,7 @@ export class LegendComponent implements OnInit {
 
     const v = this._choroplethLayer;
     let normVal = 1;
-    if ((this.caseChoroplethOptions && this.caseChoroplethOptions.normalization === CovidNumberCaseNormalization.per100k)) {
+    if ((this.mo.covidNumberCaseOptions && this.mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k)) {
       normVal = 100000;
     }
 

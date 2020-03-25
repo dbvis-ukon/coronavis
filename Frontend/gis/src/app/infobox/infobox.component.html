@@ -16,8 +16,8 @@
 
       <p>
         <mat-slide-toggle
-            [checked]="caseChoroplethOptions.enabled"
-            (change)="caseChoroplethOptions.enabled = $event.checked; emitCaseChoroplethOptions()"
+            [checked]="mo.bedGlyphOptions.enabled"
+            (change)="mo.bedGlyphOptions.enabled = $event.checked; emitMapOptions()"
           >Bettenauslatung anzeigen / ausblenden
           </mat-slide-toggle>
       </p>
@@ -27,16 +27,16 @@
       <h5>Aggregation</h5>
 
       <mat-button-toggle-group
-      class="btngrp"
-      name="fontStyle"
-      aria-label="Font Style"
-      [value]="aggregationLevel"
-      (change)="aggregationLevelChange.emit($event.value)"
-    >
-        <mat-button-toggle value="state" matTooltip="Bundesländer">Länder</mat-button-toggle>
-        <mat-button-toggle value="governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
-        <mat-button-toggle value="county" matTooltip="Landkreise">Kreise</mat-button-toggle>
-        <mat-button-toggle value="none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
+        class="btngrp"
+        name="fontStyle"
+        aria-label="Font Style"
+        [value]="mo.bedGlyphOptions.aggregationLevel"
+        (change)="updateBedGlyphAggregationLevel($event.value)"
+      >
+        <mat-button-toggle [value]="aggregationLevels.state" matTooltip="Bundesländer">Länder</mat-button-toggle>
+        <mat-button-toggle [value]="aggregationLevels.governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+        <mat-button-toggle [value]="aggregationLevels.county" matTooltip="Landkreise">Kreise</mat-button-toggle>
+        <mat-button-toggle [value]="aggregationLevels.none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
       </mat-button-toggle-group>
 
       <mat-divider></mat-divider>
@@ -48,9 +48,9 @@
               *ngFor="let t of glyphLegend" 
               class="glyph-tile" 
               [matTooltip]="t.description"
-              (click)="updateGlyphState(t.state)"
+              (click)="mo.bedGlyphOptions[t.accessor] = !mo.bedGlyphOptions[t.accessor]; emitMapOptions()"
           >
-              <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color), 'border-color': getBorderColor(t.state), 'cursor': aggregationLevel === 'none' ? 'initial' : 'pointer'}"></div>
+              <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color), 'border-color': mo.bedGlyphOptions[t.accessor] ? 'grey' : 'lightgrey'}"></div>
               <div class="text">{{ t.name }}</div>
           </div>
       </div>
@@ -70,24 +70,24 @@
       <h5>Hintergrund</h5>
 
         <mat-slide-toggle
-              [disabled]="aggregationLevel === aggregationLevels.none"
-              [checked]="internalGlyphState !== glyphStates.none"
-              (change)="$event.checked ? updateGlyphState(glyphStates.icuLow) : updateGlyphState(glyphStates.none)"
+              [disabled]="mo.bedGlyphOptions.aggregationLevel === aggregationLevels.none"
+              [checked]="mo.bedBackgroundOptions.enabled"
+              (change)="mo.bedBackgroundOptions.enabled = !mo.bedBackgroundOptions.enabled; emitMapOptions()"
             >Bettenauslatung im Hintergrund anzeigen / ausblenden
             </mat-slide-toggle>
-        <div *ngIf="aggregationLevel === aggregationLevels.none">
+        <div *ngIf="mo.bedGlyphOptions.aggregationLevel === aggregationLevels.none">
           <mat-error>Bitte eine Aggregation Länder, Bezirke, oder Kreise auswählen.</mat-error>
         </div>
         
 
       <mat-button-toggle-group
-        *ngIf="internalGlyphState !== glyphStates.none"
+        *ngIf="mo.bedBackgroundOptions.enabled"
         class="btngrp"
         name="fontStyle"
         aria-label="Font Style"
-        [value]="internalGlyphState"
-        (change)="updateGlyphState($event.value)"
-        [disabled]="aggregationLevel === aggregationLevels.none"
+        [value]="mo.bedBackgroundOptions.bedType"
+        (change)="updateBedBackgroundBedType($event.value)"
+        [disabled]="mo.bedGlyphOptions.aggregationLevel === aggregationLevels.none"
       >
         <mat-button-toggle [value]="glyphStates.icuLow">ICU low</mat-button-toggle>
         <mat-button-toggle [value]="glyphStates.icuHigh">ICU high</mat-button-toggle>
@@ -104,115 +104,77 @@
       </mat-expansion-panel-header>
       <form class="covid-form">
         <mat-slide-toggle
-          [checked]="caseChoroplethOptions.enabled"
-          (change)="caseChoroplethOptions.enabled = $event.checked; emitCaseChoroplethOptions()"
+          [checked]="mo.covidNumberCaseOptions.enabled"
+          (change)="updateCovidNumberCaseOptionsEnabled($event.checked)"
         >Covid-19 Fallansicht anzeigen / ausblenden
         </mat-slide-toggle>
 
-        <div *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled">
+        <div *ngIf="mo.covidNumberCaseOptions && mo.covidNumberCaseOptions.enabled">
           <div class="toggleGroup">
             <h5>Zeitraum</h5>
-            <mat-radio-group *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled"
-                             (change)="caseChoroplethOptions.timeWindow = $event.value; emitCaseChoroplethOptions()">
-
-              <mat-radio-button
-                [value]="covidNumberCaseTimeWindow.all"
-                [checked]="covidNumberCaseTimeWindow.all == caseChoroplethOptions.timeWindow"
-                [disabled]="caseChoroplethOptions.change == covidNumberCaseChange.relative"
-              >
-                Alle Daten
-              </mat-radio-button>
-
-              <mat-radio-button
-                [value]="covidNumberCaseTimeWindow.twentyFourhours"
-                [checked]="covidNumberCaseTimeWindow.twentyFourhours == caseChoroplethOptions.timeWindow"
-              >
-                letze 24 Stunden
-              </mat-radio-button>
-
-              <mat-radio-button
-                [value]="covidNumberCaseTimeWindow.seventyTwoHours"
-                [checked]="covidNumberCaseTimeWindow.seventyTwoHours == caseChoroplethOptions.timeWindow"
-              >
-                letzte 72 Stunden
-              </mat-radio-button>
-            </mat-radio-group>
+            <mat-button-toggle-group
+            *ngIf="mo.covidNumberCaseOptions && mo.covidNumberCaseOptions.enabled"
+            class="btngrp"
+            name="fontStyle"
+            aria-label="Font Style"
+            [value]="mo.covidNumberCaseOptions.timeWindow"
+            (change)="mo.covidNumberCaseOptions.timeWindow = $event.value; emitMapOptions()"
+          >
+            <mat-button-toggle [value]="covidNumberCaseTimeWindow.all" [disabled]="mo.covidNumberCaseOptions.change == covidNumberCaseChange.relative">Alle Daten</mat-button-toggle>
+            <mat-button-toggle [value]="covidNumberCaseTimeWindow.twentyFourhours">letze 24 Stunden</mat-button-toggle>
+            <mat-button-toggle [value]="covidNumberCaseTimeWindow.seventyTwoHours">letzte 72 Stunden</mat-button-toggle>
+          </mat-button-toggle-group>
           </div>
 
           <mat-divider></mat-divider>
 
           <div class="toggleGroup">
             <h5>Fallzahlen</h5>
-            <mat-radio-group *ngIf="caseChoroplethOptions && caseChoroplethOptions.enabled"
-                             (change)="caseChoroplethOptions.change = $event.value; emitCaseChoroplethOptions()">
-              <mat-radio-button
-                [value]="covidNumberCaseChange.absolute"
-                [checked]="covidNumberCaseChange.absolute == caseChoroplethOptions.change"
-              >
-                Alle erfassen Fälle
-              </mat-radio-button>
-
-              <mat-radio-button
-                [value]="covidNumberCaseChange.relative"
-                [checked]="covidNumberCaseChange.relative == caseChoroplethOptions.change"
-                [disabled]="covidNumberCaseTimeWindow.all == caseChoroplethOptions.timeWindow"
-              >
-                Veränderung im gewählten Zeitraum
-              </mat-radio-button>
-            </mat-radio-group>
+            
+            <mat-button-toggle-group
+            class="btngrp"
+            name="fontStyle"
+            aria-label="Font Style"
+            [value]="mo.covidNumberCaseOptions.change"
+            (change)="mo.covidNumberCaseOptions.change = $event.value; emitmo.covidNumberCaseOptions()"
+          >
+            <mat-button-toggle [value]="covidNumberCaseChange.absolute">Alle erfassen Fälle</mat-button-toggle>
+            <mat-button-toggle [value]="covidNumberCaseChange.relative" [disabled]="covidNumberCaseTimeWindow.all == mo.covidNumberCaseOptions.timeWindow">Veränderung im gewählten Zeitraum</mat-button-toggle>
+          </mat-button-toggle-group>
           </div>
 
           <mat-divider></mat-divider>
 
           <div class="toggleGroup">
             <h5>Art</h5>
-            <mat-radio-group
-              (change)="caseChoroplethOptions.type = $event.value; emitCaseChoroplethOptions()">
-              <!-- <mat-radio-button
-                  *ngFor="let enum of covidNumberCaseType | keyvalue"
-                  [value]="enum.value"
-                  [checked]="enum.value == caseChoroplethOptions.type"
-              >
-                      {{enum.key}}
-              </mat-radio-button> -->
-
-              <mat-radio-button
-                [value]="covidNumberCaseType.cases"
-                [checked]="covidNumberCaseType.cases == caseChoroplethOptions.type"
-              >
-                Erkrankungen
-              </mat-radio-button>
-
-              <mat-radio-button
-                [value]="covidNumberCaseType.deaths"
-                [checked]="covidNumberCaseType.deaths == caseChoroplethOptions.type"
-              >
-                Todesfälle
-              </mat-radio-button>
-            </mat-radio-group>
+            
+            <mat-button-toggle-group
+            class="btngrp"
+            name="fontStyle"
+            aria-label="Font Style"
+            [value]="mo.covidNumberCaseOptions.type"
+            (change)="mo.covidNumberCaseOptions.type = $event.value; emitMapOptions()"
+          >
+            <mat-button-toggle [value]="covidNumberCaseType.cases">Erkrankungen</mat-button-toggle>
+            <mat-button-toggle [value]="covidNumberCaseType.deaths">Todesfälle</mat-button-toggle>
+          </mat-button-toggle-group>
           </div>
 
           <mat-divider></mat-divider>
 
           <div class="toggleGroup">
             <h5>Normalisierung</h5>
-            <mat-radio-group
-              (change)="caseChoroplethOptions.normalization = $event.value; emitCaseChoroplethOptions()">
-              <mat-radio-button
-                [value]="covidNumberCaseNormalization.absolut"
-                [checked]="covidNumberCaseNormalization.absolut == caseChoroplethOptions.normalization"
-              >
-                Keine Normalisierung
-              </mat-radio-button>
 
-              <mat-radio-button
-                [value]="covidNumberCaseNormalization.per100k"
-                [checked]="covidNumberCaseNormalization.per100k == caseChoroplethOptions.normalization"
-                [disabled]="caseChoroplethOptions.change == covidNumberCaseChange.relative"
-              >
-                Je 100.000 Einwohner
-              </mat-radio-button>
-            </mat-radio-group>
+            <mat-button-toggle-group
+            class="btngrp"
+            name="fontStyle"
+            aria-label="Font Style"
+            [value]="mo.covidNumberCaseOptions.normalization"
+            (change)="mo.covidNumberCaseOptions.normalization = $event.value; emitMapOptions()"
+          >
+            <mat-button-toggle [value]="covidNumberCaseNormalization.absolut">Keine Normalisierung</mat-button-toggle>
+            <mat-button-toggle [value]="covidNumberCaseNormalization.per100k" [disabled]="mo.covidNumberCaseOptions.change == covidNumberCaseChange.relative">Je 100.000 Einwohner</mat-button-toggle>
+          </mat-button-toggle-group>
           </div>
         </div>
 
@@ -232,15 +194,15 @@
 
       <div>
         <mat-slide-toggle
-          [checked]="showOsmHospitals"
-          (change)="showOsmHospitalsChange.emit($event.checked)"
+          [checked]="mo.showOsmHospitals"
+          (change)="mo.showOsmHospitals = !mo.showOsmHospitals; emitMapOptions()"
         >Alle Krankenhäuser
         </mat-slide-toggle>
       </div>
       <div>
         <mat-slide-toggle
-          [checked]="showOsmHeliports"
-          (change)="showOsmHeliportsChange.emit($event.checked)"
+          [checked]="mo.showOsmHeliports"
+          (change)="mo.showOsmHeliports = !mo.showOsmHeliports; emitMapOptions()"
         >Hubschrauberlandeplätze
         </mat-slide-toggle>
       </div>

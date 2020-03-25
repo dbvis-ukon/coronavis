@@ -3,12 +3,12 @@ import { Overlay } from './overlay';
 import * as d3 from "d3";
 import {ColormapService} from "../../services/colormap.service";
 import {AggregatedHospitals, AggregatedHospitalsProperties} from "../../services/divi-hospitals.service";
-import { GlyphState } from '../options/glyph-state';
-import { AggregationLevel } from '../options/aggregation-level';
+import { BedType } from '../options/bed-type.enum';
+import { AggregationLevel } from '../options/aggregation-level.enum';
 
 export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
 
-  constructor(name: string, hospitals: AggregatedHospitals, private aggregationLevel: AggregationLevel, private type: GlyphState,
+  constructor(name: string, hospitals: AggregatedHospitals, private aggregationLevel: AggregationLevel, private type: BedType,
               private colorsService: ColormapService) {
     super(name, hospitals);
   }
@@ -29,13 +29,13 @@ export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
   private minMaxNormValues: number[];
   private normalizeValues;
 
-  private propertyAccessor(d: AggregatedHospitalsProperties, type: GlyphState) {
+  private propertyAccessor(d: AggregatedHospitalsProperties, type: BedType) {
     switch (type) {
-      case GlyphState.ecmo:
+      case BedType.ecmo:
         return d.ecmo_state;
-      case GlyphState.icuHigh:
+      case BedType.icuHigh:
         return d.icu_high_state;
-      case GlyphState.icuLow:
+      case BedType.icuLow:
         return d.icu_low_state;
     }
   }
@@ -44,7 +44,7 @@ export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
     return this.aggregationLevel;
   }
 
-  getGlyphState(): GlyphState {
+  getGlyphState(): BedType {
     return this.type;
   }
 

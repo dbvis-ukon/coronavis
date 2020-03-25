@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FeatureCollection} from 'geojson';
 import {Overlay} from './map/overlays/overlay';
-import {AggregationLevel} from './map/options/aggregation-level';
+import {AggregationLevel} from './map/options/aggregation-level.enum';
 import {
   CovidNumberCaseChange,
   CovidNumberCaseNormalization,
@@ -9,8 +9,9 @@ import {
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from './map/options/covid-number-case-options';
-import { GlyphState } from './map/options/glyph-state';
+import { BedType } from './map/options/bed-type.enum';
 import { CaseChoropleth } from './map/overlays/casechoropleth';
+import { MapOptions } from './map/options/map-options';
 
 @Component({
   selector: 'app-root',
@@ -21,23 +22,35 @@ export class AppComponent {
 
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
-  aggregationLevel: AggregationLevel = AggregationLevel.none;
+  mapOptions: MapOptions = {
+    bedGlyphOptions: {
+      aggregationLevel: AggregationLevel.none,
+      enabled: true,
+      showEcmo: true,
+      showIcuHigh: true,
+      showIcuLow: true
+    },
 
-  glyphState: GlyphState = GlyphState.none;
+    bedBackgroundOptions: {
+      bedType: BedType.icuLow,
+      enabled: false,
+      aggregationLevel: AggregationLevel.county
+    },
 
-  showOsmHospitals: boolean = false;
+    covidNumberCaseOptions: {
+      change: CovidNumberCaseChange.absolute,
+      normalization: CovidNumberCaseNormalization.absolut,
+      timeWindow: CovidNumberCaseTimeWindow.all,
+      type: CovidNumberCaseType.cases,
+      enabled: false
+    },
 
-  showOsmHeliports: boolean = false;
+    showOsmHeliports: false,
+
+    showOsmHospitals: false
+  }
 
   currentCaseChoropleth: CaseChoropleth;
-
-  caseChoroplethOptions: CovidNumberCaseOptions = {
-    enabled: false,
-    type: CovidNumberCaseType.cases,
-    timeWindow: CovidNumberCaseTimeWindow.all,
-    change: CovidNumberCaseChange.absolute,
-    normalization: CovidNumberCaseNormalization.per100k
-  };
 
   // constructor is here only used to inject services
   constructor() { }

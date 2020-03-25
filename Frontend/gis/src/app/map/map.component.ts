@@ -29,7 +29,7 @@ import {LandkreiseHospitalsLayer} from './overlays/landkreishospitals';
 import {HospitalLayer} from './overlays/hospital';
 import {HelipadLayer} from './overlays/helipads';
 import {CaseChoropleth} from './overlays/casechoropleth';
-import {AggregationLevel} from './options/aggregation-level';
+import {AggregationLevel} from './options/aggregation-level.enum';
 import {
   CovidNumberCaseChange,
   CovidNumberCaseNormalization,
@@ -37,8 +37,11 @@ import {
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from './options/covid-number-case-options';
-import { GlyphState } from './options/glyph-state';
+import { BedType } from './options/bed-type.enum';
 import { BedStatusChoropleth } from './overlays/bedstatuschoropleth';
+import { MapOptions } from './options/map-options';
+import { BedBackgroundOptions } from './options/bed-background-options';
+import { BedGlyphOptions } from './options/bed-glyph-options';
 
 
 @Component({
@@ -52,95 +55,38 @@ export class MapComponent implements OnInit {
 
   @ViewChild('main') main;
 
-  @Input() overlays: Array<Overlay<FeatureCollection>> = [];
-  iterableDiffer: any;
-
-  private _aggregationLevel: AggregationLevel;
+  private _mapOptions: MapOptions;
 
   @Input()
-  set aggregationLevel(agg: AggregationLevel) {
-    this._aggregationLevel = agg;
-
-    // show new layer
-    this.updateGlyphMapLayers(agg);
-    this.updateGlyphState(this._glyphState);
-  }
-
-  get aggregationLevel(): AggregationLevel {
-    return this._aggregationLevel;
-  }
-
-  @Output()
-  aggregationLevelChange: EventEmitter<AggregationLevel> = new EventEmitter();
-
-  private _glyphState: GlyphState;
-
-  @Input()
-  set glyphState(st: GlyphState) {
-    this._glyphState = st;
-
-    // show new layer
-    this.updateGlyphState(st);
-  }
-
-  get glyphState(): GlyphState {
-    return this._glyphState;
-  }
-
-  private _showOsmHospitals: boolean;
-
-  @Input()
-  set showOsmHospitals(val: boolean) {
-    this._showOsmHospitals = val;
+  set mapOptions(mo: MapOptions) {
+    this._mapOptions = mo;
 
     if (!this.mymap) {
       return;
     }
 
-    if (val) {
+
+    this.updateGlyphMapLayers(mo.bedGlyphOptions);
+
+    this.updateBedBackgroundLayer(mo.bedBackgroundOptions);
+
+    this.updateCaseChoroplethLayers(mo.covidNumberCaseOptions);
+
+    if (mo.showOsmHospitals) {
       this.mymap.addLayer(this.osmHospitalsLayer);
     } else {
       this.mymap.removeLayer(this.osmHospitalsLayer);
     }
-  }
 
-  get showOsmHospitals(): boolean {
-    return this._showOsmHospitals;
-  }
-
-  private _showOsmHeliports: boolean;
-
-  @Input()
-  set showOsmHeliports(val: boolean) {
-    this._showOsmHeliports = val;
-
-    if (!this.mymap) {
-      return;
-    }
-
-    if (val) {
+    if (mo.showOsmHeliports) {
       this.mymap.addLayer(this.osmHeliportsLayer);
     } else {
       this.mymap.removeLayer(this.osmHeliportsLayer);
     }
   }
 
-  get showOsmHeliports(): boolean {
-    return this._showOsmHeliports;
-  }
-
-  private _caseChoroplethOptions: CovidNumberCaseOptions;
-
-  @Input()
-  set caseChoroplethOptions(opt: CovidNumberCaseOptions) {
-    this._caseChoroplethOptions = opt;
-
-    // show new layer
-    this.updateCaseChoroplethLayers(opt);
-  }
-
-  get caseChoroplethOptions(): CovidNumberCaseOptions {
-    return this._caseChoroplethOptions;
+  get mapOptions(): MapOptions {
+    return this._mapOptions;
   }
 
   @Output()
@@ -165,14 +111,12 @@ export class MapComponent implements OnInit {
   private _lastBedCoroplethLayer: L.GeoJSON<any> | null;
 
   constructor(
-    private iterable: IterableDiffers,
     private diviHospitalsService: DiviHospitalsService,
     private dataService: DataService,
     private tooltipService: TooltipService,
     private hospitallayerService: HospitallayerService,
     private colormapService: ColormapService
   ) {
-    this.iterableDiffer = this.iterable.find(this.overlays).create();
   }
 
   ngOnInit() {
@@ -264,7 +208,7 @@ export class MapComponent implements OnInit {
 
 
         // init map with the current aggregation level
-        this.updateGlyphMapLayers(this._aggregationLevel);
+        this.updateGlyphMapLayers(this._mapOptions.bedGlyphOptions);
       });
 
     this.dataService.getOSMHospitals().toPromise().then((val: FeatureCollection) => {
@@ -453,17 +397,21 @@ export class MapComponent implements OnInit {
     this.layerToFactoryMap.set(layerGroup, factory);
   }
 
-  private updateGlyphMapLayers(agg: AggregationLevel) {
+  private updateGlyphMapLayers(o: BedGlyphOptions) {
     // remove all layers
     this.aggregationLevelToGlyphMap.forEach(l => {
       this.mymap.removeLayer(l);
     });
 
-    if (!this.aggregationLevelToGlyphMap.has(agg)) {
-      throw 'No glyph map for aggregation ' + agg + ' found';
+    if(o.enabled === false) {
+      return;
     }
 
-    const l = this.aggregationLevelToGlyphMap.get(agg);
+    if (!this.aggregationLevelToGlyphMap.has(o.aggregationLevel)) {
+      throw 'No glyph map for aggregation ' + o.aggregationLevel + ' found';
+    }
+
+    const l = this.aggregationLevelToGlyphMap.get(o.aggregationLevel);
     this.mymap.addLayer(l);
 
     if (l.getLayers().length > 1) {
@@ -492,8 +440,6 @@ export class MapComponent implements OnInit {
     this.layerToFactoryMap.set(l, f);
   }
 
-  private currentLegend;
-
   private updateCaseChoroplethLayers(opt: CovidNumberCaseOptions) {
     // remove all layers
     this.covidNumberCaseOptionsKeyToLayer.forEach(l => {
@@ -520,21 +466,26 @@ export class MapComponent implements OnInit {
     l.bringToBack();
 
     // update the glyph map to put it in the front:
-    this.updateGlyphMapLayers(this._aggregationLevel);
+    this.updateGlyphMapLayers(this._mapOptions.bedGlyphOptions);
   }
 
-  private updateGlyphState(st: GlyphState) {
+  private updateBedBackgroundLayer(o: BedBackgroundOptions) {
+    // remove active layer
     if (this._lastBedCoroplethLayer) {
       this.mymap.removeLayer(this._lastBedCoroplethLayer);
     }
 
-    if(this._aggregationLevel !== AggregationLevel.none && st !== GlyphState.none) {
-      try {
-        if (this.currentLegend) { this.mymap.removeControl(this.currentLegend); }
-      } catch (e) {
-        console.log(e);
-      }
-      const key = this.getBedChoroplethKey(this._aggregationLevel, st);
+    if(o.aggregationLevel === AggregationLevel.none) {
+      throw 'AggregationLevel must not be none on bed background layer';
+    }
+
+    if(o.bedType === BedType.none) {
+      throw 'BedType must not be none on bed background layer';
+    }
+
+    if(o.enabled) {
+
+      const key = this.getBedChoroplethKey(o.aggregationLevel, o.bedType);
 
       const layer = this.choroplethLayerMap.get(key);
       layer.bringToBack();
@@ -544,7 +495,7 @@ export class MapComponent implements OnInit {
     }
   }
 
-  private getBedChoroplethKey(agg: AggregationLevel, bedType: GlyphState) {
+  private getBedChoroplethKey(agg: AggregationLevel, bedType: BedType) {
     return `Hospitals_${agg}_${bedType}`;
   }
 }

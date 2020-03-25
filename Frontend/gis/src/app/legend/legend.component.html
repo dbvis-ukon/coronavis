@@ -1,6 +1,6 @@
 
 
-<div class="legend bedlegend" *ngIf="bedType === bed.none && choroplethLayer">
+<div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === false && choroplethLayer">
 
     <div class="row" *ngFor="let b of caseColors">
 
@@ -13,7 +13,7 @@
 </div>
 
 
-<div class="legend bedlegend" *ngIf="aggregationLevel!==agg.none && bedType !== bed.none" >
+<div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === true" >
 
     <div class="row" *ngFor="let b of bedStatusColors">
 

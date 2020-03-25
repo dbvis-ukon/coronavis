@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AggregationLevel} from '../map/options/aggregation-level';
+import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {
   CovidNumberCaseChange,
   CovidNumberCaseNormalization,
@@ -8,7 +8,9 @@ import {
   CovidNumberCaseType
 } from '../map/options/covid-number-case-options';
 import { ColormapService } from '../services/colormap.service';
-import { GlyphState } from '../map/options/glyph-state';
+import { BedType } from '../map/options/bed-type.enum';
+import { BedGlyphOptions } from '../map/options/bed-glyph-options';
+import { MapOptions } from '../map/options/map-options';
 
 @Component({
   selector: 'app-infobox',
@@ -23,40 +25,17 @@ export class InfoboxComponent implements OnInit {
 
   glyphLegend;
 
-  glyphLegendColors = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'];
+  glyphLegendColors = ColormapService.bedStati;
 
   infoboxExtended = true;
 
-  @Input()
-  aggregationLevel: AggregationLevel;
+  @Input('mapOptions')
+  mo: MapOptions;
 
   @Output()
-  aggregationLevelChange: EventEmitter<AggregationLevel> = new EventEmitter();
+  mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
 
-  @Input()
-  glyphState: GlyphState;
-
-  @Output()
-  glyphStateChange: EventEmitter<GlyphState> = new EventEmitter();
-
-  @Input()
-  showOsmHospitals: boolean;
-
-  @Output()
-  showOsmHospitalsChange: EventEmitter<boolean> = new EventEmitter();
-
-  @Input()
-  showOsmHeliports: boolean;
-
-  @Output()
-  showOsmHeliportsChange: EventEmitter<boolean> = new EventEmitter();
-
-  @Input()
-  caseChoroplethOptions: CovidNumberCaseOptions;
-
-  @Output()
-  caseChoroplethOptionsChange: EventEmitter<CovidNumberCaseOptions> = new EventEmitter();
-
+  // ENUM MAPPING
   covidNumberCaseTimeWindow = CovidNumberCaseTimeWindow;
 
   covidNumberCaseChange = CovidNumberCaseChange;
@@ -65,58 +44,88 @@ export class InfoboxComponent implements OnInit {
 
   covidNumberCaseNormalization = CovidNumberCaseNormalization;
 
-  glyphStates = GlyphState;
+  glyphStates = BedType;
 
   aggregationLevels = AggregationLevel;
 
-  internalGlyphState: GlyphState = GlyphState.none;
+  internalBedType: BedType = BedType.none;
 
   ngOnInit(): void {
     this.glyphLegend = [
-      {name: 'ICU low', state: GlyphState.icuLow, color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'}, 
-      {name: 'ICU high', state: GlyphState.icuHigh, color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'}, 
-      {name: 'ECMO', state: GlyphState.ecmo, color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
+      {name: 'ICU low', state: BedType.icuLow, accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'}, 
+      {name: 'ICU high', state: BedType.icuHigh, accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'}, 
+      {name: 'ECMO', state: BedType.ecmo, accessor: 'showEcmo', color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
     ];
   }
 
   emitCaseChoroplethOptions() {
     // console.log('emit', this.caseChoroplethOptions);
 
-    if(this.caseChoroplethOptions.change === CovidNumberCaseChange.relative) {
-      this.caseChoroplethOptions.normalization = CovidNumberCaseNormalization.absolut;
+    if(this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
+      this.mo.covidNumberCaseOptions.normalization = CovidNumberCaseNormalization.absolut;
 
-      if (this.caseChoroplethOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
-        this.caseChoroplethOptions.timeWindow = CovidNumberCaseTimeWindow.twentyFourhours;
+      if (this.mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
+        this.mo.covidNumberCaseOptions.timeWindow = CovidNumberCaseTimeWindow.twentyFourhours;
       }
     }
-    this.caseChoroplethOptionsChange.emit({...this.caseChoroplethOptions});
+
+    this.emitMapOptions();
   }
 
   getGlyphColor(str: string) {
     return this.colormapService.getSingleHospitalColormap()(str);
   }
 
-  updateGlyphState(state: GlyphState) {
-    if(this.aggregationLevel === AggregationLevel.none) {
+  updateBedBackgroundBedType(state: BedType) {
+    if(this.mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
       return;
     }
 
     // user clicked on same glyph, disable
-    if(this.internalGlyphState === state) {
-      this.internalGlyphState = GlyphState.none;
+    if(this.internalBedType === state) {
+      this.internalBedType = BedType.none;
     } else {
-      this.internalGlyphState = state;
+      this.internalBedType = state;
     }
 
-    this.glyphStateChange.emit(this.internalGlyphState);
+    this.mo.bedBackgroundOptions.bedType = this.internalBedType;
+
+    this.emitMapOptions();
   }
 
-  getBorderColor(state: GlyphState) {
-    if(this.aggregationLevel === AggregationLevel.none) {
+  updateBedGlyphAggregationLevel(lvl: AggregationLevel) {
+    this.mo.bedGlyphOptions.aggregationLevel = lvl;
+
+    if(lvl === AggregationLevel.none) {
+      this.mo.bedBackgroundOptions.enabled = false;
+    } else {
+      this.mo.bedBackgroundOptions.aggregationLevel = lvl;
+    }
+
+    this.emitMapOptions();
+  }
+
+  updateCovidNumberCaseOptionsEnabled(enabled: boolean) {
+    this.mo.covidNumberCaseOptions.enabled = enabled; 
+    
+    if(enabled) {
+      this.mo.bedBackgroundOptions.enabled = false;
+    }
+    
+    this.emitMapOptions()
+  }
+
+  getBorderColor(state: BedType) {
+    if(this.mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
       return 'white';
     }
 
-    return state === this.internalGlyphState ? 'gray' : 'lightgrey'
+    return state === this.internalBedType ? 'gray' : 'lightgrey'
+  }
+
+  emitMapOptions() {
+    console.log('emit map options', this.mo);
+    this.mapOptionsChange.emit({...this.mo});
   }
 
 }

@@ -9,8 +9,8 @@ import {BehaviorSubject, Subject} from "rxjs";
 import {Layer} from "leaflet";
 import {ColormapService} from "./colormap.service";
 import {AggregatedHospitals} from "./divi-hospitals.service";
-import { AggregationLevel } from '../map/options/aggregation-level';
-import { GlyphState } from '../map/options/glyph-state';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { BedType } from '../map/options/bed-type.enum';
 
 @Injectable({
   providedIn: "root"
@@ -39,7 +39,7 @@ export class HospitallayerService {
         state: AggregationLevel.state
       }];
 
-    const types = Object.values(GlyphState).filter(i => GlyphState.none !== i);
+    const types = Object.values(BedType).filter(i => BedType.none !== i);
 
     for (let granularity of granularities) {
       this.http.get<AggregatedHospitals>(url + granularity.api)
@@ -53,7 +53,7 @@ export class HospitallayerService {
     return this.layers;
   }
 
-  public getName(granularity: AggregationLevel, type: GlyphState) {
+  public getName(granularity: AggregationLevel, type: BedType) {
     return `Hospitals_${granularity}_${type}`;
   }
 }
