@@ -3,6 +3,7 @@ from sqlalchemy.orm import backref
 from sqlalchemy.orm import deferred
 from geoalchemy2 import Geometry
 import json
+from collections import Counter
 import geojson
 from geoalchemy2.shape import to_shape
 from sqlalchemy.dialects.postgresql import JSONB
@@ -90,9 +91,9 @@ class HospitalsAggregated(db.Model):
         result['properties'] = {
             'name': self.name,
             'ids': self.ids,
-            'icu_low_state': self.icu_low_state,
-            'icu_high_state': self.icu_high_state,
-            'ecmo_state': self.ecmo_state,
+            'icu_low_state': dict(Counter(self.icu_low_state)),
+            'icu_high_state': dict(Counter(self.icu_high_state)),
+            'ecmo_state': dict(Counter(self.ecmo_state)),
             'centroid': json.loads(self.centroid)
         }
         return result

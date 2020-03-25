@@ -317,6 +317,8 @@ WHERE st_distance(krankenhaus.geom::geography, b.geom::geography) < 1000
 def __as_feature_collection(resultset):
     features = []
     for elem in resultset:
-        features.append(elem.as_dict())
+        feature = elem.as_dict()
+        feature['type'] = 'Feature'
+        features.append(feature)
     featurecollection = {"type": "FeatureCollection", "features": features}
     return featurecollection
