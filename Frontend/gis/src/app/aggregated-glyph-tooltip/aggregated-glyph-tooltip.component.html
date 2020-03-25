@@ -9,40 +9,4 @@
   </div>
 
 </div>
-
-<table>
-  <thead>
-  <tr>
-    <th></th>
-    <th>Verfügbar</th>
-    <th>Begrenzt</th>
-    <th>Ausgelastet</th>
-    <th>Nicht verfügbar</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td><strong>ICU - Low Care:</strong> </td>
-    <td>{{ diviAggregatedHospital.icu_low_state["Verfügbar"] ? diviAggregatedHospital.icu_low_state["Verfügbar"] : 0}}</td>
-    <td>{{ diviAggregatedHospital.icu_low_state.Begrenzt ? diviAggregatedHospital.icu_low_state.Begrenzt : 0 }}</td>
-    <td>{{ diviAggregatedHospital.icu_low_state.Ausgelastet ? diviAggregatedHospital.icu_low_state.Ausgelastet : 0 }}</td>
-    <td>{{ diviAggregatedHospital.icu_low_state["Nicht verfügbar"] ? diviAggregatedHospital.icu_low_state["Nicht verfügbar"] : 0 }}</td>
-  </tr>
-  <tr>
-    <td><strong>ICU - High Care: </strong></td>
-    <td>{{ diviAggregatedHospital.icu_high_state["Verfügbar"] ? diviAggregatedHospital.icu_high_state["Verfügbar"] : 0}}</td>
-    <td>{{ diviAggregatedHospital.icu_high_state.Begrenzt ? diviAggregatedHospital.icu_high_state.Begrenzt : 0 }}</td>
-    <td>{{ diviAggregatedHospital.icu_high_state.Ausgelastet ? diviAggregatedHospital.icu_high_state.Ausgelastet : 0 }}</td>
-    <td>{{ diviAggregatedHospital.icu_high_state["Nicht verfügbar"] ? diviAggregatedHospital.icu_high_state["Nicht verfügbar"] : 0 }}</td>
-  </tr>
-  <tr>
-    <td><strong>ECMO: </strong></td>
-    <td>{{ diviAggregatedHospital.ecmo_state["Verfügbar"] ? diviAggregatedHospital.ecmo_state["Verfügbar"] : 0}}</td>
-    <td>{{ diviAggregatedHospital.ecmo_state.Begrenzt ? diviAggregatedHospital.ecmo_state.Begrenzt : 0 }}</td>
-    <td>{{ diviAggregatedHospital.ecmo_state.Ausgelastet ? diviAggregatedHospital.ecmo_state.Ausgelastet : 0 }}</td>
-    <td>{{ diviAggregatedHospital.ecmo_state["Nicht verfügbar"] ? diviAggregatedHospital.ecmo_state["Nicht verfügbar"] : 0 }}</td>
-  </tr>
-  </tbody>
-</table>
-<br>
 </div>

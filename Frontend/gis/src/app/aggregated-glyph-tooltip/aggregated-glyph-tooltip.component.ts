@@ -44,21 +44,33 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
     "mark": {"type": "bar"},
     "encoding": {
       "x": {
-        "field": "cat", 
-        "type": "nominal", 
-        "title": "ICU Low care", 
+        "field": "cat",
+        "type": "nominal",
+        "title": "ICU Low care",
         "sort": ["Verfügbar", "Begrenzt", "Ausgelastet", "Nicht verfügbar"]
         },
       "y": {
-        "field": "num", 
-        "type": "quantitative", 
+        "field": "num",
+        "type": "quantitative",
         "title": "Anzahl Krankenhäuser",
-        "scale": {"domain": [0, 10]}
+        "scale": {"domain": [0, 10]},
+        "axis": {"tickMinStep": 1, "tickCount": 5},
         },
       "color": {
         "field": "color", "type": "nominal", "scale": null
       }
+    }, "layer": [{
+    "mark": "bar"
+  }, {
+    "mark": {
+      "type": "text",
+      "align": "center",
+      "dy": -5
+    },
+    "encoding": {
+      "text": {"field": "num", "type": "quantitative"}
     }
+  }]
   };
 
   specs = [];
@@ -69,6 +81,7 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
       .range(['white', '#333', 'white', 'white']);
 
   bedAccessors = ['icu_low_state', 'icu_high_state', 'ecmo_state'];
+  bedAccessorsMapping = {'icu_low_state': 'ICU - Low Care', 'icu_high_state': 'ICU - High Care', 'ecmo_state': 'ECMO'};
 
   constructor(private colormapService: ColormapService) {
   }
@@ -107,7 +120,7 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
       spec.data.values = dataValues;
 
       // also overwrite the title
-      spec.encoding.x.title = bedAccessor;
+      spec.encoding.x.title = this.bedAccessorsMapping[bedAccessor];
 
       this.specs.push(spec);
     }
@@ -115,6 +128,7 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
     // set the max value
     this.specs.forEach(spec => {
       spec.encoding.y.scale.domain = [0, maxNum];
+      spec.encoding.y.axis.tickCount = Math.min(maxNum, 5);
     });
   }
 
