@@ -21,10 +21,11 @@ export-environment:
     - URL_BACKEND="${URL_PREFIX}api.${URL_SUFFIX}"
     - URL_TILES="${URL_PREFIX}tiles.${URL_SUFFIX}"
     - echo "VERSION=$VERSION" >> var.env
-    - echo "ENV=$ENV" >> var.env
     - echo "URL_FRONTEND=${URL_FRONTEND}" >> var.env
     - echo "URL_BACKEND=${URL_BACKEND}" >> var.env
     - echo "URL_TILES=${URL_TILES}" >> var.env
+    #
+    - echo "ENV_NAME=$ENV_NAME" >> var.env
     - echo "ENV_NAME_FRONTEND=frontend/${ENV_NAME}" >> var.env
     - echo "ENV_NAME_BACKEND=backend/${ENV_NAME}" >> var.env
     - echo "ENV_NAME_TILES=tiles/${ENV_NAME}" >> var.env
