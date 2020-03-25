@@ -100,6 +100,8 @@ def crawl_webpage(url, data):
 
 
 def get_hospital_geo_locations(hospital_entries):
+    k = 1
+    
     len_ = len(hospital_entries)
     for i, hospital_entry in enumerate(hospital_entries):
         adress = hospital_entry[1]
@@ -120,11 +122,14 @@ def get_hospital_geo_locations(hospital_entries):
                 loc = (0, 0)
                 print('Error ' + str(e))
             
+            k += 1
+            
         hospital_entry.append(loc)
         hospital_entries[i] = hospital_entry
         
-        if i % 5 == 0:
+        if k % 5 == 0:
             time.sleep(1)
+            k = 1
             
     return hospital_entries
 
@@ -148,6 +153,8 @@ def update_fetch(quote_page, values):
     return df
 
 if __name__ == "__main__":
+    
+    from sqlalchemy import func
 
     quote_page = 'https://www.divi.de/register/intensivregister?view=items'
     values = {
@@ -157,8 +164,8 @@ if __name__ == "__main__":
     }
 
     df = full_fetch(quote_page, values)
-    df.to_csv('rki_hospitals.csv')
     
+    # df.to_csv('rki_hospitals.csv')
     # df = pandas.read_csv('rki_hospitals.csv', index_col=0)
     
     df_to_db = df.drop(['String'], axis=1)
@@ -168,19 +175,7 @@ if __name__ == "__main__":
         df_to_db.columns = ['name', 'address', 'contact', 'state', 'icu_low_state', 'icu_high_state', 'ecmo_state', 'last_update', 'location']
 
     df_to_db['location'] = df_to_db['location'].map(lambda x: str(x).replace('None', '0'))
-    df_to_db['location'] = df_to_db['location'].map(lambda x: 'POINT' + x.replace(',', ''))
-
-    # df_to_db.to_sql('hospitals_crawled', db.engine, if_exists='append', dtype={
-    #     'name': String,
-    #     'address': String,
-    #     'state': String,
-    #     'contact': String,
-    #     'icu_low_state': String,
-    #     'icu_high_state': String,
-    #     'ecmo_state': String,
-    #     'last_update': DateTime,
-    #     'location': Geometry('POINT')
-    # })
+    df_to_db['location'] = df_to_db['location'].map(lambda x: 'SRID=4326;POINT' + x.replace(',', ''))
     
     crawl = db.Crawl(**{
         'url': quote_page,
