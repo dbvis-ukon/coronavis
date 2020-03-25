@@ -168,10 +168,10 @@ dockerize-frontend:
   <<: *rules-frontend
   needs:
     - build-frontend
-    - export-dependencies
+    - export-environment
   dependencies:
     - build-frontend
-    - export-dependencies
+    - export-environment
 
 dockerize-crawler:
   variables:
@@ -217,7 +217,7 @@ deploy-backend:
     url: $URL_BACKEND
     name: $ENV_NAME_BACKEND
     action: stop
-    on_stop: remove-deployment
+    on_stop: remove-deployment-backend
     kubernetes:
       namespace: $K8_NAMESPACE
   needs:
@@ -230,7 +230,6 @@ deploy-backend:
 deploy-frontend:
   variables:
     HELM_CHART: covid-19-vis-frontend
-    URL: covid19vis.lingvis.io
     FOLDER: Frontend
   <<: *deploy-template
   <<: *rules-frontend
@@ -240,7 +239,7 @@ deploy-frontend:
     url: $URL_FRONTEND
     name: $ENV_NAME_FRONTEND
     action: stop
-    on_stop: remove-deployment
+    on_stop: remove-deployment-frontend
     kubernetes:
       namespace: $K8_NAMESPACE
   needs:
@@ -259,7 +258,7 @@ deploy-crawler:
   environment:
     name: $ENV_NAME_CRAWLER
     action: stop
-    on_stop: remove-deployment
+    on_stop: remove-deployment-crawler
     kubernetes:
       namespace: $K8_NAMESPACE
   needs:
@@ -272,7 +271,6 @@ deploy-crawler:
 deploy-tileserver:
   variables:
     HELM_CHART: covid-19-vis-tileserver
-    URL: tiles.covid19vis.lingvis.io
     FOLDER: Tiles
   <<: *deploy-template
   <<: *rules-tileserver
@@ -282,7 +280,7 @@ deploy-tileserver:
     url: $URL_TILES
     name: $ENV_NAME_TILES
     action: stop
-    on_stop: remove-deployment
+    on_stop: remove-deployment-tiles
     kubernetes:
       namespace: $K8_NAMESPACE
   needs:
@@ -296,7 +294,7 @@ deploy-tileserver:
 # CLEANUP
 ###########################################
 
-remove-deployment:
+.remove-deployment: &remove-deployment
   stage: deploy
   variables:
     GIT_STRATEGY: none
@@ -305,8 +303,29 @@ remove-deployment:
     - helm delete --purge ${HELM_CHART}-${ENV_NAME}
   when: manual
   dependencies: []
-  environment:
-    name: ${ENV_NAME}
-    action: stop
   tags:
     - k8-admin
+
+remove-deployment-backend:
+  <<: *remove-deployment
+  environment:
+    name: $ENV_NAME_BACKEND
+    action: stop
+
+remove-deployment-frontend:
+  <<: *remove-deployment
+  environment:
+    name: $ENV_NAME_FRONTEND
+    action: stop
+
+remove-deployment-crawler:
+  <<: *remove-deployment
+  environment:
+    name: $ENV_NAME_CRAWLER
+    action: stop
+
+remove-deployment-tiles:
+  <<: *remove-deployment
+  environment:
+    name: $ENV_NAME_TILES
+    action: stop
