@@ -120,8 +120,8 @@ export class MapComponent implements OnInit {
     const tiledMap = L.tileLayer(
         `https://tiles.covid19vis.lingvis.io/{z}/{x}/{y}.png`,
         {
-          tileSize: 512,
-          zoomOffset: -1,
+          tileSize: 256,
+          // zoomOffset: -1,
           attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
             '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         });
@@ -133,8 +133,8 @@ export class MapComponent implements OnInit {
 
     // create map, set initial view to basemap and zoom level to center of BW
     this.mymap = L.map('main', {
-      minZoom: 6,
-      maxZoom: 12,
+      minZoom: 5,
+      maxZoom: 10,
       layers: [tiledMap],
       zoomControl: false
     }).setView([48.6813312, 9.0088299], 9);
