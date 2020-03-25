@@ -248,8 +248,8 @@ deploy-frontend:
     - source var.env
     - URL=${URL_FRONTEND}
   environment:
-    url: $URL_FRONTEND
-    name: test
+    url: http://$URL_FRONTEND
+    name: $ENV_NAME_FRONTEND
     action: stop
     on_stop: remove-deployment-frontend
   artifacts:
@@ -331,7 +331,7 @@ remove-deployment-backend:
 remove-deployment-frontend:
   <<: *remove-deployment
   environment:
-    name: test
+    name: $ENV_NAME_FRONTEND
     action: stop
 
 remove-deployment-crawler:
