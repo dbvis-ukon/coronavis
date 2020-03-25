@@ -249,7 +249,7 @@ deploy-frontend:
     - URL=${URL_FRONTEND}
   environment:
     url: http://$URL_FRONTEND
-    name: testenv-$ENV_NAME_FRONTEND
+    name: testenv
     on_stop: remove-deployment-frontend
   artifacts:
     reports:
@@ -330,7 +330,7 @@ remove-deployment-backend:
 remove-deployment-frontend:
   <<: *remove-deployment
   environment:
-    name: testenv-$ENV_NAME_FRONTEND
+    name: testenv
     action: stop
 
 remove-deployment-crawler:
