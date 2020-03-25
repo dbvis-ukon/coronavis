@@ -51,6 +51,7 @@ export interface AggregatedHospitalsState {
   Begrenzt?: number;
   'Nicht verfügbar'?: number;
   'Verfügbar'?: number;
+  ''?: number
 }
 
 export interface AggregatedHospitalsProperties {
