@@ -6,17 +6,66 @@ stages:
 variables:
   K8_NAMESPACE: covid-19-vis
 
-.rules: &rules
+.rules-backend: &rules-backend
   rules:     
   # do not run pipelines for merge requests (gets rid of "detatched pipelines")
   - if: $CI_MERGE_REQUEST_ID
     when: never
   # run if files changed; no branch restrictions
   - changes:
-      - ${FOLDER}/**
-      - ${FOLDER}/**/*
-      - k8/${FOLDER}/**
-      - k8/${FOLDER}/**/*
+      - Backend/**
+      - Backend/**/*
+      - k8/Backend/**
+      - k8/Backend/**/*
+    if: $CI_COMMIT_BRANCH == "master"
+    when: always
+  # default is on_success, so explicitly set job not to run if none of the above rules matched
+  - when: never
+
+.rules-frontend: &rules-frontend
+  rules:     
+  # do not run pipelines for merge requests (gets rid of "detatched pipelines")
+  - if: $CI_MERGE_REQUEST_ID
+    when: never
+  # run if files changed; no branch restrictions
+  - changes:
+      - Frontend/**
+      - Frontend/**/*
+      - k8/Frontend/**
+      - k8/Frontend/**/*
+    if: $CI_COMMIT_BRANCH == "master"
+    when: always
+  # default is on_success, so explicitly set job not to run if none of the above rules matched
+  - when: never
+
+.rules-crawler: &rules-crawler
+  rules:     
+  # do not run pipelines for merge requests (gets rid of "detatched pipelines")
+  - if: $CI_MERGE_REQUEST_ID
+    when: never
+  # run if files changed; no branch restrictions
+  - changes:
+      - Crawler/**
+      - Crawler/**/*
+      - k8/Crawler/**
+      - k8/Crawler/**/*
+    if: $CI_COMMIT_BRANCH == "master"
+    when: always
+  # default is on_success, so explicitly set job not to run if none of the above rules matched
+  - when: never
+
+
+.rules-tileserver: &rules-tileserver
+  rules:     
+  # do not run pipelines for merge requests (gets rid of "detatched pipelines")
+  - if: $CI_MERGE_REQUEST_ID
+    when: never
+  # run if files changed; no branch restrictions
+  - changes:
+      - Tiles/**
+      - Tiles/**/*
+      - k8/Tiles/**
+      - k8/Tiles/**/*
     if: $CI_COMMIT_BRANCH == "master"
     when: always
   # default is on_success, so explicitly set job not to run if none of the above rules matched
@@ -31,12 +80,19 @@ build-frontend:
   image: node:latest
   script:
     - cd Frontend/gis
-    - npm ci
+    - npm install --unsafe-perm
     - npm run-script build
   artifacts:
     expire_in: 1 day
     paths:
       - ./Frontend/gis/dist
+  cache:
+    key: 
+      files:
+        - ./Frontend/gis/package.json
+        - ./Frontend/gis/package-lock.json
+    paths:
+      - ./Frontend/gis/node_modules
   tags:
     - docker
 
@@ -54,7 +110,6 @@ build-frontend:
     - cd ${FOLDER}
     - docker build -t "$IMG" .
     - docker push "$IMG"
-  <<: *rules
   tags:
     - docker-build
 
@@ -64,6 +119,7 @@ dockerize-backend:
     IMG: $CI_REGISTRY_IMAGE/backend:${CI_COMMIT_SHORT_SHA}
     FOLDER: Backend
   <<: *dockerize-template
+  <<: *rules-backend
   dependencies: []
 
 dockerize-frontend:
@@ -71,6 +127,7 @@ dockerize-frontend:
     IMG: $CI_REGISTRY_IMAGE/frontend:${CI_COMMIT_SHORT_SHA}
     FOLDER: Frontend
   <<: *dockerize-template
+  <<: *rules-frontend
   dependencies:
     - build-frontend
 
@@ -79,6 +136,7 @@ dockerize-crawler:
     IMG: $CI_REGISTRY_IMAGE/crawler:${CI_COMMIT_SHORT_SHA}
     FOLDER: Crawler
   <<: *dockerize-template
+  <<: *rules-crawler
   dependencies: []
 
 dockerize-tileserver:
@@ -86,6 +144,7 @@ dockerize-tileserver:
     IMG: $CI_REGISTRY_IMAGE/tileserver:${CI_COMMIT_SHORT_SHA}
     FOLDER: Tiles
   <<: *dockerize-template
+  <<: *rules-tileserver
   dependencies: []
 
 
@@ -99,7 +158,6 @@ dockerize-tileserver:
   script:
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/${FOLDER}
     - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/${FOLDER}
-  <<: *rules
   tags:
     - k8-admin
 
@@ -110,6 +168,7 @@ deploy-backend:
     URL: api.covid19vis.lingvis.io
     FOLDER: Backend
   <<: *deploy-template
+  <<: *rules-backend
   dependencies: 
     - dockerize-backend
 
@@ -119,6 +178,7 @@ deploy-frontend:
     URL: covid19vis.lingvis.io
     FOLDER: Frontend
   <<: *deploy-template
+  <<: *rules-frontend
   dependencies: 
     - dockerize-frontend
 
@@ -127,6 +187,7 @@ deploy-crawler:
     HELM_CHART: covid-19-vis-crawler
     FOLDER: Crawler
   <<: *deploy-template
+  <<: *rules-crawler
   dependencies: 
     - dockerize-crawler
 
@@ -136,5 +197,6 @@ deploy-tileserver:
     URL: tiles.covid19vis.lingvis.io
     FOLDER: Tiles
   <<: *deploy-template
+  <<: *rules-tileserver
   dependencies: 
     - dockerize-tileserver
