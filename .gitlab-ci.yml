@@ -249,12 +249,11 @@ deploy-frontend:
     - URL=${URL_FRONTEND}
   environment:
     url: http://$URL_FRONTEND
-    name: testenv
-    action: stop
+    name: testenv-$ENV_NAME_FRONTEND
     on_stop: remove-deployment-frontend
-  # artifacts:
-  #   reports:
-  #     dotenv: var.env
+  artifacts:
+    reports:
+      dotenv: var.env
   needs:
     - dockerize-frontend
     - export-environment
@@ -331,7 +330,7 @@ remove-deployment-backend:
 remove-deployment-frontend:
   <<: *remove-deployment
   environment:
-    name: testenv
+    name: testenv-$ENV_NAME_FRONTEND
     action: stop
 
 remove-deployment-crawler:
