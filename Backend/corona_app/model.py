@@ -93,7 +93,7 @@ class HospitalsAggregated(db.Model):
             'icu_low_state': self.icu_low_state,
             'icu_high_state': self.icu_high_state,
             'ecmo_state': self.ecmo_state,
-            'centroid': self.centroid
+            'centroid': json.loads(self.centroid)
         }
         return result
 
