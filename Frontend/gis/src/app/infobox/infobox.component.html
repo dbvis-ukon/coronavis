@@ -191,7 +191,7 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Diverse Ansichten
+          Geographische Verortung
         </mat-panel-title>
         <mat-panel-description>
           <!-- description -->
@@ -202,7 +202,7 @@
         <mat-slide-toggle
           [checked]="mo.showOsmHospitals"
           (change)="mo.showOsmHospitals = !mo.showOsmHospitals; emitMapOptions()"
-        >Alle Krankenhäuser
+        >Krankenhäuser
         </mat-slide-toggle>
       </div>
       <div>
@@ -227,7 +227,7 @@
         <mat-list-item role="listitem">
           <a href="https://www.divi.de/register/intensivregister" target="_blank">DIVI Intensivregister</a>
         </mat-list-item>
-
+        
         <mat-list-item>
           <a href="https://rki.de" target="_blank">Robert Koch Institut</a>
         </mat-list-item>
@@ -235,6 +235,11 @@
         <mat-list-item role="listitem">
           <a href="https://corona.rki.de/" target="_blank">- Fallzahlen</a>
         </mat-list-item>
+
+        <mat-list-item role="listitem">
+          <a href="https://www.openstreetmap.org/" target="_blank">OpenStreetMap</a>
+        </mat-list-item>
+        
       </mat-list>
 
 
