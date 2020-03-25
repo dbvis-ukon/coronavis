@@ -20,18 +20,13 @@ import {HospitalLayer} from './overlays/hospital';
 import {HelipadLayer} from './overlays/helipads';
 import {CaseChoropleth} from './overlays/casechoropleth';
 import {AggregationLevel} from './options/aggregation-level.enum';
-import {
-  CovidNumberCaseChange,
-  CovidNumberCaseNormalization,
-  CovidNumberCaseOptions,
-  CovidNumberCaseTimeWindow,
-  CovidNumberCaseType
-} from './options/covid-number-case-options';
+import {CovidNumberCaseOptions} from './options/covid-number-case-options';
 import {BedType} from './options/bed-type.enum';
 import {MapOptions} from './options/map-options';
 import {BedBackgroundOptions} from './options/bed-background-options';
 import {BedGlyphOptions} from './options/bed-glyph-options';
 import {MatDialog} from '@angular/material/dialog';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -117,16 +112,14 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit() {
-    const apiToken = 'pk.eyJ1IjoiOTA2M2RlMTBlMWQ5IiwiYSI6ImNrODZicXpseTBjcHQzbW84d213aXBiOGgifQ.St1C8STbyTrHF7HwzIkUPg';
-    const styleToken = '9063de10e1d9/ck86c318i021d1iqfgvhln1ap';
     const tiledMap = L.tileLayer(
-      `https://api.mapbox.com/styles/v1/${styleToken}/tiles/{z}/{x}/{y}?access_token=${apiToken}`,
-      {
-        tileSize: 512,
-        zoomOffset: -1,
-        attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
-          '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      });
+        `${environment.tileServerUrl}`,
+        {
+          tileSize: 256,
+          // zoomOffset: -1,
+          attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
+            '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        });
 
     /*const webGlMap = L.mapboxGL({
       accessToken: 'pk.eyJ1IjoianVyaWIiLCJhIjoiY2s4MndsZTl0MDR2cDNobGoyY3F2YngyaiJ9.xwBjxEn_grzetKOVZDcyqA',
@@ -135,8 +128,8 @@ export class MapComponent implements OnInit {
 
     // create map, set initial view to basemap and zoom level to center of BW
     this.mymap = L.map('main', {
-      minZoom: 6,
-      maxZoom: 12,
+      minZoom: 5,
+      maxZoom: 10,
       layers: [tiledMap],
       zoomControl: false
     }).setView([48.6813312, 9.0088299], 9);
