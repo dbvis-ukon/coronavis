@@ -214,10 +214,11 @@ dockerize-tileserver:
     - source var.env
     - cat var.env
     - echo ${ENV_NAME}
-    - URL_ACCESSOR="URL_$(echo ${FOLDER} | tr [:lower:] [:upper:])"
+    - URL_ACCESSOR="URL_$(echo ${APP} | tr [:lower:] [:upper:])"
+    - echo $URL_ACCESSOR
     - URL=${!URL_ACCESSOR}
     - echo ${URL}
-    - CHART_NAME=$(echo ${ENV_NAME}-${HELM_CHART} | tr / -)
+    - CHART_NAME=$(echo ${ENV_NAME} | tr / -)
     - echo ${CHART_NAME}
     - echo "URL=${URL}" >> var.env
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${APP^}
