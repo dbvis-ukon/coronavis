@@ -80,7 +80,7 @@ build-frontend:
   image: node:latest
   script:
     - cd Frontend/gis
-    - npm install
+    - npm install --unsafe-perm
     - npm run-script build
   artifacts:
     expire_in: 1 day
