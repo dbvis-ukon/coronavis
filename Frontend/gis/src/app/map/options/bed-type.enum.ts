@@ -1,6 +1,4 @@
-export enum GlyphState {
-    none = 'none',
-
+export enum BedType {
     icuLow = 'icu_low',
 
     icuHigh = 'icu_high',

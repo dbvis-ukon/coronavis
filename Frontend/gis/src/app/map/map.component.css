@@ -39,3 +39,8 @@
   margin: 0 0 5px;
   color: #777;
 }
+
+g.hospital .bed {
+  stroke: white;
+  stroke-width: 2
+}

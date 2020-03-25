@@ -1,6 +1,7 @@
 
 
-<div class="legend bedlegend" *ngIf="bedType === bed.none && choroplethLayer">
+<div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === false && choroplethLayer">
+  <h5>Legende Fallzahlen</h5>
 
     <div class="row" *ngFor="let b of caseColors">
 
@@ -13,7 +14,8 @@
 </div>
 
 
-<div class="legend bedlegend" *ngIf="aggregationLevel!==agg.none && bedType !== bed.none" >
+<div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === true || mo.bedGlyphOptions.enabled === true" >
+  <h5>Legende Bettenauslastung</h5>
 
     <div class="row" *ngFor="let b of bedStatusColors">
 

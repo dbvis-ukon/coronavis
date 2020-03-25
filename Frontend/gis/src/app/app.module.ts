@@ -26,6 +26,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
 import { LegendComponent } from './legend/legend.component';
 import { PlusminusPipe } from './plusminus.pipe';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 
 
@@ -61,6 +62,7 @@ import { PlusminusPipe } from './plusminus.pipe';
     MatIconModule,
     MatRadioModule,
     MatButtonModule,
+    MatFormFieldModule,
     MatDialogModule
   ],
   providers: [],

@@ -32,6 +32,7 @@
         flex-direction: row;
         display: flex;
         height: 2.5em;
+        margin-bottom: 5px;
 
         .mat-button-toggle {
             text-align: center;
@@ -48,7 +49,7 @@
 
         .glyph-tile {
             cursor: pointer;
-            margin-left: 5px;
+            // margin-left: 5px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -73,11 +74,12 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
+        margin-bottom: 5px;
 
         .glyph-tile {
             display: flex;
             flex-direction: row;
-            justify-content: start;
+            justify-content: flex-start;
 
             .circle {
                 border-radius: 50%;
@@ -134,7 +136,13 @@ a:hover, a:active {
 
 mat-card {
     max-height: 90vh;
-    overflow-y: auto
+    overflow-y: auto;
+
+    .mat-divider-horizontal {
+        position: relative;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
 }
 
 .legendebeschreibung li{
@@ -151,10 +159,14 @@ mat-card {
     margin-left: 16px;
 }
 
-.covid-form div {
-    padding-top: 10px;
-}
+// .covid-form div {
+    // padding-top: 10px;
+// }
 
-.toggleGroup {
-  padding: 20px 0;
+// .toggleGroup {
+//   padding: 20px 0;
+// }
+
+h5 {
+    margin-top: 5px;
 }
