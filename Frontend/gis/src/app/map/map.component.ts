@@ -20,18 +20,13 @@ import {HospitalLayer} from './overlays/hospital';
 import {HelipadLayer} from './overlays/helipads';
 import {CaseChoropleth} from './overlays/casechoropleth';
 import {AggregationLevel} from './options/aggregation-level.enum';
-import {
-  CovidNumberCaseChange,
-  CovidNumberCaseNormalization,
-  CovidNumberCaseOptions,
-  CovidNumberCaseTimeWindow,
-  CovidNumberCaseType
-} from './options/covid-number-case-options';
+import {CovidNumberCaseOptions} from './options/covid-number-case-options';
 import {BedType} from './options/bed-type.enum';
 import {MapOptions} from './options/map-options';
 import {BedBackgroundOptions} from './options/bed-background-options';
 import {BedGlyphOptions} from './options/bed-glyph-options';
 import {MatDialog} from '@angular/material/dialog';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -118,7 +113,7 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     const tiledMap = L.tileLayer(
-        `https://tiles.covid19vis.lingvis.io/{z}/{x}/{y}.png`,
+        `${environment.tileServerUrl}`,
         {
           tileSize: 256,
           // zoomOffset: -1,

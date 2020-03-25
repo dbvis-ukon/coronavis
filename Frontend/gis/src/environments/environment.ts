@@ -6,7 +6,9 @@ export const environment = {
   production: false,
 
   // apiUrl: 'http://localhost:5000/'
-  apiUrl: 'https://api.covid19vis.lingvis.io/'
+  apiUrl: 'https://api.covid19vis.lingvis.io/',
+
+  tileServerUrl: 'https://tiles.covid19vis.lingvis.io/{z}/{x}/{y}.png',
 };
 
 /*
