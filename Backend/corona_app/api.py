@@ -21,116 +21,27 @@ def healthcheck():
     return "ok", 200
 
 
-# # Custom Rest API
-# @backend_api.route('/hospitals', methods=['GET', 'POST'])
-# def get_hospitals():
-#     """
-#         Return all Hospitals
-#     """
-#     sql_stmt = '''
-# select index, name, address, contact, icu_low_state, icu_high_state, ecmo_state, last_update, st_asgeojson(geom) as geojson
-# from hospitals_crawled hc
-#     '''
-#     sql_result = db.engine.execute(sql_stmt)
-
-#     d, features = {}, []
-#     for row in sql_result:
-#         for column, value in row.items():
-#             # build up the dictionary
-#             d = {**d, **{column: value}}
-
-#         feature = {
-#             "type": 'Feature',
-#             # careful! r.geojson is of type str, we must convert it to a dictionary
-#             "geometry": json.loads(d['geojson']),
-#             "properties": {
-#                 'index': d['index'],
-#                 'name': d['name'],
-#                 'address': d['address'],
-#                 'contact': d['contact'],
-#                 'icu_low_state': d['icu_low_state'],
-#                 'icu_high_state': d['icu_high_state'],
-#                 'ecmo_state': d['ecmo_state'],
-#                 'last_update': d['last_update']
-#             }
-#         }
-
-#         features.append(feature)
-
-#     featurecollection = {
-#         "type": "FeatureCollection",
-#         "features": features
-#     }
-
-#     resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-#             status=200,
-#             mimetype="application/json")
-#     return resp
-
-
-# Custom Rest API
 @backend_api.route('/hospitals', methods=['GET'])
 @cache.cached()
 def get_hospitals():
     """
         Return all Hospitals
     """
-    hospitals = db.session.query(Hospital).distinct(
-                 Hospital.name).order_by(Hospital.name, Hospital.last_update.desc()).all()
-
-    features = []
-    for elem in hospitals:
-        features.append(elem.as_dict())
-    featurecollection = {"type": "FeatureCollection", "features": features}
-    return jsonify(featurecollection)
+    hospitals = db.session.query(Hospital).distinct(Hospital.name).order_by(
+        Hospital.name, Hospital.last_update.desc()).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
 
 
-# Custom Rest API
 @backend_api.route('/hospitals/landkreise', methods=['GET'])
 @cache.cached()
 def get_hospitals_by_landkreise():
     """
         Return all Hospitals
     """
-
-    sql_stmt = "select name, ids, icu_low_state, icu_high_state, ecmo_state, outline, centroid from hospitals_per_landkreis"
-    sql_result = db.engine.execute(sql_stmt)
-
-    d, features = {}, []
-    for row in sql_result:
-        for column, value in row.items():
-            # build up the dictionary
-            d = {**d, **{column: value}}
-
-        feature = {
-            "type": 'Feature',
-            # careful! r.geojson is of type str, we must convert it to a dictionary
-            "geometry": json.loads(str(d['outline'])),
-            "properties": {
-                'name': d['name'],
-                'ids': d['ids'],
-                'centroid': json.loads(d['centroid']),
-                'icu_low_state': dict(Counter(d['icu_low_state'])),
-                'icu_high_state': dict(Counter(d['icu_high_state'])),
-                'ecmo_state': dict(Counter(d['ecmo_state']))
-            }
-        }
-
-        features.append(feature)
-
-    featurecollection = {"type": "FeatureCollection", "features": features}
-
-    resp = Response(response=json.dumps(featurecollection,
-                                        indent=4,
-                                        sort_keys=True,
-                                        default=str),
-                    status=200,
-                    mimetype="application/json")
-
-    return resp
+    hospitalsAggregated = db.session.query(HospitalsPerLandkreis).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
 
 
-# Custom Rest API
 @backend_api.route('/hospitals/regierungsbezirke', methods=['GET'])
 @cache.cached()
 def get_hospitals_by_regierungsbezirke():
@@ -138,44 +49,10 @@ def get_hospitals_by_regierungsbezirke():
         Return all Hospitals
     """
 
-    sql_stmt = "select name, ids, icu_low_state, icu_high_state, ecmo_state, outline, centroid from hospitals_per_regierungsbezirk"
-    sql_result = db.engine.execute(sql_stmt)
-
-    d, features = {}, []
-    for row in sql_result:
-        for column, value in row.items():
-            # build up the dictionary
-            d = {**d, **{column: value}}
-
-        feature = {
-            "type": 'Feature',
-            # careful! r.geojson is of type str, we must convert it to a dictionary
-            "geometry": json.loads(str(d['outline'])),
-            "properties": {
-                'name': d['name'],
-                'ids': d['ids'],
-                'centroid': json.loads(d['centroid']),
-                'icu_low_state': dict(Counter(d['icu_low_state'])),
-                'icu_high_state': dict(Counter(d['icu_high_state'])),
-                'ecmo_state': dict(Counter(d['ecmo_state']))
-            }
-        }
-
-        features.append(feature)
-
-    featurecollection = {"type": "FeatureCollection", "features": features}
-
-    resp = Response(response=json.dumps(featurecollection,
-                                        indent=4,
-                                        sort_keys=True,
-                                        default=str),
-                    status=200,
-                    mimetype="application/json")
-
-    return resp
+    hospitalsAggregated = db.session.query(HospitalsPerRegierungsbezirk).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
 
 
-# Custom Rest API
 @backend_api.route('/hospitals/bundeslander', methods=['GET'])
 @cache.cached()
 def get_hospitals_by_bundeslander():
@@ -183,41 +60,8 @@ def get_hospitals_by_bundeslander():
         Return all Hospitals
     """
 
-    sql_stmt = "select name, ids, icu_low_state, icu_high_state, ecmo_state, outline, centroid from hospitals_per_bundeslaender"
-    sql_result = db.engine.execute(sql_stmt)
-
-    d, features = {}, []
-    for row in sql_result:
-        for column, value in row.items():
-            # build up the dictionary
-            d = {**d, **{column: value}}
-
-        feature = {
-            "type": 'Feature',
-            # careful! r.geojson is of type str, we must convert it to a dictionary
-            "geometry": json.loads(str(d['outline'])),
-            "properties": {
-                'name': d['name'],
-                'ids': d['ids'],
-                'centroid': json.loads(d['centroid']),
-                'icu_low_state': dict(Counter(d['icu_low_state'])),
-                'icu_high_state': dict(Counter(d['icu_high_state'])),
-                'ecmo_state': dict(Counter(d['ecmo_state']))
-            }
-        }
-
-        features.append(feature)
-
-    featurecollection = {"type": "FeatureCollection", "features": features}
-
-    resp = Response(response=json.dumps(featurecollection,
-                                        indent=4,
-                                        sort_keys=True,
-                                        default=str),
-                    status=200,
-                    mimetype="application/json")
-
-    return resp
+    hospitalsAggregated = db.session.query(HospitalsPerBundesland).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
 
 
 @backend_api.route('/cases/landkreise', methods=['GET'])
@@ -266,10 +110,11 @@ group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen
     }
 
     resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-            status=200,
-            mimetype="application/json")
+                    status=200,
+                    mimetype="application/json")
 
     return resp
+
 
 @backend_api.route('/cases/landkreise/total', methods=['GET'])
 @cache.cached()
@@ -278,41 +123,9 @@ def get_cases_by_landkreise_total():
         Return all Hospitals
     """
 
-    sql_stmt = 'SELECT name, ids, until, cases, deaths, bevoelkerung, outline FROM cases_per_county_until_today'
-    sql_result = db.engine.execute(sql_stmt)
+    hospitalsAggregated = db.session.query(CasesPerLandkreisToday).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
 
-    d, features = {}, []
-    for row in sql_result:
-        for column, value in row.items():
-            # build up the dictionary
-            d = {**d, **{column: value}}
-
-        feature = {
-            "type": 'Feature',
-            # careful! r.geojson is of type str, we must convert it to a dictionary
-            "geometry": json.loads(d['outline']),
-            "properties": {
-                'name': d['name'],
-                'id': d['ids'],
-                'until': d['until'],
-                'cases': d['cases'],
-                'deaths': d['deaths'],
-                'bevoelkerung': d['bevoelkerung']
-            }
-        }
-
-        features.append(feature)
-
-    featurecollection = {
-        "type": "FeatureCollection",
-        "features": features
-    }
-
-    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-            status=200,
-            mimetype="application/json")
-
-    return resp
 
 @backend_api.route('/cases/landkreise/yesterday', methods=['GET'])
 @cache.cached()
@@ -320,42 +133,9 @@ def get_cases_by_landkreise_yesterday():
     """
         Return all Hospitals
     """
+    hospitalsAggregated = db.session.query(CasesPerLandkreisYesterday).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
 
-    sql_stmt = "SELECT name, ids, until, cases, deaths, bevoelkerung, outline FROM cases_per_county_until_yesterday"
-    sql_result = db.engine.execute(sql_stmt)
-
-    d, features = {}, []
-    for row in sql_result:
-        for column, value in row.items():
-            # build up the dictionary
-            d = {**d, **{column: value}}
-
-        feature = {
-            "type": 'Feature',
-            # careful! r.geojson is of type str, we must convert it to a dictionary
-            "geometry": json.loads(d['outline']),
-            "properties": {
-                'name': d['name'],
-                'id': d['ids'],
-                'until': d['until'],
-                'cases': d['cases'],
-                'deaths': d['deaths'],
-                'bevoelkerung': d['bevoelkerung']
-            }
-        }
-
-        features.append(feature)
-
-    featurecollection = {
-        "type": "FeatureCollection",
-        "features": features
-    }
-
-    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-            status=200,
-            mimetype="application/json")
-
-    return resp
 
 @backend_api.route('/cases/landkreise/3daysbefore', methods=['GET'])
 @cache.cached()
@@ -364,41 +144,72 @@ def get_cases_by_landkreise_3daysbefore():
         Return all Hospitals
     """
 
-    sql_stmt = 'SELECT name, ids, until, cases, deaths, bevoelkerung, outline FROM cases_per_county_until_3daysbefore'
-    sql_result = db.engine.execute(sql_stmt)
+    hospitalsAggregated = db.session.query(CasesPerLandkreis3DaysBefore).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
 
-    d, features = {}, []
-    for row in sql_result:
-        for column, value in row.items():
-            # build up the dictionary
-            d = {**d, **{column: value}}
 
-        feature = {
-            "type": 'Feature',
-            # careful! r.geojson is of type str, we must convert it to a dictionary
-            "geometry": json.loads(d['outline']),
-            "properties": {
-                'name': d['name'],
-                'id': d['ids'],
-                'until': d['until'],
-                'cases': d['cases'],
-                'deaths': d['deaths'],
-                'bevoelkerung': d['bevoelkerung']
-            }
-        }
+@backend_api.route('/cases/regierungsbezirke/total', methods=['GET'])
+@cache.cached()
+def get_cases_by_regierungsbezirke_total():
+    """
+        Return all Hospitals
+    """
+    hospitalsAggregated = db.session.query(CasesPerRegierungsbezirkToday).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
 
-        features.append(feature)
 
-    featurecollection = {
-        "type": "FeatureCollection",
-        "features": features
-    }
+@backend_api.route('/cases/regierungsbezirke/yesterday', methods=['GET'])
+@cache.cached()
+def get_cases_by_regierungsbezirke_yesterday():
+    """
+        Return all Hospitals
+    """
+    hospitalsAggregated = db.session.query(
+        CasesPerRegierungsbezirkYesterday).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
 
-    resp = Response(response=json.dumps(featurecollection, indent=4, sort_keys=True, default=str),
-            status=200,
-            mimetype="application/json")
 
-    return resp
+@backend_api.route('/cases/regierungsbezirke/3daysbefore', methods=['GET'])
+@cache.cached()
+def get_cases_by_regierungsbezirke_3daysbefore():
+    """
+        Return all Hospitals
+    """
+    hospitalsAggregated = db.session.query(
+        CasesPerRegierungsbezirk3DaysBefore).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+
+
+@backend_api.route('/cases/bundeslaender/total', methods=['GET'])
+@cache.cached()
+def get_cases_by_bundeslaender_total():
+    """
+        Return all Hospitals
+    """
+    hospitalsAggregated = db.session.query(CasesPerBundeslandToday).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+
+
+@backend_api.route('/cases/bundeslaender/yesterday', methods=['GET'])
+@cache.cached()
+def get_cases_by_rebundeslaender_yesterday():
+    """
+        Return all Hospitals
+    """
+    hospitalsAggregated = db.session.query(
+        CasesPerBundeslandYesterday).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+
+
+@backend_api.route('/cases/bundeslaender/3daysbefore', methods=['GET'])
+@cache.cached()
+def get_cases_by_bundeslaender_3daysbefore():
+    """
+        Return all Hospitals
+    """
+    hospitalsAggregated = db.session.query(
+        CasesPerBundesland3DaysBefore).all()
+    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
 
 @backend_api.route('/osm/hospitals', methods=['GET'])
 @cache.cached()
@@ -501,3 +312,11 @@ WHERE st_distance(krankenhaus.geom::geography, b.geom::geography) < 1000
                     mimetype="application/json")
 
     return resp
+
+
+def __as_feature_collection(resultset):
+    features = []
+    for elem in resultset:
+        features.append(elem.as_dict())
+    featurecollection = {"type": "FeatureCollection", "features": features}
+    return featurecollection
