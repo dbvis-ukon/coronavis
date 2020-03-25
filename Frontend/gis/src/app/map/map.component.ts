@@ -68,13 +68,13 @@ export class MapComponent implements OnInit {
 
     if (mo.showOsmHospitals) {
       this.mymap.addLayer(this.osmHospitalsLayer);
-    } else {
+    } else if (this.osmHospitalsLayer) {
       this.mymap.removeLayer(this.osmHospitalsLayer);
     }
 
     if (mo.showOsmHeliports) {
       this.mymap.addLayer(this.osmHeliportsLayer);
-    } else {
+    } else if (this.osmHeliportsLayer) {
       this.mymap.removeLayer(this.osmHeliportsLayer);
     }
   }
