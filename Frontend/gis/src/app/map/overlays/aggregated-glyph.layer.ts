@@ -44,7 +44,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
       this.gHospitals
         .selectAll(`.bed.${BedType.ecmo}`)
-        .style('opacity', opt.showEcmo ? '1' : '0');  
+        .style('opacity', opt.showEcmo ? '1' : '0');
 
 
     });
@@ -189,7 +189,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(icu_low_normalizer(this.getIcuLowScore(d1))))
+      .style('fill', d1 => this.colormapService.getBedStatusColor(icu_low_normalizer(this.getIcuLowScore(d1)), d1.icu_low_state["Nicht verfügbar"] > 0))
       // .on("mouseenter", () => {
 
       //   self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_low_state"), "enter"));
@@ -205,7 +205,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${rectSize + padding * 2}px`)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(icu_high_normalizer(this.getIcuHighScore(d1))))
+      .style('fill', d1 => this.colormapService.getBedStatusColor(icu_high_normalizer(this.getIcuHighScore(d1)), d1.icu_high_state["Nicht verfügbar"] > 0))
       // .on("mouseenter", () => {
       //   self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_high_state"), "enter"));
       // })
@@ -220,7 +220,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(ecmo_normalizer(this.getEcmoScore(d1))))
+      .style('fill', d1 => this.colormapService.getBedStatusColor(ecmo_normalizer(this.getEcmoScore(d1)), d1.ecmo_state["Nicht verfügbar"] > 0))
       // .on("mouseenter", () => {
       //   self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "ecmo_state"), "enter"));
       // })
