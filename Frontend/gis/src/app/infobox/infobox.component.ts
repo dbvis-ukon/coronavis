@@ -19,43 +19,6 @@ import { MapOptions } from '../map/options/map-options';
 })
 export class InfoboxComponent implements OnInit {
 
-  toggleBarchart() {
-    this.barchart = (this.barchart === null ? this.barchartT : null)
-  }
-
-  barchart = null;
-
-  barchartT = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-    "description": "A simple bar chart with rounded corners at the end of the bar.",
-    "data": {
-      "values": [
-        {"cat": "Verfügbar", "num": 6, "color": "red"},
-        {"cat": "Begrenzt", "num": 3, "color": "green"},
-        {"cat": "Ausgelastet", "num": 1, "color": "blue"},
-        {"cat": "Nicht verfügbar", "num": 0, "color": "yellow"}
-      ]
-    },
-    "mark": {"type": "bar"},
-    "encoding": {
-      "x": {
-        "field": "cat", 
-        "type": "nominal", 
-        "title": "ICU Low care", 
-        "sort": ["Verfügbar", "Begrenzt", "Ausgelastet", "Nicht verfügbar"]
-        },
-      "y": {
-        "field": "num", 
-        "type": "quantitative", 
-        "title": "Anzahl Krankenhäuser",
-        "scale": {"domain": [0, 10]}
-        },
-      "color": {
-        "field": "color", "type": "nominal", "scale": null
-      }
-    }
-  };
-
   constructor(
     private colormapService: ColormapService
   ) { }

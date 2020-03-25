@@ -43,8 +43,6 @@ export class VegaComponent implements AfterViewInit {
   }
 
   updateChart() {
-    console.log('update chart');
-
     // empty content
     const node = this.chartRef.nativeElement;
     
@@ -59,7 +57,7 @@ export class VegaComponent implements AfterViewInit {
       return;
     }
 
-    embed(node, this._spec);
+    embed(node, this._spec, {actions: false});
   }
 
 }
