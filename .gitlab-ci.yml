@@ -80,12 +80,19 @@ build-frontend:
   image: node:latest
   script:
     - cd Frontend/gis
-    - npm ci
+    - npm install
     - npm run-script build
   artifacts:
     expire_in: 1 day
     paths:
       - ./Frontend/gis/dist
+  cache:
+    key: 
+      files:
+        - ./Frontend/gis/package.json
+        - ./Frontend/gis/package-lock.json
+    paths:
+      - ./Frontend/gis/node_modules
   tags:
     - docker
 
