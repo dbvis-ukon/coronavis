@@ -32,6 +32,9 @@ export-environment:
   artifacts:
     reports:
       dotenv: var.env
+    paths:
+      - var.env
+    expire_in: 3000 days
   tags:
     - docker
 
@@ -143,6 +146,7 @@ build-frontend:
   services: 
     - docker:dind
   script:
+    - source var.env
     - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
     - cd ${FOLDER}
     - FOLDER=$(echo "${FOLDER}" | tr '[:upper:]' '[:lower:]')
@@ -201,6 +205,7 @@ dockerize-tileserver:
 .deploy-script: &deploy-template
   stage: deploy
   script:
+    - source var.env
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} ${HELM_CHART}-${ENV_NAME} ./k8/${FOLDER}
 #    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} ${HELM_CHART}-${ENV_NAME} ./k8/${FOLDER}
   tags:
@@ -300,10 +305,12 @@ deploy-tileserver:
   variables:
     GIT_STRATEGY: none
   script:
+    - source var.env
     - helm delete --dry-run --debug --purge ${HELM_CHART}-${ENV_NAME}
     - helm delete --purge ${HELM_CHART}-${ENV_NAME}
   when: manual
-  dependencies: []
+  dependencies:
+    - export-environment
   tags:
     - k8-admin
 
