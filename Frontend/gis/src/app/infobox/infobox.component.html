@@ -11,14 +11,14 @@
 
     <mat-expansion-panel expanded="true">
       <mat-expansion-panel-header>
-          <mat-panel-title>Krankenhäuser - Bettenauslatung</mat-panel-title>
+          <mat-panel-title>Krankenhäuser - Bettenauslastung</mat-panel-title>
       </mat-expansion-panel-header>
 
       <p>
         <mat-slide-toggle
             [checked]="mo.bedGlyphOptions.enabled"
             (change)="mo.bedGlyphOptions.enabled = $event.checked; emitMapOptions()"
-          >Bettenauslatung anzeigen / ausblenden
+          >Bettenauslastung anzeigen / ausblenden
           </mat-slide-toggle>
       </p>
 
@@ -73,7 +73,7 @@
               [disabled]="mo.bedGlyphOptions.aggregationLevel === eAggregationLevels.none"
               [checked]="mo.bedBackgroundOptions.enabled"
               (change)="mo.bedBackgroundOptions.enabled = !mo.bedBackgroundOptions.enabled; emitMapOptions()"
-            >Bettenauslatung im Hintergrund anzeigen / ausblenden
+            >Bettenauslastung im Hintergrund anzeigen / ausblenden
             </mat-slide-toggle>
         <div *ngIf="mo.bedGlyphOptions.aggregationLevel === eAggregationLevels.none">
           <mat-error>Bitte eine Aggregation Länder, Bezirke, oder Kreise auswählen.</mat-error>
