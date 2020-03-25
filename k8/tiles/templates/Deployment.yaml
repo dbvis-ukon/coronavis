@@ -1,0 +1,51 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "lingvis.labels" . | nindent 4 }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "lingvis.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "lingvis.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: tileserver
+          image: registry.dbvis.de/jentner/covid-19-vis/tileserver:{{ .Values.sha }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: "/"
+              port: 80
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: "/"
+              port: 80
+            initialDelaySeconds: 6
+            timeoutSeconds: 5
+            periodSeconds: 5
+            failureThreshold: 4
+            successThreshold: 1
+          resources:
+            default:
+              memory: "4Gi"
+              cpu: "1000m"
+            limits:
+              memory: "8Gi"
+              cpu: "2000m"
+      imagePullSecrets:
+          - name: regcred-server
