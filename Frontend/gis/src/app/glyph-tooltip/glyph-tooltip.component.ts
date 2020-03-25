@@ -36,11 +36,6 @@ export class GlyphTooltipComponent implements OnInit {
   constructor(private colormapService: ColormapService) {
   }
 
-  getCapacityStateColor(capacityState: string): string {
-    return this.colormapService.getSingleHospitalColormap()(capacityState);
-  }
-
-
   ngOnInit() {
   }
 
