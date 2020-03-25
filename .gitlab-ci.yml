@@ -6,6 +6,7 @@ stages:
 
 variables:
   K8_NAMESPACE: covid-19-vis
+  HELM_CHART_PREFIX: covid-19-vis
 
 export-environment:
   image: debian:stretch-slim
@@ -42,15 +43,18 @@ export-environment:
   # do not run pipelines for merge requests (gets rid of "detatched pipelines")
   - if: $CI_MERGE_REQUEST_ID
     when: never
-  # run if files changed; no branch restrictions
+  # run if files changed
+  # and if it should run on a feature branch or it should run on master
   - changes:
       - Backend/**
       - Backend/**/*
       - k8/Backend/**
       - k8/Backend/**/*
       - .gitlab-ci.yml
+    if: $RUN_ON_FB == "yes" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "master"
     when: always
-  - if: $CI_COMMIT_TAG =~ /^v.*/
+  # run if tagged
+  - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
     when: always
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
@@ -158,6 +162,9 @@ build-frontend:
 dockerize-backend:
   variables:
     FOLDER: Backend
+    RUN_ON_FB: "yes"
+    RUN_ON_MASTER: "yes"
+    RUN_ON_TAG: "yes"
   <<: *dockerize-template
   <<: *rules-backend
   needs:
@@ -206,36 +213,59 @@ dockerize-tileserver:
   script:
     - source var.env
     - cat var.env
-    - echo ${HELM_CHART}
     - echo ${ENV_NAME}
+    - URL_ACCESSOR="URL_$(echo ${FOLDER} | tr [:lower:] [:upper:])"
+    - URL=${!URL_ACCESSOR}
     - echo ${URL}
     - CHART_NAME=$(echo ${ENV_NAME}-${HELM_CHART} | tr / -)
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${FOLDER}
-#    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${FOLDER}
+    - echo ${CHART_NAME}
+    - echo "URL=${URL}" >> var.env
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${APP^}
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${APP^}
   tags:
     - k8-admin
 
-deploy-backend:
-  variables:
-    HELM_CHART: covid-19-vis-backend
-    FOLDER: Backend
+.deploy-backend: &deploy-backend
   <<: *deploy-template
   <<: *rules-backend
-  before_script:
-    - source var.env
-    - URL=${URL_BACKEND}
+  variables:
+    APP: backend
+    RUN_ON_FB: "no"
+    RUN_ON_MASTER: "no"
+    RUN_ON_TAG: "no"
   environment:
-    url: http://$URL_BACKEND
-    name: review/backend/$CI_COMMIT_REF_SLUG
+    url: http://$URL
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     on_stop: remove-deployment-backend
     kubernetes:
       namespace: $K8_NAMESPACE
+  artifacts:
+    reports:
+      dotenv: var.env
   needs:
     - dockerize-backend
     - export-environment
   dependencies:
     - dockerize-backend
     - export-environment
+
+deploy-backend-fb:
+  extends: .deploy-backend
+  variables:
+    ENV_TYPE: review
+    RUN_ON_FB: "yes"
+
+deploy-backend-staging:
+  <<: *deploy-backend
+  variables:
+    ENV_TYPE: staging
+    RUN_ON_MASTER: "yes"
+  
+deploy-backend-production:
+  <<: *deploy-backend
+  variables:
+    ENV_TYPE: production
+    RUN_ON_TAG: "yes"
 
 deploy-frontend:
   variables:
@@ -314,6 +344,7 @@ deploy-tileserver:
     GIT_STRATEGY: none
   script:
     - source var.env
+    - CHART_NAME=$(echo ${ENV_NAME}-${HELM_CHART} | tr / -)
     - helm delete --dry-run --debug --purge ${HELM_CHART}-${ENV_NAME}
     - helm delete --purge ${HELM_CHART}-${ENV_NAME}
   when: manual
@@ -325,7 +356,7 @@ deploy-tileserver:
 remove-deployment-backend:
   <<: *remove-deployment
   environment:
-    name: review/backend/$CI_COMMIT_REF_SLUG
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     action: stop
 
 remove-deployment-frontend:
