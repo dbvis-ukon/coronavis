@@ -139,11 +139,9 @@ build-frontend:
 
 .dockerize-template: &dockerize-template
   stage: build:docker
-  image: debian:slim-latest
+  image: docker:latest
   services: 
     - docker:dind
-  before_script:
-    - apt install docker
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
     - cd ${FOLDER}
