@@ -78,8 +78,8 @@ deploy-backend:
     - K8_NAMESPACE="covid-19-vis"
     - HELM_CHART="covid-19-vis-backend"
     - URL="api.covid19vis.lingvis.io"
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/backend
-    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/backend
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/backend
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/backend
   dependencies: []
   only:
     - master
@@ -92,8 +92,8 @@ deploy-frontend:
     - K8_NAMESPACE="covid-19-vis"
     - HELM_CHART="covid-19-vis-frontend"
     - URL="covid19vis.lingvis.io"
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/frontend
-    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/frontend
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/frontend
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/frontend
   dependencies: []
   only:
     - master
@@ -105,8 +105,8 @@ deploy-crawler:
   script:
     - K8_NAMESPACE="covid-19-vis"
     - HELM_CHART="covid-19-vis-crawler"
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/crawler
-    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha=${CI_COMMIT_SHORT_SHA} ${HELM_CHART} ./k8/crawler
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/crawler
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/crawler
   dependencies: []
   only:
     - master
