@@ -6,6 +6,20 @@ stages:
 variables:
   K8_NAMESPACE: covid-19-vis
 
+.rules: &rules
+  rules:     
+  # do not run pipelines for merge requests (gets rid of "detatched pipelines")
+  - if: $CI_MERGE_REQUEST_ID
+    when: never
+  # run if files changed; no branch restrictions
+  - changes:
+      - ${FOLDER}/**
+      - ${FOLDER}/**/*
+    if: $CI_COMMIT_BRANCH == "master"
+    when: always
+  # default is on_success, so explicitly set job not to run if none of the above rules matched
+  - when: never
+
 ###########################################
 # BUILD
 ###########################################
@@ -38,8 +52,7 @@ build-frontend:
     - cd ${FOLDER}
     - docker build -t "$IMG" .
     - docker push "$IMG"
-  only:
-    - master
+  <<: *rules
   tags:
     - docker-build
 
@@ -72,17 +85,6 @@ dockerize-tileserver:
     FOLDER: ./Tiles
   <<: *dockerize-template
   dependencies: []
-  rules:     
-    # do not run pipelines for merge requests (gets rid of "detatched pipelines")
-    - if: $CI_MERGE_REQUEST_ID
-      when: never
-    # run if files changed; no branch restrictions
-    - changes:
-      - Tiles/**
-      - Tiles/**/*
-      when: always
-    # default is on_success, so explicitly set job not to run if none of the above rules matched
-    - when: never
 
 
 
@@ -95,8 +97,7 @@ dockerize-tileserver:
   script:
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ${CHART_FOLDER}
     - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ${CHART_FOLDER}
-  only:
-    - master
+  <<: *rules
   tags:
     - k8-admin
 
@@ -106,6 +107,7 @@ deploy-backend:
     HELM_CHART: covid-19-vis-backend
     URL: api.covid19vis.lingvis.io
     CHART_FOLDER: ./k8/backend
+    FOLDER: ./Backend
   <<: *deploy-template
   dependencies: 
     - dockerize-backend
@@ -115,6 +117,7 @@ deploy-frontend:
     HELM_CHART: covid-19-vis-frontend
     URL: covid19vis.lingvis.io
     CHART_FOLDER: ./k8/frontend
+    FOLDER: ./Frontend
   <<: *deploy-template
   dependencies: 
     - dockerize-frontend
@@ -123,6 +126,7 @@ deploy-crawler:
   variables:
     HELM_CHART: covid-19-vis-crawler
     CHART_FOLDER: ./k8/crawler
+    FOLDER: ./Crawler
   <<: *deploy-template
   dependencies: 
     - dockerize-crawler
@@ -132,6 +136,7 @@ deploy-tileserver:
     HELM_CHART: covid-19-vis-tileserver
     URL: tiles.covid19vis.lingvis.io
     CHART_FOLDER: ./k8/tiles
+    FOLDER: ./Tiles
   <<: *deploy-template
   dependencies: 
     - dockerize-tileserver
