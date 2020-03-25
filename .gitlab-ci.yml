@@ -331,7 +331,7 @@ remove-deployment-backend:
 remove-deployment-frontend:
   <<: *remove-deployment
   environment:
-    name: $ENV_NAME_FRONTEND
+    name: test
     action: stop
 
 remove-deployment-crawler:
