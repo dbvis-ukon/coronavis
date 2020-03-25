@@ -339,7 +339,6 @@ export class MapComponent implements OnInit {
     const key = this.getKeyCovidNumberCaseOptions(opt);
 
     if (!this.covidNumberCaseOptionsKeyToLayer.has(key)) {
-      console.log(`Did not find choropleth for ${key}, generate one`);
       const data = this.choropletDataMap.get(opt.aggregationLevel);
       if (!data) {
         throw `Did not find choropleth data for ${opt.aggregationLevel}`;
