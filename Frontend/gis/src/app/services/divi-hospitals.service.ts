@@ -161,6 +161,7 @@ export class DiviHospitalsService {
 
   myAggregatedMapper(input: AggregatedHospitals): DiviAggregatedHospital[] {
     return input.features.map((i, index) => {
+      console.log(i);
       return {
         ID: index,
         Name: i.properties.name,

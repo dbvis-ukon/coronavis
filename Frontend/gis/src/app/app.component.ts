@@ -5,13 +5,12 @@ import {AggregationLevel} from './map/options/aggregation-level.enum';
 import {
   CovidNumberCaseChange,
   CovidNumberCaseNormalization,
-  CovidNumberCaseOptions,
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from './map/options/covid-number-case-options';
-import { BedType } from './map/options/bed-type.enum';
-import { CaseChoropleth } from './map/overlays/casechoropleth';
-import { MapOptions } from './map/options/map-options';
+import {BedType} from './map/options/bed-type.enum';
+import {CaseChoropleth} from './map/overlays/casechoropleth';
+import {MapOptions} from './map/options/map-options';
 
 @Component({
   selector: 'app-root',
@@ -42,7 +41,8 @@ export class AppComponent {
       normalization: CovidNumberCaseNormalization.absolut,
       timeWindow: CovidNumberCaseTimeWindow.all,
       type: CovidNumberCaseType.cases,
-      enabled: false
+      enabled: false,
+      aggregationLevel: AggregationLevel.county
     },
 
     showOsmHeliports: false,

@@ -4,6 +4,7 @@ import {forkJoin, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {FeatureCollection} from 'geojson';
 import {environment} from 'src/environments/environment';
+import {AggregationLevel} from "../map/options/aggregation-level.enum";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -82,10 +83,10 @@ export class DataService {
   /**
    * Retrieves the Landkreise from the given api endpoint.
    */
-  getCaseData(): Observable<FeatureCollection> {
-    const total = this.http.get<FeatureCollection>(`${environment.apiUrl}cases/landkreise/total`);
-    const yesterday = this.http.get<FeatureCollection>(`${environment.apiUrl}cases/landkreise/yesterday`);
-    const threedays = this.http.get<FeatureCollection>(`${environment.apiUrl}cases/landkreise/3daysbefore`);
+  getCaseData(agg: AggregationLevel): Observable<FeatureCollection> {
+    const total = this.http.get<FeatureCollection>(`${environment.apiUrl}cases/${agg}/total`);
+    const yesterday = this.http.get<FeatureCollection>(`${environment.apiUrl}cases/${agg}/yesterday`);
+    const threedays = this.http.get<FeatureCollection>(`${environment.apiUrl}cases/${agg}/3daysbefore`);
 
     return forkJoin([total, yesterday, threedays])
       .pipe(

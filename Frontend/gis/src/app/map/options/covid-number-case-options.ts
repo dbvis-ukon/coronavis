@@ -1,3 +1,5 @@
+import {AggregationLevel} from "./aggregation-level.enum";
+
 export enum CovidNumberCaseChange {
     absolute = 'abs',
 
@@ -40,5 +42,7 @@ export enum CovidNumberCaseChange {
     type: CovidNumberCaseType;
 
     normalization: CovidNumberCaseNormalization
+
+    aggregationLevel?: AggregationLevel
 
   }
