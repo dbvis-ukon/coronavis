@@ -7,6 +7,7 @@ spec:
   schedule: "0 */4 * * *"
   jobTemplate:
     spec:
+      backoffLimit: 2
       template:
         spec:
           containers:
@@ -15,7 +16,7 @@ spec:
             imagePullPolicy: Always
             command: ['python']
             args: ['crawler.py']
-          restartPolicy: OnFailure
+          restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server
 
@@ -30,6 +31,7 @@ spec:
   schedule: "0 9 * * *"
   jobTemplate:
     spec:
+      backoffLimit: 2
       template:
         spec:
           containers:
@@ -38,7 +40,7 @@ spec:
             imagePullPolicy: Always
             command: ['python']
             args: ['crawler_map.py']
-          restartPolicy: OnFailure
+          restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server
 
@@ -53,6 +55,7 @@ spec:
   schedule: "0 9 * * *"
   jobTemplate:
     spec:
+      backoffLimit: 2
       template:
         spec:
           containers:
@@ -61,7 +64,7 @@ spec:
             imagePullPolicy: Always
             command: ['python']
             args: ['crawler_rki_dashboard.py']
-          restartPolicy: OnFailure
+          restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server
 
@@ -76,6 +79,7 @@ spec:
   schedule: "0 9 * * *"
   jobTemplate:
     spec:
+      backoffLimit: 2
       template:
         spec:
           containers:
@@ -84,6 +88,6 @@ spec:
             imagePullPolicy: Always
             command: ['python']
             args: ['crawl_rki_cases.py']
-          restartPolicy: OnFailure
+          restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server
