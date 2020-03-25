@@ -7,8 +7,10 @@ import { ColormapService } from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
 import {GlyphHoverEvent} from "../events/glyphhover";
 import {HospitallayerService} from "../../services/hospitallayer.service";
-import {Subject} from "rxjs";
+import {Subject, Observable} from "rxjs";
 import {quadtree} from "d3";
+import { BedGlyphOptions } from '../options/bed-glyph-options';
+import { BedType } from '../options/bed-type.enum';
 
 export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
@@ -23,8 +25,29 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     private tooltipService: TooltipService,
     private colormapService: ColormapService,
     private hospitallayerService: HospitallayerService,
+    private glyphOptions: Observable<BedGlyphOptions>
 ) {
     super(name, null);
+
+    this.glyphOptions.subscribe(opt => {
+      if(!this.gHospitals || !opt) {
+        return;
+      }
+
+      this.gHospitals
+        .selectAll(`.bed.${BedType.icuLow}`)
+        .style('opacity', opt.showIcuLow ? '1' : '0');
+
+      this.gHospitals
+        .selectAll(`.bed.${BedType.icuHigh}`)
+        .style('opacity', opt.showIcuHigh ? '1' : '0');
+
+      this.gHospitals
+        .selectAll(`.bed.${BedType.ecmo}`)
+        .style('opacity', opt.showEcmo ? '1' : '0');  
+
+
+    });
   }
 
   private glyphSize = {
@@ -129,12 +152,12 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       // })
       // .on('mouseout', () => this.tooltipService.close());
 
-    this.gHospitals
-      .append('rect')
-      .attr('width', this.glyphSize.width)
-      .attr('height', this.glyphSize.height/2)
-      .attr('fill', 'white')
-      .attr('stroke', '#cccccc');
+    // this.gHospitals
+    //   .append('rect')
+    //   .attr('width', this.glyphSize.width)
+    //   .attr('height', this.glyphSize.height/2)
+    //   .attr('fill', 'white')
+    //   .attr('stroke', '#cccccc');
 
     // adds white shadow
     this.gHospitals
@@ -161,6 +184,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     const self = this;
     this.gHospitals
       .append('rect')
+      .attr('class', `bed ${BedType.icuLow}`)
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
       .attr('x', padding)
@@ -176,6 +200,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
     this.gHospitals
       .append('rect')
+      .attr('class', `bed ${BedType.icuHigh}`)
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
@@ -190,6 +215,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
     this.gHospitals
       .append('rect')
+      .attr('class', `bed ${BedType.ecmo}`)
       .attr('width', `${rectSize}px`)
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)

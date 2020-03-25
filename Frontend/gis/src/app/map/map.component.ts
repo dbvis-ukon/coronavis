@@ -55,6 +55,8 @@ export class MapComponent implements OnInit {
 
   @ViewChild('main') main;
 
+  private bedGlyphOptions$: Subject<BedGlyphOptions> = new Subject();
+
   private _mapOptions: MapOptions;
 
   @Input()
@@ -67,6 +69,8 @@ export class MapComponent implements OnInit {
 
 
     this.updateGlyphMapLayers(mo.bedGlyphOptions);
+
+    this.bedGlyphOptions$.next(mo.bedGlyphOptions);
 
     this.updateBedBackgroundLayer(mo.bedBackgroundOptions);
 
@@ -195,7 +199,13 @@ export class MapComponent implements OnInit {
       this.dataService.getHospitalsBundeslaender()
     ])
       .subscribe(result => {
-        const simpleGlyphFactory = new SimpleGlyphLayer('ho_none', result[0] as DiviHospital[], this.tooltipService, this.colormapService);
+        const simpleGlyphFactory = new SimpleGlyphLayer(
+          'ho_none', 
+          result[0] as DiviHospital[], 
+          this.tooltipService, 
+          this.colormapService,
+          this.bedGlyphOptions$
+          );
         const simpleGlyphLayer = simpleGlyphFactory.createOverlay(this.mymap);
         const l = L.layerGroup([simpleGlyphLayer]);
         this.aggregationLevelToGlyphMap.set(AggregationLevel.none, l);
@@ -379,8 +389,15 @@ export class MapComponent implements OnInit {
   }
 
   private addGlyphMap(result: any[], index: number, agg: AggregationLevel, name: string, granularity: string) {
-    const factory = new AggregatedGlyphLayer(name, granularity, result[index],
-      this.tooltipService, this.colormapService, this.hospitallayerService);
+    const factory = new AggregatedGlyphLayer(
+      name, 
+      granularity, 
+      result[index],
+      this.tooltipService, 
+      this.colormapService, 
+      this.hospitallayerService,
+      this.bedGlyphOptions$
+    );
 
     const layer = factory.createOverlay(this.mymap);
 

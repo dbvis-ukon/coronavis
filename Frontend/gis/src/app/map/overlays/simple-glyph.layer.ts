@@ -7,6 +7,9 @@ import {DiviHospital} from 'src/app/services/divi-hospitals.service';
 import {ColormapService} from 'src/app/services/colormap.service';
 import {Feature, FeatureCollection} from "geojson";
 import {quadtree} from 'd3';
+import { Observable } from 'rxjs';
+import { BedGlyphOptions } from '../options/bed-glyph-options';
+import { BedType } from '../options/bed-type.enum';
 
 export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
@@ -21,10 +24,32 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     name: string,
     private data: DiviHospital[],
     private tooltipService: TooltipService,
-    private colormapService: ColormapService
+    private colormapService: ColormapService,
+    private glyphOptions: Observable<BedGlyphOptions>
   ) {
     super(name, null);
     this.enableDefault = true;
+
+
+    this.glyphOptions.subscribe(opt => {
+      if(!this.gHospitals || !opt) {
+        return;
+      }
+
+      this.gHospitals
+        .selectAll(`.bed.${BedType.icuLow}`)
+        .style('opacity', opt.showIcuLow ? '1' : '0');
+
+      this.gHospitals
+        .selectAll(`.bed.${BedType.icuHigh}`)
+        .style('opacity', opt.showIcuHigh ? '1' : '0');
+
+      this.gHospitals
+        .selectAll(`.bed.${BedType.ecmo}`)
+        .style('opacity', opt.showEcmo ? '1' : '0');  
+
+
+    });
   }
 
 
@@ -101,12 +126,12 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       })
       .on('mouseleave', () => this.tooltipService.close());
 
-    this.gHospitals
-      .append('rect')
-      .attr('width', this.glyphSize.width)
-      .attr('height', this.glyphSize.height/2)
-      .attr('fill', 'white')
-      .attr('stroke', '#cccccc');
+    // this.gHospitals
+    //   .append('rect')
+    //   .attr('width', this.glyphSize.width)
+    //   .attr('height', this.glyphSize.height/2)
+    //   .attr('fill', 'white')
+    //   .attr('stroke', '#cccccc');
 
     this.nameHospitalsShadow = this.gHospitals
       .append('text')
@@ -166,6 +191,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     this.gHospitals
       .append('rect')
+      .attr('class', `bed ${BedType.icuLow}`)
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .style('fill', d1 => colorScale(d1.icuLowCare))
@@ -174,6 +200,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     this.gHospitals
       .append('rect')
+      .attr('class', `bed ${BedType.icuHigh}`)
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${this.rectSize}px`)
@@ -183,6 +210,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     this.gHospitals
       .append('rect')
+      .attr('class', `bed ${BedType.ecmo}`)
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${2 * this.rectSize}px`)
