@@ -249,7 +249,7 @@ deploy-frontend:
     - URL=${URL_FRONTEND}
   environment:
     url: $URL_FRONTEND
-    name: $ENV_NAME_FRONTEND
+    name: test
     action: stop
     on_stop: remove-deployment-frontend
   artifacts:
