@@ -2,6 +2,7 @@ from db import db
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import deferred
 from geoalchemy2 import Geometry
+import json
 import geojson
 from geoalchemy2.shape import to_shape
 from sqlalchemy.dialects.postgresql import JSONB
@@ -63,8 +64,6 @@ class Hospital(db.Model):
             'last_update': self.last_update
         }
         return result
-<<<<<<< HEAD
-=======
 
 class HospitalsAggregated(db.Model):
     """
@@ -167,4 +166,3 @@ class CasesPerBundeslandYesterday(CasesAggregated):
 
 class CasesPerBundesland3DaysBefore(CasesAggregated):
     __tablename__ = "cases_per_bundeslaender_until_3daysbefore"
->>>>>>> 5c045af32cdde4cc69dc807ed5980f30127da326
