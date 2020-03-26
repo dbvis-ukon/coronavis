@@ -8,7 +8,7 @@ from views.helpers import __as_feature_collection
 routes = Blueprint('hospitals', __name__, url_prefix='/hospitals')
 
 
-@routes.route('', methods=['GET'])
+@routes.route('/', methods=['GET'])
 @cache.cached()
 def get_hospitals():
     """
