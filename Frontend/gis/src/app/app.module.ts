@@ -30,6 +30,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { AboutComponent } from './about/about.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 
+import {AggregatedGlyphTooltipComponent} from './aggregated-glyph-tooltip/aggregated-glyph-tooltip.component';
+import { VegaComponent } from './vega/vega.component';
 
 
 @NgModule({
@@ -49,6 +51,8 @@ import { ImpressumComponent } from './impressum/impressum.component';
     PlusminusPipe,
     AboutComponent,
     ImpressumComponent,
+    AggregatedGlyphTooltipComponent,
+    VegaComponent
   ],
   imports: [
     BrowserModule,
