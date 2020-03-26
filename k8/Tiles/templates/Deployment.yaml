@@ -41,7 +41,7 @@ spec:
             failureThreshold: 4
             successThreshold: 1
           resources:
-            default:
+            requesets:
               memory: "500Mi"
               cpu: 0.25
             limits:
