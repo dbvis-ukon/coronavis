@@ -16,7 +16,7 @@ from cache import cache
 
 # Create Flask application
 app = Flask(__name__)
-app.config.from_pyfile(os.path.join(app.static_folder, 'config', 'config.cfg'))
+app.config.from_pyfile('config.py')
 cache.init_app(app)
 db.init_app(app)
 
