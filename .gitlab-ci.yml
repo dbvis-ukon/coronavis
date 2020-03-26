@@ -7,6 +7,10 @@ stages:
 variables:
   K8_NAMESPACE: covid-19-vis
 
+###########################################
+# SETUP ENVIRONMENT VARIALBES
+###########################################
+
 export-environment:
   image: debian:stretch-slim
   stage: prepare
@@ -35,6 +39,14 @@ export-environment:
     expire_in: 3000 days
   tags:
     - docker
+
+###########################################
+# DEFINE BRANCH TRIGGER RULES
+###########################################
+
+#--------------------
+# Deployment
+#--------------------
 
 .rules-backend: &rules-backend
   rules:     
@@ -132,6 +144,53 @@ export-environment:
     when: always
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
+
+#--------------------
+# Environment Cleanup
+#--------------------
+
+
+.rules-backend-cleanup: &rules-backend-cleanup
+  rules:
+    # do not run pipelines for merge requests (gets rid of "detatched pipelines")
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    # if this is set, run this job all the time
+    - if: $RUN_ALWAYS == "yes"
+      when: manual
+    # run if files changed
+    # and if it should run on a feature branch or it should run on master
+    - changes:
+        - Backend/**
+        - Backend/**/*
+        - k8/Backend/**
+        - k8/Backend/**/*
+        - .gitlab-ci.yml
+      if: $RUN_ON_FB == "yes" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "master"
+      when: manual
+    # default is on_success, so explicitly set job not to run if none of the above rules matched
+    - when: never
+
+.rules-frontend-cleanup: &rules-frontend-cleanup
+  rules:
+    # do not run pipelines for merge requests (gets rid of "detatched pipelines")
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    # if this is set, run this job all the time
+    - if: $RUN_ALWAYS == "yes"
+      when: manual
+    # run if files changed
+    # and if it should run on a feature branch or it should run on master
+    - changes:
+        - Frontend/**
+        - Frontend/**/*
+        - k8/Frontend/**
+        - k8/Frontend/**/*
+        - .gitlab-ci.yml
+      if: $RUN_ON_FB == "yes" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "master"
+      when: manual
+    # default is on_success, so explicitly set job not to run if none of the above rules matched
+    - when: never
 
 ###########################################
 # BUILD
@@ -474,14 +533,13 @@ deploy-tiles-production:
     - echo $CHART_NAME
     - helm delete --dry-run --debug --purge ${CHART_NAME}
     - helm delete --purge ${CHART_NAME}
-  when: manual
   dependencies: []
   tags:
     - k8-admin
 
 remove-deployment-backend-review:
   extends: .remove-deployment
-  <<: *rules-backend
+  <<: *rules-backend-cleanup
   variables:
     APP: backend
     ENV_TYPE: review
@@ -492,7 +550,7 @@ remove-deployment-backend-review:
 
 remove-deployment-frontend-review:
   extends: .remove-deployment
-  <<: *rules-frontend
+  <<: *rules-frontend-cleanup
   variables:
     APP: frontend
     ENV_TYPE: review
