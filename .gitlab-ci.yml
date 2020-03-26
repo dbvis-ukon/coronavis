@@ -22,7 +22,8 @@ export-environment:
     - if [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then VERSION=${CI_COMMIT_TAG}; else VERSION=${CI_COMMIT_SHORT_SHA}; fi
     # the current URL suffix
     - URL_SUFFIX="covid19vis.lingvis.io"
-    # set the url prefix: if tag => "", master => "staging.", fb => "100-fancify-pipeline."
+    # this shortens the slug to 30 characters and removes all trailing dashes
+    - SHORTENED_CI_COMMIT_REF_SLUG=$(echo ${CI_COMMIT_REF_SLUG} | tr / - | cut -c -30 |  sed -E 's#-+$##')
     - URL_PREFIX=""
     - FRONTEND_URL_TILES_PREFIX=""
     # multiple things happen here:
@@ -35,7 +36,7 @@ export-environment:
     # if tag => ""
     # if master => "staging."
     # if fb => "staging."
-    - if ! [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then FRONTEND_URL_TILES_PREFIX="staging."; if [[ ${CI_COMMIT_BRANCH} =~ ^${STAGING_BRANCH}$ ]]; then URL_PREFIX="staging."; else URL_PREFIX="${CI_COMMIT_REF_SLUG}."; fi fi
+    - if ! [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then FRONTEND_URL_TILES_PREFIX="staging."; if [[ ${CI_COMMIT_BRANCH} =~ ^${STAGING_BRANCH}$ ]]; then URL_PREFIX="staging."; else URL_PREFIX="${SHORTENED_CI_COMMIT_REF_SLUG}."; fi fi
     # Build the frontend url: prefix.suffix
     - URL_FRONTEND="${URL_PREFIX}${URL_SUFFIX}"
     # Build the backend url: prefix.api.suffix
@@ -402,7 +403,7 @@ dockerize-tiles:
     # DEBUG
     - echo ${URL}
     # generates the chart name using the environment name, replace all / with -; result: review-backend-100-fancify-pipeline
-    - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / - | cut -c -53 | sed 's#-$##')
+    - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / - | cut -c -53 | sed -E 's#-+$##')
     # DEBUG
     - echo ${CHART_NAME}
     # write the url into the var.env file for the dynamic env url generation
@@ -426,7 +427,7 @@ dockerize-tiles:
     RUN_ON_MASTER: "no"
     RUN_ON_TAG: "no"
   environment:
-    url: http://$URL
+    url: https://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
@@ -478,7 +479,7 @@ deploy-backend-production:
     RUN_ON_MASTER: "no"
     RUN_ON_TAG: "no"
   environment:
-    url: http://$URL
+    url: https://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
@@ -578,7 +579,7 @@ deploy-crawler-production:
     RUN_ON_MASTER: "no"
     RUN_ON_TAG: "no"
   environment:
-    url: http://$URL
+    url: https://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
@@ -626,7 +627,7 @@ deploy-tiles-production:
     RUN_ON_MASTER: "no"
     RUN_ON_TAG: "no"
   script:
-    - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / - | cut -c -53 | sed 's#-$##')
+    - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / - | cut -c -53 | sed -E 's#-+$##')
     # DEBUG
     - echo $CHART_NAME
     - helm delete --dry-run --debug --purge ${CHART_NAME}
