@@ -4,9 +4,9 @@ from flask import Blueprint, jsonify
 
 from db import db
 
-routes = Blueprint('health', __name__, url_prefix='/health')
+routes = Blueprint('health', __name__, url_prefix='/health/')
 
-@routes.route('/')
+@routes.route('')
 def healthcheck():
     is_database_working = True
     output = 'database is ok'
@@ -20,3 +20,4 @@ def healthcheck():
         logging.error(str(e))
 
     return jsonify((is_database_working, output)), 200 if is_database_working else 500
+

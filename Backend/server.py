@@ -11,6 +11,7 @@ from views import cases
 from views import health
 from views import hospitals
 from views import osm
+from views import version
 
 from db import db
 from cache import cache
@@ -25,15 +26,12 @@ try:
     DB_PASS = os.environ.get('DB_PASS')
     DB_NAME = os.environ.get('DB_NAME')
 
-
-
     if None in (DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME):
         raise KeyError
     else:
+        # why? i don't know but its necessary
         DB_PASS = DB_PASS.replace('\n', '').replace('\r', '')
         DB_CONNECTION_STRING = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-
-    logging.warning(DB_CONNECTION_STRING)
     
 except KeyError as e:
     logging.warning('One or multiple necessary environment variables not set, using config.py file as backup')
@@ -50,6 +48,7 @@ app.register_blueprint(cases.routes)
 app.register_blueprint(health.routes)
 app.register_blueprint(hospitals.routes)
 app.register_blueprint(osm.routes)
+app.register_blueprint(version.routes)
 
 # add cors and compress
 CORS(app)
