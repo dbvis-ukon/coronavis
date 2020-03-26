@@ -19,10 +19,38 @@ spec:
     spec:
       containers:
         - name: backend
-          image: registry.dbvis.de/jentner/covid-19-vis/backend:{{ .Values.sha }}
+          image: "registry.dbvis.de/jentner/covid-19-vis/backend:{{ .Values.sha }}"
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_PORT
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_PASS
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_NAME
+            - name: VERSION
+              value: {{ .Values.sha | quote }}
           readinessProbe:
             httpGet:
               path: "/health"
