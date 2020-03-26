@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: tileserver
-          image: registry.dbvis.de/jentner/covid-19-vis/tileserver:{{ .Values.sha }}
+          image: registry.dbvis.de/jentner/covid-19-vis/tiles:{{ .Values.sha }}
           imagePullPolicy: Always
           ports:
             - containerPort: 80
