@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from "@angular/animations";
-import { PlusminusPipe } from '../plusminus.pipe';
 
 @Component({
   selector: 'app-case-tooltip',
   templateUrl: './case-tooltip.component.html',
-  styleUrls: ['./case-tooltip.component.css'],
+  styleUrls: ['./case-tooltip.component.less'],
   animations: [
     trigger('tooltip', [
       transition(':enter', [
