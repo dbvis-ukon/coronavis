@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify
 
 from db import db
 
-routes = Blueprint('health', __name__, url_prefix='/health/')
+routes = Blueprint('health', __name__, url_prefix='/health')
 
 @routes.route('')
 def healthcheck():
