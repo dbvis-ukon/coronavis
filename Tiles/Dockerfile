@@ -5,7 +5,8 @@ COPY ./mysite.conf /etc/nginx/conf.d/default.conf
 
 # Copy and extract tileset to nginx web dir
 COPY ./covid19_tiles_world_1-10.tar.gz /tmp/
-RUN tar -xzf /tmp/covid19_tiles_world_1-10.tar.gz -C /usr/share/nginx/html/
+RUN apk add pigz
+RUN pigz -dc /tmp/covid19_tiles_world_1-10.tar.gz | tar -x -C /usr/share/nginx/html/
 RUN rm /tmp/covid19_tiles_world_1-10.tar.gz
 
 # Check if files are correctly placed in nginx web dir
