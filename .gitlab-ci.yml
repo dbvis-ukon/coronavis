@@ -459,6 +459,8 @@ deploy-backend-production:
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+  environment:
+    name: $ENV_TYPE/$APP/production
 
 
 #--------------------
@@ -508,6 +510,8 @@ deploy-frontend-production:
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+  environment:
+    name: $ENV_TYPE/$APP/production
 
 #--------------------
 # CRAWLER
@@ -553,6 +557,8 @@ deploy-crawler-production:
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+  environment:
+    name: $ENV_TYPE/$APP/production
 
 #--------------------
 # TILES
@@ -598,6 +604,8 @@ deploy-tiles-production:
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+  environment:
+    name: $ENV_TYPE/$APP/production
 
 ###########################################
 # CLEANUP
