@@ -219,6 +219,8 @@ build-frontend:
   script:
     - source var.env
     - cd ./Frontend
+    - export $FRONTEND_URL_BACKEND
+    - export $FRONTEND_URL_TILES
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
     - npm install --unsafe-perm
