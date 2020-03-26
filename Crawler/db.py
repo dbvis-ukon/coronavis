@@ -90,9 +90,7 @@ class Hospital(Base):
     address = Column(String(255), nullable=False)
     state = Column(String(255), nullable=False)
     contact = Column(String(255))
-    # contact = relationship('Person', backref='hospital', lazy=True)
-    #    Column(Integer, ForeignKey('person.id'))
-    location = Column(Geometry('POINT'))
+    location = Column(Geometry(geometry_type='POINT', srid=4326))
     icu_low_state = Column(String(255))
     icu_high_state = Column(String(255))
     ecmo_state = Column(String(255))
@@ -117,10 +115,6 @@ class Hospital(Base):
             self.state,
             'location':
             geojson.Feature(geometry=(to_shape(self.location)), properties={}),
-            'status':
-            self.status,
-            'beds':
-            self.beds
         }
         
         
@@ -130,7 +124,7 @@ class CasesLK(Base):
     """
     __tablename__ = 'caseslk'
     
-    # Name,Adress,String,Kontakt,Bundesland,ICU low care,ICU high care,ECMO,Stand,Location
+    # Inserted Date, Name, Description, Bundesland, Whole County Name, Cases, Deaths, Population, Death Rate, Cases per 100k, Cases per population
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(DateTime, default=datetime.datetime.utcnow)
@@ -169,7 +163,7 @@ class CasesBL(Base):
     """
     __tablename__ = 'casesbl'
     
-    # Name,Adress,String,Kontakt,Bundesland,ICU low care,ICU high care,ECMO,Stand,Location
+    # Inserted Date, Name, Description, Cases, Deaths, Population
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(DateTime, default=datetime.datetime.utcnow)

@@ -1,17 +1,18 @@
-import { BedGlyphOptions } from './bed-glyph-options';
-import { BedBackgroundOptions } from './bed-background-options';
-import { CovidNumberCaseOptions } from './covid-number-case-options';
+import {BedGlyphOptions} from './bed-glyph-options';
+import {BedBackgroundOptions} from './bed-background-options';
+import {CovidNumberCaseOptions} from './covid-number-case-options';
+import {AggregationLevel} from "./aggregation-level.enum";
 
 export interface MapOptions {
 
-    bedGlyphOptions: BedGlyphOptions;
+  bedGlyphOptions: BedGlyphOptions;
 
-    bedBackgroundOptions: BedBackgroundOptions;
+  bedBackgroundOptions: BedBackgroundOptions;
 
-    covidNumberCaseOptions: CovidNumberCaseOptions;
+  covidNumberCaseOptions: CovidNumberCaseOptions;
 
-    showOsmHospitals: boolean;
+  showOsmHospitals: boolean;
 
-    showOsmHeliports: boolean;
+  showOsmHeliports: boolean;
 
 }
