@@ -21,7 +21,7 @@ export-environment:
     - URL_SUFFIX="covid19vis.lingvis.io"
     # set the url prefix: if tag => "", master => "staging.", fb => "100-fancify-pipeline."
     - URL_PREFIX=""
-    - if ! [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then if [[ ${CI_COMMIT_BRANCH} =~ ^master$ ]]; then URL_PREFIX="staging."; else URL_PREFIX="${CI_COMMIT_REF_SLUG}."; fi fi
+    - if ! [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then if [[ ${CI_COMMIT_BRANCH} =~ ^100-fancify-pipeline$ ]]; then URL_PREFIX="staging."; else URL_PREFIX="${CI_COMMIT_REF_SLUG}."; fi fi
     # Build the frontend url: prefix.suffix
     - URL_FRONTEND="${URL_PREFIX}${URL_SUFFIX}"
     # Build the backend url: prefix.api.suffix
