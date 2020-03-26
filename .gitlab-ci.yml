@@ -83,7 +83,7 @@ export-environment:
       - k8/Backend/**
       - k8/Backend/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_REF_NAME != "100-fancify-pipeline" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
+    if: $RUN_ON_FB == "yes" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
     when: always
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -107,7 +107,7 @@ export-environment:
       - k8/Frontend/**
       - k8/Frontend/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_REF_NAME != "100-fancify-pipeline" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
+    if: $RUN_ON_FB == "yes" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
     when: always
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -131,7 +131,7 @@ export-environment:
       - k8/Crawler/**
       - k8/Crawler/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_REF_NAME != "100-fancify-pipeline" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
+    if: $RUN_ON_FB == "yes" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
     when: always
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -156,7 +156,7 @@ export-environment:
       - k8/Tiles/**
       - k8/Tiles/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_REF_NAME != "100-fancify-pipeline" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
+    if: $RUN_ON_FB == "yes" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
     when: always
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -185,7 +185,7 @@ export-environment:
         - k8/Backend/**
         - k8/Backend/**/*
         - .gitlab-ci.yml
-      if: $RUN_ON_FB == "yes" && $CI_COMMIT_REF_NAME != "100-fancify-pipeline" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
+      if: $RUN_ON_FB == "yes" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
       when: manual
     # default is on_success, so explicitly set job not to run if none of the above rules matched
     - when: never
@@ -206,7 +206,7 @@ export-environment:
         - k8/Frontend/**
         - k8/Frontend/**/*
         - .gitlab-ci.yml
-      if: $RUN_ON_FB == "yes" && $CI_COMMIT_REF_NAME != "100-fancify-pipeline" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
+      if: $RUN_ON_FB == "yes" || $RUN_ON_MASTER == "yes" && $CI_COMMIT_REF_NAME == "100-fancify-pipeline"
       when: manual
     # default is on_success, so explicitly set job not to run if none of the above rules matched
     - when: never
