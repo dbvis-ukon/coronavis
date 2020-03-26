@@ -30,6 +30,7 @@ try:
     if None in (DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME):
         raise KeyError
     else:
+        DB_PASS = DB_PASS.replace('\n', '').replace('\r', '')
         DB_CONNECTION_STRING = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
     logging.warning(DB_CONNECTION_STRING)
@@ -38,6 +39,7 @@ except KeyError as e:
     logging.warning('One or multiple necessary environment variables not set, using config.py file as backup')
     #DB_CONNECTION_STRING = config.SQLALCHEMY_DATABASE_URI
 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONNECTION_STRING
 
 db.init_app(app)
