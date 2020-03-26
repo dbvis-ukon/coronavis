@@ -2,6 +2,8 @@
 DIVI - Beds with intensive care
 https://www.divi.de/register/kartenansicht
 """
+import db
+
 import json
 
 import urllib.parse
@@ -9,7 +11,9 @@ import urllib.request
 
 from bs4 import BeautifulSoup
 
-import db
+import logging
+logger = logging.getLogger(__name__)
+
 
 def get_html_content(url, data):
     data = urllib.parse.urlencode(data)
@@ -44,27 +48,34 @@ def crawl_webpage(url, data):
     
     
 if __name__ == "__main__":
-
-    quote_page = 'https://www.divi.de/images/register/report2v.html'
-    values = {}
-
-    json_data = crawl_webpage(quote_page, values)
-    with open('json_map_data.json', 'w') as f:
-        json.dump(json_data, f)
+    
+    try:
+        logging.info('Start crawling map')
         
-    crawl = db.Crawl(**{
-        'url': quote_page,
-        'text': json.dumps(json_data),
-        'doc': json.dumps(json_data),
-    })
-    db.sess.add(crawl)
-    
-    vegadata = db.VegaData(**{
-        'text': json.dumps(json_data),
-        'doc': json.dumps(json_data),
-    })
-    db.sess.add(vegadata)
-    
-    db.sess.commit()
-    
-    print('Crawling and inserting map done')
+        quote_page = 'https://www.divi.de/images/register/report2v.html'
+        values = {}
+
+        json_data = crawl_webpage(quote_page, values)
+        with open('json_map_data.json', 'w') as f:
+            json.dump(json_data, f)
+            
+        crawl = db.Crawl(**{
+            'url': quote_page,
+            'text': json.dumps(json_data),
+            'doc': json.dumps(json_data),
+        })
+        db.sess.add(crawl)
+        
+        vegadata = db.VegaData(**{
+            'text': json.dumps(json_data),
+            'doc': json.dumps(json_data),
+        })
+        db.sess.add(vegadata)
+        
+        db.sess.commit()
+        
+        logging.info('Crawling and inserting map done')
+        
+    except Exception as e:
+        logger.error(e)
+        
