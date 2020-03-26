@@ -27,6 +27,8 @@ import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-inf
 import { LegendComponent } from './legend/legend.component';
 import { PlusminusPipe } from './plusminus.pipe';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { AboutComponent } from './about/about.component';
+import { ImpressumComponent } from './impressum/impressum.component';
 
 
 
@@ -45,6 +47,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     HospitalInfoDialogComponent,
     LegendComponent,
     PlusminusPipe,
+    AboutComponent,
+    ImpressumComponent,
   ],
   imports: [
     BrowserModule,
