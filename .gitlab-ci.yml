@@ -86,7 +86,15 @@ export-environment:
       - k8/Backend/**
       - k8/Backend/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH || $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+    when: always
+  - changes:
+      - Backend/**
+      - Backend/**/*
+      - k8/Backend/**
+      - k8/Backend/**/*
+      - .gitlab-ci.yml
+    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: always
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -110,7 +118,15 @@ export-environment:
       - k8/Frontend/**
       - k8/Frontend/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH || $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+    when: always
+  - changes:
+      - Frontend/**
+      - Frontend/**/*
+      - k8/Frontend/**
+      - k8/Frontend/**/*
+      - .gitlab-ci.yml
+    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: always
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
