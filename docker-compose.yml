@@ -4,6 +4,12 @@ services:
   gis-backend:
     ports:
       - 5000:5000
+    environment:
+      - DB_HOST=db.dbvis.de
+      - DB_PORT=5432
+      - DB_USER=corona
+      - DB_PASS=***REMOVED***
+      - DB_NAME=coronadb
     build:
       context: ./Backend
       dockerfile: Dockerfile
