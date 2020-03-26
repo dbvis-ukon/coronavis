@@ -50,6 +50,8 @@ export-environment:
     - echo "URL_TILES=${URL_TILES}" >> var.env
     - echo "FRONTEND_URL_BACKEND=${FRONTEND_URL_BACKEND}" >> var.env
     - echo "FRONTEND_URL_TILES=${FRONTEND_URL_TILES}" >> var.env
+    # DEBUG
+    - cat var.env
   artifacts:
     paths:
       - var.env
