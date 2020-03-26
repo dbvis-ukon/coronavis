@@ -461,6 +461,8 @@ deploy-backend-production:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
+  environment:
+    name: $ENV_TYPE/$APP/production
 
 
 #--------------------
@@ -512,6 +514,8 @@ deploy-frontend-production:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
+  environment:
+    name: $ENV_TYPE/$APP/production
 
 #--------------------
 # CRAWLER
@@ -558,6 +562,8 @@ deploy-crawler-production:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
+  environment:
+    name: $ENV_TYPE/$APP/production
 
 #--------------------
 # TILES
@@ -605,6 +611,8 @@ deploy-tiles-production:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
+  environment:
+    name: $ENV_TYPE/$APP/production
 
 ###########################################
 # CLEANUP
