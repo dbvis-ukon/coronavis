@@ -6,7 +6,6 @@ stages:
 
 variables:
   K8_NAMESPACE: covid-19-vis
-  HELM_CHART_PREFIX: covid-19-vis
 
 export-environment:
   image: debian:stretch-slim
