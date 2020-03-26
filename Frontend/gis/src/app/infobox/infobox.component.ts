@@ -11,6 +11,9 @@ import { ColormapService } from '../services/colormap.service';
 import { BedType } from '../map/options/bed-type.enum';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { MapOptions } from '../map/options/map-options';
+import { MatDialog } from '@angular/material/dialog';
+import { AboutComponent } from '../about/about.component';
+import { ImpressumComponent } from '../impressum/impressum.component';
 
 @Component({
   selector: 'app-infobox',
@@ -20,7 +23,8 @@ import { MapOptions } from '../map/options/map-options';
 export class InfoboxComponent implements OnInit {
 
   constructor(
-    private colormapService: ColormapService
+    private colormapService: ColormapService,
+    private dialogService: MatDialog
   ) { }
 
   glyphLegend;
@@ -119,6 +123,14 @@ export class InfoboxComponent implements OnInit {
 
   emitMapOptions() {
     this.mapOptionsChange.emit({...this.mo});
+  }
+
+  openAbout() {
+    this.dialogService.open(AboutComponent);
+  }
+
+  openImpressum() {
+    this.dialogService.open(ImpressumComponent);
   }
 
 }

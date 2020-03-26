@@ -27,6 +27,9 @@ import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-inf
 import { LegendComponent } from './legend/legend.component';
 import { PlusminusPipe } from './plusminus.pipe';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { AboutComponent } from './about/about.component';
+import { ImpressumComponent } from './impressum/impressum.component';
+
 import {AggregatedGlyphTooltipComponent} from './aggregated-glyph-tooltip/aggregated-glyph-tooltip.component';
 import { VegaComponent } from './vega/vega.component';
 
@@ -46,6 +49,8 @@ import { VegaComponent } from './vega/vega.component';
     HospitalInfoDialogComponent,
     LegendComponent,
     PlusminusPipe,
+    AboutComponent,
+    ImpressumComponent,
     AggregatedGlyphTooltipComponent,
     VegaComponent
   ],
