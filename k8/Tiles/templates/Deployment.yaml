@@ -41,11 +41,11 @@ spec:
             failureThreshold: 4
             successThreshold: 1
           resources:
-            default:
-              memory: "4Gi"
-              cpu: 1.0
+            requesets:
+              memory: "500Mi"
+              cpu: 0.25
             limits:
-              memory: "8Gi"
-              cpu: 2.0
+              memory: "1000Mi"
+              cpu: 0.5
       imagePullSecrets:
           - name: regcred-server

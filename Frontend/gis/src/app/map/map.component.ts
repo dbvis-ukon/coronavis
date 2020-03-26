@@ -113,7 +113,7 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     const tiledMap = L.tileLayer(
-        `${environment.tileServerUrl}`,
+        `${environment.tileServerUrl}{z}/{x}/{y}.png`,
         {
           tileSize: 256,
           // zoomOffset: -1,
