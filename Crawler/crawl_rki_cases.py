@@ -10,12 +10,12 @@ import psycopg2.extensions
 import datetime
 import requests
 
-#from db_config import SQLALCHEMY_DATABASE_URI # not working as the prostgres server is too old
+from db_config import SQLALCHEMY_DATABASE_URI
 
 print('Crawler for RKI detailed case data')
 
 def get_connection():
-    conn = pg.connect("host=db.dbvis.de dbname=coronadb user=corona password=***REMOVED***")
+    conn = pg.connect(SQLALCHEMY_DATABASE_URI)
     conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
     cur = conn.cursor()
     return conn, cur
