@@ -86,7 +86,7 @@ export-environment:
       - k8/Backend/**
       - k8/Backend/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: always
   - changes:
       - Backend/**
@@ -118,7 +118,7 @@ export-environment:
       - k8/Frontend/**
       - k8/Frontend/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: always
   - changes:
       - Frontend/**
@@ -150,7 +150,7 @@ export-environment:
       - k8/Crawler/**
       - k8/Crawler/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: always
   - changes:
       - Crawler/**
@@ -183,7 +183,7 @@ export-environment:
       - k8/Tiles/**
       - k8/Tiles/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: always
   - changes:
       - Tiles/**
@@ -220,7 +220,7 @@ export-environment:
         - k8/Backend/**
         - k8/Backend/**/*
         - .gitlab-ci.yml
-      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
       when: manual
       allow_failure: true
     - changes:
@@ -251,7 +251,7 @@ export-environment:
         - k8/Frontend/**
         - k8/Frontend/**/*
         - .gitlab-ci.yml
-      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
       when: manual
       allow_failure: true
     - changes:
@@ -402,7 +402,7 @@ dockerize-tiles:
     # DEBUG
     - echo ${URL}
     # generates the chart name using the environment name, replace all / with -; result: review-backend-100-fancify-pipeline
-    - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / -)
+    - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / - | cut -c -53 | sed 's#-$##')
     # DEBUG
     - echo ${CHART_NAME}
     # write the url into the var.env file for the dynamic env url generation
@@ -453,12 +453,14 @@ deploy-backend-staging:
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
-  
+    K8_NAMESPACE: covid-19-vis-staging
+
 deploy-backend-production:
   extends: .deploy-backend
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
 
 
 #--------------------
@@ -502,12 +504,14 @@ deploy-frontend-staging:
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
-  
+    K8_NAMESPACE: covid-19-vis-staging
+
 deploy-frontend-production:
   extends: .deploy-frontend
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
 
 #--------------------
 # CRAWLER
@@ -553,6 +557,7 @@ deploy-crawler-production:
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
 
 #--------------------
 # TILES
@@ -592,12 +597,14 @@ deploy-tiles-staging:
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
-  
+    K8_NAMESPACE: covid-19-vis-staging
+
 deploy-tiles-production:
   extends: .deploy-tiles
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
 
 ###########################################
 # CLEANUP
@@ -611,7 +618,7 @@ deploy-tiles-production:
     RUN_ON_MASTER: "no"
     RUN_ON_TAG: "no"
   script:
-    - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / -)
+    - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / - | cut -c -53 | sed 's#-$##')
     # DEBUG
     - echo $CHART_NAME
     - helm delete --dry-run --debug --purge ${CHART_NAME}
