@@ -6,7 +6,7 @@ stages:
 
 variables:
   K8_NAMESPACE: covid-19-vis
-  STAGING_BRANCH: 100-fancify-pipeline
+  STAGING_BRANCH: master
 
 ###########################################
 # SETUP ENVIRONMENT VARIALBES
