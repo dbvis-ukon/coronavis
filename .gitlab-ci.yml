@@ -218,11 +218,9 @@ build-frontend:
   image: node:latest
   script:
     - source var.env
-    - cd Frontend/gis
-    - sed -i -E "s#apiUrl\s*?:\s*?['\"].+?['\"]#apiUrl: '//${FRONTEND_URL_BACKEND}/'#g" ./src/environments/environment.prod.ts
-    - sed -i -E "s#tileServerUrl\s*?:\s*?['\"].+?['\"]#tileServerUrl: '//${FRONTEND_URL_TILES}/'#g" ./src/environments/environment.prod.ts
-    # DEBUG
-    - cat ./src/environments/environment.prod.ts
+    - cd ./Frontend
+    - sh -c ./replace-environment-urls.sh
+    - cd ./gis
     - npm install --unsafe-perm
     - npm run-script build
   artifacts:
