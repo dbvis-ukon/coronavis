@@ -427,7 +427,7 @@ dockerize-tiles:
     RUN_ON_MASTER: "no"
     RUN_ON_TAG: "no"
   environment:
-    url: http://$URL
+    url: https://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
@@ -479,7 +479,7 @@ deploy-backend-production:
     RUN_ON_MASTER: "no"
     RUN_ON_TAG: "no"
   environment:
-    url: http://$URL
+    url: https://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
@@ -579,7 +579,7 @@ deploy-crawler-production:
     RUN_ON_MASTER: "no"
     RUN_ON_TAG: "no"
   environment:
-    url: http://$URL
+    url: https://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
