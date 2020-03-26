@@ -458,12 +458,12 @@ deploy-frontend-production:
 #   variables:
 #     ENV_TYPE: review
 #     RUN_ON_FB: "yes"
-
-deploy-crawler-staging:
-  extends: .deploy-crawler
-  variables:
-    ENV_TYPE: staging
-    RUN_ON_MASTER: "yes"
+#
+# deploy-crawler-staging:
+#  extends: .deploy-crawler
+#  variables:
+#    ENV_TYPE: staging
+#    RUN_ON_MASTER: "yes"
   
 deploy-crawler-production:
   extends: .deploy-crawler
