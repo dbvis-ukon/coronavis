@@ -46,7 +46,7 @@ entries = [rep(entry) for entry in data['data-391c21da2b2a91c905172447fb8d1284']
 print('entries hospitals', len(entries))
 
 
-aquery = 'INSERT INTO divi_hospital_capacities_and_cases(datenbestand, gemeindeschluessel, ort, bundeslandschluessel, plz, webaddresse, icu_low_care_frei, icu_low_care_belegt, icu_low_care_einschaetzung, icu_low_care_in_24h, icu_high_care_frei, icu_high_care_belegt, icu_high_care_einschaetzung, icu_high_care_in_24h, icu_ecmo_care_frei, icu_ecmo_care_belegt, icu_ecmo_care_einschaetzung, icu_ecmo_care_in_24h, ecmo_faelle_jahr, covid19_aktuell, covid19_kumulativ, covid19_beatmet, covid19_verstorben) VALUES %s'
+aquery = 'INSERT INTO divi_hospital_capacities_and_cases(datenbestand, gemeindeschluessel, ort, bundeslandschluessel, plz, webaddresse, icu_low_care_frei, icu_low_care_belegt, icu_low_care_einschaetzung, icu_low_care_in_24h, icu_high_care_frei, icu_high_care_belegt, icu_high_care_einschaetzung, icu_high_care_in_24h, icu_ecmo_care_frei, icu_ecmo_care_belegt, icu_ecmo_care_einschaetzung, icu_ecmo_care_in_24h, ecmo_faelle_jahr, covid19_aktuell, covid19_kumulativ, covid19_beatmet, covid19_verstorben, geom) VALUES %s'
 try:  
     conn, cur = get_connection()
     cur.execute("Select Max(datenbestand) from divi_hospital_capacities_and_cases")
@@ -55,7 +55,7 @@ try:
     print("fetched data version:", datetime.datetime.now())
     print('Insert new data into DB...')
     psycopg2.extras.execute_values (
-    cur, aquery, entries, template='(\''+ str(datetime.datetime.now()) + '\', %(gemeindeschluessel)s, %(ort)s, %(bundesland)s, %(plz)s, %(webadresse)s, %(icu_low_care_frei)s, %(icu_low_care_belegt)s, %(icu_low_care_einschätzung)s, %(icu_low_care_in_24_h_anzahl)s, %(icu_high_care_frei)s, %(icu_high_care_belegt)s, %(icu_high_care_einschätzung)s, %(icu_high_care_in_24_h_anzahl)s, %(icu_ecmo_frei)s, %(icu_ecmo_belegt)s, %(icu_ecmo_care_einschätzung)s, %(icu_ecmo_care_in_24_h_anzahl)s, %(anzahl_ecmofälle_pro_jahr)s, %(covid19_aktuell)s, %(covid19_kumulativ)s, %(covid19_beatmet)s, %(covid19_verstorben)s)', page_size=500
+    cur, aquery, entries, template='(\''+ str(datetime.datetime.now()) + '\', %(gemeindeschluessel)s, %(ort)s, %(bundesland)s, %(plz)s, %(webadresse)s, %(icu_low_care_frei)s, %(icu_low_care_belegt)s, %(icu_low_care_einschätzung)s, %(icu_low_care_in_24_h_anzahl)s, %(icu_high_care_frei)s, %(icu_high_care_belegt)s, %(icu_high_care_einschätzung)s, %(icu_high_care_in_24_h_anzahl)s, %(icu_ecmo_frei)s, %(icu_ecmo_belegt)s, %(icu_ecmo_care_einschätzung)s, %(icu_ecmo_care_in_24_h_anzahl)s, %(anzahl_ecmofälle_pro_jahr)s, %(covid19_aktuell)s, %(covid19_kumulativ)s, %(covid19_beatmet)s, %(covid19_verstorben)s, ST_SetSRID( ST_Point(%(lon)s, %(lat)s), 4326))', page_size=500
 )
     conn.commit()
     print('Success')
