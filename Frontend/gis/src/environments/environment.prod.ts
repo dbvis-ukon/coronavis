@@ -5,5 +5,5 @@ export const environment = {
   apiUrl: 'https://api.covid19vis.lingvis.io/',
 
   // this is overwritten in the CI
-  tileServerUrl: 'https://tiles.covid19vis.lingvis.io/{z}/{x}/{y}.png',
+  tileServerUrl: 'https://staging.tiles.covid19vis.lingvis.io/',
 };
