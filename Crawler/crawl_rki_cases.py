@@ -5,13 +5,18 @@
 import numpy as np
 import pandas as pd
 import psycopg2 as pg
+import psycopg2.extras
+import psycopg2.extensions
 import datetime
 import requests
+
+#from db_config import SQLALCHEMY_DATABASE_URI # not working as the prostgres server is too old
 
 print('Crawler for RKI detailed case data')
 
 def get_connection():
     conn = pg.connect("host=db.dbvis.de dbname=coronadb user=corona password=***REMOVED***")
+    conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
     cur = conn.cursor()
     return conn, cur
 
@@ -61,21 +66,37 @@ for el in data:
 print('current cases', len(entries))
 
 
-aquery = 'INSERT INTO cases(datenbestand, idbundesland, bundesland, landkreis, idlandkreis, objectid, meldedatum, gender, agegroup, casetype) VALUES(%(datenbestand)s, %(idbundesland)s, %(bundesland)s, %(landkreis)s, %(idlandkreis)s, %(objectid)s, %(meldedatum)s, %(gender)s, %(agegroup)s, %(casetype)s)'  
-conn, cur = get_connection()
-cur.execute("Select Max(datenbestand) from cases")
-last_update = cur.fetchone()[0]
-current_update = entries[0]['datenbestand'].replace(tzinfo=datetime.timezone(datetime.timedelta(hours=+1)))
-print("db data version:", last_update)
-print("fetched data version:", current_update)
-if abs((current_update - last_update).total_seconds()) <= 2*60*60:
-    print("No new data available (+/- 2h), skip update")
-else:
-    print('Insert new data into DB (takes 5-10min)...')
-    cur.executemany(aquery, entries)
-    conn.commit()
+aquery = 'INSERT INTO cases(datenbestand, idbundesland, bundesland, landkreis, idlandkreis, objectid, meldedatum, gender, agegroup, casetype) VALUES %s'
+try:  
+    conn, cur = get_connection()
+    cur.execute("Select Max(datenbestand) from cases")
+    last_update = cur.fetchone()[0]
+    current_update = entries[0]['datenbestand'].replace(tzinfo=datetime.timezone(datetime.timedelta(hours=+1)))
+    print("db data version:", last_update)
+    print("fetched data version:", current_update)
+    if last_update is not None and abs((current_update - last_update).total_seconds()) <= 2*60*60:
+        print("No new data available (+/- 2h), skip update")
+    else:
+        print('Insert new data into DB (takes 2-5 seconds)...')
+        psycopg2.extras.execute_values (
+            cur, aquery, entries, template='(%(datenbestand)s, %(idbundesland)s, %(bundesland)s, %(landkreis)s, %(idlandkreis)s, %(objectid)s, %(meldedatum)s, %(gender)s, %(agegroup)s, %(casetype)s)', page_size=500
+        )
+        conn.commit()
+        print('Success')
+        if(conn):
+            cur.close()
+            conn.close()
+        exit(0)    
+except (Exception, pg.DatabaseError) as error :
+    print(error)
+    print("Error in transction - Reverting all other operations of a transction")
+    print("Most likely a simultanious update was applied faster.")
+    conn.rollback()
+    if(conn):
+        cur.close()
+        conn.close()   
+    exit(1)   
 
-print('Success')
 
 
 
