@@ -127,8 +127,8 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
 
     // set the max value
     this.specs.forEach(spec => {
-      spec.encoding.y.scale.domain = [0, maxNum];
-      spec.encoding.y.axis.tickCount = Math.min(maxNum, 5);
+      spec.encoding.y.scale.domain = [0, maxNum+1];
+      spec.encoding.y.axis.tickCount = Math.min(maxNum+1, 5);
     });
   }
 
