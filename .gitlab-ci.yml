@@ -81,17 +81,17 @@ export-environment:
     when: always
   # run if files changed
   # and if it should run on a feature branch or it should run on master
-  - changes:
-      - Backend/**/*
-      - k8/Backend/**/*
-      - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+  # - changes:
+  #     # - Backend/**/*
+  #     # - k8/Backend/**/*
+  #     # - .gitlab-ci.yml
+  - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: always
-  - changes:
-      - Backend/**/*
-      - k8/Backend/**/*
-      - .gitlab-ci.yml
-    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+  # - changes:
+  #     - Backend/**/*
+  #     - k8/Backend/**/*
+  #     - .gitlab-ci.yml
+  - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: always
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -109,17 +109,17 @@ export-environment:
     when: always
   # run if files changed
   # and if it should run on a feature branch or it should run on master
-  - changes:
-      - Frontend/**/*
-      - k8/Frontend/**/*
-      - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+  # - changes:
+  #     - Frontend/**/*
+  #     - k8/Frontend/**/*
+  #     - .gitlab-ci.yml
+  - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: always
-  - changes:
-      - Frontend/**/*
-      - k8/Frontend/**/*
-      - .gitlab-ci.yml
-    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+  # - changes:
+  #     - Frontend/**/*
+  #     - k8/Frontend/**/*
+  #     - .gitlab-ci.yml
+  - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: always
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -199,18 +199,18 @@ export-environment:
       when: manual
     # run if files changed
     # and if it should run on a feature branch or it should run on master
-    - changes:
-        - Backend/**/*
-        - k8/Backend/**/*
-        - .gitlab-ci.yml
-      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+    # - changes:
+    #     - Backend/**/*
+    #     - k8/Backend/**/*
+    #     - .gitlab-ci.yml
+    - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
       when: manual
       allow_failure: true
-    - changes:
-        - Backend/**/*
-        - k8/Backend/**/*
-        - .gitlab-ci.yml
-      if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    # - changes:
+    #     - Backend/**/*
+    #     - k8/Backend/**/*
+    #     - .gitlab-ci.yml
+    - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
       when: manual
       allow_failure: true
     # default is on_success, so explicitly set job not to run if none of the above rules matched
@@ -226,18 +226,18 @@ export-environment:
       when: manual
     # run if files changed
     # and if it should run on a feature branch or it should run on master
-    - changes:
-        - Frontend/**/*
-        - k8/Frontend/**/*
-        - .gitlab-ci.yml
-      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+    # - changes:
+    #     - Frontend/**/*
+    #     - k8/Frontend/**/*
+    #     - .gitlab-ci.yml
+    - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
       when: manual
       allow_failure: true
-    - changes:
-        - Frontend/**/*
-        - k8/Frontend/**/*
-        - .gitlab-ci.yml
-      if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    # - changes:
+    #     - Frontend/**/*
+    #     - k8/Frontend/**/*
+    #     - .gitlab-ci.yml
+    - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
       when: manual
       allow_failure: true
     # default is on_success, so explicitly set job not to run if none of the above rules matched
