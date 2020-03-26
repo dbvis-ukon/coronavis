@@ -245,8 +245,9 @@ dockerize-tiles:
 # DEPLOY
 ###########################################
 
-.setup-variables: &setup-variables
-  before_script:
+.deploy-script: &deploy-template
+  stage: deploy
+  script:
     - source var.env
     # DEBUG
     - cat var.env
@@ -264,11 +265,6 @@ dockerize-tiles:
     - echo ${CHART_NAME}
     # write the url into the var.env file for the dynamic env url generation
     - echo "URL=${URL}" >> var.env
-
-.deploy-script: &deploy-template
-  stage: deploy
-  <<: *setup-variables
-  script:
     # use chart name and the folder by uppercasing the first character of the app name; result: Backend
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${APP^}
     - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${APP^}
@@ -290,7 +286,6 @@ dockerize-tiles:
   environment:
     url: http://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    on_stop: remove-deployment
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -308,6 +303,8 @@ deploy-backend-fb:
   variables:
     ENV_TYPE: review
     RUN_ON_FB: "yes"
+  environment:
+    on_stop: remove-deployment-backend-review
 
 deploy-backend-staging:
   extends: .deploy-backend
@@ -337,7 +334,6 @@ deploy-backend-production:
   environment:
     url: http://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    on_stop: remove-deployment
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -353,6 +349,8 @@ deploy-backend-production:
 
 deploy-frontend-fb:
   extends: .deploy-frontend
+  environment:
+    on_stop: remove-deployment-frontend-review
   variables:
     ENV_TYPE: review
     RUN_ON_FB: "yes"
@@ -384,7 +382,6 @@ deploy-frontend-production:
   environment:
     # url: http://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    on_stop: remove-deployment
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -430,7 +427,6 @@ deploy-crawler-production:
   environment:
     url: http://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    on_stop: remove-deployment
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -465,25 +461,42 @@ deploy-tiles-production:
 # CLEANUP
 ###########################################
 
-remove-deployment:
+.remove-deployment:
   stage: deploy
   variables:
     GIT_STRATEGY: none
-  <<: *setup-variables
+    RUN_ON_FB: "no"
+    RUN_ON_MASTER: "no"
+    RUN_ON_TAG: "no"
   script:
     - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / -)
     # DEBUG
     - echo $CHART_NAME
     - helm delete --dry-run --debug --purge ${CHART_NAME}
     - helm delete --purge ${CHART_NAME}
-  artifacts:
-    reports:
-      dotenv: var.env
   when: manual
-  dependencies:
-    - export-environment
+  dependencies: []
+  tags:
+    - k8-admin
+
+remove-deployment-backend-review:
+  extends: .remove-deployment
+  <<: *rules-backend
+  variables:
+    APP: backend
+    ENV_TYPE: review
+    RUN_ON_FB: "yes"
   environment:
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     action: stop
-  tags:
-    - k8-admin
+
+remove-deployment-frontend-review:
+  extends: .remove-deployment
+  <<: *rules-frontend
+  variables:
+    APP: frontend
+    ENV_TYPE: review
+    RUN_ON_FB: "yes"
+  environment:
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    action: stop
