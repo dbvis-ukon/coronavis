@@ -1,0 +1,12 @@
+<div class="main">
+<h3>{{ diviAggregatedHospital.Name }}</h3>
+<mat-divider></mat-divider>
+
+<div class="barchartcontainer">
+
+  <div *ngFor="let s of specs">
+    <app-vega [spec]="s"></app-vega>
+  </div>
+
+</div>
+</div>
