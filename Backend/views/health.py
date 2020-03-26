@@ -8,7 +8,6 @@ routes = Blueprint('health', __name__, url_prefix='/health')
 
 @routes.route('/')
 def healthcheck():
-
     is_database_working = True
     output = 'database is ok'
 
