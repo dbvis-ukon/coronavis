@@ -1,4 +1,4 @@
 {{/* Generate basic labels */}}
 {{- define "lingvis.labels" }}
-deployment_name: {{ .Release.Name | quote }}
+deploymentName: {{ .Release.Name | quote }}
 {{- end }}
