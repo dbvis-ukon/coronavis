@@ -49,7 +49,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
       this.gHospitals
         .selectAll(`.bed.${BedType.ecmo}`)
-        .style('opacity', opt.showEcmo ? '1' : '0');  
+        .style('opacity', opt.showEcmo ? '1' : '0');
 
 
     });
@@ -250,7 +250,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     const zoom = this.map.getZoom();
     const scale = Math.pow(9 / (zoom), 4);
 
-    if (this.map.getZoom() > 9) {
+    if (this.map.getZoom() > 8) {
       this.glyphSize.height = 40;
       this.glyphSize.width = 80;
 
@@ -259,7 +259,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
       this.nameHospitals.classed('hiddenLabel', false);
       this.nameHospitalsShadow.classed('hiddenLabel', false);
-    } else if (this.map.getZoom() < 10 && this.map.getZoom() > 6) {
+    } else if (this.map.getZoom() < 9 && this.map.getZoom() > 6) {
       this.glyphSize.height = 28;
       this.glyphSize.width = 38;
 
@@ -269,13 +269,13 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       this.nameHospitals.classed('hiddenLabel', true);
       this.nameHospitalsShadow.classed('hiddenLabel', true);
     } else if (this.map.getZoom() < 7) {
-      this.glyphSize.height = 22;
+      this.glyphSize.height = 14;
       this.glyphSize.width = 38;
 
-      /*this.cityHospitals.classed('hiddenLabel', true);
+      this.cityHospitals.classed('hiddenLabel', true);
       this.cityHospitalsShadow.classed('hiddenLabel', true);
       this.nameHospitals.classed('hiddenLabel', true);
-      this.nameHospitalsShadow.classed('hiddenLabel', true);*/
+      this.nameHospitalsShadow.classed('hiddenLabel', true);
     }
 
     this.data.forEach(d => {
