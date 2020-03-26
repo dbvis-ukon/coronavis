@@ -245,9 +245,8 @@ dockerize-tiles:
 # DEPLOY
 ###########################################
 
-.deploy-script: &deploy-template
-  stage: deploy
-  script:
+.setup-variables: &setup-variables
+  before_script:
     - source var.env
     # DEBUG
     - cat var.env
@@ -265,6 +264,11 @@ dockerize-tiles:
     - echo ${CHART_NAME}
     # write the url into the var.env file for the dynamic env url generation
     - echo "URL=${URL}" >> var.env
+
+.deploy-script: &deploy-template
+  stage: deploy
+  <<: *setup-variables
+  script:
     # use chart name and the folder by uppercasing the first character of the app name; result: Backend
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${APP^}
     - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${APP^}
@@ -286,7 +290,7 @@ dockerize-tiles:
   environment:
     url: http://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    on_stop: remove-deployment-backend
+    on_stop: remove-deployment
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -333,7 +337,7 @@ deploy-backend-production:
   environment:
     url: http://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    on_stop: remove-deployment-frontend
+    on_stop: remove-deployment
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -380,7 +384,7 @@ deploy-frontend-production:
   environment:
     # url: http://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    on_stop: remove-deployment-crawler
+    on_stop: remove-deployment
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -426,7 +430,7 @@ deploy-crawler-production:
   environment:
     url: http://$URL
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    on_stop: remove-deployment-tiles
+    on_stop: remove-deployment
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -461,41 +465,25 @@ deploy-tiles-production:
 # CLEANUP
 ###########################################
 
-.remove-deployment: &remove-deployment
+remove-deployment:
   stage: deploy
   variables:
     GIT_STRATEGY: none
+  <<: *setup-variables
   script:
-    - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / -)
+    - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / -)
     # DEBUG
     - echo $CHART_NAME
     - helm delete --dry-run --debug --purge ${CHART_NAME}
     - helm delete --purge ${CHART_NAME}
+  artifacts:
+    reports:
+      dotenv: var.env
   when: manual
-  dependencies: []
+  dependencies:
+    - export-environment
+  environment:
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    action: stop
   tags:
     - k8-admin
-
-remove-deployment-backend:
-  <<: *remove-deployment
-  environment:
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    action: stop
-
-remove-deployment-frontend:
-  <<: *remove-deployment
-  environment:
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    action: stop
-
-remove-deployment-crawler:
-  <<: *remove-deployment
-  environment:
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    action: stop
-
-remove-deployment-tiles:
-  <<: *remove-deployment
-  environment:
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    action: stop
