@@ -1,23 +1,103 @@
 stages:
+  - prepare
   - build:frontend
   - build:docker
   - deploy
 
 variables:
   K8_NAMESPACE: covid-19-vis
+  STAGING_BRANCH: master
+
+###########################################
+# SETUP ENVIRONMENT VARIALBES
+###########################################
+
+export-environment:
+  image: debian:stretch-slim
+  stage: prepare
+  script:
+    - echo $CI_COMMIT_BRANCH
+    - echo $CI_COMMIT_REF_NAME
+    # set the version either as a tag (v0.0.1) or as a commit sha (74bac331)
+    - if [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then VERSION=${CI_COMMIT_TAG}; else VERSION=${CI_COMMIT_SHORT_SHA}; fi
+    # the current URL suffix
+    - URL_SUFFIX="covid19vis.lingvis.io"
+    # set the url prefix: if tag => "", master => "staging.", fb => "100-fancify-pipeline."
+    - URL_PREFIX=""
+    - FRONTEND_URL_TILES_PREFIX=""
+    # multiple things happen here:
+    # URL_PREFIX: 
+    # if tag => ""
+    # if master => "staging."
+    # if fb => "${CI_COMMIT_REF_SLUG}."
+    # Furthermore, the FRONTEND_URL_TILES_PREFIX is set because the tile server will not be deployed on a per fb-basis
+    # FRONTEND_URL_TILES_PREFIX:
+    # if tag => ""
+    # if master => "staging."
+    # if fb => "staging."
+    - if ! [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then FRONTEND_URL_TILES_PREFIX="staging."; if [[ ${CI_COMMIT_BRANCH} =~ ^${STAGING_BRANCH}$ ]]; then URL_PREFIX="staging."; else URL_PREFIX="${CI_COMMIT_REF_SLUG}."; fi fi
+    # Build the frontend url: prefix.suffix
+    - URL_FRONTEND="${URL_PREFIX}${URL_SUFFIX}"
+    # Build the backend url: prefix.api.suffix
+    - URL_BACKEND="${URL_PREFIX}api.${URL_SUFFIX}"
+    # Build the tiles url: prefix.tiles.suffix
+    - URL_TILES="${URL_PREFIX}tiles.${URL_SUFFIX}"
+    # This variable is used in the build job to set the api url in the environment.prod.ts
+    - FRONTEND_URL_BACKEND="${URL_PREFIX}api.${URL_SUFFIX}"
+    # This variable is used in the build job to set the tiles server url in the environment.prod.ts
+    - FRONTEND_URL_TILES="${FRONTEND_URL_TILES_PREFIX}tiles.${URL_SUFFIX}"
+    # all the stuff into the var.env
+    - echo "VERSION=$VERSION" >> var.env
+    - echo "URL_FRONTEND=${URL_FRONTEND}" >> var.env
+    - echo "URL_BACKEND=${URL_BACKEND}" >> var.env
+    - echo "URL_TILES=${URL_TILES}" >> var.env
+    - echo "FRONTEND_URL_BACKEND=${FRONTEND_URL_BACKEND}" >> var.env
+    - echo "FRONTEND_URL_TILES=${FRONTEND_URL_TILES}" >> var.env
+    # DEBUG
+    - cat var.env
+  artifacts:
+    paths:
+      - var.env
+    expire_in: 3000 days
+  tags:
+    - docker
+
+###########################################
+# DEFINE BRANCH TRIGGER RULES
+###########################################
+
+#--------------------
+# Deployment
+#--------------------
 
 .rules-backend: &rules-backend
   rules:     
   # do not run pipelines for merge requests (gets rid of "detatched pipelines")
   - if: $CI_MERGE_REQUEST_ID
     when: never
-  # run if files changed; no branch restrictions
+  # if this is set, run this job all the time
+  - if: $RUN_ALWAYS == "yes"
+    when: always
+  # run if files changed
+  # and if it should run on a feature branch or it should run on master
   - changes:
       - Backend/**
       - Backend/**/*
       - k8/Backend/**
       - k8/Backend/**/*
-    if: $CI_COMMIT_BRANCH == "master"
+      - .gitlab-ci.yml
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+    when: always
+  - changes:
+      - Backend/**
+      - Backend/**/*
+      - k8/Backend/**
+      - k8/Backend/**/*
+      - .gitlab-ci.yml
+    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    when: always
+  # run if tagged
+  - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
     when: always
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
@@ -27,13 +107,29 @@ variables:
   # do not run pipelines for merge requests (gets rid of "detatched pipelines")
   - if: $CI_MERGE_REQUEST_ID
     when: never
-  # run if files changed; no branch restrictions
+  # if this is set, run this job all the time
+  - if: $RUN_ALWAYS == "yes"
+    when: always
+  # run if files changed
+  # and if it should run on a feature branch or it should run on master
   - changes:
       - Frontend/**
       - Frontend/**/*
       - k8/Frontend/**
       - k8/Frontend/**/*
-    if: $CI_COMMIT_BRANCH == "master"
+      - .gitlab-ci.yml
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+    when: always
+  - changes:
+      - Frontend/**
+      - Frontend/**/*
+      - k8/Frontend/**
+      - k8/Frontend/**/*
+      - .gitlab-ci.yml
+    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    when: always
+  # run if tagged
+  - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
     when: always
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
@@ -43,33 +139,132 @@ variables:
   # do not run pipelines for merge requests (gets rid of "detatched pipelines")
   - if: $CI_MERGE_REQUEST_ID
     when: never
-  # run if files changed; no branch restrictions
+  # if this is set, run this job all the time
+  - if: $RUN_ALWAYS == "yes"
+    when: always
+  # run if files changed
+  # and if it should run on a feature branch or it should run on master
   - changes:
       - Crawler/**
       - Crawler/**/*
       - k8/Crawler/**
       - k8/Crawler/**/*
-    if: $CI_COMMIT_BRANCH == "master"
+      - .gitlab-ci.yml
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+    when: always
+  - changes:
+      - Crawler/**
+      - Crawler/**/*
+      - k8/Crawler/**
+      - k8/Crawler/**/*
+      - .gitlab-ci.yml
+    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    when: always
+  # run if tagged
+  - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
     when: always
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
 
 
-.rules-tileserver: &rules-tileserver
+.rules-tiles: &rules-tiles
   rules:     
   # do not run pipelines for merge requests (gets rid of "detatched pipelines")
   - if: $CI_MERGE_REQUEST_ID
     when: never
-  # run if files changed; no branch restrictions
+  # if this is set, run this job all the time
+  - if: $RUN_ALWAYS == "yes"
+    when: always
+  # run if files changed
+  # and if it should run on a feature branch or it should run on master
   - changes:
       - Tiles/**
       - Tiles/**/*
       - k8/Tiles/**
       - k8/Tiles/**/*
-    if: $CI_COMMIT_BRANCH == "master"
+      - .gitlab-ci.yml
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+    when: always
+  - changes:
+      - Tiles/**
+      - Tiles/**/*
+      - k8/Tiles/**
+      - k8/Tiles/**/*
+      - .gitlab-ci.yml
+    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    when: always
+  # run if tagged
+  - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
     when: always
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
+
+#--------------------
+# Environment Cleanup
+#--------------------
+
+
+.rules-backend-cleanup: &rules-backend-cleanup
+  rules:
+    # do not run pipelines for merge requests (gets rid of "detatched pipelines")
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    # if this is set, run this job all the time
+    - if: $RUN_ALWAYS == "yes"
+      when: manual
+    # run if files changed
+    # and if it should run on a feature branch or it should run on master
+    - changes:
+        - Backend/**
+        - Backend/**/*
+        - k8/Backend/**
+        - k8/Backend/**/*
+        - .gitlab-ci.yml
+      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+      when: manual
+      allow_failure: true
+    - changes:
+        - Backend/**
+        - Backend/**/*
+        - k8/Backend/**
+        - k8/Backend/**/*
+        - .gitlab-ci.yml
+      if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+      when: manual
+      allow_failure: true
+    # default is on_success, so explicitly set job not to run if none of the above rules matched
+    - when: never
+
+.rules-frontend-cleanup: &rules-frontend-cleanup
+  rules:
+    # do not run pipelines for merge requests (gets rid of "detatched pipelines")
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    # if this is set, run this job all the time
+    - if: $RUN_ALWAYS == "yes"
+      when: manual
+    # run if files changed
+    # and if it should run on a feature branch or it should run on master
+    - changes:
+        - Frontend/**
+        - Frontend/**/*
+        - k8/Frontend/**
+        - k8/Frontend/**/*
+        - .gitlab-ci.yml
+      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+      when: manual
+      allow_failure: true
+    - changes:
+        - Frontend/**
+        - Frontend/**/*
+        - k8/Frontend/**
+        - k8/Frontend/**/*
+        - .gitlab-ci.yml
+      if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+      when: manual
+      allow_failure: true
+    # default is on_success, so explicitly set job not to run if none of the above rules matched
+    - when: never
 
 ###########################################
 # BUILD
@@ -79,7 +274,12 @@ build-frontend:
   stage: build:frontend
   image: node:latest
   script:
-    - cd Frontend/gis
+    - source var.env
+    - cd ./Frontend
+    - export FRONTEND_URL_BACKEND
+    - export FRONTEND_URL_TILES
+    - sh -c ./replace-environment-urls.sh
+    - cd ./gis
     - npm install --unsafe-perm
     - npm run-script build
   artifacts:
@@ -93,6 +293,10 @@ build-frontend:
         - ./Frontend/gis/package-lock.json
     paths:
       - ./Frontend/gis/node_modules
+  dependencies:
+    - export-environment
+  needs:
+    - export-environment
   tags:
     - docker
 
@@ -106,50 +310,78 @@ build-frontend:
   services: 
     - docker:dind
   script:
+    # needed for VERSION
+    - source var.env
     - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
     - cd ${FOLDER}
+    # generate imagename using a lowercased foldername == app
+    - IMGNAME=$(echo "${FOLDER}" | tr '[:upper:]' '[:lower:]')
+    - IMG="${CI_REGISTRY_IMAGE}/${IMGNAME}:${VERSION}"
     - docker build -t "$IMG" .
     - docker push "$IMG"
   tags:
     - docker-build
 
-
 dockerize-backend:
   variables:
-    IMG: $CI_REGISTRY_IMAGE/backend:${CI_COMMIT_SHORT_SHA}
     FOLDER: Backend
+    # we build and deploy always to keep backend and frontend in sync
+    RUN_ALWAYS: "yes"
+    RUN_ON_FB: "yes"
+    RUN_ON_MASTER: "yes"
+    RUN_ON_TAG: "yes"
   <<: *dockerize-template
   <<: *rules-backend
-  dependencies: []
+  needs:
+    - export-environment
+  dependencies:
+    - export-environment
 
 dockerize-frontend:
   variables:
-    IMG: $CI_REGISTRY_IMAGE/frontend:${CI_COMMIT_SHORT_SHA}
     FOLDER: Frontend
+    # we build and deploy always to keep backend and frontend in sync
+    RUN_ALWAYS: "yes"
+    RUN_ON_FB: "yes"
+    RUN_ON_MASTER: "yes"
+    RUN_ON_TAG: "yes"
   <<: *dockerize-template
   <<: *rules-frontend
   needs:
     - build-frontend
+    - export-environment
   dependencies:
     - build-frontend
+    - export-environment
 
 dockerize-crawler:
   variables:
-    IMG: $CI_REGISTRY_IMAGE/crawler:${CI_COMMIT_SHORT_SHA}
     FOLDER: Crawler
+    RUN_ALWAYS: "no"
+    # Yes? In case the build image fails this could help with MR?
+    RUN_ON_FB: "yes"
+    RUN_ON_MASTER: "yes"
+    RUN_ON_TAG: "yes"
   <<: *dockerize-template
   <<: *rules-crawler
-  dependencies: []
+  needs:
+    - export-environment
+  dependencies:
+    - export-environment
 
-dockerize-tileserver:
+dockerize-tiles:
   variables:
-    IMG: $CI_REGISTRY_IMAGE/tileserver:${CI_COMMIT_SHORT_SHA}
     FOLDER: Tiles
+    RUN_ALWAYS: "no"
+    RUN_ON_FB: "no"
+    RUN_ON_MASTER: "yes"
+    RUN_ON_TAG: "yes"
   <<: *dockerize-template
-  <<: *rules-tileserver
-  dependencies: []
-
-
+  <<: *rules-tiles
+  needs:
+    - export-environment
+  dependencies:
+    - export-environment
 
 ###########################################
 # DEPLOY
@@ -158,55 +390,255 @@ dockerize-tileserver:
 .deploy-script: &deploy-template
   stage: deploy
   script:
-    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/${FOLDER}
-    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${CI_COMMIT_SHORT_SHA}" ${HELM_CHART} ./k8/${FOLDER}
+    - source var.env
+    # DEBUG
+    - cat var.env
+    # using the app name converted to uppercase to generate the url accessor, result: URL_BACKEND
+    - URL_ACCESSOR="URL_$(echo ${APP} | tr [:lower:] [:upper:])"
+    # DEBUG
+    - echo $URL_ACCESSOR
+    # this will retrieve the content of the actual URL_BACKEND variable
+    - URL=${!URL_ACCESSOR}
+    # DEBUG
+    - echo ${URL}
+    # generates the chart name using the environment name, replace all / with -; result: review-backend-100-fancify-pipeline
+    - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / -)
+    # DEBUG
+    - echo ${CHART_NAME}
+    # write the url into the var.env file for the dynamic env url generation
+    - echo "URL=${URL}" >> var.env
+    # use chart name and the folder by uppercasing the first character of the app name; result: Backend
+    - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${APP^}
+    - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} ${CHART_NAME} ./k8/${APP^}
   tags:
     - k8-admin
 
-    
-deploy-backend:
-  variables:
-    HELM_CHART: covid-19-vis-backend
-    URL: api.covid19vis.lingvis.io
-    FOLDER: Backend
+#--------------------
+# BACKEND
+#--------------------
+
+.deploy-backend: &deploy-backend
   <<: *deploy-template
   <<: *rules-backend
+  variables:
+    APP: backend
+    RUN_ON_FB: "no"
+    RUN_ON_MASTER: "no"
+    RUN_ON_TAG: "no"
+  environment:
+    url: http://$URL
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    kubernetes:
+      namespace: $K8_NAMESPACE
+  artifacts:
+    reports:
+      dotenv: var.env
   needs:
     - dockerize-backend
-  dependencies: 
+    - export-environment
+  dependencies:
     - dockerize-backend
+    - export-environment
 
-deploy-frontend:
+deploy-backend-fb:
+  extends: .deploy-backend
   variables:
-    HELM_CHART: covid-19-vis-frontend
-    URL: covid19vis.lingvis.io
-    FOLDER: Frontend
+    ENV_TYPE: review
+    RUN_ON_FB: "yes"
+  environment:
+    on_stop: remove-deployment-backend-review
+
+deploy-backend-staging:
+  extends: .deploy-backend
+  variables:
+    ENV_TYPE: staging
+    RUN_ON_MASTER: "yes"
+  
+deploy-backend-production:
+  extends: .deploy-backend
+  variables:
+    ENV_TYPE: production
+    RUN_ON_TAG: "yes"
+
+
+#--------------------
+# FRONTEND
+#--------------------
+
+.deploy-frontend: &deploy-frontend
   <<: *deploy-template
   <<: *rules-frontend
+  variables:
+    APP: frontend
+    RUN_ON_FB: "no"
+    RUN_ON_MASTER: "no"
+    RUN_ON_TAG: "no"
+  environment:
+    url: http://$URL
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    kubernetes:
+      namespace: $K8_NAMESPACE
+  artifacts:
+    reports:
+      dotenv: var.env
   needs:
     - dockerize-frontend
+    - export-environment
   dependencies:
     - dockerize-frontend
+    - export-environment
 
-deploy-crawler:
+
+deploy-frontend-fb:
+  extends: .deploy-frontend
+  environment:
+    on_stop: remove-deployment-frontend-review
   variables:
-    HELM_CHART: covid-19-vis-crawler
-    FOLDER: Crawler
+    ENV_TYPE: review
+    RUN_ON_FB: "yes"
+
+deploy-frontend-staging:
+  extends: .deploy-frontend
+  variables:
+    ENV_TYPE: staging
+    RUN_ON_MASTER: "yes"
+  
+deploy-frontend-production:
+  extends: .deploy-frontend
+  variables:
+    ENV_TYPE: production
+    RUN_ON_TAG: "yes"
+
+#--------------------
+# CRAWLER
+#--------------------
+
+.deploy-crawler: &deploy-crawler
   <<: *deploy-template
   <<: *rules-crawler
-  needs:
-    - dockerize-crawler
-  dependencies:
-    - dockerize-crawler
-
-deploy-tileserver:
   variables:
-    HELM_CHART: covid-19-vis-tileserver
-    URL: tiles.covid19vis.lingvis.io
-    FOLDER: Tiles
-  <<: *deploy-template
-  <<: *rules-tileserver
+    APP: crawler
+    RUN_ON_FB: "no"
+    RUN_ON_MASTER: "no"
+    RUN_ON_TAG: "no"
+  environment:
+    # url: http://$URL
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    kubernetes:
+      namespace: $K8_NAMESPACE
+  artifacts:
+    reports:
+      dotenv: var.env
   needs:
-    - dockerize-tileserver
+    - dockerize-crawler
+    - export-environment
   dependencies:
-    - dockerize-tileserver
+    - dockerize-crawler
+    - export-environment
+
+# deploy-crawler-fb:
+#   extends: .deploy-crawler
+#   variables:
+#     ENV_TYPE: review
+#     RUN_ON_FB: "yes"
+#
+# deploy-crawler-staging:
+#  extends: .deploy-crawler
+#  variables:
+#    ENV_TYPE: staging
+#    RUN_ON_MASTER: "yes"
+  
+deploy-crawler-production:
+  extends: .deploy-crawler
+  variables:
+    ENV_TYPE: production
+    RUN_ON_TAG: "yes"
+
+#--------------------
+# TILES
+#--------------------
+
+.deploy-tiles: &deploy-tiles
+  <<: *deploy-template
+  <<: *rules-tiles
+  variables:
+    APP: tiles
+    RUN_ON_FB: "no"
+    RUN_ON_MASTER: "no"
+    RUN_ON_TAG: "no"
+  environment:
+    url: http://$URL
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    kubernetes:
+      namespace: $K8_NAMESPACE
+  artifacts:
+    reports:
+      dotenv: var.env
+  needs:
+    - dockerize-tiles
+    - export-environment
+  dependencies:
+    - dockerize-tiles
+    - export-environment
+
+# deploy-tiles-fb:
+#   extends: .deploy-tiles
+#   variables:
+#     ENV_TYPE: review
+#     RUN_ON_FB: "yes"
+
+deploy-tiles-staging:
+  extends: .deploy-tiles
+  variables:
+    ENV_TYPE: staging
+    RUN_ON_MASTER: "yes"
+  
+deploy-tiles-production:
+  extends: .deploy-tiles
+  variables:
+    ENV_TYPE: production
+    RUN_ON_TAG: "yes"
+
+###########################################
+# CLEANUP
+###########################################
+
+.remove-deployment:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+    RUN_ON_FB: "no"
+    RUN_ON_MASTER: "no"
+    RUN_ON_TAG: "no"
+  script:
+    - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / -)
+    # DEBUG
+    - echo $CHART_NAME
+    - helm delete --dry-run --debug --purge ${CHART_NAME}
+    - helm delete --purge ${CHART_NAME}
+  dependencies: []
+  allow_failure: true
+  tags:
+    - k8-admin
+
+remove-deployment-backend-review:
+  extends: .remove-deployment
+  <<: *rules-backend-cleanup
+  variables:
+    APP: backend
+    ENV_TYPE: review
+    RUN_ON_FB: "yes"
+  environment:
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    action: stop
+
+remove-deployment-frontend-review:
+  extends: .remove-deployment
+  <<: *rules-frontend-cleanup
+  variables:
+    APP: frontend
+    ENV_TYPE: review
+    RUN_ON_FB: "yes"
+  environment:
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    action: stop

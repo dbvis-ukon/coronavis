@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: tileserver
-          image: registry.dbvis.de/jentner/covid-19-vis/tileserver:{{ .Values.sha }}
+          image: registry.dbvis.de/jentner/covid-19-vis/tiles:{{ .Values.sha }}
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -43,9 +43,9 @@ spec:
           resources:
             default:
               memory: "4Gi"
-              cpu: "1000m"
+              cpu: 1.0
             limits:
               memory: "8Gi"
-              cpu: "2000m"
+              cpu: 2.0
       imagePullSecrets:
           - name: regcred-server
