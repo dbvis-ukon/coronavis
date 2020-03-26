@@ -402,7 +402,7 @@ dockerize-tiles:
     # DEBUG
     - echo ${URL}
     # generates the chart name using the environment name, replace all / with -; result: review-backend-100-fancify-pipeline
-    - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / -)
+    - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / - | cut -c -53 | sed 's#-$##')
     # DEBUG
     - echo ${CHART_NAME}
     # write the url into the var.env file for the dynamic env url generation
@@ -453,12 +453,14 @@ deploy-backend-staging:
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
-  
+    K8_NAMESPACE: covid-19-vis-staging
+
 deploy-backend-production:
   extends: .deploy-backend
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
   environment:
     name: $ENV_TYPE/$APP/production
 
@@ -504,12 +506,14 @@ deploy-frontend-staging:
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
-  
+    K8_NAMESPACE: covid-19-vis-staging
+
 deploy-frontend-production:
   extends: .deploy-frontend
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
   environment:
     name: $ENV_TYPE/$APP/production
 
@@ -557,6 +561,7 @@ deploy-crawler-production:
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
   environment:
     name: $ENV_TYPE/$APP/production
 
@@ -598,12 +603,14 @@ deploy-tiles-staging:
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
-  
+    K8_NAMESPACE: covid-19-vis-staging
+
 deploy-tiles-production:
   extends: .deploy-tiles
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
   environment:
     name: $ENV_TYPE/$APP/production
 
@@ -619,7 +626,7 @@ deploy-tiles-production:
     RUN_ON_MASTER: "no"
     RUN_ON_TAG: "no"
   script:
-    - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / -)
+    - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / - | cut -c -53 | sed 's#-$##')
     # DEBUG
     - echo $CHART_NAME
     - helm delete --dry-run --debug --purge ${CHART_NAME}
