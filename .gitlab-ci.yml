@@ -150,7 +150,15 @@ export-environment:
       - k8/Crawler/**
       - k8/Crawler/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH || $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+    when: always
+  - changes:
+      - Crawler/**
+      - Crawler/**/*
+      - k8/Crawler/**
+      - k8/Crawler/**/*
+      - .gitlab-ci.yml
+    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: always
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -175,7 +183,15 @@ export-environment:
       - k8/Tiles/**
       - k8/Tiles/**/*
       - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH || $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+    when: always
+  - changes:
+      - Tiles/**
+      - Tiles/**/*
+      - k8/Tiles/**
+      - k8/Tiles/**/*
+      - .gitlab-ci.yml
+    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: always
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -204,7 +220,15 @@ export-environment:
         - k8/Backend/**
         - k8/Backend/**/*
         - .gitlab-ci.yml
-      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH || $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+      when: manual
+    - changes:
+        - Backend/**
+        - Backend/**/*
+        - k8/Backend/**
+        - k8/Backend/**/*
+        - .gitlab-ci.yml
+      if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
       when: manual
     # default is on_success, so explicitly set job not to run if none of the above rules matched
     - when: never
@@ -225,7 +249,15 @@ export-environment:
         - k8/Frontend/**
         - k8/Frontend/**/*
         - .gitlab-ci.yml
-      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH || $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+      if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
+      when: manual
+    - changes:
+        - Frontend/**
+        - Frontend/**/*
+        - k8/Frontend/**
+        - k8/Frontend/**/*
+        - .gitlab-ci.yml
+      if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
       when: manual
     # default is on_success, so explicitly set job not to run if none of the above rules matched
     - when: never
