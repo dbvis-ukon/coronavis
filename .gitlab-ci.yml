@@ -222,6 +222,7 @@ export-environment:
         - .gitlab-ci.yml
       if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
       when: manual
+      allow_failure: true
     - changes:
         - Backend/**
         - Backend/**/*
@@ -230,6 +231,7 @@ export-environment:
         - .gitlab-ci.yml
       if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
       when: manual
+      allow_failure: true
     # default is on_success, so explicitly set job not to run if none of the above rules matched
     - when: never
 
@@ -251,6 +253,7 @@ export-environment:
         - .gitlab-ci.yml
       if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH
       when: manual
+      allow_failure: true
     - changes:
         - Frontend/**
         - Frontend/**/*
@@ -259,6 +262,7 @@ export-environment:
         - .gitlab-ci.yml
       if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
       when: manual
+      allow_failure: true
     # default is on_success, so explicitly set job not to run if none of the above rules matched
     - when: never
 
@@ -613,6 +617,7 @@ deploy-tiles-production:
     - helm delete --dry-run --debug --purge ${CHART_NAME}
     - helm delete --purge ${CHART_NAME}
   dependencies: []
+  allow_failure: true
   tags:
     - k8-admin
 
