@@ -453,12 +453,14 @@ deploy-backend-staging:
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
-  
+    K8_NAMESPACE: covid-19-vis-staging
+
 deploy-backend-production:
   extends: .deploy-backend
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
 
 
 #--------------------
@@ -502,12 +504,14 @@ deploy-frontend-staging:
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
-  
+    K8_NAMESPACE: covid-19-vis-staging
+
 deploy-frontend-production:
   extends: .deploy-frontend
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
 
 #--------------------
 # CRAWLER
@@ -553,6 +557,7 @@ deploy-crawler-production:
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
 
 #--------------------
 # TILES
@@ -592,12 +597,14 @@ deploy-tiles-staging:
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
-  
+    K8_NAMESPACE: covid-19-vis-staging
+
 deploy-tiles-production:
   extends: .deploy-tiles
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
+    K8_NAMESPACE: covid-19-vis-production
 
 ###########################################
 # CLEANUP
