@@ -467,8 +467,9 @@ deploy-tiles-production:
   variables:
     GIT_STRATEGY: none
   script:
-    - source var.env
     - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / -)
+    # DEBUG
+    - echo $CHART_NAME
     - helm delete --dry-run --debug --purge ${CHART_NAME}
     - helm delete --purge ${CHART_NAME}
   when: manual
