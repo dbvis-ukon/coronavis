@@ -1,38 +1,20 @@
-.main {
-  background: #fff;
-  padding: 15px;
-  border-radius: 4px;
+:host {
+  pointer-events: none;
+  display: block;
+  // because the tooltips content is dynamically created
+  // angular doesn't know about it's size
+  // and will not place the tooltips correctly
+  // these are rough estimates
+  min-width: 450px;
+  min-height: 450px;
 
-  .barchartcontainer {
-    display: flex;
+  .main {
+    background: #fff;
+    padding: 15px;
+    border-radius: 4px;
+  
+    .barchartcontainer {
+      display: flex;
+    }
   }
-}
-
-table {
-  border-spacing: 0;
-  margin-top: 10px;
-}
-
-th {
-  text-align: center;
-  margin: 0;
-  padding: 8px;
-}
-
-td {
-  text-align: center;
-  margin: 0;
-  padding: 8px;
-}
-
-td:first-child {
-  text-align: left;
-}
-
-/* Color columns */
-th:nth-child(2),
-th:nth-child(4),
-td:nth-child(2),
-td:nth-child(4){
-  background-color: #f2f2f2;
 }
