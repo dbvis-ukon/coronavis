@@ -69,7 +69,7 @@ spec:
             failureThreshold: 4
             successThreshold: 1
           resources:
-            requesets:
+            requests:
               memory: "500Mi"
             limits:
               memory: "3000Mi"
