@@ -609,6 +609,8 @@ deploy-tiles-production:
   image:
     name: alpine/helm:3.1.2
     entrypoint: [""]
+  before_script:
+    - apk add bash
   script:
     - KUBECONFIG=$KUBECONFIG_NEW
     - echo $KUBECONFIG
