@@ -58,8 +58,13 @@ def rep(e):
         d[key.replace('(','').replace(')', '').replace(' ', '_').replace('-', '').lower()] = entry
     return d
 
-entries = [rep(entry) for entry in data['data-391c21da2b2a91c905172447fb8d1284']]
+# sort keys by length of containing arrays, the longest one is the hospitals list
+x = [k for k, v in sorted(data.items(), key=lambda item: len(item[1]))]
+x.reverse()
+key = x[0]
 
+# parse data
+entries = [rep(entry) for entry in data[key]]
 
 print('entries hospitals', len(entries))
 
