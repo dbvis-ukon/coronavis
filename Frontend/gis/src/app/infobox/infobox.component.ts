@@ -126,7 +126,9 @@ export class InfoboxComponent implements OnInit {
   }
 
   openAbout() {
-    this.dialogService.open(AboutComponent);
+    this.dialogService.open(AboutComponent, {
+		panelClass: 'popup-panel-white-glass-background'
+	});
   }
 
   openImpressum() {
