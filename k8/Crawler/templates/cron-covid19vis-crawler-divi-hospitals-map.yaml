@@ -5,7 +5,7 @@ metadata:
   description: "DIVI Intensivregister detailed bed count per hospital (actual numbers, not colors)"
 spec:
   # run every four hours
-  schedule: "0 */4 * * *"
+  schedule: "0 */1 * * *"
   jobTemplate:
     spec:
       backoffLimit: 2
