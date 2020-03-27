@@ -1,22 +1,30 @@
 
 
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === false && choroplethLayer">
-  <h5>Legende Fallzahlen</h5>
-
-    <div class="row" *ngFor="let b of caseColors">
+  <h5 (click)="legendCasesExtended = !legendCasesExtended" title="Klicken um Legende ein-/auszuklappen">Legende Fallzahlen</h5>
+    <div *ngIf="legendCasesExtended">
+      <div class="row" *ngFor="let b of caseColors">
 
         <div class="rect" [ngStyle]="{ 'background-color': b.color }"></div>
 
         <div class="text" [innerHtml]="b.text"></div>
 
+      </div>
     </div>
-
+    <div *ngIf="!legendCasesExtended">
+      <div class="row">
+        <div class="text" [innerHtml]="casesMin"></div>
+        <div *ngFor="let b of caseColors;"  class="rect" [ngStyle]="{ 'background-color': b.color }"></div>
+        <div class="text" [innerHtml]="casesMax"></div>
+      </div>
+    </div>
 </div>
 
 
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === true || mo.bedGlyphOptions.enabled === true" >
-  <h5>Legende Bettenauslastung</h5>
+  <h5 (click)="legendBedsExtended = !legendBedsExtended" title="Klicken um Legende ein-/auszuklappen">Legende Bettenauslastung</h5>
 
+  <div *ngIf="legendBedsExtended">
     <div class="row" *ngFor="let b of bedStatusColors">
 
         <div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div>
@@ -24,6 +32,17 @@
         <div class="text">{{ b }}</div>
 
     </div>
+  </div>
+  <div *ngIf="!legendBedsExtended">
+    <div class="row">
+      <div class="beside" *ngFor="let b of bedStatusColors;" title="{{ b }}">
 
+        <div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div>
+
+        <div class="text">{{ bedStatusIcons[b] }}</div>
+
+      </div>
+    </div>
+  </div>
 </div>
 

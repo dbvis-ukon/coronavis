@@ -18,8 +18,18 @@ export class LegendComponent implements OnInit {
 
   agg = AggregationLevel;
   bed = BedType;
+  
+  legendCasesExtended = true;
+  legendBedsExtended = true;
 
   bedStatusColors = ColormapService.bedStati;
+  bedStatusIcons = {
+    'Verfügbar': 'V',
+    'Begrenzt': 'B',
+    'Ausgelastet': 'A',
+    'Nicht verfügbar': '–',
+    'Keine Information': '?'
+  };
 
   private _choroplethLayer: CaseChoropleth;
 
@@ -35,6 +45,8 @@ export class LegendComponent implements OnInit {
   }
 
   caseColors = [];
+  casesMin = '';
+  casesMax = '';
 
   constructor(private colmapService: ColormapService) {
 
@@ -75,7 +87,9 @@ export class LegendComponent implements OnInit {
       d[1] = v.NormValuesFunc.invert(d[1]);
 
       const d0Fixed = (d[0] * normVal).toFixed(0);
+      if (i === 0) this.casesMin = d0Fixed;
       const d1Fixed = (d[1] * normVal).toFixed(0);
+      this.casesMax = d1Fixed;
       if (v.MinMax[0] < d[0] && v.MinMax[1] > d[1] ) {
 
         this.caseColors.push(
