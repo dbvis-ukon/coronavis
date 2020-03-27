@@ -11,29 +11,28 @@ class Hospital(db.Model):
     """
     Hospital data class
     """
-    __tablename__ = 'hospital'
+    __tablename__ = 'hospitals_current'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     address = db.Column(db.String(255), nullable=False)
     state = db.Column(db.String(255), nullable=False)
     contact = db.Column(db.String(255))
-    location = db.Column(Geometry('POINT'))
+    geojson = db.Column(db.JSON())
     icu_low_state = db.Column(db.String(255))
     icu_high_state = db.Column(db.String(255))
     ecmo_state = db.Column(db.String(255))
     last_update = db.Column(db.DateTime())
+    helipad_nearby = db.Column(db.Boolean())
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        return '<Hospital %r>' % (self.name)
+        return '<Hospital %r>' % self.name
 
     def as_dict(self):
-        result = geojson.Feature(geometry=(to_shape(self.location)),
-                                 properties={})
-        result['properties'] = {
+        result = {'geometry': self.geojson, 'properties': {
             'index': self.id,
             'name': self.name,
             'address': self.address,
@@ -41,8 +40,9 @@ class Hospital(db.Model):
             'icu_low_state': self.icu_low_state,
             'icu_high_state': self.icu_high_state,
             'ecmo_state': self.ecmo_state,
-            'last_update': self.last_update
-        }
+            'last_update': self.last_update,
+            'helipad_nearby': self.helipad_nearby
+        }}
         return result
 
 
