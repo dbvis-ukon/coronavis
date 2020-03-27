@@ -2,7 +2,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: covid19vis-crawler
-  description: "unknown"  
+  description: "DIVI Intensivregister for hospitals stating availability of beds"  
 spec:
   # run every four hours
   schedule: "0 */4 * * *"
@@ -27,7 +27,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: covid19vis-crawler-map
-  description: "RKI map aggregate unknown"  
+  description: "Previous version of covid19vis-crawler-divi - backup data"  
 spec:
   # run at 9am
   schedule: "0 9 * * *"
@@ -52,7 +52,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: covid19vis-crawler-rki
-  description: "RKI unknown"
+  description: "RKI cases on LK and BL level aggregated"
 spec:
   # run at 9am
   schedule: "0 9 * * *"
@@ -104,8 +104,8 @@ metadata:
   name: covid19vis-crawler-divi
   description: "DIVI Intensivregister detailed bed count per hospital (actual numbers, not colors)"
 spec:
-  # run at 9am
-  schedule: "0 9 * * *"
+  # run every four hours
+  schedule: "0 */4 * * *"
   jobTemplate:
     spec:
       backoffLimit: 2
