@@ -235,6 +235,24 @@
   </div>
 
 </div>
-<div style="float: right;" mat-dialog-actions>
-  <button class="mat-raised-button" (click)="close()">Close</button>
+
+<div class="bottom-panel" mat-dialog-actions>
+  <div class="versions">
+    <p>Version: 
+      <a *ngIf="frontendVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ frontendVersion }}">{{ frontendVersion }}</a>
+      <span *ngIf="!frontendVersion">development</span>
+    </p>
+    <p>API Version: 
+      <a *ngIf="apiVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ apiVersion }}">{{ apiVersion }}</a>
+      <span *ngIf="!apiVersion">unknown</span>
+    </p>
+    <p>Tile Server Version: 
+      <a *ngIf="tileServerVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ tileServerVersion }}">{{ tileServerVersion }}</a>
+      <span *ngIf="!tileServerVersion">unknown</span>
+    </p>
+  </div>
+  
+  <div>
+    <button class="mat-raised-button" (click)="close()">Close</button>
+  </div>
 </div>
