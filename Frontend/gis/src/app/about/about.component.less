@@ -1,59 +1,81 @@
-  .contributorcontainer img {
-    position: relative;
-    text-align: center;
-    color: black;
-    //-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
-    //filter: grayscale(100%);
-    font-size: 11px;
-  }
+.main {
+  max-height: 85vh;
+}
 
-  a {
-    color:darkslategray;
-    font-weight: lighter;
-  }
+.contributorcontainer img {
+  position: relative;
+  text-align: center;
+  color: black;
+  //-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+  //filter: grayscale(100%);
+  font-size: 11px;
+}
 
-  .groupcontainer {
-    position: relative;
-    text-align: center;
-    color: black;
-  }
+a {
+  color: #111111;
+  font-weight: lighter;
+  font-style: normal;
+  text-decoration: none;
+  transition: 0.25s ease-in-out;
+}
 
-  .groupdesc {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    font-size: 15px;
-    padding-top: 2px;
-    padding-left: 10px;
-    width: 240px;
-  }
+a:hover {
+  color: #2b5999;
+}
 
-  .cname {
-    position: absolute;
-    bottom: 0%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+.groupcontainer {
+  position: relative;
+  text-align: center;
+  color: black;
+}
 
-  .description{
-      font-family: Roboto, "Helvetica Neue", sans-serif;
-      font-size: 15px;
-      font-weight: bold;
-      margin-bottom: 2px;
-  }
+.groupdesc {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 15px;
+  padding-top: 2px;
+  padding-left: 10px;
+  width: 500px;
+}
 
+.cname {
+  position: absolute;
+  bottom: 0%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
-  .flex-container {
-    display: flex;
-    flex-flow: nowrap;
-    justify-content: flex-start;
-    padding: 0;
-    margin-top: 5px;
-    list-style: none;
-  }
+.description {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
 
-  .flex-item {
-    padding: 8px;
-    width: 80px;
-  }
+.row {
+  display: flex;
+  flex-flow: nowrap;
+  justify-content: flex-start;
+  padding: 0;
+  margin-top: 5px;
+}
+
+.group {
+  margin:  0 20px 0 20px;
+}
+
+.flex-container {
+  display: flex;
+  flex-flow: nowrap;
+  justify-content: flex-start;
+  padding: 0;
+  margin-top: 5px;
+  list-style: none;
+}
+
+.flex-item {
+  padding: 8px;
+  width: 79px;
+}
 
 .bottom-panel {
   display: flex;
@@ -70,4 +92,3 @@
     }
   }
 }
-
