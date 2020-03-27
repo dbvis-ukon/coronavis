@@ -9,3 +9,4 @@ traefik.ingress.kubernetes.io/frontend-entry-points: http,https
 traefik.ingress.kubernetes.io/redirect-entry-point: https
 traefik.ingress.kubernetes.io/redirect-permanent: "true"
 {{- end }}
+{{- end }}
