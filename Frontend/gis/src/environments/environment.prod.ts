@@ -6,4 +6,8 @@ export const environment = {
 
   // this is overwritten in the CI
   tileServerUrl: 'https://staging.tiles.covid19vis.lingvis.io/',
+
+  version: 'development',
+
+  env: 'development'
 };
