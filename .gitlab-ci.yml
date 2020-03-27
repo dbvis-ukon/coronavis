@@ -664,7 +664,7 @@ deploy-backend-fb-new:
     ENV_TYPE: review
     RUN_ON_FB: "yes"
   environment:
-    on_stop: remove-deployment-backend-review
+    on_stop: remove-deployment-backend-review-new
 
 deploy-backend-staging-new:
   extends: .deploy-backend-new
@@ -714,7 +714,7 @@ deploy-backend-production-new:
 deploy-frontend-fb-new:
   extends: .deploy-frontend-new
   environment:
-    on_stop: remove-deployment-frontend-review
+    on_stop: remove-deployment-frontend-review-new
   variables:
     ENV_TYPE: review
     RUN_ON_FB: "yes"
@@ -874,4 +874,48 @@ remove-deployment-frontend-review:
     RUN_ON_FB: "yes"
   environment:
     name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    action: stop
+
+###########################################
+# CLEANUP NEW ENV
+###########################################
+
+.remove-deployment-new:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+    RUN_ON_FB: "no"
+    RUN_ON_MASTER: "no"
+    RUN_ON_TAG: "no"
+  script:
+    - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / - | cut -c -53 | sed -E 's#-+$##')
+    # DEBUG
+    - echo $CHART_NAME
+    - helm delete --namespace=${K8_NAMESPACE} --dry-run --debug ${CHART_NAME}
+    - helm delete --namespace=${K8_NAMESPACE} ${CHART_NAME}
+  dependencies: []
+  allow_failure: true
+  tags:
+    - k8-admin
+
+remove-deployment-backend-review-new:
+  extends: .remove-deployment-new
+  <<: *rules-backend-cleanup
+  variables:
+    APP: backend
+    ENV_TYPE: review
+    RUN_ON_FB: "yes"
+  environment:
+    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    action: stop
+
+remove-deployment-frontend-review-new:
+  extends: .remove-deployment-new
+  <<: *rules-frontend-cleanup
+  variables:
+    APP: frontend
+    ENV_TYPE: review
+    RUN_ON_FB: "yes"
+  environment:
+    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     action: stop
