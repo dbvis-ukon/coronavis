@@ -608,7 +608,7 @@ deploy-tiles-production:
   stage: deploy
   image:
     name: alpine/helm:3.1.2
-    entrypoint: [""]
+    entrypoint: ["/bin/bash"]
   before_script:
     - apk add bash
   script:
