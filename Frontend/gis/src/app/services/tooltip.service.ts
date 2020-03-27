@@ -105,7 +105,6 @@ export class TooltipService {
     if (this.overlayRef.hasAttached()) {
       this.overlayRef.detach();
       this.tooltipRef = null;
-	  console.log(this.onCloseAction);
 	  if (this.onCloseAction !== null) {
 		  this.onCloseAction();
 		  this.onCloseAction = null;
