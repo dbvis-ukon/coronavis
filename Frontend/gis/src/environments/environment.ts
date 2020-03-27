@@ -3,12 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
 
   // apiUrl: 'http://localhost:5000/'
   apiUrl: 'https://staging.api.covid19vis.lingvis.io/',
 
   tileServerUrl: 'https://staging.tiles.covid19vis.lingvis.io/',
+
+  version: '',
+
+  env: 'development',
 };
 
 /*
