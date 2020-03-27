@@ -8,3 +8,4 @@ Group: dbvis
 Project: covid-19-vis-backend
 Branch: master
 
+urlProtocol: https

@@ -7,3 +7,5 @@ replicaCount: 1
 Group: dbvis
 Project: covid-19-vis-tileserver
 Branch: master
+
+urlProtocol: https

@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   annotations:
     kubernetes.io/ingress.class: traefik
+    {{- include "traefik.labels" . | nindent 4 }}
   labels:
     {{- include "lingvis.labels" . | nindent 4 }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
