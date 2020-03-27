@@ -1,16 +1,14 @@
-import logging
 import os
 
-from flask import Blueprint, jsonify
-
+from flask import Blueprint
 
 routes = Blueprint('version', __name__, url_prefix='/version/')
 
-@routes.route('')
+
+@routes.route('', strict_slashes=False)
 def versioncheck():
-    VERSION = os.environ.get('VERSION')
-    if not VERSION:
-        VERSION = 'development'
+    version = os.environ.get('VERSION')
+    if not version:
+        version = 'development'
 
-    return VERSION, 200
-
+    return version, 200
