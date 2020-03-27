@@ -14,7 +14,7 @@
     <div *ngIf="!legendCasesExtended">
       <div class="row">
         <div class="text" [innerHtml]="casesMin"></div>
-        <div *ngFor="let b of caseColors;"  class="rect" [ngStyle]="{ 'background-color': b.color }"></div>
+        <div *ngFor="let b of caseColors;"  class="rect" [ngStyle]="{ 'background-color': b.color }" title="{{ b.text }}"></div>
         <div class="text" [innerHtml]="casesMax"></div>
       </div>
     </div>

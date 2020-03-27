@@ -96,7 +96,7 @@ export class LegendComponent implements OnInit {
         this.caseColors.push(
           {
             color: color,
-            text: d0Fixed + ((d[1]) ? ' &ndash; ' + d1Fixed : '+' )
+            text: d0Fixed + ((d[1]) ? ' – ' + d1Fixed : '+' )
           }
         );
 
@@ -107,7 +107,7 @@ export class LegendComponent implements OnInit {
         this.caseColors.push(
           {
             color: color,
-            text: d0Fixed + ((d[1]) ? ' &ndash; ' + d1Fixed : '+' )
+            text: d0Fixed + ((d[1]) ? ' – ' + d1Fixed : '+' )
           }
         );
 
