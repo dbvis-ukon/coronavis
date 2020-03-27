@@ -112,6 +112,15 @@
 
 
 </div>
-<div style="float: right;" mat-dialog-actions>
-  <button class="mat-raised-button" (click)="close()">Close</button>
+
+<div class="bottom-panel" mat-dialog-actions>
+  <div class="versions">
+    <p>Version: {{ frontendVersion }}</p>
+    <p>API Version: {{ apiVersion }}</p>
+    <p>Tile Server Version: {{ tileServerVersion }}</p>
+  </div>
+  
+  <div>
+    <button class="mat-raised-button" (click)="close()">Close</button>
+  </div>
 </div>
