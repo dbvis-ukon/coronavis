@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import * as d3 from 'd3';
-import {AggregatedHospitalsState} from './divi-hospitals.service';
+import {AggregatedHospitalsProperties, AggregatedHospitalsState} from './divi-hospitals.service';
 import {ScaleLinear} from 'd3';
+import {BedType} from "../map/options/bed-type.enum";
 
 @Injectable({
   providedIn: 'root'
@@ -37,17 +38,69 @@ export class ColormapService {
     return this.caseChoroplethColorMap(normalizedDiff);
   }
 
+  private getMinScore(d: AggregatedHospitalsState) {
+    const v = d.Verfügbar || 0;
+    const b = d.Begrenzt || 0;
+    const a = d.Ausgelastet || 0;
+
+    return v + b + a;
+  }
+
+  private getMaxScore(d: AggregatedHospitalsState) {
+    const v = d.Verfügbar || 0;
+    const b = d.Begrenzt || 0;
+    const a = d.Ausgelastet || 0;
+
+    return (v + b + a) * 3;
+  }
+
+  private getScore(d: AggregatedHospitalsState) {
+    const v = d.Verfügbar || 0;
+    const b = d.Begrenzt || 0;
+    const a = d.Ausgelastet || 0;
+
+    return (v + b * 2 + a * 3); // / ((v + b + a) * 3);
+  }
+
+  private notAvailable(d: AggregatedHospitalsState) {
+    const v = d.Verfügbar || 0;
+    const b = d.Begrenzt || 0;
+    const a = d.Ausgelastet || 0;
+    const n = d["Nicht verfügbar"] || 0;
+
+    return v === 0 && b === 0 && a === 0 && n > 0;
+  }
+
+  private noInformation(d: AggregatedHospitalsState) {
+    const v = d.Verfügbar || 0;
+    const b = d.Begrenzt || 0;
+    const a = d.Ausgelastet || 0;
+    const n = d["Nicht verfügbar"] || 0;
+
+    return v === 0 && b === 0 && a === 0 && n == 0;
+  }
+
   private continousColorMap = d3.scaleLinear<string, string>()
     .domain([0, 0.5, 1])
     .range(ColormapService.bedStatusColors)
     .interpolate(d3.interpolateRgb.gamma(2.2));
-  getBedStatusColor(normalizedScore: number, notAvailableCountGreater0: boolean = true): string {
-    if (isNaN(normalizedScore)) {
-      if (notAvailableCountGreater0 === true) {
-        return this.singleHospitalCM("Nicht verfügbar");
-      }
+
+  getBedStatusColor(properties: AggregatedHospitalsState): string {
+    const score = this.getScore(properties);
+    const minScore = this.getMinScore(properties);
+    const maxScore = this.getMaxScore(properties);
+
+    const minMaxNormValues = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
+    const normalizeValues = d3.scaleQuantize()
+      .domain([minScore, maxScore])
+      .range(minMaxNormValues);
+
+    if (this.noInformation(properties)) {
       return this.singleHospitalCM("Keine Information");
     }
-    return this.continousColorMap(normalizedScore);
+    if (this.notAvailable(properties)) {
+      return this.singleHospitalCM("Nicht verfügbar");
+    }
+    return this.continousColorMap(normalizeValues(score));
   }
 }
