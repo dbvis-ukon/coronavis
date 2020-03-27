@@ -8,12 +8,29 @@ import psycopg2 as pg
 import psycopg2.extras
 import psycopg2.extensions
 import re
+import sys
+import os
 import json
 import datetime
 import requests
 
-from db_config import SQLALCHEMY_DATABASE_URI
+# create postgresql connection string
+try:
+    DB_HOST = os.environ.get('DB_HOST').replace('\n', '')
+    DB_PORT = os.environ.get('DB_PORT').replace('\n', '')
+    DB_USER = os.environ.get('DB_USER').replace('\n', '')
+    DB_PASS = os.environ.get('DB_PASS').replace('\n', '')
+    DB_NAME = os.environ.get('DB_NAME').replace('\n', '')
 
+    if None in (DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME):
+        raise KeyError
+
+    SQLALCHEMY_DATABASE_URI = f"dbname='{DB_NAME}' user='{DB_USER}' host='{DB_HOST}' password='{DB_PASS}' port={DB_PORT}"
+
+except KeyError as e:
+    logger.error('One or multiple necessary environment variables not set, stopping crawler')
+    # return non-zero exit code to indicate an error
+    sys.exit(1)
 
 print('Crawler for DIVI Data')
 
@@ -42,8 +59,13 @@ def rep(e):
         d[key.replace('(','').replace(')', '').replace(' ', '_').replace('-', '').lower()] = entry
     return d
 
-entries = [rep(entry) for entry in data['data-391c21da2b2a91c905172447fb8d1284']]
+# sort keys by length of containing arrays, the longest one is the hospitals list
+x = [k for k, v in sorted(data.items(), key=lambda item: len(item[1]))]
+x.reverse()
+key = x[0]
 
+# parse data
+entries = [rep(entry) for entry in data[key]]
 
 print('entries hospitals', len(entries))
 
