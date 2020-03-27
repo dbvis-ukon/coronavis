@@ -1,0 +1,22 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: covid19vis-crawler-divi-hospitals-map
+  description: "DIVI Intensivregister detailed bed count per hospital (actual numbers, not colors)"
+spec:
+  # run every four hours
+  schedule: "0 */1 * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          containers:
+          - name: covid19vis-crawler-divi-hospitals-map
+            image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
+            imagePullPolicy: Always
+            command: ['python']
+            args: ['crawl_divi_data.py']
+          restartPolicy: Never
+          imagePullSecrets:
+            - name: regcred-server
