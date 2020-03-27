@@ -608,6 +608,8 @@ deploy-tiles-production:
   stage: deploy
   image: alpine/helm:3.1.2
   script:
+    - KUBECONFIG=$KUBECONFIG_NEW
+    - echo $KUBECONFIG
     - source var.env
     # DEBUG
     - cat var.env
@@ -888,6 +890,8 @@ remove-deployment-frontend-review:
     RUN_ON_MASTER: "no"
     RUN_ON_TAG: "no"
   script:
+    - KUBECONFIG=$KUBECONFIG_NEW
+    - echo $KUBECONFIG
     - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / - | cut -c -53 | sed -E 's#-+$##')
     # DEBUG
     - echo $CHART_NAME
