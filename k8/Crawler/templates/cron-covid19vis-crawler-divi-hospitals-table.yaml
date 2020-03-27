@@ -2,7 +2,8 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: covid19vis-crawler-divi-hospitals-table
-  description: "DIVI Intensivregister for hospitals stating availability of beds"  
+  annotations:
+    description: "DIVI Intensivregister for hospitals stating availability of beds"  
 spec:
   # run every four hours
   schedule: "0 */1 * * *"

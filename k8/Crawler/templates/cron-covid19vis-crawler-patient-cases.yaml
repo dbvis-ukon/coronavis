@@ -2,7 +2,8 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: covid19vis-crawler-patient-cases
-  description: "RKI individual cases including statistical information per patient"
+  annotations:
+    description: "RKI individual cases including statistical information per patient"
 spec:
   # run at 9am
   schedule: "0 9 * * *"
