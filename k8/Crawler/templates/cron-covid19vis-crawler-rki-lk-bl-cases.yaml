@@ -2,7 +2,8 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: covid19vis-crawler-rki-lk-bl-cases
-  description: "RKI cases on LK and BL level aggregated"
+  annotations:
+    description: "RKI cases on LK and BL level aggregated"
 spec:
   # run at 9am
   schedule: "0 9 * * *"
