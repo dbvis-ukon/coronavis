@@ -10,7 +10,7 @@ export const environment = {
 
   tileServerUrl: 'https://staging.tiles.covid19vis.lingvis.io/',
 
-  version: 'development',
+  version: '',
 
   env: 'development',
 };
