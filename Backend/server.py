@@ -8,6 +8,7 @@ from flask_compress import Compress
 from flask_cors import CORS
 
 from views import cases
+from views import divi
 from views import health
 from views import hospitals
 from views import osm
@@ -50,6 +51,7 @@ app.register_blueprint(health.routes)
 app.register_blueprint(hospitals.routes)
 app.register_blueprint(osm.routes)
 app.register_blueprint(version.routes)
+app.register_blueprint(divi.routes)
 
 # add cors and compress
 CORS(app)
