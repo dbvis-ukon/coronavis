@@ -2,7 +2,7 @@
 {{- define "lingvis.labels" }}
 deploymentName: {{ .Release.Name | quote }}
 {{- end }}
-{{- define "traefik.lables" }}
+{{- define "traefik.labels" }}
 {{- if eq .Values.urlProtocol "http" }}
 traefik.ingress.kubernetes.io/frontend-entry-points: http
 {{- else }}
