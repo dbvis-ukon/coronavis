@@ -147,13 +147,13 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
         d._y = p.y;
         return `translate(${p.x - ((3 * rectSize + padding * 3) / 2)}, ${p.y - (22 / 2)})`;
       })
-      .on('mouseenter', function (d1: DiviAggregatedHospital) {
+      .on('mouseenter touchstart', function (d1: DiviAggregatedHospital) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(AggregatedGlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
         t.diviAggregatedHospital = d1;
         d3.select(this).raise();
       })
-      .on('mouseleave', () => this.tooltipService.close());
+      .on('mouseleave touchend', () => this.tooltipService.close());
       // .on('mouseenter', d1 => {
       //   const evt: MouseEvent = d3.event;
       //   const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
