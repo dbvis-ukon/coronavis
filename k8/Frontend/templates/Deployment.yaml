@@ -40,10 +40,10 @@ spec:
             periodSeconds: 5
             failureThreshold: 4
             successThreshold: 1
-          limits:
-            - default:
-                memory: 200M
-              defaultRequest:
-                memory: 50M
+          resources:
+            requests:
+              memory: "50Mi"
+            limits:
+              memory: "200Mi"
       imagePullSecrets:
           - name: regcred-server

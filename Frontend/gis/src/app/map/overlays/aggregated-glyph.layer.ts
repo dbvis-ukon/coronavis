@@ -147,13 +147,13 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
         d._y = p.y;
         return `translate(${p.x - ((3 * rectSize + padding * 3) / 2)}, ${p.y - (22 / 2)})`;
       })
-      .on('mouseenter', function (d1: DiviAggregatedHospital) {
+      .on('mouseenter touchstart', function (d1: DiviAggregatedHospital) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(AggregatedGlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
         t.diviAggregatedHospital = d1;
         d3.select(this).raise();
       })
-      .on('mouseleave', () => this.tooltipService.close());
+      .on('mouseleave touchend', () => this.tooltipService.close());
       // .on('mouseenter', d1 => {
       //   const evt: MouseEvent = d3.event;
       //   const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
@@ -198,14 +198,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(icu_low_normalizer(this.getIcuLowScore(d1)), d1.icu_low_state["Nicht verfügbar"] > 0))
-      // .on("mouseenter", () => {
-
-      //   self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_low_state"), "enter"));
-      // })
-      // .on("mouseleave", () => {
-      //   self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_low_state"), "exit"));
-      // })
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_low_state));
 
     this.gHospitals
       .append('rect')
@@ -214,13 +207,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${rectSize + padding * 2}px`)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(icu_high_normalizer(this.getIcuHighScore(d1)), d1.icu_high_state["Nicht verfügbar"] > 0))
-      // .on("mouseenter", () => {
-      //   self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_high_state"), "enter"));
-      // })
-      // .on("mouseleave", () => {
-      //   self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "icu_high_state"), "exit"));
-      // });
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_high_state));
 
     this.gHospitals
       .append('rect')
@@ -229,13 +216,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(ecmo_normalizer(this.getEcmoScore(d1)), d1.ecmo_state["Nicht verfügbar"] > 0))
-      // .on("mouseenter", () => {
-      //   self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "ecmo_state"), "enter"));
-      // })
-      // .on("mouseleave", () => {
-      //   self.eventEmitter.next(new GlyphHoverEvent(self.hospitallayerService.getName(self.granularity, "ecmo_state"), "exit"));
-      // });
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.ecmo_state));
 
     this.onZoomed();
 

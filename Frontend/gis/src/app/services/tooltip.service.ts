@@ -15,6 +15,7 @@ export class TooltipService {
 
   private overlayRef: OverlayRef;
   private tooltipRef: ComponentRef<any>;
+  private onCloseAction: () => void | null;
 
   constructor(private overlay: Overlay,
               private overlayPositionBuilder: OverlayPositionBuilder) {
@@ -43,6 +44,7 @@ export class TooltipService {
   openAtElementRef<T>(
     tooltipComponent: ComponentType<T>,
     elementRef: FlexibleConnectedPositionStrategyOrigin,
+	onCloseAction: () =>  void | null = null,
     positions: ConnectedPosition[] = [
       {
         overlayX: 'start',
@@ -93,6 +95,8 @@ export class TooltipService {
     }
 
     this.overlayRef.updatePosition();
+	
+	this.onCloseAction = onCloseAction;
 
     return this.tooltipRef.instance;
   }
@@ -101,6 +105,10 @@ export class TooltipService {
     if (this.overlayRef.hasAttached()) {
       this.overlayRef.detach();
       this.tooltipRef = null;
+	  if (this.onCloseAction !== null) {
+		  this.onCloseAction();
+		  this.onCloseAction = null;
+	  }
     }
   }
 }
