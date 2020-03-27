@@ -91,3 +91,27 @@ spec:
           restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server
+            
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: covid19vis-crawler-divi
+spec:
+  # run at 9am
+  schedule: "0 9 * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          containers:
+          - name: covid19vis-crawler-divi
+            image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
+            imagePullPolicy: Always
+            command: ['python']
+            args: ['crawl_divi_data.py']
+          restartPolicy: Never
+          imagePullSecrets:
+            - name: regcred-server
