@@ -393,8 +393,8 @@ dockerize-tiles:
     # write the url into the var.env file for the dynamic env url generation
     - echo "URL=${URL}" >> var.env
     # use chart name and the folder by uppercasing the first character of the app name; result: Backend
-    - helm3 upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} ${CHART_NAME} ./k8/${APP^}
-    - helm3 upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} ${CHART_NAME} ./k8/${APP^}
+    - helm3 upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} --set envType=${ENV_TYPE} ${CHART_NAME} ./k8/${APP^}
+    - helm3 upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} --set envType=${ENV_TYPE} ${CHART_NAME} ./k8/${APP^}
   tags:
     - k8-admin
 

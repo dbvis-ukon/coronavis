@@ -18,6 +18,36 @@ spec:
             imagePullPolicy: Always
             command: ['python']
             args: ['crawler_rki_dashboard.py']
+            env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_PORT
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_PASS
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_NAME
+            - name: VERSION
+              value: {{ .Values.sha | quote }}
+            - name: ENV_TYPE
+              value: {{ .Values.envType | quote }}
           restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server
