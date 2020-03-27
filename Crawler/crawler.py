@@ -2,6 +2,8 @@
 DIVI - Hospitals with their capacities
 https://www.divi.de/register/intensivregister?view=items
 """
+import db
+
 import time
 import pandas
 
@@ -10,15 +12,14 @@ import urllib.request
 
 from bs4 import BeautifulSoup
 
+from sqlalchemy import func
+
 from geopy.geocoders import Nominatim
 
 from geoalchemy2.shape import to_shape 
 
-# from sqlalchemy import Column, Integer, String, DateTime
-
-# from geoalchemy2 import Geometry
-
-import db
+import logging
+logger = logging.getLogger(__name__)
 
 
 def legends(class_input):
@@ -154,39 +155,42 @@ def update_fetch(quote_page, values):
 
 if __name__ == "__main__":
     
-    from sqlalchemy import func
+    try:
 
-    quote_page = 'https://www.divi.de/register/intensivregister?view=items'
-    values = {
-        'list': {
-            'limit': 0
+        quote_page = 'https://www.divi.de/register/intensivregister?view=items'
+        values = {
+            'list': {
+                'limit': 0
+            }
         }
-    }
 
-    df = full_fetch(quote_page, values)
-    
-    # df.to_csv('rki_hospitals.csv')
-    # df = pandas.read_csv('rki_hospitals.csv', index_col=0)
-    
-    df_to_db = df.drop(['String'], axis=1)
-    if len(df_to_db.columns) == 8:
-        df_to_db.columns = ['name', 'address', 'contact', 'state', 'icu_low_state', 'icu_high_state', 'ecmo_state', 'last_update']
-    else:
-        df_to_db.columns = ['name', 'address', 'contact', 'state', 'icu_low_state', 'icu_high_state', 'ecmo_state', 'last_update', 'location']
+        df = full_fetch(quote_page, values)
+        
+        # df.to_csv('rki_hospitals.csv')
+        # df = pandas.read_csv('rki_hospitals.csv', index_col=0)
+        
+        df_to_db = df.drop(['String'], axis=1)
+        if len(df_to_db.columns) == 8:
+            df_to_db.columns = ['name', 'address', 'contact', 'state', 'icu_low_state', 'icu_high_state', 'ecmo_state', 'last_update']
+        else:
+            df_to_db.columns = ['name', 'address', 'contact', 'state', 'icu_low_state', 'icu_high_state', 'ecmo_state', 'last_update', 'location']
 
-    df_to_db['location'] = df_to_db['location'].map(lambda x: str(x).replace('None', '0'))
-    df_to_db['location'] = df_to_db['location'].map(lambda x: 'SRID=4326;POINT' + x.replace(',', ''))
-    
-    crawl = db.Crawl(**{
-        'url': quote_page,
-        'text': df_to_db.to_json(),
-        'doc': df_to_db.to_json(),
-    })
-    db.sess.add(crawl)
-    
-    for index, row in df_to_db.iterrows():
-        hospital = db.Hospital(**row.to_dict())
-        print(hospital)
-        db.sess.add(hospital)
+        df_to_db['location'] = df_to_db['location'].map(lambda x: str(x).replace('None', '0'))
+        df_to_db['location'] = df_to_db['location'].map(lambda x: 'SRID=4326;POINT' + x.replace(',', ''))
+        
+        crawl = db.Crawl(**{
+            'url': quote_page,
+            'text': df_to_db.to_json(),
+            'doc': df_to_db.to_json(),
+        })
+        db.sess.add(crawl)
+        
+        for index, row in df_to_db.iterrows():
+            hospital = db.Hospital(**row.to_dict())
+            logger.info(hospital)
+            db.sess.add(hospital)
 
-    db.sess.commit()
+        db.sess.commit()
+    
+    except Exception as e:
+        logger.error(e)
