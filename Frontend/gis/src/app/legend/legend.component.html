@@ -1,7 +1,7 @@
 
 
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === false && choroplethLayer">
-  <h5 (click)="legendCasesExtended = !legendCasesExtended" title="Klicken um Legende ein-/auszuklappen">Legende Fallzahlen</h5>
+  <h5 (click)="legendCasesExtended = !legendCasesExtended" title="Klicken um Legende ein-/auszuklappen">Fallzahlen</h5>
     <div *ngIf="legendCasesExtended">
       <div class="row" *ngFor="let b of caseColors">
 
@@ -22,7 +22,7 @@
 
 
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === true || mo.bedGlyphOptions.enabled === true" >
-  <h5 (click)="legendBedsExtended = !legendBedsExtended" title="Klicken um Legende ein-/auszuklappen">Legende Bettenauslastung</h5>
+  <h5 (click)="legendBedsExtended = !legendBedsExtended" title="Klicken um Legende ein-/auszuklappen">Bettenauslastung</h5>
 
   <div *ngIf="legendBedsExtended">
     <div class="row" *ngFor="let b of bedStatusColors">

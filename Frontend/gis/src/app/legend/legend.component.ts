@@ -66,9 +66,10 @@ export class LegendComponent implements OnInit {
       return;
     }
 
+    const norm100k: boolean = this.mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k;
     const v = this._choroplethLayer;
     let normVal = 1;
-    if ((this.mo.covidNumberCaseOptions && this.mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k)) {
+    if ((this.mo.covidNumberCaseOptions && norm100k)) {
       normVal = 100000;
     }
 
@@ -78,25 +79,63 @@ export class LegendComponent implements OnInit {
     let prevColor;
     let prevD;
 
-    
+    let decimals: number = 0;
+
+    const doneMap = new Map<number, boolean>();
 
     this.casesMin = '';
+  
     cmap.range().map((color, i) => {
       const d = cmap.invertExtent(color);
 
       d[0] = v.NormValuesFunc.invert(d[0]);
       d[1] = v.NormValuesFunc.invert(d[1]);
 
-      const d0Fixed = (d[0] * normVal).toFixed(0);
-      const d1Fixed = (d[1] * normVal).toFixed(0);
+      let d0Fixed = (d[0] * normVal);
+      let d1Fixed = (d[1] * normVal);
+
+      // Calculate number of appropriate decimals:
+      while (d0Fixed.toFixed(decimals) === d1Fixed.toFixed(decimals)) {
+        decimals++; // Keep this decimals level for all following  steps
+      }
+
+      d0Fixed = +d0Fixed.toFixed(decimals);
+      d1Fixed = +d1Fixed.toFixed(decimals);
       this.casesMax = d1Fixed;
+
+      const d0Ceil = Math.ceil(d0Fixed);
+      const d1Ceil = Math.ceil(d1Fixed);
+
+      let text = d0Fixed + ((d[1]) ? ' – ' + d1Fixed : '+' );
+
+      if (!norm100k) {
+        if (d1Fixed - d0Fixed < 1) {
+          if (d0Ceil === d1Ceil && !doneMap.get(d0Ceil)) {
+            doneMap.set(d0Ceil, true);
+            text = Math.floor(d0Fixed) + '';
+          } else if (d1Ceil === d1Fixed) {
+            text = d1Ceil + '';
+          } else {
+            return;
+          }                    
+        } else {
+          if (d0Ceil === d1Ceil) {
+            text = d1Ceil + '';
+          } else {
+            text = d0Ceil + ' – ' + d1Ceil;
+          } 
+        }        
+      }
+
       if (v.MinMax[0] < d[0] && v.MinMax[1] > d[1] ) {
-        if (this.casesMin === '') this.casesMin = d0Fixed;
+        if (this.casesMin === '') {
+          this.casesMin = text === Math.floor(d0Fixed) + '' ? Math.floor(d0Fixed) + '' : this.casesMin = d0Fixed;
+        }
         
         this.caseColors.push(
           {
             color: color,
-            text: d0Fixed + ((d[1]) ? ' – ' + d1Fixed : '+' )
+            text: text
           }
         );
 
@@ -107,7 +146,7 @@ export class LegendComponent implements OnInit {
         this.caseColors.push(
           {
             color: color,
-            text: d0Fixed + ((d[1]) ? ' – ' + d1Fixed : '+' )
+            text: text
           }
         );
 

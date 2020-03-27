@@ -2,7 +2,8 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: covid19vis-crawler-old-divi-hospitals-map
-  description: "Previous version of covid19vis-crawler-divi - backup data"  
+  annotations:
+    description: "Previous version of covid19vis-crawler-divi - backup data"  
 spec:
   # run at 9am
   schedule: "0 9 * * *"
@@ -17,6 +18,36 @@ spec:
             imagePullPolicy: Always
             command: ['python']
             args: ['crawler_map.py']
+            env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_PORT
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_PASS
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_NAME
+            - name: VERSION
+              value: {{ .Values.sha | quote }}
+            - name: ENV_TYPE
+              value: {{ .Values.envType | quote }}
           restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server
