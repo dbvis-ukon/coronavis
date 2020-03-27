@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DiviHospital } from '../services/divi-hospitals.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-about',
@@ -26,9 +27,28 @@ export class AboutComponent implements OnInit {
 
     this.http.get(
       `${environment.apiUrl}version`, { responseType: 'text'} )
+    .pipe(
+      catchError((e, d) => {
+        console.warn('could not fetch api server version', e)
+        return d;
+      })
+    )
     .subscribe(v => {
       this.apiVersion = v;
     });
+
+    this.http.get(
+      `${environment.tileServerUrl}version`, { responseType: 'text' }
+    )
+    .pipe(
+      catchError((e, d) => {
+        console.warn('could not fetch tile server version', e);
+        return d;
+      })
+    )
+    .subscribe(v => {
+      this.tileServerVersion = v;
+    })
 
   }
 
