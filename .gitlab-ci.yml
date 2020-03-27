@@ -610,8 +610,8 @@ deploy-tiles-production:
     - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / - | cut -c -53 | sed -E 's#-+$##')
     # DEBUG
     - echo $CHART_NAME
-    - helm3 delete --dry-run --debug ${CHART_NAME}
-    - helm3 delete ${CHART_NAME}
+    - helm3 delete --namespace=${K8_NAMESPACE} --dry-run --debug ${CHART_NAME}
+    - helm3 delete --namespace=${K8_NAMESPACE} ${CHART_NAME}
   dependencies: []
   allow_failure: true
   tags:
