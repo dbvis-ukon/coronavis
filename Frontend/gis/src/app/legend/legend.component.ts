@@ -66,10 +66,6 @@ export class LegendComponent implements OnInit {
     let prevColor;
     let prevD;
 
-    const dmin = v.NormValuesFunc.invert(cmap.invertExtent(cmap.range()[0])[0]) * normVal;    
-    const dmax = v.NormValuesFunc.invert(cmap.invertExtent(cmap.range()[cmap.range().length - 1])[1]) * normVal;
-
-
     let decimals: number = 0;
     cmap.range().map((color, i) => {
       const d = cmap.invertExtent(color);
@@ -84,7 +80,7 @@ export class LegendComponent implements OnInit {
       while(d0Fixed.toFixed(decimals) === d1Fixed.toFixed(decimals)) {
         decimals++;
       }
-      
+
       d0Fixed = +d0Fixed.toFixed(decimals);
       d1Fixed = +d1Fixed.toFixed(decimals);
 
