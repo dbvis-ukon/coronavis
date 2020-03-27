@@ -5,7 +5,7 @@ from flask import Blueprint
 routes = Blueprint('version', __name__, url_prefix='/version/')
 
 
-@routes.route('', strict_slashes=False)
+@routes.route('')
 def versioncheck():
     version = os.environ.get('VERSION')
     if not version:

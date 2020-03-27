@@ -18,6 +18,7 @@ from cache import cache
 
 # Create Flask application
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 
 try:
     DB_HOST = os.environ.get('DB_HOST')
