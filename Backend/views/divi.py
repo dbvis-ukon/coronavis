@@ -19,7 +19,7 @@ def get_hospitals_current():
     return jsonify(__as_feature_collection(hospitals)), 200
 
 
-@routes.route('development', methods=['GET'])
+@routes.route('/development', methods=['GET'])
 @cache.cached()
 def get_hospitals_development():
     """
@@ -29,7 +29,7 @@ def get_hospitals_development():
     return jsonify(__as_feature_collection(hospitals)), 200
 
 
-@routes.route('development/landkreise', methods=['GET'])
+@routes.route('/development/landkreise', methods=['GET'])
 @cache.cached()
 def get_hospitals_development_landkreise():
     """
@@ -39,7 +39,7 @@ def get_hospitals_development_landkreise():
     return jsonify(__as_feature_collection(hospitals)), 200
 
 
-@routes.route('development/regierungsbezirke', methods=['GET'])
+@routes.route('/development/regierungsbezirke', methods=['GET'])
 @cache.cached()
 def get_hospitals_development_regierungsbezirke():
     """
@@ -49,7 +49,7 @@ def get_hospitals_development_regierungsbezirke():
     return jsonify(__as_feature_collection(hospitals)), 200
 
 
-@routes.route('development/bundeslaender', methods=['GET'])
+@routes.route('/development/bundeslaender', methods=['GET'])
 @cache.cached()
 def get_hospitals_development_bundeslaender():
     """
