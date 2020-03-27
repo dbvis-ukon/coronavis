@@ -7,3 +7,5 @@ replicaCount: 1
 Group: dbvis
 Project: covid-19-vis-frontend
 Branch: master
+
+urlProtocol: https
