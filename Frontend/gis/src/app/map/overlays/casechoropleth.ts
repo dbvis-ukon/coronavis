@@ -149,6 +149,32 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
         .range(this.minMaxNormValues)
         .clamp(true);
     }
+	
+	const onAction = (e: L.LeafletMouseEvent, feature: any, aggregationLayer: any) => {
+		
+		   const onCloseAction : () => void = () => {
+			   aggregationLayer.resetStyle(e.target);
+		   };
+
+            const tooltipComponent = this.tooltipService
+              .openAtElementRef(CaseTooltipComponent, {x: e.originalEvent.clientX, y: e.originalEvent.clientY}, onCloseAction);
+
+            tooltipComponent.name = feature.properties.name;
+            tooltipComponent.combined = feature.properties.combined;
+            tooltipComponent.datum = feature.properties.until;
+            tooltipComponent.einwohner = +feature.properties.bevoelkerung;
+
+            // set highlight style
+            const l = e.target;
+            l.setStyle({
+              weight: 3,
+              color: '#666',
+              dashArray: '',
+              fillOpacity: 0.7
+            });
+
+            l.bringToFront();
+          };
 
 
     // create geojson layer (looks more complex than it is)
@@ -166,31 +192,11 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
       onEachFeature: (feature, layer) => {
         layer.on({
           // on mouseover update tooltip and highlight county
-          mouseover: (e: L.LeafletMouseEvent) => {
-
-            const tooltipComponent = this.tooltipService
-              .openAtElementRef(CaseTooltipComponent, {x: e.originalEvent.clientX, y: e.originalEvent.clientY});
-
-            tooltipComponent.name = feature.properties.name;
-            tooltipComponent.combined = feature.properties.combined;
-            tooltipComponent.datum = feature.properties.until;
-            tooltipComponent.einwohner = +feature.properties.bevoelkerung;
-
-            // set highlight style
-            const l = e.target;
-            l.setStyle({
-              weight: 3,
-              color: '#666',
-              dashArray: '',
-              fillOpacity: 0.7
-            });
-
-            l.bringToFront();
-          },
+          click: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer),
+		  mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer),
           // on mouseover hide tooltip and reset county to normal sytle
           mouseout: (e: L.LeafletMouseEvent) => {
             this.tooltipService.close();
-            aggregationLayer.resetStyle(e.target);
           }
         });
       }
