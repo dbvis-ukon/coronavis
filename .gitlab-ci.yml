@@ -636,7 +636,7 @@ deploy-tiles-production:
 #--------------------
 
 .deploy-backend-new: &deploy-backend-new
-  <<: *deploy-template
+  <<: *deploy-template-new
   <<: *rules-backend
   variables:
     APP: backend
@@ -645,7 +645,7 @@ deploy-tiles-production:
     RUN_ON_TAG: "no"
   environment:
     url: $URL_PROTOCOL://$URL
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -659,7 +659,7 @@ deploy-tiles-production:
     - export-environment
 
 deploy-backend-fb-new:
-  extends: .deploy-backend
+  extends: .deploy-backend-new
   variables:
     ENV_TYPE: review
     RUN_ON_FB: "yes"
@@ -667,20 +667,20 @@ deploy-backend-fb-new:
     on_stop: remove-deployment-backend-review
 
 deploy-backend-staging-new:
-  extends: .deploy-backend
+  extends: .deploy-backend-new
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
     K8_NAMESPACE: covid-19-vis-staging
 
 deploy-backend-production-new:
-  extends: .deploy-backend
+  extends: .deploy-backend-new
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
   environment:
-    name: $ENV_TYPE/$APP
+    name: new/$ENV_TYPE/$APP
 
 
 #--------------------
@@ -688,7 +688,7 @@ deploy-backend-production-new:
 #--------------------
 
 .deploy-frontend-new: &deploy-frontend-new
-  <<: *deploy-template
+  <<: *deploy-template-new
   <<: *rules-frontend
   variables:
     APP: frontend
@@ -697,7 +697,7 @@ deploy-backend-production-new:
     RUN_ON_TAG: "no"
   environment:
     url: $URL_PROTOCOL://$URL
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -712,7 +712,7 @@ deploy-backend-production-new:
 
 
 deploy-frontend-fb-new:
-  extends: .deploy-frontend
+  extends: .deploy-frontend-new
   environment:
     on_stop: remove-deployment-frontend-review
   variables:
@@ -720,27 +720,27 @@ deploy-frontend-fb-new:
     RUN_ON_FB: "yes"
 
 deploy-frontend-staging-new:
-  extends: .deploy-frontend
+  extends: .deploy-frontend-new
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
     K8_NAMESPACE: covid-19-vis-staging
 
 deploy-frontend-production-new:
-  extends: .deploy-frontend
+  extends: .deploy-frontend-new
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
   environment:
-    name: $ENV_TYPE/$APP
+    name: new/$ENV_TYPE/$APP
 
 #--------------------
 # CRAWLER
 #--------------------
 
 .deploy-crawler-new: &deploy-crawler-new
-  <<: *deploy-template
+  <<: *deploy-template-new
   <<: *rules-crawler
   variables:
     APP: crawler
@@ -749,7 +749,7 @@ deploy-frontend-production-new:
     RUN_ON_TAG: "no"
   environment:
     # url: $URL_PROTOCOL://$URL
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -775,20 +775,20 @@ deploy-frontend-production-new:
   #    RUN_ON_MASTER: "yes"
 
 deploy-crawler-production-new:
-  extends: .deploy-crawler
+  extends: .deploy-crawler-new
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
   environment:
-    name: $ENV_TYPE/$APP
+    name: new/$ENV_TYPE/$APP
 
 #--------------------
 # TILES
 #--------------------
 
 .deploy-tiles-new: &deploy-tiles-new
-  <<: *deploy-template
+  <<: *deploy-template-new
   <<: *rules-tiles
   variables:
     APP: tiles
@@ -797,7 +797,7 @@ deploy-crawler-production-new:
     RUN_ON_TAG: "no"
   environment:
     url: $URL_PROTOCOL://$URL
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -817,20 +817,20 @@ deploy-crawler-production-new:
 #     RUN_ON_FB: "yes"
 
 deploy-tiles-staging-new:
-  extends: .deploy-tiles
+  extends: .deploy-tiles-new
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
     K8_NAMESPACE: covid-19-vis-staging
 
 deploy-tiles-production-new:
-  extends: .deploy-tiles
+  extends: .deploy-tiles-new
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
   environment:
-    name: $ENV_TYPE/$APP
+    name: new/$ENV_TYPE/$APP
 
 ###########################################
 # CLEANUP
