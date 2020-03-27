@@ -1,0 +1,22 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: covid19vis-crawler-patient-cases
+  description: "RKI individual cases including statistical information per patient"
+spec:
+  # run at 9am
+  schedule: "0 9 * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          containers:
+          - name: covid19vis-crawler-patient-cases
+            image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
+            imagePullPolicy: Always
+            command: ['python']
+            args: ['crawl_rki_cases.py']
+          restartPolicy: Never
+          imagePullSecrets:
+            - name: regcred-server
