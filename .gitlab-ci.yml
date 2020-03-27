@@ -28,6 +28,7 @@ export-environment:
     - URL_PREFIX=""
     - FRONTEND_URL_TILES_PREFIX=""
     - URL_PROTOCOL="https"
+    - ENV_TYPE="review"
     # multiple things happen here:
     # URL_PREFIX: 
     # if tag => ""
@@ -38,7 +39,7 @@ export-environment:
     # if tag => ""
     # if master => "staging."
     # if fb => "staging."
-    - if ! [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then FRONTEND_URL_TILES_PREFIX="staging."; if [[ ${CI_COMMIT_BRANCH} =~ ^${STAGING_BRANCH}$ ]]; then URL_PREFIX="staging."; else URL_PREFIX="${SHORTENED_CI_COMMIT_REF_SLUG}."; URL_PROTOCOL="http"; fi fi
+    - if ! [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then FRONTEND_URL_TILES_PREFIX="staging."; ENV_TYPE="staging"; if [[ ${CI_COMMIT_BRANCH} =~ ^${STAGING_BRANCH}$ ]]; then URL_PREFIX="staging."; else URL_PREFIX="${SHORTENED_CI_COMMIT_REF_SLUG}."; URL_PROTOCOL="http"; ENV_TYPE="production"; fi fi
     # Build the frontend url: prefix.suffix
     - URL_FRONTEND="${URL_PREFIX}${URL_SUFFIX}"
     # Build the backend url: prefix.api.suffix
@@ -50,7 +51,8 @@ export-environment:
     # This variable is used in the build job to set the tiles server url in the environment.prod.ts
     - FRONTEND_URL_TILES="${FRONTEND_URL_TILES_PREFIX}tiles.${URL_SUFFIX}"
     # all the stuff into the var.env
-    - echo "VERSION=$VERSION" >> var.env
+    - echo "ENV_TYPE=${ENV_TYPE}"
+    - echo "VERSION=${VERSION}" >> var.env
     - echo "URL_PROTOCOL=${URL_PROTOCOL}" >> var.env
     - echo "URL_FRONTEND=${URL_FRONTEND}" >> var.env
     - echo "URL_BACKEND=${URL_BACKEND}" >> var.env
@@ -259,6 +261,8 @@ build-frontend:
     - export FRONTEND_URL_BACKEND
     - export FRONTEND_URL_TILES
     - export URL_PROTOCOL
+    - export VERSION
+    - export ENV_TYPE
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
     - npm install --unsafe-perm
@@ -389,8 +393,8 @@ dockerize-tiles:
     # write the url into the var.env file for the dynamic env url generation
     - echo "URL=${URL}" >> var.env
     # use chart name and the folder by uppercasing the first character of the app name; result: Backend
-    - helm3 upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} ${CHART_NAME} ./k8/${APP^}
-    - helm3 upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} ${CHART_NAME} ./k8/${APP^}
+    - helm3 upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} --set envType=${ENV_TYPE} ${CHART_NAME} ./k8/${APP^}
+    - helm3 upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} --set envType=${ENV_TYPE} ${CHART_NAME} ./k8/${APP^}
   tags:
     - k8-admin
 
