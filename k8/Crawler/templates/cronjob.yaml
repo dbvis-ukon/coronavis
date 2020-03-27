@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: covid19vis-crawler
+  name: covid19vis-crawler-divi-hospitals-table
   description: "DIVI Intensivregister for hospitals stating availability of beds"  
 spec:
   # run every four hours
@@ -12,7 +12,7 @@ spec:
       template:
         spec:
           containers:
-          - name: covid19vis-crawler
+          - name: covid19vis-crawler-divi-hospitals-table
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
@@ -26,7 +26,7 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: covid19vis-crawler-map
+  name: covid19vis-crawler-old-divi-hospitals-map
   description: "Previous version of covid19vis-crawler-divi - backup data"  
 spec:
   # run at 9am
@@ -37,7 +37,7 @@ spec:
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-map
+          - name: covid19vis-crawler-old-divi-hospitals-map
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
@@ -51,7 +51,7 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: covid19vis-crawler-rki
+  name: covid19vis-crawler-rki-lk-bl-cases
   description: "RKI cases on LK and BL level aggregated"
 spec:
   # run at 9am
@@ -62,7 +62,7 @@ spec:
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-rki
+          - name: covid19vis-crawler-rki-lk-bl-cases
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
@@ -76,7 +76,7 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: covid19vis-crawler-cases
+  name: covid19vis-crawler-patient-cases
   description: "RKI individual cases including statistical information per patient"
 spec:
   # run at 9am
@@ -87,7 +87,7 @@ spec:
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-cases
+          - name: covid19vis-crawler-patient-cases
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
@@ -101,7 +101,7 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: covid19vis-crawler-divi
+  name: covid19vis-crawler-divi-hospitals-map
   description: "DIVI Intensivregister detailed bed count per hospital (actual numbers, not colors)"
 spec:
   # run every four hours
@@ -112,7 +112,7 @@ spec:
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-divi
+          - name: covid19vis-crawler-divi-hospitals-map
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
