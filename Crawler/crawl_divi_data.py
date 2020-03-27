@@ -29,7 +29,8 @@ try:
 
 except KeyError as e:
     logger.error('One or multiple necessary environment variables not set, stopping crawler')
-    sys.exit()
+    # return non-zero exit code to indicate an error
+    sys.exit(1)
 
 print('Crawler for DIVI Data')
 
