@@ -77,8 +77,8 @@ export class LegendComponent implements OnInit {
       let d1Fixed = (d[1] * normVal);
 
       // Calculate number of appropriate decimals:
-      while(d0Fixed.toFixed(decimals) === d1Fixed.toFixed(decimals)) {
-        decimals++;
+      while (d0Fixed.toFixed(decimals) === d1Fixed.toFixed(decimals)) {
+        decimals++; // Keep this decimals level for all following  steps
       }
 
       d0Fixed = +d0Fixed.toFixed(decimals);
