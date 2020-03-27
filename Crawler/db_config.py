@@ -11,11 +11,11 @@ logger = logging.getLogger(__name__)
 
 # create postgresql connection string
 try:
-    DB_HOST = os.environ.get('DB_HOST')
-    DB_PORT = os.environ.get('DB_PORT')
-    DB_USER = os.environ.get('DB_USER')
-    DB_PASS = os.environ.get('DB_PASS')
-    DB_NAME = os.environ.get('DB_NAME')
+    DB_HOST = os.environ.get('DB_HOST').replace('\n', '')
+    DB_PORT = os.environ.get('DB_PORT').replace('\n', '')
+    DB_USER = os.environ.get('DB_USER').replace('\n', '')
+    DB_PASS = os.environ.get('DB_PASS').replace('\n', '')
+    DB_NAME = os.environ.get('DB_NAME').replace('\n', '')
 
     if None in (DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME):
         raise KeyError
