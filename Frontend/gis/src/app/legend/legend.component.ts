@@ -80,6 +80,7 @@ export class LegendComponent implements OnInit {
 
     
 
+    this.casesMin = '';
     cmap.range().map((color, i) => {
       const d = cmap.invertExtent(color);
 
@@ -87,11 +88,11 @@ export class LegendComponent implements OnInit {
       d[1] = v.NormValuesFunc.invert(d[1]);
 
       const d0Fixed = (d[0] * normVal).toFixed(0);
-      if (i === 0) this.casesMin = d0Fixed;
       const d1Fixed = (d[1] * normVal).toFixed(0);
       this.casesMax = d1Fixed;
       if (v.MinMax[0] < d[0] && v.MinMax[1] > d[1] ) {
-
+        if (this.casesMin === '') this.casesMin = d0Fixed;
+        
         this.caseColors.push(
           {
             color: color,
