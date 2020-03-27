@@ -14,10 +14,8 @@ def get_hospitals():
     """
         Return all Hospitals
     """
-    hospitals = db.session.query(Hospital).distinct(Hospital.name).order_by(
-        Hospital.name, Hospital.last_update.desc()).all()
+    hospitals = db.session.query(Hospital).all()
     return jsonify(__as_feature_collection(hospitals)), 200
-
 
 @routes.route('/landkreise', methods=['GET'])
 @cache.cached()
