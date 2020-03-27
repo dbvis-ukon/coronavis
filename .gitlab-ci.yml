@@ -606,7 +606,9 @@ deploy-tiles-production:
 
 .deploy-script-new: &deploy-template-new
   stage: deploy
-  image: alpine/helm:3.1.2
+  image:
+    name: alpine/helm:3.1.2
+    entrypoint: [""]
   script:
     - KUBECONFIG=$KUBECONFIG_NEW
     - echo $KUBECONFIG
@@ -884,6 +886,9 @@ remove-deployment-frontend-review:
 
 .remove-deployment-new:
   stage: deploy
+  image:
+    name: alpine/helm:3.1.2
+    entrypoint: [""]
   variables:
     GIT_STRATEGY: none
     RUN_ON_FB: "no"
@@ -900,7 +905,7 @@ remove-deployment-frontend-review:
   dependencies: []
   allow_failure: true
   tags:
-    - k8-admin
+    - docker
 
 remove-deployment-backend-review-new:
   extends: .remove-deployment-new
