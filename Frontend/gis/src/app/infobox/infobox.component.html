@@ -148,7 +148,7 @@
             (change)="mo.covidNumberCaseOptions.timeWindow = $event.value; emitMapOptions()"
           >
             <mat-button-toggle [value]="eCovidNumberCaseTimeWindow.all" [disabled]="mo.covidNumberCaseOptions.change == eCovidNumberCaseChange.relative">Alle Daten</mat-button-toggle>
-            <mat-button-toggle [value]="eCovidNumberCaseTimeWindow.twentyFourhours">letze 24 Stunden</mat-button-toggle>
+            <mat-button-toggle [value]="eCovidNumberCaseTimeWindow.twentyFourhours">letzte 24 Stunden</mat-button-toggle>
             <mat-button-toggle [value]="eCovidNumberCaseTimeWindow.seventyTwoHours">letzte 72 Stunden</mat-button-toggle>
           </mat-button-toggle-group>
           </div>
@@ -165,7 +165,7 @@
             [value]="mo.covidNumberCaseOptions.change"
             (change)="mo.covidNumberCaseOptions.change = $event.value; emitMapOptions()"
           >
-            <mat-button-toggle [value]="eCovidNumberCaseChange.absolute">Alle erfassen Fälle</mat-button-toggle>
+            <mat-button-toggle [value]="eCovidNumberCaseChange.absolute">Alle erfassten Fälle</mat-button-toggle>
             <mat-button-toggle [value]="eCovidNumberCaseChange.relative" [disabled]="eCovidNumberCaseTimeWindow.all == mo.covidNumberCaseOptions.timeWindow">Veränderung im gewählten Zeitraum</mat-button-toggle>
           </mat-button-toggle-group>
           </div>
