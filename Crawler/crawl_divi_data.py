@@ -8,12 +8,28 @@ import psycopg2 as pg
 import psycopg2.extras
 import psycopg2.extensions
 import re
+import sys
+import os
 import json
 import datetime
 import requests
 
-from db_config import SQLALCHEMY_DATABASE_URI
+# create postgresql connection string
+try:
+    DB_HOST = os.environ.get('DB_HOST').replace('\n', '')
+    DB_PORT = os.environ.get('DB_PORT').replace('\n', '')
+    DB_USER = os.environ.get('DB_USER').replace('\n', '')
+    DB_PASS = os.environ.get('DB_PASS').replace('\n', '')
+    DB_NAME = os.environ.get('DB_NAME').replace('\n', '')
 
+    if None in (DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME):
+        raise KeyError
+
+    SQLALCHEMY_DATABASE_URI = f"dbname='{DB_NAME}' user='{DB_USER}' host='{DB_HOST}' password='{DB_PASS}' port={DB_PORT}"
+
+except KeyError as e:
+    logger.error('One or multiple necessary environment variables not set, stopping crawler')
+    sys.exit()
 
 print('Crawler for DIVI Data')
 
