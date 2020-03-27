@@ -69,6 +69,23 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     width: 38,
     height: 28
   };
+  
+  // Some cities have double names. These are the first parts
+  private double_names = new Set(['Sankt', 'St.', 'Bergisch','Königs','Lutherstadt','Schwäbisch']);
+  // Regexes for cleaning city names
+  private rx_adr = /.*\d{4,5} /;
+  private rx_bad = /^Bad /;
+  private rx_slash = /\/.*/;
+  private rx_dash = /-([A-Z])[a-zäöü]{6,}/;
+  // Extract the city name from the address and shorten
+  private shorten_city_name(address) {
+    let name_parts = address.replace(this.rx_adr,'') // Remove address
+        .replace(this.rx_bad,'') // Remove 'Bad'
+        .replace(this.rx_slash, '') // Remove additional descriptions
+        .replace(this.rx_dash, '-$1.') // Initials for second of double names
+        .split(' ');
+    return this.double_names.has(name_parts[0]) ? name_parts.slice(0,2).join(' ') : name_parts[0];
+  }
 
   createOverlay(map: L.Map) {
     this.map = map;
@@ -165,11 +182,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     this.cityHospitalsShadow = this.gHospitals
       .append('text')
-      .text(d1 => {
-        // Hackity hack :)
-        const splitted = d1.Adress.split(' ');
-        return splitted[splitted.length - 1];
-      })
+      .text(d1 => this.shorten_city_name(d1.Adress))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .style('text-anchor', 'middle')
       .attr('y', '22')
@@ -182,11 +195,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     this.cityHospitals = this.gHospitals
       .append('text')
-      .text(d1 => {
-        // Hackity hack :)
-        const splitted = d1.Adress.split(' ');
-        return splitted[splitted.length - 1];
-      })
+      .text(d1 => this.shorten_city_name(d1.Adress))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .style('text-anchor', 'middle')
       .attr('y', '22')
