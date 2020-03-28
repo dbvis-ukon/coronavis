@@ -4,15 +4,15 @@
   <tbody>
   <tr>
     <td><strong>ICU - Low Care:</strong> </td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuLowCare) }">{{ data.icuLowCare }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ data.icu_low_care_frei }} / {{ data.icu_ecmo_care_belegt }} </td>
   </tr>
   <tr>
     <td><strong>ICU - High Care: </strong></td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuHighCare) }">{{ data.icuHighCare }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ data.icu_high_care_frei }} / {{ data.icu_high_care_belegt }} </td>
   </tr>
   <tr>
     <td><strong>ECMO: </strong></td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.ECMO) }">{{ data.ECMO }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ data.icu_ecmo_care_frei }} / {{ data.icu_ecmo_care_belegt }}</td>
   </tr>
   </tbody>
 </table>
@@ -22,14 +22,14 @@
   <!--h3>{{ data.Name }}</h3>
   <mat-divider></mat-divider-->
   <p style="margin-top: 10px;">
-    <strong>Adresse: </strong> {{ data.Adress }}
+    <strong>Adresse: </strong> {{ data.Address }}
   </p>
   <p>
-    <strong>Kontakt: </strong> 
-    <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a> 
+    <strong>Kontakt: </strong>
+    <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a>
     <span *ngIf="!url">{{ contactMsg }}</span>
   </p>
 </div>
 
-<p><strong>Letzter Stand: </strong> {{ data.Stand }}</p>
+<p><strong>Letzter Stand: </strong> TODO</p>
 

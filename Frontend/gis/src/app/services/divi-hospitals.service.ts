@@ -195,7 +195,7 @@ export class DiviHospitalsService {
   }
 
   public getDiviHospitalsStates(): Observable<DiviAggregatedHospital[]> {
-    return this.http.get<AggregatedHospitals>(`${environment.apiUrl}divi/development/bundeslander`)
+    return this.http.get<AggregatedHospitals>(`${environment.apiUrl}divi/development/bundeslaender`)
       .pipe(
         map(this.myAggregatedMapper)
       );
