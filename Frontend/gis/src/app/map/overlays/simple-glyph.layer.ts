@@ -69,7 +69,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     width: 38,
     height: 28
   };
-  
+
   // Some cities have double names. These are the first parts
   private double_names = new Set(['Sankt', 'St.', 'Bergisch','Königs','Lutherstadt','Schwäbisch']);
   // Regexes for cleaning city names
@@ -182,7 +182,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     this.cityHospitalsShadow = this.gHospitals
       .append('text')
-      .text(d1 => this.shorten_city_name(d1.Adress))
+      .text(d1 => this.shorten_city_name(d1.Webaddress))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .style('text-anchor', 'middle')
       .attr('y', '22')
