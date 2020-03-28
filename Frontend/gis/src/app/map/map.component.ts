@@ -27,6 +27,7 @@ import {BedBackgroundOptions} from './options/bed-background-options';
 import {BedGlyphOptions} from './options/bed-glyph-options';
 import {MatDialog} from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
+import { GlyphLayer } from './overlays/GlyphLayer';
 
 
 @Component({
@@ -121,54 +122,20 @@ export class MapComponent implements OnInit {
             '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         });
 
-    /*const webGlMap = L.mapboxGL({
-      accessToken: 'pk.eyJ1IjoianVyaWIiLCJhIjoiY2s4MndsZTl0MDR2cDNobGoyY3F2YngyaiJ9.xwBjxEn_grzetKOVZDcyqA',
-      style: 'mapbox://styles/jurib/ck82xkh3z3i7b1iodexbt39x9'
-    });*/
-
     // create map, set initial view to basemap and zoom level to center of BW
     this.mymap = L.map('main', {
-      minZoom: 5,
+      minZoom: 7,
       maxZoom: 10,
       layers: [tiledMap],
       zoomControl: false
     }).setView([48.6813312, 9.0088299], 9);
 
     new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
-    // this.mymap.on('viewreset', () => this.updateSvg());
-    // this.mymap.on('zoom', () => this.updateSvg());
-
-
-    // create maps and overlay objects for leaflet control
-    // const baseMaps = {
-    //   // Empty: emptyTiles,
-    //   // OpenStreetMap: openstreetmap,
-    //   // MennaMap: mennaMap,
-    //   BaseMap: juriMap
-    //   // OpenStreetMap: basemap,
-    //   // MapTiler: gl
-    // };
-
-    // // add a control which lets us toggle maps and overlays
-    // this.layerControl = L.control.layers(baseMaps);
-    // this.layerControl.addTo(this.mymap);
 
     // Choropleth layers on hover
     this.hospitallayerService.getLayers().subscribe(layer => {
       this.choroplethLayerMap.set(this.getBedChoroplethKey(layer.getAggregationLevel(), layer.getGlyphState()), layer.createOverlay());
     });
-    // const layerEvents: Subject<GlyphHoverEvent> = new Subject<GlyphHoverEvent>();
-    // layerEvents.subscribe(event => {
-      // const layer = this.choroplethLayerMap.get(event.name);
-      // if (layer) {
-      //   if (event.type === "enter") {
-      //     layer.bringToBack();
-      //     this.mymap.addLayer(layer);
-      //   } else {
-      //     this.mymap.removeLayer(layer);
-      //   }
-      // }
-    // });
 
     // init the glyph layers
     forkJoin([
@@ -196,7 +163,7 @@ export class MapComponent implements OnInit {
         const simpleGlyphLayer = simpleGlyphFactory.createOverlay(this.mymap);
         const l = L.layerGroup([simpleGlyphLayer]);
         this.aggregationLevelToGlyphMap.set(AggregationLevel.none, l);
-        this.layerToFactoryMap.set(simpleGlyphLayer, simpleGlyphFactory);
+        this.layerToFactoryMap.set(l, simpleGlyphFactory);
 
 
         this.addGlyphMap(result, 1, AggregationLevel.county, 'ho_county', 'landkreise');
@@ -227,26 +194,6 @@ export class MapComponent implements OnInit {
     this.dataService.getCaseData(AggregationLevel.state).subscribe(data => {
       this.choropletDataMap.set(AggregationLevel.state, data);
     });
-
-    this.mymap.on('zoom', this.semanticZoom);
-  }
-
-  semanticZoom() {
-    // if (!this.aggHospitalCounty || !this.aggHospitalGovernmentDistrict) {
-    //   return;
-    // }
-    // const zoom = this.mymap.getZoom();
-
-    // if (zoom >= 10) {
-    //   this.mymap.removeLayer(this.aggHospitalCounty);
-    //   this.mymap.removeLayer(this.aggHospitalGovernmentDistrict);
-    // } else if (zoom >= 7 && zoom < 10) {
-    //   this.mymap.addLayer(this.aggHospitalCounty);
-    //   this.mymap.removeLayer(this.aggHospitalGovernmentDistrict);
-    // } else {
-    //   this.mymap.removeLayer(this.aggHospitalCounty);
-    //   this.mymap.addLayer(this.aggHospitalGovernmentDistrict);
-    // }
   }
 
   private addGlyphMap(result: any[], index: number, agg: AggregationLevel, name: string, granularity: string) {
@@ -279,6 +226,7 @@ export class MapComponent implements OnInit {
     // remove all layers
     this.aggregationLevelToGlyphMap.forEach(l => {
       this.mymap.removeLayer(l);
+      (this.layerToFactoryMap.get(l) as unknown as GlyphLayer).setVisibility(false);
     });
 
     if(o.enabled === false) {
@@ -291,6 +239,7 @@ export class MapComponent implements OnInit {
 
     const l = this.aggregationLevelToGlyphMap.get(o.aggregationLevel);
     this.mymap.addLayer(l);
+    (this.layerToFactoryMap.get(l) as unknown as GlyphLayer).setVisibility(true);
 
     if (l.getLayers().length > 1) {
 

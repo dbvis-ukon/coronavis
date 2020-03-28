@@ -6,14 +6,15 @@ import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.compone
 import {DiviHospital} from 'src/app/services/divi-hospitals.service';
 import {ColormapService} from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
-import {quadtree} from 'd3';
 import { Observable } from 'rxjs';
 import { BedGlyphOptions } from '../options/bed-glyph-options';
 import { BedType } from '../options/bed-type.enum';
 import { MatDialog } from '@angular/material/dialog';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
+import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
+import {GlyphLayer} from "./GlyphLayer";
 
-export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
+export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
   private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private nameHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
@@ -21,6 +22,10 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
   private nameHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private cityHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private map: L.Map;
+
+  private visible: boolean = false;
+
+  private forceLayout: ForceDirectedLayout<DiviHospital>;
 
   constructor(
     name: string,
@@ -33,6 +38,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     super(name, null);
     this.enableDefault = true;
 
+    this.forceLayout = new ForceDirectedLayout<DiviHospital>(this.data, this.updateGlyphPositions.bind(this));
 
     this.glyphOptions.subscribe(opt => {
       if(!this.gHospitals || !opt) {
@@ -50,15 +56,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       this.gHospitals
         .selectAll(`.bed.${BedType.ecmo}`)
         .style('opacity', opt.showEcmo ? '1' : '0');
-
-
     });
   }
-
-
-  private lastTransform;
-
-  private labelLayout;
 
   private latLngPoint(latlng: L.LatLngExpression): L.Point {
     return this.map.project(latlng, 9);
@@ -69,7 +68,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     width: 38,
     height: 28
   };
-  
+
   // Some cities have double names. These are the first parts
   private double_names = new Set(['Sankt', 'St.', 'Bergisch','Königs','Lutherstadt','Schwäbisch']);
   // Regexes for cleaning city names
@@ -240,14 +239,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     });
   }
 
-  startForceSimulation(glyphSizes): d3.Simulation<any, undefined> {
-    return d3.forceSimulation(this.data)
-      .alpha(0.1)
-      .force("collide", this.quadtreeCollide(glyphSizes))
-      .on('end', () => this.ticked());
-  }
-
-  ticked() {
+  updateGlyphPositions() {
     this.gHospitals
       .transition().duration(100)
       .attr('transform', (d, i) => {
@@ -259,7 +251,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     const zoom = this.map.getZoom();
     const scale = Math.pow(9 / (zoom), 4);
 
-    if (this.map.getZoom() > 8) {
+    // Resize glyph bounding boxes + show/hide labels
+    if (this.map.getZoom() >= 9) {
       this.glyphSize.height = 40;
       this.glyphSize.width = 80;
 
@@ -268,7 +261,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
       this.nameHospitals.classed('hiddenLabel', false);
       this.nameHospitalsShadow.classed('hiddenLabel', false);
-    } else if (this.map.getZoom() < 9 && this.map.getZoom() > 6) {
+    } else if (this.map.getZoom() === 8) {
       this.glyphSize.height = 28;
       this.glyphSize.width = 38;
 
@@ -277,7 +270,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
       this.nameHospitals.classed('hiddenLabel', true);
       this.nameHospitalsShadow.classed('hiddenLabel', true);
-    } else if (this.map.getZoom() < 7) {
+    } else if (this.map.getZoom() === 7) {
       this.glyphSize.height = 14;
       this.glyphSize.width = 38;
 
@@ -287,18 +280,6 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       this.nameHospitalsShadow.classed('hiddenLabel', true);
     }
 
-    this.data.forEach(d => {
-      d.x = d._x;
-      d.y = d._y;
-    });
-
-    if (this.labelLayout) {
-      this.labelLayout.stop();
-    }
-    this.labelLayout = this.startForceSimulation([[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]]);
-
-    // console.log('zoomed', this.map.getZoom(), scale);
-
     this.gHospitals
       .selectAll('*')
       .transition()
@@ -307,187 +288,12 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
         return `scale(${scale}, ${scale})`;
       });
 
-  }
-
-  private quadtreeCollide(bbox) {
-    bbox = constant(bbox)
-
-    let nodes;
-    let boundingBoxes;
-    let strength = 0.1;
-    let iterations = 1;
-
-    force.initialize = function (_) {
-      var i, n = (nodes = _).length;
-      boundingBoxes = new Array(n);
-      for (i = 0; i < n; ++i) boundingBoxes[i] = bbox(nodes[i], i, nodes);
-    };
-
-    function x(d) {
-      return d.x + d.vx;
+    if (!this.visible) {
+      return;
     }
 
-    function y(d) {
-      return d.y + d.vy;
-    }
-
-    function constant(x: [[number, number], [number, number]]) {
-      return function () {
-        return x;
-      };
-    }
-
-    function force() {
-      var i,
-        tree,
-        node,
-        xi,
-        yi,
-        bbi,
-        nx1,
-        ny1,
-        nx2,
-        ny2
-
-      var cornerNodes = []
-      nodes.forEach(function (d, i) {
-        cornerNodes.push({
-          node: d,
-          vx: d.vx,
-          vy: d.vy,
-          x: d.x + (boundingBoxes[i][1][0] + boundingBoxes[i][0][0]) / 2,
-          y: d.y + (boundingBoxes[i][0][1] + boundingBoxes[i][1][1]) / 2
-        })
-        cornerNodes.push({
-          node: d,
-          vx: d.vx,
-          vy: d.vy,
-          x: d.x + boundingBoxes[i][0][0],
-          y: d.y + boundingBoxes[i][0][1]
-        })
-        cornerNodes.push({
-          node: d,
-          vx: d.vx,
-          vy: d.vy,
-          x: d.x + boundingBoxes[i][0][0],
-          y: d.y + boundingBoxes[i][1][1]
-        })
-        cornerNodes.push({
-          node: d,
-          vx: d.vx,
-          vy: d.vy,
-          x: d.x + boundingBoxes[i][1][0],
-          y: d.y + boundingBoxes[i][0][1]
-        })
-        cornerNodes.push({
-          node: d,
-          vx: d.vx,
-          vy: d.vy,
-          x: d.x + boundingBoxes[i][1][0],
-          y: d.y + boundingBoxes[i][1][1]
-        })
-      })
-      var cn = cornerNodes.length
-
-      for (var k = 0; k < iterations; ++k) {
-        tree = quadtree(cornerNodes, x, y).visitAfter(prepareCorners);
-
-        for (i = 0; i < cn; ++i) {
-          var nodeI = ~~(i / 5);
-          node = nodes[nodeI]
-          bbi = boundingBoxes[nodeI]
-          xi = node.x + node.vx
-          yi = node.y + node.vy
-          nx1 = xi + bbi[0][0]
-          ny1 = yi + bbi[0][1]
-          nx2 = xi + bbi[1][0]
-          ny2 = yi + bbi[1][1]
-          tree.visit(apply);
-        }
-      }
-
-      function apply(quad, x0, y0, x1, y1) {
-        var data = quad.data
-        if (data) {
-          var bWidth = bbLength(bbi, 0),
-            bHeight = bbLength(bbi, 1);
-
-          if (data.node.index !== nodeI) {
-            var dataNode = data.node
-            var bbj = boundingBoxes[dataNode.index],
-              dnx1 = dataNode.x + dataNode.vx + bbj[0][0],
-              dny1 = dataNode.y + dataNode.vy + bbj[0][1],
-              dnx2 = dataNode.x + dataNode.vx + bbj[1][0],
-              dny2 = dataNode.y + dataNode.vy + bbj[1][1],
-              dWidth = bbLength(bbj, 0),
-              dHeight = bbLength(bbj, 1)
-
-            if (nx1 <= dnx2 && dnx1 <= nx2 && ny1 <= dny2 && dny1 <= ny2) {
-
-              var xSize = [Math.min.apply(null, [dnx1, dnx2, nx1, nx2]), Math.max.apply(null, [dnx1, dnx2, nx1, nx2])]
-              var ySize = [Math.min.apply(null, [dny1, dny2, ny1, ny2]), Math.max.apply(null, [dny1, dny2, ny1, ny2])]
-
-              var xOverlap = bWidth + dWidth - (xSize[1] - xSize[0])
-              var yOverlap = bHeight + dHeight - (ySize[1] - ySize[0])
-
-              var xBPush = xOverlap * strength / 5 * (yOverlap / bHeight)
-              var yBPush = yOverlap * strength * (xOverlap / bWidth)
-
-              var xDPush = xOverlap * strength / 5 * (yOverlap / dHeight)
-              var yDPush = yOverlap * strength * (xOverlap / dWidth)
-
-              if ((nx1 + nx2) / 2 < (dnx1 + dnx2) / 2) {
-                node.vx -= xBPush
-                dataNode.vx += xDPush
-              } else {
-                node.vx += xBPush
-                dataNode.vx -= xDPush
-              }
-              if ((ny1 + ny2) / 2 < (dny1 + dny2) / 2) {
-                node.vy -= yBPush
-                dataNode.vy += yDPush
-              } else {
-                node.vy += yBPush
-                dataNode.vy -= yDPush
-              }
-            }
-
-          }
-          return;
-        }
-
-        return x0 > nx2 || x1 < nx1 || y0 > ny2 || y1 < ny1;
-      }
-
-    }
-
-    function prepareCorners(quad) {
-
-      if (quad.data) {
-        return quad.bb = boundingBoxes[quad.data.node.index]
-      }
-      quad.bb = [[0, 0], [0, 0]]
-      for (var i = 0; i < 4; ++i) {
-        if (quad[i] && quad[i].bb[0][0] < quad.bb[0][0]) {
-          quad.bb[0][0] = quad[i].bb[0][0]
-        }
-        if (quad[i] && quad[i].bb[0][1] < quad.bb[0][1]) {
-          quad.bb[0][1] = quad[i].bb[0][1]
-        }
-        if (quad[i] && quad[i].bb[1][0] > quad.bb[1][0]) {
-          quad.bb[1][0] = quad[i].bb[1][0]
-        }
-        if (quad[i] && quad[i].bb[1][1] > quad.bb[1][1]) {
-          quad.bb[1][1] = quad[i].bb[1][1]
-        }
-      }
-    }
-
-    function bbLength(bbox, heightWidth) {
-      return bbox[1][heightWidth] - bbox[0][heightWidth]
-    }
-
-    return force;
+    const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
+    this.forceLayout.update(glyphBoxes, zoom);
   }
 
   wrap(text, width) {
@@ -521,4 +327,11 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     });
   }
 
+  setVisibility(v: boolean) {
+    this.visible = v;
+
+    if (this.visible) {
+      this.onZoomed();
+    }
+  }
 }
