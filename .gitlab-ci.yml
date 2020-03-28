@@ -257,7 +257,7 @@ export-environment:
 # BUILD
 ###########################################
 
-build-frontend:
+.build-frontend: &build-frontend
   stage: build:frontend
   image: node:latest
   script:
@@ -277,7 +277,7 @@ build-frontend:
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
     - npm install
-    - npm run-script build
+    - npm run-script build:i18n:${LOCALE}
   artifacts:
     expire_in: 1 day
     paths:
@@ -295,6 +295,16 @@ build-frontend:
     - export-environment
   tags:
     - docker
+
+build-frontend-de:
+  extends: .build-frontend
+  variables:
+    LOCALE: de
+
+build-frontend-en:
+  extends: .build-frontend
+  variables:
+    LOCALE: en
 
 ###########################################
 # DOCKERIZE
@@ -344,10 +354,12 @@ dockerize-frontend:
   <<: *dockerize-template
   <<: *rules-frontend
   needs:
-    - build-frontend
+    - build-frontend-de
+    - build-frontend-en
     - export-environment
   dependencies:
-    - build-frontend
+    - build-frontend-de
+    - build-frontend-en
     - export-environment
 
 dockerize-crawler:
