@@ -75,7 +75,6 @@ export interface AggregatedHospitalsProperties {
   name: string;
   ids: string;
   centroid: AggregatedHospitalsCentroid;
-  'last_update': string;
   'covid19_aktuell': TimestampedValue[];
   'covid19_beatmet': TimestampedValue[];
   'covid19_kumulativ': TimestampedValue[];
@@ -112,13 +111,13 @@ export interface TimestampedValue {
 }
 
 export interface DiviHospital {
-  'ID': number;
-  'Name': string;
-  'City': string;
-  'Postcode': string;
+  ID: number;
+  Name: string;
+  City: string;
+  Postcode: string;
+  Address: string;
   'Webaddress': string;
   'Location': LatLngLiteral;
-  'LastUpdate': Date;
   'covid19_aktuell': TimestampedValue[];
   'covid19_beatmet': TimestampedValue[];
   'covid19_kumulativ': TimestampedValue[];
@@ -148,7 +147,6 @@ export interface DiviAggregatedHospital {
   'ID': number;
   'Name': string;
   'Location': LatLngLiteral;
-  'LastUpdate': Date;
   'covid19_aktuell': TimestampedValue[];
   'covid19_beatmet': TimestampedValue[];
   'covid19_kumulativ': TimestampedValue[];
@@ -215,7 +213,7 @@ export class DiviHospitalsService {
       return {
         ID: +i.properties.id,
         Name: i.properties.name,
-        Adress: i.properties.address,
+        Address: i.properties.address,
         Kontakt: i.properties.contact,
         City: i.properties.ort,
         Postcode: i.properties.plz,
@@ -255,7 +253,6 @@ export class DiviHospitalsService {
           lat: i.properties.centroid.coordinates[1],
           lng: i.properties.centroid.coordinates[0]
         },
-        LastUpdate: new Date(i.properties.last_update),
         covid19_aktuell: i.properties.covid19_aktuell,
         covid19_beatmet: i.properties.covid19_beatmet,
         covid19_kumulativ: i.properties.covid19_kumulativ,

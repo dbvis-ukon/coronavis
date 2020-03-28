@@ -5,7 +5,7 @@ import {TooltipService} from 'src/app/services/tooltip.service';
 import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import {DiviHospital} from 'src/app/services/divi-hospitals.service';
 import {ColormapService} from 'src/app/services/colormap.service';
-import {FeatureCollection} from "geojson";
+import {FeatureCollection} from 'geojson';
 import {quadtree} from 'd3';
 import { Observable } from 'rxjs';
 import { BedGlyphOptions } from '../options/bed-glyph-options';
@@ -14,13 +14,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
 
 export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
-
-  private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-  private nameHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-  private cityHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-  private nameHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-  private cityHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-  private map: L.Map;
 
   constructor(
     name: string,
@@ -35,7 +28,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
 
     this.glyphOptions.subscribe(opt => {
-      if(!this.gHospitals || !opt) {
+      if (!this.gHospitals || !opt) {
         return;
       }
 
@@ -55,14 +48,17 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     });
   }
 
+  private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+  private nameHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+  private cityHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+  private nameHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+  private cityHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+  private map: L.Map;
+
 
   private lastTransform;
 
   private labelLayout;
-
-  private latLngPoint(latlng: L.LatLngExpression): L.Point {
-    return this.map.project(latlng, 9);
-  }
 
   private rectSize = 10;
   private glyphSize = {
@@ -71,20 +67,24 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
   };
 
   // Some cities have double names. These are the first parts
-  private double_names = new Set(['Sankt', 'St.', 'Bergisch','Königs','Lutherstadt','Schwäbisch']);
+  private doubleNames = new Set(['Sankt', 'St.', 'Bergisch', 'Königs', 'Lutherstadt', 'Schwäbisch']);
   // Regexes for cleaning city names
-  private rx_adr = /.*\d{4,5} /;
-  private rx_bad = /^Bad /;
-  private rx_slash = /\/.*/;
-  private rx_dash = /-([A-Z])[a-zäöü]{6,}/;
+  private rxAdr = /.*\d{4,5} /;
+  private rxBad = /^Bad /;
+  private rxSlash = /\/.*/;
+  private rxDash = /-([A-Z])[a-zäöü]{6,}/;
+
+  private latLngPoint(latlng: L.LatLngExpression): L.Point {
+    return this.map.project(latlng, 9);
+  }
   // Extract the city name from the address and shorten
   private shorten_city_name(address) {
-    let name_parts = address.replace(this.rx_adr,'') // Remove address
-        .replace(this.rx_bad,'') // Remove 'Bad'
-        .replace(this.rx_slash, '') // Remove additional descriptions
-        .replace(this.rx_dash, '-$1.') // Initials for second of double names
+    const nameParts = address.replace(this.rxAdr, '') // Remove address
+        .replace(this.rxBad, '') // Remove 'Bad'
+        .replace(this.rxSlash, '') // Remove additional descriptions
+        .replace(this.rxDash, '-$1.') // Initials for second of double names
         .split(' ');
-    return this.double_names.has(name_parts[0]) ? name_parts.slice(0,2).join(' ') : name_parts[0];
+    return this.doubleNames.has(nameParts[0]) ? nameParts.slice(0, 2).join(' ') : nameParts[0];
   }
 
   createOverlay(map: L.Map) {
@@ -123,12 +123,12 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     const yOffset = 2;
 
     this.gHospitals = d3.select(svgElement)
-      .style("pointer-events", "none")
+      .style('pointer-events', 'none')
       .selectAll('g.hospital')
       .data<DiviHospital>(this.data)
       .enter()
       .append<SVGGElement>('g')
-      .style("pointer-events", "all")
+      .style('pointer-events', 'all')
       .attr('class', 'hospital')
       .attr('transform', d => {
         const p = this.latLngPoint(d.Location);
@@ -138,7 +138,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
         d._y = p.y;
         return `translate(${p.x}, ${p.y})`;
       })
-      .on('mouseenter', function (d1: DiviHospital) {
+      .on('mouseenter', function(d1: DiviHospital) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
         t.diviHospital = d1;
@@ -195,7 +195,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     this.cityHospitals = this.gHospitals
       .append('text')
-      .text(d1 => this.shorten_city_name(d1.Adress))
+      .text(d1 => this.shorten_city_name(d1.Address))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .style('text-anchor', 'middle')
       .attr('y', '22')
@@ -207,7 +207,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('class', `bed ${BedType.icuLow}`)
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
-      .style('fill', d1 => colorScale(d1.icuLowCare))
+      .style('fill', d1 => 'red') // colorScale(d1.icuLowCare))
       .attr('x', padding)
       .attr('y', yOffset);
 
@@ -217,7 +217,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${this.rectSize}px`)
-      .style('fill', d1 => colorScale(d1.icuHighCare))
+      .style('fill', d1 => 'orange') // colorScale(d1.icuHighCare))
       .attr('y', yOffset)
       .attr('x', `${this.rectSize + padding * 2}px`);
 
@@ -227,7 +227,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${2 * this.rectSize}px`)
-      .style('fill', d1 => colorScale(d1.ECMO))
+      .style('fill', d1 => 'green') // colorScale(d1.ECMO))
       .attr('y', yOffset)
       .attr('x', `${2 * this.rectSize + padding * 3}px`);
 
@@ -243,7 +243,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
   startForceSimulation(glyphSizes): d3.Simulation<any, undefined> {
     return d3.forceSimulation(this.data)
       .alpha(0.1)
-      .force("collide", this.quadtreeCollide(glyphSizes))
+      .force('collide', this.quadtreeCollide(glyphSizes))
       .on('end', () => this.ticked());
   }
 
@@ -310,17 +310,17 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
   }
 
   private quadtreeCollide(bbox) {
-    bbox = constant(bbox)
+    bbox = constant(bbox);
 
     let nodes;
     let boundingBoxes;
-    let strength = 0.1;
-    let iterations = 1;
+    const strength = 0.1;
+    const iterations = 1;
 
-    force.initialize = function (_) {
-      var i, n = (nodes = _).length;
+    force.initialize = function(_) {
+      let i, n = (nodes = _).length;
       boundingBoxes = new Array(n);
-      for (i = 0; i < n; ++i) boundingBoxes[i] = bbox(nodes[i], i, nodes);
+      for (i = 0; i < n; ++i) { boundingBoxes[i] = bbox(nodes[i], i, nodes); }
     };
 
     function x(d) {
@@ -332,13 +332,13 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     }
 
     function constant(x: [[number, number], [number, number]]) {
-      return function () {
+      return function() {
         return x;
       };
     }
 
     function force() {
-      var i,
+      let i,
         tree,
         node,
         xi,
@@ -347,108 +347,108 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
         nx1,
         ny1,
         nx2,
-        ny2
+        ny2;
 
-      var cornerNodes = []
-      nodes.forEach(function (d, i) {
+      const cornerNodes = [];
+      nodes.forEach(function(d, i) {
         cornerNodes.push({
           node: d,
           vx: d.vx,
           vy: d.vy,
           x: d.x + (boundingBoxes[i][1][0] + boundingBoxes[i][0][0]) / 2,
           y: d.y + (boundingBoxes[i][0][1] + boundingBoxes[i][1][1]) / 2
-        })
+        });
         cornerNodes.push({
           node: d,
           vx: d.vx,
           vy: d.vy,
           x: d.x + boundingBoxes[i][0][0],
           y: d.y + boundingBoxes[i][0][1]
-        })
+        });
         cornerNodes.push({
           node: d,
           vx: d.vx,
           vy: d.vy,
           x: d.x + boundingBoxes[i][0][0],
           y: d.y + boundingBoxes[i][1][1]
-        })
+        });
         cornerNodes.push({
           node: d,
           vx: d.vx,
           vy: d.vy,
           x: d.x + boundingBoxes[i][1][0],
           y: d.y + boundingBoxes[i][0][1]
-        })
+        });
         cornerNodes.push({
           node: d,
           vx: d.vx,
           vy: d.vy,
           x: d.x + boundingBoxes[i][1][0],
           y: d.y + boundingBoxes[i][1][1]
-        })
-      })
-      var cn = cornerNodes.length
+        });
+      });
+      const cn = cornerNodes.length;
 
-      for (var k = 0; k < iterations; ++k) {
+      for (let k = 0; k < iterations; ++k) {
         tree = quadtree(cornerNodes, x, y).visitAfter(prepareCorners);
 
         for (i = 0; i < cn; ++i) {
-          var nodeI = ~~(i / 5);
-          node = nodes[nodeI]
-          bbi = boundingBoxes[nodeI]
-          xi = node.x + node.vx
-          yi = node.y + node.vy
-          nx1 = xi + bbi[0][0]
-          ny1 = yi + bbi[0][1]
-          nx2 = xi + bbi[1][0]
-          ny2 = yi + bbi[1][1]
+          const nodeI = ~~(i / 5);
+          node = nodes[nodeI];
+          bbi = boundingBoxes[nodeI];
+          xi = node.x + node.vx;
+          yi = node.y + node.vy;
+          nx1 = xi + bbi[0][0];
+          ny1 = yi + bbi[0][1];
+          nx2 = xi + bbi[1][0];
+          ny2 = yi + bbi[1][1];
           tree.visit(apply);
         }
       }
 
       function apply(quad, x0, y0, x1, y1) {
-        var data = quad.data
+        const data = quad.data;
         if (data) {
-          var bWidth = bbLength(bbi, 0),
+          const bWidth = bbLength(bbi, 0),
             bHeight = bbLength(bbi, 1);
 
           if (data.node.index !== nodeI) {
-            var dataNode = data.node
-            var bbj = boundingBoxes[dataNode.index],
+            const dataNode = data.node;
+            const bbj = boundingBoxes[dataNode.index],
               dnx1 = dataNode.x + dataNode.vx + bbj[0][0],
               dny1 = dataNode.y + dataNode.vy + bbj[0][1],
               dnx2 = dataNode.x + dataNode.vx + bbj[1][0],
               dny2 = dataNode.y + dataNode.vy + bbj[1][1],
               dWidth = bbLength(bbj, 0),
-              dHeight = bbLength(bbj, 1)
+              dHeight = bbLength(bbj, 1);
 
             if (nx1 <= dnx2 && dnx1 <= nx2 && ny1 <= dny2 && dny1 <= ny2) {
 
-              var xSize = [Math.min.apply(null, [dnx1, dnx2, nx1, nx2]), Math.max.apply(null, [dnx1, dnx2, nx1, nx2])]
-              var ySize = [Math.min.apply(null, [dny1, dny2, ny1, ny2]), Math.max.apply(null, [dny1, dny2, ny1, ny2])]
+              const xSize = [Math.min.apply(null, [dnx1, dnx2, nx1, nx2]), Math.max.apply(null, [dnx1, dnx2, nx1, nx2])];
+              const ySize = [Math.min.apply(null, [dny1, dny2, ny1, ny2]), Math.max.apply(null, [dny1, dny2, ny1, ny2])];
 
-              var xOverlap = bWidth + dWidth - (xSize[1] - xSize[0])
-              var yOverlap = bHeight + dHeight - (ySize[1] - ySize[0])
+              const xOverlap = bWidth + dWidth - (xSize[1] - xSize[0]);
+              const yOverlap = bHeight + dHeight - (ySize[1] - ySize[0]);
 
-              var xBPush = xOverlap * strength / 5 * (yOverlap / bHeight)
-              var yBPush = yOverlap * strength * (xOverlap / bWidth)
+              const xBPush = xOverlap * strength / 5 * (yOverlap / bHeight);
+              const yBPush = yOverlap * strength * (xOverlap / bWidth);
 
-              var xDPush = xOverlap * strength / 5 * (yOverlap / dHeight)
-              var yDPush = yOverlap * strength * (xOverlap / dWidth)
+              const xDPush = xOverlap * strength / 5 * (yOverlap / dHeight);
+              const yDPush = yOverlap * strength * (xOverlap / dWidth);
 
               if ((nx1 + nx2) / 2 < (dnx1 + dnx2) / 2) {
-                node.vx -= xBPush
-                dataNode.vx += xDPush
+                node.vx -= xBPush;
+                dataNode.vx += xDPush;
               } else {
-                node.vx += xBPush
-                dataNode.vx -= xDPush
+                node.vx += xBPush;
+                dataNode.vx -= xDPush;
               }
               if ((ny1 + ny2) / 2 < (dny1 + dny2) / 2) {
-                node.vy -= yBPush
-                dataNode.vy += yDPush
+                node.vy -= yBPush;
+                dataNode.vy += yDPush;
               } else {
-                node.vy += yBPush
-                dataNode.vy -= yDPush
+                node.vy += yBPush;
+                dataNode.vy -= yDPush;
               }
             }
 
@@ -464,27 +464,27 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     function prepareCorners(quad) {
 
       if (quad.data) {
-        return quad.bb = boundingBoxes[quad.data.node.index]
+        return quad.bb = boundingBoxes[quad.data.node.index];
       }
-      quad.bb = [[0, 0], [0, 0]]
-      for (var i = 0; i < 4; ++i) {
+      quad.bb = [[0, 0], [0, 0]];
+      for (let i = 0; i < 4; ++i) {
         if (quad[i] && quad[i].bb[0][0] < quad.bb[0][0]) {
-          quad.bb[0][0] = quad[i].bb[0][0]
+          quad.bb[0][0] = quad[i].bb[0][0];
         }
         if (quad[i] && quad[i].bb[0][1] < quad.bb[0][1]) {
-          quad.bb[0][1] = quad[i].bb[0][1]
+          quad.bb[0][1] = quad[i].bb[0][1];
         }
         if (quad[i] && quad[i].bb[1][0] > quad.bb[1][0]) {
-          quad.bb[1][0] = quad[i].bb[1][0]
+          quad.bb[1][0] = quad[i].bb[1][0];
         }
         if (quad[i] && quad[i].bb[1][1] > quad.bb[1][1]) {
-          quad.bb[1][1] = quad[i].bb[1][1]
+          quad.bb[1][1] = quad[i].bb[1][1];
         }
       }
     }
 
     function bbLength(bbox, heightWidth) {
-      return bbox[1][heightWidth] - bbox[0][heightWidth]
+      return bbox[1][heightWidth] - bbox[0][heightWidth];
     }
 
     return force;
@@ -517,7 +517,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
   private openDialog(data: DiviHospital): void {
     this.dialog.open(HospitalInfoDialogComponent, {
-      data: data
+      data
     });
   }
 
