@@ -146,12 +146,14 @@ export-environment:
   - changes:
       - Crawler/**/*
       - k8/Crawler/**/*
+      - k8/crawler-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: always
   - changes:
       - Crawler/**/*
       - k8/Crawler/**/*
+      - k8/crawler-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: always
@@ -175,12 +177,14 @@ export-environment:
   - changes:
       - Tiles/**/*
       - k8/Tiles/**/*
+      - k8/tiles-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: always
   - changes:
       - Tiles/**/*
       - k8/Tiles/**/*
+      - k8/tiles-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: always
