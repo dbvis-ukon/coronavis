@@ -15,6 +15,20 @@
     <td [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ getLatest(data.icu_ecmo_care_frei) }} / {{ getLatest(data.icu_ecmo_care_belegt) }}</td>
   </tr>
   </tbody>
+  <!--
+    <tbody>
+  <tr>
+    <th>ICU - Low Care:</th>
+    <th>ICU - High Care:</th>
+    <th>ECMO:</th>
+  </tr>
+  <tr>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuLowCare) }">{{ data.icuLowCare }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuHighCare) }">{{ data.icuHighCare }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(data.ECMO) }">{{ data.ECMO }}</td>
+  </tr>
+  </tbody>
+  -->
 </table>
 <br>
 
