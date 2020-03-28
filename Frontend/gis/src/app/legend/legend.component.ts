@@ -101,7 +101,7 @@ export class LegendComponent implements OnInit {
 
       d0Fixed = +d0Fixed.toFixed(decimals);
       d1Fixed = +d1Fixed.toFixed(decimals);
-      this.casesMax = d1Fixed;
+      this.casesMax = d1Fixed + '';
 
       const d0Ceil = Math.ceil(d0Fixed);
       const d1Ceil = Math.ceil(d1Fixed);
@@ -129,7 +129,7 @@ export class LegendComponent implements OnInit {
 
       if (v.MinMax[0] < d[0] && v.MinMax[1] > d[1] ) {
         if (this.casesMin === '') {
-          this.casesMin = text === Math.floor(d0Fixed) + '' ? Math.floor(d0Fixed) + '' : this.casesMin = d0Fixed;
+          this.casesMin = (text === Math.floor(d0Fixed) + '' ? Math.floor(d0Fixed) : d0Fixed) + '';
         }
         
         this.caseColors.push(
