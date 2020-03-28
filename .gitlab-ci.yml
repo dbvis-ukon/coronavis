@@ -144,21 +144,15 @@ export-environment:
   # run if files changed
   # and if it should run on a feature branch or it should run on master
   - changes:
-      - Crawler/*
       - Crawler/**/*
-      - k8/Crawler/*
       - k8/Crawler/**/*
-      - k8/crawler-new/*
       - k8/crawler-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: always
   - changes:
-      - Crawler/*
       - Crawler/**/*
-      - k8/Crawler/*
       - k8/Crawler/**/*
-      - k8/crawler-new/*
       - k8/crawler-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
@@ -181,21 +175,15 @@ export-environment:
   # run if files changed
   # and if it should run on a feature branch or it should run on master
   - changes:
-      - Tiles/*
       - Tiles/**/*
-      - k8/Tiles/*
       - k8/Tiles/**/*
-      - k8/tiles-new/*
       - k8/tiles-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: always
   - changes:
-      - Tiles/*
       - Tiles/**/*
-      - k8/Tiles/*
       - k8/Tiles/**/*
-      - k8/tiles-new/*
       - k8/tiles-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
@@ -381,7 +369,7 @@ dockerize-tiles:
   variables:
     FOLDER: Tiles
     RUN_ALWAYS: "no"
-    RUN_ON_FB: "yes"
+    RUN_ON_FB: "no"
     RUN_ON_MASTER: "yes"
     RUN_ON_TAG: "yes"
   <<: *dockerize-template
@@ -855,11 +843,11 @@ deploy-crawler-production-new:
     - dockerize-tiles
     - export-environment
 
-deploy-tiles-fb:
-  extends: .deploy-tiles
-  variables:
-    ENV_TYPE: review
-    RUN_ON_FB: "yes"
+# deploy-tiles-fb:
+#   extends: .deploy-tiles
+#   variables:
+#     ENV_TYPE: review
+#     RUN_ON_FB: "yes"
 
 deploy-tiles-staging-new:
   extends: .deploy-tiles-new
