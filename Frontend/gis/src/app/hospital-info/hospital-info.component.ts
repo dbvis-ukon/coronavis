@@ -25,29 +25,42 @@ export class HospitalInfoComponent implements OnInit {
     "height": 100,
     "data": {
       "values": [
-        { "Kategorie": "ICU - Low Care", "Datum": "A", "Bettenauslastung (%)": 12, "Vorhersage": false },
-        { "Kategorie": "ICU - Low Care", "Datum": "B", "Bettenauslastung (%)": 28, "Vorhersage": false },
-        { "Kategorie": "ICU - Low Care", "Datum": "B", "Bettenauslastung (%)": 28, "Vorhersage": true },
-        { "Kategorie": "ICU - Low Care", "Datum": "C", "Bettenauslastung (%)": 91, "Vorhersage": true },
-        { "Kategorie": "ICU - High Care", "Datum": "A", "Bettenauslastung (%)": 81, "Vorhersage": false },
-        { "Kategorie": "ICU - High Care", "Datum": "B", "Bettenauslastung (%)": 81, "Vorhersage": false },
-        { "Kategorie": "ICU - High Care", "Datum": "B", "Bettenauslastung (%)": 81, "Vorhersage": true },
-        {"Kategorie": "ICU - High Care", "Datum": "C", "Bettenauslastung (%)": 19, "Vorhersage": true },
-        { "Kategorie": "ECMO", "Datum": "A", "Bettenauslastung (%)": 87, "Vorhersage": false },
-        { "Kategorie": "ECMO", "Datum": "B", "Bettenauslastung (%)": 87, "Vorhersage": false },
-        { "Kategorie": "ECMO", "Datum": "B", "Bettenauslastung (%)": 87, "Vorhersage": true },
-        { "Kategorie": "ECMO", "Datum": "C", "Bettenauslastung (%)": 87, "Vorhersage": true }
+        { "Kategorie": "ICU - Low Care", "Datum": "2018-02-01", "Bettenauslastung (%)": 12, "Vorhersage": false },
+        { "Kategorie": "ICU - Low Care", "Datum": "2018-02-02", "Bettenauslastung (%)": 28, "Vorhersage": false },
+        { "Kategorie": "ICU - Low Care", "Datum": "2018-02-02", "Bettenauslastung (%)": 28, "Vorhersage": true },
+        { "Kategorie": "ICU - Low Care", "Datum": "2018-02-03", "Bettenauslastung (%)": 91, "Vorhersage": true },
+        { "Kategorie": "ICU - High Care", "Datum": "2018-02-01", "Bettenauslastung (%)": 81, "Vorhersage": false },
+        { "Kategorie": "ICU - High Care", "Datum": "2018-02-02", "Bettenauslastung (%)": 81, "Vorhersage": false },
+        { "Kategorie": "ICU - High Care", "Datum": "2018-02-02", "Bettenauslastung (%)": 81, "Vorhersage": true },
+        { "Kategorie": "ICU - High Care", "Datum": "2018-02-03", "Bettenauslastung (%)": 19, "Vorhersage": true },
+        { "Kategorie": "ECMO", "Datum": "2018-02-01", "Bettenauslastung (%)": 87, "Vorhersage": false },
+        { "Kategorie": "ECMO", "Datum": "2018-02-02", "Bettenauslastung (%)": 87, "Vorhersage": false },
+        { "Kategorie": "ECMO", "Datum": "2018-02-02", "Bettenauslastung (%)": 87, "Vorhersage": true },
+        { "Kategorie": "ECMO", "Datum": "2018-02-03", "Bettenauslastung (%)": 87, "Vorhersage": true }
       ]
-    }
-    ,
-    "mark": "line"
-    ,
-    "encoding": {
-      "x": { "field": "Datum", "type": "ordinal" },
-      "y": { "field": "Bettenauslastung (%)", "type": "quantitative", "axis": {"tickMinStep": 10, "tickCount": 10}, },
-      "strokeDash": { "field": "Vorhersage", "type": "nominal" },
-      "color": {"field": "Kategorie", "type": "nominal"}
-    }
+    }, 
+    "transform": [{"calculate":"100", "as":"ref"}],
+    "layer": [
+      {
+        "mark": "line",
+        "encoding": {
+          "x": { "field": "Datum", "type": "ordinal" },
+          "y": { "field": "Bettenauslastung (%)", "type": "quantitative", "axis": {"tickMinStep": 10, "tickCount": 10, "domain": [0,120]}, },
+          "strokeDash": { "field": "Vorhersage", "type": "nominal" },
+          "color": {"field": "Kategorie", "type": "nominal"}
+        },
+      },
+      {
+        "mark": "rule",
+        "encoding": {
+          "y": { 
+            "field":"ref"
+          },
+          "size": {"value": 2},
+          "color": {"value": "gray"}
+        }
+      }
+    ]
   };
 
   specs = [];
