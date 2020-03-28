@@ -259,7 +259,13 @@ build-frontend:
   script:
     - source var.env
     - cd ./Frontend
+    # if we are on a new review branch we set the new suffix to the covistest.dbvis.de, otherwise the old suffix
+    - if [[ ${ENV_TYPE} =~ ^review$ ]]; then SUFFIX=${URL_SUFFIX_NEW}; else SUFFIX=${URL_SUFFIX}; fi
+    # replace the suffix for api url
+    - FRONTEND_URL_BACKEND=$(echo ${FRONTEND_URL_BACKEND} | sed "s/${URL_SUFFIX}/${SUFFIX}/")
     - export FRONTEND_URL_BACKEND
+    # replace the suffix for tile server
+    - FRONTEND_URL_TILES=$(echo ${FRONTEND_URL_TILES} | sed "s/${URL_SUFFIX}/${SUFFIX}/")
     - export FRONTEND_URL_TILES
     - export URL_PROTOCOL
     - export VERSION
@@ -426,13 +432,13 @@ dockerize-tiles:
     - dockerize-backend
     - export-environment
 
-deploy-backend-fb:
-  extends: .deploy-backend
-  variables:
-    ENV_TYPE: review
-    RUN_ON_FB: "yes"
-  environment:
-    on_stop: remove-deployment-backend-review
+# deploy-backend-fb:
+#   extends: .deploy-backend
+#   variables:
+#     ENV_TYPE: review
+#     RUN_ON_FB: "yes"
+#   environment:
+#     on_stop: remove-deployment-backend-review
 
 deploy-backend-staging:
   extends: .deploy-backend
@@ -479,13 +485,13 @@ deploy-backend-production:
     - export-environment
 
 
-deploy-frontend-fb:
-  extends: .deploy-frontend
-  environment:
-    on_stop: remove-deployment-frontend-review
-  variables:
-    ENV_TYPE: review
-    RUN_ON_FB: "yes"
+# deploy-frontend-fb:
+#   extends: .deploy-frontend
+#   environment:
+#     on_stop: remove-deployment-frontend-review
+#   variables:
+#     ENV_TYPE: review
+#     RUN_ON_FB: "yes"
 
 deploy-frontend-staging:
   extends: .deploy-frontend
