@@ -19,7 +19,38 @@ export class HospitalInfoComponent implements OnInit {
   @Input()
   data: DiviHospital
 
+  templateSpec = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "width": 180,
+    "height": 100,
+    "data": {
+      "values": [
+        { "Kategorie": "ICU - Low Care", "Datum": "A", "Bettenauslastung (%)": 12, "Vorhersage": false },
+        { "Kategorie": "ICU - Low Care", "Datum": "B", "Bettenauslastung (%)": 28, "Vorhersage": false },
+        { "Kategorie": "ICU - Low Care", "Datum": "B", "Bettenauslastung (%)": 28, "Vorhersage": true },
+        { "Kategorie": "ICU - Low Care", "Datum": "C", "Bettenauslastung (%)": 91, "Vorhersage": true },
+        { "Kategorie": "ICU - High Care", "Datum": "A", "Bettenauslastung (%)": 81, "Vorhersage": false },
+        { "Kategorie": "ICU - High Care", "Datum": "B", "Bettenauslastung (%)": 81, "Vorhersage": false },
+        { "Kategorie": "ICU - High Care", "Datum": "B", "Bettenauslastung (%)": 81, "Vorhersage": true },
+        {"Kategorie": "ICU - High Care", "Datum": "C", "Bettenauslastung (%)": 19, "Vorhersage": true },
+        { "Kategorie": "ECMO", "Datum": "A", "Bettenauslastung (%)": 87, "Vorhersage": false },
+        { "Kategorie": "ECMO", "Datum": "B", "Bettenauslastung (%)": 87, "Vorhersage": false },
+        { "Kategorie": "ECMO", "Datum": "B", "Bettenauslastung (%)": 87, "Vorhersage": true },
+        { "Kategorie": "ECMO", "Datum": "C", "Bettenauslastung (%)": 87, "Vorhersage": true }
+      ]
+    }
+    ,
+    "mark": "line"
+    ,
+    "encoding": {
+      "x": { "field": "Datum", "type": "ordinal" },
+      "y": { "field": "Bettenauslastung (%)", "type": "quantitative", "axis": {"tickMinStep": 10, "tickCount": 10}, },
+      "strokeDash": { "field": "Vorhersage", "type": "nominal" },
+      "color": {"field": "Kategorie", "type": "nominal"}
+    }
+  };
 
+  specs = [];
 
   constructor(private colormapService: ColormapService) { }
 
@@ -39,6 +70,14 @@ export class HospitalInfoComponent implements OnInit {
 
       this.contactMsg = this.data.Kontakt;
     }
+
+
+    this.specs = [];
+
+    // hack deep clone spec
+    const spec = JSON.parse(JSON.stringify(this.templateSpec));
+
+    this.specs.push(spec);
   }
 
   getCapacityStateColor(capacityState: string): string {

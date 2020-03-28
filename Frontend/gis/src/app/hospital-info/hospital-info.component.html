@@ -3,20 +3,23 @@
 <table>
   <tbody>
   <tr>
-    <td><strong>ICU - Low Care:</strong> </td>
+    <th>ICU - Low Care:</th>
+    <th>ICU - High Care:</th>
+    <th>ECMO:</th>
+  </tr>
+  <tr>
     <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuLowCare) }">{{ data.icuLowCare }}</td>
-  </tr>
-  <tr>
-    <td><strong>ICU - High Care: </strong></td>
     <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuHighCare) }">{{ data.icuHighCare }}</td>
-  </tr>
-  <tr>
-    <td><strong>ECMO: </strong></td>
     <td [ngStyle]="{'background-color': getCapacityStateColor(data.ECMO) }">{{ data.ECMO }}</td>
   </tr>
   </tbody>
 </table>
 <br>
+
+<strong>Entwicklung:</strong>
+<div *ngFor="let s of specs">
+  <app-vega [spec]="s"></app-vega>
+</div>
 
 <div *ngIf="mode === 'dialog'">
   <!--h3>{{ data.Name }}</h3>
@@ -25,8 +28,8 @@
     <strong>Adresse: </strong> {{ data.Adress }}
   </p>
   <p>
-    <strong>Kontakt: </strong> 
-    <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a> 
+    <strong>Kontakt: </strong>
+    <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a>
     <span *ngIf="!url">{{ contactMsg }}</span>
   </p>
 </div>
