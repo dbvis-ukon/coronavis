@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FeatureCollection} from 'geojson';
 import {Overlay} from './map/overlays/overlay';
 import {AggregationLevel} from './map/options/aggregation-level.enum';
@@ -11,13 +11,14 @@ import {
 import {BedType} from './map/options/bed-type.enum';
 import {CaseChoropleth} from './map/overlays/casechoropleth';
 import {MapOptions} from './map/options/map-options';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
@@ -52,6 +53,19 @@ export class AppComponent {
 
   currentCaseChoropleth: CaseChoropleth;
 
+  siteId: number;
+
   // constructor is here only used to inject services
   constructor() { }
+
+  ngOnInit(): void {
+    const trackingPixelSiteIDMapping = {
+      'production': 1,
+      'staging': 3,
+      'review': 4,
+      'development': 5
+    };
+
+    this.siteId = trackingPixelSiteIDMapping[environment.env];
+  }
 }
