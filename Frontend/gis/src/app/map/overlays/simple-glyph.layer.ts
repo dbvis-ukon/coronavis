@@ -210,7 +210,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('class', `bed ${BedType.icuLow}`)
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
-      .style('fill', d1 => 'red') // colorScale(d1.icuLowCare))
+      .style('fill', d1 => 'red') // todo colorScale(d1.icuLowCare))
       .attr('x', padding)
       .attr('y', yOffset);
 
@@ -220,7 +220,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${this.rectSize}px`)
-      .style('fill', d1 => 'orange') // colorScale(d1.icuHighCare))
+      .style('fill', d1 => 'orange') // todo colorScale(d1.icuHighCare))
       .attr('y', yOffset)
       .attr('x', `${this.rectSize + padding * 2}px`);
 
@@ -230,7 +230,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${2 * this.rectSize}px`)
-      .style('fill', d1 => 'green') // colorScale(d1.ECMO))
+      .style('fill', d1 => 'green') // todo colorScale(d1.ECMO))
       .attr('y', yOffset)
       .attr('x', `${2 * this.rectSize + padding * 3}px`);
 
@@ -298,7 +298,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     if (this.labelLayout) {
       this.labelLayout.stop();
     }
-    this.labelLayout = this.startForceSimulation([[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]]);
+    // TODO Fabian enable again, strange things are happening here
+    // this.labelLayout = this.startForceSimulation([[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]]);
 
     // console.log('zoomed', this.map.getZoom(), scale);
 

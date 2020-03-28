@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as d3 from 'd3';
-import {AggregatedHospitalsProperties, AggregatedHospitalsState} from './divi-hospitals.service';
+import {AggregatedHospitalsProperties, getLatest, TimestampedValue} from './divi-hospitals.service';
 import {ScaleLinear} from 'd3';
 import {BedType} from '../map/options/bed-type.enum';
 
@@ -43,7 +43,7 @@ export class ColormapService {
     return this.caseChoroplethColorMap(normalizedDiff);
   }
 
-  private getMinScore(d: AggregatedHospitalsState) {
+  /*private getMinScore(d: AggregatedHospitalsState) {
     const v = d.Verfügbar || 0;
     const b = d.Begrenzt || 0;
     const a = d.Ausgelastet || 0;
@@ -83,24 +83,25 @@ export class ColormapService {
     const n = d['Nicht verfügbar'] || 0;
 
     return v === 0 && b === 0 && a === 0 && n == 0;
-  }
+  }*/
 
-  getBedStatusColor(properties: AggregatedHospitalsState): string {
-    const score = this.getScore(properties);
-    const minScore = this.getMinScore(properties);
-    const maxScore = this.getMaxScore(properties);
+  getBedStatusColor(entry: {free: TimestampedValue[], full: TimestampedValue[], prognosis: TimestampedValue[], in24h: TimestampedValue[]}): string {
+    // todo
+    const score = getLatest(entry.free) / getLatest(entry.full);
+    const minScore = 0; // todo this.getMinScore(properties);
+    const maxScore = 1.0; // todo this.getMaxScore(properties);
 
     const minMaxNormValues = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
     const normalizeValues = d3.scaleQuantize()
       .domain([minScore, maxScore])
       .range(minMaxNormValues);
 
-    if (this.noInformation(properties)) {
+    /*if (this.noInformation(properties)) {
       return this.singleHospitalCM('Keine Information');
     }
     if (this.notAvailable(properties)) {
       return this.singleHospitalCM('Nicht verfügbar');
-    }
+    }*/
     return this.continousColorMap(normalizeValues(score));
   }
 }

@@ -2,7 +2,13 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import {AggregatedHospitalsState, DiviAggregatedHospital, DiviHospital, TimestampedValue} from 'src/app/services/divi-hospitals.service';
+import {
+  AggregatedHospitalsState,
+  DiviAggregatedHospital,
+  DiviHospital,
+  getLatest,
+  TimestampedValue
+} from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
 import {GlyphHoverEvent} from "../events/glyphhover";
@@ -57,43 +63,33 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     height: 28
   };
 
-  private getLargestEntry(entries: TimestampedValue[]) {
-    if (entries.length === 0) {
-      return null;
-    }
-    let currentEntry = entries[0];
-    for (let i = 0; i < entries.length; i++) {
-      if (entries[i].timestamp > currentEntry.timestamp) {
-        currentEntry = entries[i];
-      }
-    }
-    return currentEntry.value;
-  }
-
   private latLngPoint(latlng: L.LatLngExpression): L.Point {
     return this.map.project(latlng, 9);
   }
 
+  // TODO adapt
   private getIcuLowScore(d: DiviAggregatedHospital) {
-    const v = this.getLargestEntry(d.icu_low_care_frei) || 0;
-    const b = this.getLargestEntry(d.icu_low_care_belegt) || 0;
-    const a = this.getLargestEntry(d.icu_low_care_einschaetzung)  || 0;
+    const v = getLatest(d.icu_low_care_frei) || 0;
+    const b = getLatest(d.icu_low_care_belegt) || 0;
+    const a = getLatest(d.icu_low_care_einschaetzung)  || 0;
 
     return (b * 2 + a * 3) / (v + b + a);
   }
 
+  // TODO adapt
   private getIcuHighScore(d: DiviAggregatedHospital) {
-    const v = this.getLargestEntry(d.icu_low_care_frei) || 0;
-    const b = this.getLargestEntry(d.icu_low_care_belegt) || 0;
-    const a = this.getLargestEntry(d.icu_low_care_einschaetzung)  || 0;
+    const v = getLatest(d.icu_low_care_frei) || 0;
+    const b = getLatest(d.icu_low_care_belegt) || 0;
+    const a = getLatest(d.icu_low_care_einschaetzung)  || 0;
 
     return (b * 2 + a * 3) / (v + b + a);
   }
 
+  // TODO adapt
   private getEcmoScore(d: DiviAggregatedHospital) {
-    const v = this.getLargestEntry(d.icu_low_care_frei) || 0;
-    const b = this.getLargestEntry(d.icu_low_care_belegt) || 0;
-    const a = this.getLargestEntry(d.icu_low_care_einschaetzung)  || 0;
+    const v = getLatest(d.icu_low_care_frei) || 0;
+    const b = getLatest(d.icu_low_care_belegt) || 0;
+    const a = getLatest(d.icu_low_care_einschaetzung)  || 0;
 
     return (b * 2 + a * 3) / (v + b + a);
   }
@@ -211,7 +207,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_low_state));
+      .style('fill', d1 => this.colormapService.getBedStatusColor( {free: d1.icu_low_care_frei, full: d1.icu_low_care_belegt, prognosis: d1.icu_low_care_einschaetzung, in24h: d1.icu_low_care_in_24h }));
 
     this.gHospitals
       .append('rect')
@@ -220,7 +216,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${rectSize + padding * 2}px`)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_high_state));
+      .style('fill', d1 => this.colormapService.getBedStatusColor({free: d1.icu_high_care_frei, full: d1.icu_high_care_belegt, prognosis: d1.icu_high_care_einschaetzung, in24h:d1.icu_high_care_in_24h}));
 
     this.gHospitals
       .append('rect')
@@ -229,7 +225,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.ecmo_state));
+      .style('fill', d1 => this.colormapService.getBedStatusColor({free: d1.icu_ecmo_care_frei, full: d1.icu_ecmo_care_belegt, prognosis: d1.icu_ecmo_care_einschaetzung, in24h: d1.icu_ecmo_care_in_24h}));
 
     this.onZoomed();
 

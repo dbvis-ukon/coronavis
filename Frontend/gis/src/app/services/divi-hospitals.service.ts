@@ -94,6 +94,19 @@ export interface AggregatedHospitalsProperties {
   'icu_low_care_in_24h': TimestampedValue[];
 }
 
+export function getLatest(entries: TimestampedValue[]) {
+  if (entries.length === 0) {
+    return null;
+  }
+  let currentEntry = entries[0];
+  for (let i = 0; i < entries.length; i++) {
+    if (entries[i].timestamp > currentEntry.timestamp) {
+      currentEntry = entries[i];
+    }
+  }
+  return currentEntry.value;
+}
+
 export interface AggregatedHospitalsFeature extends Feature<AggregatedHospitalsGeometry, AggregatedHospitalsProperties> {
   geometry: AggregatedHospitalsGeometry;
   properties: AggregatedHospitalsProperties;
