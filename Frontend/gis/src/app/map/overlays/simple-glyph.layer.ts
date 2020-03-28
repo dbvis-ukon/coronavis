@@ -11,9 +11,10 @@ import { BedGlyphOptions } from '../options/bed-glyph-options';
 import { BedType } from '../options/bed-type.enum';
 import { MatDialog } from '@angular/material/dialog';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
-import { Layout } from 'src/app/util/layout';
+import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
+import {GlyphLayer} from "./GlyphLayer";
 
-export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
+export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
   private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private nameHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
@@ -21,6 +22,10 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
   private nameHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private cityHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
   private map: L.Map;
+
+  private visible: boolean = false;
+
+  private forceLayout: ForceDirectedLayout<DiviHospital>;
 
   constructor(
     name: string,
@@ -33,6 +38,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     super(name, null);
     this.enableDefault = true;
 
+    this.forceLayout = new ForceDirectedLayout<DiviHospital>(this.data, this.updateGlyphPositions.bind(this));
 
     this.glyphOptions.subscribe(opt => {
       if(!this.gHospitals || !opt) {
@@ -50,15 +56,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       this.gHospitals
         .selectAll(`.bed.${BedType.ecmo}`)
         .style('opacity', opt.showEcmo ? '1' : '0');
-
-
     });
   }
-
-
-  private lastTransform;
-
-  private labelLayout;
 
   private latLngPoint(latlng: L.LatLngExpression): L.Point {
     return this.map.project(latlng, 9);
@@ -69,7 +68,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     width: 38,
     height: 28
   };
-  
+
   // Some cities have double names. These are the first parts
   private double_names = new Set(['Sankt', 'St.', 'Bergisch','Königs','Lutherstadt','Schwäbisch']);
   // Regexes for cleaning city names
@@ -240,11 +239,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     });
   }
 
-  startForceSimulation(glyphSizes): d3.Simulation<any, undefined> {
-    return (new Layout).force_simulation(this.data, glyphSizes, () => this.ticked());
-  }
-
-  ticked() {
+  updateGlyphPositions() {
     this.gHospitals
       .transition().duration(100)
       .attr('transform', (d, i) => {
@@ -256,7 +251,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     const zoom = this.map.getZoom();
     const scale = Math.pow(9 / (zoom), 4);
 
-    if (this.map.getZoom() > 8) {
+    // Resize glyph bounding boxes + show/hide labels
+    if (this.map.getZoom() >= 9) {
       this.glyphSize.height = 40;
       this.glyphSize.width = 80;
 
@@ -265,7 +261,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
       this.nameHospitals.classed('hiddenLabel', false);
       this.nameHospitalsShadow.classed('hiddenLabel', false);
-    } else if (this.map.getZoom() < 9 && this.map.getZoom() > 6) {
+    } else if (this.map.getZoom() === 8) {
       this.glyphSize.height = 28;
       this.glyphSize.width = 38;
 
@@ -274,7 +270,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
       this.nameHospitals.classed('hiddenLabel', true);
       this.nameHospitalsShadow.classed('hiddenLabel', true);
-    } else if (this.map.getZoom() < 7) {
+    } else if (this.map.getZoom() === 7) {
       this.glyphSize.height = 14;
       this.glyphSize.width = 38;
 
@@ -284,18 +280,6 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       this.nameHospitalsShadow.classed('hiddenLabel', true);
     }
 
-    this.data.forEach(d => {
-      d.x = d._x;
-      d.y = d._y;
-    });
-
-    if (this.labelLayout) {
-      this.labelLayout.stop();
-    }
-    this.labelLayout = this.startForceSimulation([[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]]);
-
-    // console.log('zoomed', this.map.getZoom(), scale);
-
     this.gHospitals
       .selectAll('*')
       .transition()
@@ -304,6 +288,12 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
         return `scale(${scale}, ${scale})`;
       });
 
+    if (!this.visible) {
+      return;
+    }
+
+    const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
+    this.forceLayout.update(glyphBoxes, zoom);
   }
 
   wrap(text, width) {
@@ -337,4 +327,11 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     });
   }
 
+  setVisibility(v: boolean) {
+    this.visible = v;
+
+    if (this.visible) {
+      this.onZoomed();
+    }
+  }
 }

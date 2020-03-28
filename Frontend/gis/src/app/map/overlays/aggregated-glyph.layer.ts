@@ -1,25 +1,26 @@
 import * as L from 'leaflet';
 import * as d3 from 'd3';
-import { Overlay } from './overlay';
+import {Overlay} from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import {AggregatedHospitalsState, DiviAggregatedHospital, DiviHospital} from 'src/app/services/divi-hospitals.service';
-import { ColormapService } from 'src/app/services/colormap.service';
+import {DiviAggregatedHospital} from 'src/app/services/divi-hospitals.service';
+import {ColormapService} from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
-import {GlyphHoverEvent} from "../events/glyphhover";
 import {HospitallayerService} from "../../services/hospitallayer.service";
-import {Subject, Observable} from "rxjs";
-import {quadtree} from "d3";
-import { BedGlyphOptions } from '../options/bed-glyph-options';
-import { BedType } from '../options/bed-type.enum';
-import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
+import {Observable} from "rxjs";
+import {BedGlyphOptions} from '../options/bed-glyph-options';
+import {BedType} from '../options/bed-type.enum';
 import {AggregatedGlyphTooltipComponent} from "../../aggregated-glyph-tooltip/aggregated-glyph-tooltip.component";
-import { Layout } from 'src/app/util/layout';
+import {ForceDirectedLayout} from 'src/app/util/forceDirectedLayout';
+import {GlyphLayer} from "./GlyphLayer";
 
-export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
+export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
   private gHospitals: d3.Selection<SVGGElement, DiviAggregatedHospital, SVGElement, unknown>;
   private map: L.Map;
   private labelLayout;
+
+  private forceLayout: ForceDirectedLayout<DiviAggregatedHospital>;
+  private visible: boolean = false;
 
   constructor(
     name: string,
@@ -31,6 +32,8 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     private glyphOptions: Observable<BedGlyphOptions>
 ) {
     super(name, null);
+
+    this.forceLayout = new ForceDirectedLayout(this.data, this.updateGlyphPositions.bind(this));
 
     this.glyphOptions.subscribe(opt => {
       if(!this.gHospitals || !opt) {
@@ -48,8 +51,6 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       this.gHospitals
         .selectAll(`.bed.${BedType.ecmo}`)
         .style('opacity', opt.showEcmo ? '1' : '0');
-
-
     });
   }
 
@@ -162,13 +163,6 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       // })
       // .on('mouseout', () => this.tooltipService.close());
 
-    // this.gHospitals
-    //   .append('rect')
-    //   .attr('width', this.glyphSize.width)
-    //   .attr('height', this.glyphSize.height/2)
-    //   .attr('fill', 'white')
-    //   .attr('stroke', '#cccccc');
-
     // adds white shadow
     this.gHospitals
       .append('text')
@@ -228,11 +222,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     });
   }
 
-  startForceSimulation(glyphSizes): d3.Simulation<any, undefined> {
-    return (new Layout).force_simulation(this.data, glyphSizes, () => this.ticked());
-  }
-
-  ticked() {
+  updateGlyphPositions() {
     this.gHospitals
       .transition().duration(100)
       .attr('transform', (d, i) => {
@@ -243,24 +233,12 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
   onZoomed() {
     const zoom = this.map.getZoom();
     let level = 9;
-    if(this.granularity === 'regierungsbezirke'){
+    if (this.granularity === 'regierungsbezirke') {
       level = 11;
-    } else if (this.granularity === 'bundeslander'){
+    } else if (this.granularity === 'bundeslander') {
       level = 12;
     }
     const scale = Math.pow(level / (zoom), 3);
-
-    this.data.forEach(d => {
-      d.x = d._x;
-      d.y = d._y;
-    });
-
-    if (this.labelLayout) {
-      this.labelLayout.stop();
-    }
-    this.labelLayout = this.startForceSimulation([[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]]);
-
-    // console.log('zoomed', this.map.getZoom(), scale);
 
     this.gHospitals
       .selectAll('*')
@@ -269,5 +247,20 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
       .attr('transform', d => {
         return `scale(${scale}, ${scale})`;
       });
+
+    if (!this.visible) {
+      return;
+    }
+
+    const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
+    this.forceLayout.update(glyphBoxes, zoom);
+  }
+
+  setVisibility(v: boolean) {
+    this.visible = v;
+
+    if (this.visible) {
+      this.onZoomed();
+    }
   }
 }
