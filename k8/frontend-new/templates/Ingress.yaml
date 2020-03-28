@@ -1,0 +1,22 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1beta1
+metadata:
+  name: {{ .Release.Name }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    {{- include "nginx.annotations" . | nindent 4 }}
+spec:
+  {{- if eq .Values.urlProtocol "https" }}
+  tls:
+    - hosts: {{ .Values.url }}
+      secretName: {{ .Release.Name }}-tls
+  {{- end }}
+  rules:
+    - host: {{ .Values.url }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ .Release.Name }}
+              servicePort: http
+
