@@ -51,7 +51,7 @@ export-environment:
     # This variable is used in the build job to set the tiles server url in the environment.prod.ts
     - FRONTEND_URL_TILES="${FRONTEND_URL_TILES_PREFIX}tiles.${URL_SUFFIX}"
     # all the stuff into the var.env
-    - echo "ENV_TYPE=${ENV_TYPE}"
+    - echo "ENV_TYPE=${ENV_TYPE}" >> var.env
     - echo "VERSION=${VERSION}" >> var.env
     - echo "URL_PROTOCOL=${URL_PROTOCOL}" >> var.env
     - echo "URL_FRONTEND=${URL_FRONTEND}" >> var.env
