@@ -4,6 +4,7 @@ metadata:
   name: covid19vis-crawler-divi-hospitals-table
   annotations:
     description: "DIVI Intensivregister for hospitals stating availability of beds"  
+    maintainer: "Udo Schlegel"    
 spec:
   # run every four hours
   schedule: "0 */1 * * *"

@@ -20,7 +20,7 @@ try:
     if None in (DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME):
         raise KeyError
     else:
-        SQLALCHEMY_DATABASE_URI = f"postgresql://{quote(DB_USER)}:{quote(DB_PASS)}@{quote(DB_HOST)}:{quote(DB_PORT)}/{quote(DB_NAME)}"
+        SQLALCHEMY_DATABASE_URI = f"postgresql://{quote(DB_USER, safe='')}:{quote(DB_PASS, safe='')}@{quote(DB_HOST, safe='')}:{quote(DB_PORT, safe='')}/{quote(DB_NAME, safe='')}"
 except KeyError as e:
     logger.warning('One or multiple necessary environment variables not set, using config.py file as backup')
 

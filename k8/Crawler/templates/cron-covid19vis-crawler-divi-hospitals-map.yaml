@@ -4,8 +4,9 @@ metadata:
   name: covid19vis-crawler-divi-hospitals-map
   annotations:
     description: "DIVI Intensivregister detailed bed count per hospital (actual numbers, not colors)"
+    maintainer: "Maximilian Fischer"
 spec:
-  # run every four hours
+  # run every hour
   schedule: "0 */1 * * *"
   jobTemplate:
     spec:
