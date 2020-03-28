@@ -24,7 +24,7 @@ export class HospitalInfoComponent implements OnInit {
   constructor(private colormapService: ColormapService) { }
 
   ngOnInit(): void {
-    if(this.data.Webaddress.indexOf('http')>-1){
+    if(this.data.Webaddress.indexOf('http') > -1) {
       this.contact = 'http' + this.data.Webaddress.split('http')[1];
       this.url = true;
 

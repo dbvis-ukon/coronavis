@@ -135,6 +135,7 @@ export interface DiviHospital {
   'icu_low_care_einschaetzung': TimestampedValue[];
   'icu_low_care_frei': TimestampedValue[];
   'icu_low_care_in_24h': TimestampedValue[];
+  helipad_nearby: boolean;
   'x'?: number;
   'y'?: number;
   '_x'?: number;
@@ -240,6 +241,7 @@ export class DiviHospitalsService {
         icu_low_care_einschaetzung: i.properties.icu_low_care_einschaetzung,
         icu_low_care_frei: i.properties.icu_low_care_frei,
         icu_low_care_in_24h: i.properties.icu_low_care_in_24h,
+        helipad_nearby: i.properties.helipad_nearby
       } as DiviHospital;
     });
   }

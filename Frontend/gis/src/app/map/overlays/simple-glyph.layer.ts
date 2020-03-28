@@ -79,6 +79,9 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
   }
   // Extract the city name from the address and shorten
   private shorten_city_name(address) {
+    if (address === null) {
+      return '';
+    }
     const nameParts = address.replace(this.rxAdr, '') // Remove address
         .replace(this.rxBad, '') // Remove 'Bad'
         .replace(this.rxSlash, '') // Remove additional descriptions
@@ -182,7 +185,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
 
     this.cityHospitalsShadow = this.gHospitals
       .append('text')
-      .text(d1 => this.shorten_city_name(d1.Webaddress))
+      .text(d1 => this.shorten_city_name(d1.Address))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .style('text-anchor', 'middle')
       .attr('y', '22')
