@@ -4,12 +4,29 @@
 @import '~mapbox-gl/dist/mapbox-gl.css';
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+  margin: 0;
+  .tracking-pxl {
+    position: fixed;
+    z-index: 0;
+  }
+}
 
 
 .popup-panel-white-glass-background {
  .mat-dialog-container {
     background: rgba(255, 255, 255, 0.50);
+	-webkit-backdrop-filter: blur(20px) brightness(160%);
     backdrop-filter: blur(20px) brightness(160%);
+	box-shadow: 0px 0px transparent;
+  }
+  @supports (-moz-appearance:none) {
+    .mat-dialog-container {
+		background: #EDEDED;
+	}
+  }
+  _:-ms-lang(x), _:-webkit-full-screen { .mat-dialog-container  {
+    background: #EDEDED;
+  }
   }
 }
