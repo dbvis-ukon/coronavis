@@ -19,14 +19,40 @@
   -->
   <tbody>
     <tr>
+      <th></th>
       <th>ICU - Low Care:</th>
       <th>ICU - High Care:</th>
       <th>ECMO:</th>
     </tr>
     <tr>
-      <td [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ getLatest(data.icu_low_care_frei) }} / {{ getLatest(data.icu_ecmo_care_belegt) }}</td>
-      <td [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ getLatest(data.icu_low_care_frei) }} / {{ getLatest(data.icu_ecmo_care_belegt) }}</td>
-      <td [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ getLatest(data.icu_low_care_frei) }} / {{ getLatest(data.icu_ecmo_care_belegt) }}</td>
+      <th></th>
+      <th [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ getLatest(data.icu_low_care_frei) }} / {{ getLatest(data.icu_low_care_belegt) }}</th>
+      <th [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ getLatest(data.icu_high_care_frei) }} / {{ getLatest(data.icu_high_care_belegt) }}</th>
+      <th [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ getLatest(data.icu_ecmo_care_frei) }} / {{ getLatest(data.icu_ecmo_care_belegt) }}</th>
+    </tr>
+    <tr>
+      <td>% Belegung</td>
+      <td>{{ (getLatest(data.icu_low_care_belegt)  / (getLatest(data.icu_low_care_belegt)  + getLatest(data.icu_low_care_frei)))  * 100 | number : '1.1-1'}}%</td> <!--'1.2-2' means {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}: A minimum of 1 digit will be shown before decimal point It will show at least 2 digits after decimal point But not more than 2 digits-->
+      <td>{{ (getLatest(data.icu_high_care_belegt) / (getLatest(data.icu_high_care_belegt) + getLatest(data.icu_high_care_frei))) * 100 | number : '1.1-1'}}%</td>
+      <td>{{ (getLatest(data.icu_ecmo_care_belegt) / (getLatest(data.icu_ecmo_care_belegt) + getLatest(data.icu_ecmo_care_frei))) * 100 | number : '1.1-1'}}%</td>
+    </tr>
+    <tr>
+      <td># Verfügbar</td>
+      <td>{{ getLatest(data.icu_low_care_frei) }}</td>
+      <td>{{ getLatest(data.icu_high_care_frei) }}</td>
+      <td>{{ getLatest(data.icu_ecmo_care_frei) }}</td>
+    </tr>
+    <tr>
+      <td># Belegt</td>
+      <td>{{ getLatest(data.icu_low_care_belegt) }}</td>
+      <td>{{ getLatest(data.icu_high_care_belegt) }}</td>
+      <td>{{ getLatest(data.icu_ecmo_care_belegt) }}</td>
+    </tr>
+    <tr>
+      <td>+ Erwartet</td>
+      <td>{{ getLatest(data.icu_low_care_einschaetzung) }}</td>
+      <td>{{ getLatest(data.icu_high_care_einschaetzung) }}</td>
+      <td>{{ getLatest(data.icu_ecmo_care_einschaetzung) }}</td>
     </tr>
   </tbody>
   
@@ -51,5 +77,5 @@
   </p>
 </div>
 
-<p><strong>Letzter Stand: </strong> TODO</p>
+<p><strong>Letzter Stand: </strong> TODO </p>
 
