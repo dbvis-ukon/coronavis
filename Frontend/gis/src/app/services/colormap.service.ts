@@ -18,6 +18,9 @@ export class ColormapService {
   public static bedStatusColors = ['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)'];
   public static bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar', 'Keine Information'];
 
+  public static bedStatusThresholdsColors = ['#c2cbd4', 'rgb(198,106,75)', 'rgb(230,181,72)', 'rgb(113,167,133)' ];
+  public static bedStatusThresholds = [0, 5, 10];
+
   public static BedStatusColor = d3.scaleLinear<string, string>()
       .domain([0, 0.5, 1])
       .range(ColormapService.bedStatusColors)
@@ -27,6 +30,10 @@ export class ColormapService {
   private singleHospitalCM = d3.scaleOrdinal<string, string>()
     .domain(ColormapService.bedStati)
     .range([...ColormapService.bedStatusColors, '#c2cbd4', '#bbb']);
+
+  private singleHospitalCMStates = d3.scaleThreshold<number, string>()
+    .domain(ColormapService.bedStatusThresholds)
+    .range(ColormapService.bedStatusThresholdsColors);
 
   private caseChoroplethColorMap = d3.scaleQuantize<string>()
     .domain([-1, 1])
@@ -38,6 +45,9 @@ export class ColormapService {
     .interpolate(d3.interpolateRgb.gamma(2.2));
   getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
     return this.singleHospitalCM;
+  }
+  getSingleHospitalColormapStates(): d3.ScaleThreshold<number, string> {
+    return this.singleHospitalCMStates;
   }
   getChoroplethCaseColor(normalizedDiff: number): string {
     return this.caseChoroplethColorMap(normalizedDiff);

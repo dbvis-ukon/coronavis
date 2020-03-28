@@ -94,9 +94,12 @@ export interface AggregatedHospitalsProperties {
   'icu_low_care_in_24h': TimestampedValue[];
 }
 
-export function getLatest(entries: TimestampedValue[]) {
+export function getLatest(entries: TimestampedValue[]) : number {
+  if (entries === undefined) {
+    return NaN;
+  }
   if (entries.length === 0) {
-    return null;
+    return NaN;
   }
   let currentEntry = entries[0];
   for (let i = 0; i < entries.length; i++) {

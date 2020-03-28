@@ -12,7 +12,7 @@ export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
     super(name, hospitals);
   }
 
-  private propertyAccessor(d: AggregatedHospitalsProperties, type: BedType): {
+  private propertyAccessor(d: AggregatedHospitalsProperties, type: BedType) {
     switch (type) {
       case BedType.ecmo:
         return {free: d.icu_ecmo_care_frei, full: d.icu_ecmo_care_belegt, prognosis: d.icu_ecmo_care_einschaetzung, in24h: d.icu_ecmo_care_in_24h};

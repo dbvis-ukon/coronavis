@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from 'src/app/services/tooltip.service';
 import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
-import {DiviHospital} from 'src/app/services/divi-hospitals.service';
+import {DiviHospital, getLatest} from 'src/app/services/divi-hospitals.service';
 import {ColormapService} from 'src/app/services/colormap.service';
 import {FeatureCollection} from 'geojson';
 import {quadtree} from 'd3';
@@ -118,7 +118,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
     svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
 
 
-    const colorScale = this.colormapService.getSingleHospitalColormap();
+    const colorScale = this.colormapService.getSingleHospitalColormapStates();
 
     const self = this;
 
@@ -210,7 +210,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('class', `bed ${BedType.icuLow}`)
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
-      .style('fill', d1 => 'red') // todo colorScale(d1.icuLowCare))
+      .style('fill', d1 => colorScale(getLatest(d1.icu_low_care_frei))) // todo colorScale(d1.icuLowCare))
       .attr('x', padding)
       .attr('y', yOffset);
 
@@ -220,7 +220,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${this.rectSize}px`)
-      .style('fill', d1 => 'orange') // todo colorScale(d1.icuHighCare))
+      .style('fill', d1 => colorScale(getLatest(d1.icu_high_care_frei))) // todo colorScale(d1.icuHighCare))
       .attr('y', yOffset)
       .attr('x', `${this.rectSize + padding * 2}px`);
 
@@ -230,7 +230,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${2 * this.rectSize}px`)
-      .style('fill', d1 => 'green') // todo colorScale(d1.ECMO))
+      .style('fill', d1 => colorScale(getLatest(d1.icu_ecmo_care_frei)))// todo colorScale(d1.ECMO))
       .attr('y', yOffset)
       .attr('x', `${2 * this.rectSize + padding * 3}px`);
 
@@ -341,6 +341,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       };
     }
 
+
     function force() {
       let i,
         tree,
@@ -416,6 +417,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
           const bWidth = bbLength(bbi, 0),
             bHeight = bbLength(bbi, 1);
 
+          const nodeI = 0; // TODO remove
           if (data.node.index !== nodeI) {
             const dataNode = data.node;
             const bbj = boundingBoxes[dataNode.index],

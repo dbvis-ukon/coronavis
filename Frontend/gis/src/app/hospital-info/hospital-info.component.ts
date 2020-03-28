@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DiviHospital } from '../services/divi-hospitals.service';
+import {DiviHospital, TimestampedValue, getLatest} from '../services/divi-hospitals.service';
 import { ColormapService } from '../services/colormap.service';
 
 @Component({
@@ -43,6 +43,10 @@ export class HospitalInfoComponent implements OnInit {
 
   getCapacityStateColor(capacityState: string): string {
     return this.colormapService.getSingleHospitalColormap()(capacityState);
+  }
+
+  getLatest(entries: TimestampedValue[]): number {
+    return getLatest(entries);
   }
 
 }

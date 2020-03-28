@@ -2,9 +2,7 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import {
-  AggregatedHospitalsState,
-  DiviAggregatedHospital,
+import {DiviAggregatedHospital,
   DiviHospital,
   getLatest,
   TimestampedValue
@@ -75,6 +73,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
     return (b * 2 + a * 3) / (v + b + a);
   }
+
 
   // TODO adapt
   private getIcuHighScore(d: DiviAggregatedHospital) {
