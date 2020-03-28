@@ -68,9 +68,18 @@ export class HospitalInfoComponent implements OnInit {
           },
           "strokeDash": { 
             "field": "Vorhersage", 
-            "type": "nominal"            
+            "type": "nominal",
+            "legend": {
+              "orient": "left"
+            }
           },
-          "color": {"field": "Kategorie", "type": "nominal"}
+          "color": {
+            "field": "Kategorie", 
+            "type": "nominal",
+            "legend": {
+              "orient": "left"
+            }
+          }
         },
       },
       {
