@@ -289,11 +289,13 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       d.y = d._y;
     });
 
+    
     if (this.labelLayout) {
       this.labelLayout.stop();
     }
-    this.labelLayout = this.startForceSimulation([[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]]);
-
+    console.log(this.data);
+    const glyphSizeAdj = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
+    (new Layout).remove_overlap(this.data, glyphSizeAdj, () => this.ticked());
     // console.log('zoomed', this.map.getZoom(), scale);
 
     this.gHospitals

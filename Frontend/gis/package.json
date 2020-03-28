@@ -32,6 +32,7 @@
     "vega": "^5.10.0",
     "vega-embed": "^6.5.2",
     "vega-lite": "^4.8.1",
+    "webcola": "^3.4.0",
     "zone.js": "~0.10.3"
   },
   "devDependencies": {

@@ -1,15 +1,31 @@
 import * as d3 from 'd3';
-import {quadtree} from 'd3';
+import { quadtree } from 'd3';
+import * as cola from 'webcola';
 
 export class Layout {
 
+    // Remove!
     force_simulation(data, glyphSizes, tick_callback): d3.Simulation<any, undefined> {
+        console.log(data);
         return d3.forceSimulation(data)
             .alpha(0.1)
             .force("collide", this.quadtreeCollide(glyphSizes))
             .on('end', () => tick_callback());
     }
 
+    remove_overlap(data, glyphSize, callback) {
+        const w = glyphSize.width;
+        const h = glyphSize.height;
+        const rects = data.map(d => new cola.Rectangle(d.x, d.x + w, d.y, d.y + h));
+        cola.removeOverlaps(rects);
+        rects.forEach((r, i) => {
+            data[i].x = r.x;
+            data[i].y = r.y;
+        });
+        callback();
+    }
+
+    // Remove!
     private quadtreeCollide(bbox) {
         bbox = constant(bbox)
 
