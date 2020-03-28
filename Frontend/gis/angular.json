@@ -30,9 +30,9 @@
         }
       },
       "i18n": {
-        "sourceLocale": "de-De",
+        "sourceLocale": "de-DE",
         "locales": {
-          "en-Us": "src/i18n/messages.en.xlf"
+          "en": "src/i18n/messages.en.xlf"
         }
       },
       "root": "",
