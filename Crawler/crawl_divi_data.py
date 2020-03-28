@@ -58,12 +58,13 @@ try:
     cur.execute("SELECT Max(datenbestand) from divi_hospital_capacities_and_cases")
     last_update = cur.fetchone()[0]
 
+    now = datetime.datetime.now().replace(tzinfo=datetime.timezone(datetime.timedelta(hours=+1)))
     print("db data version:", last_update)
-    print("fetched data version:", datetime.datetime.now())
+    print("fetched data version:", now)
     print('Insert new data into DB...')
 
     psycopg2.extras.execute_values (
-    cur, aquery, entries, template='(\''+ str(datetime.datetime.now()) + '\', %(gemeindeschluessel)s, %(ort)s, %(bundesland)s, %(plz)s, %(webadresse)s, %(icu_low_care_frei)s, %(icu_low_care_belegt)s, %(icu_low_care_einschätzung)s, %(icu_low_care_in_24_h_anzahl)s, %(icu_high_care_frei)s, %(icu_high_care_belegt)s, %(icu_high_care_einschätzung)s, %(icu_high_care_in_24_h_anzahl)s, %(icu_ecmo_frei)s, %(icu_ecmo_belegt)s, %(icu_ecmo_care_einschätzung)s, %(icu_ecmo_care_in_24_h_anzahl)s, %(anzahl_ecmofälle_pro_jahr)s, %(covid19_aktuell)s, %(covid19_kumulativ)s, %(covid19_beatmet)s, %(covid19_verstorben)s, ST_SetSRID( ST_Point(%(lon)s, %(lat)s), 4326))', page_size=500
+    cur, aquery, entries, template='(\''+ str(now) + '\', %(gemeindeschluessel)s, %(ort)s, %(bundesland)s, %(plz)s, %(webadresse)s, %(icu_low_care_frei)s, %(icu_low_care_belegt)s, %(icu_low_care_einschätzung)s, %(icu_low_care_in_24_h_anzahl)s, %(icu_high_care_frei)s, %(icu_high_care_belegt)s, %(icu_high_care_einschätzung)s, %(icu_high_care_in_24_h_anzahl)s, %(icu_ecmo_frei)s, %(icu_ecmo_belegt)s, %(icu_ecmo_care_einschätzung)s, %(icu_ecmo_care_in_24_h_anzahl)s, %(anzahl_ecmofälle_pro_jahr)s, %(covid19_aktuell)s, %(covid19_kumulativ)s, %(covid19_beatmet)s, %(covid19_verstorben)s, ST_SetSRID( ST_Point(%(lon)s, %(lat)s), 4326))', page_size=500
 )
     conn.commit()
 

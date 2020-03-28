@@ -76,7 +76,16 @@ export interface AggregatedHospitals extends FeatureCollection {
   type: "FeatureCollection"
 }
 
-export interface DiviHospital {
+export interface AbstractDiviHospital {
+  'x': number;
+  'y': number;
+  '_x': number;
+  '_y': number;
+  'vx': number;
+  'vy': number;
+}
+
+export interface DiviHospital extends AbstractDiviHospital {
   'ID': number;
   'Name': string;
   'Adress': string;
@@ -86,27 +95,15 @@ export interface DiviHospital {
   'ECMO': 'Verfügbar' | 'Begrenzt' | 'Ausgelastet' | 'Nicht verfügbar';  // Extrakorporale Membranoxygenierung --> https://bit.ly/3dnlpyb
   'Stand': string;
   'Location': LatLngLiteral;
-  'x': number;
-  'y': number;
-  '_x': number;
-  '_y': number;
-  'vx': number;
-  'vy': number;
 }
 
-export interface DiviAggregatedHospital {
+export interface DiviAggregatedHospital extends AbstractDiviHospital {
   ecmo_state: AggregatedHospitalsState;
   icu_high_state: AggregatedHospitalsState;
   icu_low_state: AggregatedHospitalsState;
   'Location': LatLngLiteral;
   'ID': number;
   'Name': string;
-  'x': number;
-  'y': number;
-  '_x': number;
-  '_y': number;
-  'vx': number;
-  'vy': number;
 }
 
 @Injectable({
