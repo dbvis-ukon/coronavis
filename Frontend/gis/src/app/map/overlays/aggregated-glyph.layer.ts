@@ -22,7 +22,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
 
   constructor(
     name: string,
-    private granularity: String,
+    private granularity: string,
     private data: DiviAggregatedHospital[],
     private tooltipService: TooltipService,
     private colormapService: ColormapService,

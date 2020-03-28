@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import * as d3 from 'd3';
 import {AggregatedHospitalsProperties, AggregatedHospitalsState} from './divi-hospitals.service';
 import {ScaleLinear} from 'd3';
-import {BedType} from "../map/options/bed-type.enum";
+import {BedType} from '../map/options/bed-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -26,14 +26,19 @@ export class ColormapService {
 
   private singleHospitalCM = d3.scaleOrdinal<string, string>()
     .domain(ColormapService.bedStati)
-    .range([...ColormapService.bedStatusColors, "#c2cbd4", "#bbb"]);
-  getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
-    return this.singleHospitalCM;
-  }
+    .range([...ColormapService.bedStatusColors, '#c2cbd4', '#bbb']);
 
   private caseChoroplethColorMap = d3.scaleQuantize<string>()
     .domain([-1, 1])
     .range([...d3.schemeGreens[8].slice(0, 7).reverse(), '#fff', ...d3.schemeBlues[8].slice(0, 7)]);
+
+  private continousColorMap = d3.scaleLinear<string, string>()
+    .domain([0, 0.5, 1])
+    .range(ColormapService.bedStatusColors)
+    .interpolate(d3.interpolateRgb.gamma(2.2));
+  getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
+    return this.singleHospitalCM;
+  }
   getChoroplethCaseColor(normalizedDiff: number): string {
     return this.caseChoroplethColorMap(normalizedDiff);
   }
@@ -66,7 +71,7 @@ export class ColormapService {
     const v = d.Verfügbar || 0;
     const b = d.Begrenzt || 0;
     const a = d.Ausgelastet || 0;
-    const n = d["Nicht verfügbar"] || 0;
+    const n = d['Nicht verfügbar'] || 0;
 
     return v === 0 && b === 0 && a === 0 && n > 0;
   }
@@ -75,15 +80,10 @@ export class ColormapService {
     const v = d.Verfügbar || 0;
     const b = d.Begrenzt || 0;
     const a = d.Ausgelastet || 0;
-    const n = d["Nicht verfügbar"] || 0;
+    const n = d['Nicht verfügbar'] || 0;
 
     return v === 0 && b === 0 && a === 0 && n == 0;
   }
-
-  private continousColorMap = d3.scaleLinear<string, string>()
-    .domain([0, 0.5, 1])
-    .range(ColormapService.bedStatusColors)
-    .interpolate(d3.interpolateRgb.gamma(2.2));
 
   getBedStatusColor(properties: AggregatedHospitalsState): string {
     const score = this.getScore(properties);
@@ -96,10 +96,10 @@ export class ColormapService {
       .range(minMaxNormValues);
 
     if (this.noInformation(properties)) {
-      return this.singleHospitalCM("Keine Information");
+      return this.singleHospitalCM('Keine Information');
     }
     if (this.notAvailable(properties)) {
-      return this.singleHospitalCM("Nicht verfügbar");
+      return this.singleHospitalCM('Nicht verfügbar');
     }
     return this.continousColorMap(normalizeValues(score));
   }
