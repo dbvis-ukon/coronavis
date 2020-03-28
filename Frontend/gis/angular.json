@@ -29,6 +29,12 @@
           "skipTests": true
         }
       },
+      "i18n": {
+        "sourceLocale": "de-De",
+        "locales": {
+          "en-Us": "src/i18n/messages.en.xlf"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
