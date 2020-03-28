@@ -1,19 +1,20 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: covid19vis-crawler-patient-cases
+  name: covid19vis-crawler-rki-patient-cases
   annotations:
     description: "RKI individual cases including statistical information per patient"
+    maintainer: "Maximilian Fischer"
 spec:
-  # run at 9am
-  schedule: "0 9 * * *"
+  # run every 3 hours
+  schedule: "0 */3 * * *"
   jobTemplate:
     spec:
       backoffLimit: 2
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-patient-cases
+          - name: covid19vis-crawler-rki-patient-cases
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']

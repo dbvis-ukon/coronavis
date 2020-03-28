@@ -265,7 +265,7 @@ build-frontend:
     - export ENV_TYPE
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
-    - npm install --unsafe-perm
+    - npm install
     - npm run-script build
   artifacts:
     expire_in: 1 day
@@ -302,7 +302,7 @@ build-frontend:
     # generate imagename using a lowercased foldername == app
     - IMGNAME=$(echo "${FOLDER}" | tr '[:upper:]' '[:lower:]')
     - IMG="${CI_REGISTRY_IMAGE}/${IMGNAME}:${VERSION}"
-    - docker build -t "$IMG" .
+    - docker build --build-arg VERSION=${VERSION} -t "$IMG" .
     - docker push "$IMG"
   tags:
     - docker-build

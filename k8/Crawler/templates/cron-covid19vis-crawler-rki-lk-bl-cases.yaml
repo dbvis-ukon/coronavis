@@ -4,6 +4,7 @@ metadata:
   name: covid19vis-crawler-rki-lk-bl-cases
   annotations:
     description: "RKI cases on LK and BL level aggregated"
+    maintainer: "Udo Schlegel"
 spec:
   # run at 9am
   schedule: "0 9 * * *"
