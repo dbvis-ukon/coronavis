@@ -38,14 +38,20 @@ export class HospitalInfoComponent implements OnInit {
         { "Kategorie": "ECMO", "Datum": "2018-02-02", "Bettenauslastung (%)": 87, "Vorhersage": true },
         { "Kategorie": "ECMO", "Datum": "2018-02-03", "Bettenauslastung (%)": 87, "Vorhersage": true }
       ]
-    }, 
+    },
     "layer": [
       {
         "mark": "line",
         "encoding": {
           "x": { 
             "field": "Datum", 
-            "type": "ordinal"            
+            "type": "temporal",
+            "axis":{
+              "title": "Datum",
+              "scale": {
+                "domain": {"field": "Datum"}
+              } 
+            }
           },
           "y": { 
             "field": "Bettenauslastung (%)", 
@@ -54,15 +60,32 @@ export class HospitalInfoComponent implements OnInit {
             {
               "tickMinStep": 10, 
               "tickCount": 10,
-              "title": "Grade"
+              "title": "Bettenauslastung (%)"
             }, 
             "scale": {
               "domain": [0, 120]
             }
           },
-          "strokeDash": { "field": "Vorhersage", "type": "nominal" },
+          "strokeDash": { 
+            "field": "Vorhersage", 
+            "type": "nominal"            
+          },
           "color": {"field": "Kategorie", "type": "nominal"}
         },
+      },
+      {
+        "data": {"values": [{"predicitonStartDate": "2018-02-02"}]},
+        "mark": "rule",
+        "encoding": {
+          "x": { 
+            "field": "predicitonStartDate",
+            "type": "temporal",
+            "axis":false
+          },
+          "size": {"value": 1},
+          "color": {"value": "gray"},
+          "strokeDash": {"signal": [8,4]}
+        }
       },
       {
         "data": {"values": [{"ref": 100}]},
@@ -70,6 +93,7 @@ export class HospitalInfoComponent implements OnInit {
         "encoding": {
           "y": { "field":"ref"},
           "size": {"value": 1},
+          "axis":false,
           "color": {"value": "red"},
           "strokeDash": {"signal": [8,4]}
         }
