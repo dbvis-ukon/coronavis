@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="de">
+  <file original="ng.template" id="ngi18n">
+    <unit id="lsName">
+      <notes>
+        <note category="description">name of the group</note>
+        <note category="meaning">ls-name</note>
+        <note category="location">src/app/about/about.component.html:6</note>
+      </notes>
+      <segment>
+        <source>Datenanalyse und Visualisierung</source>
+        <target>Datenanalyse und Visualisierung</target>
+      </segment>
+    </unit>
+    <unit id="teamToolIntro">
+      <notes>
+        <note category="description">introduces the tool and LS</note>
+        <note category="meaning">introduction-tool</note>
+        <note category="location">src/app/about/about.component.html:14,16</note>
+      </notes>
+      <segment>
+        <source> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a&gt;" dispEnd="&lt;/a&gt;">AG Datenanalyse und
+            Visualisierung</pc> von Prof. Dr. Daniel Keim an der Universität Konstanz.
+          </source>
+          <target> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a&gt;" dispEnd="&lt;/a&gt;">AG Datenanalyse und
+            Visualisierung</pc> von Prof. Dr. Daniel Keim an der Universität Konstanz.
+          </target>
+      </segment>
+    </unit>
+    <unit id="orgComm">
+      <notes>
+        <note category="description">department</note>
+        <note category="meaning">organisation-and-communication</note>
+        <note category="location">src/app/about/about.component.html:24</note>
+      </notes>
+      <segment>
+        <source>Organisation und Kommunikation</source>
+        <target>Organisation und Kommunikation</target>
+      </segment>
+    </unit>
+    <unit id="visDesign">
+      <notes>
+        <note category="description">department</note>
+        <note category="meaning">visualization and design</note>
+        <note category="location">src/app/about/about.component.html:62</note>
+      </notes>
+      <segment>
+        <source>Visualisierung und Design</source>
+        <target>Visualisierung und Design</target>
+      </segment>
+    </unit>
+    <unit id="infra">
+      <notes>
+        <note category="description">department</note>
+        <note category="meaning">infrastructure</note>
+        <note category="location">src/app/about/about.component.html:105</note>
+      </notes>
+      <segment>
+        <source>Infrastruktur</source>
+        <target>Infrastruktur</target>
+      </segment>
+    </unit>
+    <unit id="dataHandlingProcessing">
+      <notes>
+        <note category="description">department</note>
+        <note category="meaning">database and processing</note>
+        <note category="location">src/app/about/about.component.html:148</note>
+      </notes>
+      <segment>
+        <source>Datenhaltung und -verarbeitung</source>
+        <target>Datenhaltung und -verarbeitung</target>
+      </segment>
+    </unit>
+    <unit id="versionDevelopmentFlag">
+      <notes>
+        <note category="description">development</note>
+        <note category="location">src/app/about/about.component.html:243</note>
+      </notes>
+      <segment>
+        <source>development</source>
+        <target>development</target>
+      </segment>
+    </unit>
+    <unit id="versionUnknownFlag">
+      <notes>
+        <note category="description">unknown</note>
+        <note category="location">src/app/about/about.component.html:247</note>
+        <note category="location">src/app/about/about.component.html:251</note>
+      </notes>
+      <segment>
+        <source>unknown</source>
+        <target>unbekannt</target>
+      </segment>
+    </unit>
+    <unit id="closeButton">
+      <notes>
+        <note category="description">close-button</note>
+        <note category="location">src/app/about/about.component.html:256</note>
+      </notes>
+      <segment>
+        <source>Close</source>
+        <target>Schließen</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>
