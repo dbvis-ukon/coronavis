@@ -610,7 +610,7 @@ deploy-tiles-production:
     name: alpine/helm:3.1.2
     entrypoint: ["sh", "-c", "apk add bash && /bin/bash"]
   script:
-    - KUBECONFIG=$KUBECONFIG_NEW
+    - export KUBECONFIG=$KUBECONFIG_NEW
     - echo $KUBECONFIG
     - source var.env
     # DEBUG
