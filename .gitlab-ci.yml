@@ -611,7 +611,6 @@ deploy-tiles-production:
     name: alpine/helm:3.1.2
     entrypoint: ["sh", "-c", "apk add bash sed && /bin/bash"]
   script:
-    - export KUBECONFIG=$KUBECONFIG_NEW
     - echo $KUBECONFIG
     - source var.env
     # DEBUG
@@ -644,6 +643,8 @@ deploy-tiles-production:
 .deploy-backend-new: &deploy-backend-new
   <<: *deploy-template-new
   <<: *rules-backend
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_NEW
   variables:
     APP: backend
     RUN_ON_FB: "no"
@@ -674,6 +675,8 @@ deploy-backend-fb-new:
 
 deploy-backend-staging-new:
   extends: .deploy-backend-new
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_STAGING
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
@@ -681,6 +684,8 @@ deploy-backend-staging-new:
 
 deploy-backend-production-new:
   extends: .deploy-backend-new
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_PRODUCTION
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
@@ -696,6 +701,8 @@ deploy-backend-production-new:
 .deploy-frontend-new: &deploy-frontend-new
   <<: *deploy-template-new
   <<: *rules-frontend
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_NEW
   variables:
     APP: frontend
     RUN_ON_FB: "no"
@@ -727,6 +734,8 @@ deploy-frontend-fb-new:
 
 deploy-frontend-staging-new:
   extends: .deploy-frontend-new
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_STAGING
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
@@ -734,6 +743,8 @@ deploy-frontend-staging-new:
 
 deploy-frontend-production-new:
   extends: .deploy-frontend-new
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_PRODUCTION
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
@@ -748,6 +759,8 @@ deploy-frontend-production-new:
 .deploy-crawler-new: &deploy-crawler-new
   <<: *deploy-template-new
   <<: *rules-crawler
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_NEW
   variables:
     APP: crawler
     RUN_ON_FB: "no"
@@ -782,6 +795,8 @@ deploy-frontend-production-new:
 
 deploy-crawler-production-new:
   extends: .deploy-crawler-new
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_PRODUCTION
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
@@ -796,6 +811,8 @@ deploy-crawler-production-new:
 .deploy-tiles-new: &deploy-tiles-new
   <<: *deploy-template-new
   <<: *rules-tiles
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_NEW
   variables:
     APP: tiles
     RUN_ON_FB: "no"
@@ -824,6 +841,8 @@ deploy-crawler-production-new:
 
 deploy-tiles-staging-new:
   extends: .deploy-tiles-new
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_STAGING
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
@@ -831,6 +850,8 @@ deploy-tiles-staging-new:
 
 deploy-tiles-production-new:
   extends: .deploy-tiles-new
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_PRODUCTION
   variables:
     ENV_TYPE: production
     RUN_ON_TAG: "yes"
