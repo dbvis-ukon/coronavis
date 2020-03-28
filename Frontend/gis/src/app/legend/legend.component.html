@@ -1,7 +1,7 @@
 
 
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === false && choroplethLayer">
-  <h5 (click)="legendCasesExtended = !legendCasesExtended" title="Klicken um Legende ein-/auszuklappen">Fallzahlen</h5>
+  <h5 (click)="legendCasesExtended = !legendCasesExtended" matTooltip="Klicken um Legende ein-/auszuklappen">Fallzahlen</h5>
     <div *ngIf="legendCasesExtended">
       <div class="row" *ngFor="let b of caseColors">
 
@@ -14,7 +14,7 @@
     <div *ngIf="!legendCasesExtended">
       <div class="row">
         <div class="text" [innerHtml]="casesMin"></div>
-        <div *ngFor="let b of caseColors;"  class="rect" [ngStyle]="{ 'background-color': b.color }" title="{{ b.text }}"></div>
+        <div *ngFor="let b of caseColors;"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.text }}"></div>
         <div class="text" [innerHtml]="casesMax"></div>
       </div>
     </div>
@@ -22,7 +22,7 @@
 
 
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === true || mo.bedGlyphOptions.enabled === true" >
-  <h5 (click)="legendBedsExtended = !legendBedsExtended" title="Klicken um Legende ein-/auszuklappen">Bettenauslastung</h5>
+  <h5 (click)="legendBedsExtended = !legendBedsExtended" matTooltip="Klicken um Legende ein-/auszuklappen">Bettenauslastung</h5>
 
   <div *ngIf="legendBedsExtended">
     <div class="row" *ngFor="let b of bedStatusColors">
@@ -35,7 +35,7 @@
   </div>
   <div *ngIf="!legendBedsExtended">
     <div class="row">
-      <div class="beside" *ngFor="let b of bedStatusColors;" title="{{ b }}">
+      <div class="beside" *ngFor="let b of bedStatusColors;" matTooltip="{{ b }}">
 
         <div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div>
 
