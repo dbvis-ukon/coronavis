@@ -43,18 +43,33 @@ export class HospitalInfoComponent implements OnInit {
       {
         "mark": "line",
         "encoding": {
-          "x": { "field": "Datum", "type": "ordinal" },
-          "y": { "field": "Bettenauslastung (%)", "type": "quantitative", "axis": {"tickMinStep": 10, "tickCount": 10, "domain": [0,120]}, },
+          "x": { 
+            "field": "Datum", 
+            "type": "ordinal"            
+          },
+          "y": { 
+            "field": "Bettenauslastung (%)", 
+            "type": "quantitative", 
+            "axis": 
+            {
+              "tickMinStep": 10, 
+              "tickCount": 10,
+              "title": "Grade"
+            }, 
+            "scale": {
+              "domain": [0, 120]
+            }
+          },
           "strokeDash": { "field": "Vorhersage", "type": "nominal" },
           "color": {"field": "Kategorie", "type": "nominal"}
         },
       },
       {
-        "data": {"values": [{"ref": 50}]},
+        "data": {"values": [{"ref": 100}]},
         "mark": "rule",
         "encoding": {
           "y": { "field":"ref"},
-          "size": {"value": 2},
+          "size": {"value": 1},
           "color": {"value": "red"},
           "strokeDash": {"signal": [8,4]}
         }
