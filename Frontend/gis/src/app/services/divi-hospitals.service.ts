@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { LatLngLiteral } from 'leaflet';
-import { environment } from 'src/environments/environment';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {LatLngLiteral} from 'leaflet';
+import {environment} from 'src/environments/environment';
 import {Feature, FeatureCollection, MultiPolygon} from 'geojson';
 
 
 export interface SingleHospitalGeometry {
-    coordinates: number[];
-    type: string;
+  coordinates: number[];
+  type: string;
 }
 
 export interface TimestampedValueJson {
@@ -18,43 +18,45 @@ export interface TimestampedValueJson {
 }
 
 export interface SingleHospitalProperties {
-    index: number;
-    last_update: string;
-    name: string;
-    address: string;
-    contact: string;
-    LastUpdate: string;
-    city: string;
-    plz: string;
-    webaddress: string;
-    'covid19_aktuell': TimestampedValueJson[];
-    'covid19_beatmet': TimestampedValueJson[];
-    'covid19_kumulativ': TimestampedValueJson[];
-    'covid19_verstorben': TimestampedValueJson[];
-    'ecmo_faelle_jahr': TimestampedValueJson[];
-    'icu_ecmo_care_belegt': TimestampedValueJson[]; // Extrakorporale Membranoxygenierung --> https://bit.ly/3dnlpyb
-    'icu_ecmo_care_einschaetzung': TimestampedValueJson[];
-    'icu_ecmo_care_frei': TimestampedValueJson[];
-    'icu_ecmo_care_in_24h': TimestampedValueJson[];
-    'icu_high_care_belegt': TimestampedValueJson[];
-    'icu_high_care_einschaetzung': TimestampedValueJson[];
-    'icu_high_care_frei': TimestampedValueJson[];
-    'icu_high_care_in_24h': TimestampedValueJson[];
-    'icu_low_care_belegt': TimestampedValueJson[];
-    'icu_low_care_einschaetzung': TimestampedValueJson[];
-    'icu_low_care_frei': TimestampedValueJson[];
-    'icu_low_care_in_24h': TimestampedValueJson[];
+  gemeindeschluessel: number;
+  ort: string;
+  bundeslandschluessel: string;
+  plz: string;
+  webaddresse: string;
+  id: string;
+  name: string;
+  address: string;
+  state: string;
+  contact: string;
+  helipad_nearby: boolean;
+  'covid19_aktuell': TimestampedValueJson[];
+  'covid19_beatmet': TimestampedValueJson[];
+  'covid19_kumulativ': TimestampedValueJson[];
+  'covid19_verstorben': TimestampedValueJson[];
+  'ecmo_faelle_jahr': TimestampedValueJson[];
+  'icu_ecmo_care_belegt': TimestampedValueJson[]; // Extrakorporale Membranoxygenierung --> https://bit.ly/3dnlpyb
+  'icu_ecmo_care_einschaetzung': TimestampedValueJson[];
+  'icu_ecmo_care_frei': TimestampedValueJson[];
+  'icu_ecmo_care_in_24h': TimestampedValueJson[];
+  'icu_high_care_belegt': TimestampedValueJson[];
+  'icu_high_care_einschaetzung': TimestampedValueJson[];
+  'icu_high_care_frei': TimestampedValueJson[];
+  'icu_high_care_in_24h': TimestampedValueJson[];
+  'icu_low_care_belegt': TimestampedValueJson[];
+  'icu_low_care_einschaetzung': TimestampedValueJson[];
+  'icu_low_care_frei': TimestampedValueJson[];
+  'icu_low_care_in_24h': TimestampedValueJson[];
 }
 
 export interface SingleHospitalFeature {
-    geometry: SingleHospitalGeometry;
-    properties: SingleHospitalProperties;
-    type: 'Feature';
+  geometry: SingleHospitalGeometry;
+  properties: SingleHospitalProperties;
+  type: 'Feature';
 }
 
 export interface SingleHospitals {
-    features: SingleHospitalFeature[];
-    type: 'FeatureCollection';
+  features: SingleHospitalFeature[];
+  type: 'FeatureCollection';
 }
 
 
@@ -177,7 +179,8 @@ export interface DiviAggregatedHospital {
 })
 export class DiviHospitalsService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   public getDiviHospitalsCounties(): Observable<DiviAggregatedHospital[]> {
     return this.http.get<AggregatedHospitals>(`${environment.apiUrl}divi/development/landkreise`)
@@ -210,18 +213,18 @@ export class DiviHospitalsService {
   mySingleAggregatedMapper(input: SingleHospitals): DiviHospital[] {
     return input.features.map((i, index) => {
       return {
-        ID: i.properties.index,
+        ID: +i.properties.id,
         Name: i.properties.name,
         Adress: i.properties.address,
         Kontakt: i.properties.contact,
-        City: i.properties.city,
+        City: i.properties.ort,
         Postcode: i.properties.plz,
-        Webaddress: i.properties.webaddress,
+        Webaddress: i.properties.webaddresse,
         Location: {
           lat: i.geometry.coordinates[1],
           lng: i.geometry.coordinates[0]
         },
-        LastUpdate: new Date(i.properties.last_update),
+        LastUpdate: new Date(),
         covid19_aktuell: i.properties.covid19_aktuell,
         covid19_beatmet: i.properties.covid19_beatmet,
         covid19_kumulativ: i.properties.covid19_kumulativ,
