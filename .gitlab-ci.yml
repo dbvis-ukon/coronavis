@@ -895,7 +895,7 @@ remove-deployment-frontend-review:
     RUN_ON_MASTER: "no"
     RUN_ON_TAG: "no"
   script:
-    - KUBECONFIG=$KUBECONFIG_NEW
+    - export KUBECONFIG=$KUBECONFIG_NEW
     - echo $KUBECONFIG
     - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / - | cut -c -53 | sed -E 's#-+$##')
     # DEBUG
