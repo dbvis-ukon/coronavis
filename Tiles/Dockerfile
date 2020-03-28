@@ -8,6 +8,9 @@ RUN apk add --no-cache sed pigz
 # Copy nginx configuration to docker container
 COPY ./mysite.conf /etc/nginx/conf.d/default.conf
 
+# Check the syntax of the config
+RUN nginx -t
+
 # replace the %VERSION% string with the $VERSION provided by the argument which is either a commit sha or tag
 RUN sed -i "s/%VERSION%/$VERSION/" /etc/nginx/conf.d/default.conf
 
