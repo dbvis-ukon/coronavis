@@ -39,7 +39,6 @@ export class HospitalInfoComponent implements OnInit {
         { "Kategorie": "ECMO", "Datum": "2018-02-03", "Bettenauslastung (%)": 87, "Vorhersage": true }
       ]
     }, 
-    "transform": [{"calculate":"100", "as":"ref"}],
     "layer": [
       {
         "mark": "line",
@@ -51,13 +50,13 @@ export class HospitalInfoComponent implements OnInit {
         },
       },
       {
+        "data": {"values": [{"ref": 50}]},
         "mark": "rule",
         "encoding": {
-          "y": { 
-            "field":"ref"
-          },
+          "y": { "field":"ref"},
           "size": {"value": 2},
-          "color": {"value": "gray"}
+          "color": {"value": "red"},
+          "strokeDash": {"signal": [8,4]}
         }
       }
     ]
