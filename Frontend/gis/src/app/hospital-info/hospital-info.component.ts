@@ -157,15 +157,17 @@ export class HospitalInfoComponent implements OnInit {
 
       // FIXME should the timestamp for the prediction be the following day? and should the predicted value be added to the occupied beds value?
       const predictedRate = ((occupiedBeds[entryLength-1].value + prediction.value) / totalBeds * 100) || 0;
-      dataValues.push({"Kategorie": this.bedAccessorsMapping[bedAccessor], "Datum": prediction.timestamp.split("T")[0]+"pred",
+      dataValues.push({"Kategorie": this.bedAccessorsMapping[bedAccessor], "Datum": prediction.timestamp.split("T")[0],
         "Bettenauslastung (%)": predictedRate, "Vorhersage": false});
-      dataValues.push({"Kategorie": this.bedAccessorsMapping[bedAccessor], "Datum": prediction.timestamp.split("T")[0]+"pred",
-        "Bettenauslastung (%)": predictedRate, "Vorhersage": true});
+      // FIXME add twice to show with the dashed line
+      // dataValues.push({"Kategorie": this.bedAccessorsMapping[bedAccessor], "Datum": prediction.timestamp.split("T")[0]",
+        // "Bettenauslastung (%)": predictedRate, "Vorhersage": true});
     }
 
       // hack deep clone spec
       const spec = JSON.parse(JSON.stringify(this.templateSpec));
 
+    console.log(dataValues);
       // inject data values
       spec.data.values = dataValues;
 
