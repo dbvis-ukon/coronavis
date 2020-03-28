@@ -8,7 +8,8 @@ metadata:
 spec:
   {{- if eq .Values.urlProtocol "https" }}
   tls:
-    - hosts: {{ .Values.url }}
+    - hosts: 
+        - {{ .Values.url }}
       secretName: {{ .Release.Name }}-tls
   {{- end }}
   rules:
