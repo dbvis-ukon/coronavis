@@ -542,14 +542,14 @@ deploy-frontend-production:
 #    ENV_TYPE: staging
 #    RUN_ON_MASTER: "yes"
   
-deploy-crawler-production:
-  extends: .deploy-crawler
-  variables:
-    ENV_TYPE: production
-    RUN_ON_TAG: "yes"
-    K8_NAMESPACE: covid-19-vis-production
-  environment:
-    name: $ENV_TYPE/$APP
+# deploy-crawler-production:
+#   extends: .deploy-crawler
+#   variables:
+#     ENV_TYPE: production
+#     RUN_ON_TAG: "yes"
+#     K8_NAMESPACE: covid-19-vis-production
+#   environment:
+#     name: $ENV_TYPE/$APP
 
 #--------------------
 # TILES
