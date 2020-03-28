@@ -4,7 +4,13 @@
 @import '~mapbox-gl/dist/mapbox-gl.css';
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+  margin: 0;
+  .tracking-pxl {
+    position: fixed;
+    z-index: 0;
+  }
+}
 
 
 .popup-panel-white-glass-background {
