@@ -2,7 +2,7 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import { Overlay } from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import {AggregatedHospitalsState, DiviAggregatedHospital, DiviHospital} from 'src/app/services/divi-hospitals.service';
+import {AggregatedHospitalsState, DiviAggregatedHospital, DiviHospital, TimestampedValue} from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
 import {GlyphHoverEvent} from "../events/glyphhover";
@@ -57,30 +57,43 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> {
     height: 28
   };
 
+  private getLargestEntry(entries: TimestampedValue[]) {
+    if (entries.length === 0) {
+      return null;
+    }
+    let currentEntry = entries[0];
+    for (let i = 0; i < entries.length; i++) {
+      if (entries[i].timestamp > currentEntry.timestamp) {
+        currentEntry = entries[i];
+      }
+    }
+    return currentEntry.value;
+  }
+
   private latLngPoint(latlng: L.LatLngExpression): L.Point {
     return this.map.project(latlng, 9);
   }
 
   private getIcuLowScore(d: DiviAggregatedHospital) {
-    const v = d.icu_low_state.Verfügbar || 0;
-    const b = d.icu_low_state.Begrenzt || 0;
-    const a = d.icu_low_state.Ausgelastet || 0;
+    const v = this.getLargestEntry(d.icu_low_care_frei) || 0;
+    const b = this.getLargestEntry(d.icu_low_care_belegt) || 0;
+    const a = this.getLargestEntry(d.icu_low_care_einschaetzung)  || 0;
 
     return (b * 2 + a * 3) / (v + b + a);
   }
 
   private getIcuHighScore(d: DiviAggregatedHospital) {
-    const v = d.icu_high_state.Verfügbar || 0;
-    const b = d.icu_high_state.Begrenzt || 0;
-    const a = d.icu_high_state.Ausgelastet || 0;
+    const v = this.getLargestEntry(d.icu_low_care_frei) || 0;
+    const b = this.getLargestEntry(d.icu_low_care_belegt) || 0;
+    const a = this.getLargestEntry(d.icu_low_care_einschaetzung)  || 0;
 
     return (b * 2 + a * 3) / (v + b + a);
   }
 
   private getEcmoScore(d: DiviAggregatedHospital) {
-    const v = d.ecmo_state.Verfügbar || 0;
-    const b = d.ecmo_state.Begrenzt || 0;
-    const a = d.ecmo_state.Ausgelastet || 0;
+    const v = this.getLargestEntry(d.icu_low_care_frei) || 0;
+    const b = this.getLargestEntry(d.icu_low_care_belegt) || 0;
+    const a = this.getLargestEntry(d.icu_low_care_einschaetzung)  || 0;
 
     return (b * 2 + a * 3) / (v + b + a);
   }
