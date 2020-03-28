@@ -426,13 +426,13 @@ dockerize-tiles:
     - dockerize-backend
     - export-environment
 
-deploy-backend-fb:
-  extends: .deploy-backend
-  variables:
-    ENV_TYPE: review
-    RUN_ON_FB: "yes"
-  environment:
-    on_stop: remove-deployment-backend-review
+# deploy-backend-fb:
+#   extends: .deploy-backend
+#   variables:
+#     ENV_TYPE: review
+#     RUN_ON_FB: "yes"
+#   environment:
+#     on_stop: remove-deployment-backend-review
 
 deploy-backend-staging:
   extends: .deploy-backend
@@ -479,13 +479,13 @@ deploy-backend-production:
     - export-environment
 
 
-deploy-frontend-fb:
-  extends: .deploy-frontend
-  environment:
-    on_stop: remove-deployment-frontend-review
-  variables:
-    ENV_TYPE: review
-    RUN_ON_FB: "yes"
+# deploy-frontend-fb:
+#   extends: .deploy-frontend
+#   environment:
+#     on_stop: remove-deployment-frontend-review
+#   variables:
+#     ENV_TYPE: review
+#     RUN_ON_FB: "yes"
 
 deploy-frontend-staging:
   extends: .deploy-frontend
