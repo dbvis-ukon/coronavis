@@ -138,7 +138,7 @@ export class HospitalInfoComponent implements OnInit {
       for (const free of freeBeds) {
         const occupied = occupiedBeds[i];
         const rate = (occupied.value / (free.value + occupied.value) * 100)  || 0;
-        dataValues.push({ Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: free.timestamp,
+        dataValues.push({ Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: new Date(free.timestamp).toLocaleString(),
           'Bettenauslastung (%)': rate, Vorhersage: false, value: occupied.value, total: free.value + occupied.value});
         i++;
       }
@@ -149,7 +149,7 @@ export class HospitalInfoComponent implements OnInit {
       const nextDay = new Date();
       nextDay.setDate(new Date(predictionDay).getDate() + 1);
 
-      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: nextDay.toISOString().substring(0, 10),
+      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: nextDay.toLocaleString(),
         'Bettenauslastung (%)': predictedRate, Vorhersage: true});
     }
 
@@ -158,7 +158,7 @@ export class HospitalInfoComponent implements OnInit {
 
     // inject data values
     spec.data.values = dataValues;
-    spec.layer[1].data.values[0].predicitonStartDate = predictionDay;
+    spec.layer[1].data.values[0].predicitonStartDate =  new Date(predictionDay).toLocaleString();
 
     this.specs.push(spec);
   }
