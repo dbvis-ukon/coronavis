@@ -265,6 +265,11 @@ export class MapComponent implements OnInit {
   }
 
   private updateBedBackgroundLayer(o: BedBackgroundOptions) {
+    if(o.enabled === false) {
+      this.removeBedChoroplethLayers();
+      return;
+    }
+
     if(o.aggregationLevel === AggregationLevel.none) {
       this.removeBedChoroplethLayers();
       throw 'AggregationLevel must not be none on bed background layer';
