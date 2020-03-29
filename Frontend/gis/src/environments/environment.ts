@@ -5,9 +5,9 @@
 export const environment = {
 
   // apiUrl: 'http://localhost:5000/'
-  apiUrl: 'https://staging.api.covid19vis.lingvis.io/',
+  apiUrl: 'https://staging.api.covistest.dbvis.de/',
 
-  tileServerUrl: 'https://staging.tiles.covid19vis.lingvis.io/',
+  tileServerUrl: 'https://staging.tiles.covistest.dbvis.de/',
 
   version: '',
 
