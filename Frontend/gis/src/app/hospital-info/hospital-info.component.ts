@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {DiviHospital, TimestampedValue, getLatest, BedStatusSummary} from '../services/divi-hospitals.service';
 import { ColormapService } from '../services/colormap.service';
+import * as d3 from 'd3';
 
 @Component({
   selector: 'app-hospital-info',
@@ -25,18 +26,6 @@ export class HospitalInfoComponent implements OnInit {
     "height": 100,
     "data": {
       "values": [
-        { "Kategorie": "ICU - Low Care", "Datum": "2018-02-01", "Bettenauslastung (%)": 12, "Vorhersage": false },
-        { "Kategorie": "ICU - Low Care", "Datum": "2018-02-02", "Bettenauslastung (%)": 28, "Vorhersage": false },
-        { "Kategorie": "ICU - Low Care", "Datum": "2018-02-02", "Bettenauslastung (%)": 28, "Vorhersage": true },
-        { "Kategorie": "ICU - Low Care", "Datum": "2018-02-03", "Bettenauslastung (%)": 91, "Vorhersage": true },
-        { "Kategorie": "ICU - High Care", "Datum": "2018-02-01", "Bettenauslastung (%)": 81, "Vorhersage": false },
-        { "Kategorie": "ICU - High Care", "Datum": "2018-02-02", "Bettenauslastung (%)": 81, "Vorhersage": false },
-        { "Kategorie": "ICU - High Care", "Datum": "2018-02-02", "Bettenauslastung (%)": 81, "Vorhersage": true },
-        { "Kategorie": "ICU - High Care", "Datum": "2018-02-03", "Bettenauslastung (%)": 19, "Vorhersage": true },
-        { "Kategorie": "ECMO", "Datum": "2018-02-01", "Bettenauslastung (%)": 87, "Vorhersage": false },
-        { "Kategorie": "ECMO", "Datum": "2018-02-02", "Bettenauslastung (%)": 87, "Vorhersage": false },
-        { "Kategorie": "ECMO", "Datum": "2018-02-02", "Bettenauslastung (%)": 87, "Vorhersage": true },
-        { "Kategorie": "ECMO", "Datum": "2018-02-03", "Bettenauslastung (%)": 87, "Vorhersage": true }
       ]
     },
     "layer": [
@@ -45,7 +34,7 @@ export class HospitalInfoComponent implements OnInit {
         "encoding": {
           "x": {
             "field": "Datum",
-            "type": "temporal",
+            "type": "nominal",
             "axis":{
               "title": "Datum",
               "scale": {
@@ -66,13 +55,13 @@ export class HospitalInfoComponent implements OnInit {
               "domain": [0, 120]
             }
           },
-          "strokeDash": {
+         /* "strokeDash": {
             "field": "Vorhersage",
             "type": "nominal",
             "legend": {
               "orient": "left"
             }
-          },
+          },*/
           "color": {
             "field": "Kategorie",
             "type": "nominal",
@@ -88,7 +77,7 @@ export class HospitalInfoComponent implements OnInit {
         "encoding": {
           "x": {
             "field": "predicitonStartDate",
-            "type": "temporal",
+            "type": "nominal",
             "axis":false
           },
           "size": {"value": 1},
@@ -103,7 +92,7 @@ export class HospitalInfoComponent implements OnInit {
           "y": { "field":"ref"},
           "size": {"value": 1},
           "axis":false,
-          "color": {"value": "red"},
+          "color": {"value": "grey"},
           "strokeDash": {"signal": [8,4]}
         }
       }
@@ -135,33 +124,51 @@ export class HospitalInfoComponent implements OnInit {
 
     this.specs = [];
     const dataValues = [];
+    let predictionDay;
 
     for (const bedAccessor of this.bedAccessors) {
       const entryLength = this.data[bedAccessor + '_frei'].length;
 
       const freeBeds = this.data[bedAccessor + '_frei'];
       const occupiedBeds = this.data[bedAccessor + '_belegt'];
-      const prediction = this.data[bedAccessor + '_einschaetzung'][entryLength - 1];
 
       const totalBeds = freeBeds[entryLength - 1].value + occupiedBeds[entryLength - 1].value;
 
       let i = 0;
-      for (const free of freeBeds) {
-        const occupied = occupiedBeds[i];
-        const rate = (occupied.value / (free.value + occupied.value) * 100)  || 0;
-        dataValues.push({ Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: free.timestamp,
-          'Bettenauslastung (%)': rate, Vorhersage: false, value: occupied.value, total: free.value + occupied.value});
+
+      const averageOccupationPerDay = {};
+      const occupationPerDay = {};
+      const timestampsPerDay = {};
+
+      for (const occupied of occupiedBeds) {
+        const occupiedValue = occupiedBeds[i].value;
+        const day = occupied.timestamp.split('T')[0];
+        if (occupationPerDay[day] === undefined) {
+          occupationPerDay[day] = 0;
+          timestampsPerDay[day] = 0;
+        }
+        occupationPerDay[day] += occupiedValue / (occupiedValue + freeBeds[i].value);
+        timestampsPerDay[day] += 1;
+      }
+
+      for (const key in occupationPerDay) {
+        averageOccupationPerDay[key] = occupationPerDay[key] / timestampsPerDay[key];
+        const rate = (averageOccupationPerDay[key] * 100) || 0;
+        dataValues.push({
+          Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: key,
+          'Bettenauslastung (%)': rate, Vorhersage: false
+        });
         i++;
       }
 
-      // FIXME should the timestamp for the prediction be the following day?
-      // and should the predicted value be added to the occupied beds value?
+      const prediction = this.data[bedAccessor + '_einschaetzung'][entryLength - 1];
       const predictedRate = ((occupiedBeds[entryLength - 1].value + prediction.value) / totalBeds * 100) || 0;
-      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: prediction.timestamp,
-        'Bettenauslastung (%)': predictedRate, Vorhersage: false, value: prediction.value, total: totalBeds});
-      // FIXME add twice to show with the dashed line
-      // dataValues.push({"Kategorie": this.bedAccessorsMapping[bedAccessor], "Datum": prediction.timestamp.split("T")[0]",
-        // "Bettenauslastung (%)": predictedRate, "Vorhersage": true});
+      predictionDay = prediction.timestamp.split('T')[0];
+      const nextDay = new Date();
+      nextDay.setDate(new Date(predictionDay).getDate() + 1);
+
+      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: nextDay.toISOString().substring(0, 10),
+        'Bettenauslastung (%)': predictedRate, Vorhersage: true});
     }
 
       // hack deep clone spec
@@ -169,12 +176,12 @@ export class HospitalInfoComponent implements OnInit {
 
     // inject data values
     spec.data.values = dataValues;
+    spec.layer[1].data.values[0].predicitonStartDate = predictionDay.split('T')[0];
 
     this.specs.push(spec);
   }
 
   getCapacityStateColor(bedstatus: BedStatusSummary): string {
-    console.log(this.data, bedstatus);
     return this.colormapService.getBedStatusColor(bedstatus)
   }
 
