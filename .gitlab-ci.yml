@@ -7,8 +7,7 @@ stages:
 variables:
   K8_NAMESPACE: covid-19-vis
   STAGING_BRANCH: master
-  URL_SUFFIX: covid19vis.lingvis.io
-  URL_SUFFIX_NEW: covistest.dbvis.de
+  URL_SUFFIX: covis.dbvis.de
 
 ###########################################
 # SETUP ENVIRONMENT VARIALBES
@@ -23,7 +22,7 @@ export-environment:
     # set the version either as a tag (v0.0.1) or as a commit sha (74bac331)
     - if [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then VERSION=${CI_COMMIT_TAG}; else VERSION=${CI_COMMIT_SHORT_SHA}; fi
     # the current URL suffix
-    #- URL_SUFFIX="covid19vis.lingvis.io" # defined in the variables section
+    #- URL_SUFFIX="covis.dbvis.de" # defined in the variables section
     # this shortens the slug to 30 characters and removes all trailing dashes
     - SHORTENED_CI_COMMIT_REF_SLUG=$(echo ${CI_COMMIT_REF_SLUG} | tr / - | cut -c -30 |  sed -E 's#-+$##')
     - URL_PREFIX=""
@@ -263,13 +262,7 @@ build-frontend:
   script:
     - source var.env
     - cd ./Frontend
-    # if we are on a new review branch we set the new suffix to the covistest.dbvis.de, otherwise the old suffix
-    - if [[ ${ENV_TYPE} =~ ^(review|staging)$ ]]; then SUFFIX=${URL_SUFFIX_NEW}; else SUFFIX=${URL_SUFFIX}; fi
-    # replace the suffix for api url
-    - FRONTEND_URL_BACKEND=$(echo ${FRONTEND_URL_BACKEND} | sed "s/${URL_SUFFIX}/${SUFFIX}/")
     - export FRONTEND_URL_BACKEND
-    # replace the suffix for tile server
-    - FRONTEND_URL_TILES=$(echo ${FRONTEND_URL_TILES} | sed "s/${URL_SUFFIX}/${SUFFIX}/")
     - export FRONTEND_URL_TILES
     - export URL_PROTOCOL
     - export VERSION
@@ -380,239 +373,7 @@ dockerize-tiles:
     - export-environment
 
 ###########################################
-# DEPLOY
-###########################################
-
-.deploy-script: &deploy-template
-  stage: deploy
-  script:
-    - source var.env
-    # DEBUG
-    - cat var.env
-    # using the app name converted to uppercase to generate the url accessor, result: URL_BACKEND
-    - URL_ACCESSOR="URL_$(echo ${APP} | tr [:lower:] [:upper:])"
-    # DEBUG
-    - echo $URL_ACCESSOR
-    # this will retrieve the content of the actual URL_BACKEND variable
-    - URL=${!URL_ACCESSOR}
-    # DEBUG
-    - echo ${URL}
-    # generates the chart name using the environment name, replace all / with -; result: review-backend-100-fancify-pipeline
-    - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / - | cut -c -53 | sed -E 's#-+$##')
-    # DEBUG
-    - echo ${CHART_NAME}
-    # write the url into the var.env file for the dynamic env url generation
-    - echo "URL=${URL}" >> var.env
-    # use chart name and the folder by uppercasing the first character of the app name; result: Backend
-    - helm3 upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} --set envType=${ENV_TYPE} ${CHART_NAME} ./k8/${APP^}
-    - helm3 upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} --set envType=${ENV_TYPE} ${CHART_NAME} ./k8/${APP^}
-  tags:
-    - k8-admin
-
-#--------------------
-# BACKEND
-#--------------------
-
-.deploy-backend: &deploy-backend
-  <<: *deploy-template
-  <<: *rules-backend
-  variables:
-    APP: backend
-    RUN_ON_FB: "no"
-    RUN_ON_MASTER: "no"
-    RUN_ON_TAG: "no"
-  environment:
-    url: $URL_PROTOCOL://$URL
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    kubernetes:
-      namespace: $K8_NAMESPACE
-  artifacts:
-    reports:
-      dotenv: var.env
-  needs:
-    - dockerize-backend
-    - export-environment
-  dependencies:
-    - dockerize-backend
-    - export-environment
-
-# deploy-backend-fb:
-#   extends: .deploy-backend
-#   variables:
-#     ENV_TYPE: review
-#     RUN_ON_FB: "yes"
-#   environment:
-#     on_stop: remove-deployment-backend-review
-
-# deploy-backend-staging:
-#   extends: .deploy-backend
-#   variables:
-#     ENV_TYPE: staging
-#     RUN_ON_MASTER: "yes"
-#     K8_NAMESPACE: covid-19-vis-staging
-
-deploy-backend-production:
-  extends: .deploy-backend
-  variables:
-    ENV_TYPE: production
-    RUN_ON_TAG: "yes"
-    K8_NAMESPACE: covid-19-vis-production
-  environment:
-    name: $ENV_TYPE/$APP
-
-
-#--------------------
-# FRONTEND
-#--------------------
-
-.deploy-frontend: &deploy-frontend
-  <<: *deploy-template
-  <<: *rules-frontend
-  variables:
-    APP: frontend
-    RUN_ON_FB: "no"
-    RUN_ON_MASTER: "no"
-    RUN_ON_TAG: "no"
-  environment:
-    url: $URL_PROTOCOL://$URL
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    kubernetes:
-      namespace: $K8_NAMESPACE
-  artifacts:
-    reports:
-      dotenv: var.env
-  needs:
-    - dockerize-frontend
-    - export-environment
-  dependencies:
-    - dockerize-frontend
-    - export-environment
-
-
-# deploy-frontend-fb:
-#   extends: .deploy-frontend
-#   environment:
-#     on_stop: remove-deployment-frontend-review
-#   variables:
-#     ENV_TYPE: review
-#     RUN_ON_FB: "yes"
-
-# deploy-frontend-staging:
-#   extends: .deploy-frontend
-#   variables:
-#     ENV_TYPE: staging
-#     RUN_ON_MASTER: "yes"
-#     K8_NAMESPACE: covid-19-vis-staging
-
-deploy-frontend-production:
-  extends: .deploy-frontend
-  variables:
-    ENV_TYPE: production
-    RUN_ON_TAG: "yes"
-    K8_NAMESPACE: covid-19-vis-production
-  environment:
-    name: $ENV_TYPE/$APP
-
-#--------------------
-# CRAWLER
-#--------------------
-
-.deploy-crawler: &deploy-crawler
-  <<: *deploy-template
-  <<: *rules-crawler
-  variables:
-    APP: crawler
-    RUN_ON_FB: "no"
-    RUN_ON_MASTER: "no"
-    RUN_ON_TAG: "no"
-  environment:
-    # url: $URL_PROTOCOL://$URL
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    kubernetes:
-      namespace: $K8_NAMESPACE
-  artifacts:
-    reports:
-      dotenv: var.env
-  needs:
-    - dockerize-crawler
-    - export-environment
-  dependencies:
-    - dockerize-crawler
-    - export-environment
-
-# deploy-crawler-fb:
-#   extends: .deploy-crawler
-#   variables:
-#     ENV_TYPE: review
-#     RUN_ON_FB: "yes"
-#
-# deploy-crawler-staging:
-#  extends: .deploy-crawler
-#  variables:
-#    ENV_TYPE: staging
-#    RUN_ON_MASTER: "yes"
-  
-# deploy-crawler-production:
-#   extends: .deploy-crawler
-#   variables:
-#     ENV_TYPE: production
-#     RUN_ON_TAG: "yes"
-#     K8_NAMESPACE: covid-19-vis-production
-#   environment:
-#     name: $ENV_TYPE/$APP
-
-#--------------------
-# TILES
-#--------------------
-
-.deploy-tiles: &deploy-tiles
-  <<: *deploy-template
-  <<: *rules-tiles
-  variables:
-    APP: tiles
-    RUN_ON_FB: "no"
-    RUN_ON_MASTER: "no"
-    RUN_ON_TAG: "no"
-  environment:
-    url: $URL_PROTOCOL://$URL
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    kubernetes:
-      namespace: $K8_NAMESPACE
-  artifacts:
-    reports:
-      dotenv: var.env
-  needs:
-    - dockerize-tiles
-    - export-environment
-  dependencies:
-    - dockerize-tiles
-    - export-environment
-
-# deploy-tiles-fb:
-#   extends: .deploy-tiles
-#   variables:
-#     ENV_TYPE: review
-#     RUN_ON_FB: "yes"
-
-# deploy-tiles-staging:
-#   extends: .deploy-tiles
-#   variables:
-#     ENV_TYPE: staging
-#     RUN_ON_MASTER: "yes"
-#     K8_NAMESPACE: covid-19-vis-staging
-
-deploy-tiles-production:
-  extends: .deploy-tiles
-  variables:
-    ENV_TYPE: production
-    RUN_ON_TAG: "yes"
-    K8_NAMESPACE: covid-19-vis-production
-  environment:
-    name: $ENV_TYPE/$APP
-
-
-###########################################
-# TEST DEPLOY NEW CLUSTER
+# DEPLOY NEW CLUSTER
 ###########################################
 
 .deploy-script-new: &deploy-template-new
@@ -631,7 +392,6 @@ deploy-tiles-production:
     - echo $URL_ACCESSOR
     # this will retrieve the content of the actual URL_BACKEND variable
     - URL=${!URL_ACCESSOR}
-    - URL=$(echo ${URL} | sed "s/${URL_SUFFIX}/${URL_SUFFIX_NEW}/")
     # DEBUG
     - echo ${URL}
     # generates the chart name using the environment name, replace all / with -; result: review-backend-100-fancify-pipeline
@@ -662,7 +422,7 @@ deploy-tiles-production:
     RUN_ON_TAG: "no"
   environment:
     url: $URL_PROTOCOL://$URL
-    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -701,7 +461,7 @@ deploy-backend-production-new:
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
   environment:
-    name: new/$ENV_TYPE/$APP
+    name: $ENV_TYPE/$APP
 
 
 #--------------------
@@ -720,7 +480,7 @@ deploy-backend-production-new:
     RUN_ON_TAG: "no"
   environment:
     url: $URL_PROTOCOL://$URL
-    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -760,7 +520,7 @@ deploy-frontend-production-new:
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
   environment:
-    name: new/$ENV_TYPE/$APP
+    name: $ENV_TYPE/$APP
 
 #--------------------
 # CRAWLER
@@ -778,7 +538,7 @@ deploy-frontend-production-new:
     RUN_ON_TAG: "no"
   environment:
     # url: $URL_PROTOCOL://$URL
-    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -812,7 +572,7 @@ deploy-crawler-production-new:
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
   environment:
-    name: new/$ENV_TYPE/$APP
+    name: $ENV_TYPE/$APP
 
 #--------------------
 # TILES
@@ -830,7 +590,7 @@ deploy-crawler-production-new:
     RUN_ON_TAG: "no"
   environment:
     url: $URL_PROTOCOL://$URL
-    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     kubernetes:
       namespace: $K8_NAMESPACE
   artifacts:
@@ -867,51 +627,7 @@ deploy-tiles-production-new:
     RUN_ON_TAG: "yes"
     K8_NAMESPACE: covid-19-vis-production
   environment:
-    name: new/$ENV_TYPE/$APP
-
-###########################################
-# CLEANUP
-###########################################
-
-.remove-deployment:
-  stage: deploy
-  variables:
-    GIT_STRATEGY: none
-    RUN_ON_FB: "no"
-    RUN_ON_MASTER: "no"
-    RUN_ON_TAG: "no"
-  script:
-    - CHART_NAME=$(echo ${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG} | tr / - | cut -c -53 | sed -E 's#-+$##')
-    # DEBUG
-    - echo $CHART_NAME
-    - helm3 delete --namespace=${K8_NAMESPACE} --dry-run --debug ${CHART_NAME}
-    - helm3 delete --namespace=${K8_NAMESPACE} ${CHART_NAME}
-  dependencies: []
-  allow_failure: true
-  tags:
-    - k8-admin
-
-remove-deployment-backend-review:
-  extends: .remove-deployment
-  <<: *rules-backend-cleanup
-  variables:
-    APP: backend
-    ENV_TYPE: review
-    RUN_ON_FB: "yes"
-  environment:
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    action: stop
-
-remove-deployment-frontend-review:
-  extends: .remove-deployment
-  <<: *rules-frontend-cleanup
-  variables:
-    APP: frontend
-    ENV_TYPE: review
-    RUN_ON_FB: "yes"
-  environment:
-    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
-    action: stop
+    name: $ENV_TYPE/$APP
 
 ###########################################
 # CLEANUP NEW ENV
@@ -930,7 +646,7 @@ remove-deployment-frontend-review:
   script:
     - export KUBECONFIG=$KUBECONFIG_NEW
     - echo $KUBECONFIG
-    - CHART_NAME=$(echo "new-${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG}" | tr / - | cut -c -53 | sed -E 's#-+$##')
+    - CHART_NAME=$(echo "${ENV_TYPE}/${APP}/${CI_COMMIT_REF_SLUG}" | tr / - | cut -c -53 | sed -E 's#-+$##')
     # DEBUG
     - echo $CHART_NAME
     - helm delete --namespace=${K8_NAMESPACE} --dry-run --debug ${CHART_NAME}
@@ -948,7 +664,7 @@ remove-deployment-backend-review-new:
     ENV_TYPE: review
     RUN_ON_FB: "yes"
   environment:
-    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     action: stop
 
 remove-deployment-frontend-review-new:
@@ -959,5 +675,5 @@ remove-deployment-frontend-review-new:
     ENV_TYPE: review
     RUN_ON_FB: "yes"
   environment:
-    name: new/$ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
+    name: $ENV_TYPE/$APP/$CI_COMMIT_REF_SLUG
     action: stop
