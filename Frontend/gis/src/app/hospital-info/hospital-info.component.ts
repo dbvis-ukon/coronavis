@@ -135,35 +135,17 @@ export class HospitalInfoComponent implements OnInit {
       const totalBeds = freeBeds[entryLength - 1].value + occupiedBeds[entryLength - 1].value;
 
       let i = 0;
-
-      const averageOccupationPerDay = {};
-      const occupationPerDay = {};
-      const timestampsPerDay = {};
-
-      for (const occupied of occupiedBeds) {
-        const occupiedValue = occupiedBeds[i].value;
-        const day = occupied.timestamp.split('T')[0];
-        if (occupationPerDay[day] === undefined) {
-          occupationPerDay[day] = 0;
-          timestampsPerDay[day] = 0;
-        }
-        occupationPerDay[day] += occupiedValue / (occupiedValue + freeBeds[i].value);
-        timestampsPerDay[day] += 1;
-      }
-
-      for (const key in occupationPerDay) {
-        averageOccupationPerDay[key] = occupationPerDay[key] / timestampsPerDay[key];
-        const rate = (averageOccupationPerDay[key] * 100) || 0;
-        dataValues.push({
-          Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: key,
-          'Bettenauslastung (%)': rate, Vorhersage: false
-        });
+      for (const free of freeBeds) {
+        const occupied = occupiedBeds[i];
+        const rate = (occupied.value / (free.value + occupied.value) * 100)  || 0;
+        dataValues.push({ Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: free.timestamp,
+          'Bettenauslastung (%)': rate, Vorhersage: false, value: occupied.value, total: free.value + occupied.value});
         i++;
       }
 
       const prediction = this.data[bedAccessor + '_einschaetzung'][entryLength - 1];
       const predictedRate = ((occupiedBeds[entryLength - 1].value + prediction.value) / totalBeds * 100) || 0;
-      predictionDay = prediction.timestamp.split('T')[0];
+      predictionDay = prediction.timestamp;
       const nextDay = new Date();
       nextDay.setDate(new Date(predictionDay).getDate() + 1);
 
@@ -176,7 +158,7 @@ export class HospitalInfoComponent implements OnInit {
 
     // inject data values
     spec.data.values = dataValues;
-    spec.layer[1].data.values[0].predicitonStartDate = predictionDay.split('T')[0];
+    spec.layer[1].data.values[0].predicitonStartDate = predictionDay;
 
     this.specs.push(spec);
   }
