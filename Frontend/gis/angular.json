@@ -64,35 +64,10 @@
           },
           "configurations": {
             "de": {
-              "localize": ["de"],
-              "main": "src/main.de.ts",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
+              "localize": ["de"]
+            },
+            "en": {
+              "localize": ["en"]
             },
             "production": {
               "fileReplacements": [
@@ -136,6 +111,9 @@
           "configurations": {
             "de": {
               "browserTarget": "gis:build:de"
+            },
+            "en": {
+              "browserTarget": "gis:build:en"
             },
             "production": {
               "browserTarget": "gis:build:production"
