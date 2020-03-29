@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import {quadtree} from 'd3';
-import {AbstractDiviHospital} from "../services/divi-hospitals.service";
+import {AbstractDiviHospital} from "../repositories/divi-hospitals.service";
 import {of} from "rxjs";
 
 export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {

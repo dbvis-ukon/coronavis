@@ -7,12 +7,12 @@ import 'mapbox-gl-leaflet';
 // import 'leaflet-mapbox-gl';
 import {Overlay} from './overlays/overlay';
 import {SimpleGlyphLayer} from './overlays/simple-glyph.layer';
-import {DiviHospital, DiviHospitalsService} from '../services/divi-hospitals.service';
+import {DiviHospital, DiviHospitalsService} from '../repositories/divi-hospitals.service';
 import {TooltipService} from '../services/tooltip.service';
 import {ColormapService} from '../services/colormap.service';
 import {AggregatedGlyphLayer} from './overlays/aggregated-glyph.layer';
-import {DataService} from '../services/data.service';
-import {HospitallayerService} from '../services/hospitallayer.service';
+import {DataService} from '../repositories/data.service';
+import {HospitallayerService} from '../repositories/hospitallayer.service';
 import {FeatureCollection} from 'geojson';
 import {forkJoin, Subject} from 'rxjs';
 import {LandkreiseHospitalsLayer} from './overlays/landkreishospitals';
@@ -27,7 +27,6 @@ import {BedBackgroundOptions} from './options/bed-background-options';
 import {BedGlyphOptions} from './options/bed-glyph-options';
 import {MatDialog} from '@angular/material/dialog';
 import {environment} from 'src/environments/environment';
-import {BedStatusChoropleth} from "./overlays/bedstatuschoropleth";
 import { GlyphLayer } from './overlays/GlyphLayer';
 
 

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as d3 from 'd3';
-import {AggregatedHospitalsProperties, BedStatusSummary, getLatest, TimestampedValue} from './divi-hospitals.service';
+import {AggregatedHospitalsProperties, BedStatusSummary, getLatest, TimestampedValue} from '../repositories/divi-hospitals.service';
 import {ScaleLinear} from 'd3';
 import {BedType} from '../map/options/bed-type.enum';
 

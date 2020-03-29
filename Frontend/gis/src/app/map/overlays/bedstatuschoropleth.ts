@@ -1,7 +1,7 @@
 import * as L from 'leaflet';
 import { Overlay } from './overlay';
 import {ColormapService} from "../../services/colormap.service";
-import {AggregatedHospitals, AggregatedHospitalsProperties} from "../../services/divi-hospitals.service";
+import {AggregatedHospitals, AggregatedHospitalsProperties} from "../../repositories/divi-hospitals.service";
 import { BedType } from '../options/bed-type.enum';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import {CaseTooltipComponent} from "../../case-tooltip/case-tooltip.component";

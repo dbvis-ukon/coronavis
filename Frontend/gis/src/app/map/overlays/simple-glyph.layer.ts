@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from 'src/app/services/tooltip.service';
 import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
-import {DiviHospital, getLatest} from 'src/app/services/divi-hospitals.service';
+import {DiviHospital, getLatest} from 'src/app/repositories/divi-hospitals.service';
 import {ColormapService} from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
 import { Observable } from 'rxjs';

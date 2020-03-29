@@ -1,17 +1,14 @@
-import {Injectable, OnInit} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {DataService} from "./data.service";
 import {environment} from "../../environments/environment";
-import {HospitalLayer} from "../map/overlays/hospital";
 import {BedStatusChoropleth} from "../map/overlays/bedstatuschoropleth";
-import {FeatureCollection} from "geojson";
-import {BehaviorSubject, Subject} from "rxjs";
-import {Layer} from "leaflet";
-import {ColormapService} from "./colormap.service";
+import {Subject} from "rxjs";
+import {ColormapService} from "../services/colormap.service";
 import {AggregatedHospitals} from "./divi-hospitals.service";
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
-import {TooltipService} from "./tooltip.service";
+import {TooltipService} from "../services/tooltip.service";
 
 @Injectable({
   providedIn: "root"

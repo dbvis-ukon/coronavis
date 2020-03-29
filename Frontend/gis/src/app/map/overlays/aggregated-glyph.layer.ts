@@ -6,10 +6,10 @@ import {DiviAggregatedHospital,
   DiviHospital,
   getLatest,
   TimestampedValue
-} from 'src/app/services/divi-hospitals.service';
+} from 'src/app/repositories/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
-import {HospitallayerService} from "../../services/hospitallayer.service";
+import {HospitallayerService} from "../../repositories/hospitallayer.service";
 import {Observable} from "rxjs";
 import {BedGlyphOptions} from '../options/bed-glyph-options';
 import {BedType} from '../options/bed-type.enum';

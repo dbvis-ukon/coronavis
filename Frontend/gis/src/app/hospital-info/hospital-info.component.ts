@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {DiviHospital, TimestampedValue, getLatest, BedStatusSummary} from '../services/divi-hospitals.service';
+import {DiviHospital, TimestampedValue, getLatest, BedStatusSummary} from '../repositories/divi-hospitals.service';
 import { ColormapService } from '../services/colormap.service';
 
 @Component({

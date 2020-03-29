@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
-import {DiviAggregatedHospital} from '../services/divi-hospitals.service';
+import {DiviAggregatedHospital} from '../repositories/divi-hospitals.service';
 import * as d3 from 'd3';
 import { ColormapService } from '../services/colormap.service';
 import { scaleSequential } from 'd3';
