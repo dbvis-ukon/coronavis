@@ -149,7 +149,7 @@ export class HospitalInfoComponent implements OnInit {
       for (const free of freeBeds) {
         const occupied = occupiedBeds[i];
         const rate = (occupied.value / (free.value + occupied.value) * 100)  || 0;
-        dataValues.push({ Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: free.timestamp.split('T')[0],
+        dataValues.push({ Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: free.timestamp,
           'Bettenauslastung (%)': rate, Vorhersage: false, value: occupied.value, total: free.value + occupied.value});
         i++;
       }
@@ -157,7 +157,7 @@ export class HospitalInfoComponent implements OnInit {
       // FIXME should the timestamp for the prediction be the following day?
       // and should the predicted value be added to the occupied beds value?
       const predictedRate = ((occupiedBeds[entryLength - 1].value + prediction.value) / totalBeds * 100) || 0;
-      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: prediction.timestamp.split('T')[0],
+      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: prediction.timestamp,
         'Bettenauslastung (%)': predictedRate, Vorhersage: false, value: prediction.value, total: totalBeds});
       // FIXME add twice to show with the dashed line
       // dataValues.push({"Kategorie": this.bedAccessorsMapping[bedAccessor], "Datum": prediction.timestamp.split("T")[0]",
