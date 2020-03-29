@@ -171,4 +171,9 @@ export class HospitalInfoComponent implements OnInit {
     return getLatest(entries);
   }
 
+  getTrendIcon(entries: TimestampedValue[]): string {
+    const latest = getLatest(entries);
+    return latest >= 0 ? (latest == 0 ? 'trending_flat' : 'trending_up') : 'trending_down';
+  }
+
 }
