@@ -84,7 +84,7 @@ export-environment:
     when: never
   # if this is set, run this job all the time
   - if: $RUN_ALWAYS == "yes"
-    when: always
+    when: on_success
   # run if files changed
   # and if it should run on a feature branch or it should run on master
   # - changes:
@@ -92,16 +92,16 @@ export-environment:
   #     # - k8/Backend/**/*
   #     # - .gitlab-ci.yml
   - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
-    when: always
+    when: on_success
   # - changes:
   #     - Backend/**/*
   #     - k8/Backend/**/*
   #     - .gitlab-ci.yml
   - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
-    when: always
+    when: on_success
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
-    when: always
+    when: on_success
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
 
@@ -112,7 +112,7 @@ export-environment:
     when: never
   # if this is set, run this job all the time
   - if: $RUN_ALWAYS == "yes"
-    when: always
+    when: on_success
   # run if files changed
   # and if it should run on a feature branch or it should run on master
   # - changes:
@@ -120,16 +120,16 @@ export-environment:
   #     - k8/Frontend/**/*
   #     - .gitlab-ci.yml
   - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
-    when: always
+    when: on_success
   # - changes:
   #     - Frontend/**/*
   #     - k8/Frontend/**/*
   #     - .gitlab-ci.yml
   - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
-    when: always
+    when: on_success
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
-    when: always
+    when: on_success
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
 
@@ -140,7 +140,7 @@ export-environment:
     when: never
   # if this is set, run this job all the time
   - if: $RUN_ALWAYS == "yes"
-    when: always
+    when: on_success
   # run if files changed
   # and if it should run on a feature branch or it should run on master
   - changes:
@@ -149,17 +149,17 @@ export-environment:
       - k8/crawler-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
-    when: always
+    when: on_success
   - changes:
       - Crawler/**/*
       - k8/Crawler/**/*
       - k8/crawler-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
-    when: always
+    when: on_success
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
-    when: always
+    when: on_success
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
 
@@ -171,7 +171,7 @@ export-environment:
     when: never
   # if this is set, run this job all the time
   - if: $RUN_ALWAYS == "yes"
-    when: always
+    when: on_success
   # run if files changed
   # and if it should run on a feature branch or it should run on master
   - changes:
@@ -180,17 +180,17 @@ export-environment:
       - k8/tiles-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
-    when: always
+    when: on_success
   - changes:
       - Tiles/**/*
       - k8/Tiles/**/*
       - k8/tiles-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
-    when: always
+    when: on_success
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
-    when: always
+    when: on_success
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
 
