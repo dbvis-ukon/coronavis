@@ -11,6 +11,7 @@ import {ColormapService} from "./colormap.service";
 import {AggregatedHospitals} from "./divi-hospitals.service";
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
+import {TooltipService} from "./tooltip.service";
 
 @Injectable({
   providedIn: "root"
@@ -19,7 +20,7 @@ export class HospitallayerService {
   private _layers = [];
   private layers = new Subject<BedStatusChoropleth>();
 
-  constructor(private http: HttpClient, private dataService: DataService, private colormapService: ColormapService) {
+  constructor(private http: HttpClient, private dataService: DataService, private colormapService: ColormapService, private tooltipService: TooltipService) {
   }
 
   public getLayers(): Subject<BedStatusChoropleth> {
@@ -45,7 +46,7 @@ export class HospitallayerService {
       this.http.get<AggregatedHospitals>(url + granularity.api)
         .subscribe(data => {
           for (let type of types) {
-            const layer = new BedStatusChoropleth(this.getName(granularity.state, type), data, granularity.state, type, this.colormapService);
+            const layer = new BedStatusChoropleth(this.getName(granularity.state, type), data, granularity.state, type, this.colormapService, this.tooltipService);
             this.layers.next(layer);
           }
         })
