@@ -53,56 +53,18 @@ export class ColormapService {
     return this.caseChoroplethColorMap(normalizedDiff);
   }
 
-  /*private getMinScore(d: AggregatedHospitalsState) {
-    const v = d.Verfügbar || 0;
-    const b = d.Begrenzt || 0;
-    const a = d.Ausgelastet || 0;
-
-    return v + b + a;
-  }
-
-  private getMaxScore(d: AggregatedHospitalsState) {
-    const v = d.Verfügbar || 0;
-    const b = d.Begrenzt || 0;
-    const a = d.Ausgelastet || 0;
-
-    return (v + b + a) * 3;
-  }
-
-  private getScore(d: AggregatedHospitalsState) {
-    const v = d.Verfügbar || 0;
-    const b = d.Begrenzt || 0;
-    const a = d.Ausgelastet || 0;
-
-    return (v + b * 2 + a * 3); // / ((v + b + a) * 3);
-  }
-
-  private notAvailable(d: AggregatedHospitalsState) {
-    const v = d.Verfügbar || 0;
-    const b = d.Begrenzt || 0;
-    const a = d.Ausgelastet || 0;
-    const n = d['Nicht verfügbar'] || 0;
-
-    return v === 0 && b === 0 && a === 0 && n > 0;
-  }
-
-  private noInformation(d: AggregatedHospitalsState) {
-    const v = d.Verfügbar || 0;
-    const b = d.Begrenzt || 0;
-    const a = d.Ausgelastet || 0;
-    const n = d['Nicht verfügbar'] || 0;
-
-    return v === 0 && b === 0 && a === 0 && n == 0;
-  }*/
-
+  /**
+   * Calculates the ratio of available / occupied
+   * @param bedStatus
+   */
   getBedStatusColor(bedStatus: BedStatusSummary): string {
+    if (getLatest(bedStatus.full) === null || getLatest(bedStatus.free) === null) {
+      return this.singleHospitalCM('Keine Information');
+    }
+
     if (0 === getLatest(bedStatus.full) + getLatest(bedStatus.free)) {
       return this.singleHospitalCM('Nicht verfügbar');
     }
-
-    // if (this.noInformation(properties)) {
-    //   return this.singleHospitalCM('Keine Information');
-    // }
 
     const score = 1 - getLatest(bedStatus.free) / (getLatest(bedStatus.full) + getLatest(bedStatus.free));
     const normalizeValues = d3.scaleQuantize()
@@ -110,6 +72,5 @@ export class ColormapService {
       .range([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]);
 
     return this.continousColorMap(normalizeValues(score));
-    // return this.continousColorMap(score);
   }
 }

@@ -131,12 +131,12 @@ export interface BedStatusSummary {
 }
 
 export interface AbstractDiviHospital {
-  'x': number;
-  'y': number;
-  '_x': number;
-  '_y': number;
-  'vx': number;
-  'vy': number;
+  x?: number;
+  y?: number;
+  _x?: number;
+  _y?: number;
+  vx?: number;
+  vy?: number;
 }
 
 export interface DiviHospital extends AbstractDiviHospital {
@@ -172,12 +172,6 @@ export interface DiviHospital extends AbstractDiviHospital {
   icu_low_summary: BedStatusSummary;
 
   helipad_nearby: boolean;
-  'x'?: number;
-  'y'?: number;
-  '_x'?: number;
-  '_y'?: number;
-  'vx'?: number;
-  'vy'?: number;
 }
 
 export interface DiviAggregatedHospital extends AbstractDiviHospital {
@@ -207,13 +201,6 @@ export interface DiviAggregatedHospital extends AbstractDiviHospital {
   'icu_low_care_frei': TimestampedValue[];
   'icu_low_care_in_24h': TimestampedValue[];
   icu_low_summary: BedStatusSummary;
-
-  'x': number;
-  'y': number;
-  '_x': number;
-  '_y': number;
-  'vx': number;
-  'vy': number;
 }
 
 @Injectable({
