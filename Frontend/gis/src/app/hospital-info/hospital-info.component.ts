@@ -67,8 +67,9 @@ export class HospitalInfoComponent implements OnInit {
             "type": "nominal",
             "legend": {
               "orient": "left"
-            }
-          }
+            }            
+          },
+          "opacity": {"value": 0.8}
         },
       },
       {
@@ -78,7 +79,7 @@ export class HospitalInfoComponent implements OnInit {
           "x": {
             "field": "predicitonStartDate",
             "type": "nominal",
-            "axis":true
+            "axis":false
           },
           "strokeWidth": {"value": 0.1},
           "opacity": {"value": 0.4},
@@ -140,7 +141,7 @@ export class HospitalInfoComponent implements OnInit {
       for (const free of freeBeds) {
         const occupied = occupiedBeds[i];
         const rate = (occupied.value / (free.value + occupied.value) * 100)  || 0;
-        dataValues.push({ Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: free.timestamp,
+        dataValues.push({ Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: new Date(free.timestamp).toLocaleString(),
           'Bettenauslastung (%)': rate, Vorhersage: false, value: occupied.value, total: free.value + occupied.value});
         i++;
       }
@@ -157,14 +158,17 @@ export class HospitalInfoComponent implements OnInit {
       nextDay.setDate(new Date(predictionDay).getDate() + 1);
 
 
+
       const lastRealDataDay_freeBeds = getLatest(this.data[bedAccessor + '_frei']);
       const lastRealDataDay_occupiedBeds = getLatest(this.data[bedAccessor + '_belegt']);
       const lastRealDataDay_totalBeds = lastRealDataDay_freeBeds + lastRealDataDay_occupiedBeds;
       const lastRealDataDay_rate = (lastRealDataDay_occupiedBeds / lastRealDataDay_totalBeds * 100)  || 0;
-      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: predictionDay,
+      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: new Date(predictionDay).toLocaleString(),
         'Bettenauslastung (%)': lastRealDataDay_rate, Vorhersage: true});
 
-      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: nextDay.toISOString().substring(0, 10),
+
+      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: nextDay.toLocaleString(),
+
         'Bettenauslastung (%)': predictedRate, Vorhersage: true});
     }
 
@@ -173,7 +177,7 @@ export class HospitalInfoComponent implements OnInit {
 
     // inject data values
     spec.data.values = dataValues;
-    spec.layer[1].data.values[0].predicitonStartDate = predictionDay;
+    spec.layer[1].data.values[0].predicitonStartDate =  new Date(predictionDay).toLocaleString();
 
     this.specs.push(spec);
 
