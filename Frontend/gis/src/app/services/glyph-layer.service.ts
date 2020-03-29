@@ -1,27 +1,18 @@
-import {
-  Injectable
-} from '@angular/core';
-import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
-import { SimpleGlyphLayer } from '../map/overlays/simple-glyph.layer';
-import { BedGlyphOptions } from '../map/options/bed-glyph-options';
-import { map, tap } from 'rxjs/operators';
-import { TooltipService } from './tooltip.service';
-import { ColormapService } from './colormap.service';
-import { MatDialog } from '@angular/material/dialog';
-import { HospitalRepository } from '../repositories/hospital.repository';
-import { AggregatedGlyphLayer } from '../map/overlays/aggregated-glyph.layer';
-import { AggregationLevel } from '../map/options/aggregation-level.enum';
-import { LandkreiseHospitalsLayer } from '../map/overlays/landkreishospitals';
-import { LatLngLiteral, LayerGroup } from 'leaflet';
-import { TimestampedValue, SingleHospitals, AggregatedHospitals, DiviDevelopmentRepository } from '../repositories/divi-development.respository';
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {BehaviorSubject, forkJoin, Observable} from 'rxjs';
+import {SimpleGlyphLayer} from '../map/overlays/simple-glyph.layer';
+import {BedGlyphOptions} from '../map/options/bed-glyph-options';
+import {map, tap} from 'rxjs/operators';
+import {TooltipService} from './tooltip.service';
+import {ColormapService} from './colormap.service';
+import {MatDialog} from '@angular/material/dialog';
+import {HospitalRepository} from '../repositories/hospital.repository';
+import {AggregatedGlyphLayer} from '../map/overlays/aggregated-glyph.layer';
+import {AggregationLevel} from '../map/options/aggregation-level.enum';
+import {LandkreiseHospitalsLayer} from '../map/overlays/landkreishospitals';
 import {LatLngLiteral} from 'leaflet';
-import {environment} from 'src/environments/environment';
 import {Feature, FeatureCollection, MultiPolygon} from 'geojson';
-import {BedType} from "../map/options/bed-type.enum";
+import {DiviDevelopmentRepository} from "../repositories/divi-development.respository";
 
 export interface HospitalProperties {
   name: string,
