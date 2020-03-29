@@ -124,23 +124,6 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     const padding = 2;
     const yOffset = 2;
 
-    const range = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
-
-    const icu_low_scores = this.data.map(d => this.getIcuLowScore(d));
-    const icu_low_normalizer = d3.scaleQuantize()
-      .domain([0, d3.max(icu_low_scores)])
-      .range(range);
-
-    const icu_high_scores = this.data.map(d => this.getIcuHighScore(d));
-    const icu_high_normalizer = d3.scaleQuantize()
-      .domain([0, d3.max(icu_high_scores)])
-      .range(range);
-
-    const ecmo_scores = this.data.map(d => this.getEcmoScore(d));
-    const ecmo_normalizer = d3.scaleQuantize()
-      .domain([0, d3.max(ecmo_scores)])
-      .range(range);
-
     this.gHospitals = d3.select(svgElement)
       .style("pointer-events", "none")
       .selectAll('g.hospital')
@@ -201,7 +184,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('height', `${rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
-      .style('fill', d1 => this.colormapService.getBedStatusColor( {free: d1.icu_low_care_frei, full: d1.icu_low_care_belegt, prognosis: d1.icu_low_care_einschaetzung, in24h: d1.icu_low_care_in_24h }));
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_low_summary));
 
     this.gHospitals
       .append('rect')
@@ -210,7 +193,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${rectSize + padding * 2}px`)
-      .style('fill', d1 => this.colormapService.getBedStatusColor({free: d1.icu_high_care_frei, full: d1.icu_high_care_belegt, prognosis: d1.icu_high_care_einschaetzung, in24h:d1.icu_high_care_in_24h}));
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_high_summary));
 
     this.gHospitals
       .append('rect')
@@ -219,7 +202,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`)
-      .style('fill', d1 => this.colormapService.getBedStatusColor({free: d1.icu_ecmo_care_frei, full: d1.icu_ecmo_care_belegt, prognosis: d1.icu_ecmo_care_einschaetzung, in24h: d1.icu_ecmo_care_in_24h}));
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_ecmo_summary));
 
     this.onZoomed();
 
