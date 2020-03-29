@@ -210,7 +210,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('class', `bed ${BedType.icuLow}`)
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
-      .style('fill', d1 => colorScale(getLatest(d1.icu_low_care_frei))) // todo colorScale(d1.icuLowCare))
+      // .style('fill', d1 => colorScale(getLatest(d1.icu_low_care_frei))) // todo colorScale(d1.icuLowCare))
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_low_summary))
       .attr('x', padding)
       .attr('y', yOffset);
 
@@ -220,7 +221,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${this.rectSize}px`)
-      .style('fill', d1 => colorScale(getLatest(d1.icu_high_care_frei))) // todo colorScale(d1.icuHighCare))
+      // .style('fill', d1 => colorScale(getLatest(d1.icu_high_care_frei))) // todo colorScale(d1.icuHighCare))
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_high_summary))
       .attr('y', yOffset)
       .attr('x', `${this.rectSize + padding * 2}px`);
 
@@ -230,7 +232,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> {
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${2 * this.rectSize}px`)
-      .style('fill', d1 => colorScale(getLatest(d1.icu_ecmo_care_frei)))// todo colorScale(d1.ECMO))
+      // .style('fill', d1 => colorScale(getLatest(d1.icu_ecmo_care_frei)))// todo colorScale(d1.ECMO))
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_ecmo_summary))
       .attr('y', yOffset)
       .attr('x', `${2 * this.rectSize + padding * 3}px`);
 

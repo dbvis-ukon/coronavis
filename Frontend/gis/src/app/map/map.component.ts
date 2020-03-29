@@ -26,7 +26,8 @@ import {MapOptions} from './options/map-options';
 import {BedBackgroundOptions} from './options/bed-background-options';
 import {BedGlyphOptions} from './options/bed-glyph-options';
 import {MatDialog} from '@angular/material/dialog';
-import { environment } from 'src/environments/environment';
+import {environment} from 'src/environments/environment';
+import {BedStatusChoropleth} from "./overlays/bedstatuschoropleth";
 
 
 @Component({

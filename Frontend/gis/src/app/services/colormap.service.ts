@@ -96,23 +96,20 @@ export class ColormapService {
   }*/
 
   getBedStatusColor(bedStatus: BedStatusSummary): string {
-    // todo
-    const score = getLatest(bedStatus.free) / (getLatest(bedStatus.full) + getLatest(bedStatus.free));
-    // console.log(score, getLatest(bedStatus.free), (getLatest(bedStatus.full) + getLatest(bedStatus.free)));
-    const minScore = 0; // todo this.getMinScore(properties);
-    const maxScore = 1.0; // todo this.getMaxScore(properties);
-
-    const minMaxNormValues = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
-    const normalizeValues = d3.scaleQuantize()
-      .domain([minScore, maxScore])
-      .range(minMaxNormValues);
-
-    /*if (this.noInformation(properties)) {
-      return this.singleHospitalCM('Keine Information');
-    }
-    if (this.notAvailable(properties)) {
+    if (0 === getLatest(bedStatus.full) + getLatest(bedStatus.free)) {
       return this.singleHospitalCM('Nicht verfügbar');
-    }*/
+    }
+
+    // if (this.noInformation(properties)) {
+    //   return this.singleHospitalCM('Keine Information');
+    // }
+
+    const score = 1 - getLatest(bedStatus.free) / (getLatest(bedStatus.full) + getLatest(bedStatus.free));
+    const normalizeValues = d3.scaleQuantize()
+      .domain([0, 1])
+      .range([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]);
+
     return this.continousColorMap(normalizeValues(score));
+    // return this.continousColorMap(score);
   }
 }

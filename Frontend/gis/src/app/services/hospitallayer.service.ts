@@ -24,7 +24,7 @@ export class HospitallayerService {
 
   public getLayers(): Subject<BedStatusChoropleth> {
 
-    const url = `${environment.apiUrl}hospitals/`;
+    const url = `${environment.apiUrl}divi/development/`;
     const granularities = [
       {
         api: "landkreise",
