@@ -42,7 +42,6 @@ export class HospitalInfoComponent implements OnInit {
   }
 
   getCapacityStateColor(bedstatus: BedStatusSummary): string {
-    console.log(this.data, bedstatus);
     return this.colormapService.getBedStatusColor(bedstatus)
   }
 
