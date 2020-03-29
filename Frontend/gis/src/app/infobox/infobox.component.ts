@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, Inject, LOCALE_ID} from '@angular/core';
 import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {
   CovidNumberCaseChange,
@@ -24,7 +24,8 @@ export class InfoboxComponent implements OnInit {
 
   constructor(
     private colormapService: ColormapService,
-    private dialogService: MatDialog
+    private dialogService: MatDialog,
+    @Inject(LOCALE_ID) protected localeId: string
   ) { }
 
   glyphLegend;
@@ -53,7 +54,22 @@ export class InfoboxComponent implements OnInit {
 
   eAggregationLevels = AggregationLevel;
 
+  locales: string[] = [
+    'en',
+    'de'
+  ];
+
+  selectedLocale: string;
+
   ngOnInit(): void {
+    console.log('locale', this.localeId);
+
+    if(this.locales.indexOf(this.localeId) > -1) {
+      this.selectedLocale = this.localeId;
+    } else {
+      this.selectedLocale = 'en';
+    }
+
     this.glyphLegend = [
       {name: 'ICU low', accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'}, 
       {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'}, 
@@ -133,6 +149,10 @@ export class InfoboxComponent implements OnInit {
 
   openImpressum() {
     this.dialogService.open(ImpressumComponent);
+  }
+
+  changeLocale(evt) {
+    location.href = `/${evt.value}/`;
   }
 
 }
