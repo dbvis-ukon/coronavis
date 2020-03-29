@@ -146,12 +146,12 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .on('mouseleave', () => this.tooltipService.close())
       .on('click', d => this.openDialog(d));
 
-    // this.gHospitals
-    //   .append('rect')
-    //   .attr('width', this.glyphSize.width)
-    //   .attr('height', this.glyphSize.height/2)
-    //   .attr('fill', 'white')
-    //   .attr('stroke', '#cccccc');
+    this.gHospitals
+      .append('rect')
+      .attr('width', this.glyphSize.width)
+      .attr('height', this.glyphSize.height)
+      .attr('fill', 'white')
+      .attr('stroke', '#cccccc');
 
     this.nameHospitalsShadow = this.gHospitals
       .append('text')
@@ -253,8 +253,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
     // Resize glyph bounding boxes + show/hide labels
     if (this.map.getZoom() >= 9) {
-      this.glyphSize.height = 40;
-      this.glyphSize.width = 80;
+      // this.glyphSize.height = 40;
+      // this.glyphSize.width = 80;
 
       this.cityHospitals.classed('hiddenLabel', true);
       this.cityHospitalsShadow.classed('hiddenLabel', true);
@@ -262,8 +262,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       this.nameHospitals.classed('hiddenLabel', false);
       this.nameHospitalsShadow.classed('hiddenLabel', false);
     } else if (this.map.getZoom() === 8) {
-      this.glyphSize.height = 28;
-      this.glyphSize.width = 38;
+      // this.glyphSize.height = 28;
+      // this.glyphSize.width = 38;
 
       this.cityHospitals.classed('hiddenLabel', false);
       this.cityHospitalsShadow.classed('hiddenLabel', false);
@@ -271,8 +271,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       this.nameHospitals.classed('hiddenLabel', true);
       this.nameHospitalsShadow.classed('hiddenLabel', true);
     } else if (this.map.getZoom() === 7) {
-      this.glyphSize.height = 14;
-      this.glyphSize.width = 38;
+      // this.glyphSize.height = 14;
+      // this.glyphSize.width = 38;
 
       this.cityHospitals.classed('hiddenLabel', true);
       this.cityHospitalsShadow.classed('hiddenLabel', true);
