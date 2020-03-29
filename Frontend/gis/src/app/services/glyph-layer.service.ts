@@ -1,7 +1,7 @@
 import {
   Injectable
 } from '@angular/core';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
 import { SimpleGlyphLayer } from '../map/overlays/simple-glyph.layer';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { map, tap } from 'rxjs/operators';
@@ -100,6 +100,8 @@ export interface DiviAggregatedHospital extends AbstractDiviHospital {
 })
 export class GlyphLayerService {
 
+  public loading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   constructor(
     private diviDevelopmentRepository: DiviDevelopmentRepository,
     private hospitalRepository: HospitalRepository,
@@ -109,6 +111,7 @@ export class GlyphLayerService {
   ) {}
 
   getSimpleGlyphLayer(options: Observable<BedGlyphOptions>): Observable<SimpleGlyphLayer> {
+    this.loading$.next(true);
     return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
     .pipe(
       tap(() => console.log('load simple glyph layer')),
@@ -122,11 +125,13 @@ export class GlyphLayerService {
           options,
           this.matDialog
           );
-      })
+      }),
+      tap(() => this.loading$.next(false))
     );
   }
 
   getAggregatedGlyphLayer(aggLevel: AggregationLevel, options: Observable<BedGlyphOptions>): Observable<[AggregatedGlyphLayer, LandkreiseHospitalsLayer]> {
+    this.loading$.next(true);
     return forkJoin([
       this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(aggLevel),
       this.hospitalRepository.getHospitalsForAggregationLevel(aggLevel)
@@ -148,7 +153,8 @@ export class GlyphLayerService {
     
         // Create a layer group
         return [factory, factoryBg];
-      })
+      }),
+      tap<[AggregatedGlyphLayer, LandkreiseHospitalsLayer]>(() => this.loading$.next(false))
     )
   }
 

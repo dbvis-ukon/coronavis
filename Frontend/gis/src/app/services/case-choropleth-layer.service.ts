@@ -3,7 +3,8 @@ import {
 } from '../map/options/aggregation-level.enum';
 import {
   Observable,
-  forkJoin
+  forkJoin,
+  BehaviorSubject
 } from 'rxjs';
 import {
   FeatureCollection
@@ -29,6 +30,8 @@ import { Injectable } from '@angular/core';
 })
 export class CaseChoroplethLayerService {
 
+  public loading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   constructor(
     private rkiCaseRepository: RKICaseRepository,
     private tooltipService: TooltipService,
@@ -36,10 +39,12 @@ export class CaseChoroplethLayerService {
   ) {}
 
   public getLayer(options: CovidNumberCaseOptions): Observable < CaseChoropleth > {
+    this.loading$.next(true);
     return this.getCaseData(options.aggregationLevel)
       .pipe(
         tap(() => console.log('load case choropleth layer')),
-        map(data => new CaseChoropleth(this.getKeyCovidNumberCaseOptions(options), data, options, this.tooltipService, this.colormapService))
+        map(data => new CaseChoropleth(this.getKeyCovidNumberCaseOptions(options), data, options, this.tooltipService, this.colormapService)),
+        tap(() => this.loading$.next(false))
       );
   }
 

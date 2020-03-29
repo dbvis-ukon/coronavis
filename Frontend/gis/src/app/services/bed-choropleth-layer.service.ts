@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {BedStatusChoropleth} from "../map/overlays/bedstatuschoropleth";
-import { Observable} from "rxjs";
+import { Observable, BehaviorSubject} from "rxjs";
 import {ColormapService} from "./colormap.service";
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
@@ -14,12 +14,13 @@ import { map, tap } from 'rxjs/operators';
 })
 export class BedChoroplethLayerService {
 
-
+  public loading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(private diviDevelopmentRepository: DiviDevelopmentRepository, private colormapService: ColormapService, private tooltipService: TooltipService) {
   }
 
   public getLayer(option: BedBackgroundOptions): Observable<BedStatusChoropleth> {
+    this.loading$.next(true);
     return this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel)
     .pipe(
       tap(() => console.log('load bed background choropleth layer')),
@@ -32,7 +33,8 @@ export class BedChoroplethLayerService {
           this.colormapService, 
           this.tooltipService
         );
-      })
+      }),
+      tap(() => this.loading$.next(false))
     );
   }
 
