@@ -134,8 +134,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
     const self = this;
 
-    const padding = 2;
-    const yOffset = 2;
+    const padding = 0.5;
+    const yOffset = 0.5;
 
     this.gHospitals = d3.select<SVGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(svgElement)
       .style('pointer-events', 'none')
@@ -178,7 +178,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
         this.currentHoverLine.remove();
       })
       .on('click', d => this.openDialog(d.properties));
-    
+
     this.gHospitals
       .append('rect')
       .attr('class', 'background-rect')
@@ -274,28 +274,34 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     const scale = Math.pow(9 / (zoom), 4);
     this.currentScale = scale;
 
-    // Resize glyph bounding boxes + show/hide labels
-    if (this.map.getZoom() >= 9) {
-      // this.glyphSize.height = 40;
-      // this.glyphSize.width = 80;
+    this.glyphSize.height = 28;
+    this.glyphSize.width = 40;
 
+    // Resize glyph bounding boxes + show/hide labels
+    if (this.map.getZoom() == 10) {
+      this.glyphSize.width = 30;
+      this.glyphSize.height = 10;
+
+      this.cityHospitals.classed('hiddenLabel', true);
+      this.cityHospitalsShadow.classed('hiddenLabel', true);
+
+      this.nameHospitals.classed('hiddenLabel', true);
+      this.nameHospitalsShadow.classed('hiddenLabel', true);
+    } else if (this.map.getZoom() == 9) {
       this.cityHospitals.classed('hiddenLabel', true);
       this.cityHospitalsShadow.classed('hiddenLabel', true);
 
       this.nameHospitals.classed('hiddenLabel', false);
       this.nameHospitalsShadow.classed('hiddenLabel', false);
     } else if (this.map.getZoom() === 8) {
-      // this.glyphSize.height = 28;
-      // this.glyphSize.width = 38;
-
       this.cityHospitals.classed('hiddenLabel', false);
       this.cityHospitalsShadow.classed('hiddenLabel', false);
 
       this.nameHospitals.classed('hiddenLabel', true);
       this.nameHospitalsShadow.classed('hiddenLabel', true);
     } else if (this.map.getZoom() === 7) {
-      // this.glyphSize.height = 14;
-      // this.glyphSize.width = 38;
+      this.glyphSize.width = 30;
+      this.glyphSize.height = 10;
 
       this.cityHospitals.classed('hiddenLabel', true);
       this.cityHospitalsShadow.classed('hiddenLabel', true);
