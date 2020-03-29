@@ -43,38 +43,7 @@ export class MapComponent implements OnInit {
   set mapOptions(mo: MapOptions) {
     this._mapOptions = mo;
 
-    if (!this.mymap) {
-      return;
-    }
-
-
-    this.updateGlyphMapLayers(mo.bedGlyphOptions);
-
-    this.bedGlyphOptions$.next(mo.bedGlyphOptions);
-
-    this.updateBedBackgroundLayer(mo.bedBackgroundOptions);
-
-    this.updateCaseChoroplethLayers(mo.covidNumberCaseOptions);
-
-    if (mo.showOsmHospitals) {
-      this.osmLayerService.getOSMHospitalLayer()
-      .subscribe(l => {
-        this.osmHospitalsLayer = l.createOverlay();
-        this.mymap.addLayer(this.osmHospitalsLayer);
-      })
-    } else if (this.osmHospitalsLayer) {
-      this.mymap.removeLayer(this.osmHospitalsLayer);
-    }
-
-    if (mo.showOsmHeliports) {
-      this.osmLayerService.getOSMHeliportLayer()
-      .subscribe(l => {
-        this.osmHeliportsLayer = l.createOverlay();
-        this.mymap.addLayer(this.osmHeliportsLayer);
-      })
-    } else if (this.osmHeliportsLayer) {
-      this.mymap.removeLayer(this.osmHeliportsLayer);
-    }
+    this.updateMap(mo);
   }
 
   get mapOptions(): MapOptions {
@@ -130,11 +99,45 @@ export class MapComponent implements OnInit {
 
     new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
 
-    // FIXME HACK!!!
-    this.updateGlyphMapLayers(this._mapOptions.bedGlyphOptions);
+    this.updateMap(this._mapOptions);
   }
 
-  private updateGlyphMapLayers(o: BedGlyphOptions) {
+  private updateMap(mo: MapOptions) {
+    if (!this.mymap) {
+      return;
+    }
+
+
+    this.updateGlyphMapLayers(mo.bedGlyphOptions);
+
+    this.bedGlyphOptions$.next(mo.bedGlyphOptions);
+
+    this.updateBedBackgroundLayer(mo.bedBackgroundOptions);
+
+    this.updateCaseChoroplethLayers(mo.covidNumberCaseOptions);
+
+    if (mo.showOsmHospitals) {
+      this.osmLayerService.getOSMHospitalLayer()
+      .subscribe(l => {
+        this.osmHospitalsLayer = l.createOverlay();
+        this.mymap.addLayer(this.osmHospitalsLayer);
+      })
+    } else if (this.osmHospitalsLayer) {
+      this.mymap.removeLayer(this.osmHospitalsLayer);
+    }
+
+    if (mo.showOsmHeliports) {
+      this.osmLayerService.getOSMHeliportLayer()
+      .subscribe(l => {
+        this.osmHeliportsLayer = l.createOverlay();
+        this.mymap.addLayer(this.osmHeliportsLayer);
+      })
+    } else if (this.osmHeliportsLayer) {
+      this.mymap.removeLayer(this.osmHeliportsLayer);
+    }
+  }
+
+  private removeGlyphMapLayers() {
     // remove all layers
     this.aggregationLevelToGlyphMap.forEach(l => {
       this.mymap.removeLayer(l);
@@ -142,9 +145,11 @@ export class MapComponent implements OnInit {
       (this.layerToFactoryMap.get(l) as unknown as GlyphLayer).setVisibility(false);
 
     });
+  }
 
-
+  private updateGlyphMapLayers(o: BedGlyphOptions) {
     if(o.enabled === false) {
+      this.removeGlyphMapLayers();
       return;
     }
 
@@ -196,6 +201,8 @@ export class MapComponent implements OnInit {
   }
 
   private showGlyphLayer(l: L.LayerGroup) {
+    this.removeGlyphMapLayers();
+
     this.mymap.addLayer(l);
 
     (this.layerToFactoryMap.get(l) as unknown as GlyphLayer).setVisibility(true);
@@ -213,14 +220,17 @@ export class MapComponent implements OnInit {
     }
   }
 
-  private updateCaseChoroplethLayers(opt: CovidNumberCaseOptions) {
+  private removeCaseChoroplethLayers() {
     // remove all layers
     this.covidNumberCaseOptionsKeyToLayer.forEach(l => {
       this.mymap.removeLayer(l);
     });
+  }
 
+  private updateCaseChoroplethLayers(opt: CovidNumberCaseOptions) {
     if (!opt || !opt.enabled) {
       this.caseChoroplethLayerChange.emit(null);
+      this.removeCaseChoroplethLayers();
       return;
     }
 
@@ -229,6 +239,9 @@ export class MapComponent implements OnInit {
     this.caseChoroplehtLayerService.getLayer(opt)
     .subscribe(factory => {
       const l = factory.createOverlay();
+
+      this.removeCaseChoroplethLayers();
+
       this.covidNumberCaseOptionsKeyToLayer.set(key, l);
   
       this.layerToFactoryMap.set(l, factory);
@@ -244,13 +257,16 @@ export class MapComponent implements OnInit {
     });
   }
 
-  private updateBedBackgroundLayer(o: BedBackgroundOptions) {
+  private removeBedChoroplethLayers() {
     // remove active layer
     if (this._lastBedCoroplethLayer) {
       this.mymap.removeLayer(this._lastBedCoroplethLayer);
     }
+  }
 
+  private updateBedBackgroundLayer(o: BedBackgroundOptions) {
     if(o.aggregationLevel === AggregationLevel.none) {
+      this.removeBedChoroplethLayers();
       throw 'AggregationLevel must not be none on bed background layer';
     }
 
@@ -259,6 +275,8 @@ export class MapComponent implements OnInit {
       this.bedChoroplethLayerService.getLayer(o).subscribe(factory => {
 
         const layer = factory.createOverlay();
+
+        this.removeBedChoroplethLayers();
         
         this.mymap.addLayer(layer);
   
