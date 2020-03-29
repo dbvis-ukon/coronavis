@@ -178,7 +178,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
         this.currentHoverLine.remove();
       })
       .on('click', d => this.openDialog(d.properties));
-
+    
     this.gHospitals
       .append('rect')
       .attr('class', 'background-rect')
