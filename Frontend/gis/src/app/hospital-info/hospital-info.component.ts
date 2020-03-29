@@ -55,13 +55,13 @@ export class HospitalInfoComponent implements OnInit {
               "domain": [0, 120]
             }
           },
-         /* "strokeDash": {
+          "strokeDash": {
             "field": "Vorhersage",
             "type": "nominal",
             "legend": {
               "orient": "left"
             }
-          },*/
+          },
           "color": {
             "field": "Kategorie",
             "type": "nominal",
@@ -78,11 +78,12 @@ export class HospitalInfoComponent implements OnInit {
           "x": {
             "field": "predicitonStartDate",
             "type": "nominal",
-            "axis":false
+            "axis":true
           },
-          "size": {"value": 1},
-          "color": {"value": "gray"},
-          "strokeDash": {"signal": [8,4]}
+          "strokeWidth": {"value": 0.1},
+          "opacity": {"value": 0.4},
+          "color": {"value": "grey"},
+          "strokeDash": {"signal": [18,4]}
         }
       },
       {
@@ -90,10 +91,11 @@ export class HospitalInfoComponent implements OnInit {
         "mark": "rule",
         "encoding": {
           "y": { "field":"ref"},
-          "size": {"value": 1},
+          "strokeWidth": {"value": 0.1},
+          "opacity": {"value": 0.4},
           "axis":false,
           "color": {"value": "grey"},
-          "strokeDash": {"signal": [8,4]}
+          "strokeDash": {"signal": [18,4]}
         }
       }
     ]
@@ -143,11 +145,24 @@ export class HospitalInfoComponent implements OnInit {
         i++;
       }
 
+      
+      
+
+      
+
       const prediction = this.data[bedAccessor + '_einschaetzung'][entryLength - 1];
       const predictedRate = ((occupiedBeds[entryLength - 1].value + prediction.value) / totalBeds * 100) || 0;
       predictionDay = prediction.timestamp;
       const nextDay = new Date();
       nextDay.setDate(new Date(predictionDay).getDate() + 1);
+
+
+      const lastRealDataDay_freeBeds = getLatest(this.data[bedAccessor + '_frei']);
+      const lastRealDataDay_occupiedBeds = getLatest(this.data[bedAccessor + '_belegt']);
+      const lastRealDataDay_totalBeds = lastRealDataDay_freeBeds + lastRealDataDay_occupiedBeds;
+      const lastRealDataDay_rate = (lastRealDataDay_occupiedBeds / lastRealDataDay_totalBeds * 100)  || 0;
+      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: predictionDay,
+        'Bettenauslastung (%)': lastRealDataDay_rate, Vorhersage: true});
 
       dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: nextDay.toISOString().substring(0, 10),
         'Bettenauslastung (%)': predictedRate, Vorhersage: true});
@@ -161,6 +176,8 @@ export class HospitalInfoComponent implements OnInit {
     spec.layer[1].data.values[0].predicitonStartDate = predictionDay;
 
     this.specs.push(spec);
+
+    console.log(this.specs)
   }
 
   getCapacityStateColor(bedstatus: BedStatusSummary): string {
