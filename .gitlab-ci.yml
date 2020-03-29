@@ -264,7 +264,7 @@ build-frontend:
     - source var.env
     - cd ./Frontend
     # if we are on a new review branch we set the new suffix to the covistest.dbvis.de, otherwise the old suffix
-    - if [[ ${ENV_TYPE} =~ ^review$ ]]; then SUFFIX=${URL_SUFFIX_NEW}; else SUFFIX=${URL_SUFFIX}; fi
+    - if [[ ${ENV_TYPE} =~ ^(review|staging)$ ]]; then SUFFIX=${URL_SUFFIX_NEW}; else SUFFIX=${URL_SUFFIX}; fi
     # replace the suffix for api url
     - FRONTEND_URL_BACKEND=$(echo ${FRONTEND_URL_BACKEND} | sed "s/${URL_SUFFIX}/${SUFFIX}/")
     - export FRONTEND_URL_BACKEND
