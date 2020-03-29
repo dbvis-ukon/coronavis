@@ -96,6 +96,8 @@ class Hospital(Base):
     ecmo_state = Column(String(255))
     
     last_update = Column(DateTime)
+    
+    insert_date = Column(DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
