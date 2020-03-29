@@ -1,3 +1,19 @@
+import {
+  Injectable
+} from '@angular/core';
+import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
+import { SimpleGlyphLayer } from '../map/overlays/simple-glyph.layer';
+import { BedGlyphOptions } from '../map/options/bed-glyph-options';
+import { map, tap } from 'rxjs/operators';
+import { TooltipService } from './tooltip.service';
+import { ColormapService } from './colormap.service';
+import { MatDialog } from '@angular/material/dialog';
+import { HospitalRepository } from '../repositories/hospital.repository';
+import { AggregatedGlyphLayer } from '../map/overlays/aggregated-glyph.layer';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { LandkreiseHospitalsLayer } from '../map/overlays/landkreishospitals';
+import { LatLngLiteral, LayerGroup } from 'leaflet';
+import { TimestampedValue, SingleHospitals, AggregatedHospitals, DiviDevelopmentRepository } from '../repositories/divi-development.respository';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
@@ -149,40 +165,67 @@ export interface DiviAggregatedHospital extends AbstractDiviHospital {
 @Injectable({
   providedIn: 'root'
 })
-export class DiviHospitalsService {
+export class GlyphLayerService {
 
-  constructor(private http: HttpClient) {
+  public loading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  constructor(
+    private diviDevelopmentRepository: DiviDevelopmentRepository,
+    private hospitalRepository: HospitalRepository,
+    private tooltipService: TooltipService,
+    private colormapService: ColormapService,
+    private matDialog: MatDialog
+  ) {}
+
+  getSimpleGlyphLayer(options: Observable<BedGlyphOptions>): Observable<SimpleGlyphLayer> {
+    this.loading$.next(true);
+    return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
+    .pipe(
+      tap(() => console.log('load simple glyph layer')),
+      map(this.mySingleAggregatedMapper),
+      map(divi => {
+        return new SimpleGlyphLayer(
+          'ho_none',
+          divi,
+          this.tooltipService,
+          this.colormapService,
+          options,
+          this.matDialog
+          );
+      }),
+      tap(() => this.loading$.next(false))
+    );
   }
 
-  public getDiviHospitalsCounties(): Observable<DiviAggregatedHospital[]> {
-    return this.http.get<AggregatedHospitals>(`${environment.apiUrl}divi/development/landkreise`)
-      .pipe(
-        map(this.myAggregatedMapper)
-      );
+  getAggregatedGlyphLayer(aggLevel: AggregationLevel, options: Observable<BedGlyphOptions>): Observable<[AggregatedGlyphLayer, LandkreiseHospitalsLayer]> {
+    this.loading$.next(true);
+    return forkJoin([
+      this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(aggLevel),
+      this.hospitalRepository.getHospitalsForAggregationLevel(aggLevel)
+    ])
+    .pipe(
+      tap(() => console.log('load aggregated glyph layer')),
+      map(result => {
+        const factory = new AggregatedGlyphLayer(
+          'ho_glyph_'+aggLevel,
+          aggLevel,
+          this.myAggregatedMapper(result[0]),
+          this.tooltipService,
+          this.colormapService,
+          options
+        );
+
+        const factoryBg = new LandkreiseHospitalsLayer(name + '_bg', result[1], this.tooltipService);
+
+
+        // Create a layer group
+        return [factory, factoryBg];
+      }),
+      tap<[AggregatedGlyphLayer, LandkreiseHospitalsLayer]>(() => this.loading$.next(false))
+    )
   }
 
-  public getDiviHospitalsGovernmentDistrict(): Observable<DiviAggregatedHospital[]> {
-    return this.http.get<AggregatedHospitals>(`${environment.apiUrl}divi/development/regierungsbezirke`)
-      .pipe(
-        map(this.myAggregatedMapper)
-      );
-  }
-
-  public getDiviHospitalsStates(): Observable<DiviAggregatedHospital[]> {
-    return this.http.get<AggregatedHospitals>(`${environment.apiUrl}divi/development/bundeslaender`)
-      .pipe(
-        map(this.myAggregatedMapper)
-      );
-  }
-
-  public getDiviHospitals(): Observable<DiviHospital[]> {
-    return this.http.get<SingleHospitals>(`${environment.apiUrl}divi/development`)
-      .pipe(
-        map(this.mySingleAggregatedMapper)
-      );
-  }
-
-  mySingleAggregatedMapper(input: SingleHospitals): DiviHospital[] {
+  private mySingleAggregatedMapper(input: SingleHospitals): DiviHospital[] {
     return input.features.map((i, index) => {
       return {
         Address: i.properties.address,
@@ -226,7 +269,7 @@ export class DiviHospitalsService {
     });
   }
 
-  myAggregatedMapper(input: AggregatedHospitals): DiviAggregatedHospital[] {
+  private myAggregatedMapper(input: AggregatedHospitals): DiviAggregatedHospital[] {
     return input.features.map((i, index) => {
       return {
         ID: index,

@@ -3,7 +3,6 @@ import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from 'src/app/services/tooltip.service';
 import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
-import {DiviHospital, getLatest} from 'src/app/services/divi-hospitals.service';
 import {ColormapService} from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
 import { Observable } from 'rxjs';
@@ -13,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
 import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
 import {GlyphLayer} from "./GlyphLayer";
+import { DiviHospital } from 'src/app/services/glyph-layer.service';
 
 export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 

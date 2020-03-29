@@ -11,6 +11,7 @@ import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {MatCardModule} from '@angular/material/card';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatListModule} from '@angular/material/list';
@@ -71,7 +72,8 @@ import { VegaComponent } from './vega/vega.component';
     MatRadioModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,20 +2,16 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import {DiviAggregatedHospital,
-  DiviHospital,
-  getLatest,
-  TimestampedValue
-} from 'src/app/services/divi-hospitals.service';
 import { ColormapService } from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
-import {HospitallayerService} from "../../services/hospitallayer.service";
 import {Observable} from "rxjs";
 import {BedGlyphOptions} from '../options/bed-glyph-options';
 import {BedType} from '../options/bed-type.enum';
 import {AggregatedGlyphTooltipComponent} from "../../aggregated-glyph-tooltip/aggregated-glyph-tooltip.component";
 import {ForceDirectedLayout} from 'src/app/util/forceDirectedLayout';
 import {GlyphLayer} from "./GlyphLayer";
+import { DiviAggregatedHospital } from 'src/app/services/glyph-layer.service';
+import { getLatest } from 'src/app/util/timestamped-value';
 
 export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
@@ -32,7 +28,6 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     private data: DiviAggregatedHospital[],
     private tooltipService: TooltipService,
     private colormapService: ColormapService,
-    private hospitallayerService: HospitallayerService,
     private glyphOptions: Observable<BedGlyphOptions>
 ) {
     super(name, null);

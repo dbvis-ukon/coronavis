@@ -33,6 +33,7 @@
       <br/>
 
       <h5>Glyph</h5>
+      <mat-progress-bar *ngIf="glyphLoading" mode="indeterminate"></mat-progress-bar>
       <p>
         <mat-slide-toggle
             [checked]="mo.bedGlyphOptions.enabled"
@@ -77,6 +78,7 @@
       <br/>
 
       <h5>Hintergrund</h5>
+      <mat-progress-bar *ngIf="bedChoroplethLoading" mode="indeterminate"></mat-progress-bar>
 
         <mat-slide-toggle
               [disabled]="mo.bedGlyphOptions.aggregationLevel === eAggregationLevels.none"
@@ -119,6 +121,8 @@
         </mat-slide-toggle>
 
         <div *ngIf="mo.covidNumberCaseOptions && mo.covidNumberCaseOptions.enabled">
+          <mat-progress-bar *ngIf="caseChoroplethLoading" mode="indeterminate"></mat-progress-bar>
+
           <div class="toggleGroup">
             <h5>Aggregation</h5>
 
@@ -218,6 +222,8 @@
           <!-- description -->
         </mat-panel-description>
       </mat-expansion-panel-header>
+
+      <mat-progress-bar *ngIf="osmLoading" mode="indeterminate"></mat-progress-bar>
 
       <div>
         <mat-slide-toggle
