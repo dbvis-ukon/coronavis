@@ -133,45 +133,44 @@ export class HospitalInfoComponent implements OnInit {
       this.contactMsg = this.data.Webaddress;
     }
 
-
-
     this.specs = [];
     const dataValues = [];
 
-    for(const bedAccessor of this.bedAccessors) {
-      const freeBeds = this.data[bedAccessor+"_frei"];
-      const occupiedBeds = this.data[bedAccessor+"_belegt"];
-      const prediction = this.data[bedAccessor+"_einschaetzung"][0];
+    for (const bedAccessor of this.bedAccessors) {
+      const entryLength = this.data[bedAccessor + '_frei'].length;
 
-      const entryLength = this.data[bedAccessor+"_frei"].length;
-      const totalBeds = freeBeds[entryLength-1].value + occupiedBeds[entryLength-1].value;
+      const freeBeds = this.data[bedAccessor + '_frei'];
+      const occupiedBeds = this.data[bedAccessor + '_belegt'];
+      const prediction = this.data[bedAccessor + '_einschaetzung'][entryLength - 1];
+
+      const totalBeds = freeBeds[entryLength - 1].value + occupiedBeds[entryLength - 1].value;
 
       let i = 0;
-      for(const free of freeBeds){
-        let occupied = occupiedBeds[i];
+      for (const free of freeBeds) {
+        const occupied = occupiedBeds[i];
         const rate = (occupied.value / (free.value + occupied.value) * 100)  || 0;
-        dataValues.push({"Kategorie": this.bedAccessorsMapping[bedAccessor], "Datum": free.timestamp.split("T")[0],
-          "Bettenauslastung (%)": rate, "Vorhersage": false});
+        dataValues.push({ Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: free.timestamp.split('T')[0],
+          'Bettenauslastung (%)': rate, Vorhersage: false, value: occupied.value, total: free.value + occupied.value});
         i++;
       }
 
-      // FIXME should the timestamp for the prediction be the following day? and should the predicted value be added to the occupied beds value?
-      const predictedRate = ((occupiedBeds[entryLength-1].value + prediction.value) / totalBeds * 100) || 0;
-      dataValues.push({"Kategorie": this.bedAccessorsMapping[bedAccessor], "Datum": prediction.timestamp.split("T")[0],
-        "Bettenauslastung (%)": predictedRate, "Vorhersage": false});
+      // FIXME should the timestamp for the prediction be the following day?
+      // and should the predicted value be added to the occupied beds value?
+      const predictedRate = ((occupiedBeds[entryLength - 1].value + prediction.value) / totalBeds * 100) || 0;
+      dataValues.push({Kategorie: this.bedAccessorsMapping[bedAccessor], Datum: prediction.timestamp.split('T')[0],
+        'Bettenauslastung (%)': predictedRate, Vorhersage: false, value: prediction.value, total: totalBeds});
       // FIXME add twice to show with the dashed line
       // dataValues.push({"Kategorie": this.bedAccessorsMapping[bedAccessor], "Datum": prediction.timestamp.split("T")[0]",
         // "Bettenauslastung (%)": predictedRate, "Vorhersage": true});
     }
 
       // hack deep clone spec
-      const spec = JSON.parse(JSON.stringify(this.templateSpec));
+    const spec = JSON.parse(JSON.stringify(this.templateSpec));
 
-    console.log(dataValues);
-      // inject data values
-      spec.data.values = dataValues;
+    // inject data values
+    spec.data.values = dataValues;
 
-      this.specs.push(spec);
+    this.specs.push(spec);
   }
 
   getCapacityStateColor(capacityState: string): string {
