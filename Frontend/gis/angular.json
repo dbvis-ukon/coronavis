@@ -63,10 +63,18 @@
           },
           "configurations": {
             "de": {
-              "localize": ["de"]
+              "aot": true,
+              "outputPath": "dist/de/",
+              "i18nFile": "src/i18n/messages.de.xlf",
+              "i18nFormat": "xlf2",
+              "i18nLocale": "de"
             },
             "en": {
-              "localize": ["en"]
+              "aot": true,
+              "outputPath": "dist/en/",
+              "i18nFile": "src/i18n/messages.en.xlf",
+              "i18nFormat": "xlf2",
+              "i18nLocale": "en"
             },
             "production": {
               "fileReplacements": [

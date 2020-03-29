@@ -9,8 +9,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:i18n:de": "ng build --prod --output-path=dist/de --base-href /de/ --i18n-file=src/i18n/messages.de.xlf --i18n-format=xlf --i18n-locale=de",
-    "build:i18n:en": "ng build --prod --output-path=dist/en --base-href /en/ --i18n-file=src/i18n/messages.en.xlf --i18n-format=xlf --i18n-locale=en"
+    "start:en": "ng serve -c en",
+    "start:de": "ng serve -c de",
+    "build:i18n:de": "ng build --prod -c de --base-href /de/",
+    "build:i18n:en": "ng build --prod -c en --base-href /en/"
   },
   "private": true,
   "dependencies": {
@@ -38,7 +40,7 @@
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
-    "@angular-builders/custom-webpack": "~9.0.0",
+    "@angular-builders/custom-webpack": "8.4.1",
     "@angular-devkit/build-angular": "~0.901.0",
     "@angular/cli": "~9.1.0",
     "@angular/compiler-cli": "~9.1.0",
