@@ -444,12 +444,12 @@ dockerize-tiles:
 #   environment:
 #     on_stop: remove-deployment-backend-review
 
-deploy-backend-staging:
-  extends: .deploy-backend
-  variables:
-    ENV_TYPE: staging
-    RUN_ON_MASTER: "yes"
-    K8_NAMESPACE: covid-19-vis-staging
+# deploy-backend-staging:
+#   extends: .deploy-backend
+#   variables:
+#     ENV_TYPE: staging
+#     RUN_ON_MASTER: "yes"
+#     K8_NAMESPACE: covid-19-vis-staging
 
 deploy-backend-production:
   extends: .deploy-backend
@@ -497,12 +497,12 @@ deploy-backend-production:
 #     ENV_TYPE: review
 #     RUN_ON_FB: "yes"
 
-deploy-frontend-staging:
-  extends: .deploy-frontend
-  variables:
-    ENV_TYPE: staging
-    RUN_ON_MASTER: "yes"
-    K8_NAMESPACE: covid-19-vis-staging
+# deploy-frontend-staging:
+#   extends: .deploy-frontend
+#   variables:
+#     ENV_TYPE: staging
+#     RUN_ON_MASTER: "yes"
+#     K8_NAMESPACE: covid-19-vis-staging
 
 deploy-frontend-production:
   extends: .deploy-frontend
@@ -594,12 +594,12 @@ deploy-frontend-production:
 #     ENV_TYPE: review
 #     RUN_ON_FB: "yes"
 
-deploy-tiles-staging:
-  extends: .deploy-tiles
-  variables:
-    ENV_TYPE: staging
-    RUN_ON_MASTER: "yes"
-    K8_NAMESPACE: covid-19-vis-staging
+# deploy-tiles-staging:
+#   extends: .deploy-tiles
+#   variables:
+#     ENV_TYPE: staging
+#     RUN_ON_MASTER: "yes"
+#     K8_NAMESPACE: covid-19-vis-staging
 
 deploy-tiles-production:
   extends: .deploy-tiles
