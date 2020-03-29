@@ -26,9 +26,9 @@
     </tr>
     <tr>
       <th></th>
-      <th [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ getLatest(data.icu_low_care_frei) }} / {{ getLatest(data.icu_low_care_belegt) }}</th>
-      <th [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ getLatest(data.icu_high_care_frei) }} / {{ getLatest(data.icu_high_care_belegt) }}</th>
-      <th [ngStyle]="{'background-color': getCapacityStateColor('todo') }">{{ getLatest(data.icu_ecmo_care_frei) }} / {{ getLatest(data.icu_ecmo_care_belegt) }}</th>
+      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_low_summary) }">{{ getLatest(data.icu_low_care_frei) }} / {{ getLatest(data.icu_low_care_belegt) }}</th>
+      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_high_summary) }">{{ getLatest(data.icu_high_care_frei) }} / {{ getLatest(data.icu_high_care_belegt) }}</th>
+      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_ecmo_summary) }">{{ getLatest(data.icu_ecmo_care_frei) }} / {{ getLatest(data.icu_ecmo_care_belegt) }}</th>
     </tr>
     <tr>
       <td>% Belegung</td>
