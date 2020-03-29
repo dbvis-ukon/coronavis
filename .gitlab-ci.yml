@@ -8,7 +8,7 @@ variables:
   K8_NAMESPACE: covid-19-vis
   STAGING_BRANCH: master
   URL_SUFFIX: covid19vis.lingvis.io
-  URL_SUFFIX_NEW: covistest.dbvis.de
+  URL_SUFFIX_NEW: covis.dbvis.de
 
 ###########################################
 # SETUP ENVIRONMENT VARIALBES
