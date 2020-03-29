@@ -130,7 +130,16 @@ export interface BedStatusSummary {
   in24h: TimestampedValue[]
 }
 
-export interface DiviHospital {
+export interface AbstractDiviHospital {
+  'x': number;
+  'y': number;
+  '_x': number;
+  '_y': number;
+  'vx': number;
+  'vy': number;
+}
+
+export interface DiviHospital extends AbstractDiviHospital {
   ID: number;
   Name: string;
   City: string;
@@ -171,7 +180,7 @@ export interface DiviHospital {
   'vy'?: number;
 }
 
-export interface DiviAggregatedHospital {
+export interface DiviAggregatedHospital extends AbstractDiviHospital {
   'ID': number;
   'Name': string;
   'Location': LatLngLiteral;
