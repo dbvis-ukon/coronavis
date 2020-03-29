@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {DiviHospital, TimestampedValue, getLatest} from '../services/divi-hospitals.service';
+import {DiviHospital, TimestampedValue, getLatest, BedStatusSummary} from '../services/divi-hospitals.service';
 import { ColormapService } from '../services/colormap.service';
 
 @Component({
@@ -173,8 +173,9 @@ export class HospitalInfoComponent implements OnInit {
     this.specs.push(spec);
   }
 
-  getCapacityStateColor(capacityState: string): string {
-    return this.colormapService.getSingleHospitalColormap()(capacityState);
+  getCapacityStateColor(bedstatus: BedStatusSummary): string {
+    console.log(this.data, bedstatus);
+    return this.colormapService.getBedStatusColor(bedstatus)
   }
 
   getLatest(entries: TimestampedValue[]): number {

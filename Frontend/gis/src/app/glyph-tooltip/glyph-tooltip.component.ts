@@ -28,11 +28,6 @@ export class GlyphTooltipComponent implements OnInit {
   diviHospital: DiviHospital;
   name: string;
 
-
-  readonly backgroundColScale =
-    d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
-      .range(['white', '#333', 'white', 'white']);
-
   constructor(private colormapService: ColormapService) {
   }
 

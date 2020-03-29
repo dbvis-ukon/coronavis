@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as d3 from 'd3';
-import {AggregatedHospitalsProperties, getLatest, TimestampedValue} from './divi-hospitals.service';
+import {AggregatedHospitalsProperties, BedStatusSummary, getLatest, TimestampedValue} from './divi-hospitals.service';
 import {ScaleLinear} from 'd3';
 import {BedType} from '../map/options/bed-type.enum';
 
@@ -95,9 +95,10 @@ export class ColormapService {
     return v === 0 && b === 0 && a === 0 && n == 0;
   }*/
 
-  getBedStatusColor(entry: {free: TimestampedValue[], full: TimestampedValue[], prognosis: TimestampedValue[], in24h: TimestampedValue[]}): string {
+  getBedStatusColor(bedStatus: BedStatusSummary): string {
     // todo
-    const score = getLatest(entry.free) / getLatest(entry.full);
+    const score = getLatest(bedStatus.free) / (getLatest(bedStatus.full) + getLatest(bedStatus.free));
+    // console.log(score, getLatest(bedStatus.free), (getLatest(bedStatus.full) + getLatest(bedStatus.free)));
     const minScore = 0; // todo this.getMinScore(properties);
     const maxScore = 1.0; // todo this.getMaxScore(properties);
 
