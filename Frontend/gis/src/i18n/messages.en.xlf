@@ -9,6 +9,7 @@
       </notes>
       <segment>
         <source>Datenanalyse und Visualisierung</source>
+        <target></target>
       </segment>
     </unit>
     <unit id="teamToolIntro">
@@ -21,6 +22,7 @@
         <source> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a&gt;" dispEnd="&lt;/a&gt;">AG Datenanalyse und
             Visualisierung</pc> von Prof. Dr. Daniel Keim an der Universität Konstanz.
           </source>
+          <target></target>
       </segment>
     </unit>
     <unit id="orgComm">
@@ -31,6 +33,7 @@
       </notes>
       <segment>
         <source>Organisation und Kommunikation</source>
+        <target></target>
       </segment>
     </unit>
     <unit id="visDesign">
@@ -41,6 +44,7 @@
       </notes>
       <segment>
         <source>Visualisierung und Design</source>
+        <target></target>
       </segment>
     </unit>
     <unit id="infra">
@@ -51,6 +55,7 @@
       </notes>
       <segment>
         <source>Infrastruktur</source>
+        <target></target>
       </segment>
     </unit>
     <unit id="dataHandlingProcessing">
@@ -61,6 +66,7 @@
       </notes>
       <segment>
         <source>Datenhaltung und -verarbeitung</source>
+        <target></target>
       </segment>
     </unit>
     <unit id="versionDevelopmentFlag">
@@ -70,6 +76,7 @@
       </notes>
       <segment>
         <source>development</source>
+        <target></target>
       </segment>
     </unit>
     <unit id="versionUnknownFlag">
@@ -80,6 +87,7 @@
       </notes>
       <segment>
         <source>unknown</source>
+        <target></target>
       </segment>
     </unit>
     <unit id="closeButton">
@@ -89,6 +97,7 @@
       </notes>
       <segment>
         <source>Close</source>
+        <target></target>
       </segment>
     </unit>
   </file>
