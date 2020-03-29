@@ -14,6 +14,7 @@ import { MapOptions } from '../map/options/map-options';
 import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
 import { ImpressumComponent } from '../impressum/impressum.component';
+import {APP_CONFIG_KEY} from "../../constants";
 
 @Component({
   selector: 'app-infobox',
@@ -55,8 +56,8 @@ export class InfoboxComponent implements OnInit {
 
   ngOnInit(): void {
     this.glyphLegend = [
-      {name: 'ICU low', accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'}, 
-      {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'}, 
+      {name: 'ICU low', accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+      {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
       {name: 'ECMO', accessor: 'showEcmo', color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
     ];
   }
@@ -102,12 +103,12 @@ export class InfoboxComponent implements OnInit {
   }
 
   updateCovidNumberCaseOptionsEnabled(enabled: boolean) {
-    this.mo.covidNumberCaseOptions.enabled = enabled; 
-    
+    this.mo.covidNumberCaseOptions.enabled = enabled;
+
     if(enabled) {
       this.mo.bedBackgroundOptions.enabled = false;
     }
-    
+
     this.emitMapOptions()
   }
 
@@ -122,6 +123,7 @@ export class InfoboxComponent implements OnInit {
   }
 
   emitMapOptions() {
+    localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(this.mo));
     this.mapOptionsChange.emit({...this.mo});
   }
 

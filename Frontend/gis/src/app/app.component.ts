@@ -12,6 +12,7 @@ import {BedType} from './map/options/bed-type.enum';
 import {CaseChoropleth} from './map/overlays/casechoropleth';
 import {MapOptions} from './map/options/map-options';
 import { environment } from 'src/environments/environment';
+import {APP_CONFIG_KEY} from "../constants";
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit {
 
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
-  mapOptions: MapOptions = {
+  mapOptions: MapOptions = JSON.parse(localStorage.getItem(APP_CONFIG_KEY)) as MapOptions || {
     bedGlyphOptions: {
       aggregationLevel: AggregationLevel.none,
       enabled: true,

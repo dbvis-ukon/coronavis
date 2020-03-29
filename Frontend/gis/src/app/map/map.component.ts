@@ -28,6 +28,7 @@ import {BedGlyphOptions} from './options/bed-glyph-options';
 import {MatDialog} from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { GlyphLayer } from './overlays/GlyphLayer';
+import {MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
 
 
 @Component({
@@ -123,12 +124,19 @@ export class MapComponent implements OnInit {
         });
 
     // create map, set initial view to basemap and zoom level to center of BW
+    const initialView = JSON.parse(localStorage.getItem(MAP_VIEW_KEY)) || [48.6813312, 9.0088299];
+    const initialZoom = +localStorage.getItem(MAP_ZOOM_KEY) || 9;
     this.mymap = L.map('main', {
       minZoom: 7,
       maxZoom: 10,
       layers: [tiledMap],
       zoomControl: false
-    }).setView([48.6813312, 9.0088299], 9);
+    }).setView(initialView, initialZoom);
+
+    this.mymap.on('moveend', () => {
+      localStorage.setItem(MAP_VIEW_KEY, JSON.stringify(this.mymap.getBounds().getCenter()));
+      localStorage.setItem(MAP_ZOOM_KEY, "" + this.mymap.getZoom());
+    });
 
     new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
 
