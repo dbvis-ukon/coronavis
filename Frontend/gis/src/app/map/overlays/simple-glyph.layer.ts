@@ -146,12 +146,12 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .on('mouseleave', () => this.tooltipService.close())
       .on('click', d => this.openDialog(d));
 
-    this.gHospitals
-      .append('rect')
-      .attr('width', this.glyphSize.width)
-      .attr('height', this.glyphSize.height)
-      .attr('fill', 'white')
-      .attr('stroke', '#cccccc');
+    // this.gHospitals
+    //   .append('rect')
+    //   .attr('width', this.glyphSize.width)
+    //   .attr('height', this.glyphSize.height)
+    //   .attr('fill', 'white')
+    //   .attr('stroke', '#cccccc');
 
     this.nameHospitalsShadow = this.gHospitals
       .append('text')
