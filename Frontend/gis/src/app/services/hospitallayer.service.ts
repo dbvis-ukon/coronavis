@@ -35,7 +35,7 @@ export class HospitallayerService {
         state: AggregationLevel.governmentDistrict
       },
       {
-        api: "bundeslander",
+        api: "bundeslaender",
         state: AggregationLevel.state
       }];
 
