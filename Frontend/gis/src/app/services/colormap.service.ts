@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as d3 from 'd3';
-import {AggregatedHospitalsProperties, BedStatusSummary, getLatest, TimestampedValue} from '../repositories/divi-hospitals.service';
-import {ScaleLinear} from 'd3';
-import {BedType} from '../map/options/bed-type.enum';
+import { BedStatusSummary } from './glyph-layer.service';
+import { getLatest } from '../util/timestamped-value';
 
 @Injectable({
   providedIn: 'root'

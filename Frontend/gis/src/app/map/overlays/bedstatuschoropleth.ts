@@ -1,12 +1,11 @@
 import * as L from 'leaflet';
 import { Overlay } from './overlay';
 import {ColormapService} from "../../services/colormap.service";
-import {AggregatedHospitals, AggregatedHospitalsProperties} from "../../repositories/divi-hospitals.service";
 import { BedType } from '../options/bed-type.enum';
 import { AggregationLevel } from '../options/aggregation-level.enum';
-import {CaseTooltipComponent} from "../../case-tooltip/case-tooltip.component";
 import {TooltipService} from "../../services/tooltip.service";
 import {AggregatedGlyphTooltipComponent} from "../../aggregated-glyph-tooltip/aggregated-glyph-tooltip.component";
+import { AggregatedHospitals, AggregatedHospitalsProperties } from 'src/app/repositories/divi-development.respository';
 
 export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
 
@@ -48,9 +47,9 @@ export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
         }, onCloseAction);
 
       tooltipComponent.name = feature.properties.name;
-      tooltipComponent.combined = feature.properties.combined;
-      tooltipComponent.datum = feature.properties.until;
-      tooltipComponent.einwohner = +feature.properties.bevoelkerung;
+      // tooltipComponent.combined = feature.properties.combined;
+      // tooltipComponent.datum = feature.properties.until;
+      // tooltipComponent.einwohner = +feature.properties.bevoelkerung;
 
       // set highlight style
       const l = e.target;

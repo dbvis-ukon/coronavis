@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {DiviHospital, getLatest, TimestampedValue} from '../repositories/divi-hospitals.service';
+import { DiviHospital } from '../services/glyph-layer.service';
 
 @Component({
   selector: 'app-hospital-info-dialog',

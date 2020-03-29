@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {DiviHospital, TimestampedValue, getLatest, BedStatusSummary} from '../repositories/divi-hospitals.service';
 import { ColormapService } from '../services/colormap.service';
+import { TimestampedValue } from '../repositories/divi-development.respository';
+import { DiviHospital, BedStatusSummary } from '../services/glyph-layer.service';
+import { getLatest } from '../util/timestamped-value';
 
 @Component({
   selector: 'app-hospital-info',
