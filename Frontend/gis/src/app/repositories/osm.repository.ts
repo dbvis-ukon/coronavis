@@ -2,21 +2,21 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FeatureCollection } from 'geojson';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { CachedRepository } from './cached.repository';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OSMRepository {
 
-  constructor(private http: HttpClient) {
+  constructor(private cachedRepository: CachedRepository) {
   }
 
   getOSMHospitals(): Observable<FeatureCollection> {
-    return this.http.get<FeatureCollection>(`${environment.apiUrl}osm/hospitals`);
+    return this.cachedRepository.get<FeatureCollection>(`${environment.apiUrl}osm/hospitals`);
   }
 
   getOSMHelipads(): Observable<FeatureCollection> {
-    return this.http.get<FeatureCollection>(`${environment.apiUrl}osm/nearby_helipads`);
+    return this.cachedRepository.get<FeatureCollection>(`${environment.apiUrl}osm/nearby_helipads`);
   }
 }

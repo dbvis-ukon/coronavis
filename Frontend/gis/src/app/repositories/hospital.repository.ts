@@ -2,36 +2,36 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FeatureCollection } from 'geojson';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { CachedRepository } from './cached.repository';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HospitalRepository {
 
-  constructor(private http: HttpClient) {
+  constructor(private cachedRepository: CachedRepository) {
   }
 
   /**
    * Retrieves the Landkreise from the given api endpoint.
    */
   private getHospitalsLandkreise(): Observable<FeatureCollection> {
-    return this.http.get<FeatureCollection>(`${environment.apiUrl}hospitals/landkreise`);
+    return this.cachedRepository.get<FeatureCollection>(`${environment.apiUrl}hospitals/landkreise`);
   }
 
   /**
    * Retrieves the Regierungsbezirke from the given api endpoint.
    */
   private getHospitalsRegierungsbezirke(): Observable<FeatureCollection> {
-    return this.http.get<FeatureCollection>(`${environment.apiUrl}hospitals/regierungsbezirke`);
+    return this.cachedRepository.get<FeatureCollection>(`${environment.apiUrl}hospitals/regierungsbezirke`);
   }
 
   /**
    * Retrieves the Bundeslaender from the given api endpoint.
    */
   private getHospitalsBundeslaender(): Observable<FeatureCollection> {
-    return this.http.get<FeatureCollection>(`${environment.apiUrl}hospitals/bundeslander`);
+    return this.cachedRepository.get<FeatureCollection>(`${environment.apiUrl}hospitals/bundeslander`);
   }
 
   public getHospitalsForAggregationLevel(aggregationLevel: AggregationLevel) : Observable<FeatureCollection> {

@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Feature, FeatureCollection, MultiPolygon} from 'geojson';
-import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from 'src/environments/environment';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
-import { Cache } from '../decorators/cache.decorator';
 import { tap } from 'rxjs/operators';
+import { CachedRepository } from './cached.repository';
 
 /* aggregated hospitals */
 export interface AggregatedHospitalsGeometry extends MultiPolygon {
@@ -109,34 +108,22 @@ export interface TimestampedValue {
 })
 export class DiviDevelopmentRepository {
 
-  constructor(private http: HttpClient) {}
+  constructor(private cachedRepository: CachedRepository) {}
 
-  // @Cache({
-  //   ttl: 3600000 // one hour
-  // })
   private getDiviDevelopmentCounties(): Observable <AggregatedHospitals> {
-    return this.http.get <AggregatedHospitals> (`${environment.apiUrl}divi/development/landkreise`);
+    return this.cachedRepository.get <AggregatedHospitals> (`${environment.apiUrl}divi/development/landkreise`);
   }
 
-  // @Cache({
-  //   ttl: 3600000 // one hour
-  // })
   private getDiviDevelopmentGovernmentDistricts(): Observable < AggregatedHospitals > {
-    return this.http.get <AggregatedHospitals> (`${environment.apiUrl}divi/development/regierungsbezirke`);
+    return this.cachedRepository.get <AggregatedHospitals> (`${environment.apiUrl}divi/development/regierungsbezirke`);
   }
 
-  // @Cache({
-  //   ttl: 3600000 // one hour
-  // })
   private getDiviDevelopmentStates(): Observable <AggregatedHospitals> {
-    return this.http.get <AggregatedHospitals> (`${environment.apiUrl}divi/development/bundeslaender`);
+    return this.cachedRepository.get <AggregatedHospitals> (`${environment.apiUrl}divi/development/bundeslaender`);
   }
 
-  // @Cache({
-  //   ttl: 3600000 // one hour
-  // })
   public getDiviDevelopmentSingleHospitals(): Observable <SingleHospitals> {
-    return this.http.get <SingleHospitals> (`${environment.apiUrl}divi/development`)
+    return this.cachedRepository.get <SingleHospitals> (`${environment.apiUrl}divi/development`)
     .pipe(
       tap(c => console.log('repo single', c))
     )

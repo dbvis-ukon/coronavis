@@ -1,35 +1,27 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {forkJoin, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import { Observable} from 'rxjs';
 import {FeatureCollection} from 'geojson';
 import {environment} from 'src/environments/environment';
 import {AggregationLevel} from '../map/options/aggregation-level.enum';
-
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+import { CachedRepository } from './cached.repository';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RKICaseRepository {
-  constructor(private http: HttpClient) {}
+  constructor(private cachedRepository: CachedRepository) {}
+
 
   getCasesTotalForAggLevel(aggLevel: AggregationLevel): Observable<FeatureCollection> {
-    return this.http.get<FeatureCollection>(`${environment.apiUrl}cases/${aggLevel}/total`);
+    return this.cachedRepository.get<FeatureCollection>(`${environment.apiUrl}cases/${aggLevel}/total`);
   }
 
   getCasesYesterdayForAggLevel(aggLevel: AggregationLevel): Observable<FeatureCollection> {
-    return this.http.get<FeatureCollection>(`${environment.apiUrl}cases/${aggLevel}/yesterday`);
+    return this.cachedRepository.get<FeatureCollection>(`${environment.apiUrl}cases/${aggLevel}/yesterday`);
   }
 
   getCasesThreedaysForAggLevel(aggLevel: AggregationLevel): Observable<FeatureCollection> {
-    return this.http.get<FeatureCollection>(`${environment.apiUrl}cases/${aggLevel}/3daysbefore`);
+    return this.cachedRepository.get<FeatureCollection>(`${environment.apiUrl}cases/${aggLevel}/3daysbefore`);
   }
   
-
-  
-
-
 }
