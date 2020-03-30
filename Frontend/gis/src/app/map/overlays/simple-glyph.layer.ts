@@ -78,7 +78,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
   }
   // Extract the city name from the address and shorten
   private shorten_city_name(address) {
-    if (address === null) {
+    if (!address) {
       return '';
     }
     const nameParts = address.replace(this.rxAdr, '') // Remove address
