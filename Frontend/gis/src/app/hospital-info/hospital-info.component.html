@@ -25,18 +25,18 @@
       <th>ECMO:</th>
     </tr>
     <tr>
-      <th>(frei / gesamt)</th>
-      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_low_summary) }">{{ getLatest(data.icu_low_care_frei) }} / {{ getLatest(data.icu_low_care_belegt)    + getLatest(data.icu_low_care_frei)  }} <mat-icon> {{ getTrendIcon(data.icu_low_care_einschaetzung) }} </mat-icon> </th>
-      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_high_summary) }">{{ getLatest(data.icu_high_care_frei) }} / {{ getLatest(data.icu_high_care_belegt) + getLatest(data.icu_high_care_frei) }} <mat-icon> {{ getTrendIcon(data.icu_high_care_einschaetzung) }} </mat-icon> </th>
-      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_ecmo_summary) }">{{ getLatest(data.icu_ecmo_care_frei) }} / {{ getLatest(data.icu_ecmo_care_belegt) + getLatest(data.icu_ecmo_care_frei) }} <mat-icon> {{ getTrendIcon(data.icu_ecmo_care_einschaetzung) }} </mat-icon> </th>
+      <th>(belegt / gesamt)</th>
+      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_low_summary) }">{{ getLatest(data.icu_low_care_belegt) }} / {{ getLatest(data.icu_low_care_belegt)    + getLatest(data.icu_low_care_frei)  }} <mat-icon> {{ getTrendIcon(data.icu_low_care_einschaetzung) }} </mat-icon> </th>
+      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_high_summary) }">{{ getLatest(data.icu_high_care_belegt) }} / {{ getLatest(data.icu_high_care_belegt) + getLatest(data.icu_high_care_frei) }} <mat-icon> {{ getTrendIcon(data.icu_high_care_einschaetzung) }} </mat-icon> </th>
+      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_ecmo_summary) }">{{ getLatest(data.icu_ecmo_care_belegt) }} / {{ getLatest(data.icu_ecmo_care_belegt) + getLatest(data.icu_ecmo_care_frei) }} <mat-icon> {{ getTrendIcon(data.icu_ecmo_care_einschaetzung) }} </mat-icon> </th>
     </tr>
     <tr>
-      <td>% Belegung</td>
+      <td>% Auslastung</td>
       <td>{{ (getLatest(data.icu_low_care_belegt)  / (getLatest(data.icu_low_care_belegt)  + getLatest(data.icu_low_care_frei)))  * 100 | number : '1.1-1'}}%</td> <!--'1.2-2' means {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}: A minimum of 1 digit will be shown before decimal point It will show at least 2 digits after decimal point But not more than 2 digits-->
       <td>{{ (getLatest(data.icu_high_care_belegt) / (getLatest(data.icu_high_care_belegt) + getLatest(data.icu_high_care_frei))) * 100 | number : '1.1-1'}}%</td>
       <td>{{ (getLatest(data.icu_ecmo_care_belegt) / (getLatest(data.icu_ecmo_care_belegt) + getLatest(data.icu_ecmo_care_frei))) * 100 | number : '1.1-1'}}%</td>
     </tr>
-    <tr>
+    <!-- <tr>
       <td># Verfügbar</td>
       <td>{{ getLatest(data.icu_low_care_frei) }}</td>
       <td>{{ getLatest(data.icu_high_care_frei) }}</td>
@@ -47,7 +47,7 @@
       <td>{{ getLatest(data.icu_low_care_belegt) }}</td>
       <td>{{ getLatest(data.icu_high_care_belegt) }}</td>
       <td>{{ getLatest(data.icu_ecmo_care_belegt) }}</td>
-    </tr>
+    </tr> -->
     <tr>
       <td>+ Erwartet</td>
       <td>{{ getLatest(data.icu_low_care_einschaetzung) }}</td>
@@ -60,7 +60,8 @@
 <br>
 
 <strong>Entwicklung:</strong>
-<div *ngFor="let s of specs">
+<div *ngFor="let s of specs; let i = index">
+  <h5 class="chart-title">{{ this.bedAccessorsMapping[this.bedAccessors[i]] }}</h5>
   <app-vega [spec]="s"></app-vega>
 </div>
 
