@@ -40,11 +40,7 @@ export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {
       this.data.forEach(d => {
         d.x = d._x;
         d.y = d._y;
-<<<<<<< HEAD
-      })
-=======
       });
->>>>>>> origin/master
       this.sim.force("collide", this.quadtreeCollide(glyphSizes))
         .alpha(0.1)
         .restart()
