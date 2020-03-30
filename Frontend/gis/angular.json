@@ -189,6 +189,21 @@
               "devServerTarget": "gis:serve:production"
             }
           }
+        },
+        "xliffmerge": {
+          "builder": "@ngx-i18nsupport/tooling:xliffmerge",
+          "options": {
+            "xliffmergeOptions": {
+              "i18nFormat": "xlf2",
+              "srcDir": "src/i18n",
+              "genDir": "src/i18n",
+              "defaultLanguage": "de",
+              "languages": [
+                "de",
+                "en"
+              ]
+            }
+          }
         }
       }
     }
