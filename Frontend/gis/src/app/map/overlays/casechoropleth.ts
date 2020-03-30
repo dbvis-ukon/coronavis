@@ -1,5 +1,3 @@
-import {FeatureCollection, GeoJsonProperties} from 'geojson';
-
 import * as L from 'leaflet';
 import {Overlay} from './overlay';
 import * as d3 from "d3";
@@ -13,11 +11,12 @@ import {
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from '../options/covid-number-case-options';
+import { QuantitativeAggregatedRkiCases, QuantitativeAggregatedRkiCasesProperties } from 'src/app/repositories/types/in/quantitative-aggregated-rki-cases';
 
-export class CaseChoropleth extends Overlay<FeatureCollection> {
+export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCases> {
   constructor(
     name: string,
-    hospitals: FeatureCollection,
+    hospitals: QuantitativeAggregatedRkiCases,
     private options: CovidNumberCaseOptions,
     private tooltipService: TooltipService,
     private colorsService: ColormapService
@@ -29,7 +28,7 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
   private minMaxNormValues: [number, number];
   private normalizeValues;
 
-  private getCaseNumbers(d: GeoJsonProperties): number {
+  private getCaseNumbers(d: QuantitativeAggregatedRkiCasesProperties): number {
     const combined = d.combined;
     if (this.options.change === CovidNumberCaseChange.absolute) {
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.all) {

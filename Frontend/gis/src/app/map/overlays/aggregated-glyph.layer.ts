@@ -10,8 +10,8 @@ import {BedType} from '../options/bed-type.enum';
 import {AggregatedGlyphTooltipComponent} from "../../aggregated-glyph-tooltip/aggregated-glyph-tooltip.component";
 import {ForceDirectedLayout} from 'src/app/util/forceDirectedLayout';
 import {GlyphLayer} from "./GlyphLayer";
-import { DiviAggregatedHospital } from 'src/app/services/glyph-layer.service';
 import { getLatest } from 'src/app/util/timestamped-value';
+import { DiviAggregatedHospital } from 'src/app/services/types/divi-aggragated-hospital';
 
 export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
@@ -95,8 +95,8 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
 
     this.map.on('zoom', () => this.onZoomed());
 
-    const latExtent = d3.extent(this.data, i => i.Location.lat);
-    const lngExtent = d3.extent(this.data, i => i.Location.lng);
+    const latExtent = d3.extent(this.data, i => i.location.lat);
+    const lngExtent = d3.extent(this.data, i => i.location.lng);
 
     let latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
 
@@ -128,7 +128,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .style("pointer-events", "all")
       .attr('class', 'hospital')
       .attr('transform', d => {
-        const p = this.latLngPoint(d.Location);
+        const p = this.latLngPoint(d.location);
         d.x = p.x;
         d.y = p.y;
         d._x = p.x;
@@ -153,7 +153,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     this.gHospitals
       .append('text')
       .text(d1 => {
-        return d1.Name;
+        return d1.name;
       })
       .attr('x', (padding + 3 * rectSize + 4 * padding) / 2)
       .attr('y', '22')
@@ -165,7 +165,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
 
     this.gHospitals
       .append('text')
-      .text(d1 => d1.Name)
+      .text(d1 => d1.name)
       .attr('x', (padding + 3 * rectSize + 4 * padding) / 2)
       .style('text-anchor', 'middle')
       .attr('y', '22')

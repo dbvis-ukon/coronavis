@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 import * as d3 from 'd3';
 import { ColormapService } from '../services/colormap.service';
-import { DiviAggregatedHospital } from '../services/glyph-layer.service';
+import { DiviAggregatedHospital } from '../services/types/divi-aggragated-hospital';
 
 @Component({
   selector: 'app-aggregated-glyph-tooltip',

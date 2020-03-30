@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import {quadtree} from 'd3';
-import { AbstractDiviHospital } from '../services/glyph-layer.service';
+import { AbstractDiviHospital } from '../services/types/abstract-divi-hospital';
 
 export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {
 

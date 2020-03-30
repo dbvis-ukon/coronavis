@@ -4,6 +4,7 @@ import { FeatureCollection } from 'geojson';
 import { environment } from 'src/environments/environment';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { CachedRepository } from './cached.repository';
+import { QualitativeAggregatedHospitals } from './types/in/qualitative-aggregated-hospitals';
 
 @Injectable({
   providedIn: 'root'
@@ -16,25 +17,25 @@ export class HospitalRepository {
   /**
    * Retrieves the Landkreise from the given api endpoint.
    */
-  private getHospitalsLandkreise(): Observable<FeatureCollection> {
-    return this.cachedRepository.get<FeatureCollection>(`${environment.apiUrl}hospitals/landkreise`);
+  private getHospitalsLandkreise(): Observable<QualitativeAggregatedHospitals> {
+    return this.cachedRepository.get<QualitativeAggregatedHospitals>(`${environment.apiUrl}hospitals/landkreise`);
   }
 
   /**
    * Retrieves the Regierungsbezirke from the given api endpoint.
    */
-  private getHospitalsRegierungsbezirke(): Observable<FeatureCollection> {
-    return this.cachedRepository.get<FeatureCollection>(`${environment.apiUrl}hospitals/regierungsbezirke`);
+  private getHospitalsRegierungsbezirke(): Observable<QualitativeAggregatedHospitals> {
+    return this.cachedRepository.get<QualitativeAggregatedHospitals>(`${environment.apiUrl}hospitals/regierungsbezirke`);
   }
 
   /**
    * Retrieves the Bundeslaender from the given api endpoint.
    */
-  private getHospitalsBundeslaender(): Observable<FeatureCollection> {
-    return this.cachedRepository.get<FeatureCollection>(`${environment.apiUrl}hospitals/bundeslander`);
+  private getHospitalsBundeslaender(): Observable<QualitativeAggregatedHospitals> {
+    return this.cachedRepository.get<QualitativeAggregatedHospitals>(`${environment.apiUrl}hospitals/bundeslander`);
   }
 
-  public getHospitalsForAggregationLevel(aggregationLevel: AggregationLevel) : Observable<FeatureCollection> {
+  public getHospitalsForAggregationLevel(aggregationLevel: AggregationLevel) : Observable<QualitativeAggregatedHospitals> {
     switch(aggregationLevel) {
       case AggregationLevel.county:
         return this.getHospitalsLandkreise();

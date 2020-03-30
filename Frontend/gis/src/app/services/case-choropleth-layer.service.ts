@@ -24,6 +24,7 @@ import {
 import { ColormapService } from './colormap.service';
 import { TooltipService } from './tooltip.service';
 import { Injectable } from '@angular/core';
+import { QuantitativeAggregatedRkiCases } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +54,7 @@ export class CaseChoroplethLayerService {
   }
 
 
-  private getCaseData(agg: AggregationLevel): Observable < FeatureCollection > {
+  private getCaseData(agg: AggregationLevel): Observable < QuantitativeAggregatedRkiCases > {
     const total = this.rkiCaseRepository.getCasesTotalForAggLevel(agg);
     const yesterday = this.rkiCaseRepository.getCasesYesterdayForAggLevel(agg);
     const threedays = this.rkiCaseRepository.getCasesThreedaysForAggLevel(agg);
@@ -80,6 +81,7 @@ export class CaseChoroplethLayerService {
 
             e[0].features[i].properties.combined = [last.properties, y.properties, t.properties]
           }
+          console.log('combined', e['0']);
           return e[0];
         })
       )

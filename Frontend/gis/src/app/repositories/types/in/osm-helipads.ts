@@ -1,9 +1,9 @@
-import { FeatureCollection, Point, GeoJsonProperties } from 'geojson';
+import { FeatureCollection, Point } from 'geojson';
 
 export interface OSMNearbyHelipads extends FeatureCollection<Point, OSMHelipadProperties> {
 }
 
-export interface OSMHelipadProperties extends GeoJsonProperties {
+export interface OSMHelipadProperties {
   osm_id: number;
 
   name: null;

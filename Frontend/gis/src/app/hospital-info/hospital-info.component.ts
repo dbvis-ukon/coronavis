@@ -7,15 +7,11 @@ import {
   ColormapService
 } from '../services/colormap.service';
 import {
-  TimestampedValue
-} from '../repositories/divi-development.respository';
-import {
-  DiviHospital,
-  BedStatusSummary
-} from '../services/glyph-layer.service';
-import {
   getLatest
 } from '../util/timestamped-value';
+import { DiviHospital } from '../services/types/divi-hospital';
+import { BedStatusSummary } from '../services/types/bed-status-summary';
+import { TimestampedValue } from '../repositories/types/in/timestamped-value';
 
 @Component({
   selector: 'app-hospital-info',
@@ -496,20 +492,20 @@ export class HospitalInfoComponent implements OnInit {
   ngOnInit(): void {
     console.log('tooltip', this.data);
 
-    if (this.data.Webaddress.indexOf('http') > -1) {
-      this.contact = 'http' + this.data.Webaddress.split('http')[1];
+    if (this.data.webaddresse.indexOf('http') > -1) {
+      this.contact = 'http' + this.data.webaddresse.split('http')[1];
       this.url = true;
 
-      this.contactMsg = this.data.Webaddress.replace(this.contact, '').replace('Website', '').trim();
+      this.contactMsg = this.data.webaddresse.replace(this.contact, '').replace('Website', '').trim();
 
       if (this.contactMsg === '') {
         this.contactMsg = 'Webseite';
       }
     } else {
-      this.contact = this.data.Webaddress;
+      this.contact = this.data.webaddresse;
       this.url = false;
 
-      this.contactMsg = this.data.Webaddress;
+      this.contactMsg = this.data.webaddresse;
     }
 
     this.specs = [];

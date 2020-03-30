@@ -4,8 +4,8 @@ import {environment} from 'src/environments/environment';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { tap } from 'rxjs/operators';
 import { CachedRepository } from './cached.repository';
-import { AggregatedHospitals } from './types/in/aggregated-hospital';
-import { SingleHospitals } from './types/in/single-hospitals';
+import { QuantitativeAggregatedHospitals } from './types/in/quantitative-aggregated-hospitals';
+import { QuantitativeSingleHospitals } from './types/in/quantitative-single-hospitals';
 
 @Injectable({
   providedIn: 'root'
@@ -14,26 +14,26 @@ export class DiviDevelopmentRepository {
 
   constructor(private cachedRepository: CachedRepository) {}
 
-  private getDiviDevelopmentCounties(): Observable <AggregatedHospitals> {
-    return this.cachedRepository.get <AggregatedHospitals> (`${environment.apiUrl}divi/development/landkreise`);
+  private getDiviDevelopmentCounties(): Observable <QuantitativeAggregatedHospitals> {
+    return this.cachedRepository.get <QuantitativeAggregatedHospitals> (`${environment.apiUrl}divi/development/landkreise`);
   }
 
-  private getDiviDevelopmentGovernmentDistricts(): Observable < AggregatedHospitals > {
-    return this.cachedRepository.get <AggregatedHospitals> (`${environment.apiUrl}divi/development/regierungsbezirke`);
+  private getDiviDevelopmentGovernmentDistricts(): Observable < QuantitativeAggregatedHospitals > {
+    return this.cachedRepository.get <QuantitativeAggregatedHospitals> (`${environment.apiUrl}divi/development/regierungsbezirke`);
   }
 
-  private getDiviDevelopmentStates(): Observable <AggregatedHospitals> {
-    return this.cachedRepository.get <AggregatedHospitals> (`${environment.apiUrl}divi/development/bundeslaender`);
+  private getDiviDevelopmentStates(): Observable <QuantitativeAggregatedHospitals> {
+    return this.cachedRepository.get <QuantitativeAggregatedHospitals> (`${environment.apiUrl}divi/development/bundeslaender`);
   }
 
-  public getDiviDevelopmentSingleHospitals(): Observable <SingleHospitals> {
-    return this.cachedRepository.get <SingleHospitals> (`${environment.apiUrl}divi/development`)
+  public getDiviDevelopmentSingleHospitals(): Observable <QuantitativeSingleHospitals> {
+    return this.cachedRepository.get <QuantitativeSingleHospitals> (`${environment.apiUrl}divi/development`)
     .pipe(
       tap(c => console.log('repo single', c))
     )
   }
 
-  public getDiviDevelopmentForAggLevel(aggregationLevel: AggregationLevel): Observable<AggregatedHospitals> {
+  public getDiviDevelopmentForAggLevel(aggregationLevel: AggregationLevel): Observable<QuantitativeAggregatedHospitals> {
     switch(aggregationLevel) {
         
       case AggregationLevel.county:

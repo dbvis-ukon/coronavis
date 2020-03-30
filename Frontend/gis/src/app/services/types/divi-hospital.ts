@@ -1,10 +1,4 @@
 import { AbstractDiviHospital } from './abstract-divi-hospital';
+import { QuantitativeSingleHospitalProperties } from 'src/app/repositories/types/in/quantitative-single-hospitals';
 
-export interface DiviHospital extends AbstractDiviHospital {
-  City: string;
-  Postcode: string;
-  Address: string;
-  Webaddress: string;
-
-  helipad_nearby: boolean;
-}
+export type DiviHospital = AbstractDiviHospital & QuantitativeSingleHospitalProperties;

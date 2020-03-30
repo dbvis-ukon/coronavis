@@ -5,15 +5,16 @@ import { BedType } from '../options/bed-type.enum';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import {TooltipService} from "../../services/tooltip.service";
 import {AggregatedGlyphTooltipComponent} from "../../aggregated-glyph-tooltip/aggregated-glyph-tooltip.component";
+import { QuantitativeAggregatedHospitals, QuantitativeAggregatedHospitalsProperties } from 'src/app/repositories/types/in/quantitative-aggregated-hospitals';
 
-export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
+export class BedStatusChoropleth extends Overlay<QuantitativeAggregatedHospitals> {
 
-  constructor(name: string, hospitals: AggregatedHospitals, private aggregationLevel: AggregationLevel, private type: BedType,
+  constructor(name: string, hospitals: QuantitativeAggregatedHospitals, private aggregationLevel: AggregationLevel, private type: BedType,
               private colorsService: ColormapService, private tooltipService: TooltipService) {
     super(name, hospitals);
   }
 
-  private propertyAccessor(d: AggregatedHospitalsProperties, type: BedType) {
+  private propertyAccessor(d: QuantitativeAggregatedHospitalsProperties, type: BedType) {
     switch (type) {
       case BedType.ecmo:
         return {free: d.icu_ecmo_care_frei, full: d.icu_ecmo_care_belegt, prognosis: d.icu_ecmo_care_einschaetzung, in24h: d.icu_ecmo_care_in_24h};

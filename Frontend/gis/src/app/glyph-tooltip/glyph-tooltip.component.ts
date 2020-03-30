@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 import { ColormapService } from '../services/colormap.service';
-import { DiviHospital } from '../services/glyph-layer.service';
+import { DiviHospital } from '../services/types/divi-hospital';
 
 @Component({
   selector: 'app-glyph-tooltip',

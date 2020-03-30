@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as d3 from 'd3';
-import { BedStatusSummary } from './glyph-layer.service';
 import { getLatest } from '../util/timestamped-value';
+import { BedStatusSummary } from './types/bed-status-summary';
 
 @Injectable({
   providedIn: 'root'
