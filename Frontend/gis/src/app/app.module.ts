@@ -30,6 +30,7 @@ import { PlusminusPipe } from './plusminus.pipe';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { AboutComponent } from './about/about.component';
 import { ImpressumComponent } from './impressum/impressum.component';
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import {AggregatedGlyphTooltipComponent} from './aggregated-glyph-tooltip/aggregated-glyph-tooltip.component';
 import { VegaComponent } from './vega/vega.component';
@@ -53,7 +54,7 @@ import { VegaComponent } from './vega/vega.component';
     AboutComponent,
     ImpressumComponent,
     AggregatedGlyphTooltipComponent,
-    VegaComponent
+    VegaComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,7 +74,8 @@ import { VegaComponent } from './vega/vega.component';
     MatButtonModule,
     MatFormFieldModule,
     MatDialogModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

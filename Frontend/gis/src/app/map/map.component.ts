@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
 
 import * as L from 'leaflet';
-import {GeoJSON, SVGOverlay} from 'leaflet';
+import {GeoJSON, LatLng, LatLngTuple, SVGOverlay} from 'leaflet';
 import 'mapbox-gl';
 import 'mapbox-gl-leaflet';
 // import 'leaflet-mapbox-gl';
@@ -22,6 +22,8 @@ import { CaseChoropleth } from './overlays/casechoropleth';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { SimpleGlyphLayer } from './overlays/simple-glyph.layer';
 import { switchMap, map } from 'rxjs/operators';
+import {APP_CONFIG_KEY, MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -75,7 +77,8 @@ export class MapComponent implements OnInit {
     private bedChoroplethLayerService: BedChoroplethLayerService,
     private glyphLayerService: GlyphLayerService,
     private caseChoroplehtLayerService: CaseChoroplethLayerService,
-    private osmLayerService: OSMLayerService
+    private osmLayerService: OSMLayerService,
+    private snackbar: MatSnackBar
   ) {
   }
 
@@ -90,12 +93,37 @@ export class MapComponent implements OnInit {
         });
 
     // create map, set initial view to basemap and zoom level to center of BW
+    const defaultView: LatLngTuple = [48.6813312, 9.0088299];
+    const defaultZoom = 9;
+
+    // let initialView = JSON.parse(localStorage.getItem(MAP_VIEW_KEY))
+    // let initialZoom = +localStorage.getItem(MAP_ZOOM_KEY);
+
+    // if (initialView && initialZoom) {
+    //   let snackbar = this.snackbar.open("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt", "Zurücksetzen", {
+    //     politeness: "polite",
+    //     duration: 40000
+    //   });
+    //   snackbar.onAction().subscribe(() => {
+    //     localStorage.removeItem(MAP_ZOOM_KEY);
+    //     localStorage.removeItem(MAP_VIEW_KEY);
+    //   })
+    // } else {
+    //   initialView = defaultView;
+    //   initialZoom = defaultZoom;
+    // }
+
     this.mymap = L.map('main', {
       minZoom: 7,
       maxZoom: 10,
       layers: [tiledMap],
       zoomControl: false
-    }).setView([48.6813312, 9.0088299], 9);
+    }).setView(defaultView, defaultZoom);
+
+    this.mymap.on('moveend', () => {
+      localStorage.setItem(MAP_VIEW_KEY, JSON.stringify(this.mymap.getBounds().getCenter()));
+      localStorage.setItem(MAP_ZOOM_KEY, "" + this.mymap.getZoom());
+    });
 
     new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
 
@@ -178,23 +206,23 @@ export class MapComponent implements OnInit {
         obs = this.glyphLayerService.getAggregatedGlyphLayer(o.aggregationLevel, this.bedGlyphOptions$)
         .pipe(
           map(([glyphFactory, backgroundFactory]) => {
-  
+
           const glyphLayer = glyphFactory.createOverlay(this.mymap);
-    
+
           const bgLayer = backgroundFactory.createOverlay();
-    
+
           // Create a layer group
           const layerGroup = L.layerGroup([bgLayer, glyphLayer]);
 
           this.layerToFactoryMap.set(layerGroup, glyphFactory);
-            
+
           return layerGroup;
         }));
       }
 
       obs.subscribe(layerGroup => {
         this.aggregationLevelToGlyphMap.set(o.aggregationLevel, layerGroup);
-  
+
         this.showGlyphLayer(layerGroup);
       });
     }
@@ -243,15 +271,15 @@ export class MapComponent implements OnInit {
       this.removeCaseChoroplethLayers();
 
       this.covidNumberCaseOptionsKeyToLayer.set(key, l);
-  
+
       this.layerToFactoryMap.set(l, factory);
-      
+
       this.mymap.addLayer(l);
-  
+
       this.caseChoroplethLayerChange.emit(factory as CaseChoropleth);
-  
+
       l.bringToBack();
-  
+
       // update the glyph map to put it in the front:
       this.updateGlyphMapLayers(this._mapOptions.bedGlyphOptions);
     });
@@ -282,14 +310,14 @@ export class MapComponent implements OnInit {
         const layer = factory.createOverlay();
 
         this.removeBedChoroplethLayers();
-        
+
         this.mymap.addLayer(layer);
-  
+
         this._lastBedCoroplethLayer = layer;
 
         layer.bringToBack();
       });
-   
+
     }
   }
 }
