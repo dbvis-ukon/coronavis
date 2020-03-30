@@ -11,8 +11,9 @@ import {
 import {BedType} from './map/options/bed-type.enum';
 import {CaseChoropleth} from './map/overlays/casechoropleth';
 import {MapOptions} from './map/options/map-options';
-import { environment } from 'src/environments/environment';
+import {environment} from 'src/environments/environment';
 import {APP_CONFIG_KEY} from "../constants";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,7 @@ export class AppComponent implements OnInit {
 
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
-  mapOptions: MapOptions = JSON.parse(localStorage.getItem(APP_CONFIG_KEY)) as MapOptions || {
+  private defaultMapOptions = {
     bedGlyphOptions: {
       aggregationLevel: AggregationLevel.none,
       enabled: true,
@@ -51,15 +52,30 @@ export class AppComponent implements OnInit {
 
     showOsmHospitals: false
   }
+  mapOptions: MapOptions = this.defaultMapOptions;
 
   currentCaseChoropleth: CaseChoropleth;
 
   siteId: number;
 
   // constructor is here only used to inject services
-  constructor() { }
+  constructor(private snackbar: MatSnackBar) {
+  }
 
   ngOnInit(): void {
+    const stored = JSON.parse(localStorage.getItem(APP_CONFIG_KEY)) as MapOptions;
+    if (stored) {
+      this.mapOptions = stored;
+      let snackbar = this.snackbar.open("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt", "Zurücksetzen", {
+        politeness: "polite",
+        duration: 20000
+      });
+      snackbar.onAction().subscribe(() => {
+        this.mapOptions = this.defaultMapOptions;
+        localStorage.removeItem(APP_CONFIG_KEY);
+      })
+    }
+
     const trackingPixelSiteIDMapping = {
       'production': 1,
       'staging': 3,

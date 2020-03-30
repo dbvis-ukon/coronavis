@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
 
 import * as L from 'leaflet';
-import {GeoJSON, SVGOverlay} from 'leaflet';
+import {GeoJSON, LatLng, LatLngTuple, SVGOverlay} from 'leaflet';
 import 'mapbox-gl';
 import 'mapbox-gl-leaflet';
 // import 'leaflet-mapbox-gl';
@@ -22,7 +22,8 @@ import { CaseChoropleth } from './overlays/casechoropleth';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { SimpleGlyphLayer } from './overlays/simple-glyph.layer';
 import { switchMap, map } from 'rxjs/operators';
-import {MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
+import {APP_CONFIG_KEY, MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -76,7 +77,8 @@ export class MapComponent implements OnInit {
     private bedChoroplethLayerService: BedChoroplethLayerService,
     private glyphLayerService: GlyphLayerService,
     private caseChoroplehtLayerService: CaseChoroplethLayerService,
-    private osmLayerService: OSMLayerService
+    private osmLayerService: OSMLayerService,
+    private snackbar: MatSnackBar
   ) {
   }
 
@@ -91,14 +93,32 @@ export class MapComponent implements OnInit {
         });
 
     // create map, set initial view to basemap and zoom level to center of BW
-    const initialView = JSON.parse(localStorage.getItem(MAP_VIEW_KEY)) || [48.6813312, 9.0088299];
-    const initialZoom = +localStorage.getItem(MAP_ZOOM_KEY) || 9;
+    const defaultView: LatLngTuple = [48.6813312, 9.0088299];
+    const defaultZoom = 9;
+
+    // let initialView = JSON.parse(localStorage.getItem(MAP_VIEW_KEY))
+    // let initialZoom = +localStorage.getItem(MAP_ZOOM_KEY);
+
+    // if (initialView && initialZoom) {
+    //   let snackbar = this.snackbar.open("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt", "Zurücksetzen", {
+    //     politeness: "polite",
+    //     duration: 40000
+    //   });
+    //   snackbar.onAction().subscribe(() => {
+    //     localStorage.removeItem(MAP_ZOOM_KEY);
+    //     localStorage.removeItem(MAP_VIEW_KEY);
+    //   })
+    // } else {
+    //   initialView = defaultView;
+    //   initialZoom = defaultZoom;
+    // }
+
     this.mymap = L.map('main', {
       minZoom: 7,
       maxZoom: 10,
       layers: [tiledMap],
       zoomControl: false
-    }).setView(initialView, initialZoom);
+    }).setView(defaultView, defaultZoom);
 
     this.mymap.on('moveend', () => {
       localStorage.setItem(MAP_VIEW_KEY, JSON.stringify(this.mymap.getBounds().getCenter()));
