@@ -9,7 +9,7 @@
       </notes>
       <segment>
         <source>Datenanalyse und Visualisierung</source>
-        <target></target>
+        <target>Data Analysis and Visualization Group</target>
       </segment>
     </unit>
     <unit id="teamToolIntro">
@@ -22,7 +22,9 @@
         <source> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a&gt;" dispEnd="&lt;/a&gt;">AG Datenanalyse und
             Visualisierung</pc> von Prof. Dr. Daniel Keim an der Universität Konstanz.
           </source>
-          <target></target>
+          <target>This tool is being developed by the <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a&gt;" dispEnd="&lt;/a&gt;">Data Analysis and Visualization Group</pc>
+          of Prof. Dr. Daniel Keim at the University of Konstanz.
+          </target>
       </segment>
     </unit>
     <unit id="orgComm">
@@ -33,7 +35,7 @@
       </notes>
       <segment>
         <source>Organisation und Kommunikation</source>
-        <target></target>
+        <target>Organisation and Communication</target>
       </segment>
     </unit>
     <unit id="visDesign">
@@ -44,7 +46,7 @@
       </notes>
       <segment>
         <source>Visualisierung und Design</source>
-        <target></target>
+        <target>Visualization and Design</target>
       </segment>
     </unit>
     <unit id="infra">
@@ -55,7 +57,7 @@
       </notes>
       <segment>
         <source>Infrastruktur</source>
-        <target></target>
+        <target>Infrastructure</target>
       </segment>
     </unit>
     <unit id="dataHandlingProcessing">
@@ -66,7 +68,7 @@
       </notes>
       <segment>
         <source>Datenhaltung und -verarbeitung</source>
-        <target></target>
+        <target>Data processing</target>
       </segment>
     </unit>
     <unit id="versionDevelopmentFlag">
@@ -76,7 +78,7 @@
       </notes>
       <segment>
         <source>development</source>
-        <target></target>
+        <target>development</target>
       </segment>
     </unit>
     <unit id="versionUnknownFlag">
@@ -87,7 +89,7 @@
       </notes>
       <segment>
         <source>unknown</source>
-        <target></target>
+        <target>unknown</target>
       </segment>
     </unit>
     <unit id="closeButton">
@@ -97,7 +99,7 @@
       </notes>
       <segment>
         <source>Close</source>
-        <target></target>
+        <target>Close</target>
       </segment>
     </unit>
   </file>
