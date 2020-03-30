@@ -13,145 +13,95 @@ import {LandkreiseHospitalsLayer} from '../map/overlays/landkreishospitals';
 import {LatLngLiteral} from 'leaflet';
 import {Feature, FeatureCollection, MultiPolygon} from 'geojson';
 import {DiviDevelopmentRepository} from "../repositories/divi-development.respository";
+import { DiviHospital } from './types/divi-hospital';
+import { AggregatedHospitals } from '../repositories/types/in/aggregated-hospital';
+import { DiviAggregatedHospital } from './types/divi-aggragated-hospital';
+import { TimestampedValue } from '../repositories/types/in/timestamped-value';
+import { SingleHospitals } from '../repositories/types/in/single-hospitals';
 
-export interface HospitalProperties {
-  name: string,
-  covid19_aktuell: TimestampedValue[];
-  covid19_beatmet: TimestampedValue[];
-  covid19_kumulativ: TimestampedValue[];
-  covid19_verstorben: TimestampedValue[];
-  ecmo_faelle_jahr: TimestampedValue[];
-  icu_ecmo_care_belegt: TimestampedValue[];
-  icu_ecmo_care_einschaetzung: TimestampedValue[];
-  icu_ecmo_care_frei: TimestampedValue[];
-  icu_ecmo_care_in_24h: TimestampedValue[];
-  icu_high_care_belegt: TimestampedValue[];
-  icu_high_care_einschaetzung: TimestampedValue[];
-  icu_high_care_frei: TimestampedValue[];
-  icu_high_care_in_24h: TimestampedValue[];
-  icu_low_care_belegt: TimestampedValue[];
-  icu_low_care_einschaetzung: TimestampedValue[];
-  icu_low_care_frei: TimestampedValue[];
-  icu_low_care_in_24h: TimestampedValue[];
-}
+// export interface HospitalProperties {
+//   name: string,
+//   covid19_aktuell: TimestampedValue[];
+//   covid19_beatmet: TimestampedValue[];
+//   covid19_kumulativ: TimestampedValue[];
+//   covid19_verstorben: TimestampedValue[];
+//   ecmo_faelle_jahr: TimestampedValue[];
+//   icu_ecmo_care_belegt: TimestampedValue[];
+//   icu_ecmo_care_einschaetzung: TimestampedValue[];
+//   icu_ecmo_care_frei: TimestampedValue[];
+//   icu_ecmo_care_in_24h: TimestampedValue[];
+//   icu_high_care_belegt: TimestampedValue[];
+//   icu_high_care_einschaetzung: TimestampedValue[];
+//   icu_high_care_frei: TimestampedValue[];
+//   icu_high_care_in_24h: TimestampedValue[];
+//   icu_low_care_belegt: TimestampedValue[];
+//   icu_low_care_einschaetzung: TimestampedValue[];
+//   icu_low_care_frei: TimestampedValue[];
+//   icu_low_care_in_24h: TimestampedValue[];
+// }
 
-export interface SingleHospitalProperties extends HospitalProperties {
-  gemeindeschluessel: number;
-  ort: string;
-  bundeslandschluessel: string;
-  plz: string;
-  webaddresse: string;
-  id: string;
-  address: string;
-  state: string;
-  contact: string;
-  helipad_nearby: boolean;
-}
+// export interface SingleHospitalProperties extends HospitalProperties {
+//   gemeindeschluessel: number;
+//   ort: string;
+//   bundeslandschluessel: string;
+//   plz: string;
+//   webaddresse: string;
+//   id: string;
+//   address: string;
+//   state: string;
+//   contact: string;
+//   helipad_nearby: boolean;
+// }
 
-export interface AggregatedHospitalsCentroid {
-  coordinates: number[];
-  type: string;
-}
+// export interface AggregatedHospitalsCentroid {
+//   coordinates: number[];
+//   type: string;
+// }
 
-export interface AggregatedHospitalsProperties extends HospitalProperties {
-  ids: string;
-  centroid: AggregatedHospitalsCentroid;
-}
+// export interface AggregatedHospitalsProperties extends HospitalProperties {
+//   ids: string;
+//   centroid: AggregatedHospitalsCentroid;
+// }
 
-export interface SingleHospitals extends FeatureCollection {
-  features: SingleHospitalFeature[];
-  type: 'FeatureCollection';
-}
+// export interface SingleHospitals extends FeatureCollection {
+//   features: SingleHospitalFeature[];
+//   type: 'FeatureCollection';
+// }
 
-export interface SingleHospitalFeature {
-  geometry: SingleHospitalGeometry;
-  properties: SingleHospitalProperties;
-  type: 'Feature';
-}
+// export interface SingleHospitalFeature {
+//   geometry: SingleHospitalGeometry;
+//   properties: SingleHospitalProperties;
+//   type: 'Feature';
+// }
 
-export interface SingleHospitalGeometry {
-  coordinates: number[];
-  type: 'Point';
-}
-
-
-export interface AggregatedHospitalsGeometry extends MultiPolygon {
-  coordinates: number[][][][];
-  type: 'MultiPolygon';
-}
+// export interface SingleHospitalGeometry {
+//   coordinates: number[];
+//   type: 'Point';
+// }
 
 
-export interface AggregatedHospitalsFeature extends Feature<AggregatedHospitalsGeometry, AggregatedHospitalsProperties> {
-  geometry: AggregatedHospitalsGeometry;
-  properties: AggregatedHospitalsProperties;
-  type: 'Feature';
-}
+// export interface AggregatedHospitalsGeometry extends MultiPolygon {
+//   coordinates: number[][][][];
+// }
 
-export interface AggregatedHospitals extends FeatureCollection {
-  features: Array<AggregatedHospitalsFeature>;
-  type: 'FeatureCollection';
-}
 
-export interface TimestampedValue {
-  value: number;
-  timestamp: Date;
-}
+// export interface AggregatedHospitalsFeature extends Feature<AggregatedHospitalsGeometry, AggregatedHospitalsProperties> {
+//   geometry: AggregatedHospitalsGeometry;
+//   properties: AggregatedHospitalsProperties;
+//   type: 'Feature';
+// }
 
-export interface BedStatusSummary {
-  free: TimestampedValue[]
-  full: TimestampedValue[]
-  prognosis: TimestampedValue[]
-  in24h: TimestampedValue[]
-}
+// export interface AggregatedHospitals extends FeatureCollection {
+//   features: Array<AggregatedHospitalsFeature>;
+// }
 
-export interface AbstractDiviHospital {
-  x?: number;
-  y?: number;
-  _x?: number;
-  _y?: number;
-  vx?: number;
-  vy?: number;
 
-  ID: number;
-  Name: string;
-  Location: LatLngLiteral;
 
-  covid19_aktuell: TimestampedValue[];
-  covid19_beatmet: TimestampedValue[];
-  covid19_kumulativ: TimestampedValue[];
-  covid19_verstorben: TimestampedValue[];
-  ecmo_faelle_jahr: TimestampedValue[];
 
-  icu_ecmo_care_belegt: TimestampedValue[]; // Extrakorporale Membranoxygenierung --> https://bit.ly/3dnlpyb
-  icu_ecmo_care_einschaetzung: TimestampedValue[];
-  icu_ecmo_care_frei: TimestampedValue[];
-  icu_ecmo_care_in_24h: TimestampedValue[];
-  icu_ecmo_summary: BedStatusSummary;
 
-  icu_high_care_belegt: TimestampedValue[];
-  icu_high_care_einschaetzung: TimestampedValue[];
-  icu_high_care_frei: TimestampedValue[];
-  icu_high_care_in_24h: TimestampedValue[];
-  icu_high_summary: BedStatusSummary;
 
-  icu_low_care_belegt: TimestampedValue[];
-  icu_low_care_einschaetzung: TimestampedValue[];
-  icu_low_care_frei: TimestampedValue[];
-  icu_low_care_in_24h: TimestampedValue[];
-  icu_low_summary: BedStatusSummary;
-}
 
-export interface DiviHospital extends AbstractDiviHospital {
-  City: string;
-  Postcode: string;
-  Address: string;
-  Webaddress: string;
 
-  helipad_nearby: boolean;
-}
-
-export interface DiviAggregatedHospital extends AbstractDiviHospital {
-}
 
 @Injectable({
   providedIn: 'root'

@@ -5,7 +5,6 @@ import { BedType } from '../options/bed-type.enum';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import {TooltipService} from "../../services/tooltip.service";
 import {AggregatedGlyphTooltipComponent} from "../../aggregated-glyph-tooltip/aggregated-glyph-tooltip.component";
-import { AggregatedHospitals, AggregatedHospitalsProperties } from 'src/app/repositories/divi-development.respository';
 
 export class BedStatusChoropleth extends Overlay<AggregatedHospitals> {
 

@@ -1,4 +1,4 @@
-import { TimestampedValue } from '../repositories/divi-development.respository';
+import { TimestampedValue } from '../repositories/types/in/timestamped-value';
 
 export function getLatest(entries: TimestampedValue[]): number {
   // console.log(entries);
