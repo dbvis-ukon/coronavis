@@ -118,14 +118,14 @@ export class MapComponent implements OnInit {
         {
           tileSize: 256,
           // zoomOffset: -1,
-          attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
-            '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          // attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
+          //   '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         });
 
     // create map, set initial view to basemap and zoom level to center of BW
     this.mymap = L.map('main', {
-      minZoom: 7,
-      maxZoom: 10,
+      minZoom: 6,
+      maxZoom: 11,
       layers: [tiledMap],
       zoomControl: false
     }).setView([48.6813312, 9.0088299], 9);
