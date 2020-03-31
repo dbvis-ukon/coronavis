@@ -98,9 +98,6 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
       return;
     }
 
-    console.log('latest development', this.latestDevelopment);
-
-
     this.specs = [];
     let maxNum = 0;
 
