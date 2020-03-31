@@ -80,14 +80,26 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
     d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
       .range(['white', '#333', 'white', 'white']);
 
-  bedAccessors = ['icu_low_state', 'icu_high_state', 'ecmo_state'];
-  bedAccessorsMapping = {'icu_low_state': 'ICU - Low Care', 'icu_high_state': 'ICU - High Care', 'ecmo_state': 'ECMO'};
+  bedAccessors = ['icu_low_care', 'icu_high_care', 'ecmo_state'];
+  bedAccessorsMapping = {'icu_low_care': 'ICU - Low Care', 'icu_high_care': 'ICU - High Care', 'ecmo_state': 'ECMO'};
+
+  latestDevelopment: QualitativeTimedStatus;
 
   constructor(private colormapService: QualitativeColormapService) {
   }
 
   ngOnInit() {
     const bedStati = QualitativeColormapService.bedStati;
+
+
+    if(this.diviAggregatedHospital.developments) {
+      this.latestDevelopment = this.diviAggregatedHospital.developments[this.diviAggregatedHospital.developments.length - 1];
+    } else {
+      return;
+    }
+
+    console.log('latest development', this.latestDevelopment);
+
 
     this.specs = [];
     let maxNum = 0;
@@ -97,7 +109,7 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
 
       // fill the data object
       for(const bedStatus of bedStati) {
-        const v = this.diviAggregatedHospital[bedAccessor][bedStatus] || 0;
+        const v = this.latestDevelopment[bedAccessor][bedStatus] || 0;
 
         dataValues.push(
           {

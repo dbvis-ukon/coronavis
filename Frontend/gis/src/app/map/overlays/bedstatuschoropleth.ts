@@ -3,11 +3,11 @@ import { Overlay } from './overlay';
 import { BedType } from '../options/bed-type.enum';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import {TooltipService} from "../../services/tooltip.service";
-import { TooltipComponent } from '@angular/material/tooltip';
-import { AbstractTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
-import { FeatureCollection, MultiPolygon, Feature } from 'geojson';
+import { AbstractTimedStatus, QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
+import { FeatureCollection, MultiPolygon, Feature, Geometry } from 'geojson';
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
+import { AggregatedGlyphTooltipComponent } from 'src/app/aggregated-glyph-tooltip/aggregated-glyph-tooltip.component';
 
 export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<FeatureCollection<MultiPolygon, AggregatedHospitalOut<T>>> {
 
@@ -36,16 +36,18 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<F
 
 
   createOverlay() {
-    const onAction = (e: L.LeafletMouseEvent, feature: any, aggregationLayer: any) => {
+    const onAction = (e: L.LeafletMouseEvent, feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>, aggregationLayer: any) => {
       const onCloseAction: () => void = () => {
         aggregationLayer.resetStyle(e.target);
       };
 
       const tooltipComponent = this.tooltipService
-        .openAtElementRef(TooltipComponent, {
+        .openAtElementRef(AggregatedGlyphTooltipComponent, {
           x: e.originalEvent.clientX,
           y: e.originalEvent.clientY
         }, onCloseAction);
+
+      tooltipComponent.diviAggregatedHospital = feature.properties;
 
       // tooltipComponent.name = feature.properties.name;
       // tooltipComponent.combined = feature.properties.combined;
@@ -66,7 +68,7 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<F
 
     // create geojson layer (looks more complex than it is)
     const aggregationLayer = L.geoJSON(this.featureCollection, {
-      style: (feature: Feature<MultiPolygon, AggregatedHospitalOut<T>>) => {
+      style: (feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>) => {
         return {
           fillColor: this.colorsService.getLatestBedStatusColor(feature.properties.developments as any, this.type),
           weight: 0.5,
