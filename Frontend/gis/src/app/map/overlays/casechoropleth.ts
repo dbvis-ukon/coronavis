@@ -11,11 +11,8 @@ import {
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from '../options/covid-number-case-options';
-import {
-  QuantitativeAggregatedRkiCaseNumberProperties,
-  QuantitativeAggregatedRkiCasesOverTime,
-  QuantitativeAggregatedRkiCasesOverTimeProperties
-} from 'src/app/repositories/types/in/quantitative-aggregated-rki-cases';
+import { QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties } from 'src/app/services/types/quantitative-aggregated-rki-cases-over-time';
+import { QuantitativeAggregatedRkiCaseNumberProperties } from 'src/app/repositories/types/in/quantitative-aggregated-rki-cases';
 
 export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTime> {
   private typeAccessor: (d: QuantitativeAggregatedRkiCaseNumberProperties) => number;

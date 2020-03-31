@@ -7,12 +7,8 @@ import {CovidNumberCaseOptions} from '../map/options/covid-number-case-options';
 import {ColormapService} from './colormap.service';
 import {TooltipService} from './tooltip.service';
 import {Injectable} from '@angular/core';
-import {
-  QuantitativeAggregatedRkiCaseNumberProperties,
-  QuantitativeAggregatedRkiCases,
-  QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties
-} from '../repositories/types/in/quantitative-aggregated-rki-cases';
 import {Feature, Polygon} from "geojson";
+import { QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties } from './types/quantitative-aggregated-rki-cases-over-time';
 
 @Injectable({
   providedIn: 'root'
