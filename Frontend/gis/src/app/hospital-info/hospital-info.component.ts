@@ -34,7 +34,7 @@ export class HospitalInfoComponent implements OnInit {
     "encoding": {
       "x": {
         "field": "Datum", "type": "temporal",
-        "axis": {"domain": false, "format": "%d.%m", "tickSize": 0}
+        "axis": {"domain": false, "format": "%d.%m", "tickSize": 0, "tickCount": 7}
       },
       "y": {
         "field": "num", "type": "quantitative",

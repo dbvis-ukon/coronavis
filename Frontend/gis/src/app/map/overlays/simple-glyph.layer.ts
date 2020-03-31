@@ -158,7 +158,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
         d3.select(this).raise();
       })
       .on('mouseleave', () => this.tooltipService.close())
-      .on('click', d => this.openDialog(d));
+      .on('click', d => this.openDialog(d.properties));
 
     // this.gHospitals
     //   .append('rect')
@@ -338,7 +338,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     });
   }
 
-  private openDialog(data): void {
+  private openDialog(data: SingleHospitalOut<QualitativeTimedStatus>): void {
     this.dialog.open(HospitalInfoDialogComponent, {
       data
     });
