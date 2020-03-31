@@ -15,7 +15,8 @@
     "build:i18n:en": "ng build --prod -c en --base-href /en/",
     "extract-i18n": "ng xi18n gis --format xlf2 --output-path src/i18n --i18n-locale de && ng run gis:xliffmerge",
     "start-en": "ng serve -c en",
-    "start-de": "ng serve -c de"
+    "start-de": "ng serve -c de",
+    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
   },
   "private": true,
   "dependencies": {
