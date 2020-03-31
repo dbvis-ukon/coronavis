@@ -10,7 +10,7 @@
       </notes>
       <segment state="initial">
         <source>Fälle Total</source>
-      <target>Fälle Total</target></segment>
+      <target>Total cases</target></segment>
     </unit><unit id="changes">
       <notes>
         <note category="description">changes</note>
@@ -19,7 +19,7 @@
       </notes>
       <segment state="initial">
         <source>Veränderung</source>
-      <target>Veränderung</target></segment>
+      <target>Change</target></segment>
     </unit><unit id="24h">
       <notes>
         <note category="description">24h</note>
@@ -28,7 +28,7 @@
       </notes>
       <segment state="initial">
         <source>letzte 24h</source>
-      <target>letzte 24h</target></segment>
+      <target>last 24h</target></segment>
     </unit><unit id="72h">
       <notes>
         <note category="description">72h</note>
@@ -37,7 +37,7 @@
       </notes>
       <segment state="initial">
         <source>letzte 72h</source>
-      <target>letzte 72h</target></segment>
+      <target>last 72h</target></segment>
     </unit><unit id="sick">
       <notes>
         <note category="description">sick</note>
@@ -46,7 +46,7 @@
       </notes>
       <segment state="initial">
         <source>Erkrankte</source>
-      <target>Erkrankte</target></segment>
+      <target>Afflicted</target></segment>
     </unit><unit id="deaths">
       <notes>
         <note category="description">deaths</note>
@@ -55,7 +55,7 @@
       </notes>
       <segment state="initial">
         <source>Todesfälle</source>
-      <target>Todesfälle</target></segment>
+      <target>Deaths</target></segment>
     </unit><unit id="sickScale">
       <notes>
         <note category="description">sickScale</note>
@@ -64,7 +64,7 @@
       </notes>
       <segment state="initial">
         <source>Erkrankte je 100.000 Einwohner</source>
-      <target>Erkrankte je 100.000 Einwohner</target></segment>
+      <target>Afflicted per 100.000 Residents</target></segment>
     </unit><unit id="deathScale">
       <notes>
         <note category="description">deathScale</note>
@@ -73,7 +73,7 @@
       </notes>
       <segment state="initial">
         <source>Todesfälle je 100.000 Einwohner</source>
-      <target>Todesfälle je 100.000 Einwohner</target></segment>
+      <target>Deaths per 100.000 Residents</target></segment>
     </unit><unit id="lsName">
       <notes>
         <note category="description">name of the group</note>
@@ -196,49 +196,49 @@
       </notes>
       <segment state="initial">
         <source>Länder</source>
-      <target>Länder</target></segment>
+      <target>States</target></segment>
     </unit><unit id="infoboxRegions">
       <notes>
         <note category="location">src/app/infobox/infobox.component.html:27</note>
       </notes>
       <segment state="initial">
         <source>Bezirke</source>
-      <target>Bezirke</target></segment>
+      <target>Regions</target></segment>
     </unit><unit id="infoboxCounties">
       <notes>
         <note category="location">src/app/infobox/infobox.component.html:28</note>
       </notes>
       <segment state="initial">
         <source>Kreise</source>
-      <target>Kreise</target></segment>
+      <target>Counties</target></segment>
     </unit><unit id="infoboxNone">
       <notes>
         <note category="location">src/app/infobox/infobox.component.html:29</note>
       </notes>
       <segment state="initial">
         <source>Keine</source>
-      <target>Keine</target></segment>
+      <target>None</target></segment>
     </unit><unit id="tooltipHospitalAddress">
       <notes>
         <note category="location">src/app/hospital-info/hospital-info.component.html:25</note>
       </notes>
       <segment state="initial">
         <source>Adresse: </source>
-      <target>Adresse: </target></segment>
+      <target>Address: </target></segment>
     </unit><unit id="tooltipHospitalContact">
       <notes>
         <note category="location">src/app/hospital-info/hospital-info.component.html:28</note>
       </notes>
       <segment state="initial">
         <source>Kontakt: </source>
-      <target>Kontakt: </target></segment>
+      <target>Contact: </target></segment>
     </unit><unit id="tooltipHospitalLastUpdate">
       <notes>
         <note category="location">src/app/hospital-info/hospital-info.component.html:34</note>
       </notes>
       <segment state="initial">
         <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Letzter Stand: </pc> <ph id="1" equiv="INTERPOLATION" disp="{{ data.Stand }}"/></source>
-      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Letzter Stand: </pc> <ph id="1" equiv="INTERPOLATION" disp="{{ data.Stand }}"/></target></segment>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Last Update: </pc> <ph id="1" equiv="INTERPOLATION" disp="{{ data.Stand }}"/></target></segment>
     </unit><unit id="beds">
       <notes>
         <note category="description">beds</note>
@@ -247,7 +247,7 @@
       </notes>
       <segment state="initial">
         <source>Bettenauslastung</source>
-      <target>Bettenauslastung</target></segment>
+      <target>Bed Capacity</target></segment>
     </unit>
   </file>
 </xliff>
