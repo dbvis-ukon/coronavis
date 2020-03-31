@@ -1,19 +1,20 @@
-<h3>{{ data.name }}</h3>
+<div  *ngIf="isSingleHospital === true">
+<h3>{{ data.Name }}</h3>
 <mat-divider></mat-divider>
 <table>
   <!--
   <tbody>
   <tr>
     <td><strong>ICU - Low Care:</strong> </td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icu_low_summary) }">{{ getLatest(data.icu_low_care_belegt) }} / {{ getLatest(data.icu_low_care_frei) + getLatest(data.icu_low_care_belegt) }} </td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(singleHospital.icuLowCare) }">{{ singleHospital.icuLowCare }}</td>
   </tr>
   <tr>
     <td><strong>ICU - High Care: </strong></td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icu_high_summary) }">{{ getLatest(data.icu_high_care_belegt) }} / {{ getLatest(data.icu_high_care_frei) + getLatest(data.icu_high_care_belegt) }} </td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(singleHospital.icuHighCare) }">{{ singleHospital.icuHighCare }}</td>
   </tr>
   <tr>
     <td><strong>ECMO: </strong></td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icu_ecmo_summary) }">{{ getLatest(data.icu_ecmo_care_belegt) }} / {{ getLatest(data.icu_ecmo_care_frei) + getLatest(data.icu_ecmo_care_belegt) }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(singleHospital.ECMO) }">{{ singleHospital.ECMO }}</td>
   </tr>
   </tbody>
   -->
@@ -57,19 +58,23 @@
   </tbody>
   
 </table>
+</div>
 <br>
 
+<div *ngIf="specs.length > 0">
 <strong>Entwicklung:</strong>
 <div *ngFor="let s of specs; let i = index">
-  <h5 class="chart-title">{{ this.bedAccessorsMapping[this.bedAccessors[i]] }}</h5>
-  <app-vega [spec]="s"></app-vega>
+  <div class="chart-wrapper">
+    <app-vega [spec]="s.chart"></app-vega>
+  </div>
+</div>
 </div>
 
 <div *ngIf="mode === 'dialog'">
   <!--h3>{{ data.Name }}</h3>
   <mat-divider></mat-divider-->
   <p style="margin-top: 10px;">
-    <strong>Adresse: </strong> {{ data.address }}
+    <strong>Adresse: </strong> {{ singleHospital.Adress }}
   </p>
   <p>
     <strong>Kontakt: </strong>
@@ -78,5 +83,7 @@
   </p>
 </div>
 
-<p><strong>Letzter Stand: </strong> TODO </p>
+<div  *ngIf="isSingleHospital === true">
+  <p><strong>Letzter Stand: </strong> {{ singleHospital.Stand }} </p>
+</div>
 
