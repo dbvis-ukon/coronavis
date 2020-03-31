@@ -4,8 +4,8 @@ import {
   Input
 } from '@angular/core';
 import {
-  ColormapService
-} from '../services/colormap.service';
+  QuantitativeColormapService
+} from '../services/quantiataive-colormap.service';
 import {
   getLatest
 } from '../util/timestamped-value';
@@ -487,7 +487,7 @@ export class HospitalInfoComponent implements OnInit {
     'icu_ecmo_care': 'ECMO'
   };
 
-  constructor(private colormapService: ColormapService) {}
+  constructor(private colormapService: QuantitativeColormapService) {}
 
   ngOnInit(): void {
     console.log('tooltip', this.data);

@@ -1,20 +1,7 @@
 import { FeatureCollection, Point, Polygon } from 'geojson';
-import { QualitativeAggregatedBedStates } from './qualitative-aggregated-bed-states';
+import { QualitativeAggregatedBedStateCounts } from './qualitative-aggregated-bed-states';
+import { QualitativeAggregatedHospitalProperties } from './qualitative-hospitals-development';
 
-export interface QualitativeAggregatedHospitals extends FeatureCollection<Polygon, QualitativeAggregatedHospitalsProperties> {
+export interface QualitativeAggregatedHospitals extends FeatureCollection<Polygon, QualitativeAggregatedHospitalProperties> {
 
-}
-
-export interface QualitativeAggregatedHospitalsProperties {
-    ids: string;
-
-    name: string;
-
-    centroid: Point;
-    
-    icu_low_state: QualitativeAggregatedBedStates;
-
-    icu_high_state: QualitativeAggregatedBedStates;
-    
-    ecmo_state: QualitativeAggregatedBedStates;
 }

@@ -4,7 +4,7 @@ import {RKICaseRepository} from '../repositories/rki-case.repository';
 import {map, tap} from 'rxjs/operators';
 import {CaseChoropleth} from '../map/overlays/casechoropleth';
 import {CovidNumberCaseOptions} from '../map/options/covid-number-case-options';
-import {ColormapService} from './colormap.service';
+import {QuantitativeColormapService} from './quantiataive-colormap.service';
 import {TooltipService} from './tooltip.service';
 import {Injectable} from '@angular/core';
 import {Feature, Polygon} from "geojson";
@@ -20,7 +20,7 @@ export class CaseChoroplethLayerService {
   constructor(
     private rkiCaseRepository: RKICaseRepository,
     private tooltipService: TooltipService,
-    private colormapService: ColormapService
+    private colormapService: QuantitativeColormapService
   ) {}
 
   public getLayer(options: CovidNumberCaseOptions): Observable < CaseChoropleth > {

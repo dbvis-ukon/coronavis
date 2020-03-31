@@ -4,13 +4,13 @@ import {SimpleGlyphLayer} from '../map/overlays/simple-glyph.layer';
 import {BedGlyphOptions} from '../map/options/bed-glyph-options';
 import {map, tap} from 'rxjs/operators';
 import {TooltipService} from './tooltip.service';
-import {ColormapService} from './colormap.service';
+import {QuantitativeColormapService} from './quantiataive-colormap.service';
 import {MatDialog} from '@angular/material/dialog';
 import {HospitalRepository} from '../repositories/hospital.repository';
 import {AggregatedGlyphLayer} from '../map/overlays/aggregated-glyph.layer';
 import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {LandkreiseHospitalsLayer} from '../map/overlays/landkreishospitals';
-import {DiviDevelopmentRepository} from "../repositories/divi-development.respository";
+import {DiviDevelopmentRepository} from "../repositories/quantitative-divi-development.respository";
 import { DiviHospital } from './types/divi-hospital';
 import { DiviAggregatedHospital } from './types/divi-aggragated-hospital';
 import { QuantitativeSingleHospitals } from '../repositories/types/in/quantitative-single-hospitals';
@@ -28,7 +28,7 @@ export class GlyphLayerService {
     private diviDevelopmentRepository: DiviDevelopmentRepository,
     private hospitalRepository: HospitalRepository,
     private tooltipService: TooltipService,
-    private colormapService: ColormapService,
+    private colormapService: QuantitativeColormapService,
     private matDialog: MatDialog
   ) {}
 

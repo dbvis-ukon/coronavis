@@ -7,7 +7,7 @@ import {
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from '../map/options/covid-number-case-options';
-import { ColormapService } from '../services/colormap.service';
+import { QuantitativeColormapService } from '../services/quantiataive-colormap.service';
 import { BedType } from '../map/options/bed-type.enum';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { MapOptions } from '../map/options/map-options';
@@ -28,7 +28,7 @@ import {APP_CONFIG_KEY} from "../../constants";
 export class InfoboxComponent implements OnInit {
 
   constructor(
-    private colormapService: ColormapService,
+    private colormapService: QuantitativeColormapService,
     private dialogService: MatDialog,
     private osmLayerService: OSMLayerService,
     private glyphLayerService: GlyphLayerService,
@@ -38,7 +38,7 @@ export class InfoboxComponent implements OnInit {
 
   glyphLegend;
 
-  glyphLegendColors = ColormapService.bedStati;
+  glyphLegendColors = QuantitativeColormapService.bedStati;
 
   infoboxExtended = true;
 

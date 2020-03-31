@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from 'src/app/services/tooltip.service';
 import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
-import {ColormapService} from 'src/app/services/colormap.service';
+import {QuantitativeColormapService} from 'src/app/services/quantiataive-colormap.service';
 import {FeatureCollection} from "geojson";
 import { Observable } from 'rxjs';
 import { BedGlyphOptions } from '../options/bed-glyph-options';
@@ -31,7 +31,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     name: string,
     private data: DiviHospital[],
     private tooltipService: TooltipService,
-    private colormapService: ColormapService,
+    private colormapService: QuantitativeColormapService,
     private glyphOptions: Observable<BedGlyphOptions>,
     private dialog: MatDialog
   ) {

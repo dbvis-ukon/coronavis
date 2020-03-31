@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 import * as d3 from 'd3';
-import { ColormapService } from '../services/colormap.service';
+import { QuantitativeColormapService } from '../services/quantiataive-colormap.service';
 import { DiviAggregatedHospital } from '../services/types/divi-aggragated-hospital';
 
 @Component({
@@ -82,11 +82,11 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
   bedAccessors = ['icu_low_state', 'icu_high_state', 'ecmo_state'];
   bedAccessorsMapping = {'icu_low_state': 'ICU - Low Care', 'icu_high_state': 'ICU - High Care', 'ecmo_state': 'ECMO'};
 
-  constructor(private colormapService: ColormapService) {
+  constructor(private colormapService: QuantitativeColormapService) {
   }
 
   ngOnInit() {
-    const bedStati = ColormapService.bedStati;
+    const bedStati = QuantitativeColormapService.bedStati;
 
     this.specs = [];
     let maxNum = 0;

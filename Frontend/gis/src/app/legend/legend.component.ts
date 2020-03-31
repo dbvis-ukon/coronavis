@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ColormapService} from '../services/colormap.service';
+import {QuantitativeColormapService} from '../services/quantiataive-colormap.service';
 import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {BedType} from '../map/options/bed-type.enum';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
@@ -19,7 +19,7 @@ export class LegendComponent implements OnInit {
   agg = AggregationLevel;
   bed = BedType;
 
-  bedStatusColors = ColormapService.bedStati;
+  bedStatusColors = QuantitativeColormapService.bedStati;
 
   private _choroplethLayer: CaseChoropleth;
 
@@ -36,7 +36,7 @@ export class LegendComponent implements OnInit {
 
   caseColors = [];
 
-  constructor(private colmapService: ColormapService) {
+  constructor(private colmapService: QuantitativeColormapService) {
 
   }
 
@@ -61,7 +61,7 @@ export class LegendComponent implements OnInit {
       normVal = 100000;
     }
 
-    const cmap = ColormapService.CChoroplethColorMap;
+    const cmap = QuantitativeColormapService.CChoroplethColorMap;
 
     let lastColor = true;
     let prevColor;

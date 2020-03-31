@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
-import { ColormapService } from '../services/colormap.service';
+import { QuantitativeColormapService } from '../services/quantiataive-colormap.service';
 import { DiviHospital } from '../services/types/divi-hospital';
 
 @Component({
@@ -27,7 +27,7 @@ export class GlyphTooltipComponent implements OnInit {
   diviHospital: DiviHospital;
   name: string;
 
-  constructor(private colormapService: ColormapService) {
+  constructor(private colormapService: QuantitativeColormapService) {
   }
 
   ngOnInit() {

@@ -2,7 +2,7 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import { ColormapService } from 'src/app/services/colormap.service';
+import { QuantitativeColormapService } from 'src/app/services/quantiataive-colormap.service';
 import {FeatureCollection} from "geojson";
 import {Observable} from "rxjs";
 import {BedGlyphOptions} from '../options/bed-glyph-options';
@@ -27,7 +27,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     private granularity: string,
     private data: DiviAggregatedHospital[],
     private tooltipService: TooltipService,
-    private colormapService: ColormapService,
+    private colormapService: QuantitativeColormapService,
     private glyphOptions: Observable<BedGlyphOptions>
 ) {
     super(name, null);

@@ -277,7 +277,7 @@ export class MapComponent implements OnInit {
       this.mymap.addLayer(l);
 
       this.caseChoroplethLayerChange.emit(factory as CaseChoropleth);
-
+getQuantitativeLayer
       l.bringToBack();
 
       // update the glyph map to put it in the front:

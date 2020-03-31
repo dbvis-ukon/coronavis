@@ -6,7 +6,7 @@ import { BedStatusSummary } from './types/bed-status-summary';
 @Injectable({
   providedIn: 'root'
 })
-export class ColormapService {
+export class QuantitativeColormapService {
   constructor() {
   }
 
@@ -22,17 +22,17 @@ export class ColormapService {
 
   public static BedStatusColor = d3.scaleLinear<string, string>()
       .domain([0, 0.5, 1])
-      .range(ColormapService.bedStatusColors)
+      .range(QuantitativeColormapService.bedStatusColors)
       .interpolate(d3.interpolateRgb.gamma(2.2));
 
 
   private singleHospitalCM = d3.scaleOrdinal<string, string>()
-    .domain(ColormapService.bedStati)
-    .range([...ColormapService.bedStatusColors, '#c2cbd4', '#bbb']);
+    .domain(QuantitativeColormapService.bedStati)
+    .range([...QuantitativeColormapService.bedStatusColors, '#c2cbd4', '#bbb']);
 
   private singleHospitalCMStates = d3.scaleThreshold<number, string>()
-    .domain(ColormapService.bedStatusThresholds)
-    .range(ColormapService.bedStatusThresholdsColors);
+    .domain(QuantitativeColormapService.bedStatusThresholds)
+    .range(QuantitativeColormapService.bedStatusThresholdsColors);
 
   private caseChoroplethColorMap = d3.scaleQuantize<string>()
     .domain([-1, 1])
@@ -40,7 +40,7 @@ export class ColormapService {
 
   private continousColorMap = d3.scaleLinear<string, string>()
     .domain([0, 0.5, 1])
-    .range(ColormapService.bedStatusColors)
+    .range(QuantitativeColormapService.bedStatusColors)
     .interpolate(d3.interpolateRgb.gamma(2.2));
   getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
     return this.singleHospitalCM;

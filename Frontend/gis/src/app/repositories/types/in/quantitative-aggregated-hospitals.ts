@@ -1,10 +1,5 @@
-import { FeatureCollection, MultiPolygon, Point } from 'geojson';
-import { QuantitativeAbstractHospitalsProperties } from './quantitative-abstract-hospital-properties';
+import { FeatureCollection, MultiPolygon } from 'geojson';
+import { QuantitativeAggregatedHospitalProperties } from './qualitative-hospitals-development';
 
-export interface QuantitativeAggregatedHospitals extends FeatureCollection<MultiPolygon, QuantitativeAggregatedHospitalsProperties> {
-}
-
-export interface QuantitativeAggregatedHospitalsProperties extends QuantitativeAbstractHospitalsProperties {
-  ids: string;
-  centroid: Point;
+export interface QuantitativeAggregatedHospitals extends FeatureCollection<MultiPolygon, QuantitativeAggregatedHospitalProperties> {
 }

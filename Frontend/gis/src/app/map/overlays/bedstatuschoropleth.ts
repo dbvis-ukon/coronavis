@@ -1,16 +1,24 @@
 import * as L from 'leaflet';
 import { Overlay } from './overlay';
-import {ColormapService} from "../../services/colormap.service";
+import {QuantitativeColormapService} from "../../services/quantiataive-colormap.service";
 import { BedType } from '../options/bed-type.enum';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import {TooltipService} from "../../services/tooltip.service";
 import {AggregatedGlyphTooltipComponent} from "../../aggregated-glyph-tooltip/aggregated-glyph-tooltip.component";
 import { QuantitativeAggregatedHospitals, QuantitativeAggregatedHospitalsProperties } from 'src/app/repositories/types/in/quantitative-aggregated-hospitals';
+import { ComponentType } from '@angular/cdk/portal';
+import { TooltipComponent } from '@angular/material/tooltip';
 
-export class BedStatusChoropleth extends Overlay<QuantitativeAggregatedHospitals> {
+export class BedStatusChoropleth<> extends Overlay<QuantitativeAggregatedHospitals> {
 
-  constructor(name: string, hospitals: QuantitativeAggregatedHospitals, private aggregationLevel: AggregationLevel, private type: BedType,
-              private colorsService: ColormapService, private tooltipService: TooltipService) {
+  constructor(
+    name: string, 
+    hospitals: QuantitativeAggregatedHospitals, 
+    private aggregationLevel: AggregationLevel, 
+    private type: BedType,
+    private colorsService: QuantitativeColormapService, 
+    private tooltipService: TooltipService,
+    ) {
     super(name, hospitals);
   }
 
@@ -41,7 +49,7 @@ export class BedStatusChoropleth extends Overlay<QuantitativeAggregatedHospitals
       };
 
       const tooltipComponent = this.tooltipService
-        .openAtElementRef(AggregatedGlyphTooltipComponent, {
+        .openAtElementRef(TooltipComponent, {
           x: e.originalEvent.clientX,
           y: e.originalEvent.clientY
         }, onCloseAction);

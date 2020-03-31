@@ -1,7 +1,7 @@
 import * as L from 'leaflet';
 import {Overlay} from './overlay';
 import * as d3 from "d3";
-import {ColormapService} from "../../services/colormap.service";
+import {QuantitativeColormapService} from "../../services/quantiataive-colormap.service";
 import {TooltipService} from "../../services/tooltip.service";
 import {CaseTooltipComponent} from "../../case-tooltip/case-tooltip.component";
 import {
@@ -23,7 +23,7 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
     hospitals: QuantitativeAggregatedRkiCasesOverTime,
     private options: CovidNumberCaseOptions,
     private tooltipService: TooltipService,
-    private colorsService: ColormapService
+    private colorsService: QuantitativeColormapService
   ) {
     super(name, hospitals);
 
