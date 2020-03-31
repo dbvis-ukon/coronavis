@@ -23,6 +23,7 @@ export class HospitalInfoComponent implements OnInit {
   mode: 'dialog' | 'tooltip';
   @Input()
   data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
+  glyphLegendColors = QualitativeColormapService.bedStati;
 
   templateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
@@ -179,5 +180,8 @@ export class HospitalInfoComponent implements OnInit {
     return Object.keys(counts).find(s => s !== "") ?? "Keine Information";
   }
 
+  getGlyphColor(str: string) {
+    return this.colormapService.getSingleHospitalColormap()(str);
+  }
 
 }

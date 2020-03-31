@@ -45,3 +45,60 @@ table {
   margin-bottom: 0px;
   padding-bottom: 0px;
 }
+
+.glyph-legend {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .glyph-tile {
+    cursor: pointer;
+    // margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .rect {
+      width: 30px;
+      height: 30px;
+      border-color: rgb(204, 204, 204);
+      border-width: 5px;
+      border-style: solid;
+    }
+
+    .text {
+      font-size: 11px;
+      text-align: center;
+    }
+  }
+}
+
+.glyph-color-legend {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 5px;
+
+  .glyph-tile {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+    .circle {
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+    }
+
+    .text {
+      margin-left: 2px;
+      margin-right: 5px;
+      font-size: 10px;
+      line-height: 10px;
+    }
+  }
+
+
+}
