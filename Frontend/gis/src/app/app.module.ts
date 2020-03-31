@@ -81,7 +81,7 @@ import { HelpDialogComponent } from './help-dialog/help-dialog.component';
     MatProgressBarModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
     MatSnackBarModule,
     MatStepperModule
   ],
