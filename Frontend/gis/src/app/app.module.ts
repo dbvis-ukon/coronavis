@@ -76,7 +76,7 @@ import { VegaComponent } from './vega/vega.component';
     MatFormFieldModule,
     MatDialogModule,
     MatProgressBarModule,
-    MatSnackBarModule
+    MatSnackBarModule,
     MatDialogModule,
     MatSelectModule
   ],
