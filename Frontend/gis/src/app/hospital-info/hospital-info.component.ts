@@ -37,7 +37,7 @@ export class HospitalInfoComponent implements OnInit {
       },
       "y": {
         "field": "num", "type": "quantitative",
-        "axis": {"title": "Anzahl KH"}
+        "axis": {"title": "Anzahl KH", "tickMinStep": 1}
       },
      "color": {"type": "nominal", "field":"Kategorie", "scale":{"domain": [], "range": []}}
     }
