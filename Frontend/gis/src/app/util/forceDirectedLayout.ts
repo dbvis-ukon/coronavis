@@ -64,11 +64,11 @@ export class ForceDirectedLayout {
     };
 
     function x(d) {
-      return d.properties.x + d.properties.vx;
+      return d.x + d.vx;
     }
 
     function y(d) {
-      return d.properties.y + d.properties.vy;
+      return d.y + d.vy;
     }
 
     function constant(x: [[number, number], [number, number]]) {
@@ -93,38 +93,38 @@ export class ForceDirectedLayout {
       nodes.forEach(function (d, i) {
         cornerNodes.push({
           node: d,
-          vx: d.properties.vx,
-          vy: d.properties.vy,
-          x: d.properties.x + (boundingBoxes[i][1][0] + boundingBoxes[i][0][0]) / 2,
-          y: d.properties.y + (boundingBoxes[i][0][1] + boundingBoxes[i][1][1]) / 2
+          vx: d.vx,
+          vy: d.vy,
+          x: d.x + (boundingBoxes[i][1][0] + boundingBoxes[i][0][0]) / 2,
+          y: d.y + (boundingBoxes[i][0][1] + boundingBoxes[i][1][1]) / 2
         })
         cornerNodes.push({
           node: d,
-          vx: d.properties.vx,
-          vy: d.properties.vy,
-          x: d.properties.x + boundingBoxes[i][0][0],
-          y: d.properties.y + boundingBoxes[i][0][1]
+          vx: d.vx,
+          vy: d.vy,
+          x: d.x + boundingBoxes[i][0][0],
+          y: d.y + boundingBoxes[i][0][1]
         })
         cornerNodes.push({
           node: d,
-          vx: d.properties.vx,
-          vy: d.properties.vy,
-          x: d.properties.x + boundingBoxes[i][0][0],
-          y: d.properties.y + boundingBoxes[i][1][1]
+          vx: d.vx,
+          vy: d.vy,
+          x: d.x + boundingBoxes[i][0][0],
+          y: d.y + boundingBoxes[i][1][1]
         })
         cornerNodes.push({
           node: d,
-          vx: d.properties.vx,
-          vy: d.properties.vy,
-          x: d.properties.x + boundingBoxes[i][1][0],
-          y: d.properties.y + boundingBoxes[i][0][1]
+          vx: d.vx,
+          vy: d.vy,
+          x: d.x + boundingBoxes[i][1][0],
+          y: d.y + boundingBoxes[i][0][1]
         })
         cornerNodes.push({
           node: d,
-          vx: d.properties.vx,
-          vy: d.properties.vy,
-          x: d.properties.x + boundingBoxes[i][1][0],
-          y: d.properties.y + boundingBoxes[i][1][1]
+          vx: d.vx,
+          vy: d.vy,
+          x: d.x + boundingBoxes[i][1][0],
+          y: d.y + boundingBoxes[i][1][1]
         })
       })
       var cn = cornerNodes.length
@@ -155,10 +155,10 @@ export class ForceDirectedLayout {
           if (data.node.index !== nodeI) {
             var dataNode = data.node
             var bbj = boundingBoxes[dataNode.index],
-              dnx1 = dataNode.properties.x + dataNode.properties.vx + bbj[0][0],
-              dny1 = dataNode.properties.y + dataNode.properties.vy + bbj[0][1],
-              dnx2 = dataNode.properties.x + dataNode.properties.vx + bbj[1][0],
-              dny2 = dataNode.properties.y + dataNode.properties.vy + bbj[1][1],
+              dnx1 = dataNode.x + dataNode.vx + bbj[0][0],
+              dny1 = dataNode.y + dataNode.vy + bbj[0][1],
+              dnx2 = dataNode.x + dataNode.vx + bbj[1][0],
+              dny2 = dataNode.y + dataNode.vy + bbj[1][1],
               dWidth = bbLength(bbj, 0),
               dHeight = bbLength(bbj, 1)
 
@@ -178,17 +178,17 @@ export class ForceDirectedLayout {
 
               if ((nx1 + nx2) / 2 < (dnx1 + dnx2) / 2) {
                 node.vx -= xBPush
-                dataNode.properties.vx += xDPush
+                dataNode.vx += xDPush
               } else {
                 node.vx += xBPush
-                dataNode.properties.vx -= xDPush
+                dataNode.vx -= xDPush
               }
               if ((ny1 + ny2) / 2 < (dny1 + dny2) / 2) {
                 node.vy -= yBPush
-                dataNode.properties.vy += yDPush
+                dataNode.vy += yDPush
               } else {
                 node.vy += yBPush
-                dataNode.properties.vy -= yDPush
+                dataNode.vy -= yDPush
               }
             }
 
