@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from "@angular/animations";
+import {QuantitativeAggregatedRkiCasesOverTimeProperties} from "../repositories/types/in/quantitative-aggregated-rki-cases";
 
 @Component({
   selector: 'app-case-tooltip',
@@ -19,15 +20,12 @@ import {animate, style, transition, trigger} from "@angular/animations";
 })
 export class CaseTooltipComponent implements OnInit {
 
-  public name: String;
-  public combined: [{ cases: number, deaths: number }, { cases: number, deaths: number }, { cases: number, deaths: number }];
-  public datum: String;
-  public einwohner: number;
+  public data: QuantitativeAggregatedRkiCasesOverTimeProperties;
 
   constructor() {}
 
   public getCasesPer100kInhabitants(count: number, addPlus: boolean = false): string {
-    const v = ((count / this.einwohner) * 100000);
+    const v = ((count / this.data.bevoelkerung) * 100000);
 
     return `${v > 0 && addPlus ? '+' : ''}${v.toFixed(2)}`;
   }

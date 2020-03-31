@@ -11,12 +11,17 @@ import {
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from '../options/covid-number-case-options';
-import { QuantitativeAggregatedRkiCases, QuantitativeAggregatedRkiCasesProperties } from 'src/app/repositories/types/in/quantitative-aggregated-rki-cases';
+import {
+  QuantitativeAggregatedRkiCaseNumberProperties,
+  QuantitativeAggregatedRkiCases,
+  QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties,
+  QuantitativeAggregatedRkiCasesProperties
+} from 'src/app/repositories/types/in/quantitative-aggregated-rki-cases';
 
-export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCases> {
+export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTime> {
   constructor(
     name: string,
-    hospitals: QuantitativeAggregatedRkiCases,
+    hospitals: QuantitativeAggregatedRkiCasesOverTime,
     private options: CovidNumberCaseOptions,
     private tooltipService: TooltipService,
     private colorsService: ColormapService
@@ -28,54 +33,49 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCases> {
   private minMaxNormValues: [number, number];
   private normalizeValues;
 
-  private getCaseNumbers(d: QuantitativeAggregatedRkiCasesProperties): number {
-    const combined = d.combined;
+
+  private getCaseNumbers(data: QuantitativeAggregatedRkiCasesOverTimeProperties): number {
     if (this.options.change === CovidNumberCaseChange.absolute) {
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.all) {
-        const last = combined[0];
         if (this.options.type === CovidNumberCaseType.cases) {
           if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-            return last.cases;
+            return data.last.cases;
           } else {
-            return last.cases / last.bevoelkerung;
+            return data.last.cases / data.bevoelkerung;
           }
         }
         if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-          return last.deaths;
+          return data.last.deaths;
         } else {
-          return last.deaths / last.bevoelkerung;
+          return data.last.deaths / data.bevoelkerung;
         }
       }
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours) {
-        const last = combined[0];
-        const prev = combined[1];
         if (this.options.type === CovidNumberCaseType.cases) {
           if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-            return last.cases - prev.cases;
+            return data.last.cases - data.yesterday.cases;
           } else {
-            return (last.cases - prev.cases) / last.bevoelkerung;
+            return (data.last.cases - data.yesterday.cases) / data.bevoelkerung;
           }
         }
         if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-          return last.deaths - prev.deaths;
+          return data.last.deaths - data.yesterday.deaths;
         } else {
-          return (last.deaths - prev.deaths) / last.bevoelkerung;
+          return (data.last.deaths - data.yesterday.deaths) / data.bevoelkerung;
         }
       }
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.seventyTwoHours) {
-        const last = combined[0];
-        const prev = combined[2];
         if (this.options.type === CovidNumberCaseType.cases) {
           if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-            return last.cases - prev.cases;
+            return data.last.cases - data.threeDaysAgo.cases;
           } else {
-            return (last.cases - prev.cases) / last.bevoelkerung;
+            return (data.last.cases - data.threeDaysAgo.cases) / data.bevoelkerung;
           }
         }
         if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-          return last.deaths - prev.deaths;
+          return data.last.deaths - data.threeDaysAgo.deaths;
         } else {
-          return (last.deaths - prev.deaths) / last.bevoelkerung;
+          return (data.last.deaths - data.threeDaysAgo.deaths) / data.bevoelkerung;
         }
       }
     } else {
@@ -83,35 +83,31 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCases> {
         throw "Unsupported configuration -- cannot show percentage change for single value";
       }
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours) {
-        const last = combined[0];
-        const prev = combined[1];
         if (this.options.type === CovidNumberCaseType.cases) {
           if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-            return ((last.cases - prev.cases) / prev.cases) * 100 || 0;
+            return ((data.last.cases - data.yesterday.cases) / data.yesterday.cases) * 100 || 0;
           } else {
-            return (((last.cases - prev.cases) / prev.cases) * 100 || 0) / last.bevoelkerung;
+            return (((data.last.cases - data.yesterday.cases) / data.yesterday.cases) * 100 || 0) / data.bevoelkerung;
           }
         }
         if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-          return ((last.deaths - prev.deaths) / prev.deaths) * 100 || 0;
+          return ((data.last.deaths - data.yesterday.deaths) / data.yesterday.deaths) * 100 || 0;
         } else {
-          return (((last.deaths - prev.deaths) / prev.deaths) * 100 || 0) / last.bevoelkerung;
+          return (((data.last.deaths - data.yesterday.deaths) / data.yesterday.deaths) * 100 || 0) / data.bevoelkerung;
         }
       }
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.seventyTwoHours) {
-        const last = combined[0];
-        const prev = combined[2];
         if (this.options.type === CovidNumberCaseType.cases) {
           if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-            return ((last.cases - prev.cases) / prev.cases) * 100 || 0;
+            return ((data.last.cases - data.threeDaysAgo.cases) / data.threeDaysAgo.cases) * 100 || 0;
           } else {
-            return (((last.cases - prev.cases) / prev.cases) * 100 || 0) / last.bevoelkerung;
+            return (((data.last.cases - data.threeDaysAgo.cases) / data.threeDaysAgo.cases) * 100 || 0) / data.bevoelkerung;
           }
         }
         if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-          return ((last.deaths - prev.deaths) / prev.deaths) * 100 || 0;
+          return ((data.last.deaths - data.threeDaysAgo.deaths) / data.threeDaysAgo.deaths) * 100 || 0;
         } else {
-          return (((last.deaths - prev.deaths) / prev.deaths) * 100 || 0) / last.bevoelkerung;
+          return (((data.last.deaths - data.threeDaysAgo.deaths) / data.threeDaysAgo.deaths) * 100 || 0) / data.bevoelkerung;
         }
       }
     }
@@ -160,10 +156,7 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCases> {
           y: e.originalEvent.clientY
         }, onCloseAction);
 
-      tooltipComponent.name = feature.properties.name;
-      tooltipComponent.combined = feature.properties.combined;
-      tooltipComponent.datum = feature.properties.until;
-      tooltipComponent.einwohner = +feature.properties.bevoelkerung;
+      tooltipComponent.data = feature.properties;
 
       // set highlight style
       const l = e.target;

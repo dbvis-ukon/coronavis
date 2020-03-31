@@ -1,30 +1,18 @@
+import {AggregationLevel} from '../map/options/aggregation-level.enum';
+import {BehaviorSubject, forkJoin, Observable} from 'rxjs';
+import {RKICaseRepository} from '../repositories/rki-case.repository';
+import {map, tap} from 'rxjs/operators';
+import {CaseChoropleth} from '../map/overlays/casechoropleth';
+import {CovidNumberCaseOptions} from '../map/options/covid-number-case-options';
+import {ColormapService} from './colormap.service';
+import {TooltipService} from './tooltip.service';
+import {Injectable} from '@angular/core';
 import {
-  AggregationLevel
-} from '../map/options/aggregation-level.enum';
-import {
-  Observable,
-  forkJoin,
-  BehaviorSubject
-} from 'rxjs';
-import {
-  FeatureCollection
-} from 'geojson';
-import {
-  RKICaseRepository
-} from '../repositories/rki-case.repository';
-import {
-  map, tap
-} from 'rxjs/operators';
-import {
-  CaseChoropleth
-} from '../map/overlays/casechoropleth';
-import {
-  CovidNumberCaseOptions
-} from '../map/options/covid-number-case-options';
-import { ColormapService } from './colormap.service';
-import { TooltipService } from './tooltip.service';
-import { Injectable } from '@angular/core';
-import { QuantitativeAggregatedRkiCases } from '../repositories/types/in/quantitative-aggregated-rki-cases';
+  QuantitativeAggregatedRkiCaseNumberProperties,
+  QuantitativeAggregatedRkiCases,
+  QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties
+} from '../repositories/types/in/quantitative-aggregated-rki-cases';
+import {Feature, Polygon} from "geojson";
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +42,7 @@ export class CaseChoroplethLayerService {
   }
 
 
-  private getCaseData(agg: AggregationLevel): Observable < QuantitativeAggregatedRkiCases > {
+  private getCaseData(agg: AggregationLevel): Observable < QuantitativeAggregatedRkiCasesOverTime > {
     const total = this.rkiCaseRepository.getCasesTotalForAggLevel(agg);
     const yesterday = this.rkiCaseRepository.getCasesYesterdayForAggLevel(agg);
     const threedays = this.rkiCaseRepository.getCasesThreedaysForAggLevel(agg);
@@ -62,6 +50,8 @@ export class CaseChoroplethLayerService {
     return forkJoin([total, yesterday, threedays])
       .pipe(
         map(e => {
+          const casesOverTime: Array<Feature<Polygon, QuantitativeAggregatedRkiCasesOverTimeProperties>> = [];
+
           for (let i = 0; i < e[0].features.length; i++) {
             const last = e[0].features[i];
             const y = e[1].features[i];
@@ -79,10 +69,35 @@ export class CaseChoroplethLayerService {
             t.properties.cases = +t.properties.cases;
             t.properties.bevoelkerung = +t.properties.bevoelkerung;
 
-            e[0].features[i].properties.combined = [last.properties, y.properties, t.properties]
+            const combined = {
+              last: {
+                cases: last.properties.cases,
+                deaths: last.properties.deaths
+              },
+              yesterday: {
+                cases: y.properties.cases,
+                deaths: y.properties.deaths
+              },
+              threeDaysAgo: {
+                cases: t.properties.cases,
+                deaths: t.properties.deaths
+              },
+
+              name: last.properties.name,
+              bevoelkerung: last.properties.bevoelkerung,
+              until: last.properties.until
+
+            } as QuantitativeAggregatedRkiCasesOverTimeProperties;
+
+            casesOverTime.push({
+              ...last,
+              properties: combined,
+            });
           }
-          console.log('combined', e['0']);
-          return e[0];
+
+          return {
+            features: casesOverTime
+          } as QuantitativeAggregatedRkiCasesOverTime;
         })
       )
   }
