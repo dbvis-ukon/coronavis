@@ -5,6 +5,13 @@
   <div class="content">
     <strong i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </strong><span *ngIf="latestDevelopment">({{ (isSingleHospital ? latestDevelopment?.timestamp : latestDevelopment?.last_update) | date:"dd.MM.yyy, HH:mm" }} Uhr)</span>
 
+
+    <div class="data-warning" *ngIf="warnOfOutdatedData">
+      <mat-icon color="warn">warning</mat-icon>
+      
+      <h4>Die Daten sind älter als 24 Stunden.</h4>
+    </div>
+
     <table>
       <tbody>
       <tr>
