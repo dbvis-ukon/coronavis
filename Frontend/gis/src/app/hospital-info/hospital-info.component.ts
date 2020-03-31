@@ -94,58 +94,60 @@ export class HospitalInfoComponent implements OnInit {
     this.specs = [];
     let maxNum = 0;
 
-    for(const bedAccessor of this.bedAccessors) {
-      let summedbedcounts = 0;
-      const dataValues = [];
+    if (this.data.developments) {
+      for(const bedAccessor of this.bedAccessors) {
+        let summedbedcounts = 0;
+        const dataValues = [];
 
-      for( const d of this.data.developments) {
+        for( const d of this.data.developments) {
 
-        // fill the data object
-        for (const bedStatus of bedStati) {
-          const v = d[bedAccessor][bedStatus] || 0;
-          if(d[bedAccessor][bedStatus]) {
-            summedbedcounts++;
-          }
-
-          dataValues.push(
-            {
-              Kategorie: bedStatus,
-              num: v,
-              color: this.getCapacityStateColor(bedStatus),
-              Datum: d.timestamp
+          // fill the data object
+          for (const bedStatus of bedStati) {
+            const v = d[bedAccessor][bedStatus] || 0;
+            if(d[bedAccessor][bedStatus]) {
+              summedbedcounts++;
             }
-          );
-          if (v > maxNum) {
-            maxNum = v;
+
+            dataValues.push(
+              {
+                Kategorie: bedStatus,
+                num: v,
+                color: this.getCapacityStateColor(bedStatus),
+                Datum: d.timestamp
+              }
+            );
+            if (v > maxNum) {
+              maxNum = v;
+            }
           }
+        }
+
+
+        // hack deep clone spec
+        const spec = JSON.parse(JSON.stringify(this.templateSpec));
+
+        // inject data values
+        spec.data.values = dataValues;
+
+        // also overwrite the title
+        spec.encoding.x.title = this.bedAccessorsMapping[bedAccessor];
+
+        if(summedbedcounts > 0) {
+          this.specs.push({
+            title: this.bedAccessorsMapping[bedAccessor],
+            chart: spec
+          });
+
         }
       }
 
-
-      // hack deep clone spec
-      const spec = JSON.parse(JSON.stringify(this.templateSpec));
-
-      // inject data values
-      spec.data.values = dataValues;
-
-      // also overwrite the title
-      spec.encoding.x.title = this.bedAccessorsMapping[bedAccessor];
-
-      if(summedbedcounts > 0) {
-        this.specs.push({
-          title: this.bedAccessorsMapping[bedAccessor],
-          chart: spec
-        });
-
-      }
+      // set the max value
+      this.specs.forEach(spec => {
+        spec.chart.encoding.color.scale.domain = bedStati;
+        spec.chart.encoding.color.scale.range = colors;
+        //spec.encoding.color.range = Math.min(maxNum+1, 5);
+      });
     }
-
-    // set the max value
-    this.specs.forEach(spec => {
-      spec.chart.encoding.color.scale.domain = bedStati;
-      spec.chart.encoding.color.scale.range = colors;
-      //spec.encoding.color.range = Math.min(maxNum+1, 5);
-    });
   }
 
   // getTrendIcon(entries: TimestampedValue[]): string {
