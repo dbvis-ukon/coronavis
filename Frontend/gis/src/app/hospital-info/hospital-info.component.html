@@ -1,30 +1,30 @@
 <div  *ngIf="isSingleHospital === true">
 <h3>{{ data.name }}</h3>
 <mat-divider></mat-divider>
+
+<strong>Aktueller Stand </strong><span *ngIf="latestDevelopment">({{ latestDevelopment?.timestamp | date:"dd.MM, HH:mm" }} Uhr)</span>
 <table>
-  <!--
   <tbody>
   <tr>
     <td><strong>ICU - Low Care:</strong> </td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(singleHospital.icuLowCare) }">{{ singleHospital.icuLowCare }}</td>
+    <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuLow) }">{{ getStatusDescriptionFor(eBedType.icuLow) }}</td>
   </tr>
   <tr>
     <td><strong>ICU - High Care: </strong></td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(singleHospital.icuHighCare) }">{{ singleHospital.icuHighCare }}</td>
+    <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuHigh) }">{{ getStatusDescriptionFor(eBedType.icuHigh) }}</td>
   </tr>
   <tr>
     <td><strong>ECMO: </strong></td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(singleHospital.ECMO) }">{{ singleHospital.ECMO }}</td>
+    <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.ecmo) }">{{ getStatusDescriptionFor(eBedType.ecmo) }}</td>
   </tr>
   </tbody>
-  -->
-  <tbody>
-    <tr>
-      <th></th>
-      <th>ICU - Low Care:</th>
-      <th>ICU - High Care:</th>
-      <th>ECMO:</th>
-    </tr>
+<!--  <tbody>-->
+<!--    <tr>-->
+<!--      <th></th>-->
+<!--      <th>ICU - Low Care:</th>-->
+<!--      <th>ICU - High Care:</th>-->
+<!--      <th>ECMO:</th>-->
+<!--    </tr>-->
     <!-- <tr>
       <th>(belegt / gesamt)</th>
       <th [ngStyle]="{'background-color': getCapacityStateColor(latestDevelopment.icu_low_care) }">{{ getLatest(data.icu_low_care_belegt) }} / {{ getLatest(data.icu_low_care_belegt)    + getLatest(data.icu_low_care_frei)  }} <mat-icon> {{ getTrendIcon(data.icu_low_care_einschaetzung) }} </mat-icon> </th>
@@ -55,14 +55,14 @@
       <td>{{ getLatest(data.icu_high_care_einschaetzung) }}</td>
       <td>{{ getLatest(data.icu_ecmo_care_einschaetzung) }}</td>
     </tr> -->
-  </tbody>
+<!--  </tbody>-->
 
 </table>
 </div>
 <br>
 
 <div *ngIf="specs.length > 0">
-<strong>Entwicklung:</strong>
+<strong>Zeitliche Entwicklung:</strong>
 <div *ngFor="let s of specs; let i = index">
   <div class="chart-wrapper">
     <app-vega [spec]="s.chart"></app-vega>
@@ -83,7 +83,4 @@
   </p>
 </div>
 
-<div  *ngIf="isSingleHospital === true">
-  <p i18n="@@tooltipHospitalLastUpdate" ><strong>Letzter Stand: </strong> {{ latestDevelopment?.timestamp }} </p>
-</div>
 

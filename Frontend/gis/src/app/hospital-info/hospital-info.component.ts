@@ -3,6 +3,7 @@ import { QualitativeColormapService } from '../services/qualitative-colormap.ser
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
+import {BedType} from "../map/options/bed-type.enum";
 
 @Component({
   selector: 'app-hospital-info',
@@ -15,6 +16,8 @@ export class HospitalInfoComponent implements OnInit {
   url: boolean;
 
   contactMsg: string;
+
+  public eBedType = BedType;
 
   @Input()
   mode: 'dialog' | 'tooltip';
@@ -149,7 +152,6 @@ export class HospitalInfoComponent implements OnInit {
       });
     }
   }
-
   // getTrendIcon(entries: TimestampedValue[]): string {
   //   const latest = getLatest(entries);
   //   return latest >= 0 ? (latest == 0 ? 'trending_flat' : 'trending_up') : 'trending_down';
@@ -158,5 +160,17 @@ export class HospitalInfoComponent implements OnInit {
   getCapacityStateColor(bedStatus: string) {
     return this.colormapService.getSingleHospitalColormap()(bedStatus);
   }
+
+  getStatusColorFor(bedStatus: BedType) {
+    return this.colormapService.getLatestBedStatusColor(this.singleHospital.developments, bedStatus);
+  }
+
+  getStatusDescriptionFor(bedStatus: BedType) {
+    const latest = this.singleHospital.developments[this.singleHospital.developments.length - 1];
+    const counts = this.colormapService.propertyAccessor(bedStatus)(latest);
+
+    return Object.keys(counts).find(s => s !== "") ?? "Keine Information";
+  }
+
 
 }
