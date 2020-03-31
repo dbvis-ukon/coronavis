@@ -19,7 +19,7 @@ export function getLatest(entries: TimestampedValue[]): number {
   return currentEntry.value;
 }
 
-export function getLatestQuantitativeTimedStatus(entries: ArrayLike<AbstractTimedStatus>): QuantitativeTimedStatus {
+export function getLatestQuantitativeTimedStatus(entries: Array<AbstractTimedStatus>): QuantitativeTimedStatus {
   if(!entries) {
     return null;
   }

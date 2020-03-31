@@ -101,7 +101,7 @@ export class QuantitativeDiviDevelopmentRepository {
     };
   }
 
-  private map(input: QuantitativeHospitalsDevelopment): ArrayLike<QuantitativeTimedStatus> {
+  private map(input: QuantitativeHospitalsDevelopment): Array<QuantitativeTimedStatus> {
     const out: QuantitativeTimedStatus[] = [];
     
     for(let i = 0; i < input.covid19_aktuell.length; i++) {

@@ -37,7 +37,7 @@ export class HospitalInfoComponent implements OnInit {
         "axis": null,
         "stack": "center"
       },
-     "color": {"field":"Kategorie", "scale":{"domain": [], "range": []}}
+     "color": {"type": "nominal", "field":"Kategorie", "scale":{"domain": [], "range": []}}
     }
   };
 
@@ -82,7 +82,7 @@ export class HospitalInfoComponent implements OnInit {
     }
 
 
-    var data = [{"development" : {"timestamp" : "2020-03-27T14:49:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-28T09:42:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-29T10:38:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-30T09:18:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Begrenzt" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-31T09:04:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}];
+    // var data = [{"development" : {"timestamp" : "2020-03-27T14:49:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-28T09:42:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-29T10:38:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-30T09:18:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Begrenzt" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-31T09:04:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}];
     const bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet']; //FIXME add "Nicht verfügbar" if should be displayed
 
     var colors = [];
@@ -98,13 +98,12 @@ export class HospitalInfoComponent implements OnInit {
       let summedbedcounts = 0;
       const dataValues = [];
 
-      for( const d of data) {
-        const development = d.development;
+      for( const d of this.data.developments) {
 
         // fill the data object
         for (const bedStatus of bedStati) {
-          const v = development[bedAccessor][bedStatus] || 0;
-          if(development[bedAccessor][bedStatus]) {
+          const v = d[bedAccessor][bedStatus] || 0;
+          if(d[bedAccessor][bedStatus]) {
             summedbedcounts++;
           }
 
@@ -113,7 +112,7 @@ export class HospitalInfoComponent implements OnInit {
               Kategorie: bedStatus,
               num: v,
               color: this.getCapacityStateColor(bedStatus),
-              Datum: development.timestamp
+              Datum: d.timestamp
             }
           );
           if (v > maxNum) {

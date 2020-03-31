@@ -99,7 +99,7 @@ export class QualitativeColormapService {
       }
     }
   
-    getLatestBedStatusColor(t: ArrayLike<QualitativeTimedStatus>, type: BedType) {
+    getLatestBedStatusColor(t: Array<QualitativeTimedStatus>, type: BedType) {
       if(!t) {
         return this.getBedStatusColor(null, this.propertyAccessor(type));
       }

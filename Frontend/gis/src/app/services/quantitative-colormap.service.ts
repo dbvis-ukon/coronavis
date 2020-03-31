@@ -64,7 +64,7 @@ export class QuantitativeColormapService {
     }
   }
 
-  getLatestBedStatusColor(t: ArrayLike<QuantitativeTimedStatus>, type: BedType) {
+  getLatestBedStatusColor(t: Array<QuantitativeTimedStatus>, type: BedType) {
     const latest = t[t.length -1];
     const bedStatus =this.propertyAccessor(type)(latest);
     return this.getBedStatusColor(bedStatus);
