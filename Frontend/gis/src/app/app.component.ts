@@ -12,8 +12,10 @@ import {BedType} from './map/options/bed-type.enum';
 import {CaseChoropleth} from './map/overlays/casechoropleth';
 import {MapOptions} from './map/options/map-options';
 import {environment} from 'src/environments/environment';
-import {APP_CONFIG_KEY} from "../constants";
+import {APP_CONFIG_KEY, APP_HELP_SEEN} from "../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatDialog} from "@angular/material/dialog";
+import {HelpDialogComponent} from "./help-dialog/help-dialog.component";
 
 @Component({
   selector: 'app-root',
@@ -59,7 +61,8 @@ export class AppComponent implements OnInit {
   siteId: number;
 
   // constructor is here only used to inject services
-  constructor(private snackbar: MatSnackBar) {
+  constructor(private snackbar: MatSnackBar,
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -73,6 +76,14 @@ export class AppComponent implements OnInit {
       snackbar.onAction().subscribe(() => {
         this.mapOptions = this.defaultMapOptions;
         localStorage.removeItem(APP_CONFIG_KEY);
+      })
+    }
+
+    const helpSeen = JSON.parse(localStorage.getItem(APP_HELP_SEEN)) || false;
+    if (!helpSeen) {
+      this.dialog.open(HelpDialogComponent)
+        .afterClosed().subscribe(d => {
+        localStorage.setItem(APP_HELP_SEEN, JSON.stringify(true));
       })
     }
 
