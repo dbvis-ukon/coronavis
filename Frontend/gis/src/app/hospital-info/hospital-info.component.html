@@ -2,7 +2,7 @@
 <h3>{{ data.name }}</h3>
 <mat-divider></mat-divider>
 
-<strong>Aktueller Stand </strong><span *ngIf="latestDevelopment">({{ latestDevelopment?.timestamp | date:"dd.MM, HH:mm" }} Uhr)</span>
+<strong>Aktueller Stand </strong><span *ngIf="latestDevelopment">({{ latestDevelopment?.timestamp | date:"dd.MM.yyy, HH:mm" }} Uhr)</span>
 <table>
   <tbody>
   <tr>
@@ -65,6 +65,7 @@
 <strong>Zeitliche Entwicklung:</strong>
 <div *ngFor="let s of specs; let i = index">
   <div class="chart-wrapper">
+    <h4 class="chart-title"> {{s.title}} </h4>
     <app-vega [spec]="s.chart"></app-vega>
   </div>
 </div>
@@ -81,6 +82,10 @@
     <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a>
     <span *ngIf="!url">{{ contactMsg }}</span>
   </p>
+</div>
+
+<div *ngIf="!isSingleHospital">
+  <p i18n="@@tooltipHospitalLastUpdate" ><strong>Letzter Stand: </strong> {{ latestDevelopment?.last_update | date:'dd.MM.yyy, HH:mm' }} Uhr</p>
 </div>
 
 

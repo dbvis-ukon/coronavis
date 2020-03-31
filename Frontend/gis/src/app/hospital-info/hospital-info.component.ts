@@ -29,16 +29,15 @@ export class HospitalInfoComponent implements OnInit {
     "width": 300, "height": 50,
     "data": {"values":[
       ]},
-    "mark": {"type": "area", "interpolate": "step"},
+    "mark": {"type": "area", "interpolate": "step-before"},
     "encoding": {
       "x": {
         "field": "Datum", "type": "temporal",
-        "axis": {"domain": false, "format": "%Y-%m-%d", "tickSize": 0}
+        "axis": {"domain": false, "format": "%d.%m", "tickSize": 0}
       },
       "y": {
         "field": "num", "type": "quantitative",
-        "axis": null,
-        "stack": "center"
+        "axis": {"title": "Anzahl KH"}
       },
      "color": {"type": "nominal", "field":"Kategorie", "scale":{"domain": [], "range": []}}
     }
@@ -57,31 +56,33 @@ export class HospitalInfoComponent implements OnInit {
   constructor(private colormapService: QualitativeColormapService) {}
 
   ngOnInit(): void {
+    if((this.data as SingleHospitalOut<QualitativeTimedStatus>).address){
+      this.isSingleHospital = true;
+      this.singleHospital = this.data as SingleHospitalOut<QualitativeTimedStatus>;
+    }
+
+
     if(this.data.developments) {
       this.latestDevelopment = this.data.developments[this.data.developments.length - 1];
     }
 
+    if(this.isSingleHospital){
 
+      if(this.singleHospital.contact.indexOf('http')>-1){
+        this.contact = 'http' + this.singleHospital.contact.split('http')[1];
+        this.url = true;
 
-    if((this.data as SingleHospitalOut<QualitativeTimedStatus>).address){
-      this.isSingleHospital = true;
-      this.singleHospital = this.data as SingleHospitalOut<QualitativeTimedStatus>;
+        this.contactMsg = this.singleHospital.contact.replace(this.contact, '').replace('Website', '').trim();
 
-    if(this.singleHospital.contact.indexOf('http')>-1){
-      this.contact = 'http' + this.singleHospital.contact.split('http')[1];
-      this.url = true;
+        if (this.contactMsg === '') {
+          this.contactMsg = 'Webseite';
+        }
+      }else{
+        this.contact = this.singleHospital.contact;
+        this.url = false;
 
-      this.contactMsg = this.singleHospital.contact.replace(this.contact, '').replace('Website', '').trim();
-
-      if (this.contactMsg === '') {
-        this.contactMsg = 'Webseite';
+        this.contactMsg = this.singleHospital.contact;
       }
-    }else{
-      this.contact = this.singleHospital.contact;
-      this.url = false;
-
-      this.contactMsg = this.singleHospital.contact;
-    }
     }
 
 
@@ -132,8 +133,12 @@ export class HospitalInfoComponent implements OnInit {
         // inject data values
         spec.data.values = dataValues;
 
+        if(!this.isSingleHospital) {
+          spec.mark.interpolate = 'step-before';
+        }
+
         // also overwrite the title
-        spec.encoding.x.title = this.bedAccessorsMapping[bedAccessor];
+        spec.encoding.x.title = '';
 
         if(summedbedcounts > 0) {
           this.specs.push({
