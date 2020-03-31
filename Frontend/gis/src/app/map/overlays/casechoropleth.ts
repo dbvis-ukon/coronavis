@@ -175,7 +175,7 @@ export class CaseChoropleth extends Overlay<FeatureCollection> {
         fillOpacity: 0.7
       });
 
-      l.bringToFront();
+      // l.bringToFront();
     };
 
 
