@@ -3,12 +3,10 @@ import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {
   CovidNumberCaseChange,
   CovidNumberCaseNormalization,
-  CovidNumberCaseOptions,
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from '../map/options/covid-number-case-options';
 import { BedType } from '../map/options/bed-type.enum';
-import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { MapOptions } from '../map/options/map-options';
 import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
@@ -18,7 +16,6 @@ import { GlyphLayerService } from '../services/glyph-layer.service';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
 import {APP_CONFIG_KEY} from "../../constants";
-import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 
 @Component({
