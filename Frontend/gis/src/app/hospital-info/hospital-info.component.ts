@@ -108,6 +108,8 @@ export class HospitalInfoComponent implements OnInit {
     this.specs = [];
     let maxNum = 0;
 
+    let maxNumSlices = 0;
+
     if (this.data.developments) {
       for(const bedAccessor of this.bedAccessors) {
         let summedbedcounts = 0;
@@ -115,12 +117,14 @@ export class HospitalInfoComponent implements OnInit {
 
         for( const d of this.data.developments) {
 
+          let sumOfOneSlice = 0;
           // fill the data object
           for (const bedStatus of bedStati) {
             const v = d[bedAccessor][bedStatus] || 0;
-            if(d[bedAccessor][bedStatus]) {
-              summedbedcounts++;
-            }
+            
+            summedbedcounts++;
+
+            sumOfOneSlice += v;
 
             dataValues.push(
               {
@@ -134,14 +138,23 @@ export class HospitalInfoComponent implements OnInit {
               maxNum = v;
             }
           }
+
+          if(sumOfOneSlice > maxNumSlices) {
+            maxNumSlices = sumOfOneSlice;
+          }
         }
 
+        
 
         // hack deep clone spec
         const spec = JSON.parse(JSON.stringify(this.templateSpec));
 
         // inject data values
         spec.data.values = dataValues;
+        
+        spec.encoding.y.scale = {
+          domain: [0, maxNumSlices]
+        }
 
         if(!this.isSingleHospital) {
           spec.mark.interpolate = 'step-before';
