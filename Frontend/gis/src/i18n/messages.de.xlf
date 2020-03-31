@@ -458,8 +458,8 @@
         
       <note category="location">src/app/hospital-info/hospital-info.component.html:10</note></notes>
       <segment state="final">
-        <source>Letzter Stand: <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span>" dispEnd="&lt;/span>">(<ph id="1" equiv="INTERPOLATION" disp="{{ lastUpdate | date:&quot;dd.MM.yyy, HH:mm&quot; }}"/> Uhr)</pc></source>
-      <target>Letzter Stand: <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span>" dispEnd="&lt;/span>">(<ph id="1" equiv="INTERPOLATION" disp="{{ lastUpdate | date:&quot;dd.MM.yyy, HH:mm&quot; }}"/> Uhr)</pc></target></segment>
+        <source>Letzter Stand:</source>
+      <target>Letzter Stand:</target></segment>
     </unit><unit id="tooltipHospitalTemporalDevelopment">
       <notes>
         <note category="location">src/app/hospital-info/hospital-info.component.html:92</note>
