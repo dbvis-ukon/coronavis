@@ -36,7 +36,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     private glyphOptions: Observable<BedGlyphOptions>,
     private dialog: MatDialog
   ) {
-    super(name, null);
+    super(name, data);
     this.enableDefault = true;
 
     this.forceLayout = new ForceDirectedLayout(this.data, this.updateGlyphPositions.bind(this));
@@ -98,8 +98,20 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     });
 
 
-    const latExtent = d3.extent(this.data.features, i => i.geometry.coordinates[1]);
-    const lngExtent = d3.extent(this.data.features, i => i.geometry.coordinates[0]);
+    const latExtent = d3.extent(this.data.features, i => {
+      if (i.geometry.coordinates[1] !== 0) {
+        return i.geometry.coordinates[1];
+      }
+      return NaN;
+    });
+    const lngExtent = d3.extent(this.data.features, i => {
+      if (i.geometry.coordinates[0] !== 0) {
+        return i.geometry.coordinates[0]
+      }
+      return NaN;
+    });
+
+    console.log(latExtent, lngExtent);
 
     let latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
 
@@ -123,14 +135,10 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     const padding = 2;
     const yOffset = 2;
 
-    const svgSel = d3.select<SVGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(svgElement)
-      .style('pointer-events', 'none');
-
-    this.gHospitals = svgSel  
+    this.gHospitals = d3.select<SVGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(svgElement)
+      .style('pointer-events', 'none')
       .selectAll<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>('g.hospital')
-      .data<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(this.data.features);
-
-    this.gHospitals
+      .data<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(this.data.features)
       .enter()
       .append<SVGGElement>('g')
       .style('pointer-events', 'all')
