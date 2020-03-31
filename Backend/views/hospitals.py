@@ -345,6 +345,7 @@ SELECT
     places_per_landkreis_per_timestamp.ids AS id,
     places_per_landkreis_per_timestamp.name,
     st_asgeojson(places_per_landkreis_per_timestamp.geom) :: json AS geom,
+    st_asgeojson(st_centroid(places_per_landkreis_per_timestamp.geom)):: json AS centroid,
     -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
     CASE
         WHEN min(places_per_landkreis_per_timestamp.timestamp) IS NULL THEN NULL
@@ -409,7 +410,8 @@ GROUP BY
             "properties": {
                 "id": r[0],
                 "name": r[1],
-                "developments": r[3]
+                "centroid": r[3],
+                "developments": r[4]
             }
         }
 
@@ -601,6 +603,7 @@ SELECT
     places_per_regierungsbezirk_per_timestamp.ids AS id,
     places_per_regierungsbezirk_per_timestamp.name,
     st_asgeojson(places_per_regierungsbezirk_per_timestamp.geom) :: json AS geom,
+    st_asgeojson(st_centroid(places_per_regierungsbezirk_per_timestamp.geom)):: json AS centroid,
     -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
     CASE
         WHEN min(places_per_regierungsbezirk_per_timestamp.timestamp) IS NULL THEN NULL
@@ -665,7 +668,8 @@ GROUP BY
             "properties": {
                 "id": r[0],
                 "name": r[1],
-                "developments": r[3]
+                "centroid": r[3],
+                "developments": r[4]
             }
         }
 
@@ -857,6 +861,7 @@ SELECT
     places_per_bundesland_per_timestamp.ids AS id,
     places_per_bundesland_per_timestamp.name,
     st_asgeojson(places_per_bundesland_per_timestamp.geom) :: json AS geom,
+    st_asgeojson(st_centroid(places_per_bundesland_per_timestamp.geom)):: json AS centroid,
     -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
     CASE
         WHEN min(places_per_bundesland_per_timestamp.timestamp) IS NULL THEN NULL
@@ -921,7 +926,8 @@ GROUP BY
             "properties": {
                 "id": r[0],
                 "name": r[1],
-                "developments": r[3]
+                "centroid": r[3],
+                "developments": r[4]
             }
         }
 
