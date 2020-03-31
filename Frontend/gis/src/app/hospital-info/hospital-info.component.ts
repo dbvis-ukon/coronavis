@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DiviHospital } from '../services/divi-hospitals.service';
+import {DiviAggregatedHospital, DiviHospital} from '../services/divi-hospitals.service';
 import { ColormapService } from '../services/colormap.service';
 import * as d3 from "d3";
 
@@ -18,7 +18,7 @@ export class HospitalInfoComponent implements OnInit {
   @Input()
   mode: 'dialog' | 'tooltip';
   @Input()
-  data: DiviHospital
+  data: DiviHospital | DiviAggregatedHospital;
 
   templateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
@@ -45,26 +45,33 @@ export class HospitalInfoComponent implements OnInit {
   bedAccessors = ['icu_low_care', 'icu_high_care', 'ecmo_state'];
   bedAccessorsMapping = {'icu_low_care': 'ICU - Low Care', 'icu_high_care': 'ICU - High Care', 'ecmo_state': 'ECMO'};
 
-
+  isSingleHospital: boolean = false;
+  singleHospital: DiviHospital;
 
   constructor(private colormapService: ColormapService) { }
 
   ngOnInit(): void {
-    if(this.data.Kontakt.indexOf('http')>-1){
-      this.contact = 'http' + this.data.Kontakt.split('http')[1];
+    if((this.data as DiviHospital).Adress){
+      this.isSingleHospital = true;
+      this.singleHospital = this.data as DiviHospital;
+
+    if(this.singleHospital.Kontakt.indexOf('http')>-1){
+      this.contact = 'http' + this.singleHospital.Kontakt.split('http')[1];
       this.url = true;
 
-      this.contactMsg = this.data.Kontakt.replace(this.contact, '').replace('Website', '').trim();
+      this.contactMsg = this.singleHospital.Kontakt.replace(this.contact, '').replace('Website', '').trim();
 
       if(this.contactMsg === '') {
         this.contactMsg = 'Webseite';
       }
     }else{
-      this.contact = this.data.Kontakt;
+      this.contact = this.singleHospital.Kontakt;
       this.url = false;
 
-      this.contactMsg = this.data.Kontakt;
+      this.contactMsg = this.singleHospital.Kontakt;
     }
+    }
+
 
     var data = [{"development" : {"timestamp" : "2020-03-27T14:49:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-28T09:42:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-29T10:38:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-30T09:18:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Begrenzt" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-31T09:04:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}];
     const bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet']; //FIXME add "Nicht verfügbar" if should be displayed
@@ -74,6 +81,7 @@ export class HospitalInfoComponent implements OnInit {
      colors.push(this.getCapacityStateColor(bedStatus));
     }
 
+    console.log(this.data);
     this.specs = [];
     let maxNum = 0;
 
@@ -116,14 +124,18 @@ export class HospitalInfoComponent implements OnInit {
       spec.encoding.x.title = this.bedAccessorsMapping[bedAccessor];
 
       if(summedbedcounts > 0) {
-        this.specs.push(spec);
+        this.specs.push({
+          title: this.bedAccessorsMapping[bedAccessor],
+          chart: spec
+        });
+
       }
     }
 
     // set the max value
     this.specs.forEach(spec => {
-      spec.encoding.color.scale.domain = bedStati;
-      spec.encoding.color.scale.range = colors;
+      spec.chart.encoding.color.scale.domain = bedStati;
+      spec.chart.encoding.color.scale.range = colors;
       //spec.encoding.color.range = Math.min(maxNum+1, 5);
     });
   }

@@ -1,32 +1,39 @@
+<div  *ngIf="isSingleHospital === true">
 <h3>{{ data.Name }}</h3>
 <mat-divider></mat-divider>
 <table>
   <tbody>
   <tr>
     <td><strong>ICU - Low Care:</strong> </td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuLowCare) }">{{ data.icuLowCare }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(singleHospital.icuLowCare) }">{{ singleHospital.icuLowCare }}</td>
   </tr>
   <tr>
     <td><strong>ICU - High Care: </strong></td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icuHighCare) }">{{ data.icuHighCare }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(singleHospital.icuHighCare) }">{{ singleHospital.icuHighCare }}</td>
   </tr>
   <tr>
     <td><strong>ECMO: </strong></td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.ECMO) }">{{ data.ECMO }}</td>
+    <td [ngStyle]="{'background-color': getCapacityStateColor(singleHospital.ECMO) }">{{ singleHospital.ECMO }}</td>
   </tr>
   </tbody>
 </table>
+</div>
 <br>
 
-<div *ngFor="let s of specs">
-  <app-vega [spec]="s"></app-vega>
+<div *ngIf="specs.length > 0">
+<strong>Entwicklung:</strong>
+<div *ngFor="let s of specs; let i = index">
+  <div class="chart-wrapper">
+    <app-vega [spec]="s.chart"></app-vega>
+  </div>
+</div>
 </div>
 
 <div *ngIf="mode === 'dialog'">
   <!--h3>{{ data.Name }}</h3>
   <mat-divider></mat-divider-->
   <p style="margin-top: 10px;">
-    <strong>Adresse: </strong> {{ data.Adress }}
+    <strong>Adresse: </strong> {{ singleHospital.Adress }}
   </p>
   <p>
     <strong>Kontakt: </strong>
@@ -35,5 +42,7 @@
   </p>
 </div>
 
-<p><strong>Letzter Stand: </strong> {{ data.Stand }}</p>
+<div  *ngIf="isSingleHospital === true">
+  <p><strong>Letzter Stand: </strong> {{ singleHospital.Stand }} </p>
+</div>
 
