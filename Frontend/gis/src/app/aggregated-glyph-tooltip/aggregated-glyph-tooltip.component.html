@@ -10,7 +10,8 @@
       <div class="barchartcontainer">
 
         <div *ngFor="let s of specs">
-          <app-vega [spec]="s"></app-vega>
+          <h5 class="chart-title">{{ s.title }}</h5>
+          <app-vega [spec]="s.chart"></app-vega>
         </div>
 
       </div>

@@ -48,7 +48,10 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
         "field": "cat",
         "type": "nominal",
         "title": "ICU Low care",
-        "sort": ["Verfügbar", "Begrenzt", "Ausgelastet", "Nicht verfügbar"]
+        "sort": ["Verfügbar", "Begrenzt", "Ausgelastet", "Nicht verfügbar"],
+        "axis": {
+          "labels": false
+        }
         },
       "y": {
         "field": "num",
@@ -137,15 +140,18 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
       spec.data.values = dataValues;
 
       // also overwrite the title
-      spec.encoding.x.title = this.bedAccessorsMapping[bedAccessor];
+      spec.encoding.x.title = '';
 
-      this.specs.push(spec);
+      this.specs.push({
+        title: this.bedAccessorsMapping[bedAccessor],
+        chart: spec
+      });
     }
 
     // set the max value
     this.specs.forEach(spec => {
-      spec.encoding.y.scale.domain = [0, maxNum+1];
-      spec.encoding.y.axis.tickCount = Math.min(maxNum+1, 5);
+      spec.chart.encoding.y.scale.domain = [0, maxNum+1];
+      spec.chart.encoding.y.axis.tickCount = Math.min(maxNum+1, 5);
     });
   }
 
