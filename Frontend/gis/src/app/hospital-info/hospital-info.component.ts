@@ -4,6 +4,7 @@ import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import {BedType} from "../map/options/bed-type.enum";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-hospital-info',
@@ -26,7 +27,7 @@ export class HospitalInfoComponent implements OnInit {
 
   templateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-    "width": 300, "height": 50,
+    "width": 250, "height": 50,
     "data": {"values":[
       ]},
     "mark": {"type": "area", "interpolate": "step-before"},
@@ -39,7 +40,7 @@ export class HospitalInfoComponent implements OnInit {
         "field": "num", "type": "quantitative",
         "axis": {"title": "Anzahl KH", "tickMinStep": 1}
       },
-     "color": {"type": "nominal", "field":"Kategorie", "scale":{"domain": [], "range": []}}
+     "color": {"type": "nominal", "field":"Kategorie", "scale":{"domain": [], "range": []}, "legend": false}
     }
   };
 
@@ -53,6 +54,10 @@ export class HospitalInfoComponent implements OnInit {
 
   latestDevelopment: QualitativeTimedStatus;
 
+  lastUpdate: Date;
+
+  warnOfOutdatedData: boolean;
+
   constructor(private colormapService: QualitativeColormapService) {}
 
   ngOnInit(): void {
@@ -64,6 +69,11 @@ export class HospitalInfoComponent implements OnInit {
 
     if(this.data.developments) {
       this.latestDevelopment = this.data.developments[this.data.developments.length - 1];
+
+      
+      this.lastUpdate = this.isSingleHospital ? this.latestDevelopment.timestamp : this.latestDevelopment.last_update;
+
+      this.warnOfOutdatedData = moment().subtract(1, 'day').isAfter(moment(this.lastUpdate));
     }
 
     if(this.isSingleHospital){
@@ -94,7 +104,6 @@ export class HospitalInfoComponent implements OnInit {
      colors.push(this.getCapacityStateColor(bedStatus));
     }
 
-    console.log(this.data);
     this.specs = [];
     let maxNum = 0;
 
@@ -135,6 +144,7 @@ export class HospitalInfoComponent implements OnInit {
 
         if(!this.isSingleHospital) {
           spec.mark.interpolate = 'step-before';
+          spec.width = 370;
         }
 
         // also overwrite the title
@@ -153,6 +163,7 @@ export class HospitalInfoComponent implements OnInit {
       this.specs.forEach(spec => {
         spec.chart.encoding.color.scale.domain = bedStati;
         spec.chart.encoding.color.scale.range = colors;
+
         //spec.encoding.color.range = Math.min(maxNum+1, 5);
       });
     }
