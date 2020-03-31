@@ -1,12 +1,14 @@
 <div class="main">
-<h3>{{ diviAggregatedHospital.name }}</h3>
-<mat-divider></mat-divider>
+  <h3>{{ diviAggregatedHospital.name }}</h3>
+  <mat-divider></mat-divider>
 
-<div class="barchartcontainer">
+  <div *ngIf="!diviAggregatedHospital.developments" i18n="@@countyDataNotFound" class="noData">Für diesen Landkreis stehen keine Daten zur Verfügung.</div>
 
-  <div *ngFor="let s of specs">
-    <app-vega [spec]="s"></app-vega>
+  <div class="barchartcontainer">
+
+    <div *ngFor="let s of specs">
+      <app-vega [spec]="s"></app-vega>
+    </div>
+
   </div>
-
-</div>
 </div>
