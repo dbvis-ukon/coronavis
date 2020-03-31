@@ -2,7 +2,7 @@
 <h3>{{ data.name }}</h3>
 <mat-divider></mat-divider>
 
-<strong>Aktueller Stand </strong><span *ngIf="latestDevelopment">({{ latestDevelopment?.timestamp | date:"dd.MM.yyy, HH:mm" }} Uhr)</span>
+<strong i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </strong><span *ngIf="latestDevelopment">({{ latestDevelopment?.timestamp | date:"dd.MM.yyy, HH:mm" }} Uhr)</span>
 <table>
   <tbody>
   <tr>
