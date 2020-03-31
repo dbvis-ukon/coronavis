@@ -3,6 +3,9 @@ import * as d3 from 'd3';
 import { getLatest } from '../util/timestamped-value';
 import { BedStatusSummary } from './types/bed-status-summary';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
+import { BedType } from '../map/options/bed-type.enum';
+import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 
 @Injectable({
   providedIn: 'root'
@@ -85,7 +88,26 @@ export class QualitativeColormapService {
     .range(QualitativeColormapService.bedStatusColors)
     .interpolate(d3.interpolateRgb.gamma(2.2));
 
-  getBedStatusColor(properties: QualitativeAggregatedBedStateCounts): string {
+    public propertyAccessor(type: BedType) {
+      switch (type) {
+        case BedType.ecmo:
+          return (a: QualitativeTimedStatus) => a.ecmo_state;
+        case BedType.icuHigh:
+          return (a: QualitativeTimedStatus) => a.icu_high_care;
+        case BedType.icuLow:
+          return (a: QualitativeTimedStatus) => a.icu_low_care;
+      }
+    }
+  
+    getLatestBedStatusColor(t: ArrayLike<QualitativeTimedStatus>, type: BedType) {
+      const latest = t[t.length -1];
+  
+      return this.getBedStatusColor(latest, this.propertyAccessor(type));
+    }
+
+  getBedStatusColor(latest: QualitativeTimedStatus, f: (d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts): string {
+    const properties = f(latest);
+
     const score = this.getScore(properties);
     const minScore = this.getMinScore(properties);
     const maxScore = this.getMaxScore(properties);

@@ -4,14 +4,13 @@ import {
   Input
 } from '@angular/core';
 import {
-  QuantitativeColormapService
-} from '../services/quantiataive-colormap.service';
-import {
   getLatest
 } from '../util/timestamped-value';
-import { DiviHospital } from '../services/types/divi-hospital';
-import { BedStatusSummary } from '../services/types/bed-status-summary';
+import { QuantitativeBedStatusSummary } from '../services/types/bed-status-summary';
 import { TimestampedValue } from '../repositories/types/in/timestamped-value';
+import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
+import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 
 @Component({
   selector: 'app-hospital-info',
@@ -28,7 +27,7 @@ export class HospitalInfoComponent implements OnInit {
   @Input()
   mode: 'dialog' | 'tooltip';
   @Input()
-  data: DiviHospital;
+  data: SingleHospitalOut<QualitativeTimedStatus>;
 
   templateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
@@ -487,9 +486,14 @@ export class HospitalInfoComponent implements OnInit {
     'icu_ecmo_care': 'ECMO'
   };
 
+
+  latestDevelopment: QualitativeTimedStatus;
+
   constructor(private colormapService: QuantitativeColormapService) {}
 
   ngOnInit(): void {
+
+    this.latestDevelopment = this.data.development[this.data.development.length - 1];
     console.log('tooltip', this.data);
 
     if (this.data.webaddresse.indexOf('http') > -1) {
@@ -611,7 +615,7 @@ export class HospitalInfoComponent implements OnInit {
     console.log('vega specs', this.specs, JSON.stringify(this.specs));
   }
 
-  getCapacityStateColor(bedstatus: BedStatusSummary): string {
+  getCapacityStateColor(bedstatus: QuantitativeBedStatusSummary): string {
     return this.colormapService.getBedStatusColor(bedstatus)
   }
 

@@ -1,37 +1,29 @@
 import * as L from 'leaflet';
 import { Overlay } from './overlay';
-import {QuantitativeColormapService} from "../../services/quantiataive-colormap.service";
 import { BedType } from '../options/bed-type.enum';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import {TooltipService} from "../../services/tooltip.service";
-import {AggregatedGlyphTooltipComponent} from "../../aggregated-glyph-tooltip/aggregated-glyph-tooltip.component";
-import { QuantitativeAggregatedHospitals, QuantitativeAggregatedHospitalsProperties } from 'src/app/repositories/types/in/quantitative-aggregated-hospitals';
-import { ComponentType } from '@angular/cdk/portal';
 import { TooltipComponent } from '@angular/material/tooltip';
+import { AbstractTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
+import { FeatureCollection, MultiPolygon, Feature } from 'geojson';
+import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
+import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
+import { QuantitativeColormapService } from 'src/app/services/quantitative-colormap.service';
 
-export class BedStatusChoropleth<> extends Overlay<QuantitativeAggregatedHospitals> {
+export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<FeatureCollection<MultiPolygon, AggregatedHospitalOut<T>>> {
 
   constructor(
     name: string, 
-    hospitals: QuantitativeAggregatedHospitals, 
+    hospitals: FeatureCollection<MultiPolygon, AggregatedHospitalOut<T>>, 
     private aggregationLevel: AggregationLevel, 
     private type: BedType,
-    private colorsService: QuantitativeColormapService, 
+    private colorsService: QuantitativeColormapService | QualitativeColormapService, 
     private tooltipService: TooltipService,
     ) {
-    super(name, hospitals);
+      super(name, hospitals);
   }
 
-  private propertyAccessor(d: QuantitativeAggregatedHospitalsProperties, type: BedType) {
-    switch (type) {
-      case BedType.ecmo:
-        return {free: d.icu_ecmo_care_frei, full: d.icu_ecmo_care_belegt, prognosis: d.icu_ecmo_care_einschaetzung, in24h: d.icu_ecmo_care_in_24h};
-      case BedType.icuHigh:
-        return {free: d.icu_high_care_frei, full: d.icu_high_care_belegt, prognosis: d.icu_high_care_einschaetzung, in24h: d.icu_high_care_in_24h};
-      case BedType.icuLow:
-        return {free: d.icu_low_care_frei, full: d.icu_low_care_belegt, prognosis: d.icu_low_care_einschaetzung, in24h: d.icu_low_care_in_24h };
-    }
-  }
+  
 
   getAggregationLevel(): AggregationLevel {
     return this.aggregationLevel;
@@ -54,7 +46,7 @@ export class BedStatusChoropleth<> extends Overlay<QuantitativeAggregatedHospita
           y: e.originalEvent.clientY
         }, onCloseAction);
 
-      tooltipComponent.name = feature.properties.name;
+      // tooltipComponent.name = feature.properties.name;
       // tooltipComponent.combined = feature.properties.combined;
       // tooltipComponent.datum = feature.properties.until;
       // tooltipComponent.einwohner = +feature.properties.bevoelkerung;
@@ -73,9 +65,9 @@ export class BedStatusChoropleth<> extends Overlay<QuantitativeAggregatedHospita
 
     // create geojson layer (looks more complex than it is)
     const aggregationLayer = L.geoJSON(this.featureCollection, {
-      style: (feature) => {
+      style: (feature: Feature<MultiPolygon, AggregatedHospitalOut<T>>) => {
         return {
-          fillColor: this.colorsService.getBedStatusColor(this.propertyAccessor(feature.properties, this.type)),
+          fillColor: this.colorsService.getLatestBedStatusColor(feature.properties.development as any, this.type),
           weight: 0.5,
           opacity: 1,
           color: 'gray',

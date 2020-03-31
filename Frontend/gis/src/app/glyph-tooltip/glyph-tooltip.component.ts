@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
-import { QuantitativeColormapService } from '../services/quantiataive-colormap.service';
-import { DiviHospital } from '../services/types/divi-hospital';
+import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 
 @Component({
   selector: 'app-glyph-tooltip',
@@ -24,10 +24,10 @@ import { DiviHospital } from '../services/types/divi-hospital';
 export class GlyphTooltipComponent implements OnInit {
 
   @Input()
-  diviHospital: DiviHospital;
+  diviHospital: SingleHospitalOut<QualitativeTimedStatus>;
   name: string;
 
-  constructor(private colormapService: QuantitativeColormapService) {
+  constructor() {
   }
 
   ngOnInit() {

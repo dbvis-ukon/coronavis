@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 import * as d3 from 'd3';
-import { QuantitativeColormapService } from '../services/quantiataive-colormap.service';
-import { DiviAggregatedHospital } from '../services/types/divi-aggragated-hospital';
+import { QualitativeColormapService } from '../services/qualitative-colormap.service';
+import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 
 @Component({
   selector: 'app-aggregated-glyph-tooltip',
@@ -25,7 +26,7 @@ import { DiviAggregatedHospital } from '../services/types/divi-aggragated-hospit
 export class AggregatedGlyphTooltipComponent implements OnInit {
 
   @Input()
-  diviAggregatedHospital: DiviAggregatedHospital;
+  diviAggregatedHospital: AggregatedHospitalOut<QualitativeTimedStatus>;
   name: string;
 
 
@@ -82,11 +83,11 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
   bedAccessors = ['icu_low_state', 'icu_high_state', 'ecmo_state'];
   bedAccessorsMapping = {'icu_low_state': 'ICU - Low Care', 'icu_high_state': 'ICU - High Care', 'ecmo_state': 'ECMO'};
 
-  constructor(private colormapService: QuantitativeColormapService) {
+  constructor(private colormapService: QualitativeColormapService) {
   }
 
   ngOnInit() {
-    const bedStati = QuantitativeColormapService.bedStati;
+    const bedStati = QualitativeColormapService.bedStati;
 
     this.specs = [];
     let maxNum = 0;

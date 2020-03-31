@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {QuantitativeColormapService} from '../services/quantiataive-colormap.service';
 import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {BedType} from '../map/options/bed-type.enum';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
-import { CovidNumberCaseOptions, CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
+import { CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
 import { MapOptions } from '../map/options/map-options';
+import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
 
 @Component({
   selector: 'app-legend',

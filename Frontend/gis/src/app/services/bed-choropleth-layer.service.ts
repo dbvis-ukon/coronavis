@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
 import {BedStatusChoropleth} from "../map/overlays/bedstatuschoropleth";
 import { Observable, BehaviorSubject} from "rxjs";
-import {QuantitativeColormapService} from "./quantiataive-colormap.service";
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
 import {TooltipService} from "./tooltip.service";
@@ -9,6 +8,10 @@ import { BedBackgroundOptions } from '../map/options/bed-background-options';
 import { map, tap } from 'rxjs/operators';
 import { QuantitativeDiviDevelopmentRepository } from '../repositories/quantitative-divi-development.respository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { QualitativeColormapService } from './qualitative-colormap.service';
+import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
+import { QuantitativeColormapService } from './quantitative-colormap.service';
 
 @Injectable({
   providedIn: "root"
@@ -20,12 +23,13 @@ export class BedChoroplethLayerService {
   constructor(
     private quantitativeDiviDevelopmentRepository: QuantitativeDiviDevelopmentRepository,
     private qualitativeDiviDevelopmentRepository: QualitativeDiviDevelopmentRepository,
-    private colormapService: QuantitativeColormapService, 
+    private quantitativeColorMapService: QuantitativeColormapService, 
+    private qualitativeColorMapService: QualitativeColormapService, 
     private tooltipService: TooltipService
     ) {
   }
 
-  public getQualitativeLayer(option: BedBackgroundOptions): Observable<BedStatusChoropleth> {
+  public getQualitativeLayer(option: BedBackgroundOptions): Observable<BedStatusChoropleth<QualitativeTimedStatus>> {
     this.loading$.next(true);
     return this.qualitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel)
     .pipe(
@@ -36,15 +40,15 @@ export class BedChoroplethLayerService {
           data, 
           option.aggregationLevel, 
           option.bedType, 
-          this.colormapService, 
-          this.tooltipService
+          this.qualitativeColorMapService, 
+          this.tooltipService,
         );
       }),
       tap(() => this.loading$.next(false))
     );
   }
 
-  public getQuantitativeLayer(option: BedBackgroundOptions): Observable<BedStatusChoropleth> {
+  public getQuantitativeLayer(option: BedBackgroundOptions): Observable<BedStatusChoropleth<QuantitativeTimedStatus>> {
     this.loading$.next(true);
     return this.quantitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel)
     .pipe(
@@ -55,7 +59,7 @@ export class BedChoroplethLayerService {
           data, 
           option.aggregationLevel, 
           option.bedType, 
-          this.colormapService, 
+          this.quantitativeColorMapService, 
           this.tooltipService
         );
       }),

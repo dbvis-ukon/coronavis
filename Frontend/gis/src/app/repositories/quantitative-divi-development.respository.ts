@@ -90,7 +90,7 @@ export class QuantitativeDiviDevelopmentRepository {
       features: input.features.map(i => {
         const newProperties: AggregatedHospitalOut<QuantitativeTimedStatus> = {
           ...i.properties,
-          development: this.map(i.properties)
+          development: this.map(i.properties),
         };
 
         const newI: Feature<MultiPolygon, AggregatedHospitalOut<QuantitativeTimedStatus>> = {
@@ -139,8 +139,9 @@ export class QuantitativeDiviDevelopmentRepository {
           full: input.icu_ecmo_care_belegt[i].value,
           in24h: input.icu_ecmo_care_in_24h[i].value,
           prognosis: input.icu_ecmo_care_einschaetzung[i].value
-        }
+        },
 
+        quantitative: true
 
       });
 

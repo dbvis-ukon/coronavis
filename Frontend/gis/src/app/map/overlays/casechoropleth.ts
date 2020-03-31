@@ -1,7 +1,6 @@
 import * as L from 'leaflet';
 import {Overlay} from './overlay';
 import * as d3 from "d3";
-import {QuantitativeColormapService} from "../../services/quantiataive-colormap.service";
 import {TooltipService} from "../../services/tooltip.service";
 import {CaseTooltipComponent} from "../../case-tooltip/case-tooltip.component";
 import {
@@ -13,6 +12,7 @@ import {
 } from '../options/covid-number-case-options';
 import { QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties } from 'src/app/services/types/quantitative-aggregated-rki-cases-over-time';
 import { QuantitativeAggregatedRkiCaseNumberProperties } from 'src/app/repositories/types/in/quantitative-aggregated-rki-cases';
+import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
 
 export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTime> {
   private typeAccessor: (d: QuantitativeAggregatedRkiCaseNumberProperties) => number;
@@ -23,7 +23,7 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
     hospitals: QuantitativeAggregatedRkiCasesOverTime,
     private options: CovidNumberCaseOptions,
     private tooltipService: TooltipService,
-    private colorsService: QuantitativeColormapService
+    private colorsService: QualitativeColormapService
   ) {
     super(name, hospitals);
 

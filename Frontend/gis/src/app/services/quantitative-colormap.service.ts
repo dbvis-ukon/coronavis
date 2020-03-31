@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import * as d3 from 'd3';
-import { getLatest } from '../util/timestamped-value';
-import { BedStatusSummary } from './types/bed-status-summary';
+import { QuantitativeBedStatusSummary } from './types/bed-status-summary';
+import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
+import { BedType } from '../map/options/bed-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -52,20 +53,37 @@ export class QuantitativeColormapService {
     return this.caseChoroplethColorMap(normalizedDiff);
   }
 
+  public propertyAccessor(type: BedType) {
+    switch (type) {
+      case BedType.ecmo:
+        return (a: QuantitativeTimedStatus) => a.ecmo_state;
+      case BedType.icuHigh:
+        return (a: QuantitativeTimedStatus) => a.icu_high_care;
+      case BedType.icuLow:
+        return (a: QuantitativeTimedStatus) => a.icu_low_care;
+    }
+  }
+
+  getLatestBedStatusColor(t: ArrayLike<QuantitativeTimedStatus>, type: BedType) {
+    const latest = t[t.length -1];
+    const bedStatus =this.propertyAccessor(type)(latest);
+    return this.getBedStatusColor(bedStatus);
+  }
+
   /**
    * Calculates the ratio of available / occupied
    * @param bedStatus
    */
-  getBedStatusColor(bedStatus: BedStatusSummary): string {
-    if (getLatest(bedStatus.full) === null || getLatest(bedStatus.free) === null) {
+  getBedStatusColor(bedStatus: QuantitativeBedStatusSummary) {
+    if (bedStatus === null) {
       return this.singleHospitalCM('Keine Information');
     }
 
-    if (0 === getLatest(bedStatus.full) + getLatest(bedStatus.free)) {
+    if (0 === bedStatus.full + bedStatus.free) {
       return this.singleHospitalCM('Nicht verfügbar');
     }
 
-    const score = 1 - getLatest(bedStatus.free) / (getLatest(bedStatus.full) + getLatest(bedStatus.free));
+    const score = 1 - bedStatus.free / (bedStatus.full + bedStatus.free);
     const normalizeValues = d3.scaleQuantize()
       .domain([0, 1])
       .range([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]);

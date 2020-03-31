@@ -1,14 +1,16 @@
 import * as d3 from 'd3';
 import {quadtree} from 'd3';
-import { AbstractDiviHospital } from '../services/types/abstract-divi-hospital';
+import { Point, FeatureCollection } from 'geojson';
+import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
+import { AbstractTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 
-export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {
+export class ForceDirectedLayout {
 
   private levelPositionMap = new Map<number, Array<[number, number]>>();
-  private sim: d3.Simulation<HospitalType, any>;
+  private sim: d3.Simulation<AbstractHospitalOut<AbstractTimedStatus>, any>;
 
-  constructor(private data: HospitalType[], private finishCallback: any) {
-    this.sim = d3.forceSimulation(this.data)
+  constructor(private data: FeatureCollection<Point, AbstractHospitalOut<AbstractTimedStatus>>, private finishCallback: any) {
+    this.sim = d3.forceSimulation(this.data.features.map(d => d.properties))
       .alpha(0.1)
       .stop();
   }
@@ -16,8 +18,8 @@ export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {
   forceComplete(zoom) {
     // persist to cache
     const positions = [];
-    this.data.forEach((d) => {
-      positions.push([d.x, d.y]);
+    this.data.features.forEach((d) => {
+      positions.push([d.properties.x, d.properties.y]);
     });
     this.levelPositionMap.set(zoom, positions);
 
@@ -29,16 +31,16 @@ export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {
 
     if (this.levelPositionMap.has(zoom)) {
       const positions = this.levelPositionMap.get(zoom);
-      this.data.forEach((d, i) => {
+      this.data.features.forEach((d, i) => {
         const cached = positions[i];
-        d.x = cached[0];
-        d.y = cached[1];
+        d.properties.x = cached[0];
+        d.properties.y = cached[1];
       });
       this.finishCallback();
     } else {
-      this.data.forEach(d => {
-        d.x = d._x;
-        d.y = d._y;
+      this.data.features.forEach(d => {
+        d.properties.x = d.properties._x;
+        d.properties.y = d.properties._y;
       });
       this.sim.force("collide", this.quadtreeCollide(glyphSizes))
         .alpha(0.1)
@@ -62,11 +64,11 @@ export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {
     };
 
     function x(d) {
-      return d.x + d.vx;
+      return d.properties.x + d.properties.vx;
     }
 
     function y(d) {
-      return d.y + d.vy;
+      return d.properties.y + d.properties.vy;
     }
 
     function constant(x: [[number, number], [number, number]]) {
@@ -91,38 +93,38 @@ export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {
       nodes.forEach(function (d, i) {
         cornerNodes.push({
           node: d,
-          vx: d.vx,
-          vy: d.vy,
-          x: d.x + (boundingBoxes[i][1][0] + boundingBoxes[i][0][0]) / 2,
-          y: d.y + (boundingBoxes[i][0][1] + boundingBoxes[i][1][1]) / 2
+          vx: d.properties.vx,
+          vy: d.properties.vy,
+          x: d.properties.x + (boundingBoxes[i][1][0] + boundingBoxes[i][0][0]) / 2,
+          y: d.properties.y + (boundingBoxes[i][0][1] + boundingBoxes[i][1][1]) / 2
         })
         cornerNodes.push({
           node: d,
-          vx: d.vx,
-          vy: d.vy,
-          x: d.x + boundingBoxes[i][0][0],
-          y: d.y + boundingBoxes[i][0][1]
+          vx: d.properties.vx,
+          vy: d.properties.vy,
+          x: d.properties.x + boundingBoxes[i][0][0],
+          y: d.properties.y + boundingBoxes[i][0][1]
         })
         cornerNodes.push({
           node: d,
-          vx: d.vx,
-          vy: d.vy,
-          x: d.x + boundingBoxes[i][0][0],
-          y: d.y + boundingBoxes[i][1][1]
+          vx: d.properties.vx,
+          vy: d.properties.vy,
+          x: d.properties.x + boundingBoxes[i][0][0],
+          y: d.properties.y + boundingBoxes[i][1][1]
         })
         cornerNodes.push({
           node: d,
-          vx: d.vx,
-          vy: d.vy,
-          x: d.x + boundingBoxes[i][1][0],
-          y: d.y + boundingBoxes[i][0][1]
+          vx: d.properties.vx,
+          vy: d.properties.vy,
+          x: d.properties.x + boundingBoxes[i][1][0],
+          y: d.properties.y + boundingBoxes[i][0][1]
         })
         cornerNodes.push({
           node: d,
-          vx: d.vx,
-          vy: d.vy,
-          x: d.x + boundingBoxes[i][1][0],
-          y: d.y + boundingBoxes[i][1][1]
+          vx: d.properties.vx,
+          vy: d.properties.vy,
+          x: d.properties.x + boundingBoxes[i][1][0],
+          y: d.properties.y + boundingBoxes[i][1][1]
         })
       })
       var cn = cornerNodes.length
@@ -153,10 +155,10 @@ export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {
           if (data.node.index !== nodeI) {
             var dataNode = data.node
             var bbj = boundingBoxes[dataNode.index],
-              dnx1 = dataNode.x + dataNode.vx + bbj[0][0],
-              dny1 = dataNode.y + dataNode.vy + bbj[0][1],
-              dnx2 = dataNode.x + dataNode.vx + bbj[1][0],
-              dny2 = dataNode.y + dataNode.vy + bbj[1][1],
+              dnx1 = dataNode.properties.x + dataNode.properties.vx + bbj[0][0],
+              dny1 = dataNode.properties.y + dataNode.properties.vy + bbj[0][1],
+              dnx2 = dataNode.properties.x + dataNode.properties.vx + bbj[1][0],
+              dny2 = dataNode.properties.y + dataNode.properties.vy + bbj[1][1],
               dWidth = bbLength(bbj, 0),
               dHeight = bbLength(bbj, 1)
 
@@ -176,17 +178,17 @@ export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {
 
               if ((nx1 + nx2) / 2 < (dnx1 + dnx2) / 2) {
                 node.vx -= xBPush
-                dataNode.vx += xDPush
+                dataNode.properties.vx += xDPush
               } else {
                 node.vx += xBPush
-                dataNode.vx -= xDPush
+                dataNode.properties.vx -= xDPush
               }
               if ((ny1 + ny2) / 2 < (dny1 + dny2) / 2) {
                 node.vy -= yBPush
-                dataNode.vy += yDPush
+                dataNode.properties.vy += yDPush
               } else {
                 node.vy += yBPush
-                dataNode.vy -= yDPush
+                dataNode.properties.vy -= yDPush
               }
             }
 

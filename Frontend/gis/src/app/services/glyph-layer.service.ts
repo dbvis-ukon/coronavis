@@ -4,18 +4,18 @@ import {SimpleGlyphLayer} from '../map/overlays/simple-glyph.layer';
 import {BedGlyphOptions} from '../map/options/bed-glyph-options';
 import {map, tap} from 'rxjs/operators';
 import {TooltipService} from './tooltip.service';
-import {QuantitativeColormapService} from './quantiataive-colormap.service';
 import {MatDialog} from '@angular/material/dialog';
 import {HospitalRepository} from '../repositories/hospital.repository';
 import {AggregatedGlyphLayer} from '../map/overlays/aggregated-glyph.layer';
 import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {LandkreiseHospitalsLayer} from '../map/overlays/landkreishospitals';
-import {DiviDevelopmentRepository} from "../repositories/quantitative-divi-development.respository";
-import { DiviHospital } from './types/divi-hospital';
-import { DiviAggregatedHospital } from './types/divi-aggragated-hospital';
-import { QuantitativeSingleHospitals } from '../repositories/types/in/quantitative-single-hospitals';
 import { QuantitativeAggregatedHospitals } from '../repositories/types/in/quantitative-aggregated-hospitals';
 import { BedStatusSummary } from './types/bed-status-summary';
+import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
+import { QualitativeColormapService } from './qualitative-colormap.service';
+import { FeatureCollection, Point } from 'geojson';
+import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +25,10 @@ export class GlyphLayerService {
   public loading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
-    private diviDevelopmentRepository: DiviDevelopmentRepository,
+    private diviDevelopmentRepository: QualitativeDiviDevelopmentRepository,
     private hospitalRepository: HospitalRepository,
     private tooltipService: TooltipService,
-    private colormapService: QuantitativeColormapService,
+    private colormapService: QualitativeColormapService,
     private matDialog: MatDialog
   ) {}
 
@@ -37,7 +37,7 @@ export class GlyphLayerService {
     return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
     .pipe(
       tap(() => console.log('load simple glyph layer')),
-      map(this.mySingleAggregatedMapper),
+      // map(this.mySingleAggregatedMapper),
       map(divi => {
         return new SimpleGlyphLayer(
           'ho_none',
@@ -64,7 +64,7 @@ export class GlyphLayerService {
         const factory = new AggregatedGlyphLayer(
           'ho_glyph_'+aggLevel,
           aggLevel,
-          this.myAggregatedMapper(result[0]),
+          result[0],
           this.tooltipService,
           this.colormapService,
           options
@@ -80,36 +80,36 @@ export class GlyphLayerService {
     )
   }
 
-  private mySingleAggregatedMapper(input: QuantitativeSingleHospitals): DiviHospital[] {
-    return input.features.map(i => {
-      const diviHospital: DiviHospital =  {
-        ...i.properties,
-        location: {
-          lat: i.geometry.coordinates[1],
-          lng: i.geometry.coordinates[0]
-        },
-        icu_low_summary: {free: i.properties.icu_low_care_frei, full: i.properties.icu_low_care_belegt, prognosis: i.properties.icu_low_care_einschaetzung, in24h: i.properties.icu_low_care_in_24h } as BedStatusSummary,
-        icu_high_summary: {free: i.properties.icu_high_care_frei, full: i.properties.icu_high_care_belegt, prognosis: i.properties.icu_high_care_einschaetzung, in24h: i.properties.icu_high_care_in_24h} as BedStatusSummary,
-        icu_ecmo_summary: {free: i.properties.icu_ecmo_care_frei, full: i.properties.icu_ecmo_care_belegt, prognosis: i.properties.icu_ecmo_care_einschaetzung, in24h: i.properties.icu_ecmo_care_in_24h} as BedStatusSummary,
-      };
-      return diviHospital;
-    });
-  }
+  // private mySingleAggregatedMapper(input: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>): DiviHospital[] {
+  //   return input.features.map(i => {
+  //     const diviHospital: DiviHospital =  {
+  //       ...i.properties,
+  //       location: {
+  //         lat: i.geometry.coordinates[1],
+  //         lng: i.geometry.coordinates[0]
+  //       },
+  //       // icu_low_summary: {free: i.properties.icu_low_care_frei, full: i.properties.icu_low_care_belegt, prognosis: i.properties.icu_low_care_einschaetzung, in24h: i.properties.icu_low_care_in_24h } as BedStatusSummary,
+  //       // icu_high_summary: {free: i.properties.icu_high_care_frei, full: i.properties.icu_high_care_belegt, prognosis: i.properties.icu_high_care_einschaetzung, in24h: i.properties.icu_high_care_in_24h} as BedStatusSummary,
+  //       // icu_ecmo_summary: {free: i.properties.icu_ecmo_care_frei, full: i.properties.icu_ecmo_care_belegt, prognosis: i.properties.icu_ecmo_care_einschaetzung, in24h: i.properties.icu_ecmo_care_in_24h} as BedStatusSummary,
+  //     };
+  //     return diviHospital;
+  //   });
+  // }
 
-  private myAggregatedMapper(input: QuantitativeAggregatedHospitals): DiviAggregatedHospital[] {
-    return input.features.map((i, index) => {
-      const diviAggregatedHospital: DiviAggregatedHospital = {
-        ...i.properties,
-        location: {
-          lat: i.properties.centroid.coordinates[1],
-          lng: i.properties.centroid.coordinates[0]
-        },
-        icu_low_summary: {free: i.properties.icu_low_care_frei, full: i.properties.icu_low_care_belegt, prognosis: i.properties.icu_low_care_einschaetzung, in24h: i.properties.icu_low_care_in_24h } as BedStatusSummary,
-        icu_high_summary: {free: i.properties.icu_high_care_frei, full: i.properties.icu_high_care_belegt, prognosis: i.properties.icu_high_care_einschaetzung, in24h: i.properties.icu_high_care_in_24h} as BedStatusSummary,
-        icu_ecmo_summary: {free: i.properties.icu_ecmo_care_frei, full: i.properties.icu_ecmo_care_belegt, prognosis: i.properties.icu_ecmo_care_einschaetzung, in24h: i.properties.icu_ecmo_care_in_24h} as BedStatusSummary,
-      };
+  // private myAggregatedMapper(input: QuantitativeAggregatedHospitals): DiviAggregatedHospital[] {
+  //   return input.features.map((i, index) => {
+  //     const diviAggregatedHospital: DiviAggregatedHospital = {
+  //       ...i.properties,
+  //       location: {
+  //         lat: i.properties.centroid.coordinates[1],
+  //         lng: i.properties.centroid.coordinates[0]
+  //       },
+  //       icu_low_summary: {free: i.properties.icu_low_care_frei, full: i.properties.icu_low_care_belegt, prognosis: i.properties.icu_low_care_einschaetzung, in24h: i.properties.icu_low_care_in_24h } as BedStatusSummary,
+  //       icu_high_summary: {free: i.properties.icu_high_care_frei, full: i.properties.icu_high_care_belegt, prognosis: i.properties.icu_high_care_einschaetzung, in24h: i.properties.icu_high_care_in_24h} as BedStatusSummary,
+  //       icu_ecmo_summary: {free: i.properties.icu_ecmo_care_frei, full: i.properties.icu_ecmo_care_belegt, prognosis: i.properties.icu_ecmo_care_einschaetzung, in24h: i.properties.icu_ecmo_care_in_24h} as BedStatusSummary,
+  //     };
 
-      return diviAggregatedHospital;
-    });
-  }
+  //     return diviAggregatedHospital;
+  //   });
+  // }
 }
