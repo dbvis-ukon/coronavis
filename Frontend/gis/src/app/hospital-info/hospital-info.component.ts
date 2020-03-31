@@ -135,7 +135,7 @@ export class HospitalInfoComponent implements OnInit {
 
         if(!this.isSingleHospital) {
           spec.mark.interpolate = 'step-before';
-          spec.width = 300;
+          spec.width = 370;
         }
 
         // also overwrite the title
