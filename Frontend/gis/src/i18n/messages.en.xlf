@@ -10,7 +10,7 @@
       </notes>
       <segment state="initial">
         <source>Fälle Total</source>
-      <target>Total cases</target></segment>
+      <target>Total Cases</target></segment>
     </unit><unit id="changes">
       <notes>
         <note category="description">changes</note>
@@ -28,7 +28,7 @@
       </notes>
       <segment state="initial">
         <source>letzte 24h</source>
-      <target>last 24h</target></segment>
+      <target>Last 24h</target></segment>
     </unit><unit id="72h">
       <notes>
         <note category="description">72h</note>
@@ -37,7 +37,7 @@
       </notes>
       <segment state="initial">
         <source>letzte 72h</source>
-      <target>last 72h</target></segment>
+      <target>Last 72h</target></segment>
     </unit><unit id="sick">
       <notes>
         <note category="description">sick</note>
@@ -150,7 +150,7 @@
       <note category="location">src/app/about/about.component.html:104</note></notes>
       <segment>
         <source>Datenhaltung und -verarbeitung</source>
-        <target>Data processing</target>
+        <target>Data Processing</target>
       </segment>
     </unit>
     <unit id="versionDevelopmentFlag">
@@ -225,7 +225,7 @@
       <segment state="initial">
         <source>Bettenauslastung anzeigen / ausblenden
           </source>
-      <target>Bettenauslastung anzeigen / ausblenden
+      <target>Show / Hide Bed Occupancy
           </target></segment>
     </unit><unit id="infoboxBackground">
       <notes>
@@ -241,7 +241,7 @@
       <segment state="initial">
         <source>Bettenauslastung im Hintergrund anzeigen / ausblenden
             </source>
-      <target>Show / hide bed occupancy in the background</target></segment>
+      <target>Show / Hide Bed Occupancy in the Background</target></segment>
     </unit><unit id="infoboxBackgroundError">
       <notes>
         
@@ -255,7 +255,7 @@
       <note category="location">src/app/infobox/infobox.component.html:114</note></notes>
       <segment state="initial">
         <source>Fallansicht</source>
-      <target>Case view</target></segment>
+      <target>Case View</target></segment>
     </unit><unit id="infoboxCaseViewShow">
       <notes>
         
@@ -263,7 +263,7 @@
       <segment state="initial">
         <source>Covid-19 Fallansicht anzeigen / ausblenden
         </source>
-      <target>Show / hide Covid-19 case view
+      <target>Show / Hide Covid-19 Case View
         </target></segment>
     </unit><unit id="infoboxAggregation">
       <notes>
@@ -306,7 +306,7 @@
       <note category="location">src/app/infobox/infobox.component.html:162</note></notes>
       <segment state="initial">
         <source>Fallzahlen</source>
-      <target>Case counts</target></segment>
+      <target>Case Counts</target></segment>
     </unit><unit id="infoboxCasesAll">
       <notes>
         
@@ -348,14 +348,14 @@
       <note category="location">src/app/infobox/infobox.component.html:196</note></notes>
       <segment state="initial">
         <source>Normalisierung</source>
-      <target>Normalisation</target></segment>
+      <target>Normalization</target></segment>
     </unit><unit id="infoboxNornNone">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:205</note></notes>
       <segment state="initial">
         <source>Keine Normalisierung</source>
-      <target>No Normalisation</target></segment>
+      <target>No Normalization</target></segment>
     </unit><unit id="infoboxNornYes">
       <notes>
         
@@ -369,28 +369,28 @@
       <note category="location">src/app/infobox/infobox.component.html:217</note></notes>
       <segment state="initial">
         <source>
-          Geographische Verortung
+          Weitere Geo-Information
         </source>
       <target>
-          Geographic Positioning
+          Additional Landmarks
         </target></segment>
     </unit><unit id="infoboxGeoHospital">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:230</note></notes>
       <segment state="initial">
-        <source>Krankenhäuser
+        <source>Krankenhäuser - OpenStreetMap
         </source>
-      <target>Hospitals
+      <target>Hospitals - OpenStreetMap
         </target></segment>
     </unit><unit id="infoboxGeoHeli">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:238</note></notes>
       <segment state="initial">
-        <source>Hubschrauberlandeplätze
+        <source>Hubschrauberlandeplätze - OpenStreetMap
         </source>
-      <target>Helicopter Pads
+      <target>Helicopter Pads - OpenStreetMap
         </target></segment>
     </unit><unit id="infoboxData">
       <notes>
