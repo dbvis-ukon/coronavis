@@ -31,7 +31,8 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     private colormapService: QualitativeColormapService,
     private glyphOptions: Observable<BedGlyphOptions>
 ) {
-    super(name, null);
+    super(name, data);
+    console.log(name, data);
 
     this.forceLayout = new ForceDirectedLayout(this.data as any, this.updateGlyphPositions.bind(this));
 
@@ -96,7 +97,9 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
 
     this.map.on('zoom', () => this.onZoomed());
 
-    const latExtent = d3.extent(this.data.features, i => i.properties.centroid.coordinates[1]);
+    const latExtent = d3.extent(this.data.features, i => {
+      return i.properties.centroid.coordinates[1]
+    });
     const lngExtent = d3.extent(this.data.features, i => i.properties.centroid.coordinates[0]);
 
     let latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
@@ -129,7 +132,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .style("pointer-events", "all")
       .attr('class', 'hospital')
       .attr('transform', d => {
-        const p = this.latLngPoint({ lat: d.properties.centroid[1], lng: d.properties.centroid[0] });
+        const p = this.latLngPoint({ lat: d.properties.centroid.coordinates[1], lng: d.properties.centroid.coordinates[0] });
         d.properties.x = p.x;
         d.properties.y = p.y;
         d.properties._x = p.x;
