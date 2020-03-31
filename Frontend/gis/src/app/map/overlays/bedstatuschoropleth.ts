@@ -20,6 +20,8 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<F
     private tooltipService: TooltipService,
     ) {
       super(name, hospitals);
+
+      console.log('bed data', hospitals);
   }
 
   
