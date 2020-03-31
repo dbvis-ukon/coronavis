@@ -118,7 +118,7 @@ export class MapComponent implements OnInit {
       maxZoom: 11,
       layers: [tiledMap],
       zoomControl: false
-    }).setView(defaultView, defaultZoom);
+    }).setView(initialView, initialZoom);
 
     this.mymap.on('moveend', () => {
       localStorage.setItem(MAP_VIEW_KEY, JSON.stringify(this.mymap.getBounds().getCenter()));
