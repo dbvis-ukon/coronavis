@@ -3,9 +3,7 @@ import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from 'src/app/services/tooltip.service';
 import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
-import {DiviHospital} from 'src/app/services/divi-hospitals.service';
-import {ColormapService} from 'src/app/services/colormap.service';
-import {FeatureCollection} from "geojson";
+import {FeatureCollection, Point, Feature} from "geojson";
 import { Observable } from 'rxjs';
 import { BedGlyphOptions } from '../options/bed-glyph-options';
 import { BedType } from '../options/bed-type.enum';
@@ -13,35 +11,38 @@ import { MatDialog } from '@angular/material/dialog';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
 import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
 import {GlyphLayer} from "./GlyphLayer";
+import { SingleHospitalOut } from 'src/app/repositories/types/out/single-hospital-out';
+import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
+import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
 
 export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
-  private gHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-  private nameHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-  private cityHospitals: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-  private nameHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
-  private cityHospitalsShadow: d3.Selection<SVGGElement, DiviHospital, SVGElement, unknown>;
+  private gHospitals: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
+  private nameHospitals: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
+  private cityHospitals: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
+  private nameHospitalsShadow: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
+  private cityHospitalsShadow: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
   private map: L.Map;
 
   private visible: boolean = false;
 
-  private forceLayout: ForceDirectedLayout<DiviHospital>;
+  private forceLayout: ForceDirectedLayout;
 
   constructor(
     name: string,
-    private data: DiviHospital[],
+    private data: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>,
     private tooltipService: TooltipService,
-    private colormapService: ColormapService,
+    private colormapService: QualitativeColormapService,
     private glyphOptions: Observable<BedGlyphOptions>,
     private dialog: MatDialog
   ) {
-    super(name, null);
+    super(name, data);
     this.enableDefault = true;
 
-    this.forceLayout = new ForceDirectedLayout<DiviHospital>(this.data, this.updateGlyphPositions.bind(this));
+    this.forceLayout = new ForceDirectedLayout(this.data, this.updateGlyphPositions.bind(this));
 
     this.glyphOptions.subscribe(opt => {
-      if(!this.gHospitals || !opt) {
+      if (!this.gHospitals || !opt) {
         return;
       }
 
@@ -59,10 +60,6 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     });
   }
 
-  private latLngPoint(latlng: L.LatLngExpression): L.Point {
-    return this.map.project(latlng, 9);
-  }
-
   private rectSize = 10;
   private glyphSize = {
     width: 38,
@@ -70,20 +67,27 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
   };
 
   // Some cities have double names. These are the first parts
-  private double_names = new Set(['Sankt', 'St.', 'Bergisch','Königs','Lutherstadt','Schwäbisch']);
+  private doubleNames = new Set(['Sankt', 'St.', 'Bergisch', 'Königs', 'Lutherstadt', 'Schwäbisch']);
   // Regexes for cleaning city names
-  private rx_adr = /.*\d{4,5} /;
-  private rx_bad = /^Bad /;
-  private rx_slash = /\/.*/;
-  private rx_dash = /-([A-Z])[a-zäöü]{6,}/;
+  private rxAdr = /.*\d{4,5} /;
+  private rxBad = /^Bad /;
+  private rxSlash = /\/.*/;
+  private rxDash = /-([A-Z])[a-zäöü]{6,}/;
+
+  private latLngPoint(latlng: L.LatLngExpression): L.Point {
+    return this.map.project(latlng, 9);
+  }
   // Extract the city name from the address and shorten
   private shorten_city_name(address) {
-    let name_parts = address.replace(this.rx_adr,'') // Remove address
-        .replace(this.rx_bad,'') // Remove 'Bad'
-        .replace(this.rx_slash, '') // Remove additional descriptions
-        .replace(this.rx_dash, '-$1.') // Initials for second of double names
+    if (!address) {
+      return '';
+    }
+    const nameParts = address.replace(this.rxAdr, '') // Remove address
+        .replace(this.rxBad, '') // Remove 'Bad'
+        .replace(this.rxSlash, '') // Remove additional descriptions
+        .replace(this.rxDash, '-$1.') // Initials for second of double names
         .split(' ');
-    return this.double_names.has(name_parts[0]) ? name_parts.slice(0,2).join(' ') : name_parts[0];
+    return this.doubleNames.has(nameParts[0]) ? nameParts.slice(0, 2).join(' ') : nameParts[0];
   }
 
   createOverlay(map: L.Map) {
@@ -94,8 +98,20 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     });
 
 
-    const latExtent = d3.extent(this.data, i => i.Location.lat);
-    const lngExtent = d3.extent(this.data, i => i.Location.lng);
+    const latExtent = d3.extent(this.data.features, i => {
+      if (i.geometry.coordinates[1] !== 0) {
+        return i.geometry.coordinates[1];
+      }
+      return NaN;
+    });
+    const lngExtent = d3.extent(this.data.features, i => {
+      if (i.geometry.coordinates[0] !== 0) {
+        return i.geometry.coordinates[0]
+      }
+      return NaN;
+    });
+
+    console.log(latExtent, lngExtent);
 
     let latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
 
@@ -114,37 +130,35 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
 
 
-    const colorScale = this.colormapService.getSingleHospitalColormap();
-
     const self = this;
 
     const padding = 2;
     const yOffset = 2;
 
-    this.gHospitals = d3.select(svgElement)
-      .style("pointer-events", "none")
-      .selectAll('g.hospital')
-      .data<DiviHospital>(this.data)
+    this.gHospitals = d3.select<SVGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(svgElement)
+      .style('pointer-events', 'none')
+      .selectAll<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>('g.hospital')
+      .data<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(this.data.features)
       .enter()
       .append<SVGGElement>('g')
-      .style("pointer-events", "all")
+      .style('pointer-events', 'all')
       .attr('class', 'hospital')
       .attr('transform', d => {
-        const p = this.latLngPoint(d.Location);
-        d.x = p.x;
-        d.y = p.y;
-        d._x = p.x;
-        d._y = p.y;
+        const p = this.latLngPoint({ lat: d.geometry.coordinates[1], lng: d.geometry.coordinates[0]});
+        d.properties.x = p.x;
+        d.properties.y = p.y;
+        d.properties._x = p.x;
+        d.properties._y = p.y;
         return `translate(${p.x}, ${p.y})`;
       })
-      .on('mouseenter', function (d1: DiviHospital) {
+      .on('mouseenter', function(d1) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
-        t.diviHospital = d1;
+        t.tooltipData = d1.properties;
         d3.select(this).raise();
       })
       .on('mouseleave', () => this.tooltipService.close())
-      .on('click', d => this.openDialog(d));
+      .on('click', d => this.openDialog(d.properties));
 
     // this.gHospitals
     //   .append('rect')
@@ -156,7 +170,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     this.nameHospitalsShadow = this.gHospitals
       .append('text')
       .text(d1 => {
-        return d1.Name;
+        return d1.properties.name;
       })
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .attr('y', '13')
@@ -170,7 +184,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     this.nameHospitals = this.gHospitals
       .append('text')
       .text(d1 => {
-        return d1.Name;
+        return d1.properties.name;
       })
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .attr('y', '13')
@@ -181,7 +195,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
     this.cityHospitalsShadow = this.gHospitals
       .append('text')
-      .text(d1 => this.shorten_city_name(d1.Adress))
+      .text(d1 => this.shorten_city_name(d1.properties.address))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .style('text-anchor', 'middle')
       .attr('y', '22')
@@ -194,7 +208,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
     this.cityHospitals = this.gHospitals
       .append('text')
-      .text(d1 => this.shorten_city_name(d1.Adress))
+      .text(d1 => this.shorten_city_name(d1.properties.address))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .style('text-anchor', 'middle')
       .attr('y', '22')
@@ -206,7 +220,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .attr('class', `bed ${BedType.icuLow}`)
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
-      .style('fill', d1 => colorScale(d1.icuLowCare))
+      // .style('fill', d1 => colorScale(getLatest(d1.icu_low_care_frei))) // todo colorScale(d1.icuLowCare))
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuLow))
       .attr('x', padding)
       .attr('y', yOffset);
 
@@ -216,7 +231,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${this.rectSize}px`)
-      .style('fill', d1 => colorScale(d1.icuHighCare))
+      // .style('fill', d1 => colorScale(getLatest(d1.icu_high_care_frei))) // todo colorScale(d1.icuHighCare))
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuHigh))
       .attr('y', yOffset)
       .attr('x', `${this.rectSize + padding * 2}px`);
 
@@ -226,7 +242,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
       .attr('x', `${2 * this.rectSize}px`)
-      .style('fill', d1 => colorScale(d1.ECMO))
+      // .style('fill', d1 => colorScale(getLatest(d1.icu_ecmo_care_frei)))// todo colorScale(d1.ECMO))
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.ecmo))
       .attr('y', yOffset)
       .attr('x', `${2 * this.rectSize + padding * 3}px`);
 
@@ -243,7 +260,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     this.gHospitals
       .transition().duration(100)
       .attr('transform', (d, i) => {
-        return `translate(${d.x},${d.y})`;
+        return `translate(${d.properties.x},${d.properties.y})`;
       });
   }
 
@@ -321,9 +338,9 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     });
   }
 
-  private openDialog(data: DiviHospital): void {
+  private openDialog(data: SingleHospitalOut<QualitativeTimedStatus>): void {
     this.dialog.open(HospitalInfoDialogComponent, {
-      data: data
+      data
     });
   }
 

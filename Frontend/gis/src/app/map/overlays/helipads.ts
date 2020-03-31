@@ -3,6 +3,7 @@ import { FeatureCollection } from 'geojson';
 import * as L from 'leaflet';
 import { Overlay } from './overlay';
 import { TooltipService } from 'src/app/services/tooltip.service';
+import { OSMNearbyHelipads } from 'src/app/repositories/types/in/osm-helipads';
 
 // const helipadIcon = L.icon({
 //   iconUrl: 'Helipad.png',
@@ -11,10 +12,10 @@ import { TooltipService } from 'src/app/services/tooltip.service';
 //   iconAnchor:   [8, 8], // point of the icon which will correspond to marker's location
 // });
 
-export class HelipadLayer extends Overlay<FeatureCollection> {
+export class HelipadLayer extends Overlay<OSMNearbyHelipads> {
   constructor(
     name: string,
-    featureCollection: FeatureCollection,
+    featureCollection: OSMNearbyHelipads,
     private tooltipService: TooltipService
   ) {
     super(name, featureCollection);

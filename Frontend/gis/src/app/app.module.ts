@@ -11,6 +11,7 @@ import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {MatCardModule} from '@angular/material/card';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatListModule} from '@angular/material/list';
@@ -21,6 +22,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
 import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
@@ -29,9 +31,11 @@ import { PlusminusPipe } from './plusminus.pipe';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { AboutComponent } from './about/about.component';
 import { ImpressumComponent } from './impressum/impressum.component';
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatStepperModule } from "@angular/material/stepper";
 
-import {AggregatedGlyphTooltipComponent} from './aggregated-glyph-tooltip/aggregated-glyph-tooltip.component';
 import { VegaComponent } from './vega/vega.component';
+import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 
 
 @NgModule({
@@ -51,8 +55,8 @@ import { VegaComponent } from './vega/vega.component';
     PlusminusPipe,
     AboutComponent,
     ImpressumComponent,
-    AggregatedGlyphTooltipComponent,
-    VegaComponent
+    VegaComponent,
+    HelpDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,7 +75,13 @@ import { VegaComponent } from './vega/vega.component';
     MatRadioModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressBarModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatStepperModule
   ],
   providers: [],
   bootstrap: [AppComponent]
