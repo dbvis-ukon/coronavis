@@ -19,6 +19,12 @@ class HospitalDevelopment(db.Model):
     plz = db.Column(db.String())
     webaddresse = db.Column(db.String())
     geojson = db.Column(db.JSON())
+    id = db.Column(db.Integer())
+    name = db.Column(db.JSON())
+    address = db.Column(db.JSON())
+    state = db.Column(db.JSON())
+    contact = db.Column(db.JSON())
+    helipad_nearby = db.Column(db.Boolean())
     icu_low_care_frei = db.Column(db.JSON())
     icu_low_care_belegt = db.Column(db.JSON())
     icu_low_care_einschaetzung = db.Column(db.JSON())
@@ -51,6 +57,12 @@ class HospitalDevelopment(db.Model):
                       'bundeslandschluessel': self.bundeslandschluessel,
                       'plz': self.plz,
                       'webaddresse': self.webaddresse,
+                      'id': self.id,
+                      'name': self.name,
+                      'address': self.address,
+                      'state': self.state,
+                      'contact': self.contact,
+                      'helipad_nearby': self.helipad_nearby,
                       'icu_low_care_frei': self.icu_low_care_frei,
                       'icu_low_care_belegt': self.icu_low_care_belegt,
                       'icu_low_care_einschaetzung': self.icu_low_care_einschaetzung,
@@ -82,6 +94,7 @@ class HospitalDevelopmentAggregated(db.Model):
     name = db.Column(db.String())
     ids = db.Column(db.String(), primary_key=True)
     geojson = db.Column(db.JSON())
+    centroid = db.Column(db.JSON())
     icu_low_care_frei = db.Column(db.JSON())
     icu_low_care_belegt = db.Column(db.JSON())
     icu_low_care_einschaetzung = db.Column(db.JSON())
@@ -111,6 +124,7 @@ class HospitalDevelopmentAggregated(db.Model):
                   'properties': {
                       'name': self.name,
                       'ids': self.ids,
+                      'centroid': self.centroid,
                       'icu_low_care_frei': self.icu_low_care_frei,
                       'icu_low_care_belegt': self.icu_low_care_belegt,
                       'icu_low_care_einschaetzung': self.icu_low_care_einschaetzung,

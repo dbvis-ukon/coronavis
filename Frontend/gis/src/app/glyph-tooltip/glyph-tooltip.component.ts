@@ -1,8 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
-import {DiviHospital} from '../services/divi-hospitals.service';
-import * as d3 from 'd3';
 import { ColormapService } from '../services/colormap.service';
+import { DiviHospital } from '../services/glyph-layer.service';
 
 @Component({
   selector: 'app-glyph-tooltip',
@@ -27,11 +26,6 @@ export class GlyphTooltipComponent implements OnInit {
   @Input()
   diviHospital: DiviHospital;
   name: string;
-
-
-  readonly backgroundColScale =
-    d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
-      .range(['white', '#333', 'white', 'white']);
 
   constructor(private colormapService: ColormapService) {
   }

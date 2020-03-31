@@ -2,28 +2,41 @@ table {
     border-spacing: 1px;
     margin-top: 10px;
   }
-  
+
   th {
     text-align: center;
     margin: 0;
     padding: 8px;
+    font-weight: normal;
   }
-  
-  td {
-    text-align: left;
+
+  td, th:nth-child(1) {
+    text-align: center;
+    padding-left: 2px;
+    padding-right: 2px;
     margin: 0;
-    padding: 8px;
+    font-size: 12px;
   }
-  
+
   td:first-child {
     text-align: left;
   }
-  
+
   /* Color columns */
-  th:nth-child(2),
-  th:nth-child(4),
   td:nth-child(2),
-  td:nth-child(5),
-  td:nth-child(6) {
+  td:nth-child(4) {
     background-color: #f2f2f2;
   }
+
+
+
+  #sub-table-label{
+    transform: rotate(-90deg);
+  }
+
+.chart-title {
+  text-align: center;
+  font-weight:bold;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}

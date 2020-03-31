@@ -11,6 +11,7 @@ import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {MatCardModule} from '@angular/material/card';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatListModule} from '@angular/material/list';
@@ -29,6 +30,7 @@ import { PlusminusPipe } from './plusminus.pipe';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { AboutComponent } from './about/about.component';
 import { ImpressumComponent } from './impressum/impressum.component';
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import {AggregatedGlyphTooltipComponent} from './aggregated-glyph-tooltip/aggregated-glyph-tooltip.component';
 import { VegaComponent } from './vega/vega.component';
@@ -52,7 +54,7 @@ import { VegaComponent } from './vega/vega.component';
     AboutComponent,
     ImpressumComponent,
     AggregatedGlyphTooltipComponent,
-    VegaComponent
+    VegaComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,7 +73,9 @@ import { VegaComponent } from './vega/vega.component';
     MatRadioModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressBarModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

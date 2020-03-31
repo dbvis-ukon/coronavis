@@ -2,16 +2,16 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import {DiviAggregatedHospital} from 'src/app/services/divi-hospitals.service';
-import {ColormapService} from 'src/app/services/colormap.service';
+import { ColormapService } from 'src/app/services/colormap.service';
 import {FeatureCollection} from "geojson";
-import {HospitallayerService} from "../../services/hospitallayer.service";
 import {Observable} from "rxjs";
 import {BedGlyphOptions} from '../options/bed-glyph-options';
 import {BedType} from '../options/bed-type.enum';
 import {AggregatedGlyphTooltipComponent} from "../../aggregated-glyph-tooltip/aggregated-glyph-tooltip.component";
 import {ForceDirectedLayout} from 'src/app/util/forceDirectedLayout';
 import {GlyphLayer} from "./GlyphLayer";
+import { DiviAggregatedHospital } from 'src/app/services/glyph-layer.service';
+import { getLatest } from 'src/app/util/timestamped-value';
 
 export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
@@ -24,11 +24,10 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
 
   constructor(
     name: string,
-    private granularity: String,
+    private granularity: string,
     private data: DiviAggregatedHospital[],
     private tooltipService: TooltipService,
     private colormapService: ColormapService,
-    private hospitallayerService: HospitallayerService,
     private glyphOptions: Observable<BedGlyphOptions>
 ) {
     super(name, null);
@@ -63,26 +62,30 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     return this.map.project(latlng, 9);
   }
 
+  // TODO adapt
   private getIcuLowScore(d: DiviAggregatedHospital) {
-    const v = d.icu_low_state.Verfügbar || 0;
-    const b = d.icu_low_state.Begrenzt || 0;
-    const a = d.icu_low_state.Ausgelastet || 0;
+    const v = getLatest(d.icu_low_care_frei) || 0;
+    const b = getLatest(d.icu_low_care_belegt) || 0;
+    const a = getLatest(d.icu_low_care_einschaetzung)  || 0;
 
     return (b * 2 + a * 3) / (v + b + a);
   }
 
+
+  // TODO adapt
   private getIcuHighScore(d: DiviAggregatedHospital) {
-    const v = d.icu_high_state.Verfügbar || 0;
-    const b = d.icu_high_state.Begrenzt || 0;
-    const a = d.icu_high_state.Ausgelastet || 0;
+    const v = getLatest(d.icu_low_care_frei) || 0;
+    const b = getLatest(d.icu_low_care_belegt) || 0;
+    const a = getLatest(d.icu_low_care_einschaetzung)  || 0;
 
     return (b * 2 + a * 3) / (v + b + a);
   }
 
+  // TODO adapt
   private getEcmoScore(d: DiviAggregatedHospital) {
-    const v = d.ecmo_state.Verfügbar || 0;
-    const b = d.ecmo_state.Begrenzt || 0;
-    const a = d.ecmo_state.Ausgelastet || 0;
+    const v = getLatest(d.icu_low_care_frei) || 0;
+    const b = getLatest(d.icu_low_care_belegt) || 0;
+    const a = getLatest(d.icu_low_care_einschaetzung)  || 0;
 
     return (b * 2 + a * 3) / (v + b + a);
   }
@@ -115,23 +118,6 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
 
     const padding = 2;
     const yOffset = 2;
-
-    const range = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
-
-    const icu_low_scores = this.data.map(d => this.getIcuLowScore(d));
-    const icu_low_normalizer = d3.scaleQuantize()
-      .domain([0, d3.max(icu_low_scores)])
-      .range(range);
-
-    const icu_high_scores = this.data.map(d => this.getIcuHighScore(d));
-    const icu_high_normalizer = d3.scaleQuantize()
-      .domain([0, d3.max(icu_high_scores)])
-      .range(range);
-
-    const ecmo_scores = this.data.map(d => this.getEcmoScore(d));
-    const ecmo_normalizer = d3.scaleQuantize()
-      .domain([0, d3.max(ecmo_scores)])
-      .range(range);
 
     this.gHospitals = d3.select(svgElement)
       .style("pointer-events", "none")
@@ -193,7 +179,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('height', `${rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_low_state));
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_low_summary));
 
     this.gHospitals
       .append('rect')
@@ -202,7 +188,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${rectSize + padding * 2}px`)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_high_state));
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_high_summary));
 
     this.gHospitals
       .append('rect')
@@ -211,7 +197,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`)
-      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.ecmo_state));
+      .style('fill', d1 => this.colormapService.getBedStatusColor(d1.icu_ecmo_summary));
 
     this.onZoomed();
 

@@ -14,6 +14,11 @@ import { MapOptions } from '../map/options/map-options';
 import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
 import { ImpressumComponent } from '../impressum/impressum.component';
+import { OSMLayerService } from '../services/osm-layer.service';
+import { GlyphLayerService } from '../services/glyph-layer.service';
+import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
+import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
+import {APP_CONFIG_KEY} from "../../constants";
 
 @Component({
   selector: 'app-infobox',
@@ -24,7 +29,11 @@ export class InfoboxComponent implements OnInit {
 
   constructor(
     private colormapService: ColormapService,
-    private dialogService: MatDialog
+    private dialogService: MatDialog,
+    private osmLayerService: OSMLayerService,
+    private glyphLayerService: GlyphLayerService,
+    private bedChoroplethLayerService: BedChoroplethLayerService,
+    private caseChoroplethLayerService: CaseChoroplethLayerService
   ) { }
 
   glyphLegend;
@@ -53,10 +62,22 @@ export class InfoboxComponent implements OnInit {
 
   eAggregationLevels = AggregationLevel;
 
+
+  glyphLoading = false;
+  bedChoroplethLoading = false;
+  caseChoroplethLoading = false;
+  osmLoading = false;
+
   ngOnInit(): void {
+    this.glyphLayerService.loading$.subscribe(l => this.glyphLoading = l);
+    this.bedChoroplethLayerService.loading$.subscribe(l => this.bedChoroplethLoading = l);
+    this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
+    this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);
+
+
     this.glyphLegend = [
-      {name: 'ICU low', accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'}, 
-      {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'}, 
+      {name: 'ICU low', accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+      {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
       {name: 'ECMO', accessor: 'showEcmo', color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
     ];
   }
@@ -102,12 +123,12 @@ export class InfoboxComponent implements OnInit {
   }
 
   updateCovidNumberCaseOptionsEnabled(enabled: boolean) {
-    this.mo.covidNumberCaseOptions.enabled = enabled; 
-    
+    this.mo.covidNumberCaseOptions.enabled = enabled;
+
     if(enabled) {
       this.mo.bedBackgroundOptions.enabled = false;
     }
-    
+
     this.emitMapOptions()
   }
 
@@ -122,6 +143,7 @@ export class InfoboxComponent implements OnInit {
   }
 
   emitMapOptions() {
+    localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(this.mo));
     this.mapOptionsChange.emit({...this.mo});
   }
 
