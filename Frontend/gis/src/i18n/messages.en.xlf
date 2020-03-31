@@ -233,7 +233,7 @@
       <note category="location">src/app/infobox/infobox.component.html:80</note></notes>
       <segment state="initial">
         <source>Hintergrund</source>
-      <target>Hintergrund</target></segment>
+      <target>Background</target></segment>
     </unit><unit id="infoboxBackgroundShow">
       <notes>
         
@@ -241,22 +241,21 @@
       <segment state="initial">
         <source>Bettenauslastung im Hintergrund anzeigen / ausblenden
             </source>
-      <target>Bettenauslastung im Hintergrund anzeigen / ausblenden
-            </target></segment>
+      <target>Show / hide bed occupancy in the background</target></segment>
     </unit><unit id="infoboxBackgroundError">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:90</note></notes>
       <segment state="initial">
         <source>Bitte eine Aggregation Länder, Bezirke, oder Kreise auswählen.</source>
-      <target>Bitte eine Aggregation Länder, Bezirke, oder Kreise auswählen.</target></segment>
+      <target>Please select state, region or county aggregation</target></segment>
     </unit><unit id="infoboxCaseView">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:114</note></notes>
       <segment state="initial">
         <source>Fallansicht</source>
-      <target>Fallansicht</target></segment>
+      <target>Case view</target></segment>
     </unit><unit id="infoboxCaseViewShow">
       <notes>
         
@@ -264,7 +263,7 @@
       <segment state="initial">
         <source>Covid-19 Fallansicht anzeigen / ausblenden
         </source>
-      <target>Covid-19 Fallansicht anzeigen / ausblenden
+      <target>Show / hide Covid-19 case view
         </target></segment>
     </unit><unit id="infoboxAggregation">
       <notes>
@@ -279,91 +278,91 @@
       <note category="location">src/app/infobox/infobox.component.html:144</note></notes>
       <segment state="initial">
         <source>Zeitraum</source>
-      <target>Zeitraum</target></segment>
+      <target>Time Period</target></segment>
     </unit><unit id="infoboxTimeAll">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:153</note></notes>
       <segment state="initial">
         <source>Alle Daten</source>
-      <target>Alle Daten</target></segment>
+      <target>All Data</target></segment>
     </unit><unit id="infoboxTime24">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:154</note></notes>
       <segment state="initial">
         <source>letzte 24 Stunden</source>
-      <target>letzte 24 Stunden</target></segment>
+      <target>Last 24 Hours</target></segment>
     </unit><unit id="infoboxTime72">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:155</note></notes>
       <segment state="initial">
         <source>letzte 72 Stunden</source>
-      <target>letzte 72 Stunden</target></segment>
+      <target>Last 72 Hours</target></segment>
     </unit><unit id="infoboxCaseNum">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:162</note></notes>
       <segment state="initial">
         <source>Fallzahlen</source>
-      <target>Fallzahlen</target></segment>
+      <target>Case counts</target></segment>
     </unit><unit id="infoboxCasesAll">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:171</note></notes>
       <segment state="initial">
         <source>Alle erfassten Fälle</source>
-      <target>Alle erfassten Fälle</target></segment>
+      <target>All Recorded Cases</target></segment>
     </unit><unit id="infoboxCasesDiff">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:172</note></notes>
       <segment state="initial">
         <source>Veränderung im gewählten Zeitraum</source>
-      <target>Veränderung im gewählten Zeitraum</target></segment>
+      <target>Changes in the Selected Time Period</target></segment>
     </unit><unit id="infoboxType">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:179</note></notes>
       <segment state="initial">
         <source>Art</source>
-      <target>Art</target></segment>
+      <target>Type</target></segment>
     </unit><unit id="infoboxTypeSick">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:188</note></notes>
       <segment state="initial">
         <source>Erkrankungen</source>
-      <target>Erkrankungen</target></segment>
+      <target>Afflictions</target></segment>
     </unit><unit id="infoboxTypeDeath">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:189</note></notes>
       <segment state="initial">
         <source>Todesfälle</source>
-      <target>Todesfälle</target></segment>
+      <target>Deaths</target></segment>
     </unit><unit id="infoboxNorm">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:196</note></notes>
       <segment state="initial">
         <source>Normalisierung</source>
-      <target>Normalisierung</target></segment>
+      <target>Normalisation</target></segment>
     </unit><unit id="infoboxNornNone">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:205</note></notes>
       <segment state="initial">
         <source>Keine Normalisierung</source>
-      <target>Keine Normalisierung</target></segment>
+      <target>No Normalisation</target></segment>
     </unit><unit id="infoboxNornYes">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:206</note></notes>
       <segment state="initial">
         <source>Je 100.000 Einwohner</source>
-      <target>Je 100.000 Einwohner</target></segment>
+      <target>Per 100.000 Residents</target></segment>
     </unit><unit id="infoboxGeo">
       <notes>
         
@@ -373,7 +372,7 @@
           Geographische Verortung
         </source>
       <target>
-          Geographische Verortung
+          Geographic Positioning
         </target></segment>
     </unit><unit id="infoboxGeoHospital">
       <notes>
@@ -382,7 +381,7 @@
       <segment state="initial">
         <source>Krankenhäuser
         </source>
-      <target>Krankenhäuser
+      <target>Hospitals
         </target></segment>
     </unit><unit id="infoboxGeoHeli">
       <notes>
@@ -391,7 +390,7 @@
       <segment state="initial">
         <source>Hubschrauberlandeplätze
         </source>
-      <target>Hubschrauberlandeplätze
+      <target>Helicopter Pads
         </target></segment>
     </unit><unit id="infoboxData">
       <notes>
@@ -402,7 +401,7 @@
           Datenquellen
         </source>
       <target>
-          Datenquellen
+          Data Sources
         </target></segment>
     </unit><unit id="infoboxDIVI">
       <notes>
@@ -410,28 +409,28 @@
       <note category="location">src/app/infobox/infobox.component.html:254</note></notes>
       <segment state="initial">
         <source>DIVI Intensivregister</source>
-      <target>DIVI Intensivregister</target></segment>
+      <target>DIVI ER-Register</target></segment>
     </unit><unit id="infoboxRKI">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:258</note></notes>
       <segment state="initial">
         <source>Robert Koch Institut</source>
-      <target>Robert Koch Institut</target></segment>
+      <target>Robert Koch Institute</target></segment>
     </unit><unit id="infoboxRKICases">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:262</note></notes>
       <segment state="initial">
         <source>- Fallzahlen</source>
-      <target>- Fallzahlen</target></segment>
+      <target>- Cases</target></segment>
     </unit><unit id="infoboxImprint">
       <notes>
         
       <note category="location">src/app/infobox/infobox.component.html:278</note></notes>
       <segment state="initial">
         <source>Impressum</source>
-      <target>Impressum</target></segment>
+      <target>Imprint</target></segment>
     </unit><unit id="tooltipHospitalAddress">
       <notes>
         <note category="location">src/app/hospital-info/hospital-info.component.html:25</note>
