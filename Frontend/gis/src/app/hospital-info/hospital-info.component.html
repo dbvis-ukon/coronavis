@@ -84,7 +84,7 @@
   </p>
 </div>
 
-<div  *ngIf="isSingleHospital === true">
-  <p i18n="@@tooltipHospitalLastUpdate" ><strong>Letzter Stand: </strong> {{ latestDevelopment?.timestamp }} </p>
+<div>
+  <p i18n="@@tooltipHospitalLastUpdate" ><strong>Letzter Stand: </strong> {{ (isSingleHospital ? latestDevelopment?.timestamp : latestDevelopment?.last_update) | date:'dd.MM.yyy HH:mm:ss' }} </p>
 </div>
 

@@ -30,7 +30,7 @@ export class HospitalInfoComponent implements OnInit {
     "encoding": {
       "x": {
         "field": "Datum", "type": "temporal",
-        "axis": {"domain": false, "format": "%Y-%m-%d", "tickSize": 0}
+        "axis": {"domain": false, "format": "%d.%m", "tickSize": 0}
       },
       "y": {
         "field": "num", "type": "quantitative",
@@ -53,13 +53,17 @@ export class HospitalInfoComponent implements OnInit {
   constructor(private colormapService: QualitativeColormapService) {}
 
   ngOnInit(): void {
+    if((this.data as SingleHospitalOut<QualitativeTimedStatus>).address){
+      this.isSingleHospital = true;
+      this.singleHospital = this.data as SingleHospitalOut<QualitativeTimedStatus>;
+    }
+
+
     if(this.data.developments) {
       this.latestDevelopment = this.data.developments[this.data.developments.length - 1];
     }
 
-    if((this.data as SingleHospitalOut<QualitativeTimedStatus>).address){
-        this.isSingleHospital = true;
-        this.singleHospital = this.data as SingleHospitalOut<QualitativeTimedStatus>;
+    if(this.isSingleHospital){
 
       if(this.singleHospital.contact.indexOf('http')>-1){
         this.contact = 'http' + this.singleHospital.contact.split('http')[1];
