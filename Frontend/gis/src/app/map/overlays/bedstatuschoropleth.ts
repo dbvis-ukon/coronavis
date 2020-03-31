@@ -8,7 +8,6 @@ import { AbstractTimedStatus } from 'src/app/repositories/types/in/qualitative-h
 import { FeatureCollection, MultiPolygon, Feature } from 'geojson';
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
-import { QuantitativeColormapService } from 'src/app/services/quantitative-colormap.service';
 
 export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<FeatureCollection<MultiPolygon, AggregatedHospitalOut<T>>> {
 
@@ -17,7 +16,7 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<F
     hospitals: FeatureCollection<MultiPolygon, AggregatedHospitalOut<T>>, 
     private aggregationLevel: AggregationLevel, 
     private type: BedType,
-    private colorsService: QuantitativeColormapService | QualitativeColormapService, 
+    private colorsService: QualitativeColormapService, 
     private tooltipService: TooltipService,
     ) {
       super(name, hospitals);
@@ -67,7 +66,7 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<F
     const aggregationLayer = L.geoJSON(this.featureCollection, {
       style: (feature: Feature<MultiPolygon, AggregatedHospitalOut<T>>) => {
         return {
-          fillColor: this.colorsService.getLatestBedStatusColor(feature.properties.development as any, this.type),
+          fillColor: this.colorsService.getLatestBedStatusColor(feature.properties.developments as any, this.type),
           weight: 0.5,
           opacity: 1,
           color: 'gray',

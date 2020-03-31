@@ -180,7 +180,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('height', `${rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.development, BedType.icuLow));
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuLow));
 
     this.gHospitals
       .append('rect')
@@ -189,7 +189,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${rectSize + padding * 2}px`)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.development, BedType.icuHigh));
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuHigh));
 
     this.gHospitals
       .append('rect')
@@ -198,7 +198,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('height', `${rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${2 * rectSize + padding * 3}px`)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.development, BedType.ecmo));
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.ecmo));
 
     this.onZoomed();
 

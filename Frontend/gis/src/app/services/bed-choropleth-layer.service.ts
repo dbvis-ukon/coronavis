@@ -48,24 +48,24 @@ export class BedChoroplethLayerService {
     );
   }
 
-  public getQuantitativeLayer(option: BedBackgroundOptions): Observable<BedStatusChoropleth<QuantitativeTimedStatus>> {
-    this.loading$.next(true);
-    return this.quantitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel)
-    .pipe(
-      tap(() => console.log('load bed background choropleth layer')),
-      map(data => {
-        return new BedStatusChoropleth(
-          this.getName(option.aggregationLevel, option.bedType), 
-          data, 
-          option.aggregationLevel, 
-          option.bedType, 
-          this.quantitativeColorMapService, 
-          this.tooltipService
-        );
-      }),
-      tap(() => this.loading$.next(false))
-    );
-  }
+  // public getQuantitativeLayer(option: BedBackgroundOptions): Observable<BedStatusChoropleth<QuantitativeTimedStatus>> {
+  //   this.loading$.next(true);
+  //   return this.quantitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel)
+  //   .pipe(
+  //     tap(() => console.log('load bed background choropleth layer')),
+  //     map(data => {
+  //       return new BedStatusChoropleth(
+  //         this.getName(option.aggregationLevel, option.bedType), 
+  //         data, 
+  //         option.aggregationLevel, 
+  //         option.bedType, 
+  //         this.quantitativeColorMapService, 
+  //         this.tooltipService
+  //       );
+  //     }),
+  //     tap(() => this.loading$.next(false))
+  //   );
+  // }
 
   public getName(granularity: AggregationLevel, type: BedType) {
     return `Hospitals_${granularity}_${type}`;

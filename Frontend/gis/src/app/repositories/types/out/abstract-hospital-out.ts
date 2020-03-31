@@ -6,5 +6,5 @@ export interface AbstractHospitalOut<T extends AbstractTimedStatus> {
     _x?:number;
     _y?:number;
 
-    development: ArrayLike<T>;
+    developments: ArrayLike<T>;
 }

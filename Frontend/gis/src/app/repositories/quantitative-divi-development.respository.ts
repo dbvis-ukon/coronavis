@@ -71,7 +71,7 @@ export class QuantitativeDiviDevelopmentRepository {
       features: input.features.map(i => {
         const newProperties: SingleHospitalOut<QuantitativeTimedStatus> = {
           ...i.properties,
-          development: this.map(i.properties)
+          developments: this.map(i.properties)
         };
 
         const newI: Feature<Point, SingleHospitalOut<QuantitativeTimedStatus>> = {
@@ -90,7 +90,7 @@ export class QuantitativeDiviDevelopmentRepository {
       features: input.features.map(i => {
         const newProperties: AggregatedHospitalOut<QuantitativeTimedStatus> = {
           ...i.properties,
-          development: this.map(i.properties),
+          developments: this.map(i.properties),
         };
 
         const newI: Feature<MultiPolygon, AggregatedHospitalOut<QuantitativeTimedStatus>> = {

@@ -493,7 +493,7 @@ export class HospitalInfoComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.latestDevelopment = this.data.development[this.data.development.length - 1];
+    this.latestDevelopment = this.data.developments[this.data.developments.length - 1];
     console.log('tooltip', this.data);
 
     if (this.data.webaddresse.indexOf('http') > -1) {

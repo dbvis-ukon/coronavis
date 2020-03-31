@@ -38,7 +38,7 @@ export interface QualitativeHospitalDevelopment extends ArrayLike<QualitativeTim
 export interface QualitativeHospitalDevelopmentExtension extends GeneralDevelopment {
 
 
-    development: QualitativeHospitalDevelopment;
+    developments: QualitativeHospitalDevelopment;
 }
 
 
