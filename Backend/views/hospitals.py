@@ -408,7 +408,7 @@ GROUP BY
             "geometry": r[2],
             "properties": {
                 "id": r[0],
-                "address": r[1],
+                "name": r[1],
                 "developments": r[3]
             }
         }
@@ -664,7 +664,7 @@ GROUP BY
             "geometry": r[2],
             "properties": {
                 "id": r[0],
-                "address": r[1],
+                "name": r[1],
                 "developments": r[3]
             }
         }
@@ -920,7 +920,7 @@ GROUP BY
             "geometry": r[2],
             "properties": {
                 "id": r[0],
-                "address": r[1],
+                "name": r[1],
                 "developments": r[3]
             }
         }
