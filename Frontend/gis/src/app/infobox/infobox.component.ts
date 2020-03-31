@@ -158,4 +158,8 @@ export class InfoboxComponent implements OnInit {
     this.dialogService.open(ImpressumComponent);
   }
 
+  openVideo() {
+    window.open('https://video.covis.dbvis.de', '_blank');
+    // location.href = 'https://video.covis.dbvis.de';
+  }
 }
