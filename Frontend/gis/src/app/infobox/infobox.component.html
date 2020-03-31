@@ -23,10 +23,10 @@
         [value]="mo.bedGlyphOptions.aggregationLevel"
         (change)="updateBedGlyphAggregationLevel($event.value)"
       >
-        <mat-button-toggle [value]="eAggregationLevels.state" matTooltip="Bundesländer">Länder</mat-button-toggle>
-        <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
-        <mat-button-toggle [value]="eAggregationLevels.county" matTooltip="Landkreise">Kreise</mat-button-toggle>
-        <mat-button-toggle [value]="eAggregationLevels.none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.state" i18n="@@infoboxStates" matTooltip="Bundesländer">Länder</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" i18n="@@infoboxRegions" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.county" i18n="@@infoboxCounties" matTooltip="Landkreise">Kreise</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.none" i18n="@@infoboxNone" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
       </mat-button-toggle-group>
 
       <mat-divider></mat-divider>

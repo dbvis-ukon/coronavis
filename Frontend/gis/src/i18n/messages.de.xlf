@@ -1,7 +1,80 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="de">
   <file original="ng.template" id="ngi18n">
-    <unit id="lsName">
+    <unit id="cases">
+      <notes>
+        <note category="description">cases</note>
+        <note category="meaning">case-tooltip</note>
+        <note category="location">src/app/case-tooltip/case-tooltip.component.html:9</note>
+        <note category="location">src/app/legend/legend.component.html:4</note>
+      </notes>
+      <segment state="final">
+        <source>Fälle Total</source>
+      <target>Fälle Total</target></segment>
+    </unit><unit id="changes">
+      <notes>
+        <note category="description">changes</note>
+        <note category="meaning">case-tooltip</note>
+        <note category="location">src/app/case-tooltip/case-tooltip.component.html:10</note>
+      </notes>
+      <segment state="final">
+        <source>Veränderung</source>
+      <target>Veränderung</target></segment>
+    </unit><unit id="24h">
+      <notes>
+        <note category="description">24h</note>
+        <note category="meaning">case-tooltip</note>
+        <note category="location">src/app/case-tooltip/case-tooltip.component.html:15</note>
+      </notes>
+      <segment state="final">
+        <source>letzte 24h</source>
+      <target>letzte 24h</target></segment>
+    </unit><unit id="72h">
+      <notes>
+        <note category="description">72h</note>
+        <note category="meaning">case-tooltip</note>
+        <note category="location">src/app/case-tooltip/case-tooltip.component.html:16</note>
+      </notes>
+      <segment state="final">
+        <source>letzte 72h</source>
+      <target>letzte 72h</target></segment>
+    </unit><unit id="sick">
+      <notes>
+        <note category="description">sick</note>
+        <note category="meaning">case-tooltip</note>
+        <note category="location">src/app/case-tooltip/case-tooltip.component.html:21</note>
+      </notes>
+      <segment state="final">
+        <source>Erkrankte</source>
+      <target>Erkrankte</target></segment>
+    </unit><unit id="deaths">
+      <notes>
+        <note category="description">deaths</note>
+        <note category="meaning">case-tooltip</note>
+        <note category="location">src/app/case-tooltip/case-tooltip.component.html:29</note>
+      </notes>
+      <segment state="final">
+        <source>Todesfälle</source>
+      <target>Todesfälle</target></segment>
+    </unit><unit id="sickScale">
+      <notes>
+        <note category="description">sickScale</note>
+        <note category="meaning">case-tooltip</note>
+        <note category="location">src/app/case-tooltip/case-tooltip.component.html:37</note>
+      </notes>
+      <segment state="final">
+        <source>Erkrankte je 100.000 Einwohner</source>
+      <target>Erkrankte je 100.000 Einwohner</target></segment>
+    </unit><unit id="deathScale">
+      <notes>
+        <note category="description">deathScale</note>
+        <note category="meaning">case-tooltip</note>
+        <note category="location">src/app/case-tooltip/case-tooltip.component.html:45</note>
+      </notes>
+      <segment state="final">
+        <source>Todesfälle je 100.000 Einwohner</source>
+      <target>Todesfälle je 100.000 Einwohner</target></segment>
+    </unit><unit id="lsName">
       <notes>
         <note category="description">name of the group</note>
         <note category="meaning">ls-name</note>
@@ -19,10 +92,10 @@
         <note category="location">src/app/about/about.component.html:14,16</note>
       </notes>
       <segment>
-        <source> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a&gt;" dispEnd="&lt;/a&gt;">AG Datenanalyse und
+        <source> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">AG Datenanalyse und
             Visualisierung</pc> von Prof. Dr. Daniel Keim an der Universität Konstanz.
           </source>
-          <target> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a&gt;" dispEnd="&lt;/a&gt;">AG Datenanalyse und
+          <target> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">AG Datenanalyse und
             Visualisierung</pc> von Prof. Dr. Daniel Keim an der Universität Konstanz.
           </target>
       </segment>
@@ -42,8 +115,8 @@
       <notes>
         <note category="description">department</note>
         <note category="meaning">visualization and design</note>
-        <note category="location">src/app/about/about.component.html:62</note>
-      </notes>
+        
+      <note category="location">src/app/about/about.component.html:61</note></notes>
       <segment>
         <source>Visualisierung und Design</source>
         <target>Visualisierung und Design</target>
@@ -53,19 +126,28 @@
       <notes>
         <note category="description">department</note>
         <note category="meaning">infrastructure</note>
-        <note category="location">src/app/about/about.component.html:105</note>
-      </notes>
+        
+      <note category="location">src/app/about/about.component.html:147</note></notes>
       <segment>
         <source>Infrastruktur</source>
         <target>Infrastruktur</target>
       </segment>
+    </unit><unit id="consult">
+      <notes>
+        <note category="description">department</note>
+        <note category="meaning">consulting</note>
+        <note category="location">src/app/about/about.component.html:192</note>
+      </notes>
+      <segment state="final">
+        <source>Advice and Consulting</source>
+      <target>Advice and Consulting</target></segment>
     </unit>
     <unit id="dataHandlingProcessing">
       <notes>
         <note category="description">department</note>
         <note category="meaning">database and processing</note>
-        <note category="location">src/app/about/about.component.html:148</note>
-      </notes>
+        
+      <note category="location">src/app/about/about.component.html:104</note></notes>
       <segment>
         <source>Datenhaltung und -verarbeitung</source>
         <target>Datenhaltung und -verarbeitung</target>
@@ -74,8 +156,8 @@
     <unit id="versionDevelopmentFlag">
       <notes>
         <note category="description">development</note>
-        <note category="location">src/app/about/about.component.html:243</note>
-      </notes>
+        
+      <note category="location">src/app/about/about.component.html:241</note></notes>
       <segment>
         <source>development</source>
         <target>development</target>
@@ -84,9 +166,9 @@
     <unit id="versionUnknownFlag">
       <notes>
         <note category="description">unknown</note>
-        <note category="location">src/app/about/about.component.html:247</note>
-        <note category="location">src/app/about/about.component.html:251</note>
-      </notes>
+        
+        
+      <note category="location">src/app/about/about.component.html:245</note><note category="location">src/app/about/about.component.html:249</note></notes>
       <segment>
         <source>unknown</source>
         <target>unbekannt</target>
@@ -95,12 +177,77 @@
     <unit id="closeButton">
       <notes>
         <note category="description">close-button</note>
-        <note category="location">src/app/about/about.component.html:256</note>
-      </notes>
+        
+      <note category="location">src/app/about/about.component.html:254</note></notes>
       <segment>
         <source>Close</source>
         <target>Schließen</target>
       </segment>
+    </unit><unit id="infoboxHospitalBeds">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:14</note>
+      </notes>
+      <segment state="final">
+        <source>Krankenhäuser - Bettenauslastung</source>
+      <target>Krankenhäuser - Bettenauslastung</target></segment>
+    </unit><unit id="infoboxStates">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:26</note>
+      </notes>
+      <segment state="final">
+        <source>Länder</source>
+      <target>Länder</target></segment>
+    </unit><unit id="infoboxRegions">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:27</note>
+      </notes>
+      <segment state="final">
+        <source>Bezirke</source>
+      <target>Bezirke</target></segment>
+    </unit><unit id="infoboxCounties">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:28</note>
+      </notes>
+      <segment state="final">
+        <source>Kreise</source>
+      <target>Kreise</target></segment>
+    </unit><unit id="infoboxNone">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:29</note>
+      </notes>
+      <segment state="final">
+        <source>Keine</source>
+      <target>Keine</target></segment>
+    </unit><unit id="tooltipHospitalAddress">
+      <notes>
+        <note category="location">src/app/hospital-info/hospital-info.component.html:25</note>
+      </notes>
+      <segment state="final">
+        <source>Adresse: </source>
+      <target>Adresse: </target></segment>
+    </unit><unit id="tooltipHospitalContact">
+      <notes>
+        <note category="location">src/app/hospital-info/hospital-info.component.html:28</note>
+      </notes>
+      <segment state="final">
+        <source>Kontakt: </source>
+      <target>Kontakt: </target></segment>
+    </unit><unit id="tooltipHospitalLastUpdate">
+      <notes>
+        <note category="location">src/app/hospital-info/hospital-info.component.html:34</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Letzter Stand: </pc> <ph id="1" equiv="INTERPOLATION" disp="{{ data.Stand }}"/></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Letzter Stand: </pc> <ph id="1" equiv="INTERPOLATION" disp="{{ data.Stand }}"/></target></segment>
+    </unit><unit id="beds">
+      <notes>
+        <note category="description">beds</note>
+        <note category="meaning">legend</note>
+        <note category="location">src/app/legend/legend.component.html:18</note>
+      </notes>
+      <segment state="final">
+        <source>Bettenauslastung</source>
+      <target>Bettenauslastung</target></segment>
     </unit>
   </file>
 </xliff>

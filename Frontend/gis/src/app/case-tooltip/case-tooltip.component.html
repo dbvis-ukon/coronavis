@@ -6,19 +6,19 @@
     <thead>
       <tr>
         <th></th>
-        <th>Fälle Total</th>
-        <th colspan="4">Veränderung</th>
+        <th i18n="case-tooltip|cases@@cases">Fälle Total</th>
+        <th colspan="4" i18n="case-tooltip|changes@@changes">Veränderung</th>
       </tr>
       <tr>
         <th></th>
         <th>{{ this.datum | date:"d.M.y HH:mm" }}</th>
-        <th colspan="2">letzte 24h</th>
-        <th colspan="2">letzte 72h</th>
+        <th colspan="2" i18n="case-tooltip|24h@@24h">letzte 24h</th>
+        <th colspan="2" i18n="case-tooltip|72h@@72h">letzte 72h</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Erkrankte</td>
+        <td i18n="case-tooltip|sick@@sick">Erkrankte</td>
         <td>{{ this.combined[0].cases }}</td>
         <td>{{ this.combined[0].cases - this.combined[1].cases | plusminus }}</td>
         <td>({{ this.getPercentageChange(this.combined[0].cases, this.combined[1].cases)}})</td>
@@ -26,7 +26,7 @@
         <td>({{ this.getPercentageChange(this.combined[0].cases, this.combined[2].cases)}})</td>
       </tr>
       <tr>
-        <td>Todesfälle</td>
+        <td i18n="case-tooltip|deaths@@deaths">Todesfälle</td>
         <td>{{ this.combined[0].deaths }}</td>
         <td>{{ this.combined[0].deaths - this.combined[1].deaths | plusminus }}</td>
         <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[1].deaths)}})</td>
@@ -34,7 +34,7 @@
         <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[2].deaths)}})</td>
       </tr>
       <tr>
-        <td>Erkrankte je 100.000 Einwohner</td>
+        <td i18n="case-tooltip|sickScale@@sickScale">Erkrankte je 100.000 Einwohner</td>
         <td>{{ this.getCasesPer100kInhabitants(this.combined[0].cases) }}</td>
         <td>{{ this.getCasesPer100kInhabitants(this.combined[0].cases - this.combined[1].cases, true) }}</td>
         <td>({{ this.getPercentageChange(this.combined[0].cases, this.combined[1].cases)}})</td>
@@ -42,7 +42,7 @@
         <td>({{ this.getPercentageChange(this.combined[0].cases, this.combined[2].cases)}})</td>
       </tr>
       <tr>
-        <td>Todesfälle je 100.000 Einwohner</td>
+        <td i18n="case-tooltip|deathScale@@deathScale">Todesfälle je 100.000 Einwohner</td>
         <td>{{ this.getCasesPer100kInhabitants(this.combined[0].deaths) }}</td>
         <td>{{ this.getCasesPer100kInhabitants(this.combined[0].deaths - this.combined[1].deaths, true) }}</td>
         <td>({{ this.getPercentageChange(this.combined[0].deaths, this.combined[1].deaths)}})</td>
