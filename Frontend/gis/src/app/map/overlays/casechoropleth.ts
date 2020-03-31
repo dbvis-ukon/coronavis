@@ -13,12 +13,14 @@ import {
 } from '../options/covid-number-case-options';
 import {
   QuantitativeAggregatedRkiCaseNumberProperties,
-  QuantitativeAggregatedRkiCases,
-  QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties,
-  QuantitativeAggregatedRkiCasesProperties
+  QuantitativeAggregatedRkiCasesOverTime,
+  QuantitativeAggregatedRkiCasesOverTimeProperties
 } from 'src/app/repositories/types/in/quantitative-aggregated-rki-cases';
 
 export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTime> {
+  private typeAccessor: (d: QuantitativeAggregatedRkiCaseNumberProperties) => number;
+  private timeAccessor: (d: QuantitativeAggregatedRkiCasesOverTimeProperties) => QuantitativeAggregatedRkiCaseNumberProperties;
+
   constructor(
     name: string,
     hospitals: QuantitativeAggregatedRkiCasesOverTime,
@@ -27,90 +29,55 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
     private colorsService: ColormapService
   ) {
     super(name, hospitals);
+
+    switch (this.options.type) {
+      case CovidNumberCaseType.cases:
+        this.typeAccessor = d => d.cases;
+        break;
+      case CovidNumberCaseType.deaths:
+        this.typeAccessor = d => d.deaths;
+        break;
+    }
+
+    switch (this.options.timeWindow) {
+      case CovidNumberCaseTimeWindow.all:
+        this.timeAccessor = d => d.last;
+        break;
+      case CovidNumberCaseTimeWindow.twentyFourhours:
+        this.timeAccessor = d => d.yesterday;
+        break;
+      case CovidNumberCaseTimeWindow.seventyTwoHours:
+        this.timeAccessor = d => d.threeDaysAgo;
+        break;
+    }
+
   }
 
   private minMaxValues: [number, number];
   private minMaxNormValues: [number, number];
   private normalizeValues;
 
-
   private getCaseNumbers(data: QuantitativeAggregatedRkiCasesOverTimeProperties): number {
+    const prev = this.typeAccessor(this.timeAccessor(data));
+    const now = this.typeAccessor(data.last);
+
+    let unnormalizedResult = 0;
     if (this.options.change === CovidNumberCaseChange.absolute) {
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.all) {
-        if (this.options.type === CovidNumberCaseType.cases) {
-          if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-            return data.last.cases;
-          } else {
-            return data.last.cases / data.bevoelkerung;
-          }
-        }
-        if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-          return data.last.deaths;
-        } else {
-          return data.last.deaths / data.bevoelkerung;
-        }
-      }
-      if (this.options.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours) {
-        if (this.options.type === CovidNumberCaseType.cases) {
-          if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-            return data.last.cases - data.yesterday.cases;
-          } else {
-            return (data.last.cases - data.yesterday.cases) / data.bevoelkerung;
-          }
-        }
-        if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-          return data.last.deaths - data.yesterday.deaths;
-        } else {
-          return (data.last.deaths - data.yesterday.deaths) / data.bevoelkerung;
-        }
-      }
-      if (this.options.timeWindow === CovidNumberCaseTimeWindow.seventyTwoHours) {
-        if (this.options.type === CovidNumberCaseType.cases) {
-          if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-            return data.last.cases - data.threeDaysAgo.cases;
-          } else {
-            return (data.last.cases - data.threeDaysAgo.cases) / data.bevoelkerung;
-          }
-        }
-        if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-          return data.last.deaths - data.threeDaysAgo.deaths;
-        } else {
-          return (data.last.deaths - data.threeDaysAgo.deaths) / data.bevoelkerung;
-        }
+        unnormalizedResult = now;
+      } else {
+        unnormalizedResult = now - prev;
       }
     } else {
       if (this.options.timeWindow === CovidNumberCaseTimeWindow.all) {
         throw "Unsupported configuration -- cannot show percentage change for single value";
       }
-      if (this.options.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours) {
-        if (this.options.type === CovidNumberCaseType.cases) {
-          if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-            return ((data.last.cases - data.yesterday.cases) / data.yesterday.cases) * 100 || 0;
-          } else {
-            return (((data.last.cases - data.yesterday.cases) / data.yesterday.cases) * 100 || 0) / data.bevoelkerung;
-          }
-        }
-        if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-          return ((data.last.deaths - data.yesterday.deaths) / data.yesterday.deaths) * 100 || 0;
-        } else {
-          return (((data.last.deaths - data.yesterday.deaths) / data.yesterday.deaths) * 100 || 0) / data.bevoelkerung;
-        }
-      }
-      if (this.options.timeWindow === CovidNumberCaseTimeWindow.seventyTwoHours) {
-        if (this.options.type === CovidNumberCaseType.cases) {
-          if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-            return ((data.last.cases - data.threeDaysAgo.cases) / data.threeDaysAgo.cases) * 100 || 0;
-          } else {
-            return (((data.last.cases - data.threeDaysAgo.cases) / data.threeDaysAgo.cases) * 100 || 0) / data.bevoelkerung;
-          }
-        }
-        if (this.options.normalization === CovidNumberCaseNormalization.absolut) {
-          return ((data.last.deaths - data.threeDaysAgo.deaths) / data.threeDaysAgo.deaths) * 100 || 0;
-        } else {
-          return (((data.last.deaths - data.threeDaysAgo.deaths) / data.threeDaysAgo.deaths) * 100 || 0) / data.bevoelkerung;
-        }
-      }
+      unnormalizedResult = ((now - prev) / prev) * 100 || 0;
     }
+
+    return this.options.normalization === CovidNumberCaseNormalization.absolut ?
+      unnormalizedResult :
+      unnormalizedResult / data.bevoelkerung;
   }
 
   public get MinMax(): [number, number] {
