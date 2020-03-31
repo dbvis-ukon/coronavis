@@ -1,15 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, Inject, LOCALE_ID} from '@angular/core';
 import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {
   CovidNumberCaseChange,
   CovidNumberCaseNormalization,
-  CovidNumberCaseOptions,
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from '../map/options/covid-number-case-options';
-import { ColormapService } from '../services/colormap.service';
 import { BedType } from '../map/options/bed-type.enum';
-import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { MapOptions } from '../map/options/map-options';
 import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
@@ -19,6 +16,8 @@ import { GlyphLayerService } from '../services/glyph-layer.service';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
 import {APP_CONFIG_KEY} from "../../constants";
+import { QualitativeColormapService } from '../services/qualitative-colormap.service';
+import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 
 @Component({
   selector: 'app-infobox',
@@ -28,17 +27,18 @@ import {APP_CONFIG_KEY} from "../../constants";
 export class InfoboxComponent implements OnInit {
 
   constructor(
-    private colormapService: ColormapService,
+    private colormapService: QualitativeColormapService,
     private dialogService: MatDialog,
     private osmLayerService: OSMLayerService,
     private glyphLayerService: GlyphLayerService,
     private bedChoroplethLayerService: BedChoroplethLayerService,
-    private caseChoroplethLayerService: CaseChoroplethLayerService
+    private caseChoroplethLayerService: CaseChoroplethLayerService,
+    @Inject(LOCALE_ID) protected localeId: string
   ) { }
 
   glyphLegend;
 
-  glyphLegendColors = ColormapService.bedStati;
+  glyphLegendColors = QualitativeColormapService.bedStati;
 
   infoboxExtended = true;
 
@@ -62,6 +62,13 @@ export class InfoboxComponent implements OnInit {
 
   eAggregationLevels = AggregationLevel;
 
+  locales: string[] = [
+    'en',
+    'de'
+  ];
+
+  selectedLocale: string;
+
 
   glyphLoading = false;
   bedChoroplethLoading = false;
@@ -74,6 +81,11 @@ export class InfoboxComponent implements OnInit {
     this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
     this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);
 
+    if(this.locales.indexOf(this.localeId) > -1) {
+      this.selectedLocale = this.localeId;
+    } else {
+      this.selectedLocale = 'en';
+    }
 
     this.glyphLegend = [
       {name: 'ICU low', accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
@@ -157,4 +169,16 @@ export class InfoboxComponent implements OnInit {
     this.dialogService.open(ImpressumComponent);
   }
 
+  openVideo() {
+    window.open('https://video.covis.dbvis.de', '_blank');
+    // location.href = 'https://video.covis.dbvis.de';
+  }
+  changeLocale(evt) {
+    location.href = `/${evt.value}/`;
+  }
+
+
+  openHelp() {
+    this.dialogService.open(HelpDialogComponent);
+  }
 }

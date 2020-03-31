@@ -88,37 +88,37 @@ export class MapComponent implements OnInit {
         {
           tileSize: 256,
           // zoomOffset: -1,
-          attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
-            '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          // attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
+          //   '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         });
 
     // create map, set initial view to basemap and zoom level to center of BW
     const defaultView: LatLngTuple = [48.6813312, 9.0088299];
     const defaultZoom = 9;
 
-    // let initialView = JSON.parse(localStorage.getItem(MAP_VIEW_KEY))
-    // let initialZoom = +localStorage.getItem(MAP_ZOOM_KEY);
+    let initialView = JSON.parse(localStorage.getItem(MAP_VIEW_KEY))
+    let initialZoom = +localStorage.getItem(MAP_ZOOM_KEY);
 
-    // if (initialView && initialZoom) {
-    //   let snackbar = this.snackbar.open("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt", "Zurücksetzen", {
-    //     politeness: "polite",
-    //     duration: 40000
-    //   });
-    //   snackbar.onAction().subscribe(() => {
-    //     localStorage.removeItem(MAP_ZOOM_KEY);
-    //     localStorage.removeItem(MAP_VIEW_KEY);
-    //   })
-    // } else {
-    //   initialView = defaultView;
-    //   initialZoom = defaultZoom;
-    // }
+    if (initialView && initialZoom) {
+      let snackbar = this.snackbar.open("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt", "Zurücksetzen", {
+        politeness: "polite",
+        duration: 40000
+      });
+      snackbar.onAction().subscribe(() => {
+        localStorage.removeItem(MAP_ZOOM_KEY);
+        localStorage.removeItem(MAP_VIEW_KEY);
+      })
+    } else {
+      initialView = defaultView;
+      initialZoom = defaultZoom;
+    }
 
     this.mymap = L.map('main', {
-      minZoom: 7,
-      maxZoom: 10,
+      minZoom: 6,
+      maxZoom: 11,
       layers: [tiledMap],
       zoomControl: false
-    }).setView(defaultView, defaultZoom);
+    }).setView(initialView, initialZoom);
 
     this.mymap.on('moveend', () => {
       localStorage.setItem(MAP_VIEW_KEY, JSON.stringify(this.mymap.getBounds().getCenter()));
@@ -305,7 +305,7 @@ export class MapComponent implements OnInit {
 
     if(o.enabled) {
 
-      this.bedChoroplethLayerService.getLayer(o).subscribe(factory => {
+      this.bedChoroplethLayerService.getQualitativeLayer(o).subscribe(factory => {
 
         const layer = factory.createOverlay();
 

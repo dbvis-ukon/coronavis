@@ -29,6 +29,12 @@
           "skipTests": true
         }
       },
+      "i18n": {
+        "locales": {
+          "en": "src/i18n/messages.en.xlf",
+          "de": "src/i18n/messages.de.xlf"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -56,6 +62,20 @@
             "scripts": []
           },
           "configurations": {
+            "de": {
+              "aot": true,
+              "outputPath": "dist/de/",
+              "i18nFile": "src/i18n/messages.de.xlf",
+              "i18nFormat": "xlf2",
+              "i18nLocale": "de"
+            },
+            "en": {
+              "aot": true,
+              "outputPath": "dist/en/",
+              "i18nFile": "src/i18n/messages.en.xlf",
+              "i18nFormat": "xlf2",
+              "i18nLocale": "en"
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -96,6 +116,12 @@
             }
           },
           "configurations": {
+            "de": {
+              "browserTarget": "gis:build:de"
+            },
+            "en": {
+              "browserTarget": "gis:build:en"
+            },
             "production": {
               "browserTarget": "gis:build:production"
             }
@@ -105,6 +131,20 @@
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "browserTarget": "gis:build"
+          },
+          "configurations": {
+            "de": {
+              "outputPath": "src/i18n/",
+              "outFile": "messages.de.xlf",
+              "i18nFormat": "xlf2",
+              "i18nLocale": "de"
+            },
+            "en": {
+              "outputPath": "src/i18n/",
+              "outFile": "messages.en.xlf",
+              "i18nFormat": "xlf2",
+              "i18nLocale": "de"
+            }
           }
         },
         "test": {
@@ -147,6 +187,21 @@
           "configurations": {
             "production": {
               "devServerTarget": "gis:serve:production"
+            }
+          }
+        },
+        "xliffmerge": {
+          "builder": "@ngx-i18nsupport/tooling:xliffmerge",
+          "options": {
+            "xliffmergeOptions": {
+              "i18nFormat": "xlf2",
+              "srcDir": "src/i18n",
+              "genDir": "src/i18n",
+              "defaultLanguage": "de",
+              "languages": [
+                "de",
+                "en"
+              ]
             }
           }
         }
