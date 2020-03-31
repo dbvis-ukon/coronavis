@@ -18,6 +18,10 @@
 </table>
 <br>
 
+<div *ngFor="let s of specs">
+  <app-vega [spec]="s"></app-vega>
+</div>
+
 <div *ngIf="mode === 'dialog'">
   <!--h3>{{ data.Name }}</h3>
   <mat-divider></mat-divider-->
@@ -25,8 +29,8 @@
     <strong>Adresse: </strong> {{ data.Adress }}
   </p>
   <p>
-    <strong>Kontakt: </strong> 
-    <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a> 
+    <strong>Kontakt: </strong>
+    <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a>
     <span *ngIf="!url">{{ contactMsg }}</span>
   </p>
 </div>
