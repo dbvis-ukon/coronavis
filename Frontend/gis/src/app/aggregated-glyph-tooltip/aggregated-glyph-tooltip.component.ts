@@ -33,6 +33,7 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
   templateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "description": "A simple bar chart with rounded corners at the end of the bar.",
+    "height": 120,
     "data": {
       "values": [
         {"cat": "Verfügbar", "num": 6, "color": "red"},

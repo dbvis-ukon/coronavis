@@ -127,7 +127,7 @@ export class HospitalInfoComponent implements OnInit {
         spec.data.values = dataValues;
 
         if(!this.isSingleHospital) {
-          spec.mark.interpolate = 'step-before';
+          spec.mark.interpolate = 'monotone';
         }
 
         // also overwrite the title
