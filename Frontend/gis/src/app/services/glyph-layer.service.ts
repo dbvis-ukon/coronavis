@@ -62,7 +62,8 @@ export class GlyphLayerService {
           result[0],
           this.tooltipService,
           this.colormapService,
-          options
+          options,
+          this.matDialog
         );
 
         const factoryBg = new LandkreiseHospitalsLayer(name + '_bg', result[1], this.tooltipService);

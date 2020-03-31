@@ -34,7 +34,6 @@ import { ImpressumComponent } from './impressum/impressum.component';
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatStepperModule } from "@angular/material/stepper";
 
-import {AggregatedGlyphTooltipComponent} from './aggregated-glyph-tooltip/aggregated-glyph-tooltip.component';
 import { VegaComponent } from './vega/vega.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 
@@ -56,7 +55,6 @@ import { HelpDialogComponent } from './help-dialog/help-dialog.component';
     PlusminusPipe,
     AboutComponent,
     ImpressumComponent,
-    AggregatedGlyphTooltipComponent,
     VegaComponent,
     HelpDialogComponent,
   ],

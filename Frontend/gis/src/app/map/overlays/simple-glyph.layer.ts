@@ -154,7 +154,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .on('mouseenter', function(d1) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
-        t.diviHospital = d1.properties;
+        t.tooltipData = d1.properties;
         d3.select(this).raise();
       })
       .on('mouseleave', () => this.tooltipService.close())

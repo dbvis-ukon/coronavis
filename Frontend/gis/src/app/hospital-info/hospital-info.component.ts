@@ -5,6 +5,7 @@ import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hos
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import {BedType} from "../map/options/bed-type.enum";
 import * as moment from 'moment';
+import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
 
 @Component({
   selector: 'app-hospital-info',
@@ -24,11 +25,12 @@ export class HospitalInfoComponent implements OnInit {
   mode: 'dialog' | 'tooltip';
   @Input()
   data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
-  glyphLegendColors = QualitativeColormapService.bedStati;
+
+  glyphLegendColors = QualitativeColormapService.bedStati.filter(f => f !== 'Keine Information');
 
   templateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-    "width": 370, "height": 50,
+    "width": 320, "height": 50,
     "data": {"values":[
       ]},
     "mark": {"type": "area", "interpolate": "step-before"},
@@ -45,7 +47,56 @@ export class HospitalInfoComponent implements OnInit {
     }
   };
 
+  barChartTemplateSpec = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "height": 100,
+    "description": "A simple bar chart with rounded corners at the end of the bar.",
+    "data": {
+      "values": [
+        {"cat": "Verfügbar", "num": 6, "color": "red"},
+        {"cat": "Begrenzt", "num": 3, "color": "green"},
+        {"cat": "Ausgelastet", "num": 1, "color": "blue"},
+        {"cat": "Nicht verfügbar", "num": 0, "color": "yellow"}
+      ]
+    },
+    "mark": {"type": "bar"},
+    "encoding": {
+      "x": {
+        "field": "cat",
+        "type": "nominal",
+        "title": "ICU Low care",
+        "sort": ["Verfügbar", "Begrenzt", "Ausgelastet", "Nicht verfügbar"],
+        "axis": {
+          "labels": false
+        }
+        },
+      "y": {
+        "field": "num",
+        "type": "quantitative",
+        "title": "Anzahl Krankenhäuser",
+        "scale": {"domain": [0, 10]},
+        "axis": {"tickMinStep": 1, "tickCount": 5},
+        },
+      "color": {
+        "field": "color", "type": "nominal", "scale": null
+      }
+    }, "layer": [{
+    "mark": "bar"
+  }, {
+    "mark": {
+      "type": "text",
+      "align": "center",
+      "dy": -5
+    },
+    "encoding": {
+      "text": {"field": "num", "type": "quantitative"}
+    }
+  }]
+  };
+
   specs = [];
+
+  barChartSpecs = [];
 
   bedAccessors = ['icu_low_care', 'icu_high_care', 'ecmo_state'];
   bedAccessorsMapping = {'icu_low_care': 'ICU - Low Care', 'icu_high_care': 'ICU - High Care', 'ecmo_state': 'ECMO'};
@@ -61,14 +112,16 @@ export class HospitalInfoComponent implements OnInit {
 
   warnOfOutdatedData: boolean;
 
+  totalNumberOfHospitals: number = 0;
+
   constructor(private colormapService: QualitativeColormapService) {}
 
   ngOnInit(): void {
+
     if((this.data as SingleHospitalOut<QualitativeTimedStatus>).address){
       this.isSingleHospital = true;
       this.singleHospital = this.data as SingleHospitalOut<QualitativeTimedStatus>;
     }
-
 
     if(this.data.developments) {
       this.latestDevelopment = this.data.developments[this.data.developments.length - 1];
@@ -81,26 +134,119 @@ export class HospitalInfoComponent implements OnInit {
       this.warnOfOutdatedData = moment().subtract(1, 'day').isAfter(moment(this.lastUpdate));
     }
 
-    if(this.isSingleHospital){
+    
 
-      if(this.singleHospital.contact.indexOf('http')>-1){
-        this.contact = 'http' + this.singleHospital.contact.split('http')[1];
-        this.url = true;
+    this.prepareAddressAndContactInformation();
 
-        this.contactMsg = this.singleHospital.contact.replace(this.contact, '').replace('Website', '').trim();
+    this.prepareBarCharts();
 
-        if (this.contactMsg === '') {
-          this.contactMsg = 'Webseite';
+    this.prepareTemporalCharts();
+
+    
+  }
+  // getTrendIcon(entries: TimestampedValue[]): string {
+  //   const latest = getLatest(entries);
+  //   return latest >= 0 ? (latest == 0 ? 'trending_flat' : 'trending_up') : 'trending_down';
+  // }
+
+  getCapacityStateColor(bedStatus: string) {
+    return this.colormapService.getSingleHospitalColormap()(bedStatus);
+  }
+
+  getStatusColorFor(bedStatus: BedType) {
+    return this.colormapService.getLatestBedStatusColor(this.singleHospital.developments, bedStatus);
+  }
+
+  getStatusDescriptionFor(bedStatus: BedType) {
+    const latest = this.singleHospital.developments[this.singleHospital.developments.length - 1];
+    const counts = this.colormapService.propertyAccessor(bedStatus)(latest);
+
+    return Object.keys(counts).find(s => s !== "") ?? "Keine Information";
+  }
+
+  getGlyphColor(str: string) {
+    return this.colormapService.getSingleHospitalColormap()(str);
+  }
+
+
+  private prepareBarCharts() {
+    const bedStati = this.glyphLegendColors;
+
+    this.barChartSpecs = [];
+    let maxNum = 0;
+
+    for(const bedAccessor of this.bedAccessors) {
+      const dataValues = [];
+
+      // fill the data object
+      for(const bedStatus of bedStati) {
+        const v = this.latestDevelopment[bedAccessor][bedStatus] || 0;
+
+        if(bedAccessor === this.bedAccessors[0]) {
+          this.totalNumberOfHospitals += v;
         }
-      }else{
-        this.contact = this.singleHospital.contact;
-        this.url = false;
 
-        this.contactMsg = this.singleHospital.contact;
+
+        dataValues.push(
+          {
+            cat: bedStatus,
+            num: v,
+            color: this.getCapacityStateColor(bedStatus)
+          }
+        );
+
+        if(v > maxNum) {
+          maxNum = v;
+        }
       }
+
+
+      // hack deep clone spec
+      const spec = JSON.parse(JSON.stringify(this.barChartTemplateSpec));
+
+      // inject data values
+      spec.data.values = dataValues;
+
+      // also overwrite the title
+      spec.encoding.x.title = '';
+
+      this.barChartSpecs.push({
+        title: this.bedAccessorsMapping[bedAccessor],
+        chart: spec
+      });
+    }
+
+    // set the max value
+    this.barChartSpecs.forEach(spec => {
+      spec.chart.encoding.y.scale.domain = [0, maxNum+1];
+      spec.chart.encoding.y.axis.tickCount = Math.min(maxNum+1, 5);
+    });
+  }
+
+  private prepareAddressAndContactInformation() {
+    if(!this.isSingleHospital) {
+      return false;
     }
 
 
+    if(this.singleHospital.contact.indexOf('http')>-1){
+      this.contact = 'http' + this.singleHospital.contact.split('http')[1];
+      this.url = true;
+
+      this.contactMsg = this.singleHospital.contact.replace(this.contact, '').replace('Website', '').trim();
+
+      if (this.contactMsg === '') {
+        this.contactMsg = 'Webseite';
+      }
+    }else{
+      this.contact = this.singleHospital.contact;
+      this.url = false;
+
+      this.contactMsg = this.singleHospital.contact;
+    }
+  }
+
+  private prepareTemporalCharts() {
     // var data = [{"development" : {"timestamp" : "2020-03-27T14:49:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-28T09:42:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-29T10:38:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-30T09:18:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Begrenzt" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-31T09:04:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}];
     const bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet']; //FIXME add "Nicht verfügbar" if should be displayed
 
@@ -191,28 +337,4 @@ export class HospitalInfoComponent implements OnInit {
       });
     }
   }
-  // getTrendIcon(entries: TimestampedValue[]): string {
-  //   const latest = getLatest(entries);
-  //   return latest >= 0 ? (latest == 0 ? 'trending_flat' : 'trending_up') : 'trending_down';
-  // }
-
-  getCapacityStateColor(bedStatus: string) {
-    return this.colormapService.getSingleHospitalColormap()(bedStatus);
-  }
-
-  getStatusColorFor(bedStatus: BedType) {
-    return this.colormapService.getLatestBedStatusColor(this.singleHospital.developments, bedStatus);
-  }
-
-  getStatusDescriptionFor(bedStatus: BedType) {
-    const latest = this.singleHospital.developments[this.singleHospital.developments.length - 1];
-    const counts = this.colormapService.propertyAccessor(bedStatus)(latest);
-
-    return Object.keys(counts).find(s => s !== "") ?? "Keine Information";
-  }
-
-  getGlyphColor(str: string) {
-    return this.colormapService.getSingleHospitalColormap()(str);
-  }
-
 }

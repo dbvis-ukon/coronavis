@@ -6,13 +6,14 @@ import {FeatureCollection, MultiPolygon, Feature} from "geojson";
 import {Observable} from "rxjs";
 import {BedGlyphOptions} from '../options/bed-glyph-options';
 import {BedType} from '../options/bed-type.enum';
-import {AggregatedGlyphTooltipComponent} from "../../aggregated-glyph-tooltip/aggregated-glyph-tooltip.component";
 import {ForceDirectedLayout} from 'src/app/util/forceDirectedLayout';
 import {GlyphLayer} from "./GlyphLayer";
-import { getLatest } from 'src/app/util/timestamped-value';
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
+import { MatDialog } from '@angular/material/dialog';
+import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
+import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 
 export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
@@ -29,7 +30,8 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     private data: FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>,
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
-    private glyphOptions: Observable<BedGlyphOptions>
+    private glyphOptions: Observable<BedGlyphOptions>,
+    private dialog: MatDialog
 ) {
     super(name, data);
     console.log(name, data);
@@ -141,11 +143,16 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       })
       .on('mouseenter touchstart', function (d1) {
         const evt: MouseEvent = d3.event;
-        const t = self.tooltipService.openAtElementRef(AggregatedGlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
-        t.diviAggregatedHospital = d1.properties;
+        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
+        t.tooltipData = d1.properties;
         d3.select(this).raise();
       })
-      .on('mouseleave touchend', () => this.tooltipService.close());
+      .on('mouseleave touchend', () => this.tooltipService.close())
+      .on('click', d => {
+        this.dialog.open(HospitalInfoDialogComponent, {
+          data: d.properties
+        });
+      });
       // .on('mouseenter', d1 => {
       //   const evt: MouseEvent = d3.event;
       //   const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });

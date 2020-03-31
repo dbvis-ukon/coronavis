@@ -7,7 +7,7 @@ import { AbstractTimedStatus, QualitativeTimedStatus } from 'src/app/repositorie
 import { FeatureCollection, MultiPolygon, Feature, Geometry } from 'geojson';
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
-import { AggregatedGlyphTooltipComponent } from 'src/app/aggregated-glyph-tooltip/aggregated-glyph-tooltip.component';
+import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 
 export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<FeatureCollection<MultiPolygon, AggregatedHospitalOut<T>>> {
 
@@ -42,12 +42,12 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<F
       };
 
       const tooltipComponent = this.tooltipService
-        .openAtElementRef(AggregatedGlyphTooltipComponent, {
+        .openAtElementRef(GlyphTooltipComponent, {
           x: e.originalEvent.clientX,
           y: e.originalEvent.clientY
         }, onCloseAction);
 
-      tooltipComponent.diviAggregatedHospital = feature.properties;
+      tooltipComponent.tooltipData = feature.properties;
 
       // tooltipComponent.name = feature.properties.name;
       // tooltipComponent.combined = feature.properties.combined;

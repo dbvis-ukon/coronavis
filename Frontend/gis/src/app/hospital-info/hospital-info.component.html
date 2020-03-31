@@ -1,9 +1,13 @@
-<div  *ngIf="isSingleHospital === true">
-  <h3>{{ data.name }}</h3>
+<div>
+  <h3 class="name">{{ data.name }}</h3>
+
+  <p class="numHospitals" *ngIf="!isSingleHospital">({{ totalNumberOfHospitals }} gemeldete Krankenhäuser)</p>
   <mat-divider></mat-divider>
 
   <div class="content">
-    <h4 i18n="@@tooltipHospitalLastUpdate">Letzter Stand: <span *ngIf="latestDevelopment">({{ lastUpdate | date:"dd.MM.yyy, HH:mm" }} Uhr)</span></h4>
+    <div *ngIf="!data.developments" i18n="@@countyDataNotFound" class="noData">Es stehen keine Daten zur Verfügung.</div>
+
+    <h4 i18n="@@tooltipHospitalLastUpdate" *ngIf="latestDevelopment">Letzter Stand: <span>({{ lastUpdate | date:"dd.MM.yyy, HH:mm" }} Uhr)</span></h4>
     
 
 
@@ -13,7 +17,18 @@
       <h5>Die Daten sind älter als 24 Stunden.</h5>
     </div>
 
-    <table>
+
+    <div class="barchartcontainer" *ngIf="isSingleHospital === false">
+
+      <div *ngFor="let s of barChartSpecs">
+        <h5 class="chart-title">{{ s.title }}</h5>
+        <app-vega [spec]="s.chart"></app-vega>
+      </div>
+
+    </div>
+
+
+    <table *ngIf="isSingleHospital">
       <tbody>
       <tr>
         <td><strong>ICU - Low Care:</strong> </td>
@@ -90,7 +105,7 @@
 </div>
 </div>
 
-<div *ngIf="mode === 'dialog'">
+<div *ngIf="mode === 'dialog' && isSingleHospital">
   <!--h3>{{ data.Name }}</h3>
   <mat-divider></mat-divider-->
   <p style="margin-top: 10px;">

@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 
 @Component({
   selector: 'app-glyph-tooltip',
@@ -24,8 +25,7 @@ import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hos
 export class GlyphTooltipComponent implements OnInit {
 
   @Input()
-  diviHospital: SingleHospitalOut<QualitativeTimedStatus>;
-  name: string;
+  tooltipData: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
 
   constructor() {
   }
