@@ -3,6 +3,7 @@ import { QualitativeColormapService } from '../services/qualitative-colormap.ser
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
+import {BedType} from "../map/options/bed-type.enum";
 
 @Component({
   selector: 'app-hospital-info',
@@ -15,6 +16,8 @@ export class HospitalInfoComponent implements OnInit {
   url: boolean;
 
   contactMsg: string;
+
+  public eBedType = BedType;
 
   @Input()
   mode: 'dialog' | 'tooltip';
@@ -30,11 +33,11 @@ export class HospitalInfoComponent implements OnInit {
     "encoding": {
       "x": {
         "field": "Datum", "type": "temporal",
-        "axis": {"domain": false, "format": "%Y-%m-%d", "tickSize": 0}
+        "axis": {"domain": false, "format": "%d.%m", "tickSize": 0}
       },
       "y": {
         "field": "num", "type": "quantitative",
-        "axis": {"title": "Anzahl KH"}
+        "axis": {"title": "Anzahl KH", "tickMinStep": 1}
       },
      "color": {"type": "nominal", "field":"Kategorie", "scale":{"domain": [], "range": []}}
     }
@@ -53,13 +56,17 @@ export class HospitalInfoComponent implements OnInit {
   constructor(private colormapService: QualitativeColormapService) {}
 
   ngOnInit(): void {
+    if((this.data as SingleHospitalOut<QualitativeTimedStatus>).address){
+      this.isSingleHospital = true;
+      this.singleHospital = this.data as SingleHospitalOut<QualitativeTimedStatus>;
+    }
+
+
     if(this.data.developments) {
       this.latestDevelopment = this.data.developments[this.data.developments.length - 1];
     }
 
-    if((this.data as SingleHospitalOut<QualitativeTimedStatus>).address){
-        this.isSingleHospital = true;
-        this.singleHospital = this.data as SingleHospitalOut<QualitativeTimedStatus>;
+    if(this.isSingleHospital){
 
       if(this.singleHospital.contact.indexOf('http')>-1){
         this.contact = 'http' + this.singleHospital.contact.split('http')[1];
@@ -150,7 +157,6 @@ export class HospitalInfoComponent implements OnInit {
       });
     }
   }
-
   // getTrendIcon(entries: TimestampedValue[]): string {
   //   const latest = getLatest(entries);
   //   return latest >= 0 ? (latest == 0 ? 'trending_flat' : 'trending_up') : 'trending_down';
@@ -159,5 +165,17 @@ export class HospitalInfoComponent implements OnInit {
   getCapacityStateColor(bedStatus: string) {
     return this.colormapService.getSingleHospitalColormap()(bedStatus);
   }
+
+  getStatusColorFor(bedStatus: BedType) {
+    return this.colormapService.getLatestBedStatusColor(this.singleHospital.developments, bedStatus);
+  }
+
+  getStatusDescriptionFor(bedStatus: BedType) {
+    const latest = this.singleHospital.developments[this.singleHospital.developments.length - 1];
+    const counts = this.colormapService.propertyAccessor(bedStatus)(latest);
+
+    return Object.keys(counts).find(s => s !== "") ?? "Keine Information";
+  }
+
 
 }

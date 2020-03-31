@@ -1,16 +1,21 @@
 <div class="main">
-  <h3>{{ diviAggregatedHospital.name }}</h3>
+  <h3>{{ diviAggregatedHospital.name }} ({{ totalNumberOfHospitals }} gemeldete Krankenhäuser)</h3>
   <mat-divider></mat-divider>
 
-  <div *ngIf="!diviAggregatedHospital.developments" i18n="@@countyDataNotFound" class="noData">Für diesen Landkreis stehen keine Daten zur Verfügung.</div>
+  <div class="content">
+    <div *ngIf="!diviAggregatedHospital.developments" i18n="@@countyDataNotFound" class="noData">Für diesen Landkreis stehen keine Daten zur Verfügung.</div>
+    <div *ngIf="diviAggregatedHospital.developments">
+      <strong i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </strong><span *ngIf="latestDevelopment">({{ latestDevelopment?.last_update | date:"dd.MM.yyy, HH:mm" }} Uhr)</span>
 
-  <div class="barchartcontainer">
+      <div class="barchartcontainer">
 
-    <div *ngFor="let s of specs">
-      <app-vega [spec]="s"></app-vega>
+        <div *ngFor="let s of specs">
+          <app-vega [spec]="s"></app-vega>
+        </div>
+
+      </div>
+
+      <app-hospital-info [data]="diviAggregatedHospital" mode="tooltip"></app-hospital-info>
     </div>
-
   </div>
-
-  <app-hospital-info [data]="diviAggregatedHospital" mode="tooltip"></app-hospital-info>
 </div>
