@@ -25,6 +25,9 @@ import { switchMap, map } from 'rxjs/operators';
 import {APP_CONFIG_KEY, MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
+export enum MapOptionKeys {
+  bedGlyphOptions, bedBackgroundOptions, covidNumberCaseOptions, showOsmHospitals, showOsmHeliports
+}
 
 @Component({
   selector: 'app-map',
@@ -72,6 +75,8 @@ export class MapComponent implements OnInit {
   private covidNumberCaseOptionsKeyToLayer = new Map<String, L.GeoJSON<any>>();
 
   private _lastBedCoroplethLayer: L.GeoJSON<any> | null;
+
+  private previousOptions = new Map();
 
   constructor(
     private bedChoroplethLayerService: BedChoroplethLayerService,
@@ -135,32 +140,43 @@ export class MapComponent implements OnInit {
       return;
     }
 
+    const bedGlyphOptions = JSON.stringify(mo.bedGlyphOptions);
+    if (this.previousOptions.get(MapOptionKeys.bedGlyphOptions) ?? "" !== bedGlyphOptions) {
+      this.updateGlyphMapLayers(mo.bedGlyphOptions);
+      this.bedGlyphOptions$.next(mo.bedGlyphOptions);
+    }
+    this.previousOptions.set(MapOptionKeys.bedGlyphOptions, bedGlyphOptions);
 
-    this.updateGlyphMapLayers(mo.bedGlyphOptions);
+    const bedBackgroundOptions = JSON.stringify(mo.bedBackgroundOptions);
+    if (this.previousOptions.get(MapOptionKeys.bedBackgroundOptions) ?? "" !== bedBackgroundOptions) {
+      this.updateBedBackgroundLayer(mo.bedBackgroundOptions);
+    }
+    this.previousOptions.set(MapOptionKeys.bedBackgroundOptions, bedBackgroundOptions);
 
-    this.bedGlyphOptions$.next(mo.bedGlyphOptions);
+    const covidNumberCaseOptions = JSON.stringify(mo.covidNumberCaseOptions);
+    if (this.previousOptions.get(MapOptionKeys.covidNumberCaseOptions) ?? "" !== covidNumberCaseOptions) {
+      this.updateCaseChoroplethLayers(mo.covidNumberCaseOptions);
+    }
+    this.previousOptions.set(MapOptionKeys.covidNumberCaseOptions, covidNumberCaseOptions);
 
-    this.updateBedBackgroundLayer(mo.bedBackgroundOptions);
 
-    this.updateCaseChoroplethLayers(mo.covidNumberCaseOptions);
-
-    if (mo.showOsmHospitals) {
+    if (mo.showOsmHospitals && !this.osmHospitalsLayer) {
       this.osmLayerService.getOSMHospitalLayer()
       .subscribe(l => {
         this.osmHospitalsLayer = l.createOverlay();
         this.mymap.addLayer(this.osmHospitalsLayer);
       })
-    } else if (this.osmHospitalsLayer) {
+    } else if (!mo.showOsmHospitals && this.osmHospitalsLayer) {
       this.mymap.removeLayer(this.osmHospitalsLayer);
     }
 
-    if (mo.showOsmHeliports) {
+    if (mo.showOsmHeliports && !this.osmHeliportsLayer) {
       this.osmLayerService.getOSMHeliportLayer()
       .subscribe(l => {
         this.osmHeliportsLayer = l.createOverlay();
         this.mymap.addLayer(this.osmHeliportsLayer);
       })
-    } else if (this.osmHeliportsLayer) {
+    } else if (!mo.showOsmHeliports && this.osmHeliportsLayer) {
       this.mymap.removeLayer(this.osmHeliportsLayer);
     }
   }
