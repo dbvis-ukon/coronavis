@@ -31,9 +31,11 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { AboutComponent } from './about/about.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatStepperModule } from "@angular/material/stepper";
 
 import {AggregatedGlyphTooltipComponent} from './aggregated-glyph-tooltip/aggregated-glyph-tooltip.component';
 import { VegaComponent } from './vega/vega.component';
+import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 
 
 @NgModule({
@@ -55,6 +57,7 @@ import { VegaComponent } from './vega/vega.component';
     ImpressumComponent,
     AggregatedGlyphTooltipComponent,
     VegaComponent,
+    HelpDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,7 +78,8 @@ import { VegaComponent } from './vega/vega.component';
     MatFormFieldModule,
     MatDialogModule,
     MatProgressBarModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatStepperModule
   ],
   providers: [],
   bootstrap: [AppComponent]
