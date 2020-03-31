@@ -34,7 +34,6 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "height": 100,
     "description": "A simple bar chart with rounded corners at the end of the bar.",
-    "height": 120,
     "data": {
       "values": [
         {"cat": "Verfügbar", "num": 6, "color": "red"},
@@ -115,7 +114,7 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
         if(bedAccessor === this.bedAccessors[0]) {
           this.totalNumberOfHospitals += v;
         }
-        
+
 
         dataValues.push(
           {
