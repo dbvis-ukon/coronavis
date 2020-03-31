@@ -100,12 +100,18 @@ export class QualitativeColormapService {
     }
   
     getLatestBedStatusColor(t: ArrayLike<QualitativeTimedStatus>, type: BedType) {
+      if(!t) {
+        return this.getBedStatusColor(null, this.propertyAccessor(type));
+      }
       const latest = t[t.length -1];
   
       return this.getBedStatusColor(latest, this.propertyAccessor(type));
     }
 
   getBedStatusColor(latest: QualitativeTimedStatus, f: (d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts): string {
+    if(!latest) {
+      return this.singleHospitalCM("Keine Information");
+    }
     const properties = f(latest);
 
     const score = this.getScore(properties);
