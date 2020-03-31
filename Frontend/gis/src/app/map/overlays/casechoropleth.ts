@@ -131,7 +131,7 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
         fillOpacity: 0.7
       });
 
-      l.bringToFront();
+      // l.bringToFront();
     };
 
 
