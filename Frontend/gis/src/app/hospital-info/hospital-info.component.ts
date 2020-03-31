@@ -28,7 +28,7 @@ export class HospitalInfoComponent implements OnInit {
 
   glyphLegendColors = QualitativeColormapService.bedStati.filter(f => f !== 'Keine Information');
 
-  templateSpec = {
+  temporalChartTemplateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "width": 320, "height": 50,
     "data": {"values":[
@@ -37,7 +37,7 @@ export class HospitalInfoComponent implements OnInit {
     "encoding": {
       "x": {
         "field": "Datum", "type": "temporal",
-        "axis": {"domain": false, "format": "%d.%m", "tickSize": 0, "tickCount": 7}
+        "axis": {"domain": false, "format": "%d.%m", "tickSize": 3, "tickCount": 7}
       },
       "y": {
         "field": "num", "type": "quantitative",
@@ -297,7 +297,7 @@ export class HospitalInfoComponent implements OnInit {
         
 
         // hack deep clone spec
-        const spec = JSON.parse(JSON.stringify(this.templateSpec));
+        const spec = JSON.parse(JSON.stringify(this.temporalChartTemplateSpec));
 
         // inject data values
         spec.data.values = dataValues;
