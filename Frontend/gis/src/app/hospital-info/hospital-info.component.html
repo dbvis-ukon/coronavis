@@ -56,7 +56,7 @@
       <td>{{ getLatest(data.icu_ecmo_care_einschaetzung) }}</td>
     </tr> -->
   </tbody>
-  
+
 </table>
 </div>
 <br>
@@ -74,16 +74,16 @@
   <!--h3>{{ data.Name }}</h3>
   <mat-divider></mat-divider-->
   <p style="margin-top: 10px;">
-    <strong>Adresse: </strong> {{ singleHospital.address }}
+    <strong i18n="@@tooltipHospitalAddress">Adresse: </strong> {{ singleHospital.address }}
   </p>
   <p>
-    <strong>Kontakt: </strong>
+    <strong i18n="@@tooltipHospitalContact">Kontakt: </strong>
     <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a>
     <span *ngIf="!url">{{ contactMsg }}</span>
   </p>
 </div>
 
 <div  *ngIf="isSingleHospital === true">
-  <p><strong>Letzter Stand: </strong> {{ latestDevelopment?.timestamp }} </p>
+  <p i18n="@@tooltipHospitalLastUpdate" ><strong>Letzter Stand: </strong> {{ latestDevelopment?.timestamp }} </p>
 </div>
 
