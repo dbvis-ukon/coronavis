@@ -17,6 +17,7 @@ import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.serv
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
 import {APP_CONFIG_KEY} from "../../constants";
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
+import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 
 @Component({
   selector: 'app-infobox',
@@ -176,4 +177,8 @@ export class InfoboxComponent implements OnInit {
     location.href = `/${evt.value}/`;
   }
 
+
+  openHelp() {
+    this.dialogService.open(HelpDialogComponent);
+  }
 }

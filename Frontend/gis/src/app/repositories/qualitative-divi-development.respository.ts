@@ -4,7 +4,6 @@ import {environment} from 'src/environments/environment';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { tap } from 'rxjs/operators';
 import { CachedRepository } from './cached.repository';
-import { QualitativeSingleHospitals } from './types/in/qualitative-single-hospitals';
 import { AggregatedHospitalOut } from './types/out/aggregated-hospital-out';
 import { QualitativeTimedStatus } from './types/in/qualitative-hospitals-development';
 import { SingleHospitalOut } from './types/out/single-hospital-out';

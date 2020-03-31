@@ -9,13 +9,8 @@ import {HospitalRepository} from '../repositories/hospital.repository';
 import {AggregatedGlyphLayer} from '../map/overlays/aggregated-glyph.layer';
 import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {LandkreiseHospitalsLayer} from '../map/overlays/landkreishospitals';
-import { QuantitativeAggregatedHospitals } from '../repositories/types/in/quantitative-aggregated-hospitals';
-import { BedStatusSummary } from './types/bed-status-summary';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeColormapService } from './qualitative-colormap.service';
-import { FeatureCollection, Point } from 'geojson';
-import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
-import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 
 @Injectable({
   providedIn: 'root'
