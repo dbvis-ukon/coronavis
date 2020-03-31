@@ -22,6 +22,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
 import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
@@ -31,9 +32,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { AboutComponent } from './about/about.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatStepperModule } from "@angular/material/stepper";
 
-import {AggregatedGlyphTooltipComponent} from './aggregated-glyph-tooltip/aggregated-glyph-tooltip.component';
 import { VegaComponent } from './vega/vega.component';
+import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 
 
 @NgModule({
@@ -53,8 +55,8 @@ import { VegaComponent } from './vega/vega.component';
     PlusminusPipe,
     AboutComponent,
     ImpressumComponent,
-    AggregatedGlyphTooltipComponent,
     VegaComponent,
+    HelpDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,7 +77,11 @@ import { VegaComponent } from './vega/vega.component';
     MatFormFieldModule,
     MatDialogModule,
     MatProgressBarModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatStepperModule
   ],
   providers: [],
   bootstrap: [AppComponent]

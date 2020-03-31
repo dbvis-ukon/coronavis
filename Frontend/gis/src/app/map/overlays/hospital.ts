@@ -3,11 +3,12 @@ import { FeatureCollection } from 'geojson';
 import * as L from 'leaflet';
 import { Overlay } from './overlay';
 import { TooltipService } from 'src/app/services/tooltip.service';
+import { OSMHospitals } from 'src/app/repositories/types/in/osm-hospitals';
 
-export class HospitalLayer extends Overlay<FeatureCollection> {
+export class HospitalLayer extends Overlay<OSMHospitals> {
   constructor(
     name: string,
-    featureCollection: FeatureCollection,
+    featureCollection: OSMHospitals,
     private tooltipService: TooltipService
   ) {
     super(name, featureCollection);

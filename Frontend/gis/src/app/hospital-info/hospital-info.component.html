@@ -1,82 +1,125 @@
-<h3>{{ data.Name }}</h3>
-<mat-divider></mat-divider>
-<table>
-  <!--
-  <tbody>
-  <tr>
-    <td><strong>ICU - Low Care:</strong> </td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icu_low_summary) }">{{ getLatest(data.icu_low_care_belegt) }} / {{ getLatest(data.icu_low_care_frei) + getLatest(data.icu_low_care_belegt) }} </td>
-  </tr>
-  <tr>
-    <td><strong>ICU - High Care: </strong></td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icu_high_summary) }">{{ getLatest(data.icu_high_care_belegt) }} / {{ getLatest(data.icu_high_care_frei) + getLatest(data.icu_high_care_belegt) }} </td>
-  </tr>
-  <tr>
-    <td><strong>ECMO: </strong></td>
-    <td [ngStyle]="{'background-color': getCapacityStateColor(data.icu_ecmo_summary) }">{{ getLatest(data.icu_ecmo_care_belegt) }} / {{ getLatest(data.icu_ecmo_care_frei) + getLatest(data.icu_ecmo_care_belegt) }}</td>
-  </tr>
-  </tbody>
-  -->
-  <tbody>
-    <tr>
-      <th></th>
-      <th>ICU - Low Care:</th>
-      <th>ICU - High Care:</th>
-      <th>ECMO:</th>
-    </tr>
-    <tr>
-      <th>(belegt / gesamt)</th>
-      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_low_summary) }">{{ getLatest(data.icu_low_care_belegt) }} / {{ getLatest(data.icu_low_care_belegt)    + getLatest(data.icu_low_care_frei)  }} <mat-icon> {{ getTrendIcon(data.icu_low_care_einschaetzung) }} </mat-icon> </th>
-      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_high_summary) }">{{ getLatest(data.icu_high_care_belegt) }} / {{ getLatest(data.icu_high_care_belegt) + getLatest(data.icu_high_care_frei) }} <mat-icon> {{ getTrendIcon(data.icu_high_care_einschaetzung) }} </mat-icon> </th>
-      <th [ngStyle]="{'background-color': getCapacityStateColor(data.icu_ecmo_summary) }">{{ getLatest(data.icu_ecmo_care_belegt) }} / {{ getLatest(data.icu_ecmo_care_belegt) + getLatest(data.icu_ecmo_care_frei) }} <mat-icon> {{ getTrendIcon(data.icu_ecmo_care_einschaetzung) }} </mat-icon> </th>
-    </tr>
-    <tr>
-      <td>% Auslastung</td>
-      <td>{{ (getLatest(data.icu_low_care_belegt)  / (getLatest(data.icu_low_care_belegt)  + getLatest(data.icu_low_care_frei)))  * 100 | number : '1.1-1'}}%</td> <!--'1.2-2' means {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}: A minimum of 1 digit will be shown before decimal point It will show at least 2 digits after decimal point But not more than 2 digits-->
-      <td>{{ (getLatest(data.icu_high_care_belegt) / (getLatest(data.icu_high_care_belegt) + getLatest(data.icu_high_care_frei))) * 100 | number : '1.1-1'}}%</td>
-      <td>{{ (getLatest(data.icu_ecmo_care_belegt) / (getLatest(data.icu_ecmo_care_belegt) + getLatest(data.icu_ecmo_care_frei))) * 100 | number : '1.1-1'}}%</td>
-    </tr>
-    <!-- <tr>
-      <td># Verfügbar</td>
-      <td>{{ getLatest(data.icu_low_care_frei) }}</td>
-      <td>{{ getLatest(data.icu_high_care_frei) }}</td>
-      <td>{{ getLatest(data.icu_ecmo_care_frei) }}</td>
-    </tr>
-    <tr>
-      <td># Belegt</td>
-      <td>{{ getLatest(data.icu_low_care_belegt) }}</td>
-      <td>{{ getLatest(data.icu_high_care_belegt) }}</td>
-      <td>{{ getLatest(data.icu_ecmo_care_belegt) }}</td>
-    </tr> -->
-    <tr>
-      <td>+ Erwartet</td>
-      <td>{{ getLatest(data.icu_low_care_einschaetzung) }}</td>
-      <td>{{ getLatest(data.icu_high_care_einschaetzung) }}</td>
-      <td>{{ getLatest(data.icu_ecmo_care_einschaetzung) }}</td>
-    </tr>
-  </tbody>
-  
-</table>
+<div>
+  <h3 class="name">{{ data.name }}</h3>
+
+  <p class="numHospitals" *ngIf="!isSingleHospital">({{ totalNumberOfHospitals }} gemeldete Krankenhäuser)</p>
+  <mat-divider></mat-divider>
+
+  <div class="content">
+    <div *ngIf="!data.developments" i18n="@@countyDataNotFound" class="noData">Es stehen keine Daten zur Verfügung.</div>
+
+    <h4 i18n="@@tooltipHospitalLastUpdate" *ngIf="latestDevelopment">Letzter Stand: <span>({{ lastUpdate | date:"dd.MM.yyy, HH:mm" }} Uhr)</span></h4>
+    
+
+
+    <div class="data-warning" *ngIf="warnOfOutdatedData">
+      <mat-icon color="warn">warning</mat-icon>
+      
+      <h5>Die Daten sind älter als 24 Stunden.</h5>
+    </div>
+
+
+    <div class="barchartcontainer" *ngIf="isSingleHospital === false">
+
+      <div *ngFor="let s of barChartSpecs">
+        <h5 class="chart-title">{{ s.title }}</h5>
+        <app-vega [spec]="s.chart"></app-vega>
+      </div>
+
+    </div>
+
+
+    <table *ngIf="isSingleHospital">
+      <tbody>
+      <tr>
+        <td><strong>ICU - Low Care:</strong> </td>
+        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuLow) }">{{ getStatusDescriptionFor(eBedType.icuLow) }}</td>
+      </tr>
+      <tr>
+        <td><strong>ICU - High Care: </strong></td>
+        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuHigh) }">{{ getStatusDescriptionFor(eBedType.icuHigh) }}</td>
+      </tr>
+      <tr>
+        <td><strong>ECMO: </strong></td>
+        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.ecmo) }">{{ getStatusDescriptionFor(eBedType.ecmo) }}</td>
+      </tr>
+      </tbody>
+      <!--  <tbody>-->
+      <!--    <tr>-->
+      <!--      <th></th>-->
+      <!--      <th>ICU - Low Care:</th>-->
+      <!--      <th>ICU - High Care:</th>-->
+      <!--      <th>ECMO:</th>-->
+      <!--    </tr>-->
+      <!-- <tr>
+        <th>(belegt / gesamt)</th>
+        <th [ngStyle]="{'background-color': getCapacityStateColor(latestDevelopment.icu_low_care) }">{{ getLatest(data.icu_low_care_belegt) }} / {{ getLatest(data.icu_low_care_belegt)    + getLatest(data.icu_low_care_frei)  }} <mat-icon> {{ getTrendIcon(data.icu_low_care_einschaetzung) }} </mat-icon> </th>
+        <th [ngStyle]="{'background-color': getCapacityStateColor(latestDevelopment.icu_high_care) }">{{ getLatest(data.icu_high_care_belegt) }} / {{ getLatest(data.icu_high_care_belegt) + getLatest(data.icu_high_care_frei) }} <mat-icon> {{ getTrendIcon(data.icu_high_care_einschaetzung) }} </mat-icon> </th>
+        <th [ngStyle]="{'background-color': getCapacityStateColor(latestDevelopment.ecmo_state) }">{{ getLatest(data.icu_ecmo_care_belegt) }} / {{ getLatest(data.icu_ecmo_care_belegt) + getLatest(data.icu_ecmo_care_frei) }} <mat-icon> {{ getTrendIcon(data.icu_ecmo_care_einschaetzung) }} </mat-icon> </th>
+      </tr>
+      <tr>
+        <td>% Auslastung</td>
+        <td>{{ (getLatest(data.icu_low_care_belegt)  / (getLatest(data.icu_low_care_belegt)  + getLatest(data.icu_low_care_frei)))  * 100 | number : '1.1-1'}}%</td>
+        <td>{{ (getLatest(data.icu_high_care_belegt) / (getLatest(data.icu_high_care_belegt) + getLatest(data.icu_high_care_frei))) * 100 | number : '1.1-1'}}%</td>
+        <td>{{ (getLatest(data.icu_ecmo_care_belegt) / (getLatest(data.icu_ecmo_care_belegt) + getLatest(data.icu_ecmo_care_frei))) * 100 | number : '1.1-1'}}%</td>
+      </tr> -->
+      <!-- <tr>
+        <td># Verfügbar</td>
+        <td>{{ getLatest(data.icu_low_care_frei) }}</td>
+        <td>{{ getLatest(data.icu_high_care_frei) }}</td>
+        <td>{{ getLatest(data.icu_ecmo_care_frei) }}</td>
+      </tr>
+      <tr>
+        <td># Belegt</td>
+        <td>{{ getLatest(data.icu_low_care_belegt) }}</td>
+        <td>{{ getLatest(data.icu_high_care_belegt) }}</td>
+        <td>{{ getLatest(data.icu_ecmo_care_belegt) }}</td>
+      </tr> -->
+      <!-- <tr>
+        <td>+ Erwartet</td>
+        <td>{{ getLatest(data.icu_low_care_einschaetzung) }}</td>
+        <td>{{ getLatest(data.icu_high_care_einschaetzung) }}</td>
+        <td>{{ getLatest(data.icu_ecmo_care_einschaetzung) }}</td>
+      </tr> -->
+      <!--  </tbody>-->
+
+    </table>
+
+  </div>
+</div>
 <br>
 
-<strong>Entwicklung:</strong>
-<div *ngFor="let s of specs; let i = index">
-  <h5 class="chart-title">{{ this.bedAccessorsMapping[this.bedAccessors[i]] }}</h5>
-  <app-vega [spec]="s"></app-vega>
+<div *ngIf="specs.length > 0">
+<h4 i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung: ({{ firstTimestamp | date:"dd.MM.yyyy"}} - {{ lastUpdate | date:"dd.MM.yyyy" }})</h4>
+
+<p *ngIf="data.developments?.length <= 1" i18n="@@hospitalInfoNoTemporalDataAvailable">
+  Keine zeitliche Entwicklung verfügbar da ledliglich ein Datenpunkt gemeldet wurde.
+</p>
+
+<div *ngIf="data.developments?.length > 1">
+  <div *ngFor="let s of specs; let i = index">
+    <div class="chart-wrapper">
+      <h5 class="chart-title"> {{s.title}} </h5>
+      <app-vega [spec]="s.chart"></app-vega>
+    </div>
+  </div>
+</div>
 </div>
 
-<div *ngIf="mode === 'dialog'">
+<div *ngIf="mode === 'dialog' && isSingleHospital">
   <!--h3>{{ data.Name }}</h3>
   <mat-divider></mat-divider-->
   <p style="margin-top: 10px;">
-    <strong>Adresse: </strong> {{ data.Address }}
+    <strong i18n="@@tooltipHospitalAddress">Adresse: </strong> {{ singleHospital.address }}
   </p>
   <p>
-    <strong>Kontakt: </strong>
+    <strong i18n="@@tooltipHospitalContact">Kontakt: </strong>
     <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a>
     <span *ngIf="!url">{{ contactMsg }}</span>
   </p>
 </div>
 
-<p><strong>Letzter Stand: </strong> TODO </p>
-
+<div class="glyph-color-legend">
+    <div *ngFor="let t of glyphLegendColors" class="glyph-tile" >
+        <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
+        <div class="text">{{ t }}</div>
+</div>
