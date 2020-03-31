@@ -28,7 +28,7 @@ export class HospitalInfoComponent implements OnInit {
 
   templateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-    "width": 250, "height": 50,
+    "width": 370, "height": 50,
     "data": {"values":[
       ]},
     "mark": {"type": "area", "interpolate": "step-before"},
@@ -57,6 +57,8 @@ export class HospitalInfoComponent implements OnInit {
 
   lastUpdate: Date;
 
+  firstTimestamp: Date;
+
   warnOfOutdatedData: boolean;
 
   constructor(private colormapService: QualitativeColormapService) {}
@@ -73,6 +75,8 @@ export class HospitalInfoComponent implements OnInit {
 
       
       this.lastUpdate = this.isSingleHospital ? this.latestDevelopment.timestamp : this.latestDevelopment.last_update;
+
+      this.firstTimestamp = this.data.developments[0].timestamp;
 
       this.warnOfOutdatedData = moment().subtract(1, 'day').isAfter(moment(this.lastUpdate));
     }
@@ -158,7 +162,12 @@ export class HospitalInfoComponent implements OnInit {
 
         if(!this.isSingleHospital) {
           spec.mark.interpolate = 'step-before';
-          spec.width = 370;
+          // spec.width = 370;
+        } else {
+          // is single hospital
+          spec.encoding.y.axis = false;
+
+          spec.height = spec.height * 0.3;
         }
 
         // also overwrite the title
