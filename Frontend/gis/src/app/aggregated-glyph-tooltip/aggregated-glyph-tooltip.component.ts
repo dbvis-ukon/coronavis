@@ -32,6 +32,7 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
 
   templateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "height": 100,
     "description": "A simple bar chart with rounded corners at the end of the bar.",
     "data": {
       "values": [
@@ -85,6 +86,8 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
 
   latestDevelopment: QualitativeTimedStatus;
 
+  totalNumberOfHospitals: number = 0;
+
   constructor(private colormapService: QualitativeColormapService) {
   }
 
@@ -107,6 +110,11 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
       // fill the data object
       for(const bedStatus of bedStati) {
         const v = this.latestDevelopment[bedAccessor][bedStatus] || 0;
+
+        if(bedAccessor === this.bedAccessors[0]) {
+          this.totalNumberOfHospitals += v;
+        }
+        
 
         dataValues.push(
           {
