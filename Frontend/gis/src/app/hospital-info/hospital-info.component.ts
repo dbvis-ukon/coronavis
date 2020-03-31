@@ -27,7 +27,7 @@ export class HospitalInfoComponent implements OnInit {
 
   templateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-    "width": 300, "height": 50,
+    "width": 250, "height": 50,
     "data": {"values":[
       ]},
     "mark": {"type": "area", "interpolate": "step-before"},
@@ -40,7 +40,7 @@ export class HospitalInfoComponent implements OnInit {
         "field": "num", "type": "quantitative",
         "axis": {"title": "Anzahl KH", "tickMinStep": 1}
       },
-     "color": {"type": "nominal", "field":"Kategorie", "scale":{"domain": [], "range": []}}
+     "color": {"type": "nominal", "field":"Kategorie", "scale":{"domain": [], "range": []}, "legend": false}
     }
   };
 
@@ -144,6 +144,7 @@ export class HospitalInfoComponent implements OnInit {
 
         if(!this.isSingleHospital) {
           spec.mark.interpolate = 'step-before';
+          spec.width = 370;
         }
 
         // also overwrite the title
@@ -162,6 +163,7 @@ export class HospitalInfoComponent implements OnInit {
       this.specs.forEach(spec => {
         spec.chart.encoding.color.scale.domain = bedStati;
         spec.chart.encoding.color.scale.range = colors;
+
         //spec.encoding.color.range = Math.min(maxNum+1, 5);
       });
     }

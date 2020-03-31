@@ -114,7 +114,7 @@ export class AggregatedGlyphTooltipComponent implements OnInit {
         if(bedAccessor === this.bedAccessors[0]) {
           this.totalNumberOfHospitals += v;
         }
-        
+
 
         dataValues.push(
           {
