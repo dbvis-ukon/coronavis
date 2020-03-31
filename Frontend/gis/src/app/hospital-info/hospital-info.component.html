@@ -1,5 +1,5 @@
 <div  *ngIf="isSingleHospital === true">
-<h3>{{ data.Name }}</h3>
+<h3>{{ data.name }}</h3>
 <mat-divider></mat-divider>
 <table>
   <!--
@@ -74,7 +74,7 @@
   <!--h3>{{ data.Name }}</h3>
   <mat-divider></mat-divider-->
   <p style="margin-top: 10px;">
-    <strong i18n="@@tooltipHospitalAddress">Adresse: </strong> {{ singleHospital.Adress }}
+    <strong i18n="@@tooltipHospitalAddress">Adresse: </strong> {{ singleHospital.address }}
   </p>
   <p>
     <strong i18n="@@tooltipHospitalContact">Kontakt: </strong>
@@ -84,6 +84,6 @@
 </div>
 
 <div  *ngIf="isSingleHospital === true">
-  <p i18n="@@tooltipHospitalLastUpdate" ><strong>Letzter Stand: </strong> {{ singleHospital.Stand }} </p>
+  <p i18n="@@tooltipHospitalLastUpdate" ><strong>Letzter Stand: </strong> {{ latestDevelopment?.timestamp }} </p>
 </div>
 

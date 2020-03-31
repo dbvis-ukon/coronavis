@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {DiviAggregatedHospital, DiviHospital} from '../services/divi-hospitals.service';
-import { ColormapService } from '../services/colormap.service';
-import * as d3 from "d3";
+import { QualitativeColormapService } from '../services/qualitative-colormap.service';
+import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 
 @Component({
   selector: 'app-hospital-info',
@@ -18,7 +19,7 @@ export class HospitalInfoComponent implements OnInit {
   @Input()
   mode: 'dialog' | 'tooltip';
   @Input()
-  data: DiviHospital | DiviAggregatedHospital;
+  data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
 
   templateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
@@ -46,31 +47,37 @@ export class HospitalInfoComponent implements OnInit {
   bedAccessorsMapping = {'icu_low_care': 'ICU - Low Care', 'icu_high_care': 'ICU - High Care', 'ecmo_state': 'ECMO'};
 
   isSingleHospital: boolean = false;
-  singleHospital: DiviHospital;
+  singleHospital: SingleHospitalOut<QualitativeTimedStatus>;
 
   latestDevelopment: QualitativeTimedStatus;
 
-  constructor(private colormapService: QuantitativeColormapService) {}
+  constructor(private colormapService: QualitativeColormapService) {}
 
   ngOnInit(): void {
-    if((this.data as DiviHospital).Adress){
-      this.isSingleHospital = true;
-      this.singleHospital = this.data as DiviHospital;
+    if(this.data.developments) {
+      this.latestDevelopment = this.data.developments[this.data.developments.length - 1];
+    }
 
-    if(this.singleHospital.Kontakt.indexOf('http')>-1){
-      this.contact = 'http' + this.singleHospital.Kontakt.split('http')[1];
+
+
+    if((this.data as SingleHospitalOut<QualitativeTimedStatus>).address){
+      this.isSingleHospital = true;
+      this.singleHospital = this.data as SingleHospitalOut<QualitativeTimedStatus>;
+
+    if(this.singleHospital.contact.indexOf('http')>-1){
+      this.contact = 'http' + this.singleHospital.contact.split('http')[1];
       this.url = true;
 
-      this.contactMsg = this.singleHospital.Kontakt.replace(this.contact, '').replace('Website', '').trim();
+      this.contactMsg = this.singleHospital.contact.replace(this.contact, '').replace('Website', '').trim();
 
       if (this.contactMsg === '') {
         this.contactMsg = 'Webseite';
       }
     }else{
-      this.contact = this.singleHospital.Kontakt;
+      this.contact = this.singleHospital.contact;
       this.url = false;
 
-      this.contactMsg = this.singleHospital.Kontakt;
+      this.contactMsg = this.singleHospital.contact;
     }
     }
 
@@ -142,9 +149,13 @@ export class HospitalInfoComponent implements OnInit {
     });
   }
 
-  getTrendIcon(entries: TimestampedValue[]): string {
-    const latest = getLatest(entries);
-    return latest >= 0 ? (latest == 0 ? 'trending_flat' : 'trending_up') : 'trending_down';
+  // getTrendIcon(entries: TimestampedValue[]): string {
+  //   const latest = getLatest(entries);
+  //   return latest >= 0 ? (latest == 0 ? 'trending_flat' : 'trending_up') : 'trending_down';
+  // }
+
+  getCapacityStateColor(bedStatus: string) {
+    return this.colormapService.getSingleHospitalColormap()(bedStatus);
   }
 
 }
