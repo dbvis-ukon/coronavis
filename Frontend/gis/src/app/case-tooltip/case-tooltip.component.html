@@ -6,19 +6,19 @@
     <thead>
       <tr>
         <th></th>
-        <th>Fälle Total</th>
-        <th colspan="4">Veränderung</th>
+        <th i18n="case-tooltip|cases@@cases">Fälle Total</th>
+        <th colspan="4" i18n="case-tooltip|changes@@changes">Veränderung</th>
       </tr>
       <tr>
         <th></th>
         <th>{{ this.data.until | date:"d.M.y HH:mm" }}</th>
-        <th colspan="2">letzte 24h</th>
-        <th colspan="2">letzte 72h</th>
+        <th colspan="2" i18n="case-tooltip|24h@@24h">letzte 24h</th>
+        <th colspan="2" i18n="case-tooltip|72h@@72h">letzte 72h</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Erkrankte</td>
+        <td i18n="case-tooltip|sick@@sick">Erkrankte</td>
         <td>{{ this.data.last.cases }}</td>
         <td>{{ this.data.last.cases - this.data.yesterday.cases | plusminus }}</td>
         <td>({{ this.getPercentageChange(this.data.last.cases, this.data.yesterday.cases)}})</td>
@@ -26,7 +26,7 @@
         <td>({{ this.getPercentageChange(this.data.last.cases, this.data.threeDaysAgo.cases)}})</td>
       </tr>
       <tr>
-        <td>Todesfälle</td>
+        <td i18n="case-tooltip|deaths@@deaths">Todesfälle</td>
         <td>{{ this.data.last.deaths }}</td>
         <td>{{ this.data.last.deaths - this.data.yesterday.deaths | plusminus }}</td>
         <td>({{ this.getPercentageChange(this.data.last.deaths, this.data.yesterday.deaths)}})</td>
@@ -34,7 +34,7 @@
         <td>({{ this.getPercentageChange(this.data.last.deaths, this.data.threeDaysAgo.deaths)}})</td>
       </tr>
       <tr>
-        <td>Erkrankte je 100.000 Einwohner</td>
+        <td i18n="case-tooltip|sickScale@@sickScale">Erkrankte je 100.000 Einwohner</td>
         <td>{{ this.getCasesPer100kInhabitants(this.data.last.cases) }}</td>
         <td>{{ this.getCasesPer100kInhabitants(this.data.last.cases - this.data.yesterday.cases, true) }}</td>
         <td>({{ this.getPercentageChange(this.data.last.cases, this.data.yesterday.cases)}})</td>
@@ -42,7 +42,7 @@
         <td>({{ this.getPercentageChange(this.data.last.cases, this.data.threeDaysAgo.cases)}})</td>
       </tr>
       <tr>
-        <td>Todesfälle je 100.000 Einwohner</td>
+        <td i18n="case-tooltip|deathScale@@deathScale">Todesfälle je 100.000 Einwohner</td>
         <td>{{ this.getCasesPer100kInhabitants(this.data.last.deaths) }}</td>
         <td>{{ this.getCasesPer100kInhabitants(this.data.last.deaths - this.data.yesterday.deaths, true) }}</td>
         <td>({{ this.getPercentageChange(this.data.last.deaths, this.data.yesterday.deaths)}})</td>

@@ -22,6 +22,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
 import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
@@ -76,6 +77,8 @@ import { VegaComponent } from './vega/vega.component';
     MatDialogModule,
     MatProgressBarModule,
     MatSnackBarModule
+    MatDialogModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
