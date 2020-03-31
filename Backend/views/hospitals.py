@@ -79,17 +79,14 @@ hospital_updates_aggregated AS (
         h.name,
         json_agg(
             json_build_object(
-                'development',
-                json_build_object(
-                    'timestamp',
-                    h.last_update,
-                    'icu_low_care',
-                    json_build_object(h.icu_low_state, 1),
-                    'icu_high_care',
-                    json_build_object(h.icu_high_state, 1),
-                    'ecmo_state',
-                    json_build_object(h.ecmo_state, 1)
-                )
+                'timestamp',
+                h.last_update,
+                'icu_low_care',
+                json_build_object(h.icu_low_state, 1),
+                'icu_high_care',
+                json_build_object(h.icu_high_state, 1),
+                'ecmo_state',
+                json_build_object(h.ecmo_state, 1)
             )
             ORDER BY
                 h.last_update
@@ -353,45 +350,42 @@ SELECT
         WHEN min(places_per_landkreis_per_timestamp.timestamp) IS NULL THEN NULL
         ELSE json_agg(
             json_build_object(
-                'development',
+                'timestamp',
+                places_per_landkreis_per_timestamp.timestamp,
+                'last_update',
+                places_per_landkreis_per_timestamp.last_update,
+                'icu_low_care',
                 json_build_object(
-                    'timestamp',
-                    places_per_landkreis_per_timestamp.timestamp,
-                    'last_update',
-                    places_per_landkreis_per_timestamp.last_update,
-                    'icu_low_care',
-                    json_build_object(
-                        'Verfügbar',
-                        places_per_landkreis_per_timestamp.icu_low_v,
-                        'Begrenzt',
-                        places_per_landkreis_per_timestamp.icu_low_b,
-                        'Ausgelastet',
-                        places_per_landkreis_per_timestamp.icu_low_a,
-                        'Nicht verfügbar',
-                        places_per_landkreis_per_timestamp.icu_low_nv
-                    ),
-                    'icu_high_care',
-                    json_build_object(
-                        'Verfügbar',
-                        places_per_landkreis_per_timestamp.icu_high_v,
-                        'Begrenzt',
-                        places_per_landkreis_per_timestamp.icu_high_b,
-                        'Ausgelastet',
-                        places_per_landkreis_per_timestamp.icu_high_a,
-                        'Nicht verfügbar',
-                        places_per_landkreis_per_timestamp.icu_high_nv
-                    ),
-                    'ecmo_state',
-                    json_build_object(
-                        'Verfügbar',
-                        places_per_landkreis_per_timestamp.ecmo_low_v,
-                        'Begrenzt',
-                        places_per_landkreis_per_timestamp.ecmo_low_b,
-                        'Ausgelastet',
-                        places_per_landkreis_per_timestamp.ecmo_low_a,
-                        'Nicht verfügbar',
-                        places_per_landkreis_per_timestamp.ecmo_low_nv
-                    )
+                    'Verfügbar',
+                    places_per_landkreis_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_landkreis_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_landkreis_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_landkreis_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_landkreis_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_landkreis_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_landkreis_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_landkreis_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_landkreis_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_landkreis_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_landkreis_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_landkreis_per_timestamp.ecmo_low_nv
                 )
             )
             ORDER BY
@@ -612,45 +606,42 @@ SELECT
         WHEN min(places_per_regierungsbezirk_per_timestamp.timestamp) IS NULL THEN NULL
         ELSE json_agg(
             json_build_object(
-                'development',
+                'timestamp',
+                places_per_regierungsbezirk_per_timestamp.timestamp,
+                'last_update',
+                places_per_regierungsbezirk_per_timestamp.last_update,
+                'icu_low_care',
                 json_build_object(
-                    'timestamp',
-                    places_per_regierungsbezirk_per_timestamp.timestamp,
-                    'last_update',
-                    places_per_regierungsbezirk_per_timestamp.last_update,
-                    'icu_low_care',
-                    json_build_object(
-                        'Verfügbar',
-                        places_per_regierungsbezirk_per_timestamp.icu_low_v,
-                        'Begrenzt',
-                        places_per_regierungsbezirk_per_timestamp.icu_low_b,
-                        'Ausgelastet',
-                        places_per_regierungsbezirk_per_timestamp.icu_low_a,
-                        'Nicht verfügbar',
-                        places_per_regierungsbezirk_per_timestamp.icu_low_nv
-                    ),
-                    'icu_high_care',
-                    json_build_object(
-                        'Verfügbar',
-                        places_per_regierungsbezirk_per_timestamp.icu_high_v,
-                        'Begrenzt',
-                        places_per_regierungsbezirk_per_timestamp.icu_high_b,
-                        'Ausgelastet',
-                        places_per_regierungsbezirk_per_timestamp.icu_high_a,
-                        'Nicht verfügbar',
-                        places_per_regierungsbezirk_per_timestamp.icu_high_nv
-                    ),
-                    'ecmo_state',
-                    json_build_object(
-                        'Verfügbar',
-                        places_per_regierungsbezirk_per_timestamp.ecmo_low_v,
-                        'Begrenzt',
-                        places_per_regierungsbezirk_per_timestamp.ecmo_low_b,
-                        'Ausgelastet',
-                        places_per_regierungsbezirk_per_timestamp.ecmo_low_a,
-                        'Nicht verfügbar',
-                        places_per_regierungsbezirk_per_timestamp.ecmo_low_nv
-                    )
+                    'Verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_nv
                 )
             )
             ORDER BY
@@ -871,45 +862,42 @@ SELECT
         WHEN min(places_per_bundesland_per_timestamp.timestamp) IS NULL THEN NULL
         ELSE json_agg(
             json_build_object(
-                'development',
+                'timestamp',
+                places_per_bundesland_per_timestamp.timestamp,
+                'last_update',
+                places_per_bundesland_per_timestamp.last_update,
+                'icu_low_care',
                 json_build_object(
-                    'timestamp',
-                    places_per_bundesland_per_timestamp.timestamp,
-                    'last_update',
-                    places_per_bundesland_per_timestamp.last_update,
-                    'icu_low_care',
-                    json_build_object(
-                        'Verfügbar',
-                        places_per_bundesland_per_timestamp.icu_low_v,
-                        'Begrenzt',
-                        places_per_bundesland_per_timestamp.icu_low_b,
-                        'Ausgelastet',
-                        places_per_bundesland_per_timestamp.icu_low_a,
-                        'Nicht verfügbar',
-                        places_per_bundesland_per_timestamp.icu_low_nv
-                    ),
-                    'icu_high_care',
-                    json_build_object(
-                        'Verfügbar',
-                        places_per_bundesland_per_timestamp.icu_high_v,
-                        'Begrenzt',
-                        places_per_bundesland_per_timestamp.icu_high_b,
-                        'Ausgelastet',
-                        places_per_bundesland_per_timestamp.icu_high_a,
-                        'Nicht verfügbar',
-                        places_per_bundesland_per_timestamp.icu_high_nv
-                    ),
-                    'ecmo_state',
-                    json_build_object(
-                        'Verfügbar',
-                        places_per_bundesland_per_timestamp.ecmo_low_v,
-                        'Begrenzt',
-                        places_per_bundesland_per_timestamp.ecmo_low_b,
-                        'Ausgelastet',
-                        places_per_bundesland_per_timestamp.ecmo_low_a,
-                        'Nicht verfügbar',
-                        places_per_bundesland_per_timestamp.ecmo_low_nv
-                    )
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_nv
                 )
             )
             ORDER BY
