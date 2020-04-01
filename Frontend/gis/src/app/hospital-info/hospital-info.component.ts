@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { QualitativeColormapService } from '../services/qualitative-colormap.service';
-import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
-import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
-import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
+import {Component, OnInit, Input} from '@angular/core';
+import {QualitativeColormapService} from '../services/qualitative-colormap.service';
+import {SingleHospitalOut} from '../repositories/types/out/single-hospital-out';
+import {QualitativeTimedStatus} from '../repositories/types/in/qualitative-hospitals-development';
+import {AggregatedHospitalOut} from '../repositories/types/out/aggregated-hospital-out';
 import {BedType} from "../map/options/bed-type.enum";
 import * as moment from 'moment';
-import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
+import {QuantitativeColormapService} from '../services/quantitative-colormap.service';
 
 @Component({
   selector: 'app-hospital-info',
@@ -32,9 +32,10 @@ export class HospitalInfoComponent implements OnInit {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "width": 320, "height": 50,
     "aggregated": true,
-    "data": {"values":[
-      ]},
-    "mark": {"type": "area", "interpolate": "step-before"},
+    "data": {
+      "values": []
+    },
+    "mark": {"type": "area", "interpolate": "step-after"},
     "encoding": {
       "x": {
         "field": "Datum", "type": "temporal",
@@ -42,13 +43,13 @@ export class HospitalInfoComponent implements OnInit {
           "domain": false,
           "tickSize": 3, "tickCount": 7,
           "format": "%d.%m"
-        }        
+        }
       },
       "y": {
         "field": "num", "type": "quantitative",
         "axis": {"title": "Anzahl KH", "tickMinStep": 1}
       },
-     "color": {"type": "nominal", "field":"Kategorie", "scale":{"domain": [], "range": []}, "legend": false}
+      "color": {"type": "nominal", "field": "Kategorie", "scale": {"domain": [], "range": []}, "legend": false}
     }
   };
 
@@ -74,29 +75,29 @@ export class HospitalInfoComponent implements OnInit {
         "axis": {
           "labels": false
         }
-        },
+      },
       "y": {
         "field": "num",
         "type": "quantitative",
         "title": "Anzahl Krankenhäuser",
         "scale": {"domain": [0, 10]},
         "axis": {"tickMinStep": 1, "tickCount": 5},
-        },
+      },
       "color": {
         "field": "color", "type": "nominal", "scale": null
       }
     }, "layer": [{
-    "mark": "bar"
-  }, {
-    "mark": {
-      "type": "text",
-      "align": "center",
-      "dy": -5
-    },
-    "encoding": {
-      "text": {"field": "num", "type": "quantitative"}
-    }
-  }]
+      "mark": "bar"
+    }, {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "dy": -5
+      },
+      "encoding": {
+        "text": {"field": "num", "type": "quantitative"}
+      }
+    }]
   };
 
   specs = [];
@@ -119,27 +120,28 @@ export class HospitalInfoComponent implements OnInit {
 
   totalNumberOfHospitals: number = 0;
 
-  constructor(private colormapService: QualitativeColormapService) {}
+  constructor(private colormapService: QualitativeColormapService) {
+  }
 
   ngOnInit(): void {
 
-    if((this.data as SingleHospitalOut<QualitativeTimedStatus>).address){
+    if ((this.data as SingleHospitalOut<QualitativeTimedStatus>).address) {
       this.isSingleHospital = true;
       this.singleHospital = this.data as SingleHospitalOut<QualitativeTimedStatus>;
     }
 
-    if(this.data.developments) {
+    if (this.data.developments) {
       this.latestDevelopment = this.data.developments[this.data.developments.length - 1];
 
-      
+
       this.lastUpdate = this.isSingleHospital ? this.latestDevelopment.timestamp : this.latestDevelopment.last_update;
 
-      this.firstTimestamp = this.data.developments[0].timestamp;
+      const tenDaysAgo = moment().subtract(10, 'day');
+      this.firstTimestamp = moment.max(moment(this.data.developments[0].timestamp), tenDaysAgo).toDate();
 
       this.warnOfOutdatedData = moment().subtract(1, 'day').isAfter(moment(this.lastUpdate));
     }
 
-    
 
     this.prepareAddressAndContactInformation();
 
@@ -147,8 +149,9 @@ export class HospitalInfoComponent implements OnInit {
 
     this.prepareTemporalCharts();
 
-    
+
   }
+
   // getTrendIcon(entries: TimestampedValue[]): string {
   //   const latest = getLatest(entries);
   //   return latest >= 0 ? (latest == 0 ? 'trending_flat' : 'trending_up') : 'trending_down';
@@ -180,14 +183,14 @@ export class HospitalInfoComponent implements OnInit {
     this.barChartSpecs = [];
     let maxNum = 0;
 
-    for(const bedAccessor of this.bedAccessors) {
+    for (const bedAccessor of this.bedAccessors) {
       const dataValues = [];
 
       // fill the data object
-      for(const bedStatus of bedStati) {
+      for (const bedStatus of bedStati) {
         const v = this.latestDevelopment[bedAccessor][bedStatus] || 0;
 
-        if(bedAccessor === this.bedAccessors[0]) {
+        if (bedAccessor === this.bedAccessors[0]) {
           this.totalNumberOfHospitals += v;
         }
 
@@ -200,7 +203,7 @@ export class HospitalInfoComponent implements OnInit {
           }
         );
 
-        if(v > maxNum) {
+        if (v > maxNum) {
           maxNum = v;
         }
       }
@@ -215,7 +218,6 @@ export class HospitalInfoComponent implements OnInit {
       // also overwrite the title
       spec.encoding.x.title = '';
 
-      
 
       this.barChartSpecs.push({
         title: this.bedAccessorsMapping[bedAccessor],
@@ -225,18 +227,18 @@ export class HospitalInfoComponent implements OnInit {
 
     // set the max value
     this.barChartSpecs.forEach(spec => {
-      spec.chart.encoding.y.scale.domain = [0, maxNum+1];
-      spec.chart.encoding.y.axis.tickCount = Math.min(maxNum+1, 5);
+      spec.chart.encoding.y.scale.domain = [0, maxNum + 1];
+      spec.chart.encoding.y.axis.tickCount = Math.min(maxNum + 1, 5);
     });
   }
 
   private prepareAddressAndContactInformation() {
-    if(!this.isSingleHospital) {
+    if (!this.isSingleHospital) {
       return false;
     }
 
 
-    if(this.singleHospital.contact.indexOf('http')>-1){
+    if (this.singleHospital.contact.indexOf('http') > -1) {
       this.contact = 'http' + this.singleHospital.contact.split('http')[1];
       this.url = true;
 
@@ -245,7 +247,7 @@ export class HospitalInfoComponent implements OnInit {
       if (this.contactMsg === '') {
         this.contactMsg = 'Webseite';
       }
-    }else{
+    } else {
       this.contact = this.singleHospital.contact;
       this.url = false;
 
@@ -259,7 +261,7 @@ export class HospitalInfoComponent implements OnInit {
 
     var colors = [];
     for (const bedStatus of bedStati) {
-     colors.push(this.getCapacityStateColor(bedStatus));
+      colors.push(this.getCapacityStateColor(bedStatus));
     }
 
     this.specs = [];
@@ -267,10 +269,26 @@ export class HospitalInfoComponent implements OnInit {
 
     let maxNumSlices = 0;
 
+
     if (this.data.developments) {
-      for(const bedAccessor of this.bedAccessors) {
+      const tenDaysAgo = moment().subtract(10, 'day');
+      // const data = this.data.developments.filter(d => tenDaysAgo.isBefore(moment(d.timestamp)));
+      for (const bedAccessor of this.bedAccessors) {
         let summedbedcounts = 0;
         const dataValues = [];
+
+        if (moment(this.firstTimestamp).isAfter(tenDaysAgo)) {
+          for (const bedStatus of bedStati) {
+            dataValues.push(
+              {
+                Kategorie: bedStatus,
+                num: 0,
+                color: 'white',
+                Datum: tenDaysAgo
+              }
+            );
+          }
+        }
 
         for( const d of this.data.developments) {
 
@@ -278,7 +296,7 @@ export class HospitalInfoComponent implements OnInit {
           // fill the data object
           for (const bedStatus of bedStati) {
             const v = d[bedAccessor][bedStatus] || 0;
-            
+
             summedbedcounts++;
 
             sumOfOneSlice += v;
@@ -288,7 +306,7 @@ export class HospitalInfoComponent implements OnInit {
                 Kategorie: bedStatus,
                 num: v,
                 color: this.getCapacityStateColor(bedStatus),
-                Datum: d.timestamp
+                Datum: moment.max(moment(d.timestamp), tenDaysAgo).toDate()
               }
             );
             if (v > maxNum) {
@@ -296,12 +314,12 @@ export class HospitalInfoComponent implements OnInit {
             }
           }
 
-          if(sumOfOneSlice > maxNumSlices) {
+          if (sumOfOneSlice > maxNumSlices) {
             maxNumSlices = sumOfOneSlice;
           }
         }
 
-        
+        console.log(dataValues);
 
         // hack deep clone spec
         const spec = JSON.parse(JSON.stringify(this.temporalChartTemplateSpec));
@@ -309,17 +327,17 @@ export class HospitalInfoComponent implements OnInit {
         // inject data values
         spec.data.values = dataValues;
 
-        if(this.isSingleHospital && (new Date(this.lastUpdate).getTime()-new Date(this.firstTimestamp).getTime() < 2 * 24*60*60*1000)){
+        if (this.isSingleHospital && (new Date(this.lastUpdate).getTime() - new Date(this.firstTimestamp).getTime() < 2 * 24 * 60 * 60 * 1000)) {
           //spec.encoding.x.axis.format = '%d.%m (%H:%M)'
           spec.encoding.x.axis.labelExpr = "[timeFormat(datum.value, '%d.%m'), false ? ' ' : timeFormat(datum.value, '(%H:%M)')]";
-        } 
-        
+        }
+
         spec.encoding.y.scale = {
           domain: [0, maxNumSlices]
         }
 
-        if(!this.isSingleHospital) {
-          spec.mark.interpolate = 'step-before';
+        if (!this.isSingleHospital) {
+          spec.mark.interpolate = 'step-after';
           // spec.width = 370;
         } else {
           // is single hospital
@@ -331,12 +349,12 @@ export class HospitalInfoComponent implements OnInit {
         // also overwrite the title
         spec.encoding.x.title = '';
 
-        if(summedbedcounts > 0) {
+        if (summedbedcounts > 0) {
           this.specs.push({
             title: this.bedAccessorsMapping[bedAccessor],
             chart: spec
           });
-          
+
 
         }
       }
