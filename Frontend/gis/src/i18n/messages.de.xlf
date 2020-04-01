@@ -121,11 +121,11 @@
       </target></segment>
     </unit><unit id="countyDataNotFound">
       <notes>
-        <note category="location">src/app/aggregated-glyph-tooltip/aggregated-glyph-tooltip.component.html:6</note>
-      </notes>
+        
+      <note category="location">src/app/hospital-info/hospital-info.component.html:8</note></notes>
       <segment state="final">
-        <source>Für diesen Landkreis stehen keine Daten zur Verfügung.</source>
-      <target>Für diesen Landkreis stehen keine Daten zur Verfügung.</target></segment>
+        <source>Es stehen keine Daten zur Verfügung.</source>
+      <target>Es stehen keine Daten zur Verfügung.</target></segment>
     </unit><unit id="lsName">
       <notes>
         <note category="description">name of the group</note>
@@ -495,14 +495,14 @@
       <notes>
         
       <note category="location">src/app/hospital-info/hospital-info.component.html:112</note></notes>
-      <note category="location">src/app/infobox/infobox.component.html:284</note></notes>
+      
       <segment state="final">
-        <source>Impressum</source>
-      <target>Impressum</target></segment>
+        <source>Adresse: </source>
+      <target>Adresse: </target></segment>
     </unit><unit id="hospitalInfoNoTemporalDataAvailable">
       <notes>
-        <note category="location">src/app/hospital-info/hospital-info.component.html:71,73</note>
-      </notes>
+        
+      <note category="location">src/app/hospital-info/hospital-info.component.html:94</note></notes>
       <segment state="final">
         <source>
   Keine zeitliche Entwicklung verfügbar da ledliglich ein Datenpunkt gemeldet wurde.
@@ -520,17 +520,24 @@
     </unit><unit id="tooltipHospitalContact">
       <notes>
         
-      <note category="location">src/app/hospital-info/hospital-info.component.html:92</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:115</note></notes>
       <segment state="final">
         <source>Kontakt: </source>
       <target>Kontakt: </target></segment>
     </unit><unit id="tooltipHospitalLastUpdate">
       <notes>
         
-      <note category="location">src/app/aggregated-glyph-tooltip/aggregated-glyph-tooltip.component.html:8</note><note category="location">src/app/hospital-info/hospital-info.component.html:6</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:10</note></notes>
       <segment state="final">
         <source>Letzter Stand: </source>
       <target>Letzter Stand: </target></segment>
+    </unit><unit id="tooltipHospitalTemporalDevelopment">
+      <notes>
+        <note category="location">src/app/hospital-info/hospital-info.component.html:92</note>
+      </notes>
+      <segment state="final">
+        <source>Zeitliche Entwicklung:</source>
+      <target>Zeitliche Entwicklung:</target></segment>
     </unit><unit id="beds">
       <notes>
         <note category="description">beds</note>
