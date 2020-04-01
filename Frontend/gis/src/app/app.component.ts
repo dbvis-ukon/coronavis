@@ -16,6 +16,8 @@ import {APP_CONFIG_KEY, APP_HELP_SEEN} from "../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {HelpDialogComponent} from "./help-dialog/help-dialog.component";
+import { I18nService } from './services/i18n.service';
+import { TranslationService } from './services/translation.service';
 
 @Component({
   selector: 'app-root',
@@ -62,14 +64,22 @@ export class AppComponent implements OnInit {
 
   // constructor is here only used to inject services
   constructor(private snackbar: MatSnackBar,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private i18nService: I18nService,
+              private translationService: TranslationService
+              ) {
   }
 
   ngOnInit(): void {
+    this.i18nService.initI18n();
+
+
     const stored = JSON.parse(localStorage.getItem(APP_CONFIG_KEY)) as MapOptions;
     if (stored) {
       this.mapOptions = stored;
-      let snackbar = this.snackbar.open("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt", "Zurücksetzen", {
+      let snackbar = this.snackbar.open(
+        this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"), 
+        this.translationService.translate("Zurücksetzen"), {
         politeness: "polite",
         duration: 20000
       });

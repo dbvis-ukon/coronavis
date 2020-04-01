@@ -29,10 +29,7 @@ export class QualitativeDiviDevelopmentRepository {
   }
 
   public getDiviDevelopmentSingleHospitals(): Observable <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> {
-    return this.cachedRepository.get <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> (`${environment.apiUrl}hospitals/development`)
-    .pipe(
-      tap(c => console.log('repo single', c))
-    )
+    return this.cachedRepository.get <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> (`${environment.apiUrl}hospitals/development`);
   }
 
   public getDiviDevelopmentForAggLevel(aggregationLevel: AggregationLevel): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {

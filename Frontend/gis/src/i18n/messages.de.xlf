@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="de">
   <file original="ng.template" id="ngi18n">
-    <unit id="cases">
+    <unit id="residents">
+      <notes>
+        <note category="description">cases</note>
+        <note category="meaning">case-tooltip</note>
+        <note category="location">src/app/case-tooltip/case-tooltip.component.html:4</note>
+      </notes>
+      <segment state="final">
+        <source>Einwohner</source>
+      <target>Einwohner</target></segment>
+    </unit><unit id="cases">
       <notes>
         <note category="description">cases</note>
         <note category="meaning">case-tooltip</note>
@@ -74,6 +83,316 @@
       <segment state="final">
         <source>Todesfälle je 100.000 Einwohner</source>
       <target>Todesfälle je 100.000 Einwohner</target></segment>
+    </unit><unit id="menu1">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:4</note>
+      </notes>
+      <segment state="final">
+        <source>Das Projekt</source>
+      <target>Das Projekt</target></segment>
+    </unit><unit id="title1">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:7,8</note>
+      </notes>
+      <segment state="final">
+        <source>Interaktive
+          Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</source>
+      <target>Interaktive
+          Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</target></segment>
+    </unit><unit id="visdescription12">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:9,10</note>
+      </notes>
+      <segment state="final">
+        <source>Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
+            am Besten im Chrome-Browser.</source>
+      <target>Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
+            am Besten im Chrome-Browser.</target></segment>
+    </unit><unit id="visdescription13">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:11,14</note>
+      </notes>
+      <segment state="final">
+        <source>Die <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
+          Konstanz entwickelt dieses Tool, um eine intuitive Übersicht über freie und belegte Bettenkapazitäten in
+          Deutschland zu zeigen. Anhand dieser Information können Engpässe früh erkannt und eine Umverteilung oder
+          direkte Umleitung von Patientenströmen vorgenommen werden.</source>
+      <target>Die <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
+          Konstanz entwickelt dieses Tool, um eine intuitive Übersicht über freie und belegte Bettenkapazitäten in
+          Deutschland zu zeigen. Anhand dieser Information können Engpässe früh erkannt und eine Umverteilung oder
+          direkte Umleitung von Patientenströmen vorgenommen werden.</target></segment>
+    </unit><unit id="visdescription14">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:15,19</note>
+      </notes>
+      <segment state="final">
+        <source>Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten des DIVI[1] (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
+          exakten Kapazitätsdaten des DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
+          vor Überlastungen erweitert werden. Diese Funktionalitäten sind schon vorhanden, jedoch aufgrund fehlendem
+          Datenzugang derzeit deaktiviert.</source>
+      <target>Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten des DIVI[1] (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
+          exakten Kapazitätsdaten des DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
+          vor Überlastungen erweitert werden. Diese Funktionalitäten sind schon vorhanden, jedoch aufgrund fehlendem
+          Datenzugang derzeit deaktiviert.</target></segment>
+    </unit><unit id="visdescription15">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:20,22</note>
+      </notes>
+      <segment state="final">
+        <source>Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
+          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick kann unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.covis.dbvis.de</pc> gefunden werden.</source>
+      <target>Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
+          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick kann unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.covis.dbvis.de</pc> gefunden werden.</target></segment>
+    </unit><unit id="visdescription16">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:23,24</note>
+      </notes>
+      <segment state="final">
+        <source>Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
+          anschauen wollen, kann dieses Fenster geschlossen werden.</source>
+      <target>Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
+          anschauen wollen, kann dieses Fenster geschlossen werden.</target></segment>
+    </unit><unit id="visdescription17">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:25</note>
+      </notes>
+      <segment state="final">
+        <source>[1] <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></source>
+      <target>[1] <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></target></segment>
+    </unit><unit id="button11">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:28</note>
+      </notes>
+      <segment state="final">
+        <source>Zur Beschreibung der Kapazitätsdarstellung</source>
+      <target>Zur Beschreibung der Kapazitätsdarstellung</target></segment>
+    </unit><unit id="button12">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:29</note>
+      </notes>
+      <segment state="final">
+        <source>Fenster schließen</source>
+      <target>Fenster schließen</target></segment>
+    </unit><unit id="menu2">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:33</note>
+      </notes>
+      <segment state="final">
+        <source>Darstellung der Bettenkapazitäten</source>
+      <target>Darstellung der Bettenkapazitäten</target></segment>
+    </unit><unit id="title2">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:36,37</note>
+      </notes>
+      <segment state="final">
+        <source>Beschreibung der Darstellung der Bettenkapazitäten
+        </source>
+      <target>Beschreibung der Darstellung der Bettenkapazitäten
+        </target></segment>
+    </unit><unit id="visdescription21">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:41</note></notes>
+      <segment state="final">
+        <source>Die Bettendarstellung erfolgt im Überblick mit drei farbigen Kästchen pro Krankenhaus, welche für die
+              Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
+              stärkere Interventionen dar.</source>
+      <target>Die Bettendarstellung erfolgt im Überblick mit drei farbigen Kästchen pro Krankenhaus, welche für die
+              Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
+              stärkere Interventionen dar.</target></segment>
+    </unit><unit id="visdescription22">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:45</note></notes>
+      <segment state="final">
+        <source>ICU low care: Auslastung der Betten für nichtinvasive Beatmung</source>
+      <target>ICU low care: Auslastung der Betten für nichtinvasive Beatmung</target></segment>
+    </unit><unit id="visdescription23">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:46</note></notes>
+      <segment state="final">
+        <source>ICU high care: Auslastung der Betten für invasive Beatmung</source>
+      <target>ICU high care: Auslastung der Betten für invasive Beatmung</target></segment>
+    </unit><unit id="visdescription24">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:47</note></notes>
+      <segment state="final">
+        <source>ECMO: Auslastung der Betten für die Beatmung von Patienten durch extrakorporale Membranoxygenierung</source>
+      <target>ECMO: Auslastung der Betten für die Beatmung von Patienten durch extrakorporale Membranoxygenierung</target></segment>
+    </unit><unit id="visdescription25">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:49</note></notes>
+      <segment state="final">
+        <source>Die Farbe stellen die Auslastung dar:</source>
+      <target>Die Farbe stellen die Auslastung dar:</target></segment>
+    </unit><unit id="visdescription26">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:51</note></notes>
+      <segment state="final">
+        <source>Grün: Plätze in dieser Behandlungskategorie sind in diesem Klinikum noch vorhanden</source>
+      <target>Grün: Plätze in dieser Behandlungskategorie sind in diesem Klinikum noch vorhanden</target></segment>
+    </unit><unit id="visdescription27">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:52</note></notes>
+      <segment state="final">
+        <source>Gelb: Die Betten in dieser Behandlungskategorie werden knapp</source>
+      <target>Gelb: Die Betten in dieser Behandlungskategorie werden knapp</target></segment>
+    </unit><unit id="visdescription28">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:53</note></notes>
+      <segment state="final">
+        <source>Rot: Die Betten in dieser Behandlungskategorie sind komplett ausgelastet</source>
+      <target>Rot: Die Betten in dieser Behandlungskategorie sind komplett ausgelastet</target></segment>
+    </unit><unit id="visdescription29">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:55</note></notes>
+      <segment state="final">
+        <source>Die Informationen können auch nach Regionen zusammengefasst werden durch die entsprechende Schaltfläche.
+              Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
+              notwendigerweise Kapazitäten gemeldet haben, können unter "Geographische Verortung" hinzugeschaltet werden.
+            </source>
+      <target>Die Informationen können auch nach Regionen zusammengefasst werden durch die entsprechende Schaltfläche.
+              Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
+              notwendigerweise Kapazitäten gemeldet haben, können unter "Geographische Verortung" hinzugeschaltet werden.
+            </target></segment>
+    </unit><unit id="button21">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:63</note></notes>
+      <segment state="final">
+        <source>Zurück</source>
+      <target>Zurück</target></segment>
+    </unit><unit id="button22">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:64</note></notes>
+      <segment state="final">
+        <source>Weiter zur Darstellung der Fallzahlen</source>
+      <target>Weiter zur Darstellung der Fallzahlen</target></segment>
+    </unit><unit id="button23">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:65</note></notes>
+      <segment state="final">
+        <source>Fenster schließen</source>
+      <target>Fenster schließen</target></segment>
+    </unit><unit id="menu3">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:69</note></notes>
+      <segment state="final">
+        <source>Darstellung der Fallzahlen</source>
+      <target>Darstellung der Fallzahlen</target></segment>
+    </unit><unit id="title3">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:71</note></notes>
+      <segment state="final">
+        <source>Beschreibung der Darstellung der Fallzahlen</source>
+      <target>Beschreibung der Darstellung der Fallzahlen</target></segment>
+    </unit><unit id="visdescription3">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:75</note></notes>
+      <segment state="final">
+        <source>Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
+              Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
+              oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
+              angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
+              gewählt werden, ob die Darstellung absolut oder pro 100 000 Einwohner angezeigt werden soll. Wenn man auf der
+              Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</source>
+      <target>Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
+              Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
+              oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
+              angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
+              gewählt werden, ob die Darstellung absolut oder pro 100 000 Einwohner angezeigt werden soll. Wenn man auf der
+              Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</target></segment>
+    </unit><unit id="button31">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:85</note></notes>
+      <segment state="final">
+        <source>Zurück</source>
+      <target>Zurück</target></segment>
+    </unit><unit id="button32">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:86</note></notes>
+      <segment state="final">
+        <source>Fenster schließen</source>
+      <target>Fenster schließen</target></segment>
+    </unit><unit id="countyDataNotFound">
+      <notes>
+        
+      <note category="location">src/app/hospital-info/hospital-info.component.html:8</note></notes>
+      <segment state="final">
+        <source>Es stehen keine Daten zur Verfügung.</source>
+      <target>Es stehen keine Daten zur Verfügung.</target></segment>
     </unit><unit id="lsName">
       <notes>
         <note category="description">name of the group</note>
@@ -206,6 +525,14 @@
       <segment state="final">
         <source>Länder</source>
       <target>Länder</target></segment>
+    </unit><unit id="StatesTP">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:26</note>
+        <note category="location">src/app/infobox/infobox.component.html:139</note>
+      </notes>
+      <segment state="final">
+        <source>Bundesländer</source>
+      <target>Bundesländer</target></segment>
     </unit><unit id="infoboxRegions">
       <notes>
         
@@ -213,6 +540,14 @@
       <segment state="final">
         <source>Bezirke</source>
       <target>Bezirke</target></segment>
+    </unit><unit id="RegionsTP">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:27</note>
+        <note category="location">src/app/infobox/infobox.component.html:140</note>
+      </notes>
+      <segment state="final">
+        <source>Regierungsbezirke</source>
+      <target>Regierungsbezirke</target></segment>
     </unit><unit id="infoboxCounties">
       <notes>
         
@@ -220,6 +555,14 @@
       <segment state="final">
         <source>Kreise</source>
       <target>Kreise</target></segment>
+    </unit><unit id="CountiesTP">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:28</note>
+        <note category="location">src/app/infobox/infobox.component.html:141</note>
+      </notes>
+      <segment state="final">
+        <source>Landkreise</source>
+      <target>Landkreise</target></segment>
     </unit><unit id="infoboxNone">
       <notes>
         <note category="location">src/app/infobox/infobox.component.html:29</note>
@@ -227,6 +570,13 @@
       <segment state="final">
         <source>Keine</source>
       <target>Keine</target></segment>
+    </unit><unit id="NoneTP">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:29</note>
+      </notes>
+      <segment state="final">
+        <source>Ohne Aggregation</source>
+      <target>Ohne Aggregation</target></segment>
     </unit><unit id="infoboxBelegungShow">
       <notes>
         
@@ -434,6 +784,33 @@
       <segment state="final">
         <source>- Fallzahlen</source>
       <target>- Fallzahlen</target></segment>
+    </unit><unit id="footer1">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+        <note category="location">src/app/infobox/infobox.component.html:285</note>
+      </notes>
+      <segment state="final">
+        <source>Video</source>
+      <target>Video</target></segment>
+    </unit><unit id="footer2">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+        <note category="location">src/app/infobox/infobox.component.html:287</note>
+      </notes>
+      <segment state="final">
+        <source>Hilfe</source>
+      <target>Hilfe</target></segment>
+    </unit><unit id="footer3">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+        <note category="location">src/app/infobox/infobox.component.html:289</note>
+      </notes>
+      <segment state="final">
+        <source>Team</source>
+      <target>Team</target></segment>
     </unit><unit id="infoboxImprint">
       <notes>
         
@@ -441,20 +818,44 @@
       <segment state="final">
         <source>Impressum</source>
       <target>Impressum</target></segment>
-    </unit><unit id="countyDataNotFound">
+    </unit><unit id="footer5">
       <notes>
-        <note category="location">src/app/hospital-info/hospital-info.component.html:8</note>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+        <note category="location">src/app/infobox/infobox.component.html:297</note>
       </notes>
       <segment state="final">
-        <source>Es stehen keine Daten zur Verfügung.</source>
-      <target>Es stehen keine Daten zur Verfügung.</target></segment>
-    </unit><unit id="tooltipHospitalAddress">
+        <source>Sprache</source>
+      <target>Sprache</target></segment>
+    </unit><unit id="3102430522812415895">
+      <notes>
+        <note category="description"> hospitals@reported</note>
+        <note category="meaning">tooltip </note>
+        <note category="location">src/app/hospital-info/hospital-info.component.html:4</note>
+      </notes>
+      <segment state="final">
+        <source>gemeldete Krankenhäuser</source>
+      <target>gemeldete Krankenhäuser</target></segment>
+    </unit>
+    <unit id="tooltipHospitalAddress">
       <notes>
         
       <note category="location">src/app/hospital-info/hospital-info.component.html:112</note></notes>
+      
       <segment state="final">
         <source>Adresse: </source>
       <target>Adresse: </target></segment>
+    </unit><unit id="hospitalInfoNoTemporalDataAvailable">
+      <notes>
+        
+      <note category="location">src/app/hospital-info/hospital-info.component.html:94</note></notes>
+      <segment state="final">
+        <source>
+  Keine zeitliche Entwicklung verfügbar, da ledliglich ein Datenpunkt gemeldet wurde.
+</source>
+      <target>
+  Keine zeitliche Entwicklung verfügbar, da ledliglich ein Datenpunkt gemeldet wurde.
+</target></segment>
     </unit><unit id="tooltipHospitalContact">
       <notes>
         
@@ -467,32 +868,28 @@
         
       <note category="location">src/app/hospital-info/hospital-info.component.html:10</note></notes>
       <segment state="final">
-        <source>Letzter Stand:</source>
-      <target>Letzter Stand:</target></segment>
+        <source>Letzter Stand: </source>
+      <target>Letzter Stand: </target></segment>
+    </unit><unit id="tooltipHospitalOldData">
+      <notes>
+        <note category="location">src/app/hospital-info/hospital-info.component.html:17</note>
+      </notes>
+      <segment state="final">
+        <source>Die Daten sind älter als 24 Stunden.</source>
+      <target>Die Daten sind älter als 24 Stunden.</target></segment>
     </unit><unit id="tooltipHospitalTemporalDevelopment">
       <notes>
         <note category="location">src/app/hospital-info/hospital-info.component.html:92</note>
       </notes>
       <segment state="final">
-        <source>Zeitliche Entwicklung: (<ph id="0" equiv="INTERPOLATION" disp="{{ firstTimestamp | date:&quot;dd.MM.yyyy&quot;}}"/> - <ph id="1" equiv="INTERPOLATION_1" disp="{{ lastUpdate | date:&quot;dd.MM.yyyy&quot; }}"/>)</source>
-      <target>Zeitliche Entwicklung: (<ph id="0" equiv="INTERPOLATION" disp="{{ firstTimestamp | date:&quot;dd.MM.yyyy&quot;}}"/> - <ph id="1" equiv="INTERPOLATION_1" disp="{{ lastUpdate | date:&quot;dd.MM.yyyy&quot; }}"/>)</target></segment>
-    </unit><unit id="hospitalInfoNoTemporalDataAvailable">
-      <notes>
-        <note category="location">src/app/hospital-info/hospital-info.component.html:94,96</note>
-      </notes>
-      <segment state="final">
-        <source>
-  Keine zeitliche Entwicklung verfügbar, da ledliglich ein Datenpunkt gemeldet wurde.
-</source>
-      <target>
-  Keine zeitliche Entwicklung verfügbar, da ledliglich ein Datenpunkt gemeldet wurde.
-</target></segment>
+        <source>Zeitliche Entwicklung: </source>
+      <target>Zeitliche Entwicklung: </target></segment>
     </unit><unit id="beds">
       <notes>
         <note category="description">beds</note>
         <note category="meaning">legend</note>
-        <note category="location">src/app/legend/legend.component.html:18</note>
-      </notes>
+        
+      <note category="location">src/app/legend/legend.component.html:34</note></notes>
       <segment state="final">
         <source>Bettenauslastung</source>
       <target>Bettenauslastung</target></segment>

@@ -6,6 +6,7 @@ import {AggregatedHospitalOut} from '../repositories/types/out/aggregated-hospit
 import {BedType} from "../map/options/bed-type.enum";
 import * as moment from 'moment';
 import {QuantitativeColormapService} from '../services/quantitative-colormap.service';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-hospital-info',
@@ -120,7 +121,8 @@ export class HospitalInfoComponent implements OnInit {
 
   totalNumberOfHospitals: number = 0;
 
-  constructor(private colormapService: QualitativeColormapService) {
+  constructor(private colormapService: QualitativeColormapService,
+    private translationService: TranslationService) {
   }
 
   ngOnInit(): void {
@@ -217,6 +219,8 @@ export class HospitalInfoComponent implements OnInit {
 
       // also overwrite the title
       spec.encoding.x.title = '';
+
+      spec.encoding.y.title = this.translationService.translate('Anzahl Krankenhäuser');
 
 
       this.barChartSpecs.push({
@@ -344,6 +348,7 @@ export class HospitalInfoComponent implements OnInit {
 
         if (!this.isSingleHospital) {
           spec.mark.interpolate = 'step-after';
+          spec.encoding.y.axis.title = this.translationService.translate('Anzahl KH');
           // spec.width = 370;
         } else {
           // is single hospital
@@ -369,7 +374,6 @@ export class HospitalInfoComponent implements OnInit {
       this.specs.forEach(spec => {
         spec.chart.encoding.color.scale.domain = bedStati;
         spec.chart.encoding.color.scale.range = colors;
-        //console.log(JSON.stringify(spec));
         //spec.encoding.color.range = Math.min(maxNum+1, 5);
       });
     }

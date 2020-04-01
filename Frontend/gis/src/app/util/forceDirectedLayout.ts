@@ -28,7 +28,6 @@ export class ForceDirectedLayout {
         this.levelPositionMap = cachedLayoutForAggLevel;
       } else {
         // Cache length does not match current data;
-        console.log('wrong cache length');
         this.levelPositionMap = {};
         localStorage.removeItem(this.cacheKey);
       }

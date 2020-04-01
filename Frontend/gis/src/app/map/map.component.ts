@@ -23,6 +23,7 @@ import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.serv
 import { switchMap, map } from 'rxjs/operators';
 import {APP_CONFIG_KEY, MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { TranslationService } from '../services/translation.service';
 
 export enum MapOptionKeys {
   bedGlyphOptions, bedBackgroundOptions, covidNumberCaseOptions, showOsmHospitals, showOsmHeliports
@@ -88,7 +89,8 @@ export class MapComponent implements OnInit {
     private glyphLayerService: GlyphLayerService,
     private caseChoroplehtLayerService: CaseChoroplethLayerService,
     private osmLayerService: OSMLayerService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private translationService: TranslationService
   ) {
   }
 
@@ -110,7 +112,9 @@ export class MapComponent implements OnInit {
     let initialZoom = +localStorage.getItem(MAP_ZOOM_KEY);
 
     if (initialView && initialZoom) {
-      let snackbar = this.snackbar.open("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt", "Zurücksetzen", {
+      let snackbar = this.snackbar.open(
+        this.translationService.translate("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt"), 
+        this.translationService.translate("Zurücksetzen"), {
         politeness: "polite",
         duration: 40000
       });
