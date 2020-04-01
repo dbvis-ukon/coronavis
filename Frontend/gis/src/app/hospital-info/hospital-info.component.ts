@@ -26,11 +26,11 @@ export class HospitalInfoComponent implements OnInit {
   @Input()
   data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
 
-  glyphLegendColors = QualitativeColormapService.bedStati.filter(f => f !== 'Keine Information');
+  glyphLegendColors = QualitativeColormapService.bedStati;
 
   temporalChartTemplateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-    "width": 320, "height": 50,
+    "width": 350, "height": 50,
     "aggregated": true,
     "data": {
       "values": []
@@ -257,7 +257,7 @@ export class HospitalInfoComponent implements OnInit {
 
   private prepareTemporalCharts() {
     // var data = [{"development" : {"timestamp" : "2020-03-27T14:49:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-28T09:42:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-29T10:38:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-30T09:18:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Begrenzt" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-31T09:04:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}];
-    const bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet']; //FIXME add "Nicht verfügbar" if should be displayed
+    const bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar', 'Keine Information']; //FIXME add "Nicht verfügbar" if should be displayed
 
     var colors = [];
     for (const bedStatus of bedStati) {
@@ -277,17 +277,15 @@ export class HospitalInfoComponent implements OnInit {
         let summedbedcounts = 0;
         const dataValues = [];
 
-        if (moment(this.firstTimestamp).isAfter(tenDaysAgo)) {
-          for (const bedStatus of bedStati) {
+        if (moment(this.firstTimestamp).isSameOrAfter(tenDaysAgo)) {
             dataValues.push(
               {
-                Kategorie: bedStatus,
-                num: 0,
-                color: 'white',
+                Kategorie: "Keine Information",
+                num: this.totalNumberOfHospitals,
+                color: this.getCapacityStateColor("Keine Information"),
                 Datum: tenDaysAgo
               }
             );
-          }
         }
 
         for( const d of this.data.developments) {
