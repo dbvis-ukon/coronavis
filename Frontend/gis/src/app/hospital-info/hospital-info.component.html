@@ -1,7 +1,7 @@
 <div>
   <h3 class="name">{{ data.name }}</h3>
 
-  <p class="numHospitals" *ngIf="!isSingleHospital">({{ totalNumberOfHospitals }} gemeldete Krankenhäuser)</p>
+  <p class="numHospitals" *ngIf="!isSingleHospital">({{ totalNumberOfHospitals }} <span i18n="tooltip | hospitals@reported">gemeldete Krankenhäuser</span>)</p>
   <mat-divider></mat-divider>
 
   <div class="content">
@@ -32,15 +32,15 @@
       <tbody>
       <tr>
         <td><strong>ICU - Low Care:</strong> </td>
-        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuLow) }">{{ getStatusDescriptionFor(eBedType.icuLow) }}</td>
+        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuLow) }">{{ getStatusDescriptionFor(eBedType.icuLow) | translate }}</td>
       </tr>
       <tr>
         <td><strong>ICU - High Care: </strong></td>
-        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuHigh) }">{{ getStatusDescriptionFor(eBedType.icuHigh) }}</td>
+        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuHigh) }">{{ getStatusDescriptionFor(eBedType.icuHigh)  | translate}}</td>
       </tr>
       <tr>
         <td><strong>ECMO: </strong></td>
-        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.ecmo) }">{{ getStatusDescriptionFor(eBedType.ecmo) }}</td>
+        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.ecmo) }">{{ getStatusDescriptionFor(eBedType.ecmo) | translate}}</td>
       </tr>
       </tbody>
       <!--  <tbody>-->

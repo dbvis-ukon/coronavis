@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="de">
   <file original="ng.template" id="ngi18n">
-    <unit id="cases">
+    <unit id="residents">
+      <notes>
+        <note category="description">cases</note>
+        <note category="meaning">case-tooltip</note>
+        <note category="location">src/app/case-tooltip/case-tooltip.component.html:4</note>
+      </notes>
+      <segment state="final">
+        <source>Einwohner</source>
+      <target>Einwohner</target></segment>
+    </unit><unit id="cases">
       <notes>
         <note category="description">cases</note>
         <note category="meaning">case-tooltip</note>
@@ -818,6 +827,15 @@
       <segment state="final">
         <source>Sprache</source>
       <target>Sprache</target></segment>
+    </unit><unit id="3102430522812415895">
+      <notes>
+        <note category="description"> hospitals@reported</note>
+        <note category="meaning">tooltip </note>
+        <note category="location">src/app/hospital-info/hospital-info.component.html:4</note>
+      </notes>
+      <segment state="final">
+        <source>gemeldete Krankenhäuser</source>
+      <target>gemeldete Krankenhäuser</target></segment>
     </unit>
     <unit id="tooltipHospitalAddress">
       <notes>

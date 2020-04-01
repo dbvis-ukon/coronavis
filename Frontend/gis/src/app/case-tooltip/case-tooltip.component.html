@@ -1,7 +1,7 @@
 <div #main class="main">
   <h3>{{ this.data.name }}</h3>
   <mat-divider></mat-divider>
-  {{ this.data.bevoelkerung | number }} Einwohner
+   {{ this.data.bevoelkerung | number }} <span i18n="case-tooltip|cases@@residents">Einwohner</span>
   <table>
     <thead>
       <tr>

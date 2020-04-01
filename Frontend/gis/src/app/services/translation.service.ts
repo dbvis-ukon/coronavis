@@ -17,7 +17,7 @@ export class TranslationService {
     },
     {
       'de-DE': 'Ausgelastet',
-      'en-US': 'Fully occupied'
+      'en-US': 'Fully Occupied'
     },
     {
       'de-DE': 'Nicht verfügbar',
@@ -25,7 +25,7 @@ export class TranslationService {
     },
     {
       'de-DE': 'Keine Information',
-      'en-US': 'No information'
+      'en-US': 'No Information'
     },
     {
       'de-DE': 'Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt',
@@ -37,7 +37,7 @@ export class TranslationService {
     },
     {
       'de-DE': 'Zurücksetzen',
-      'en-US': 'Reset to default'
+      'en-US': 'Reset to Default'
     },
     {
       'de-DE': 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie',
@@ -53,7 +53,7 @@ export class TranslationService {
     },
     {
       'de-DE': 'Anzahl Krankenhäuser',
-      'en-US': 'Number of hospitals'
+      'en-US': 'Number of Hospitals'
     },
     {
       'de-DE': 'Anzahl KH',
