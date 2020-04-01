@@ -4,7 +4,6 @@
 
 export const environment = {
 
-   // apiUrl: 'https://153-migrate-divihospitalsservi.api.covis.dbvis.de/',
   apiUrl: 'https://staging.api.covis.dbvis.de/',
   // apiUrl: 'http://localhost:5000/',
 
