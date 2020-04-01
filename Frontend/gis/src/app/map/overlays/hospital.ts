@@ -1,9 +1,8 @@
-import { FeatureCollection } from 'geojson';
-
 import * as L from 'leaflet';
 import { Overlay } from './overlay';
 import { TooltipService } from 'src/app/services/tooltip.service';
 import { OSMHospitals } from 'src/app/repositories/types/in/osm-hospitals';
+import {OsmTooltipComponent} from "../../osm-tooltip/osm-tooltip.component";
 
 export class HospitalLayer extends Overlay<OSMHospitals> {
   constructor(
@@ -28,8 +27,45 @@ export class HospitalLayer extends Overlay<OSMHospitals> {
     const hospitalLayer = L.geoJSON(this.featureCollection, {
       pointToLayer: (feature, latlng) => {
         return L.circleMarker(latlng, geojsonMarkerOptions);
-      }
-    });
+      },
+      onEachFeature: (feature, layer) => {
+        layer.on({
+          // on mouseover update tooltip and highlight county
+          click: (e: L.LeafletMouseEvent) => onAction(e, feature, hospitalLayer),
+          mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, hospitalLayer),
+          // on mouseover hide tooltip and reset county to normal sytle
+          mouseout: (e: L.LeafletMouseEvent) => {
+            this.tooltipService.close();
+          }
+        });
+      }}
+      );
+
+      const onAction = (e: L.LeafletMouseEvent, feature: any, aggregationLayer: any) => {
+        const onCloseAction: () => void = () => {
+          aggregationLayer.resetStyle(e.target);
+        };
+  
+        const tooltipComponent = this.tooltipService
+          .openAtElementRef(OsmTooltipComponent, {
+            x: e.originalEvent.clientX,
+            y: e.originalEvent.clientY
+          }, onCloseAction);
+  
+        tooltipComponent.name = feature.properties.name;
+        tooltipComponent.type = "hospital";
+  
+        // set highlight style
+        const l = e.target;
+        l.setStyle({
+          weight: 3,
+          color: '#666',
+          dashArray: '',
+          fillOpacity: 0.7
+        });
+  
+        // l.bringToFront();
+      };
     return hospitalLayer;
   }
 }
