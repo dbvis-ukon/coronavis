@@ -12,17 +12,18 @@ spec:
   selector:
     matchLabels:
       {{- include "lingvis.labels" . | nindent 6 }}
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: onlyingress
-              operator: DoesNotExist
   template:
     metadata:
       labels:
         {{- include "lingvis.labels" . | nindent 8 }}
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - nodeSelectorTerms:
+                matchExpressions:
+                  - key: onlyingress
+                    operator: DoesNotExist
       containers:
         - name: backend
           image: "registry.dbvis.de/jentner/covid-19-vis/backend:{{ .Values.sha }}"
