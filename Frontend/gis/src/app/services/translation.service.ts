@@ -50,6 +50,14 @@ export class TranslationService {
     {
       'de-DE': 'ECMO = Zusätzlich ECMO',
       'en-US': 'ECMO = Additional ECMO'
+    },
+    {
+      'de-DE': 'Anzahl Krankenhäuser',
+      'en-US': 'Number of hospitals'
+    },
+    {
+      'de-DE': 'Anzahl KH',
+      'en-US': '# Hospitals'
     }
   ];
 
