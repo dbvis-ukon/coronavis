@@ -36,11 +36,13 @@ import { MatStepperModule } from "@angular/material/stepper";
 
 import { VegaComponent } from './vega/vega.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
+import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 
 
 @NgModule({
   entryComponents: [
-    GlyphTooltipComponent
+    GlyphTooltipComponent,
+    OsmTooltipComponent
   ],
   declarations: [
     AppComponent,
@@ -57,6 +59,7 @@ import { HelpDialogComponent } from './help-dialog/help-dialog.component';
     ImpressumComponent,
     VegaComponent,
     HelpDialogComponent,
+    OsmTooltipComponent,
   ],
   imports: [
     BrowserModule,

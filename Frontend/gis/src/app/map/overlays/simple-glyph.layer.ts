@@ -3,17 +3,18 @@ import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from 'src/app/services/tooltip.service';
 import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
-import {FeatureCollection, Point, Feature} from "geojson";
-import { Observable } from 'rxjs';
-import { BedGlyphOptions } from '../options/bed-glyph-options';
-import { BedType } from '../options/bed-type.enum';
-import { MatDialog } from '@angular/material/dialog';
-import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
-import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
+import {Feature, FeatureCollection, Point} from "geojson";
+import {Observable} from 'rxjs';
+import {BedGlyphOptions} from '../options/bed-glyph-options';
+import {BedType} from '../options/bed-type.enum';
+import {MatDialog} from '@angular/material/dialog';
+import {HospitalInfoDialogComponent} from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
+import {ForceDirectedLayout} from 'src/app/util/forceDirectedLayout';
 import {GlyphLayer} from "./GlyphLayer";
-import { SingleHospitalOut } from 'src/app/repositories/types/out/single-hospital-out';
-import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
-import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
+import {SingleHospitalOut} from 'src/app/repositories/types/out/single-hospital-out';
+import {QualitativeTimedStatus} from 'src/app/repositories/types/in/qualitative-hospitals-development';
+import {QualitativeColormapService} from 'src/app/services/qualitative-colormap.service';
+import {AggregationLevel} from "../options/aggregation-level.enum";
 
 export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
@@ -39,7 +40,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     super(name, data);
     this.enableDefault = true;
 
-    this.forceLayout = new ForceDirectedLayout(this.data, this.updateGlyphPositions.bind(this));
+    this.forceLayout = new ForceDirectedLayout(this.data, AggregationLevel.none, this.updateGlyphPositions.bind(this));
 
     this.glyphOptions.subscribe(opt => {
       if (!this.gHospitals || !opt) {
@@ -141,7 +142,6 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .data<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(this.data.features)
       .enter()
       .append<SVGGElement>('g')
-      .style('pointer-events', 'all')
       .attr('class', 'hospital')
       .attr('transform', d => {
         const p = this.latLngPoint({ lat: d.geometry.coordinates[1], lng: d.geometry.coordinates[0]});
@@ -153,67 +153,54 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       })
       .on('mouseenter', function(d1) {
         const evt: MouseEvent = d3.event;
-        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
+        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX + 5, y: evt.clientY + 5});
         t.tooltipData = d1.properties;
         d3.select(this).raise();
       })
       .on('mouseleave', () => this.tooltipService.close())
       .on('click', d => this.openDialog(d.properties));
 
-    // this.gHospitals
-    //   .append('rect')
-    //   .attr('width', this.glyphSize.width)
-    //   .attr('height', this.glyphSize.height/2)
-    //   .attr('fill', 'white')
-    //   .attr('stroke', '#cccccc');
+    this.gHospitals
+      .append('rect')
+      .attr('class', 'background-rect')
+      .attr('width', this.glyphSize.width)
+      .attr('height', this.glyphSize.height/2);
+      
 
     this.nameHospitalsShadow = this.gHospitals
       .append('text')
+      .attr('class', 'text-bg hospital')
       .text(d1 => {
         return d1.properties.name;
       })
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .attr('y', '13')
-      .attr('font-size', '7px')
-      .style('text-anchor', 'middle')
-      .style('stroke', 'white')
-      .style('stroke-width', '4px')
-      .style('opacity', '0.8')
       .call(this.wrap, '50');
 
     this.nameHospitals = this.gHospitals
       .append('text')
+      .attr('class', 'text-fg hospital')
       .text(d1 => {
         return d1.properties.name;
       })
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .attr('y', '13')
-      .attr('font-size', '7px')
-      .style('text-anchor', 'middle')
       .call(this.wrap, '50');
 
 
     this.cityHospitalsShadow = this.gHospitals
       .append('text')
+      .attr('class', 'text-bg city hiddenLabel')
       .text(d1 => this.shorten_city_name(d1.properties.address))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
-      .style('text-anchor', 'middle')
-      .attr('y', '22')
-      .attr('font-size', '10px')
-      .style('text-anchor', 'middle')
-      .style('stroke', 'white')
-      .style('stroke-width', '4px')
-      .style('opacity', '0.8')
-      .classed('hiddenLabel', true);
+      .attr('y', '22');
 
     this.cityHospitals = this.gHospitals
       .append('text')
+      .attr('class', 'text-fg city hiddenLabel')
       .text(d1 => this.shorten_city_name(d1.properties.address))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
-      .style('text-anchor', 'middle')
-      .attr('y', '22')
-      .attr('font-size', '10px')
-      .classed('hiddenLabel', true);
+      .attr('y', '22');
 
     this.gHospitals
       .append('rect')

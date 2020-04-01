@@ -37,7 +37,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     super(name, data);
     console.log(name, data);
 
-    this.forceLayout = new ForceDirectedLayout(this.data as any, this.updateGlyphPositions.bind(this));
+    this.forceLayout = new ForceDirectedLayout(this.data as any, granularity, this.updateGlyphPositions.bind(this));
 
     this.glyphOptions.subscribe(opt => {
       if(!this.gHospitals || !opt) {
@@ -144,7 +144,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       })
       .on('mouseenter touchstart', function (d1) {
         const evt: MouseEvent = d3.event;
-        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
+        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX + 5, y: evt.clientY + 5});
         t.tooltipData = d1.properties;
         d3.select(this).raise();
       })
@@ -154,6 +154,12 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
           data: d.properties
         });
       });
+
+    this.gHospitals
+      .append('rect')
+      .attr('class', 'background-rect')
+      .attr('width', this.glyphSize.width)
+      .attr('height', this.glyphSize.height/2);
       // .on('mouseenter', d1 => {
       //   const evt: MouseEvent = d3.event;
       //   const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
@@ -164,24 +170,21 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     // adds white shadow
     this.gHospitals
       .append('text')
+      .attr('class', 'text-bg aggName')
       .text(d1 => {
         return d1.properties.name;
       })
       .attr('x', (padding + 3 * rectSize + 4 * padding) / 2)
-      .attr('y', '22')
-      .attr('font-size', '8px')
-      .style('text-anchor', 'middle')
-      .style('stroke', 'white')
-      .style('stroke-width', '4px')
-      .style('opacity', '0.8');
+      .attr('y', '22');
+
 
     this.gHospitals
       .append('text')
+      .attr('class', 'text-fg aggName')
       .text(d1 => d1.properties.name)
       .attr('x', (padding + 3 * rectSize + 4 * padding) / 2)
-      .style('text-anchor', 'middle')
-      .attr('y', '22')
-      .attr('font-size', '8px');
+      .attr('y', '22');
+
 
     const self = this;
     this.gHospitals
