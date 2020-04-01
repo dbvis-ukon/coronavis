@@ -17,6 +17,13 @@ spec:
       labels:
         {{- include "lingvis.labels" . | nindent 8 }}
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: onlyingress
+                operator: DoesNotExist
       containers:
         - name: tileserver
           image: registry.dbvis.de/jentner/covid-19-vis/tiles:{{ .Values.sha }}
