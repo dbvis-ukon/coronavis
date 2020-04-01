@@ -518,6 +518,13 @@
       <segment state="final">
         <source>Letzter Stand: </source>
       <target>Letzter Stand: </target></segment>
+    </unit><unit id="tooltipHospitalOldData">
+      <notes>
+        <note category="location">src/app/hospital-info/hospital-info.component.html:17</note>
+      </notes>
+      <segment state="final">
+        <source>Die Daten sind älter als 24 Stunden.</source>
+      <target>Die Daten sind älter als 24 Stunden.</target></segment>
     </unit><unit id="tooltipHospitalTemporalDevelopment">
       <notes>
         <note category="location">src/app/hospital-info/hospital-info.component.html:92</note>

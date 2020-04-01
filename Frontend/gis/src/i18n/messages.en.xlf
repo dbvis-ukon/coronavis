@@ -513,13 +513,21 @@
       <segment state="initial">
         <source>Letzter Stand: </source>
       <target>Last Update: </target></segment>
+    </unit><unit id="tooltipHospitalOldData">
+      <notes>
+        <note category="location">src/app/hospital-info/hospital-info.component.html:17</note>
+      </notes>
+      <segment state="initial">
+        <source>Die Daten sind älter als 24 Stunden.</source>
+      <target>The data is older than 24 hours.</target></segment>
     </unit><unit id="tooltipHospitalTemporalDevelopment">
       <notes>
         <note category="location">src/app/hospital-info/hospital-info.component.html:92</note>
       </notes>
       <segment state="initial">
         <source>Zeitliche Entwicklung: </source>
-      <target>Zeitliche Entwicklung: </target></segment>
+        <target>Temporal Development: </target>
+      </segment>
     </unit><unit id="beds">
       <notes>
         <note category="description">beds</note>
