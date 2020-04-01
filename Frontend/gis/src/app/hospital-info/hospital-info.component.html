@@ -89,7 +89,7 @@
 <br>
 
 <div *ngIf="specs.length > 0">
-<h4><ng-template i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung:</ng-template> ({{ firstTimestamp | date:"dd.MM.yyyy"}} - {{ lastUpdate | date:"dd.MM.yyyy" }})</h4>
+<h4><span i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung:</span> ({{ firstTimestamp | date:"dd.MM.yyyy"}} - {{ lastUpdate | date:"dd.MM.yyyy" }})</h4>
 
 <p *ngIf="data.developments?.length <= 1" i18n="@@hospitalInfoNoTemporalDataAvailable">
   Keine zeitliche Entwicklung verfügbar da ledliglich ein Datenpunkt gemeldet wurde.

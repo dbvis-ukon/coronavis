@@ -484,14 +484,8 @@
       <segment state="final">
         <source>Impressum</source>
       <target>Impressum</target></segment>
-    </unit><unit id="countyDataNotFound">
-      <notes>
-        <note category="location">src/app/hospital-info/hospital-info.component.html:8</note>
-      </notes>
-      <segment state="final">
-        <source>Es stehen keine Daten zur Verfügung.</source>
-      <target>Es stehen keine Daten zur Verfügung.</target></segment>
-    </unit><unit id="tooltipHospitalAddress">
+    </unit>
+    <unit id="tooltipHospitalAddress">
       <notes>
         
       <note category="location">src/app/hospital-info/hospital-info.component.html:112</note></notes>
@@ -510,13 +504,6 @@
       <target>
   Keine zeitliche Entwicklung verfügbar da ledliglich ein Datenpunkt gemeldet wurde.
 </target></segment>
-    </unit><unit id="tooltipHospitalAddress">
-      <notes>
-        
-      <note category="location">src/app/hospital-info/hospital-info.component.html:89</note></notes>
-      <segment state="final">
-        <source>Adresse: </source>
-      <target>Adresse: </target></segment>
     </unit><unit id="tooltipHospitalContact">
       <notes>
         
