@@ -37,7 +37,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     super(name, data);
     console.log(name, data);
 
-    this.forceLayout = new ForceDirectedLayout(this.data as any, this.updateGlyphPositions.bind(this));
+    this.forceLayout = new ForceDirectedLayout(this.data as any, granularity, this.updateGlyphPositions.bind(this));
 
     this.glyphOptions.subscribe(opt => {
       if(!this.gHospitals || !opt) {
