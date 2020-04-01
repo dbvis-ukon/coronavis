@@ -3,6 +3,7 @@ import { AbstractTimedStatus, QualitativeTimedStatus } from '../repositories/typ
 import { QuantitativeTimedStatus, haxx } from '../repositories/types/out/quantitative-timed-status';
 
 export function getLatest(entries: TimestampedValue[]): number {
+  if (entries === undefined) {
     return NaN;
   }
   if (entries.length === 0) {
