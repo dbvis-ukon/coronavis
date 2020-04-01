@@ -42,6 +42,7 @@ import localeEn from '@angular/common/locales/en';
 import localeDe from '@angular/common/locales/de';
 import { APP_LOCALE } from 'src/constants';
 import { SupportedLocales } from './services/i18n.service';
+import { TranslatePipe } from './translate.pipe';
 
 // the second parameter 'fr-FR' is optional
 
@@ -57,8 +58,6 @@ if(storedLocale === SupportedLocales.DE_DE) {
   localeProvider = {provide: LOCALE_ID, useValue: 'en-US'};
   registerLocaleData(localeEn, 'en-US');
 }
-
-console.log('provide with', localeProvider);
 
 
 @NgModule({
@@ -80,6 +79,7 @@ console.log('provide with', localeProvider);
     ImpressumComponent,
     VegaComponent,
     HelpDialogComponent,
+    TranslatePipe,
   ],
   imports: [
     BrowserModule,
@@ -106,7 +106,7 @@ console.log('provide with', localeProvider);
     MatSnackBarModule,
     MatStepperModule
   ],
-  providers: [localeProvider, PlusminusPipe, DecimalPipe],
+  providers: [localeProvider, PlusminusPipe, DecimalPipe, TranslatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

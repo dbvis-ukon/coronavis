@@ -121,5 +121,5 @@
 <div class="glyph-color-legend">
     <div *ngFor="let t of glyphLegendColors" class="glyph-tile" >
         <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
-        <div class="text">{{ t }}</div>
+        <div class="text">{{ t | translate }}</div>
 </div>

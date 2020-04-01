@@ -37,7 +37,7 @@
     <tr *ngFor="let b of bedStatusColors">
       <td><div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div></td>
 
-      <td class="text">{{ b }}</td>
+      <td class="text">{{ b | translate }}</td>
     </tr>
   </table>
 
