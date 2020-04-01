@@ -147,18 +147,23 @@ export class MapComponent implements OnInit {
 
     if(this.glyphLayerSubscription) {
       this.glyphLayerSubscription.unsubscribe();
+      this.glyphLayerService.loading$.next(false);
     }
     if(this.bedChoroplethSubscription) {
       this.bedChoroplethSubscription.unsubscribe();
+      this.bedChoroplethLayerService.loading$.next(false);
     }
     if(this.caseChoroplethSubscription) {
       this.caseChoroplethSubscription.unsubscribe();
+      this.caseChoroplehtLayerService.loading$.next(false);
     }
     if(this.osmHospitalLayerSubscription) {
       this.osmHospitalLayerSubscription.unsubscribe();
+      this.osmLayerService.loading$.next(false);
     }
     if(this.osmHelipadLayerSubscription) {
       this.osmHelipadLayerSubscription.unsubscribe();
+      this.osmLayerService.loading$.next(false);
     }
 
     const bedGlyphOptions = JSON.stringify(mo.bedGlyphOptions);
