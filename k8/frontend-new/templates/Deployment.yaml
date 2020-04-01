@@ -12,6 +12,12 @@ spec:
   selector:
     matchLabels:
       {{- include "lingvis.labels" . | nindent 6 }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: onlyingress
+              operator: DoesNotExist
   template:
     metadata:
       labels:
