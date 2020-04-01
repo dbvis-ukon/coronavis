@@ -37,6 +37,14 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { VegaComponent } from './vega/vega.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 
+import { registerLocaleData } from '@angular/common';
+import localeEn from '@angular/common/locales/en';
+import localeDe from '@angular/common/locales/de';
+
+// the second parameter 'fr-FR' is optional
+registerLocaleData(localeEn, 'en-US');
+registerLocaleData(localeDe, 'de-DE');
+
 
 @NgModule({
   entryComponents: [

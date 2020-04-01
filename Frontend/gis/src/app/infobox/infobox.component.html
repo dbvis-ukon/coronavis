@@ -296,7 +296,7 @@
     <mat-form-field class="locale">
       <mat-label>Language</mat-label>
       <mat-select (selectionChange)="changeLocale($event)" [value]="selectedLocale">
-        <mat-option *ngFor="let locale of locales" [value]="locale">
+        <mat-option *ngFor="let locale of supportedLocales" [value]="locale">
           {{ locale }}
         </mat-option>
       </mat-select>
