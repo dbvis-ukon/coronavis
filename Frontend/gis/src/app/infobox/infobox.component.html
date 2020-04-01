@@ -282,19 +282,19 @@
   <div class="footer">
 
     
-    <a mat-button (click)="openVideo()">Video</a>
+    <a mat-button (click)="openVideo()"   i18n="infobox | infobox@@footer1" >Video</a>
 
-    <a mat-button (click)="openHelp()">Hilfe</a>
+    <a mat-button (click)="openHelp()"    i18n="infobox | infobox@@footer2" >Hilfe</a>
 
-    <a mat-button (click)="openAbout()">Team</a>
+    <a mat-button (click)="openAbout()"   i18n="infobox | infobox@@footer3" >Team</a>
 
     
-    <a mat-button  i18n="@@infoboxImprint" (click)="openImpressum()">Impressum</a>
+    <a mat-button  i18n="@@infoboxImprint" (click)="openImpressum()"    i18n="infobox | infobox@@footer4" >Impressum</a>
 
     <span class="spacer"></span>
 
     <mat-form-field class="locale">
-      <mat-label>Language</mat-label>
+      <mat-label    i18n="infobox | infobox@@footer5" >Sprache</mat-label>
       <mat-select (selectionChange)="changeLocale($event)" [value]="selectedLocale">
         <mat-option *ngFor="let locale of supportedLocales" [value]="locale">
           {{ locale }}

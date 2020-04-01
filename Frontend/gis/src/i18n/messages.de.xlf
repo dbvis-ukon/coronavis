@@ -74,51 +74,309 @@
       <segment state="final">
         <source>Todesfälle je 100.000 Einwohner</source>
       <target>Todesfälle je 100.000 Einwohner</target></segment>
-    </unit><unit id="visdescription">
+    </unit><unit id="menu1">
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:6,26</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:4</note>
       </notes>
       <segment state="final">
-        <source>
-        <pc id="0" equivStart="START_HEADING_LEVEL1" equivEnd="CLOSE_HEADING_LEVEL1" type="other" dispStart="&lt;h1>" dispEnd="&lt;/h1>">Interaktive
-          Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</pc>
-        <pc id="1" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>"><pc id="2" equivStart="START_EMPHASISED_TEXT" equivEnd="CLOSE_EMPHASISED_TEXT" type="other" dispStart="&lt;em>" dispEnd="&lt;/em>">Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
-            am Besten im Chrome-Browser.</pc></pc>
-        <pc id="3" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Die <pc id="4" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
+        <source>Das Projekt</source>
+      <target>Das Projekt</target></segment>
+    </unit><unit id="title1">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:7,8</note>
+      </notes>
+      <segment state="final">
+        <source>Interaktive
+          Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</source>
+      <target>Interaktive
+          Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</target></segment>
+    </unit><unit id="visdescription12">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:9,10</note>
+      </notes>
+      <segment state="final">
+        <source>Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
+            am Besten im Chrome-Browser.</source>
+      <target>Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
+            am Besten im Chrome-Browser.</target></segment>
+    </unit><unit id="visdescription13">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:11,14</note>
+      </notes>
+      <segment state="final">
+        <source>Die <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
           Konstanz entwickelt dieses Tool, um eine intuitive Übersicht über freie und belegte Bettenkapazitäten in
           Deutschland zu zeigen. Anhand dieser Information können Engpässe früh erkannt und eine Umverteilung oder
-          direkte Umleitung von Patientenströmen vorgenommen werden.</pc>
-        <pc id="5" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten des DIVI[1] (<pc id="6" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
-          exakten Kapazitätsdaten des DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
-          vor Überlastungen erweitert werden. Diese Funktionalitäten sind schon vorhanden, jedoch aufgrund fehlendem
-          Datenzugang derzeit deaktiviert.</pc>
-        <pc id="7" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
-          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick kann unter <pc id="8" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.covis.dbvis.de</pc> gefunden werden.</pc>
-        <pc id="9" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
-          anschauen wollen, kann dieses Fenster geschlossen werden.</pc>
-        <pc id="10" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">[1] <pc id="11" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></pc>
-      </source>
-      <target>
-        <pc id="0" equivStart="START_HEADING_LEVEL1" equivEnd="CLOSE_HEADING_LEVEL1" type="other" dispStart="&lt;h1>" dispEnd="&lt;/h1>">Interaktive
-          Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</pc>
-        <pc id="1" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>"><pc id="2" equivStart="START_EMPHASISED_TEXT" equivEnd="CLOSE_EMPHASISED_TEXT" type="other" dispStart="&lt;em>" dispEnd="&lt;/em>">Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
-            am Besten im Chrome-Browser.</pc></pc>
-        <pc id="3" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Die <pc id="4" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
+          direkte Umleitung von Patientenströmen vorgenommen werden.</source>
+      <target>Die <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
           Konstanz entwickelt dieses Tool, um eine intuitive Übersicht über freie und belegte Bettenkapazitäten in
           Deutschland zu zeigen. Anhand dieser Information können Engpässe früh erkannt und eine Umverteilung oder
-          direkte Umleitung von Patientenströmen vorgenommen werden.</pc>
-        <pc id="5" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten des DIVI[1] (<pc id="6" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
+          direkte Umleitung von Patientenströmen vorgenommen werden.</target></segment>
+    </unit><unit id="visdescription14">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:15,19</note>
+      </notes>
+      <segment state="final">
+        <source>Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten des DIVI[1] (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
           exakten Kapazitätsdaten des DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
           vor Überlastungen erweitert werden. Diese Funktionalitäten sind schon vorhanden, jedoch aufgrund fehlendem
-          Datenzugang derzeit deaktiviert.</pc>
-        <pc id="7" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
-          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick kann unter <pc id="8" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.covis.dbvis.de</pc> gefunden werden.</pc>
-        <pc id="9" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
-          anschauen wollen, kann dieses Fenster geschlossen werden.</pc>
-        <pc id="10" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">[1] <pc id="11" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></pc>
-      </target></segment>
+          Datenzugang derzeit deaktiviert.</source>
+      <target>Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten des DIVI[1] (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
+          exakten Kapazitätsdaten des DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
+          vor Überlastungen erweitert werden. Diese Funktionalitäten sind schon vorhanden, jedoch aufgrund fehlendem
+          Datenzugang derzeit deaktiviert.</target></segment>
+    </unit><unit id="visdescription15">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:20,22</note>
+      </notes>
+      <segment state="final">
+        <source>Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
+          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick kann unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.covis.dbvis.de</pc> gefunden werden.</source>
+      <target>Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
+          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick kann unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.covis.dbvis.de</pc> gefunden werden.</target></segment>
+    </unit><unit id="visdescription16">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:23,24</note>
+      </notes>
+      <segment state="final">
+        <source>Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
+          anschauen wollen, kann dieses Fenster geschlossen werden.</source>
+      <target>Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
+          anschauen wollen, kann dieses Fenster geschlossen werden.</target></segment>
+    </unit><unit id="visdescription17">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:25</note>
+      </notes>
+      <segment state="final">
+        <source>[1] <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></source>
+      <target>[1] <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></target></segment>
+    </unit><unit id="button11">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:28</note>
+      </notes>
+      <segment state="final">
+        <source>Zur Beschreibung der Kapazitätsdarstellung</source>
+      <target>Zur Beschreibung der Kapazitätsdarstellung</target></segment>
+    </unit><unit id="button12">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:29</note>
+      </notes>
+      <segment state="final">
+        <source>Fenster schließen</source>
+      <target>Fenster schließen</target></segment>
+    </unit><unit id="menu2">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:33</note>
+      </notes>
+      <segment state="final">
+        <source>Darstellung der Bettenkapazitäten</source>
+      <target>Darstellung der Bettenkapazitäten</target></segment>
+    </unit><unit id="title2">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:36,37</note>
+      </notes>
+      <segment state="final">
+        <source>Beschreibung der Darstellung der Bettenkapazitäten
+        </source>
+      <target>Beschreibung der Darstellung der Bettenkapazitäten
+        </target></segment>
+    </unit><unit id="visdescription21">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:39,41</note>
+      </notes>
+      <segment state="final">
+        <source>Die Bettendarstellung erfolgt im Überblick mit drei farbigen Kästchen pro Krankenhaus, welche für die
+          Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
+          stärkere Interventionen dar.</source>
+      <target>Die Bettendarstellung erfolgt im Überblick mit drei farbigen Kästchen pro Krankenhaus, welche für die
+          Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
+          stärkere Interventionen dar.</target></segment>
+    </unit><unit id="visdescription22">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:43</note>
+      </notes>
+      <segment state="final">
+        <source>ICU low care: Auslastung der Betten für nichtinvasive Beatmung</source>
+      <target>ICU low care: Auslastung der Betten für nichtinvasive Beatmung</target></segment>
+    </unit><unit id="visdescription23">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:44</note>
+      </notes>
+      <segment state="final">
+        <source>ICU high care: Auslastung der Betten für invasive Beatmung</source>
+      <target>ICU high care: Auslastung der Betten für invasive Beatmung</target></segment>
+    </unit><unit id="visdescription24">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:45</note>
+      </notes>
+      <segment state="final">
+        <source>ECMO: Auslastung der Betten für die Beatmung von Patienten durch extrakorporale Membranoxygenierung</source>
+      <target>ECMO: Auslastung der Betten für die Beatmung von Patienten durch extrakorporale Membranoxygenierung</target></segment>
+    </unit><unit id="visdescription25">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:47</note>
+      </notes>
+      <segment state="final">
+        <source>Die Farbe stellen die Auslastung dar:</source>
+      <target>Die Farbe stellen die Auslastung dar:</target></segment>
+    </unit><unit id="visdescription26">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:49</note>
+      </notes>
+      <segment state="final">
+        <source>Grün: Plätze in dieser Behandlungskategorie sind in diesem Klinikum noch vorhanden</source>
+      <target>Grün: Plätze in dieser Behandlungskategorie sind in diesem Klinikum noch vorhanden</target></segment>
+    </unit><unit id="visdescription27">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:50</note>
+      </notes>
+      <segment state="final">
+        <source>Gelb: Die Betten in dieser Behandlungskategorie werden knapp</source>
+      <target>Gelb: Die Betten in dieser Behandlungskategorie werden knapp</target></segment>
+    </unit><unit id="visdescription28">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:51</note>
+      </notes>
+      <segment state="final">
+        <source>Rot: Die Betten in dieser Behandlungskategorie sind komplett ausgelastet</source>
+      <target>Rot: Die Betten in dieser Behandlungskategorie sind komplett ausgelastet</target></segment>
+    </unit><unit id="visdescription29">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:53,56</note>
+      </notes>
+      <segment state="final">
+        <source>Die Informationen können auch nach Regionen zusammengefasst werden durch die entsprechende Schaltfläche.
+          Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
+          notwendigerweise Kapazitäten gemeldet haben, können unter "Geographische Verortung" hinzugeschaltet werden.
+        </source>
+      <target>Die Informationen können auch nach Regionen zusammengefasst werden durch die entsprechende Schaltfläche.
+          Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
+          notwendigerweise Kapazitäten gemeldet haben, können unter "Geographische Verortung" hinzugeschaltet werden.
+        </target></segment>
+    </unit><unit id="button21">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:59</note>
+      </notes>
+      <segment state="final">
+        <source>Zurück</source>
+      <target>Zurück</target></segment>
+    </unit><unit id="button22">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:60</note>
+      </notes>
+      <segment state="final">
+        <source>Weiter zur Darstellung der Fallzahlen</source>
+      <target>Weiter zur Darstellung der Fallzahlen</target></segment>
+    </unit><unit id="button23">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:61</note>
+      </notes>
+      <segment state="final">
+        <source>Fenster schließen</source>
+      <target>Fenster schließen</target></segment>
+    </unit><unit id="menu3">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:65</note>
+      </notes>
+      <segment state="final">
+        <source>Darstellung der Fallzahlen</source>
+      <target>Darstellung der Fallzahlen</target></segment>
+    </unit><unit id="title3">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:67</note>
+      </notes>
+      <segment state="final">
+        <source>Beschreibung der Darstellung der Fallzahlen</source>
+      <target>Beschreibung der Darstellung der Fallzahlen</target></segment>
+    </unit><unit id="visdescription3">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:69</note></notes>
+      <segment state="final">
+        <source>Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
+          Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
+          oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
+          angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
+          gewählt werden, ob die Darstellung absolut oder pro 100 000 Einwohner angezeigt werden soll. Wenn man auf der
+          Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</source>
+      <target>Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
+          Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
+          oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
+          angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
+          gewählt werden, ob die Darstellung absolut oder pro 100 000 Einwohner angezeigt werden soll. Wenn man auf der
+          Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</target></segment>
+    </unit><unit id="button31">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:77</note>
+      </notes>
+      <segment state="final">
+        <source>Zurück</source>
+      <target>Zurück</target></segment>
+    </unit><unit id="button32">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:78</note>
+      </notes>
+      <segment state="final">
+        <source>Fenster schließen</source>
+      <target>Fenster schließen</target></segment>
     </unit><unit id="countyDataNotFound">
       <notes>
         
@@ -477,6 +735,33 @@
       <segment state="final">
         <source>- Fallzahlen</source>
       <target>- Fallzahlen</target></segment>
+    </unit><unit id="footer1">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+        <note category="location">src/app/infobox/infobox.component.html:285</note>
+      </notes>
+      <segment state="final">
+        <source>Video</source>
+      <target>Video</target></segment>
+    </unit><unit id="footer2">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+        <note category="location">src/app/infobox/infobox.component.html:287</note>
+      </notes>
+      <segment state="final">
+        <source>Hilfe</source>
+      <target>Hilfe</target></segment>
+    </unit><unit id="footer3">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+        <note category="location">src/app/infobox/infobox.component.html:289</note>
+      </notes>
+      <segment state="final">
+        <source>Team</source>
+      <target>Team</target></segment>
     </unit><unit id="infoboxImprint">
       <notes>
         
@@ -484,6 +769,15 @@
       <segment state="final">
         <source>Impressum</source>
       <target>Impressum</target></segment>
+    </unit><unit id="footer5">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+        <note category="location">src/app/infobox/infobox.component.html:297</note>
+      </notes>
+      <segment state="final">
+        <source>Sprache</source>
+      <target>Sprache</target></segment>
     </unit>
     <unit id="tooltipHospitalAddress">
       <notes>
