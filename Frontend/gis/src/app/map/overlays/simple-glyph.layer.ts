@@ -142,7 +142,6 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .data<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(this.data.features)
       .enter()
       .append<SVGGElement>('g')
-      .style('pointer-events', 'all')
       .attr('class', 'hospital')
       .attr('transform', d => {
         const p = this.latLngPoint({ lat: d.geometry.coordinates[1], lng: d.geometry.coordinates[0]});
@@ -151,8 +150,16 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
         d.properties._x = p.x;
         d.properties._y = p.y;
         return `translate(${p.x}, ${p.y})`;
-      })
+      });
+
+    this.gHospitals
+      .append('rect')
+      .attr('class', 'background-rect')
+      .attr('width', this.glyphSize.width)
+      .attr('height', this.glyphSize.height/2)
       .on('mouseenter', function(d1) {
+        console.log('tooltip');
+
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
         t.tooltipData = d1.properties;
@@ -161,36 +168,24 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .on('mouseleave', () => this.tooltipService.close())
       .on('click', d => this.openDialog(d.properties));
 
-    // this.gHospitals
-    //   .append('rect')
-    //   .attr('width', this.glyphSize.width)
-    //   .attr('height', this.glyphSize.height/2)
-    //   .attr('fill', 'white')
-    //   .attr('stroke', '#cccccc');
-
     this.nameHospitalsShadow = this.gHospitals
       .append('text')
+      .attr('class', 'text-bg')
       .text(d1 => {
         return d1.properties.name;
       })
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .attr('y', '13')
-      .attr('font-size', '7px')
-      .style('text-anchor', 'middle')
-      .style('stroke', 'white')
-      .style('stroke-width', '4px')
-      .style('opacity', '0.8')
       .call(this.wrap, '50');
 
     this.nameHospitals = this.gHospitals
       .append('text')
+      .attr('class', 'text-fg')
       .text(d1 => {
         return d1.properties.name;
       })
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .attr('y', '13')
-      .attr('font-size', '7px')
-      .style('text-anchor', 'middle')
       .call(this.wrap, '50');
 
 

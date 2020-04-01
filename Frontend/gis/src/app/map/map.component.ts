@@ -32,7 +32,7 @@ export enum MapOptionKeys {
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css'],
+  styleUrls: ['./map.component.less'],
   // super important, otherwise the defined css doesn't get added to dynamically created elements, for example, from D3.
   encapsulation: ViewEncapsulation.None,
 })
