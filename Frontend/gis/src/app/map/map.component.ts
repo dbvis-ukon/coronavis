@@ -23,6 +23,8 @@ import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.serv
 import { switchMap, map } from 'rxjs/operators';
 import {APP_CONFIG_KEY, MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {SimpleMapScreenshoter} from 'leaflet-simple-map-screenshoter'
+
 
 export enum MapOptionKeys {
   bedGlyphOptions, bedBackgroundOptions, covidNumberCaseOptions, showOsmHospitals, showOsmHeliports
@@ -136,6 +138,8 @@ export class MapComponent implements OnInit {
     });
 
     new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
+
+    new SimpleMapScreenshoter().addTo(this.mymap);
 
     this.updateMap(this._mapOptions);
   }
