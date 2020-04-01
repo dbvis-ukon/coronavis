@@ -150,27 +150,26 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
         d.properties._x = p.x;
         d.properties._y = p.y;
         return `translate(${p.x}, ${p.y})`;
-      });
-
-    this.gHospitals
-      .append('rect')
-      .attr('class', 'background-rect')
-      .attr('width', this.glyphSize.width)
-      .attr('height', this.glyphSize.height/2)
+      })
       .on('mouseenter', function(d1) {
-        console.log('tooltip');
-
         const evt: MouseEvent = d3.event;
-        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
+        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX + 5, y: evt.clientY + 5});
         t.tooltipData = d1.properties;
         d3.select(this).raise();
       })
       .on('mouseleave', () => this.tooltipService.close())
       .on('click', d => this.openDialog(d.properties));
 
+    this.gHospitals
+      .append('rect')
+      .attr('class', 'background-rect')
+      .attr('width', this.glyphSize.width)
+      .attr('height', this.glyphSize.height/2);
+      
+
     this.nameHospitalsShadow = this.gHospitals
       .append('text')
-      .attr('class', 'text-bg')
+      .attr('class', 'text-bg hospital')
       .text(d1 => {
         return d1.properties.name;
       })
@@ -180,7 +179,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
     this.nameHospitals = this.gHospitals
       .append('text')
-      .attr('class', 'text-fg')
+      .attr('class', 'text-fg hospital')
       .text(d1 => {
         return d1.properties.name;
       })
@@ -191,25 +190,17 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
     this.cityHospitalsShadow = this.gHospitals
       .append('text')
+      .attr('class', 'text-bg city hiddenLabel')
       .text(d1 => this.shorten_city_name(d1.properties.address))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
-      .style('text-anchor', 'middle')
-      .attr('y', '22')
-      .attr('font-size', '10px')
-      .style('text-anchor', 'middle')
-      .style('stroke', 'white')
-      .style('stroke-width', '4px')
-      .style('opacity', '0.8')
-      .classed('hiddenLabel', true);
+      .attr('y', '22');
 
     this.cityHospitals = this.gHospitals
       .append('text')
+      .attr('class', 'text-fg city hiddenLabel')
       .text(d1 => this.shorten_city_name(d1.properties.address))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
-      .style('text-anchor', 'middle')
-      .attr('y', '22')
-      .attr('font-size', '10px')
-      .classed('hiddenLabel', true);
+      .attr('y', '22');
 
     this.gHospitals
       .append('rect')
