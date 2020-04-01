@@ -11,9 +11,7 @@
   z-index: 999;
 }
 
-.hiddenLabel{
-  visibility: hidden;
-}
+
 
 .legend {
   line-height: 18px !important;
@@ -43,30 +41,61 @@
 g.hospital {
   pointer-events: none;
 
+  .hiddenLabel{
+    visibility: hidden;
+  }
+
   .background-rect {
-    fill: red;
+    fill: transparent;
     stroke: none;
     pointer-events: all;
   }
 
   .text-bg {
-    font-size: 7px;
+    pointer-events: all;
     text-anchor: middle;
     stroke: white;
     stroke-width: 4px;
-    opacity: 0.8
+    opacity: 0.8;
+
+    &.hospital {
+      font-size: 7px;     
+    }
+
+    &.city {
+      font-size: 10px;
+    }
+
+    &.aggName {
+      font-size: 8px;
+    }
   }
 
   .text-fg {
-    font-size: 7px;
     text-anchor: middle;
+    pointer-events: all;
+
+
+    &.hospital {
+      font-size: 7px;
+    }
+
+    &.city {
+      font-size: 10px;
+    }
+
+    &.aggName {
+      font-size: 8px;
+    }
+  }
+
+  .bed {
+    stroke: white;
+    stroke-width: 2;
+    pointer-events: none;
   }
 }
 
-g.hospital .bed {
-  stroke: white;
-  stroke-width: 2
-}
 
 svg text {
   text-rendering: geometricprecision;
