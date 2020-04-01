@@ -25,8 +25,8 @@
         <p>[1] <a href="http://divi.de">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</a></p>
       </div>
       <div>
-        <button mat-button matStepperNext>Zur Beschreibung der Kapazitätsdarstellung</button>
-        <button mat-button (click)="close()">Fenster schließen</button>
+        <button mat-button mat-raised-button color="primary" matStepperNext>Zur Beschreibung der Kapazitätsdarstellung</button>
+        <button mat-button mat-stroked-button (click)="close()">Fenster schließen</button>
       </div>
     </mat-step>
     <mat-step>
@@ -56,9 +56,9 @@
         </p>
       </div>
       <div>
-        <button mat-button matStepperPrevious>Zurück</button>
-        <button mat-button matStepperNext>Weiter zur Darstellung der Fallzahlen</button>
-        <button mat-button (click)="close()">Fenster schließen</button>
+        <button mat-button mat-stroked-button matStepperPrevious>Zurück</button>
+        <button mat-button mat-raised-button color="primary" matStepperNext>Weiter zur Darstellung der Fallzahlen</button>
+        <button mat-button mat-stroked-button (click)="close()">Fenster schließen</button>
       </div>
     </mat-step>
     <mat-step>
@@ -74,8 +74,8 @@
           Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</p>
       </div>
       <div>
-        <button mat-button matStepperPrevious>Zurück</button>
-        <button mat-button (click)="close()">Fenster schließen</button>
+        <button mat-button mat-stroked-button matStepperPrevious>Zurück</button>
+        <button mat-button mat-raised-button color="primary" (click)="close()">Fenster schließen</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

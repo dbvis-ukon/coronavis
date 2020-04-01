@@ -198,6 +198,7 @@ export class MapComponent implements OnInit {
       })
     } else if (!mo.showOsmHospitals && this.osmHospitalsLayer) {
       this.mymap.removeLayer(this.osmHospitalsLayer);
+      this.osmHospitalsLayer = null;
     }
 
     if (mo.showOsmHeliports && !this.osmHeliportsLayer) {
@@ -208,6 +209,7 @@ export class MapComponent implements OnInit {
       })
     } else if (!mo.showOsmHeliports && this.osmHeliportsLayer) {
       this.mymap.removeLayer(this.osmHeliportsLayer);
+      this.osmHeliportsLayer = null;
     }
   }
 

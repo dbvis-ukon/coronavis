@@ -36,6 +36,7 @@ import { MatStepperModule } from "@angular/material/stepper";
 
 import { VegaComponent } from './vega/vega.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
+import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 
 import { registerLocaleData, DecimalPipe } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
@@ -72,7 +73,8 @@ if(storedLocale === SupportedLocales.DE_DE) {
 
 @NgModule({
   entryComponents: [
-    GlyphTooltipComponent
+    GlyphTooltipComponent,
+    OsmTooltipComponent
   ],
   declarations: [
     AppComponent,
@@ -90,6 +92,7 @@ if(storedLocale === SupportedLocales.DE_DE) {
     VegaComponent,
     HelpDialogComponent,
     TranslatePipe,
+    OsmTooltipComponent,
   ],
   imports: [
     BrowserModule,
