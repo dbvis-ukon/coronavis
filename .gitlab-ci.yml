@@ -376,9 +376,10 @@ dockerize-tiles:
   variables:
     FOLDER: Tiles
     RUN_ALWAYS: "no"
-    RUN_ON_FB: "no"
+    RUN_ON_FB: "yes"
     RUN_ON_MASTER: "yes"
     RUN_ON_TAG: "yes"
+    GIT_SUBMODULE_STRATEGY: "recursive"
   <<: *dockerize-template
   <<: *rules-tiles
   needs:
