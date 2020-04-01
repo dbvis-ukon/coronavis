@@ -23,10 +23,10 @@
         [value]="mo.bedGlyphOptions.aggregationLevel"
         (change)="updateBedGlyphAggregationLevel($event.value)"
       >
-        <mat-button-toggle [value]="eAggregationLevels.state" i18n="@@infoboxStates" matTooltip="Bundesländer">Länder</mat-button-toggle>
-        <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" i18n="@@infoboxRegions" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
-        <mat-button-toggle [value]="eAggregationLevels.county" i18n="@@infoboxCounties" matTooltip="Landkreise">Kreise</mat-button-toggle>
-        <mat-button-toggle [value]="eAggregationLevels.none" i18n="@@infoboxNone" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.state" i18n="@@infoboxStates"  i18n-matTooltip="@@StatesTP" matTooltip="Bundesländer">Länder</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" i18n="@@infoboxRegions"   i18n-matTooltip="@@RegionsTP" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.county" i18n="@@infoboxCounties"   i18n-matTooltip="@@CountiesTP"  matTooltip="Landkreise">Kreise</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.none" i18n="@@infoboxNone"   i18n-matTooltip="@@NoneTP" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
       </mat-button-toggle-group>
 
       <mat-divider></mat-divider>
@@ -136,9 +136,9 @@
               [value]="mo.covidNumberCaseOptions.aggregationLevel"
               (change)="mo.covidNumberCaseOptions.aggregationLevel = $event.value; emitMapOptions()"
             >
-              <mat-button-toggle [value]="eAggregationLevels.state" i18n="@@infoboxStates" matTooltip="Bundesländer">Länder</mat-button-toggle>
-              <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" i18n="@@infoboxRegions" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
-              <mat-button-toggle [value]="eAggregationLevels.county" i18n="@@infoboxCounties" matTooltip="Landkreise">Kreise</mat-button-toggle>
+              <mat-button-toggle [value]="eAggregationLevels.state" i18n="@@infoboxStates"   i18n-matTooltip="@@StatesTP"  matTooltip="Bundesländer">Länder</mat-button-toggle>
+              <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" i18n="@@infoboxRegions"   i18n-matTooltip="@@RegionsTP"  matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+              <mat-button-toggle [value]="eAggregationLevels.county" i18n="@@infoboxCounties"   i18n-matTooltip="@@CountiesTP"  matTooltip="Landkreise">Kreise</mat-button-toggle>
             </mat-button-toggle-group>
           </div>
 
