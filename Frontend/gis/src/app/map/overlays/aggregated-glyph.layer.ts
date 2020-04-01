@@ -2,18 +2,19 @@ import * as L from 'leaflet';
 import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from '../../services/tooltip.service';
-import {FeatureCollection, MultiPolygon, Feature} from "geojson";
+import {Feature, FeatureCollection, MultiPolygon} from "geojson";
 import {Observable} from "rxjs";
 import {BedGlyphOptions} from '../options/bed-glyph-options';
 import {BedType} from '../options/bed-type.enum';
 import {ForceDirectedLayout} from 'src/app/util/forceDirectedLayout';
 import {GlyphLayer} from "./GlyphLayer";
-import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
-import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
-import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
-import { MatDialog } from '@angular/material/dialog';
-import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
-import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
+import {AggregatedHospitalOut} from 'src/app/repositories/types/out/aggregated-hospital-out';
+import {QualitativeTimedStatus} from 'src/app/repositories/types/in/qualitative-hospitals-development';
+import {QualitativeColormapService} from 'src/app/services/qualitative-colormap.service';
+import {MatDialog} from '@angular/material/dialog';
+import {HospitalInfoDialogComponent} from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
+import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
+import {AggregationLevel} from "../options/aggregation-level.enum";
 
 export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
@@ -26,7 +27,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
 
   constructor(
     name: string,
-    private granularity: string,
+    private granularity: AggregationLevel,
     private data: FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>,
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
@@ -230,9 +231,9 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
   onZoomed() {
     const zoom = this.map.getZoom();
     let level = 9;
-    if (this.granularity === 'regierungsbezirke') {
+    if (this.granularity === AggregationLevel.governmentDistrict) {
       level = 11;
-    } else if (this.granularity === 'bundeslander') {
+    } else if (this.granularity === AggregationLevel.state) {
       level = 12;
     }
     const scale = Math.pow(level / (zoom), 3);
