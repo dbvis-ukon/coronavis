@@ -340,6 +340,7 @@ export class HospitalInfoComponent implements OnInit {
 
         if (!this.isSingleHospital) {
           spec.mark.interpolate = 'step-after';
+          spec.encoding.y.axis.title = this.translationService.translate('Anzahl KH');
           // spec.width = 370;
         } else {
           // is single hospital
@@ -350,8 +351,6 @@ export class HospitalInfoComponent implements OnInit {
 
         // also overwrite the title
         spec.encoding.x.title = '';
-
-        spec.encoding.y.axis.title = this.translationService.translate('Anzahl KH');
 
         if (summedbedcounts > 0) {
           this.specs.push({
