@@ -4,6 +4,14 @@ import { TooltipService } from 'src/app/services/tooltip.service';
 import { OSMHospitals } from 'src/app/repositories/types/in/osm-hospitals';
 import {OsmTooltipComponent} from "../../osm-tooltip/osm-tooltip.component";
 
+
+const krankenhausIcon = L.icon({
+  iconUrl: 'assets/Krankenhaus.png',
+
+  iconSize:     [16, 16], // size of the iconow
+  iconAnchor:   [8, 8], // point of the icon which will correspond to marker's location
+});
+
 export class HospitalLayer extends Overlay<OSMHospitals> {
   constructor(
     name: string,
@@ -26,7 +34,7 @@ export class HospitalLayer extends Overlay<OSMHospitals> {
     // create geojson layer (looks more complex than it is)
     const hospitalLayer = L.geoJSON(this.featureCollection, {
       pointToLayer: (feature, latlng) => {
-        return L.circleMarker(latlng, geojsonMarkerOptions);
+        return L.marker(latlng, {icon: krankenhausIcon}); //L.circleMarker(latlng, geojsonMarkerOptions);
       },
       onEachFeature: (feature, layer) => {
         layer.on({
