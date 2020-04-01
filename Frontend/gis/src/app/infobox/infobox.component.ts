@@ -176,7 +176,9 @@ export class InfoboxComponent implements OnInit {
   changeLocale(evt) {
     this.i18nService.updateLocale(evt.value);
 
-    location.href = `/${evt.value}/`;
+    const url = evt.value.slice(0,2);
+
+    location.href = `/${url}/`;
   }
 
 

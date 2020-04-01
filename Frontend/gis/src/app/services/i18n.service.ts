@@ -25,12 +25,26 @@ export class I18nService {
       // retrieve from local storage
       this.updateLocale(l);
 
-    } else if(this.getSupportedLocales().indexOf(this.localeId as SupportedLocales) > -1) {
+      return true;
 
-      // retrieve through browser
-      this.updateLocale(this.localeId as SupportedLocales);
+    } else {
+      const navL = navigator.language.slice(0, 2);
 
+
+      for(const availableLocale of this.getSupportedLocales()) {
+        if(availableLocale.slice(0, 2) === navL) {
+
+          console.log('detected locale by browser', navL);
+
+          this.updateLocale(availableLocale);
+
+          return true;
+        }
+      }
+
+      this.updateLocale(SupportedLocales.EN_US);
     }
+    return false;
   }
 
   getSupportedLocales() {
