@@ -519,7 +519,7 @@
       </notes>
       <segment state="initial">
         <source>Zeitliche Entwicklung:</source>
-      <target>Zeitliche Entwicklung: (<ph id="0" equiv="INTERPOLATION" disp="{{ firstTimestamp | date:&quot;dd.MM.yyyy&quot;}}"/> - <ph id="1" equiv="INTERPOLATION_1" disp="{{ lastUpdate | date:&quot;dd.MM.yyyy&quot; }}"/>)</target></segment>
+      <target>Zeitliche Entwicklung:</target></segment>
     </unit><unit id="beds">
       <notes>
         <note category="description">beds</note>
