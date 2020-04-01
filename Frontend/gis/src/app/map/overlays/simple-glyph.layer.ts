@@ -3,17 +3,18 @@ import * as d3 from 'd3';
 import {Overlay} from './overlay';
 import {TooltipService} from 'src/app/services/tooltip.service';
 import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
-import {FeatureCollection, Point, Feature} from "geojson";
-import { Observable } from 'rxjs';
-import { BedGlyphOptions } from '../options/bed-glyph-options';
-import { BedType } from '../options/bed-type.enum';
-import { MatDialog } from '@angular/material/dialog';
-import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
-import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
+import {Feature, FeatureCollection, Point} from "geojson";
+import {Observable} from 'rxjs';
+import {BedGlyphOptions} from '../options/bed-glyph-options';
+import {BedType} from '../options/bed-type.enum';
+import {MatDialog} from '@angular/material/dialog';
+import {HospitalInfoDialogComponent} from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
+import {ForceDirectedLayout} from 'src/app/util/forceDirectedLayout';
 import {GlyphLayer} from "./GlyphLayer";
-import { SingleHospitalOut } from 'src/app/repositories/types/out/single-hospital-out';
-import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
-import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
+import {SingleHospitalOut} from 'src/app/repositories/types/out/single-hospital-out';
+import {QualitativeTimedStatus} from 'src/app/repositories/types/in/qualitative-hospitals-development';
+import {QualitativeColormapService} from 'src/app/services/qualitative-colormap.service';
+import {AggregationLevel} from "../options/aggregation-level.enum";
 
 export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
@@ -39,7 +40,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     super(name, data);
     this.enableDefault = true;
 
-    this.forceLayout = new ForceDirectedLayout(this.data, this.updateGlyphPositions.bind(this));
+    this.forceLayout = new ForceDirectedLayout(this.data, AggregationLevel.none, this.updateGlyphPositions.bind(this));
 
     this.glyphOptions.subscribe(opt => {
       if (!this.gHospitals || !opt) {
