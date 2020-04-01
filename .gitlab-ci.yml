@@ -375,8 +375,8 @@ dockerize-crawler:
 dockerize-tiles:
   variables:
     FOLDER: Tiles
-    RUN_ALWAYS: "yes"
-    RUN_ON_FB: "yes"
+    RUN_ALWAYS: "no"
+    RUN_ON_FB: "no"
     RUN_ON_MASTER: "yes"
     RUN_ON_TAG: "yes"
     GIT_SUBMODULE_STRATEGY: "recursive"
@@ -618,11 +618,11 @@ deploy-crawler-production-new:
     - dockerize-tiles
     - export-environment
 
-deploy-tiles-fb:
-  extends: .deploy-tiles-new
-  variables:
-    ENV_TYPE: review
-    RUN_ON_FB: "yes"
+# deploy-tiles-fb:
+#   extends: .deploy-tiles-new
+#   variables:
+#     ENV_TYPE: review
+#     RUN_ON_FB: "yes"
 
 deploy-tiles-staging-new:
   extends: .deploy-tiles-new
