@@ -520,17 +520,6 @@
       <segment state="initial">
         <source>Zeitliche Entwicklung: </source>
       <target>Zeitliche Entwicklung: </target></segment>
-    </unit><unit id="hospitalInfoNoTemporalDataAvailable">
-      <notes>
-        <note category="location">src/app/hospital-info/hospital-info.component.html:94,96</note>
-      </notes>
-      <segment state="initial">
-        <source>
-  Keine zeitliche Entwicklung verfügbar, da ledliglich ein Datenpunkt gemeldet wurde.
-</source>
-      <target>
-  Keine zeitliche Entwicklung verfügbar, da ledliglich ein Datenpunkt gemeldet wurde.
-</target></segment>
     </unit><unit id="beds">
       <notes>
         <note category="description">beds</note>
