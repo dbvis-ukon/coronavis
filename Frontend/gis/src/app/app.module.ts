@@ -50,14 +50,24 @@ import { TranslatePipe } from './translate.pipe';
 
 const storedLocale = JSON.parse(localStorage.getItem(APP_LOCALE)) as SupportedLocales;
 
-let localeProvider;
+export const localeProvider = {
+  provide: LOCALE_ID,
+  useFactory: () => {
+    if(storedLocale === SupportedLocales.DE_DE) {
+      return 'de-DE'
+    } else {
+      return 'en-US';
+    }
+  }
+}
+
+
 if(storedLocale === SupportedLocales.DE_DE) {
-  localeProvider = {provide: LOCALE_ID, useValue: 'de-DE'};
   registerLocaleData(localeDe, 'de-DE');
 } else {
-  localeProvider = {provide: LOCALE_ID, useValue: 'en-US'};
   registerLocaleData(localeEn, 'en-US');
 }
+
 
 
 @NgModule({

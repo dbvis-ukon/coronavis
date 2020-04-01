@@ -499,10 +499,10 @@
       <note category="location">src/app/hospital-info/hospital-info.component.html:94</note></notes>
       <segment state="final">
         <source>
-  Keine zeitliche Entwicklung verfügbar da ledliglich ein Datenpunkt gemeldet wurde.
+  Keine zeitliche Entwicklung verfügbar, da ledliglich ein Datenpunkt gemeldet wurde.
 </source>
       <target>
-  Keine zeitliche Entwicklung verfügbar da ledliglich ein Datenpunkt gemeldet wurde.
+  Keine zeitliche Entwicklung verfügbar, da ledliglich ein Datenpunkt gemeldet wurde.
 </target></segment>
     </unit><unit id="tooltipHospitalContact">
       <notes>
@@ -529,8 +529,8 @@
       <notes>
         <note category="description">beds</note>
         <note category="meaning">legend</note>
-        <note category="location">src/app/legend/legend.component.html:18</note>
-      </notes>
+        
+      <note category="location">src/app/legend/legend.component.html:34</note></notes>
       <segment state="final">
         <source>Bettenauslastung</source>
       <target>Bettenauslastung</target></segment>
