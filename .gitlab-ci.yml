@@ -29,7 +29,7 @@ export-environment:
     - FRONTEND_URL_TILES_PREFIX=""
     - URL_PROTOCOL="https"
     - ENV_TYPE="production"
-    - REPLICA_COUNT="3"
+    - REPLICA_COUNT="2"
     # multiple things happen here:
     # URL_PREFIX: 
     # if tag => ""
