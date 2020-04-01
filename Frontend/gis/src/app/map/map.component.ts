@@ -98,8 +98,8 @@ export class MapComponent implements OnInit {
         {
           tileSize: 256,
           // zoomOffset: -1,
-          // attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
-          //   '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> ' +
+                       '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
         });
 
     // create map, set initial view to basemap and zoom level to center of BW
