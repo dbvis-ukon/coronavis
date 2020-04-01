@@ -17,7 +17,6 @@ export class I18nService {
   constructor(@Inject(LOCALE_ID) protected localeId: string) {}
 
   initI18n() {
-    this.currentLocale$.subscribe(l => console.log('current locale:', l));
 
     const l = JSON.parse(localStorage.getItem(APP_LOCALE)) as SupportedLocales;
     if(this.getSupportedLocales().indexOf(l) > -1) {
@@ -33,8 +32,6 @@ export class I18nService {
 
       for(const availableLocale of this.getSupportedLocales()) {
         if(availableLocale.slice(0, 2) === navL) {
-
-          console.log('detected locale by browser', navL);
 
           this.updateLocale(availableLocale);
 

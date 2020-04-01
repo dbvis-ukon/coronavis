@@ -35,7 +35,6 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     private dialog: MatDialog
 ) {
     super(name, data);
-    console.log(name, data);
 
     this.forceLayout = new ForceDirectedLayout(this.data as any, granularity, this.updateGlyphPositions.bind(this));
 

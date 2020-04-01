@@ -374,7 +374,6 @@ export class HospitalInfoComponent implements OnInit {
       this.specs.forEach(spec => {
         spec.chart.encoding.color.scale.domain = bedStati;
         spec.chart.encoding.color.scale.range = colors;
-        //console.log(JSON.stringify(spec));
         //spec.encoding.color.range = Math.min(maxNum+1, 5);
       });
     }

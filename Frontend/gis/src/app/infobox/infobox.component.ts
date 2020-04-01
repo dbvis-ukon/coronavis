@@ -94,7 +94,6 @@ export class InfoboxComponent implements OnInit {
   }
 
   emitCaseChoroplethOptions() {
-    // console.log('emit', this.caseChoroplethOptions);
 
     if(this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
       this.mo.covidNumberCaseOptions.normalization = CovidNumberCaseNormalization.absolut;

@@ -25,7 +25,6 @@ export class OSMLayerService {
     this.loading$.next(true);
     return this.osmRespository.getOSMHospitals()
     .pipe(
-      tap(() => console.log('load osm hospital layers')),
       map(d => new HospitalLayer('OSM Hospitals', d, this.tooltipService)),
       tap(() => this.loading$.next(false))
     )
@@ -35,7 +34,6 @@ export class OSMLayerService {
     this.loading$.next(true);
     return this.osmRespository.getOSMHelipads()
     .pipe(
-      tap(() => console.log('load osm helipad layers')),
       map(d => new HelipadLayer('OSM Helipads', d, this.tooltipService)),
       tap(() => this.loading$.next(false))
     )

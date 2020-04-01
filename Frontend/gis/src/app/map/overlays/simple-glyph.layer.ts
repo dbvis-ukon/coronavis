@@ -115,8 +115,6 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       return NaN;
     });
 
-    console.log(latExtent, lngExtent);
-
     let latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
 
     latLngBounds = latLngBounds.pad(10);
