@@ -8,12 +8,12 @@
     <div *ngIf="!data.developments" i18n="@@countyDataNotFound" class="noData">Es stehen keine Daten zur Verfügung.</div>
 
     <h4 *ngIf="latestDevelopment"><span i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </span> <span>{{ lastUpdate | date:"dd.MM.yyy, HH:mm" }} Uhr</span></h4>
-    
+
 
 
     <div class="data-warning" *ngIf="warnOfOutdatedData">
       <mat-icon color="warn">warning</mat-icon>
-      
+
       <h5>Die Daten sind älter als 24 Stunden.</h5>
     </div>
 

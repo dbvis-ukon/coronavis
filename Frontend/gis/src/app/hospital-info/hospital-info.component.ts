@@ -255,9 +255,17 @@ export class HospitalInfoComponent implements OnInit {
     }
   }
 
+  private existsInDataValues(date, category, dataValues){
+    for(let i = dataValues.length-1; i>=0; i--) {
+      if(moment(dataValues[i].Datum).isSame(date) && dataValues[i].Kategorie === category){
+        return true;
+      }
+    }
+    return false;
+  }
+
   private prepareTemporalCharts() {
-    // var data = [{"development" : {"timestamp" : "2020-03-27T14:49:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-28T09:42:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-29T10:38:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-30T09:18:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Begrenzt" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-31T09:04:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}];
-    const bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar', 'Keine Information']; //FIXME add "Nicht verfügbar" if should be displayed
+    const bedStati = this.glyphLegendColors;
 
     var colors = [];
     for (const bedStatus of bedStati) {
@@ -299,16 +307,18 @@ export class HospitalInfoComponent implements OnInit {
 
             sumOfOneSlice += v;
 
-            dataValues.push(
-              {
-                Kategorie: bedStatus,
-                num: v,
-                color: this.getCapacityStateColor(bedStatus),
-                Datum: moment.max(moment(d.timestamp), tenDaysAgo).toDate()
+            if(!this.existsInDataValues(moment.max(moment(d.timestamp), tenDaysAgo).toDate(), bedStatus, dataValues)) {
+              dataValues.push(
+                {
+                  Kategorie: bedStatus,
+                  num: v,
+                  color: this.getCapacityStateColor(bedStatus),
+                  Datum: moment.max(moment(d.timestamp), tenDaysAgo).toDate()
+                }
+              );
+              if (v > maxNum) {
+                maxNum = v;
               }
-            );
-            if (v > maxNum) {
-              maxNum = v;
             }
           }
 
@@ -316,8 +326,6 @@ export class HospitalInfoComponent implements OnInit {
             maxNumSlices = sumOfOneSlice;
           }
         }
-
-        console.log(dataValues);
 
         // hack deep clone spec
         const spec = JSON.parse(JSON.stringify(this.temporalChartTemplateSpec));
