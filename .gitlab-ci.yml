@@ -619,7 +619,7 @@ deploy-crawler-production-new:
     - export-environment
 
 deploy-tiles-fb:
-  extends: .deploy-tiles
+  extends: .deploy-tiles-new
   variables:
     ENV_TYPE: review
     RUN_ON_FB: "yes"
