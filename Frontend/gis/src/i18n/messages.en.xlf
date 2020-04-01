@@ -127,27 +127,36 @@
         <note category="description">department</note>
         <note category="meaning">infrastructure</note>
 
-      <note category="location">src/app/about/about.component.html:147</note></notes>
+      <note category="location">src/app/about/about.component.html:138</note></notes>
       <segment>
         <source>Infrastruktur</source>
         <target>Infrastructure</target>
       </segment>
     </unit><unit id="consult">
       <notes>
+        <note category="description">advice</note>
+        
+        
+      <note category="location">src/app/about/about.component.html:183</note></notes>
+      <segment state="initial">
+        <source>Unterstützung und Beratung</source>
+      <target>Advice and Consulting</target></segment>
+    </unit><unit id="testing">
+      <notes>
         <note category="description">department</note>
-        <note category="meaning">consulting</note>
-        <note category="location">src/app/about/about.component.html:192</note>
+        <note category="meaning">testing</note>
+        <note category="location">src/app/about/about.component.html:227</note>
       </notes>
       <segment state="initial">
-        <source>Advice and Consulting</source>
-      <target>Advice and Consulting</target></segment>
+        <source>Tests und Qualitätssicherung</source>
+      <target>Testing and quality assurance</target></segment>
     </unit>
     <unit id="dataHandlingProcessing">
       <notes>
         <note category="description">department</note>
         <note category="meaning">database and processing</note>
 
-      <note category="location">src/app/about/about.component.html:104</note></notes>
+      <note category="location">src/app/about/about.component.html:95</note></notes>
       <segment>
         <source>Datenhaltung und -verarbeitung</source>
         <target>Data Processing</target>
@@ -157,7 +166,7 @@
       <notes>
         <note category="description">development</note>
 
-      <note category="location">src/app/about/about.component.html:241</note></notes>
+      <note category="location">src/app/about/about.component.html:256</note></notes>
       <segment>
         <source>development</source>
         <target>development</target>
@@ -168,7 +177,7 @@
         <note category="description">unknown</note>
 
 
-      <note category="location">src/app/about/about.component.html:245</note><note category="location">src/app/about/about.component.html:249</note></notes>
+      <note category="location">src/app/about/about.component.html:260</note><note category="location">src/app/about/about.component.html:264</note></notes>
       <segment>
         <source>unknown</source>
         <target>unknown</target>
@@ -178,7 +187,7 @@
       <notes>
         <note category="description">close-button</note>
 
-      <note category="location">src/app/about/about.component.html:254</note></notes>
+      <note category="location">src/app/about/about.component.html:269</note></notes>
       <segment>
         <source>Close</source>
         <target>Close</target>

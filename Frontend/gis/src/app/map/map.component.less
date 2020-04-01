@@ -1,0 +1,102 @@
+#main {
+  width: 100%;
+  height: 100%;
+}
+
+.map-tooltip {
+  background: white;
+  width: 350px;
+  height: 150px;
+  position: absolute;
+  z-index: 999;
+}
+
+
+
+.legend {
+  line-height: 18px !important;
+  color: #555;
+}
+.legend i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
+.info {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+}
+.info h4 {
+  margin: 0 0 5px;
+  color: #777;
+}
+
+g.hospital {
+  pointer-events: none;
+
+  .hiddenLabel{
+    visibility: hidden;
+  }
+
+  .background-rect {
+    fill: transparent;
+    stroke: none;
+    pointer-events: all;
+  }
+
+  .text-bg {
+    pointer-events: all;
+    text-anchor: middle;
+    stroke: white;
+    stroke-width: 4px;
+    opacity: 0.8;
+
+    &.hospital {
+      font-size: 7px;     
+    }
+
+    &.city {
+      font-size: 10px;
+    }
+
+    &.aggName {
+      font-size: 8px;
+    }
+  }
+
+  .text-fg {
+    text-anchor: middle;
+    pointer-events: all;
+
+
+    &.hospital {
+      font-size: 7px;
+    }
+
+    &.city {
+      font-size: 10px;
+    }
+
+    &.aggName {
+      font-size: 8px;
+    }
+  }
+
+  .bed {
+    stroke: white;
+    stroke-width: 2;
+    pointer-events: none;
+  }
+}
+
+
+svg text {
+  text-rendering: geometricprecision;
+}

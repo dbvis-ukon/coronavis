@@ -565,17 +565,17 @@ deploy-frontend-production-new:
     - dockerize-crawler
     - export-environment
 
-  # deploy-crawler-fb:
-  #   extends: .deploy-crawler
-  #   variables:
-  #     ENV_TYPE: review
-  #     RUN_ON_FB: "yes"
-  #
-  # deploy-crawler-staging:
-  #  extends: .deploy-crawler
-  #  variables:
-  #    ENV_TYPE: staging
-  #    RUN_ON_MASTER: "yes"
+# deploy-crawler-fb:
+#   extends: .deploy-crawler-new
+#   variables:
+#     ENV_TYPE: review
+#     RUN_ON_FB: "yes"
+
+deploy-crawler-staging:
+  extends: .deploy-crawler-new
+  variables:
+    ENV_TYPE: staging
+    RUN_ON_MASTER: "yes"
 
 deploy-crawler-production-new:
   extends: .deploy-crawler-new
