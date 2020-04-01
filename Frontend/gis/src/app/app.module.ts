@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -37,13 +37,28 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { VegaComponent } from './vega/vega.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 
-import { registerLocaleData } from '@angular/common';
+import { registerLocaleData, DecimalPipe } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import localeDe from '@angular/common/locales/de';
+import { APP_LOCALE } from 'src/constants';
+import { SupportedLocales } from './services/i18n.service';
 
 // the second parameter 'fr-FR' is optional
-registerLocaleData(localeEn, 'en-US');
-registerLocaleData(localeDe, 'de-DE');
+
+
+
+const storedLocale = JSON.parse(localStorage.getItem(APP_LOCALE)) as SupportedLocales;
+
+let localeProvider;
+if(storedLocale === SupportedLocales.DE_DE) {
+  localeProvider = {provide: LOCALE_ID, useValue: 'de-DE'};
+  registerLocaleData(localeDe, 'de-DE');
+} else {
+  localeProvider = {provide: LOCALE_ID, useValue: 'en-US'};
+  registerLocaleData(localeEn, 'en-US');
+}
+
+console.log('provide with', localeProvider);
 
 
 @NgModule({
@@ -91,7 +106,7 @@ registerLocaleData(localeDe, 'de-DE');
     MatSnackBarModule,
     MatStepperModule
   ],
-  providers: [],
+  providers: [localeProvider, PlusminusPipe, DecimalPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

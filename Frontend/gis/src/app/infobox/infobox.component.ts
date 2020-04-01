@@ -18,7 +18,7 @@ import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.se
 import {APP_CONFIG_KEY} from "../../constants";
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
-import { SupportedLanguages, I18nService } from '../services/i18n.service';
+import { SupportedLocales, I18nService } from '../services/i18n.service';
 
 @Component({
   selector: 'app-infobox',
@@ -66,7 +66,7 @@ export class InfoboxComponent implements OnInit {
 
   supportedLocales: string[];
 
-  selectedLocale: SupportedLanguages;
+  selectedLocale: SupportedLocales;
 
 
   glyphLoading = false;

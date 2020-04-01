@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input, TemplateRef } from '@angular/core';
 import {default as embed} from 'vega-embed';
 import { VisualizationSpec } from 'vega-embed';
-import { I18nService, SupportedLanguages } from '../services/i18n.service';
+import { I18nService, SupportedLocales } from '../services/i18n.service';
 
 @Component({
   selector: 'app-vega',
@@ -42,7 +42,7 @@ export class VegaComponent implements AfterViewInit {
     let formatLocale;
 
     let timeFormatLocale;
-    if(this.i18nService.getCurrentLocale() === SupportedLanguages.DE) {
+    if(this.i18nService.getCurrentLocale() === SupportedLocales.DE_DE) {
       formatLocale = {
         "decimal": ",",
         "thousands": ".",

@@ -5,6 +5,7 @@ import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
 import { MapOptions } from '../map/options/map-options';
 import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-legend',
@@ -36,7 +37,10 @@ export class LegendComponent implements OnInit {
 
   caseColors = [];
 
-  constructor(private colmapService: QuantitativeColormapService) {
+  constructor(
+    private colmapService: QuantitativeColormapService,
+    private decimalPipe: DecimalPipe
+    ) {
 
   }
 
@@ -92,22 +96,32 @@ export class LegendComponent implements OnInit {
       const d1Ceil = Math.ceil(d1Fixed);
 
       let text = d0Fixed + ((d[1]) ? ' &ndash; ' + d1Fixed : '+' );
+      console.log(text);
+
+      let binLowerBound = d0Fixed;
+      let binUpperBound = d1Fixed;
 
       if (!norm100k) {
         if (d1Fixed - d0Fixed < 1) {
           if (d0Ceil === d1Ceil && !doneMap.get(d0Ceil)) {
             doneMap.set(d0Ceil, true);
             text = Math.floor(d0Fixed) + '';
+            binLowerBound = Math.floor(d0Fixed);
           } else if (d1Ceil === d1Fixed) {
             text = d1Ceil + '';
+            binUpperBound = d1Ceil;
           } else {
             return;
           }                    
         } else {
           if (d0Ceil === d1Ceil) {
             text = d1Ceil + '';
+            binLowerBound = d0Ceil;
+            binUpperBound = d1Ceil;
           } else {
             text = d0Ceil + ' &ndash; ' + d1Ceil;
+            binLowerBound = d0Ceil;
+            binUpperBound = d1Ceil;
           } 
         }        
       }
@@ -117,7 +131,9 @@ export class LegendComponent implements OnInit {
         this.caseColors.push(
           {
             color: color,
-            text: text
+            text: text,
+            binLowerBound,
+            binUpperBound,
           }
         );
 
@@ -128,7 +144,9 @@ export class LegendComponent implements OnInit {
         this.caseColors.push(
           {
             color: color,
-            text: text
+            text: text,
+            binLowerBound,
+            binUpperBound
           }
         );
 
