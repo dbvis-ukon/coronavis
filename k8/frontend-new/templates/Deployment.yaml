@@ -20,10 +20,10 @@ spec:
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            - nodeSelectorTerms:
-                matchExpressions:
-                  - key: onlyingress
-                    operator: DoesNotExist
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: onlyingress
+                operator: DoesNotExist
       containers:
         - name: frontend
           image: registry.dbvis.de/jentner/covid-19-vis/frontend:{{ .Values.sha }}
