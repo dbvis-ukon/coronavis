@@ -309,7 +309,7 @@ export class HospitalInfoComponent implements OnInit {
         // inject data values
         spec.data.values = dataValues;
 
-        if(this.isSingleHospital){
+        if(this.isSingleHospital && (new Date(this.lastUpdate).getTime()-new Date(this.firstTimestamp).getTime() < 2 * 24*60*60*1000)){
           //spec.encoding.x.axis.format = '%d.%m (%H:%M)'
           spec.encoding.x.axis.labelExpr = "[timeFormat(datum.value, '%d.%m'), false ? ' ' : timeFormat(datum.value, '(%H:%M)')]";
         } 
