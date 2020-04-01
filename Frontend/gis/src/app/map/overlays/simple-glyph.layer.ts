@@ -74,6 +74,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
   private rxBad = /^Bad /;
   private rxSlash = /\/.*/;
   private rxDash = /-([A-Z])[a-zäöü]{6,}/;
+  private currentHoverLine;
 
   private latLngPoint(latlng: L.LatLngExpression): L.Point {
     return this.map.project(latlng, 9);
@@ -151,13 +152,30 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
         d.properties._y = p.y;
         return `translate(${p.x}, ${p.y})`;
       })
-      .on('mouseenter', function(d1) {
+      .on('mouseenter', (d1, i, n) => {
+        const currentElement = n[i];
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX + 5, y: evt.clientY + 5});
         t.tooltipData = d1.properties;
-        d3.select(this).raise();
+        d3.select(currentElement).raise();
+
+        this.currentHoverLine = d3.select(currentElement)
+        .append<SVGLineElement>("line")
+        //.firstChild.insert<SVGLineElement>("line", )
+        .attr("class","originLine")
+        .attr("x1", 0) //`translate(${d1.properties.x})` d1.geometry.coordinates[1]
+        .attr("y1", 0)
+        .attr("x2", d1.properties._x-d1.properties.x)
+        .attr("y2", d1.properties._y-d1.properties.y)
+        .attr("stroke-width", 1)
+        .attr("stroke", "black")
+        .lower();
+        d3.select(currentElement).selectAll("*").filter(this.currentHoverLine).raise();
       })
-      .on('mouseleave', () => this.tooltipService.close())
+      .on('mouseleave', () => {
+        this.tooltipService.close();
+        this.currentHoverLine.remove();
+      })
       .on('click', d => this.openDialog(d.properties));
 
     this.gHospitals
