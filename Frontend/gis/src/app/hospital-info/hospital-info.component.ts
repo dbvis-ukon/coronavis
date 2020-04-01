@@ -31,13 +31,18 @@ export class HospitalInfoComponent implements OnInit {
   temporalChartTemplateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "width": 320, "height": 50,
+    "aggregated": true,
     "data": {"values":[
       ]},
     "mark": {"type": "area", "interpolate": "step-before"},
     "encoding": {
       "x": {
         "field": "Datum", "type": "temporal",
-        "axis": {"domain": false, "format": "%d.%m", "tickSize": 3, "tickCount": 7}
+        "axis": {
+          "domain": false,
+          "tickSize": 3, "tickCount": 7,
+          "format": "%d.%m"
+        }        
       },
       "y": {
         "field": "num", "type": "quantitative",
@@ -210,6 +215,8 @@ export class HospitalInfoComponent implements OnInit {
       // also overwrite the title
       spec.encoding.x.title = '';
 
+      
+
       this.barChartSpecs.push({
         title: this.bedAccessorsMapping[bedAccessor],
         chart: spec
@@ -301,6 +308,11 @@ export class HospitalInfoComponent implements OnInit {
 
         // inject data values
         spec.data.values = dataValues;
+
+        if(this.isSingleHospital){
+          //spec.encoding.x.axis.format = '%d.%m (%H:%M)'
+          spec.encoding.x.axis.labelExpr = "[timeFormat(datum.value, '%d.%m'), false ? ' ' : timeFormat(datum.value, '(%H:%M)')]";
+        } 
         
         spec.encoding.y.scale = {
           domain: [0, maxNumSlices]
@@ -324,6 +336,7 @@ export class HospitalInfoComponent implements OnInit {
             title: this.bedAccessorsMapping[bedAccessor],
             chart: spec
           });
+          
 
         }
       }
@@ -332,7 +345,7 @@ export class HospitalInfoComponent implements OnInit {
       this.specs.forEach(spec => {
         spec.chart.encoding.color.scale.domain = bedStati;
         spec.chart.encoding.color.scale.range = colors;
-
+        //console.log(JSON.stringify(spec));
         //spec.encoding.color.range = Math.min(maxNum+1, 5);
       });
     }
