@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 
 from sqlalchemy import func
 
-from geopy.geocoders import Nominatim
+from geopy.geocoders import Nominatim, ArcGIS, Photon
 
 from geoalchemy2.shape import to_shape 
 
@@ -51,11 +51,22 @@ def remove_spaces(text):
 
 
 def get_geo_location(adress):
-    geolocator = Nominatim(user_agent='COVID-19', timeout=10)
-    location = geolocator.geocode(adress)
+    osm_geolocator = Nominatim(user_agent='COVID-19', timeout=10)
+    arcgis_geolocator = ArcGIS()
+    photon_geolocator = Photon()
+    
+    location = osm_geolocator.geocode(adress)
     loc = (None, None)
     if location != None:
         loc = (location.longitude, location.latitude)
+    else:
+        location = arcgis_geolocator.geocode(adress)
+        if location != None:
+            loc = (location.longitude, location.latitude)
+        else:
+            location = photon_geolocator.geocode(adress)
+            if location != None:
+                loc = (location.longitude, location.latitude)
         
     return loc, location
 
@@ -109,18 +120,20 @@ def get_hospital_geo_locations(hospital_entries):
         print(str(i + 1) + ' / ' + str(len_))
         print('Crawled location: ' + adress)
         
+        loc = '(0 0)'
+        
         query = db.sess.query(db.Hospital.location).filter_by(address=adress).limit(1).scalar()
         if query is not None:
             loc = str(to_shape(query)).replace('POINT', '')
-            print('Entry in Database')
+            if not '(0 0)' in loc:
+                print('Entry in Database')
             
-        else:
+        if '(0 0)' in loc:
             try:
                 loc, location = get_geo_location(adress)
                 print('Found location: ' + str(location))
                 
             except Exception as e:
-                loc = (0, 0)
                 print('Error ' + str(e))
             
             k += 1
@@ -141,6 +154,9 @@ def full_fetch(quote_page, values):
     
     df = pandas.DataFrame(hospital_entries, columns=['Name', 'Adress', 'String', 'Kontakt', 'Bundesland', 'ICU low care', 'ICU high care', 'ECMO', 'Stand', 'Location'])
     df['Stand'] =  pandas.to_datetime(df['Stand'], format='%d.%m.%Y %H:%M')
+    
+    print(df)
+    input()
     
     return df
 

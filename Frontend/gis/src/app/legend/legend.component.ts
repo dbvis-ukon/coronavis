@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ColormapService} from '../services/colormap.service';
 import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {BedType} from '../map/options/bed-type.enum';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
-import { CovidNumberCaseOptions, CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
+import { CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
 import { MapOptions } from '../map/options/map-options';
+import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
 
 @Component({
   selector: 'app-legend',
@@ -22,7 +22,7 @@ export class LegendComponent implements OnInit {
   legendCasesExtended = true;
   legendBedsExtended = true;
 
-  bedStatusColors = ColormapService.bedStati;
+  bedStatusColors = QuantitativeColormapService.bedStati;
   bedStatusIcons = {
     'Verfügbar': 'V',
     'Begrenzt': 'B',
@@ -48,7 +48,7 @@ export class LegendComponent implements OnInit {
   casesMin = '';
   casesMax = '';
 
-  constructor(private colmapService: ColormapService) {
+  constructor(private colmapService: QuantitativeColormapService) {
 
   }
 
@@ -73,7 +73,7 @@ export class LegendComponent implements OnInit {
       normVal = 100000;
     }
 
-    const cmap = ColormapService.CChoroplethColorMap;
+    const cmap = QuantitativeColormapService.CChoroplethColorMap;
 
     let lastColor = true;
     let prevColor;

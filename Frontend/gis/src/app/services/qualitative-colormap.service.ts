@@ -1,13 +1,16 @@
 import {Injectable} from '@angular/core';
 import * as d3 from 'd3';
-import {AggregatedHospitalsProperties, AggregatedHospitalsState} from './divi-hospitals.service';
-import {ScaleLinear} from 'd3';
-import {BedType} from "../map/options/bed-type.enum";
+import { getLatest } from '../util/timestamped-value';
+import { BedStatusSummary } from './types/bed-status-summary';
+import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
+import { BedType } from '../map/options/bed-type.enum';
+import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ColormapService {
+export class QualitativeColormapService {
   constructor() {
   }
 
@@ -20,13 +23,13 @@ export class ColormapService {
 
   public static BedStatusColor = d3.scaleLinear<string, string>()
       .domain([0, 0.5, 1])
-      .range(ColormapService.bedStatusColors)
+      .range(QualitativeColormapService.bedStatusColors)
       .interpolate(d3.interpolateRgb.gamma(2.2));
 
 
   private singleHospitalCM = d3.scaleOrdinal<string, string>()
-    .domain(ColormapService.bedStati)
-    .range([...ColormapService.bedStatusColors, "#c2cbd4", "#bbb"]);
+    .domain(QualitativeColormapService.bedStati)
+    .range([...QualitativeColormapService.bedStatusColors, "#c2cbd4", "#bbb"]);
   getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
     return this.singleHospitalCM;
   }
@@ -38,7 +41,7 @@ export class ColormapService {
     return this.caseChoroplethColorMap(normalizedDiff);
   }
 
-  private getMinScore(d: AggregatedHospitalsState) {
+  private getMinScore(d: QualitativeAggregatedBedStateCounts) {
     const v = d.Verfügbar || 0;
     const b = d.Begrenzt || 0;
     const a = d.Ausgelastet || 0;
@@ -46,7 +49,7 @@ export class ColormapService {
     return v + b + a;
   }
 
-  private getMaxScore(d: AggregatedHospitalsState) {
+  private getMaxScore(d: QualitativeAggregatedBedStateCounts) {
     const v = d.Verfügbar || 0;
     const b = d.Begrenzt || 0;
     const a = d.Ausgelastet || 0;
@@ -54,7 +57,7 @@ export class ColormapService {
     return (v + b + a) * 3;
   }
 
-  private getScore(d: AggregatedHospitalsState) {
+  private getScore(d: QualitativeAggregatedBedStateCounts) {
     const v = d.Verfügbar || 0;
     const b = d.Begrenzt || 0;
     const a = d.Ausgelastet || 0;
@@ -62,7 +65,7 @@ export class ColormapService {
     return (v + b * 2 + a * 3); // / ((v + b + a) * 3);
   }
 
-  private notAvailable(d: AggregatedHospitalsState) {
+  private notAvailable(d: QualitativeAggregatedBedStateCounts) {
     const v = d.Verfügbar || 0;
     const b = d.Begrenzt || 0;
     const a = d.Ausgelastet || 0;
@@ -71,7 +74,7 @@ export class ColormapService {
     return v === 0 && b === 0 && a === 0 && n > 0;
   }
 
-  private noInformation(d: AggregatedHospitalsState) {
+  private noInformation(d: QualitativeAggregatedBedStateCounts) {
     const v = d.Verfügbar || 0;
     const b = d.Begrenzt || 0;
     const a = d.Ausgelastet || 0;
@@ -82,10 +85,35 @@ export class ColormapService {
 
   private continousColorMap = d3.scaleLinear<string, string>()
     .domain([0, 0.5, 1])
-    .range(ColormapService.bedStatusColors)
+    .range(QualitativeColormapService.bedStatusColors)
     .interpolate(d3.interpolateRgb.gamma(2.2));
 
-  getBedStatusColor(properties: AggregatedHospitalsState): string {
+    public propertyAccessor(type: BedType) {
+      switch (type) {
+        case BedType.ecmo:
+          return (a: QualitativeTimedStatus) => a.ecmo_state;
+        case BedType.icuHigh:
+          return (a: QualitativeTimedStatus) => a.icu_high_care;
+        case BedType.icuLow:
+          return (a: QualitativeTimedStatus) => a.icu_low_care;
+      }
+    }
+  
+    getLatestBedStatusColor(t: Array<QualitativeTimedStatus>, type: BedType) {
+      if(!t) {
+        return this.getBedStatusColor(null, this.propertyAccessor(type));
+      }
+      const latest = t[t.length -1];
+  
+      return this.getBedStatusColor(latest, this.propertyAccessor(type));
+    }
+
+  getBedStatusColor(latest: QualitativeTimedStatus, f: (d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts): string {
+    if(!latest) {
+      return this.singleHospitalCM("Keine Information");
+    }
+    const properties = f(latest);
+
     const score = this.getScore(properties);
     const minScore = this.getMinScore(properties);
     const maxScore = this.getMaxScore(properties);
@@ -103,4 +131,5 @@ export class ColormapService {
     }
     return this.continousColorMap(normalizeValues(score));
   }
+
 }

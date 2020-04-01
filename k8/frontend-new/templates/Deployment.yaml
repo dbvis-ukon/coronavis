@@ -25,7 +25,7 @@ spec:
             - containerPort: 80
           readinessProbe:
             httpGet:
-              path: "/"
+              path: "/health"
               port: 80
             initialDelaySeconds: 5
             timeoutSeconds: 5
@@ -33,7 +33,7 @@ spec:
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              path: "/"
+              path: "/health"
               port: 80
             initialDelaySeconds: 6
             timeoutSeconds: 5

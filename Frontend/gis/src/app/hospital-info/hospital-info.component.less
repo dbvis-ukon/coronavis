@@ -2,28 +2,134 @@ table {
     border-spacing: 1px;
     margin-top: 10px;
   }
-  
+
   th {
     text-align: center;
     margin: 0;
     padding: 8px;
+    font-weight: normal;
   }
-  
-  td {
-    text-align: left;
+
+  td, th:nth-child(1) {
+    text-align: center;
+    padding-left: 2px;
+    padding-right: 2px;
     margin: 0;
+    font-size: 12px;
     padding: 8px;
   }
-  
+
   td:first-child {
     text-align: left;
   }
-  
+
   /* Color columns */
-  th:nth-child(2),
-  th:nth-child(4),
   td:nth-child(2),
-  td:nth-child(5),
-  td:nth-child(6) {
+  td:nth-child(4) {
     background-color: #f2f2f2;
   }
+
+  .content {
+    padding-top: 14px;
+  }
+
+
+
+  #sub-table-label{
+    transform: rotate(-90deg);
+  }
+
+.chart-title {
+  text-align: center;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.glyph-legend {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .glyph-tile {
+    cursor: pointer;
+    // margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .rect {
+      width: 30px;
+      height: 30px;
+      border-color: rgb(204, 204, 204);
+      border-width: 5px;
+      border-style: solid;
+    }
+
+    .text {
+      font-size: 11px;
+      text-align: center;
+    }
+  }
+}
+
+.glyph-color-legend {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 5px;
+
+  .glyph-tile {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+    .circle {
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+    }
+
+    .text {
+      margin-left: 2px;
+      margin-right: 5px;
+      font-size: 10px;
+      line-height: 10px;
+    }
+  }
+
+
+}
+
+.data-warning {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  >h5 {
+    padding-left: 10px;
+    // padding-top: 3px;
+    font-weight: bold;
+    // line-height: 30px;
+    margin: 0;
+  }
+
+  // .mat-icon {
+    // font-size: 30px;
+  // }
+}
+
+.barchartcontainer {
+  display: flex;
+}
+
+.numHospitals {
+  margin: 0;
+}
+
+.name {
+  margin: 0;
+}

@@ -1,10 +1,10 @@
 export const environment = {
 
   // this is overwritten in the CI
-  apiUrl: 'https://api.covid19vis.lingvis.io/',
+  apiUrl: 'https://api.covis.dbvis.de/',
 
   // this is overwritten in the CI
-  tileServerUrl: 'https://staging.tiles.covid19vis.lingvis.io/',
+  tileServerUrl: 'https://staging.tiles.covis.dbvis.de/',
 
   version: '',
 
