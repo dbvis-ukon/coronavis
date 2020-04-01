@@ -74,6 +74,56 @@
       <segment state="initial">
         <source>Todesfälle je 100.000 Einwohner</source>
       <target>Deaths per 100.000 Residents</target></segment>
+    </unit><unit id="visdescription">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:6,26</note>
+      </notes>
+      <segment state="initial">
+        <source>
+        <pc id="0" equivStart="START_HEADING_LEVEL1" equivEnd="CLOSE_HEADING_LEVEL1" type="other" dispStart="&lt;h1>" dispEnd="&lt;/h1>">Interaktive
+          Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</pc>
+        <pc id="1" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>"><pc id="2" equivStart="START_EMPHASISED_TEXT" equivEnd="CLOSE_EMPHASISED_TEXT" type="other" dispStart="&lt;em>" dispEnd="&lt;/em>">Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
+            am Besten im Chrome-Browser.</pc></pc>
+        <pc id="3" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Die <pc id="4" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
+          Konstanz entwickelt dieses Tool, um eine intuitive Übersicht über freie und belegte Bettenkapazitäten in
+          Deutschland zu zeigen. Anhand dieser Information können Engpässe früh erkannt und eine Umverteilung oder
+          direkte Umleitung von Patientenströmen vorgenommen werden.</pc>
+        <pc id="5" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten des DIVI[1] (<pc id="6" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
+          exakten Kapazitätsdaten des DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
+          vor Überlastungen erweitert werden. Diese Funktionalitäten sind schon vorhanden, jedoch aufgrund fehlendem
+          Datenzugang derzeit deaktiviert.</pc>
+        <pc id="7" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
+          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick kann unter <pc id="8" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.covis.dbvis.de</pc> gefunden werden.</pc>
+        <pc id="9" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
+          anschauen wollen, kann dieses Fenster geschlossen werden.</pc>
+        <pc id="10" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">[1] <pc id="11" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></pc>
+      </source>
+      <target>
+        <pc id="0" equivStart="START_HEADING_LEVEL1" equivEnd="CLOSE_HEADING_LEVEL1" type="other" dispStart="&lt;h1>" dispEnd="&lt;/h1>">Interactive
+        Visualization for the Analysis of Bed Capacities for Covid-19 Patients</pc>
+        <pc id="1" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>"><pc id="2" equivStart="START_EMPHASISED_TEXT" equivEnd="CLOSE_EMPHASISED_TEXT" type="other" dispStart="&lt;em>" dispEnd="&lt;/em>">Please allow a few seconds for loading the bed capacity data. The tool works
+            best in a Chrome browser.</pc></pc>
+        <pc id="3" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Die <pc id="4" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">The Data Analysis and Visualization Group</pc> at the University
+         of Konstanz develpos this tool to give an intuitive overview of free and occupied hospital beds in
+         Germany. Based on this information bottlenecks can be detected to reroute and redistribute patients to other hospitals and health case facilities.</pc>
+        <pc id="5" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">The currently integrated data encompass publicly available sources, as provided by DIVI[1] (<pc id="6" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>).
+        Through access to the exact DIVI capacity data, our tool could be enhanced with useful capabilities, particularly the early capacity alert functionality.
+        These Features are already implemented, yet are deactivated due to missing data access.</pc>
+        <pc id="7" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
+          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick kann unter <pc id="8" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.covis.dbvis.de</pc> gefunden werden.</pc>
+        <pc id="9" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
+          anschauen wollen, kann dieses Fenster geschlossen werden.</pc>
+        <pc id="10" equivStart="START_PARAGRAPH" equivEnd="CLOSE_PARAGRAPH" type="other" dispStart="&lt;p>" dispEnd="&lt;/p>">[1] <pc id="11" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></pc>
+      </target></segment>
+    </unit><unit id="countyDataNotFound">
+      <notes>
+        <note category="location">src/app/aggregated-glyph-tooltip/aggregated-glyph-tooltip.component.html:6</note>
+      </notes>
+      <segment state="initial">
+        <source>Für diesen Landkreis stehen keine Daten zur Verfügung.</source>
+      <target>For this county there is no data available.</target></segment>
     </unit><unit id="lsName">
       <notes>
         <note category="description">name of the group</note>
@@ -427,57 +477,42 @@
     </unit><unit id="infoboxImprint">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:292</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:284</note></notes>
       <segment state="initial">
         <source>Impressum</source>
       <target>Imprint</target></segment>
-    </unit><unit id="countyDataNotFound">
-      <notes>
-        <note category="location">src/app/hospital-info/hospital-info.component.html:8</note>
-      </notes>
-      <segment state="initial">
-        <source>Es stehen keine Daten zur Verfügung.</source>
-      <target>Es stehen keine Daten zur Verfügung.</target></segment>
-    </unit><unit id="tooltipHospitalAddress">
-      <notes>
-        
-      <note category="location">src/app/hospital-info/hospital-info.component.html:112</note></notes>
-      <segment state="initial">
-        <source>Adresse: </source>
-      <target>Address: </target></segment>
-    </unit><unit id="tooltipHospitalContact">
-      <notes>
-        
-      <note category="location">src/app/hospital-info/hospital-info.component.html:115</note></notes>
-      <segment state="initial">
-        <source>Kontakt: </source>
-      <target>Contact: </target></segment>
-    </unit><unit id="tooltipHospitalLastUpdate">
-      <notes>
-        
-      <note category="location">src/app/hospital-info/hospital-info.component.html:10</note></notes>
-      <segment state="initial">
-        <source>Letzter Stand: </source>
-      <target>Last Update: </target></segment>
-    </unit>
-<unit id="tooltipHospitalTemporalDevelopment">
-      <notes>
-        <note category="location">src/app/hospital-info/hospital-info.component.html:92</note>
-      </notes>
-      <segment state="initial">
-        <source>Zeitliche Entwicklung: (<ph id="0" equiv="INTERPOLATION" disp="{{ firstTimestamp | date:&quot;dd.MM.yyyy&quot;}}"/> - <ph id="1" equiv="INTERPOLATION_1" disp="{{ lastUpdate | date:&quot;dd.MM.yyyy&quot; }}"/>)</source>
-      <target>Zeitliche Entwicklung: (<ph id="0" equiv="INTERPOLATION" disp="{{ firstTimestamp | date:&quot;dd.MM.yyyy&quot;}}"/> - <ph id="1" equiv="INTERPOLATION_1" disp="{{ lastUpdate | date:&quot;dd.MM.yyyy&quot; }}"/>)</target></segment>
     </unit><unit id="hospitalInfoNoTemporalDataAvailable">
       <notes>
-        <note category="location">src/app/hospital-info/hospital-info.component.html:94,96</note>
+        <note category="location">src/app/hospital-info/hospital-info.component.html:71,73</note>
       </notes>
       <segment state="initial">
         <source>
   Keine zeitliche Entwicklung verfügbar da ledliglich ein Datenpunkt gemeldet wurde.
 </source>
       <target>
-  Keine zeitliche Entwicklung verfügbar da ledliglich ein Datenpunkt gemeldet wurde.
+  No temporal evolution available as only one data point has been reported.
 </target></segment>
+    </unit><unit id="tooltipHospitalAddress">
+      <notes>
+        
+      <note category="location">src/app/hospital-info/hospital-info.component.html:89</note></notes>
+      <segment state="initial">
+        <source>Adresse: </source>
+      <target>Address: </target></segment>
+    </unit><unit id="tooltipHospitalContact">
+      <notes>
+        
+      <note category="location">src/app/hospital-info/hospital-info.component.html:92</note></notes>
+      <segment state="initial">
+        <source>Kontakt: </source>
+      <target>Contact: </target></segment>
+    </unit><unit id="tooltipHospitalLastUpdate">
+      <notes>
+        
+      <note category="location">src/app/aggregated-glyph-tooltip/aggregated-glyph-tooltip.component.html:8</note><note category="location">src/app/hospital-info/hospital-info.component.html:6</note></notes>
+      <segment state="initial">
+        <source>Letzter Stand: </source>
+      <target>Last Update: </target></segment>
     </unit><unit id="beds">
       <notes>
         <note category="description">beds</note>
