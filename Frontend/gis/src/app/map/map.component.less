@@ -40,6 +40,7 @@
 
 g.hospital {
   pointer-events: none;
+  shape-rendering: geometricPrecision;
 
   .hiddenLabel{
     visibility: hidden;
@@ -49,6 +50,13 @@ g.hospital {
     fill: transparent;
     stroke: none;
     pointer-events: all;
+  }
+
+  .pointer-line {
+    shape-rendering: geometricPrecision;
+    stroke-linecap: round;
+    stroke-width: 1;
+    stroke: black;
   }
 
   .text-bg {

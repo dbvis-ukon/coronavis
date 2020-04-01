@@ -29,6 +29,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
   private forceLayout: ForceDirectedLayout;
 
+  private currentScale: number = 1;
+
   constructor(
     name: string,
     private data: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>,
@@ -161,16 +163,17 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
         this.currentHoverLine = d3.select(currentElement)
         .append<SVGLineElement>("line")
+        .attr('class', 'pointer-line')
         //.firstChild.insert<SVGLineElement>("line", )
-        .attr("class","originLine")
-        .attr("x1", 0) //`translate(${d1.properties.x})` d1.geometry.coordinates[1]
-        .attr("y1", 0)
+        .attr("x1", 1) //`translate(${d1.properties.x})` d1.geometry.coordinates[1]
+        .attr("y1", 1)
         .attr("x2", d1.properties._x-d1.properties.x)
         .attr("y2", d1.properties._y-d1.properties.y)
-        .attr("stroke-width", 1)
-        .attr("stroke", "black")
         .lower();
-        d3.select(currentElement).selectAll("*").filter(this.currentHoverLine).raise();
+        
+        d3.select(currentElement)
+        .selectAll("*:not(.pointer-line)")
+        .raise();
       })
       .on('mouseleave', () => {
         this.tooltipService.close();
@@ -272,6 +275,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
   onZoomed() {
     const zoom = this.map.getZoom();
     const scale = Math.pow(9 / (zoom), 4);
+    this.currentScale = scale;
 
     // Resize glyph bounding boxes + show/hide labels
     if (this.map.getZoom() >= 9) {
