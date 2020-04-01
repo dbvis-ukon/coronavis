@@ -618,11 +618,11 @@ deploy-crawler-production-new:
     - dockerize-tiles
     - export-environment
 
-# deploy-tiles-fb:
-#   extends: .deploy-tiles
-#   variables:
-#     ENV_TYPE: review
-#     RUN_ON_FB: "yes"
+deploy-tiles-fb:
+  extends: .deploy-tiles
+  variables:
+    ENV_TYPE: review
+    RUN_ON_FB: "yes"
 
 deploy-tiles-staging-new:
   extends: .deploy-tiles-new
