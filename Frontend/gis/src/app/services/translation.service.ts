@@ -38,6 +38,18 @@ export class TranslationService {
     {
       'de-DE': 'Zurücksetzen',
       'en-US': 'Reset to default'
+    },
+    {
+      'de-DE': 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie',
+      'en-US': 'ICU low care = monitoring, non-invasive ventilation (NIV), no organ replacement therapy'
+    },
+    {
+      'de-DE': 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten',
+      'en-US': 'ICU high care = monitoring, invasive ventilation, organ replacement therapy, complete intensive care medical therapy'
+    },
+    {
+      'de-DE': 'ECMO = Zusätzlich ECMO',
+      'en-US': 'ECMO = Additional ECMO'
     }
   ];
 

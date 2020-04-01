@@ -5,7 +5,6 @@ import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
 import { MapOptions } from '../map/options/map-options';
 import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
-import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-legend',
@@ -38,9 +37,7 @@ export class LegendComponent implements OnInit {
   caseColors = [];
 
   constructor(
-    private colmapService: QuantitativeColormapService,
-    private decimalPipe: DecimalPipe
-    ) {
+    private colmapService: QuantitativeColormapService) {
 
   }
 
@@ -96,7 +93,6 @@ export class LegendComponent implements OnInit {
       const d1Ceil = Math.ceil(d1Fixed);
 
       let text = d0Fixed + ((d[1]) ? ' &ndash; ' + d1Fixed : '+' );
-      console.log(text);
 
       let binLowerBound = d0Fixed;
       let binUpperBound = d1Fixed;

@@ -55,7 +55,7 @@
           <div
               *ngFor="let t of glyphLegend"
               class="glyph-tile"
-              [matTooltip]="t.description"
+              matTooltip="{{t.description | translate }}"
               (click)="mo.bedGlyphOptions[t.accessor] = !mo.bedGlyphOptions[t.accessor]; emitMapOptions()"
           >
               <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color), 'border-color': mo.bedGlyphOptions[t.accessor] ? 'grey' : 'lightgrey'}"></div>
