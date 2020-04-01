@@ -122,7 +122,7 @@ def get_hospital_geo_locations(hospital_entries):
         
         loc = '(0 0)'
         
-        query = db.sess.query(db.Hospital.location).filter_by(address=adress).limit(1).scalar()
+        query = db.sess.query(db.Hospital.location).filter_by(address=adress).order_by(db.Hospital.id.desc()).limit(1).scalar()
         if query is not None:
             loc = str(to_shape(query)).replace('POINT', '')
             if not '(0 0)' in loc:
@@ -154,9 +154,6 @@ def full_fetch(quote_page, values):
     
     df = pandas.DataFrame(hospital_entries, columns=['Name', 'Adress', 'String', 'Kontakt', 'Bundesland', 'ICU low care', 'ICU high care', 'ECMO', 'Stand', 'Location'])
     df['Stand'] =  pandas.to_datetime(df['Stand'], format='%d.%m.%Y %H:%M')
-    
-    print(df)
-    input()
     
     return df
 
