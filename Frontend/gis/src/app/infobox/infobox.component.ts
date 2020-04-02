@@ -176,8 +176,8 @@ export class InfoboxComponent implements OnInit {
   }
 
   openVideo() {
-    window.open('https://video.covis.dbvis.de', '_blank');
-    // location.href = 'https://video.covis.dbvis.de';
+    window.open('https://video.coronavis.dbvis.de', '_blank');
+    // location.href = 'https://video.coronavis.dbvis.de';
   }
 
   changeLocale(evt) {
