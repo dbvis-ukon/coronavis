@@ -1,6 +1,4 @@
-numpy
 pandas
-
 urllib3
 beautifulsoup4
 
