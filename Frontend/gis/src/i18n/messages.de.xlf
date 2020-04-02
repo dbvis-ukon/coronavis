@@ -386,6 +386,16 @@
       <segment state="final">
         <source>Fenster schließen</source>
       <target>Fenster schließen</target></segment>
+    </unit><unit id="close">
+      <notes>
+        <note category="description">button</note>
+        <note category="location">src/app/hospital-info-dialog/hospital-info-dialog.component.html:6</note>
+        <note category="location">src/app/about/about.component.html:269</note>
+        <note category="location">src/app/impressum/impressum.component.html:55</note>
+      </notes>
+      <segment state="final">
+        <source>Schließen</source>
+      <target>Schließen</target></segment>
     </unit><unit id="countyDataNotFound">
       <notes>
         
@@ -502,16 +512,7 @@
         <target>unbekannt</target>
       </segment>
     </unit>
-    <unit id="closeButton">
-      <notes>
-        <note category="description">close-button</note>
-        
-      <note category="location">src/app/about/about.component.html:269</note></notes>
-      <segment>
-        <source>Close</source>
-        <target>Schließen</target>
-      </segment>
-    </unit><unit id="infoboxHospitalBeds">
+    <unit id="infoboxHospitalBeds">
       <notes>
         <note category="location">src/app/infobox/infobox.component.html:14</note>
       </notes>
