@@ -19,6 +19,7 @@ import {APP_CONFIG_KEY} from "../../constants";
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { SupportedLocales, I18nService } from '../services/i18n.service';
+import {BreakpointObserver} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-infobox',
@@ -34,7 +35,8 @@ export class InfoboxComponent implements OnInit {
     private glyphLayerService: GlyphLayerService,
     private bedChoroplethLayerService: BedChoroplethLayerService,
     private caseChoroplethLayerService: CaseChoroplethLayerService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private breakPointObserver: BreakpointObserver
   ) { }
 
   glyphLegend;
@@ -75,6 +77,13 @@ export class InfoboxComponent implements OnInit {
   osmLoading = false;
 
   ngOnInit(): void {
+
+    //close info box if mobile
+    const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
+    if(isSmallScreen){
+      this.infoboxExtended = false;
+    }
+
     this.supportedLocales = this.i18nService.getSupportedLocales();
 
     this.i18nService.currentLocale().subscribe(l => {
