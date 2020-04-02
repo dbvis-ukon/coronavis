@@ -386,6 +386,14 @@
       <segment state="final">
         <source>Fenster schließen</source>
       <target>Fenster schließen</target></segment>
+    </unit><unit id="mobile">
+      <notes>
+        <note category="description">overlay</note>
+        <note category="location">src/app/overlay-mobile/overlay-mobile.component.html:2</note>
+      </notes>
+      <segment state="final">
+        <source>Diese Applikation ist nicht für mobile Geräte optimiert.</source>
+      <target>Diese Applikation ist nicht für mobile Geräte optimiert.</target></segment>
     </unit><unit id="countyDataNotFound">
       <notes>
         

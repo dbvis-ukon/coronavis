@@ -372,6 +372,14 @@
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
+    </unit><unit id="mobile">
+      <notes>
+        <note category="description">overlay</note>
+        <note category="location">src/app/overlay-mobile/overlay-mobile.component.html:2</note>
+      </notes>
+      <segment state="initial">
+        <source>Diese Applikation ist nicht für mobile Geräte optimiert.</source>
+      <target>This application is not optimized for mobile devices.</target></segment>
     </unit><unit id="countyDataNotFound">
       <notes>
         
