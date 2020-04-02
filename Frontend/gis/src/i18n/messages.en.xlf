@@ -372,6 +372,16 @@
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
+    </unit><unit id="close">
+      <notes>
+        <note category="description">button</note>
+        <note category="location">src/app/hospital-info-dialog/hospital-info-dialog.component.html:6</note>
+        <note category="location">src/app/about/about.component.html:269</note>
+        <note category="location">src/app/impressum/impressum.component.html:55</note>
+      </notes>
+      <segment state="initial">
+        <source>Schließen</source>
+      <target>Close</target></segment>
     </unit><unit id="mobile">
       <notes>
         <note category="description">overlay</note>
@@ -496,16 +506,7 @@
         <target>unknown</target>
       </segment>
     </unit>
-    <unit id="closeButton">
-      <notes>
-        <note category="description">close-button</note>
-
-      <note category="location">src/app/about/about.component.html:269</note></notes>
-      <segment>
-        <source>Close</source>
-        <target>Close</target>
-      </segment>
-    </unit><unit id="infoboxHospitalBeds">
+    <unit id="infoboxHospitalBeds">
       <notes>
         <note category="location">src/app/infobox/infobox.component.html:14</note>
       </notes>
