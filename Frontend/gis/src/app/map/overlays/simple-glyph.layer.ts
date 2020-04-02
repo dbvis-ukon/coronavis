@@ -277,6 +277,9 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     this.glyphSize.height = 28;
     this.glyphSize.width = 40;
 
+    this.glyphSize.height = 28;
+    this.glyphSize.width = 40;
+
     // Resize glyph bounding boxes + show/hide labels
     if (this.map.getZoom() == 10) {
       this.glyphSize.width = 30;
