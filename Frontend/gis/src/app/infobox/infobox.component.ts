@@ -120,6 +120,11 @@ export class InfoboxComponent implements OnInit {
     this.emitMapOptions();
   }
 
+  updateForceDirectedStatus(status: boolean) {
+    this.mo.forceDirectedOn = status;
+    this.emitMapOptions();
+  }
+
   updateBedGlyphAggregationLevel(lvl: AggregationLevel) {
     this.mo.bedGlyphOptions.aggregationLevel = lvl;
 

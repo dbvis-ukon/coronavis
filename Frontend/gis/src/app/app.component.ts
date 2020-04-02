@@ -54,8 +54,10 @@ export class AppComponent implements OnInit {
 
     showOsmHeliports: false,
 
-    showOsmHospitals: false
-  }
+    showOsmHospitals: false,
+
+    forceDirectedOn: false
+  };
   mapOptions: MapOptions = this.defaultMapOptions;
 
   currentCaseChoropleth: CaseChoropleth;
@@ -78,7 +80,7 @@ export class AppComponent implements OnInit {
     if (stored) {
       this.mapOptions = stored;
       let snackbar = this.snackbar.open(
-        this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"), 
+        this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"),
         this.translationService.translate("Zurücksetzen"), {
         politeness: "polite",
         duration: 20000

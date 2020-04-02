@@ -277,6 +277,10 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     if (zoom < 8) {
       scale = scale / (Math.pow(1.4, (8 - zoom)));
     }
+    // decrease size further for high zoom levels (city districts)
+    if (zoom > 12) {
+      scale = scale / (Math.pow(1.5, (zoom - 12)));
+    }
     this.currentScale = scale;
 
     this.glyphSize.width = 40;
