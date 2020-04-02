@@ -27,7 +27,7 @@ export class GlyphLayerService {
     private matDialog: MatDialog
   ) {}
 
-  getSimpleGlyphLayer(options: Observable<BedGlyphOptions>): Observable<SimpleGlyphLayer> {
+  getSimpleGlyphLayer(options: Observable<BedGlyphOptions>, forceEnabled: boolean): Observable<SimpleGlyphLayer> {
     this.loading$.next(true);
     return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
     .pipe(
@@ -38,6 +38,7 @@ export class GlyphLayerService {
           divi,
           this.tooltipService,
           this.colormapService,
+          forceEnabled,
           options,
           this.matDialog
           );
@@ -46,7 +47,8 @@ export class GlyphLayerService {
     );
   }
 
-  getAggregatedGlyphLayer(aggLevel: AggregationLevel, options: Observable<BedGlyphOptions>): Observable<[AggregatedGlyphLayer, LandkreiseHospitalsLayer]> {
+  getAggregatedGlyphLayer(options: BedGlyphOptions, options$: Observable<BedGlyphOptions>): Observable<[AggregatedGlyphLayer, LandkreiseHospitalsLayer]> {
+    const aggLevel = options.aggregationLevel;
     this.loading$.next(true);
     return forkJoin([
       this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(aggLevel),
@@ -60,7 +62,8 @@ export class GlyphLayerService {
           result[0],
           this.tooltipService,
           this.colormapService,
-          options,
+          options.forceDirectedOn,
+          options$,
           this.matDialog
         );
 
