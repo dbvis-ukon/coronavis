@@ -7,7 +7,7 @@ export const environment = {
   apiUrl: 'https://api.coronavis.dbvis.de/',
   // apiUrl: 'http://localhost:5000/',
 
-  tileServerUrl: 'https://staging.tiles.covis.dbvis.de/',
+  tileServerUrl: 'https://staging.tiles.coronavis.dbvis.de/',
 
   version: '',
 

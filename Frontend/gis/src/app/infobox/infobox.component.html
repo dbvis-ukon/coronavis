@@ -83,11 +83,11 @@
         class="btngrp"
         name="fontStyle"
         aria-label="Font Style"
-        [value]="mo.forceDirectedOn"
-        (change)="updateForceDirectedStatus($event.value)"
+        [value]="mo.bedGlyphOptions.forceDirectedOn"
+        (change)="mo.bedGlyphOptions.forceDirectedOn = $event.value; emitMapOptions()"
       >
-        <mat-button-toggle [value]=false i18n="@@infoboxForceDirectedOnTP"  i18n-matTooltip="@@ForceDirectedOnTP" matTooltip="Position der Krankenhäuser entzerren">Verdeckungsfrei</mat-button-toggle>
-        <mat-button-toggle [value]=true i18n="@@infoboxForceDirectedOffTP"   i18n-matTooltip="@@ForceDirectedOffTP" matTooltip="Position der Krankenhäuser beibehalten">Geo-Position</mat-button-toggle>
+        <mat-button-toggle [value]="true" i18n="@@infoboxForceDirectedOnTP"  i18n-matTooltip="@@ForceDirectedOnTP" matTooltip="Position der Krankenhäuser entzerren">Verdeckungsfrei</mat-button-toggle>
+        <mat-button-toggle [value]="false" i18n="@@infoboxForceDirectedOffTP"   i18n-matTooltip="@@ForceDirectedOffTP" matTooltip="Position der Krankenhäuser beibehalten">Geo-Position</mat-button-toggle>
       </mat-button-toggle-group>
 
       <h5 i18n="@@infoboxBackground">Hintergrund</h5>

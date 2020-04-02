@@ -31,12 +31,15 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     private data: FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>,
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
+    private forceDirect: boolean,
     private glyphOptions: Observable<BedGlyphOptions>,
     private dialog: MatDialog
 ) {
     super(name, data);
 
-    this.forceLayout = new ForceDirectedLayout(this.data as any, granularity, this.updateGlyphPositions.bind(this));
+    if (this.forceDirect) {
+      this.forceLayout = new ForceDirectedLayout(this.data as any, granularity, this.updateGlyphPositions.bind(this));
+    }
 
     this.glyphOptions.subscribe(opt => {
       if(!this.gHospitals || !opt) {
@@ -252,8 +255,10 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       return;
     }
 
-    const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
-    this.forceLayout.update(glyphBoxes, zoom);
+    if (this.forceDirect) {
+      const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
+      this.forceLayout.update(glyphBoxes, zoom);
+    }
   }
 
   setVisibility(v: boolean) {

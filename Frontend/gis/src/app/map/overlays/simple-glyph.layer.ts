@@ -36,13 +36,16 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     private data: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>,
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
+    private forceEnabled: boolean,
     private glyphOptions: Observable<BedGlyphOptions>,
     private dialog: MatDialog
   ) {
     super(name, data);
     this.enableDefault = true;
 
-    //this.forceLayout = new ForceDirectedLayout(this.data, AggregationLevel.none, this.updateGlyphPositions.bind(this));
+    if (forceEnabled) {
+      this.forceLayout = new ForceDirectedLayout(this.data, AggregationLevel.none, this.updateGlyphPositions.bind(this));
+    }
 
     this.glyphOptions.subscribe(opt => {
       if (!this.gHospitals || !opt) {
@@ -341,8 +344,10 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       return;
     }
 
-    const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
-    //this.forceLayout.update(glyphBoxes, zoom);
+    if (this.forceEnabled) {
+      const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
+      this.forceLayout.update(glyphBoxes, zoom);
+    }
   }
 
   wrap(text, width) {

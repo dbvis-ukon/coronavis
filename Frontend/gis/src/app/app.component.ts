@@ -34,7 +34,8 @@ export class AppComponent implements OnInit {
       enabled: true,
       showEcmo: true,
       showIcuHigh: true,
-      showIcuLow: true
+      showIcuLow: true,
+      forceDirectedOn: true
     },
 
     bedBackgroundOptions: {

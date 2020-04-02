@@ -15,6 +15,4 @@ export interface MapOptions {
 
   showOsmHeliports: boolean;
 
-  forceDirectedOn: boolean;
-
 }
