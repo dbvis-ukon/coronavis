@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
 
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
-  private defaultMapOptions = {
+  private defaultMapOptions: MapOptions = {
     bedGlyphOptions: {
       aggregationLevel: AggregationLevel.none,
       enabled: true,
@@ -56,8 +56,6 @@ export class AppComponent implements OnInit {
     showOsmHeliports: false,
 
     showOsmHospitals: false,
-
-    forceDirectedOn: false
   };
   mapOptions: MapOptions = this.defaultMapOptions;
 
