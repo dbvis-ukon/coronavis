@@ -272,8 +272,10 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
   onZoomed() {
     const zoom = this.map.getZoom();
     let scale = Math.pow(9 / (zoom), 4);
+
+    // decrease size further for low zoom levels (country wide overview)
     if (zoom < 8) {
-      scale = scale / 1.5;
+      scale = scale / (Math.pow(1.4, (8 - zoom)));
     }
     this.currentScale = scale;
 
