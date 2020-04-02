@@ -577,6 +577,7 @@ deploy-crawler-staging:
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
+    K8_NAMESPACE: covid-19-vis-staging
 
 deploy-crawler-production-new:
   extends: .deploy-crawler-new
