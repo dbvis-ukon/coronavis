@@ -124,7 +124,7 @@
           Deutschland zu zeigen. Anhand dieser Information können Engpässe früh erkannt und eine Umverteilung oder
           direkte Umleitung von Patientenströmen vorgenommen werden.</source>
       <target>The <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Data Analysis and Visualization Group</pc> at the University
-                                                                                                                                                                                of Konstanz develpos this tool to give an intuitive overview of free and occupied hospital beds in Germany. Based on this information bottlenecks can be detected to reroute and redistribute patients to other hospitals and health case facilities.</target></segment>
+                                                                                                                                                                                of Konstanz is developing this tool to give an intuitive overview of free and occupied hospital beds in Germany. Based on this information bottlenecks can be detected to reroute and redistribute patients to other hospitals and health case facilities.</target></segment>
     </unit><unit id="visdescription14">
       <notes>
         <note category="description"> help</note>
