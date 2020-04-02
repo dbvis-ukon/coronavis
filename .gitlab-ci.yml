@@ -574,6 +574,8 @@ deploy-frontend-production-new:
 
 deploy-crawler-staging:
   extends: .deploy-crawler-new
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_STAGING
   variables:
     ENV_TYPE: staging
     RUN_ON_MASTER: "yes"
