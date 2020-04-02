@@ -3,7 +3,7 @@ export interface MapLocationSettings {
     /**
      * determined by map.getBounds().getCenter()
      */ 
-    center: L.LatLngLiteral;
+    center: L.LatLngExpression;
 
     /**
      * determined by map.getZoom()

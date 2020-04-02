@@ -162,9 +162,7 @@ export class InfoboxComponent implements OnInit {
   }
 
   emitMapOptions() {
-    localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(this.mo));
     this.mapOptionsChange.emit({...this.mo});
-    console.log(this.mo);
   }
 
   openAbout() {

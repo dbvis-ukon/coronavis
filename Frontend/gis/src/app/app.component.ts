@@ -12,13 +12,15 @@ import {BedType} from './map/options/bed-type.enum';
 import {CaseChoropleth} from './map/overlays/casechoropleth';
 import {MapOptions} from './map/options/map-options';
 import {environment} from 'src/environments/environment';
-import {APP_CONFIG_KEY, APP_HELP_SEEN} from "../constants";
+import {APP_CONFIG_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY} from "../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {HelpDialogComponent} from "./help-dialog/help-dialog.component";
 import { I18nService } from './services/i18n.service';
 import { TranslationService } from './services/translation.service';
 import { MapLocationSettings } from './map/options/map-location-settings';
+import { BehaviorSubject, of } from 'rxjs';
+import { safeDebounce } from './util/safe-debounce';
 
 @Component({
   selector: 'app-root',
@@ -72,11 +74,14 @@ export class AppComponent implements OnInit {
 
   mapOptions: MapOptions = JSON.parse(JSON.stringify(this.defaultMapOptions));
 
-  mapLocationSettings: MapLocationSettings = JSON.parse(JSON.stringify(this.defaultMapLocationSettings));
+  mapLocationSettings$: BehaviorSubject<MapLocationSettings> = new BehaviorSubject(JSON.parse(JSON.stringify(this.defaultMapLocationSettings)));
 
   currentCaseChoropleth: CaseChoropleth;
 
+  initialMapLocationSettings: MapLocationSettings = JSON.parse(JSON.stringify(this.defaultMapLocationSettings));
+
   siteId: number;
+
 
   // constructor is here only used to inject services
   constructor(private snackbar: MatSnackBar,
@@ -90,29 +95,38 @@ export class AppComponent implements OnInit {
     this.i18nService.initI18n();
 
 
-    const stored = JSON.parse(localStorage.getItem(APP_CONFIG_KEY)) as MapOptions;
-    if (stored) {
-      this.mapOptions = stored;
-      let snackbar = this.snackbar.open(
-        this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"),
-        this.translationService.translate("Zurücksetzen"), {
-        politeness: "polite",
-        duration: 20000
-      });
-      snackbar.onAction().subscribe(() => {
-        this.mapOptions = this.defaultMapOptions;
-        localStorage.removeItem(APP_CONFIG_KEY);
-      })
-    }
+    this.restoreSettingsFromLocalStorageOrUseDefault();
 
-    const helpSeen = JSON.parse(localStorage.getItem(APP_HELP_SEEN)) || false;
-    if (!helpSeen) {
-      this.dialog.open(HelpDialogComponent)
-        .afterClosed().subscribe(d => {
-        localStorage.setItem(APP_HELP_SEEN, JSON.stringify(true));
-      })
-    }
 
+    this.displayHelpForNewUser();
+
+
+    this.initTrackingPixel();
+
+
+    // listen for map changes and debounce
+    // writing into local storage by 500ms
+    // to save cpu/io
+    this.mapLocationSettings$.asObservable()
+    .pipe(
+      safeDebounce(500, a => of(a))
+    )
+    .subscribe(newLocSettings => {
+      // store data into local storage
+      localStorage.setItem(MAP_LOCATION_SETTINGS_KEY, JSON.stringify(newLocSettings));
+    });
+  }
+
+  mapLocationSettingsUpdated(newSettings: MapLocationSettings) {
+    this.mapLocationSettings$.next(newSettings);
+  }
+
+  mapOptionsUpdated(newOptions: MapOptions) {
+    this.mapOptions = newOptions;
+    localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(newOptions));
+  }
+
+  initTrackingPixel() {
     const trackingPixelSiteIDMapping = {
       'production': 1,
       'staging': 3,
@@ -121,5 +135,47 @@ export class AppComponent implements OnInit {
     };
 
     this.siteId = trackingPixelSiteIDMapping[environment.env];
+  }
+
+  displayHelpForNewUser() {
+    const helpSeen = JSON.parse(localStorage.getItem(APP_HELP_SEEN)) || false;
+    if (!helpSeen) {
+      this.dialog.open(HelpDialogComponent)
+        .afterClosed().subscribe(d => {
+        localStorage.setItem(APP_HELP_SEEN, JSON.stringify(true));
+      });
+    }
+  }
+
+  restoreSettingsFromLocalStorageOrUseDefault() {
+    const storedMapOptions = JSON.parse(localStorage.getItem(APP_CONFIG_KEY)) as MapOptions;
+    let restored = false;
+    if (storedMapOptions) {
+      this.mapOptions = storedMapOptions;
+      restored = true;
+    }
+
+    const storedMapLocationSettings = JSON.parse(localStorage.getItem(MAP_LOCATION_SETTINGS_KEY)) as MapLocationSettings;
+    if(storedMapLocationSettings) {
+      // this.mapLocationSettings$.next(storedMapLocationSettings);
+      this.initialMapLocationSettings = storedMapLocationSettings;
+      restored = true;
+    }
+
+    if(restored) {
+      let snackbar = this.snackbar.open(
+        this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"),
+        this.translationService.translate("Zurücksetzen"), {
+        politeness: "polite",
+        duration: 20000
+      });
+      snackbar.onAction().subscribe(() => {
+        this.mapOptions = this.defaultMapOptions;
+        this.mapLocationSettings$.next(this.defaultMapLocationSettings);
+
+        localStorage.removeItem(APP_CONFIG_KEY);
+        localStorage.removeItem(MAP_LOCATION_SETTINGS_KEY);
+      });
+    }
   }
 }

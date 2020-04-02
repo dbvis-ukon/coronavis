@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
 
 import * as L from 'leaflet';
-import {GeoJSON, LatLng, LatLngTuple, SVGOverlay} from 'leaflet';
+import {SVGOverlay} from 'leaflet';
 import 'mapbox-gl';
 import 'mapbox-gl-leaflet';
 // import 'leaflet-mapbox-gl';
@@ -21,7 +21,6 @@ import { OSMLayerService } from '../services/osm-layer.service';
 import { CaseChoropleth } from './overlays/casechoropleth';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { map } from 'rxjs/operators';
-import { MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { TranslationService } from '../services/translation.service';
 import { MapLocationSettings } from './options/map-location-settings';
@@ -122,26 +121,18 @@ export class MapComponent implements OnInit {
         });
 
     // create map, set initial view to to see whole of Germany (country wide deployment)
-    const defaultView: LatLngTuple = [51.163375, 10.447683];
+    const defaultView: L.LatLngExpression = [51.163375, 10.447683];
     const defaultZoom = 6;
 
-    let initialView = JSON.parse(localStorage.getItem(MAP_VIEW_KEY))
-    let initialZoom = +localStorage.getItem(MAP_ZOOM_KEY);
+    let mapLocationSettings = this._mapLocationSettings;
 
-    if (initialView && initialZoom) {
-      let snackbar = this.snackbar.open(
-        this.translationService.translate("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt"),
-        this.translationService.translate("Zurücksetzen"), {
-        politeness: "polite",
-        duration: 40000
-      });
-      snackbar.onAction().subscribe(() => {
-        localStorage.removeItem(MAP_ZOOM_KEY);
-        localStorage.removeItem(MAP_VIEW_KEY);
-      })
-    } else {
-      initialView = defaultView;
-      initialZoom = defaultZoom;
+    if (!mapLocationSettings) {
+      
+      mapLocationSettings = {
+        center: defaultView,
+        zoom: defaultZoom
+      }
+
     }
 
     this.mymap = L.map('main', {
@@ -149,11 +140,14 @@ export class MapComponent implements OnInit {
       maxZoom: 14,
       layers: [tiledMap],
       zoomControl: false
-    }).setView(initialView, initialZoom);
+    }).setView(mapLocationSettings.center, mapLocationSettings.zoom);
 
     this.mymap.on('moveend', () => {
-      localStorage.setItem(MAP_VIEW_KEY, JSON.stringify(this.mymap.getBounds().getCenter()));
-      localStorage.setItem(MAP_ZOOM_KEY, "" + this.mymap.getZoom());
+      this.emitMapLocationSettings();
+    });
+
+    this.mymap.on('zoom', () => {
+      this.emitMapLocationSettings();
     });
 
     new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
@@ -161,8 +155,17 @@ export class MapComponent implements OnInit {
     this.updateMap(this._mapOptions);
   }
 
+  private emitMapLocationSettings() {
+    const opt: MapLocationSettings = {
+      center: this.mymap.getBounds().getCenter(),
+      zoom: this.mymap.getZoom()
+    };
+
+    this.mapLocationSettingsChange.emit(opt);
+  }
+
   private updateMapLocation(mapLoc: MapLocationSettings) {
-    if (!this.mymap) {
+    if (!this.mymap || !mapLoc) {
       return;
     }
 

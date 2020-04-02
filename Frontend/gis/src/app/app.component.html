@@ -4,11 +4,14 @@
     id="map"
     [mapOptions]="mapOptions"
     (caseChoroplethLayerChange)="currentCaseChoropleth = $event"
+    [mapLocationSettings]="initialMapLocationSettings"
+    (mapLocationSettingsChange)="mapLocationSettingsUpdated($event)"
   ></app-map>
 
   <app-infobox
     class="infobox"
-    [(mapOptions)]="mapOptions"
+    [mapOptions]="mapOptions"
+    (mapOptionsChange)="mapOptionsUpdated($event)"
   ></app-infobox>
 
   <app-overlay-brand class="overlay-brand"></app-overlay-brand>
