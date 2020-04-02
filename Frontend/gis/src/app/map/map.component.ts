@@ -104,16 +104,16 @@ export class MapComponent implements OnInit {
                        '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
         });
 
-    // create map, set initial view to basemap and zoom level to center of BW
-    const defaultView: LatLngTuple = [48.6813312, 9.0088299];
-    const defaultZoom = 9;
+    // create map, set initial view to to see whole of Germany (country wide deployment)
+    const defaultView: LatLngTuple = [51.163375, 10.447683];
+    const defaultZoom = 6;
 
     let initialView = JSON.parse(localStorage.getItem(MAP_VIEW_KEY))
     let initialZoom = +localStorage.getItem(MAP_ZOOM_KEY);
 
     if (initialView && initialZoom) {
       let snackbar = this.snackbar.open(
-        this.translationService.translate("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt"), 
+        this.translationService.translate("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt"),
         this.translationService.translate("Zurücksetzen"), {
         politeness: "polite",
         duration: 40000
