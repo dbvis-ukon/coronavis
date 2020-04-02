@@ -42,7 +42,7 @@ export class HospitalInfoComponent implements OnInit {
         "field": "Datum", "type": "temporal",
         "axis": {
           "domain": false,
-          "tickSize": 3, "tickCount": 7,
+          "tickSize": 2, "tickCount": 8,
           "format": "%d.%m"
         }
       },
@@ -300,6 +300,7 @@ export class HospitalInfoComponent implements OnInit {
             );
         }
 
+        let counter = 0;
         for( const d of this.data.developments) {
 
           let sumOfOneSlice = 0;
@@ -324,11 +325,25 @@ export class HospitalInfoComponent implements OnInit {
                 maxNum = v;
               }
             }
+
+            // add last data point once again
+            if(counter === this.data.developments.length-1){
+              dataValues.push(
+                {
+                  Kategorie: bedStatus,
+                  num: v,
+                  color: this.getCapacityStateColor(bedStatus),
+                  Datum: moment(d.timestamp).add(1, 'days').toDate()
+                }
+              );
+            }
           }
 
           if (sumOfOneSlice > maxNumSlices) {
             maxNumSlices = sumOfOneSlice;
           }
+
+          counter++;
         }
 
         // hack deep clone spec
