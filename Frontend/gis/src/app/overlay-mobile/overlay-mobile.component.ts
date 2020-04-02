@@ -9,16 +9,14 @@ import {BreakpointObserver} from "@angular/cdk/layout";
 export class OverlayMobileComponent implements OnInit {
   showOverlayMobile = false;
 
-  constructor(    private breakPointObserver: BreakpointObserver
-  ) { }
+  constructor( private breakPointObserver: BreakpointObserver) {}
+
 
   ngOnInit(): void {
     //close info box if mobile
-    console.log("init")
     const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
     if(isSmallScreen){
       this.showOverlayMobile = true;
-      console.log("is small");
     }
   }
 

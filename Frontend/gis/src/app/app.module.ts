@@ -8,6 +8,7 @@ import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
+import { OverlayMobileComponent } from './overlay-mobile/overlay-mobile.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -33,7 +34,6 @@ import { AboutComponent } from './about/about.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatStepperModule } from "@angular/material/stepper";
-import { OverlayMobileComponent } from './overlay-mobile/overlay-mobile.component';
 
 
 import { VegaComponent } from './vega/vega.component';
@@ -84,6 +84,7 @@ if(storedLocale === SupportedLocales.DE_DE) {
     GlyphTooltipComponent,
     CaseTooltipComponent,
     OverlayBrandComponent,
+    OverlayMobileComponent,
     InfoboxComponent,
     HospitalInfoComponent,
     HospitalInfoDialogComponent,
@@ -94,8 +95,7 @@ if(storedLocale === SupportedLocales.DE_DE) {
     VegaComponent,
     HelpDialogComponent,
     TranslatePipe,
-    OsmTooltipComponent,
-    OverlayMobileComponent
+    OsmTooltipComponent
   ],
   imports: [
     BrowserModule,
