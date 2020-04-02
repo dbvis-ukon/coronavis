@@ -18,6 +18,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {HelpDialogComponent} from "./help-dialog/help-dialog.component";
 import { I18nService } from './services/i18n.service';
 import { TranslationService } from './services/translation.service';
+import { MapLocationSettings } from './map/options/map-location-settings';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,7 @@ export class AppComponent implements OnInit {
 
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
-  private defaultMapOptions = {
+  private defaultMapOptions: MapOptions = {
     bedGlyphOptions: {
       aggregationLevel: AggregationLevel.none,
       enabled: true,
@@ -55,8 +56,22 @@ export class AppComponent implements OnInit {
     showOsmHeliports: false,
 
     showOsmHospitals: false
-  }
-  mapOptions: MapOptions = this.defaultMapOptions;
+  };
+
+  private defaultMapLocationSettings: MapLocationSettings = {
+
+    center: {
+      lat: 48.6813312,
+      lng: 9.0088299
+    },
+
+    zoom: 9
+  };
+
+
+  mapOptions: MapOptions = JSON.parse(JSON.stringify(this.defaultMapOptions));
+
+  mapLocationSettings: MapLocationSettings = JSON.parse(JSON.stringify(this.defaultMapLocationSettings));
 
   currentCaseChoropleth: CaseChoropleth;
 

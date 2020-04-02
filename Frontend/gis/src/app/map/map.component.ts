@@ -24,6 +24,7 @@ import { map } from 'rxjs/operators';
 import { MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { TranslationService } from '../services/translation.service';
+import { MapLocationSettings } from './options/map-location-settings';
 
 export enum MapOptionKeys {
   bedGlyphOptions, bedBackgroundOptions, covidNumberCaseOptions, showOsmHospitals, showOsmHeliports
@@ -54,6 +55,22 @@ export class MapComponent implements OnInit {
   get mapOptions(): MapOptions {
     return this._mapOptions;
   }
+
+  private _mapLocationSettings: MapLocationSettings;
+
+  @Input()
+  set mapLocationSettings(mls: MapLocationSettings) {
+    this._mapLocationSettings = mls;
+
+    this.updateMapLocation(mls);
+  }
+
+  get mapLocationSettings(): MapLocationSettings {
+    return this._mapLocationSettings;
+  }
+
+  @Output()
+  mapLocationSettingsChange: EventEmitter<MapLocationSettings> = new EventEmitter();
 
   @Output()
   caseChoroplethLayerChange: EventEmitter<CaseChoropleth> = new EventEmitter();
@@ -142,6 +159,14 @@ export class MapComponent implements OnInit {
     new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
 
     this.updateMap(this._mapOptions);
+  }
+
+  private updateMapLocation(mapLoc: MapLocationSettings) {
+    if (!this.mymap) {
+      return;
+    }
+
+    this.mymap.setView(mapLoc.center, mapLoc.zoom);
   }
 
   private updateMap(mo: MapOptions) {
