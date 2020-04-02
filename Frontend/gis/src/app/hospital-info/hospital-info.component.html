@@ -7,7 +7,7 @@
   <div class="content">
     <div *ngIf="!data.developments" i18n="@@countyDataNotFound" class="noData">Es stehen keine Daten zur Verfügung.</div>
 
-    <h4 *ngIf="latestDevelopment"><span i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </span> <span>{{ lastUpdate | date:"dd.MM.yyy, HH:mm" }} Uhr</span></h4>
+    <h4 *ngIf="latestDevelopment"><span i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </span> <span>{{ lastUpdate | date:'medium' }}</span></h4>
 
 
 
@@ -89,10 +89,10 @@
 <br>
 
 <div *ngIf="specs.length > 0">
-<h4><span i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung:</span> ({{ firstTimestamp | date:"dd.MM.yyyy"}} - {{ lastUpdate | date:"dd.MM.yyyy" }})</h4>
+<h4><span i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung:</span> ({{ firstTimestamp | date:'mediumDate'}} - {{ lastUpdate | date:'mediumDate' }})</h4>
 
 <p *ngIf="data.developments?.length <= 1" i18n="@@hospitalInfoNoTemporalDataAvailable">
-  Keine zeitliche Entwicklung verfügbar, da ledliglich ein Datenpunkt gemeldet wurde.
+  Keine zeitliche Entwicklung verfügbar, da lediglich ein Datenpunkt gemeldet wurde.
 </p>
 
 <div *ngIf="data.developments?.length > 1">

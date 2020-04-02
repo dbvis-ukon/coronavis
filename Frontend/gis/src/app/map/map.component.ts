@@ -83,7 +83,7 @@ export class MapComponent implements OnInit {
 
   private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<FeatureCollection>>();
 
-  private aggregationLevelToGlyphMap = new Map<AggregationLevel, L.LayerGroup<any>>();
+  private aggregationLevelToGlyphMap = new Map<string, L.LayerGroup<any>>();
 
   private osmHospitalsLayer: L.GeoJSON<any>;
 
@@ -121,16 +121,16 @@ export class MapComponent implements OnInit {
                        '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
         });
 
-    // create map, set initial view to basemap and zoom level to center of BW
-    const defaultView: LatLngTuple = [48.6813312, 9.0088299];
-    const defaultZoom = 9;
+    // create map, set initial view to to see whole of Germany (country wide deployment)
+    const defaultView: LatLngTuple = [51.163375, 10.447683];
+    const defaultZoom = 6;
 
     let initialView = JSON.parse(localStorage.getItem(MAP_VIEW_KEY))
     let initialZoom = +localStorage.getItem(MAP_ZOOM_KEY);
 
     if (initialView && initialZoom) {
       let snackbar = this.snackbar.open(
-        this.translationService.translate("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt"), 
+        this.translationService.translate("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt"),
         this.translationService.translate("Zurücksetzen"), {
         politeness: "polite",
         duration: 40000
@@ -255,16 +255,16 @@ export class MapComponent implements OnInit {
     }
 
     // internal caching for the glyph positions due to slow force layout:
-    if(this.aggregationLevelToGlyphMap.has(o.aggregationLevel)) {
+    if(this.aggregationLevelToGlyphMap.has(`${o.aggregationLevel}-${o.forceDirectedOn}`)) {
 
-      this.showGlyphLayer(this.aggregationLevelToGlyphMap.get(o.aggregationLevel));
+      this.showGlyphLayer(this.aggregationLevelToGlyphMap.get(`${o.aggregationLevel}-${o.forceDirectedOn}`));
 
     } else {
       // dynamically create the map and load data from api
 
       let obs: Observable<L.LayerGroup>;
       if(o.aggregationLevel === AggregationLevel.none) {
-        obs = this.glyphLayerService.getSimpleGlyphLayer(this.bedGlyphOptions$)
+        obs = this.glyphLayerService.getSimpleGlyphLayer(this.bedGlyphOptions$, o.forceDirectedOn)
         .pipe(
           map(glyphFactory => {
             const glyphLayer = glyphFactory.createOverlay(this.mymap);
@@ -276,7 +276,7 @@ export class MapComponent implements OnInit {
             return layerGroup;
           }));
       } else {
-        obs = this.glyphLayerService.getAggregatedGlyphLayer(o.aggregationLevel, this.bedGlyphOptions$)
+        obs = this.glyphLayerService.getAggregatedGlyphLayer(o, this.bedGlyphOptions$)
         .pipe(
           map(([glyphFactory, backgroundFactory]) => {
 
@@ -294,7 +294,7 @@ export class MapComponent implements OnInit {
       }
 
       this.glyphLayerSubscription = obs.subscribe(layerGroup => {
-        this.aggregationLevelToGlyphMap.set(o.aggregationLevel, layerGroup);
+        this.aggregationLevelToGlyphMap.set(`${o.aggregationLevel}-${o.forceDirectedOn}`, layerGroup);
 
         this.showGlyphLayer(layerGroup);
       });

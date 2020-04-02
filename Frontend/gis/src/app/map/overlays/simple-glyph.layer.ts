@@ -36,13 +36,16 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     private data: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>,
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
+    private forceEnabled: boolean,
     private glyphOptions: Observable<BedGlyphOptions>,
     private dialog: MatDialog
   ) {
     super(name, data);
     this.enableDefault = true;
 
-    this.forceLayout = new ForceDirectedLayout(this.data, AggregationLevel.none, this.updateGlyphPositions.bind(this));
+    if (forceEnabled) {
+      this.forceLayout = new ForceDirectedLayout(this.data, AggregationLevel.none, this.updateGlyphPositions.bind(this));
+    }
 
     this.glyphOptions.subscribe(opt => {
       if (!this.gHospitals || !opt) {
@@ -134,8 +137,8 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
     const self = this;
 
-    const padding = 2;
-    const yOffset = 2;
+    const padding = 0.5;
+    const yOffset = 0.5;
 
     this.gHospitals = d3.select<SVGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(svgElement)
       .style('pointer-events', 'none')
@@ -168,7 +171,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
         .attr("x2", d1.properties._x-d1.properties.x)
         .attr("y2", d1.properties._y-d1.properties.y)
         .lower();
-        
+
         d3.select(currentElement)
         .selectAll("*:not(.pointer-line)")
         .raise();
@@ -183,8 +186,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .append('rect')
       .attr('class', 'background-rect')
       .attr('width', this.glyphSize.width)
-      .attr('height', this.glyphSize.height/2);
-      
+      .attr('height', this.glyphSize.height / 2);
 
     this.nameHospitalsShadow = this.gHospitals
       .append('text')
@@ -264,7 +266,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
   updateGlyphPositions() {
     this.gHospitals
-      .transition().duration(100)
+      .transition().duration(500)
       .attr('transform', (d, i) => {
         return `translate(${d.properties.x},${d.properties.y})`;
       });
@@ -272,36 +274,62 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
   onZoomed() {
     const zoom = this.map.getZoom();
-    const scale = Math.pow(9 / (zoom), 4);
+    let scale = Math.pow(9 / (zoom), 4);
+
+    // decrease size further for low zoom levels (country wide overview)
+    if (zoom < 8) {
+      scale = scale / (Math.pow(1.4, (8 - zoom)));
+    }
+    // decrease size further for high zoom levels (city districts)
+    if (zoom > 12) {
+      scale = scale / (Math.pow(1.5, (zoom - 12)));
+    }
     this.currentScale = scale;
 
+    this.glyphSize.width = 40;
+    this.glyphSize.height = 28;
+
+    // hidden by default
+    this.cityHospitals.classed('hiddenLabel', true);
+    this.cityHospitalsShadow.classed('hiddenLabel', true);
+    this.nameHospitals.classed('hiddenLabel', true);
+    this.nameHospitalsShadow.classed('hiddenLabel', true);
+
+
     // Resize glyph bounding boxes + show/hide labels
-    if (this.map.getZoom() >= 9) {
-      this.glyphSize.height = 40;
-      this.glyphSize.width = 80;
-
-      this.cityHospitals.classed('hiddenLabel', true);
-      this.cityHospitalsShadow.classed('hiddenLabel', true);
-
+    if (this.map.getZoom() >= 12) {
+      this.glyphSize.width = 30;
+      this.glyphSize.height = 10;
       this.nameHospitals.classed('hiddenLabel', false);
       this.nameHospitalsShadow.classed('hiddenLabel', false);
-    } else if (this.map.getZoom() === 8) {
-      this.glyphSize.height = 28;
-      this.glyphSize.width = 38;
 
+      // true, true
+    } else if (this.map.getZoom() === 11) {
+      this.glyphSize.width = 30;
+      this.glyphSize.height = 10;
       this.cityHospitals.classed('hiddenLabel', false);
       this.cityHospitalsShadow.classed('hiddenLabel', false);
 
-      this.nameHospitals.classed('hiddenLabel', true);
-      this.nameHospitalsShadow.classed('hiddenLabel', true);
-    } else if (this.map.getZoom() === 7) {
-      this.glyphSize.height = 14;
-      this.glyphSize.width = 38;
+      // true, true
+    } else if (this.map.getZoom() === 10) {
+      this.glyphSize.width = 30;
+      this.glyphSize.height = 10;
 
-      this.cityHospitals.classed('hiddenLabel', true);
-      this.cityHospitalsShadow.classed('hiddenLabel', true);
-      this.nameHospitals.classed('hiddenLabel', true);
-      this.nameHospitalsShadow.classed('hiddenLabel', true);
+      // true, true
+    } else if (this.map.getZoom() === 9) {
+      this.glyphSize.width = 30;
+      this.glyphSize.height = 10;
+
+      // true, false
+    } else if (this.map.getZoom() === 8) {
+      this.glyphSize.width = 30;
+      this.glyphSize.height = 10;
+
+      // false, true
+    } else if (this.map.getZoom() <= 7) {
+      this.glyphSize.width = 30;
+      this.glyphSize.height = 10;
+      // true, true
     }
 
     this.gHospitals
@@ -316,8 +344,10 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       return;
     }
 
-    const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
-    this.forceLayout.update(glyphBoxes, zoom);
+    if (this.forceEnabled) {
+      const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
+      this.forceLayout.update(glyphBoxes, zoom);
+    }
   }
 
   wrap(text, width) {

@@ -35,7 +35,8 @@ export class AppComponent implements OnInit {
       enabled: true,
       showEcmo: true,
       showIcuHigh: true,
-      showIcuLow: true
+      showIcuLow: true,
+      forceDirectedOn: true
     },
 
     bedBackgroundOptions: {
@@ -93,7 +94,7 @@ export class AppComponent implements OnInit {
     if (stored) {
       this.mapOptions = stored;
       let snackbar = this.snackbar.open(
-        this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"), 
+        this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"),
         this.translationService.translate("Zurücksetzen"), {
         politeness: "polite",
         duration: 20000
