@@ -33,6 +33,8 @@ import { AboutComponent } from './about/about.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatStepperModule } from "@angular/material/stepper";
+import { OverlayMobileComponent } from './overlay-mobile/overlay-mobile.component';
+
 
 import { VegaComponent } from './vega/vega.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
@@ -93,6 +95,7 @@ if(storedLocale === SupportedLocales.DE_DE) {
     HelpDialogComponent,
     TranslatePipe,
     OsmTooltipComponent,
+    OverlayMobileComponent
   ],
   imports: [
     BrowserModule,
