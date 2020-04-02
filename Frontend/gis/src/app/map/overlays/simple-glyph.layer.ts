@@ -266,7 +266,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
 
   updateGlyphPositions() {
     this.gHospitals
-      .transition().duration(100)
+      .transition().duration(500)
       .attr('transform', (d, i) => {
         return `translate(${d.properties.x},${d.properties.y})`;
       });
