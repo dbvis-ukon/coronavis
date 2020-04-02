@@ -177,20 +177,22 @@ export-environment:
   # and if it should run on a feature branch or it should run on master
   - changes:
       - Tiles/**/*
-      - k8/Tiles/**/*
       - k8/tiles-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: on_success
   - changes:
       - Tiles/**/*
-      - k8/Tiles/**/*
       - k8/tiles-new/**/*
       - .gitlab-ci.yml
     if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: on_success
   # run if tagged
-  - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
+  - changes:
+     - Tiles/**/*
+     - k8/tiles-new/**/*
+     - .gitlab-ci.yml
+    if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
     when: on_success
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never

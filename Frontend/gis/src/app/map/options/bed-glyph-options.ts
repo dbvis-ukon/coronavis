@@ -27,4 +27,6 @@ export interface BedGlyphOptions {
      */
     showEcmo: boolean;
 
+    forceDirectedOn: boolean;
+
 }
