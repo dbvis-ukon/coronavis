@@ -20,11 +20,10 @@ import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.se
 import { OSMLayerService } from '../services/osm-layer.service';
 import { CaseChoropleth } from './overlays/casechoropleth';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
-import { switchMap, map } from 'rxjs/operators';
-import {APP_CONFIG_KEY, MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
+import { map } from 'rxjs/operators';
+import { MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {SimpleMapScreenshoter} from 'leaflet-simple-map-screenshoter'
-
+import { TranslationService } from '../services/translation.service';
 
 export enum MapOptionKeys {
   bedGlyphOptions, bedBackgroundOptions, covidNumberCaseOptions, showOsmHospitals, showOsmHeliports
@@ -90,7 +89,8 @@ export class MapComponent implements OnInit {
     private glyphLayerService: GlyphLayerService,
     private caseChoroplehtLayerService: CaseChoroplethLayerService,
     private osmLayerService: OSMLayerService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private translationService: TranslationService
   ) {
   }
 
@@ -100,8 +100,8 @@ export class MapComponent implements OnInit {
         {
           tileSize: 256,
           // zoomOffset: -1,
-          // attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
-          //   '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> ' +
+                       '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
         });
 
     // create map, set initial view to basemap and zoom level to center of BW
@@ -112,7 +112,9 @@ export class MapComponent implements OnInit {
     let initialZoom = +localStorage.getItem(MAP_ZOOM_KEY);
 
     if (initialView && initialZoom) {
-      let snackbar = this.snackbar.open("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt", "Zurücksetzen", {
+      let snackbar = this.snackbar.open(
+        this.translationService.translate("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt"), 
+        this.translationService.translate("Zurücksetzen"), {
         politeness: "polite",
         duration: 40000
       });
@@ -127,7 +129,7 @@ export class MapComponent implements OnInit {
 
     this.mymap = L.map('main', {
       minZoom: 6,
-      maxZoom: 11,
+      maxZoom: 14,
       layers: [tiledMap],
       zoomControl: false
     }).setView(initialView, initialZoom);
@@ -138,8 +140,6 @@ export class MapComponent implements OnInit {
     });
 
     new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
-
-    new SimpleMapScreenshoter().addTo(this.mymap);
 
     this.updateMap(this._mapOptions);
   }

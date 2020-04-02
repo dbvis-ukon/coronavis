@@ -31,7 +31,6 @@ export class GlyphLayerService {
     this.loading$.next(true);
     return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
     .pipe(
-      tap(() => console.log('load simple glyph layer')),
       // map(this.mySingleAggregatedMapper),
       map(divi => {
         return new SimpleGlyphLayer(
@@ -54,7 +53,6 @@ export class GlyphLayerService {
       this.hospitalRepository.getHospitalsForAggregationLevel(aggLevel)
     ])
     .pipe(
-      tap(() => console.log('load aggregated glyph layer')),
       map(result => {
         const factory = new AggregatedGlyphLayer(
           'ho_glyph_'+aggLevel,

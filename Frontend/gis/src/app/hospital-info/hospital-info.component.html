@@ -1,20 +1,20 @@
 <div>
   <h3 class="name">{{ data.name }}</h3>
 
-  <p class="numHospitals" *ngIf="!isSingleHospital">({{ totalNumberOfHospitals }} gemeldete Krankenhäuser)</p>
+  <p class="numHospitals" *ngIf="!isSingleHospital">({{ totalNumberOfHospitals }} <span i18n="tooltip | hospitals@reported">gemeldete Krankenhäuser</span>)</p>
   <mat-divider></mat-divider>
 
   <div class="content">
     <div *ngIf="!data.developments" i18n="@@countyDataNotFound" class="noData">Es stehen keine Daten zur Verfügung.</div>
 
     <h4 *ngIf="latestDevelopment"><span i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </span> <span>{{ lastUpdate | date:"dd.MM.yyy, HH:mm" }} Uhr</span></h4>
-    
+
 
 
     <div class="data-warning" *ngIf="warnOfOutdatedData">
       <mat-icon color="warn">warning</mat-icon>
       
-      <h5>Die Daten sind älter als 24 Stunden.</h5>
+      <h5 i18n="@@tooltipHospitalOldData">Die Daten sind älter als 24 Stunden.</h5>
     </div>
 
 
@@ -32,15 +32,15 @@
       <tbody>
       <tr>
         <td><strong>ICU - Low Care:</strong> </td>
-        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuLow) }">{{ getStatusDescriptionFor(eBedType.icuLow) }}</td>
+        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuLow) }">{{ getStatusDescriptionFor(eBedType.icuLow) | translate }}</td>
       </tr>
       <tr>
         <td><strong>ICU - High Care: </strong></td>
-        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuHigh) }">{{ getStatusDescriptionFor(eBedType.icuHigh) }}</td>
+        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.icuHigh) }">{{ getStatusDescriptionFor(eBedType.icuHigh)  | translate}}</td>
       </tr>
       <tr>
         <td><strong>ECMO: </strong></td>
-        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.ecmo) }">{{ getStatusDescriptionFor(eBedType.ecmo) }}</td>
+        <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.ecmo) }">{{ getStatusDescriptionFor(eBedType.ecmo) | translate}}</td>
       </tr>
       </tbody>
       <!--  <tbody>-->
@@ -89,7 +89,7 @@
 <br>
 
 <div *ngIf="specs.length > 0">
-<h4 i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung: ({{ firstTimestamp | date:"dd.MM.yyyy"}} - {{ lastUpdate | date:"dd.MM.yyyy" }})</h4>
+<h4><span i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung:</span> ({{ firstTimestamp | date:"dd.MM.yyyy"}} - {{ lastUpdate | date:"dd.MM.yyyy" }})</h4>
 
 <p *ngIf="data.developments?.length <= 1" i18n="@@hospitalInfoNoTemporalDataAvailable">
   Keine zeitliche Entwicklung verfügbar, da ledliglich ein Datenpunkt gemeldet wurde.
@@ -121,5 +121,5 @@
 <div class="glyph-color-legend">
     <div *ngFor="let t of glyphLegendColors" class="glyph-tile" >
         <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
-        <div class="text">{{ t }}</div>
+        <div class="text">{{ t | translate }}</div>
 </div>

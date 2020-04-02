@@ -3,11 +3,27 @@
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === false && choroplethLayer">
   <h5 i18n="legend|cases@@cases">Fallzahlen</h5>
 
-    <div class="row" *ngFor="let b of caseColors">
+    <div>
 
-        <div class="rect" [ngStyle]="{ 'background-color': b.color }"></div>
+    <table>
 
-        <div class="text" [innerHtml]="b.text"></div>
+      <tr *ngFor="let b of caseColors">
+
+        <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
+
+        <td class="lower">
+          {{ b.binLowerBound | number }}
+        </td>
+
+        <td class="dash">&ndash;</td>
+
+        <td class="upper">
+          {{ b.binUpperBound | number }}
+        </td>
+      </tr>
+
+
+    </table>
 
     </div>
 
@@ -17,12 +33,13 @@
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === true || mo.bedGlyphOptions.enabled === true" >
   <h5 i18n="legend|beds@@beds">Bettenauslastung</h5>
 
-    <div class="row" *ngFor="let b of bedStatusColors">
+  <table>
+    <tr *ngFor="let b of bedStatusColors">
+      <td><div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div></td>
 
-        <div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div>
+      <td class="text">{{ b | translate }}</td>
+    </tr>
+  </table>
 
-        <div class="text">{{ b }}</div>
-
-    </div>
 
 </div>

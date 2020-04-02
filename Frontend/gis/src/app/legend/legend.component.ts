@@ -36,7 +36,8 @@ export class LegendComponent implements OnInit {
 
   caseColors = [];
 
-  constructor(private colmapService: QuantitativeColormapService) {
+  constructor(
+    private colmapService: QuantitativeColormapService) {
 
   }
 
@@ -93,21 +94,30 @@ export class LegendComponent implements OnInit {
 
       let text = d0Fixed + ((d[1]) ? ' &ndash; ' + d1Fixed : '+' );
 
+      let binLowerBound = d0Fixed;
+      let binUpperBound = d1Fixed;
+
       if (!norm100k) {
         if (d1Fixed - d0Fixed < 1) {
           if (d0Ceil === d1Ceil && !doneMap.get(d0Ceil)) {
             doneMap.set(d0Ceil, true);
             text = Math.floor(d0Fixed) + '';
+            binLowerBound = Math.floor(d0Fixed);
           } else if (d1Ceil === d1Fixed) {
             text = d1Ceil + '';
+            binUpperBound = d1Ceil;
           } else {
             return;
           }                    
         } else {
           if (d0Ceil === d1Ceil) {
             text = d1Ceil + '';
+            binLowerBound = d0Ceil;
+            binUpperBound = d1Ceil;
           } else {
             text = d0Ceil + ' &ndash; ' + d1Ceil;
+            binLowerBound = d0Ceil;
+            binUpperBound = d1Ceil;
           } 
         }        
       }
@@ -117,7 +127,9 @@ export class LegendComponent implements OnInit {
         this.caseColors.push(
           {
             color: color,
-            text: text
+            text: text,
+            binLowerBound,
+            binUpperBound,
           }
         );
 
@@ -128,7 +140,9 @@ export class LegendComponent implements OnInit {
         this.caseColors.push(
           {
             color: color,
-            text: text
+            text: text,
+            binLowerBound,
+            binUpperBound
           }
         );
 

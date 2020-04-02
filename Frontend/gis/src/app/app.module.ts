@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -38,6 +38,38 @@ import { VegaComponent } from './vega/vega.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 
+import { registerLocaleData, DecimalPipe } from '@angular/common';
+import localeEn from '@angular/common/locales/en';
+import localeDe from '@angular/common/locales/de';
+import { APP_LOCALE } from 'src/constants';
+import { SupportedLocales } from './services/i18n.service';
+import { TranslatePipe } from './translate.pipe';
+
+// the second parameter 'fr-FR' is optional
+
+
+
+const storedLocale = JSON.parse(localStorage.getItem(APP_LOCALE)) as SupportedLocales;
+
+export const localeProvider = {
+  provide: LOCALE_ID,
+  useFactory: () => {
+    if(storedLocale === SupportedLocales.DE_DE) {
+      return 'de-DE'
+    } else {
+      return 'en-US';
+    }
+  }
+}
+
+
+if(storedLocale === SupportedLocales.DE_DE) {
+  registerLocaleData(localeDe, 'de-DE');
+} else {
+  registerLocaleData(localeEn, 'en-US');
+}
+
+
 
 @NgModule({
   entryComponents: [
@@ -59,6 +91,7 @@ import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
     ImpressumComponent,
     VegaComponent,
     HelpDialogComponent,
+    TranslatePipe,
     OsmTooltipComponent,
   ],
   imports: [
@@ -86,7 +119,7 @@ import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
     MatSnackBarModule,
     MatStepperModule
   ],
-  providers: [],
+  providers: [localeProvider, PlusminusPipe, DecimalPipe, TranslatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

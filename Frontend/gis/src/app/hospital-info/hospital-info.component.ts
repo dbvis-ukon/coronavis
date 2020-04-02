@@ -6,6 +6,7 @@ import {AggregatedHospitalOut} from '../repositories/types/out/aggregated-hospit
 import {BedType} from "../map/options/bed-type.enum";
 import * as moment from 'moment';
 import {QuantitativeColormapService} from '../services/quantitative-colormap.service';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-hospital-info',
@@ -120,7 +121,8 @@ export class HospitalInfoComponent implements OnInit {
 
   totalNumberOfHospitals: number = 0;
 
-  constructor(private colormapService: QualitativeColormapService) {
+  constructor(private colormapService: QualitativeColormapService,
+    private translationService: TranslationService) {
   }
 
   ngOnInit(): void {
@@ -218,6 +220,8 @@ export class HospitalInfoComponent implements OnInit {
       // also overwrite the title
       spec.encoding.x.title = '';
 
+      spec.encoding.y.title = this.translationService.translate('Anzahl Krankenhäuser');
+
 
       this.barChartSpecs.push({
         title: this.bedAccessorsMapping[bedAccessor],
@@ -255,9 +259,17 @@ export class HospitalInfoComponent implements OnInit {
     }
   }
 
+  private existsInDataValues(date, category, dataValues){
+    for(let i = dataValues.length-1; i>=0; i--) {
+      if(moment(dataValues[i].Datum).isSame(date) && dataValues[i].Kategorie === category){
+        return true;
+      }
+    }
+    return false;
+  }
+
   private prepareTemporalCharts() {
-    // var data = [{"development" : {"timestamp" : "2020-03-27T14:49:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-28T09:42:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-29T10:38:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-30T09:18:00", "icu_low_care" : {"Verfügbar" : 1}, "icu_high_care" : {"Begrenzt" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}, {"development" : {"timestamp" : "2020-03-31T09:04:00", "icu_low_care" : {"Begrenzt" : 1}, "icu_high_care" : {"Verfügbar" : 1}, "ecmo_state" : {"Nicht verfügbar" : 1}}}];
-    const bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar', 'Keine Information']; //FIXME add "Nicht verfügbar" if should be displayed
+    const bedStati = this.glyphLegendColors;
 
     var colors = [];
     for (const bedStatus of bedStati) {
@@ -299,16 +311,18 @@ export class HospitalInfoComponent implements OnInit {
 
             sumOfOneSlice += v;
 
-            dataValues.push(
-              {
-                Kategorie: bedStatus,
-                num: v,
-                color: this.getCapacityStateColor(bedStatus),
-                Datum: moment.max(moment(d.timestamp), tenDaysAgo).toDate()
+            if(!this.existsInDataValues(moment.max(moment(d.timestamp), tenDaysAgo).toDate(), bedStatus, dataValues)) {
+              dataValues.push(
+                {
+                  Kategorie: bedStatus,
+                  num: v,
+                  color: this.getCapacityStateColor(bedStatus),
+                  Datum: moment.max(moment(d.timestamp), tenDaysAgo).toDate()
+                }
+              );
+              if (v > maxNum) {
+                maxNum = v;
               }
-            );
-            if (v > maxNum) {
-              maxNum = v;
             }
           }
 
@@ -316,8 +330,6 @@ export class HospitalInfoComponent implements OnInit {
             maxNumSlices = sumOfOneSlice;
           }
         }
-
-        console.log(dataValues);
 
         // hack deep clone spec
         const spec = JSON.parse(JSON.stringify(this.temporalChartTemplateSpec));
@@ -336,6 +348,7 @@ export class HospitalInfoComponent implements OnInit {
 
         if (!this.isSingleHospital) {
           spec.mark.interpolate = 'step-after';
+          spec.encoding.y.axis.title = this.translationService.translate('Anzahl KH');
           // spec.width = 370;
         } else {
           // is single hospital
@@ -361,7 +374,6 @@ export class HospitalInfoComponent implements OnInit {
       this.specs.forEach(spec => {
         spec.chart.encoding.color.scale.domain = bedStati;
         spec.chart.encoding.color.scale.range = colors;
-        //console.log(JSON.stringify(spec));
         //spec.encoding.color.range = Math.min(maxNum+1, 5);
       });
     }

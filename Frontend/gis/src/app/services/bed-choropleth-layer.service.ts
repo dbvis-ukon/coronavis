@@ -33,7 +33,6 @@ export class BedChoroplethLayerService {
     this.loading$.next(true);
     return this.qualitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel)
     .pipe(
-      tap(() => console.log('load bed background choropleth layer')),
       map(data => {
         return new BedStatusChoropleth(
           this.getName(option.aggregationLevel, option.bedType), 
@@ -52,7 +51,6 @@ export class BedChoroplethLayerService {
   //   this.loading$.next(true);
   //   return this.quantitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel)
   //   .pipe(
-  //     tap(() => console.log('load bed background choropleth layer')),
   //     map(data => {
   //       return new BedStatusChoropleth(
   //         this.getName(option.aggregationLevel, option.bedType), 

@@ -21,7 +21,6 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<F
     ) {
       super(name, hospitals);
 
-      console.log('bed data', hospitals);
   }
 
   
