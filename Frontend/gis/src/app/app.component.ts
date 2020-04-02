@@ -28,13 +28,14 @@ export class AppComponent implements OnInit {
 
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
-  private defaultMapOptions = {
+  private defaultMapOptions: MapOptions = {
     bedGlyphOptions: {
       aggregationLevel: AggregationLevel.none,
       enabled: true,
       showEcmo: true,
       showIcuHigh: true,
-      showIcuLow: true
+      showIcuLow: true,
+      forceDirectedOn: true
     },
 
     bedBackgroundOptions: {
@@ -54,8 +55,8 @@ export class AppComponent implements OnInit {
 
     showOsmHeliports: false,
 
-    showOsmHospitals: false
-  }
+    showOsmHospitals: false,
+  };
   mapOptions: MapOptions = this.defaultMapOptions;
 
   currentCaseChoropleth: CaseChoropleth;
@@ -78,7 +79,7 @@ export class AppComponent implements OnInit {
     if (stored) {
       this.mapOptions = stored;
       let snackbar = this.snackbar.open(
-        this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"), 
+        this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"),
         this.translationService.translate("Zurücksetzen"), {
         politeness: "polite",
         duration: 20000
