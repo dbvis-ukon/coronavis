@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from "@angular/animations";
+import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../services/types/quantitative-aggregated-rki-cases-over-time';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-case-tooltip',
@@ -19,17 +21,15 @@ import {animate, style, transition, trigger} from "@angular/animations";
 })
 export class CaseTooltipComponent implements OnInit {
 
-  public name: String;
-  public combined: [{ cases: number, deaths: number }, { cases: number, deaths: number }, { cases: number, deaths: number }];
-  public datum: String;
-  public einwohner: number;
+  public data: QuantitativeAggregatedRkiCasesOverTimeProperties;
 
-  constructor() {}
+  constructor(private numberPipe: DecimalPipe,
+    ) {}
 
   public getCasesPer100kInhabitants(count: number, addPlus: boolean = false): string {
-    const v = ((count / this.einwohner) * 100000);
+    const v = ((count / this.data.bevoelkerung) * 100000);
 
-    return `${v > 0 && addPlus ? '+' : ''}${v.toFixed(2)}`;
+    return `${v > 0 && addPlus ? '+' : ''}${this.numberPipe.transform(v, '1.0-2')}`;
   }
 
   public getPercentageChange(curr: number, old: number): string {
@@ -40,7 +40,7 @@ export class CaseTooltipComponent implements OnInit {
     if (change === Infinity) {
       return ("war 0");
     }
-    return `${change > 0 ? '+' : ''}${change.toFixed(1)}%`
+    return `${change > 0 ? '+' : ''}${this.numberPipe.transform(change, '1.0-1')}%`
   }
 
   ngOnInit(): void {

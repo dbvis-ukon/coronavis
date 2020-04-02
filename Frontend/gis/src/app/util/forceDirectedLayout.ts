@@ -1,26 +1,51 @@
 import * as d3 from 'd3';
 import {quadtree} from 'd3';
-import {AbstractDiviHospital} from "../services/divi-hospitals.service";
-import {of} from "rxjs";
+import { Point, FeatureCollection } from 'geojson';
+import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
+import { AbstractTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import {AggregationLevel} from "../map/options/aggregation-level.enum";
+import {MAP_FORCE_CACHE_KEY} from "../../constants";
 
-export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {
+export class ForceDirectedLayout {
 
-  private levelPositionMap = new Map<number, Array<[number, number]>>();
-  private sim: d3.Simulation<HospitalType, any>;
+  private levelPositionMap: { [key: number]: number[][] };
+  private sim: d3.Simulation<AbstractHospitalOut<AbstractTimedStatus>, any>;
 
-  constructor(private data: HospitalType[], private finishCallback: any) {
-    this.sim = d3.forceSimulation(this.data)
+  private cacheKey: string;
+
+  constructor(private data: FeatureCollection<Point, AbstractHospitalOut<AbstractTimedStatus>>,
+              private aggregationLevel: AggregationLevel,
+              private finishCallback: () => any) {
+    this.sim = d3.forceSimulation(this.data.features.map(d => d.properties))
       .alpha(0.1)
       .stop();
+
+    this.cacheKey = MAP_FORCE_CACHE_KEY + aggregationLevel;
+
+    const cachedLayoutForAggLevel: { [key: number]: number[][] } = JSON.parse(localStorage.getItem(this.cacheKey)) ?? {}
+    if (Object.keys(cachedLayoutForAggLevel).length > 0) {
+      if (Array.from(Object.values(cachedLayoutForAggLevel)).every(levelCache => levelCache.length === data.features.length)) {
+        this.levelPositionMap = cachedLayoutForAggLevel;
+      } else {
+        // Cache length does not match current data;
+        this.levelPositionMap = {};
+        localStorage.removeItem(this.cacheKey);
+      }
+    } else {
+      this.levelPositionMap = {};
+      localStorage.removeItem(this.cacheKey);
+    }
+    // = new Map<number, Array<[number, number]>>();
   }
 
   forceComplete(zoom) {
     // persist to cache
     const positions = [];
-    this.data.forEach((d) => {
-      positions.push([d.x, d.y]);
+    this.data.features.forEach((d) => {
+      positions.push([d.properties.x, d.properties.y]);
     });
-    this.levelPositionMap.set(zoom, positions);
+    this.levelPositionMap[zoom] = positions;
+    localStorage.setItem(this.cacheKey, JSON.stringify(this.levelPositionMap));
 
     this.finishCallback();
   }
@@ -28,19 +53,19 @@ export class ForceDirectedLayout<HospitalType extends AbstractDiviHospital> {
   public update(glyphSizes: number[][], zoom: number) {
     this.sim.stop();
 
-    if (this.levelPositionMap.has(zoom)) {
-      const positions = this.levelPositionMap.get(zoom);
-      this.data.forEach((d, i) => {
+    if (this.levelPositionMap[zoom]) {
+      const positions = this.levelPositionMap[zoom];
+      this.data.features.forEach((d, i) => {
         const cached = positions[i];
-        d.x = cached[0];
-        d.y = cached[1];
+        d.properties.x = cached[0];
+        d.properties.y = cached[1];
       });
       this.finishCallback();
     } else {
-      this.data.forEach(d => {
-        d.x = d._x;
-        d.y = d._y;
-      })
+      this.data.features.forEach(d => {
+        d.properties.x = d.properties._x;
+        d.properties.y = d.properties._y;
+      });
       this.sim.force("collide", this.quadtreeCollide(glyphSizes))
         .alpha(0.1)
         .restart()

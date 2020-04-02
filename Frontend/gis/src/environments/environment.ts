@@ -4,10 +4,10 @@
 
 export const environment = {
 
-  // apiUrl: 'http://localhost:5000/'
-  apiUrl: 'https://staging.api.covistest.dbvis.de/',
+  apiUrl: 'https://api.coronavis.dbvis.de/',
+  // apiUrl: 'http://localhost:5000/',
 
-  tileServerUrl: 'https://staging.tiles.covistest.dbvis.de/',
+  tileServerUrl: 'https://staging.tiles.covis.dbvis.de/',
 
   version: '',
 

@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
-import {DiviHospital} from '../services/divi-hospitals.service';
-import * as d3 from 'd3';
-import { ColormapService } from '../services/colormap.service';
+import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 
 @Component({
   selector: 'app-glyph-tooltip',
@@ -25,15 +25,9 @@ import { ColormapService } from '../services/colormap.service';
 export class GlyphTooltipComponent implements OnInit {
 
   @Input()
-  diviHospital: DiviHospital;
-  name: string;
+  tooltipData: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
 
-
-  readonly backgroundColScale =
-    d3.scaleOrdinal<string, string>().domain(['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar'])
-      .range(['white', '#333', 'white', 'white']);
-
-  constructor(private colormapService: ColormapService) {
+  constructor() {
   }
 
   ngOnInit() {

@@ -3,7 +3,7 @@
 
   <div class="row">
     <div class="group">
-      <div class="description">Datenanalyse und Visualisierung</div>
+      <div class="description" i18n="ls-name|name of the group@@lsName">Datenanalyse und Visualisierung</div>
       <ul class="flex-container">
         <li class="flex-item">
           <div class="groupcontainer">
@@ -11,7 +11,7 @@
           </div>
         </li>
         <li>
-          <div class="groupdesc"> Dieses Tool wird entwickelt von der <a href="https://vis.uni.kn">AG Datenanalyse und
+          <div class="groupdesc" i18n="introduction-tool|introduces the tool and LS@@teamToolIntro"> Dieses Tool wird entwickelt von der <a href="https://vis.uni.kn">AG Datenanalyse und
             Visualisierung</a> von Prof. Dr. Daniel Keim an der Universität Konstanz.
           </div>
         </li>
@@ -21,7 +21,7 @@
 
   <div class="row">
     <div class="group">
-      <div class="description">Organisation und Kommunikation</div>
+      <div class="description" i18n="organisation-and-communication|department@@orgComm">Organisation und Kommunikation</div>
       <ul class="flex-container">
         <li class="flex-item">
           <div class="contributorcontainer">
@@ -58,7 +58,7 @@
       </ul>
     </div>
     <div class="group">
-      <div class="description">Visualisierung und Design</div>
+      <div class="description" i18n="visualization and design|department@@visDesign">Visualisierung und Design</div>
       <ul class="flex-container">
         <li class="flex-item">
           <div class="contributorcontainer">
@@ -86,22 +86,13 @@
             </figcaption>
           </div>
         </li>
-        <li class="flex-item">
-          <div class="contributorcontainer">
-            <a href="https://www.vis.uni-konstanz.de/mitglieder/streeb" target="_blank"><img src="/assets/streeb.jpg"
-                                                                                             alt="Dirk Streeb"
-                                                                                             width="80px;"></a>
-            <figcaption><a href="https://www.vis.uni-konstanz.de/mitglieder/streeb" target="_blank">Dirk Streeb</a>
-            </figcaption>
-          </div>
-        </li>
       </ul>
     </div>
   </div>
 
   <div class="row">
     <div class="group">
-      <div class="description">Datenhaltung und -verarbeitung</div>
+      <div class="description" i18n="database and processing|department@@dataHandlingProcessing">Datenhaltung und -verarbeitung</div>
       <ul class="flex-container">
         <li class="flex-item">
           <div class="contributorcontainer">
@@ -144,7 +135,7 @@
       </ul>
     </div>
     <div class="group">
-      <div class="description">Infrastruktur</div>
+      <div class="description" i18n="infrastructure|department@@infra">Infrastruktur</div>
       <ul class="flex-container">
         <li class="flex-item">
           <div class="contributorcontainer">
@@ -188,8 +179,8 @@
   </div>
 
   <div class="row">
-    <div class="group wide">
-      <div class="description">Advice and Consulting</div>
+    <div class="group">
+      <div i18n="advice@@consult" class="description">Unterstützung und Beratung</div>
       <ul class="flex-container">
         <li class="flex-item">
           <div class="contributorcontainer">
@@ -230,30 +221,51 @@
         </li>
       </ul>
     </div>
+
+
+    <div class="group">
+      <div i18n="testing|department@@testing" class="description">Tests und Qualitätssicherung</div>
+      <ul class="flex-container">
+        <li class="flex-item">
+          <div class="contributorcontainer">
+            <a href="https://www.vis.uni-konstanz.de/mitglieder/streeb/" target="_blank"><img src="/assets/streeb.jpg"
+                                                                                           alt="Dirk Streeb"
+                                                                                           width="80px;"></a>
+            <figcaption><a href="https://www.vis.uni-konstanz.de/mitglieder/streeb/" target="_blank">Dirk Streeb</a>
+            </figcaption>
+          </div>
+        </li>
+        <li class="flex-item">
+          <div class="contributorcontainer">
+            <a href="https://www.vis.uni-konstanz.de/mitglieder/meschenmoser/" target="_blank"><img
+              src="/assets/meschenmoser.jpg" alt="Philipp Meschenmoser" width="80px;"></a>
+            <figcaption><a href="https://www.vis.uni-konstanz.de/mitglieder/meschenmoser/" target="_blank">
+              Philipp Meschenmoser</a></figcaption>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 
 </div>
 
 <div class="bottom-panel" mat-dialog-actions>
   <div class="versions">
-    <p>Version:
-      <a *ngIf="frontendVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ frontendVersion }}">{{
-        frontendVersion }}</a>
-      <span *ngIf="!frontendVersion">development</span>
+    <p>Version: 
+      <a *ngIf="frontendVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ frontendVersion }}">{{ frontendVersion }}</a>
+      <span *ngIf="!frontendVersion" i18n="development@@versionDevelopmentFlag">development</span>
     </p>
-    <p>API Version:
-      <a *ngIf="apiVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ apiVersion }}">{{ apiVersion
-        }}</a>
-      <span *ngIf="!apiVersion">unknown</span>
+    <p>API Version: 
+      <a *ngIf="apiVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ apiVersion }}">{{ apiVersion }}</a>
+      <span *ngIf="!apiVersion" i18n="unknown@@versionUnknownFlag">unknown</span>
     </p>
-    <p>Tile Server Version:
-      <a *ngIf="tileServerVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ tileServerVersion }}">{{
-        tileServerVersion }}</a>
-      <span *ngIf="!tileServerVersion">unknown</span>
+    <p>Tile Server Version: 
+      <a *ngIf="tileServerVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ tileServerVersion }}">{{ tileServerVersion }}</a>
+      <span *ngIf="!tileServerVersion" i18n="unknown@@versionUnknownFlag">unknown</span>
     </p>
   </div>
 
   <div>
-    <button class="mat-raised-button" (click)="close()">Close</button>
+    <button class="mat-raised-button" (click)="close()" i18n="close-button@@closeButton">Close</button>
   </div>
 </div>

@@ -11,7 +11,7 @@
 
     <mat-expansion-panel expanded="true">
       <mat-expansion-panel-header>
-          <mat-panel-title>Krankenhäuser - Bettenauslastung</mat-panel-title>
+          <mat-panel-title i18n="@@infoboxHospitalBeds">Krankenhäuser - Bettenauslastung</mat-panel-title>
       </mat-expansion-panel-header>
 
       <h5>Aggregation</h5>
@@ -23,20 +23,22 @@
         [value]="mo.bedGlyphOptions.aggregationLevel"
         (change)="updateBedGlyphAggregationLevel($event.value)"
       >
-        <mat-button-toggle [value]="eAggregationLevels.state" matTooltip="Bundesländer">Länder</mat-button-toggle>
-        <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
-        <mat-button-toggle [value]="eAggregationLevels.county" matTooltip="Landkreise">Kreise</mat-button-toggle>
-        <mat-button-toggle [value]="eAggregationLevels.none" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.state" i18n="@@infoboxStates"  i18n-matTooltip="@@StatesTP" matTooltip="Bundesländer">Länder</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" i18n="@@infoboxRegions"   i18n-matTooltip="@@RegionsTP" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.county" i18n="@@infoboxCounties"   i18n-matTooltip="@@CountiesTP"  matTooltip="Landkreise">Kreise</mat-button-toggle>
+        <mat-button-toggle [value]="eAggregationLevels.none" i18n="@@infoboxNone"   i18n-matTooltip="@@NoneTP" matTooltip="Ohne Aggregation">Keine</mat-button-toggle>
       </mat-button-toggle-group>
 
       <mat-divider></mat-divider>
       <br/>
 
       <h5>Glyph</h5>
+      <mat-progress-bar *ngIf="glyphLoading" mode="indeterminate"></mat-progress-bar>
       <p>
         <mat-slide-toggle
             [checked]="mo.bedGlyphOptions.enabled"
             (change)="mo.bedGlyphOptions.enabled = $event.checked; emitMapOptions()"
+            i18n="@@infoboxBelegungShow"
           >Bettenauslastung anzeigen / ausblenden
           </mat-slide-toggle>
       </p>
@@ -53,7 +55,7 @@
           <div
               *ngFor="let t of glyphLegend"
               class="glyph-tile"
-              [matTooltip]="t.description"
+              matTooltip="{{t.description | translate }}"
               (click)="mo.bedGlyphOptions[t.accessor] = !mo.bedGlyphOptions[t.accessor]; emitMapOptions()"
           >
               <div class="rect" [ngStyle]="{'background-color': getGlyphColor(t.color), 'border-color': mo.bedGlyphOptions[t.accessor] ? 'grey' : 'lightgrey'}"></div>
@@ -67,7 +69,7 @@
 
           >
               <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
-              <div class="text">{{ t }}</div>
+              <div class="text">{{ t | translate }}</div>
           </div>
       </div>
 
@@ -76,16 +78,30 @@
       <mat-divider></mat-divider>
       <br/>
 
-      <h5>Hintergrund</h5>
+      <h5 i18n="@@infoboxBackground">Positionierung</h5>
+      <mat-button-toggle-group
+        class="btngrp"
+        name="fontStyle"
+        aria-label="Font Style"
+        [value]="mo.forceDirectedOn"
+        (change)="updateForceDirectedStatus($event.value)"
+      >
+        <mat-button-toggle [value]=false i18n="@@infoboxForceDirectedOnTP"  i18n-matTooltip="@@ForceDirectedOnTP" matTooltip="Position der Krankenhäuser entzerren">Verdeckungsfrei</mat-button-toggle>
+        <mat-button-toggle [value]=true i18n="@@infoboxForceDirectedOffTP"   i18n-matTooltip="@@ForceDirectedOffTP" matTooltip="Position der Krankenhäuser beibehalten">Geo-Position</mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <h5 i18n="@@infoboxBackground">Hintergrund</h5>
+      <mat-progress-bar *ngIf="bedChoroplethLoading" mode="indeterminate"></mat-progress-bar>
 
         <mat-slide-toggle
               [disabled]="mo.bedGlyphOptions.aggregationLevel === eAggregationLevels.none"
               [checked]="mo.bedBackgroundOptions.enabled"
               (change)="updateBedBackgroundOptionsEnabled($event.checked)"
+              i18n="@@infoboxBackgroundShow"
             >Bettenauslastung im Hintergrund anzeigen / ausblenden
             </mat-slide-toggle>
         <div *ngIf="mo.bedGlyphOptions.aggregationLevel === eAggregationLevels.none">
-          <mat-error>Bitte eine Aggregation Länder, Bezirke, oder Kreise auswählen.</mat-error>
+          <mat-error i18n="@@infoboxBackgroundError">Bitte eine Aggregation Länder, Bezirke, oder Kreise auswählen.</mat-error>
         </div>
 
 
@@ -109,18 +125,21 @@
 
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-panel-title>Fallansicht</mat-panel-title>
+        <mat-panel-title  i18n="@@infoboxCaseView">Fallansicht</mat-panel-title>
       </mat-expansion-panel-header>
       <form class="covid-form">
         <mat-slide-toggle
           [checked]="mo.covidNumberCaseOptions.enabled"
           (change)="updateCovidNumberCaseOptionsEnabled($event.checked)"
+           i18n="@@infoboxCaseViewShow"
         >Covid-19 Fallansicht anzeigen / ausblenden
         </mat-slide-toggle>
 
         <div *ngIf="mo.covidNumberCaseOptions && mo.covidNumberCaseOptions.enabled">
+          <mat-progress-bar *ngIf="caseChoroplethLoading" mode="indeterminate"></mat-progress-bar>
+
           <div class="toggleGroup">
-            <h5>Aggregation</h5>
+            <h5 i18n="@@infoboxAggregation">Aggregation</h5>
 
             <mat-button-toggle-group
               class="btngrp"
@@ -129,16 +148,16 @@
               [value]="mo.covidNumberCaseOptions.aggregationLevel"
               (change)="mo.covidNumberCaseOptions.aggregationLevel = $event.value; emitMapOptions()"
             >
-              <mat-button-toggle [value]="eAggregationLevels.state" matTooltip="Bundesländer">Länder</mat-button-toggle>
-              <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
-              <mat-button-toggle [value]="eAggregationLevels.county" matTooltip="Landkreise">Kreise</mat-button-toggle>
+              <mat-button-toggle [value]="eAggregationLevels.state" i18n="@@infoboxStates"   i18n-matTooltip="@@StatesTP"  matTooltip="Bundesländer">Länder</mat-button-toggle>
+              <mat-button-toggle [value]="eAggregationLevels.governmentDistrict" i18n="@@infoboxRegions"   i18n-matTooltip="@@RegionsTP"  matTooltip="Regierungsbezirke">Bezirke</mat-button-toggle>
+              <mat-button-toggle [value]="eAggregationLevels.county" i18n="@@infoboxCounties"   i18n-matTooltip="@@CountiesTP"  matTooltip="Landkreise">Kreise</mat-button-toggle>
             </mat-button-toggle-group>
           </div>
 
           <!--<mat-divider></mat-divider>-->
 
           <div class="toggleGroup">
-            <h5>Zeitraum</h5>
+            <h5 i18n="@@infoboxTime">Zeitraum</h5>
             <mat-button-toggle-group
             *ngIf="mo.covidNumberCaseOptions && mo.covidNumberCaseOptions.enabled"
             class="btngrp"
@@ -147,16 +166,16 @@
             [value]="mo.covidNumberCaseOptions.timeWindow"
             (change)="mo.covidNumberCaseOptions.timeWindow = $event.value; emitMapOptions()"
           >
-            <mat-button-toggle [value]="eCovidNumberCaseTimeWindow.all" [disabled]="mo.covidNumberCaseOptions.change == eCovidNumberCaseChange.relative">Alle Daten</mat-button-toggle>
-            <mat-button-toggle [value]="eCovidNumberCaseTimeWindow.twentyFourhours">letzte 24 Stunden</mat-button-toggle>
-            <mat-button-toggle [value]="eCovidNumberCaseTimeWindow.seventyTwoHours">letzte 72 Stunden</mat-button-toggle>
+            <mat-button-toggle i18n="@@infoboxTimeAll" [value]="eCovidNumberCaseTimeWindow.all" [disabled]="mo.covidNumberCaseOptions.change == eCovidNumberCaseChange.relative">Alle Daten</mat-button-toggle>
+            <mat-button-toggle i18n="@@infoboxTime24" onerror=" "[value]="eCovidNumberCaseTimeWindow.twentyFourhours">letzte 24 Stunden</mat-button-toggle>
+            <mat-button-toggle i18n="@@infoboxTime72"[value]="eCovidNumberCaseTimeWindow.seventyTwoHours">letzte 72 Stunden</mat-button-toggle>
           </mat-button-toggle-group>
           </div>
 
           <!--<mat-divider></mat-divider>-->
 
           <div class="toggleGroup">
-            <h5>Fallzahlen</h5>
+            <h5 i18n="@@infoboxCaseNum">Fallzahlen</h5>
 
             <mat-button-toggle-group
             class="btngrp"
@@ -165,15 +184,15 @@
             [value]="mo.covidNumberCaseOptions.change"
             (change)="mo.covidNumberCaseOptions.change = $event.value; emitMapOptions()"
           >
-            <mat-button-toggle [value]="eCovidNumberCaseChange.absolute">Alle erfassten Fälle</mat-button-toggle>
-            <mat-button-toggle [value]="eCovidNumberCaseChange.relative" [disabled]="eCovidNumberCaseTimeWindow.all == mo.covidNumberCaseOptions.timeWindow">Veränderung im gewählten Zeitraum</mat-button-toggle>
+            <mat-button-toggle i18n="@@infoboxCasesAll" [value]="eCovidNumberCaseChange.absolute">Alle erfassten Fälle</mat-button-toggle>
+            <mat-button-toggle i18n="@@infoboxCasesDiff" [value]="eCovidNumberCaseChange.relative" [disabled]="eCovidNumberCaseTimeWindow.all == mo.covidNumberCaseOptions.timeWindow">Veränderung im gewählten Zeitraum</mat-button-toggle>
           </mat-button-toggle-group>
           </div>
 
           <!--<mat-divider></mat-divider>-->
 
           <div class="toggleGroup">
-            <h5>Art</h5>
+            <h5 i18n="@@infoboxType">Art</h5>
 
             <mat-button-toggle-group
             class="btngrp"
@@ -182,15 +201,15 @@
             [value]="mo.covidNumberCaseOptions.type"
             (change)="mo.covidNumberCaseOptions.type = $event.value; emitMapOptions()"
           >
-            <mat-button-toggle [value]="eCovidNumberCaseType.cases">Erkrankungen</mat-button-toggle>
-            <mat-button-toggle [value]="eCovidNumberCaseType.deaths">Todesfälle</mat-button-toggle>
+            <mat-button-toggle i18n="@@infoboxTypeSick" [value]="eCovidNumberCaseType.cases">Erkrankungen</mat-button-toggle>
+            <mat-button-toggle i18n="@@infoboxTypeDeath" [value]="eCovidNumberCaseType.deaths">Todesfälle</mat-button-toggle>
           </mat-button-toggle-group>
           </div>
 
           <!--<mat-divider></mat-divider>-->
 
           <div class="toggleGroup">
-            <h5>Normalisierung</h5>
+            <h5 i18n="@@infoboxNorm">Normalisierung</h5>
 
             <mat-button-toggle-group
             class="btngrp"
@@ -199,8 +218,8 @@
             [value]="mo.covidNumberCaseOptions.normalization"
             (change)="mo.covidNumberCaseOptions.normalization = $event.value; emitMapOptions()"
           >
-            <mat-button-toggle [value]="eCovidNumberCaseNormalization.absolut">Keine Normalisierung</mat-button-toggle>
-            <mat-button-toggle [value]="eCovidNumberCaseNormalization.per100k" [disabled]="mo.covidNumberCaseOptions.change == eCovidNumberCaseChange.relative">Je 100.000 Einwohner</mat-button-toggle>
+            <mat-button-toggle i18n="@@infoboxNornNone" [value]="eCovidNumberCaseNormalization.absolut">Keine Normalisierung</mat-button-toggle>
+            <mat-button-toggle i18n="@@infoboxNornYes" [value]="eCovidNumberCaseNormalization.per100k" [disabled]="mo.covidNumberCaseOptions.change == eCovidNumberCaseChange.relative">Je 100.000 Einwohner</mat-button-toggle>
           </mat-button-toggle-group>
           </div>
         </div>
@@ -211,7 +230,7 @@
 
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-panel-title>
+        <mat-panel-title i18n="@@infoboxGeo">
           Geographische Verortung
         </mat-panel-title>
         <mat-panel-description>
@@ -219,10 +238,13 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
+      <mat-progress-bar *ngIf="osmLoading" mode="indeterminate"></mat-progress-bar>
+
       <div>
         <mat-slide-toggle
           [checked]="mo.showOsmHospitals"
           (change)="mo.showOsmHospitals = !mo.showOsmHospitals; emitMapOptions()"
+          i18n="@@infoboxGeoHospital"
         >Krankenhäuser
         </mat-slide-toggle>
       </div>
@@ -230,6 +252,7 @@
         <mat-slide-toggle
           [checked]="mo.showOsmHeliports"
           (change)="mo.showOsmHeliports = !mo.showOsmHeliports; emitMapOptions()"
+          i18n="@@infoboxGeoHeli"
         >Hubschrauberlandeplätze
         </mat-slide-toggle>
       </div>
@@ -238,7 +261,7 @@
 
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-panel-title>
+        <mat-panel-title i18n="@@infoboxData">
           Datenquellen
         </mat-panel-title>
       </mat-expansion-panel-header>
@@ -246,15 +269,15 @@
 
       <mat-list role="list">
         <mat-list-item role="listitem">
-          <a href="https://www.divi.de/register/intensivregister" target="_blank">DIVI Intensivregister</a>
+          <a i18n="@@infoboxDIVI" href="https://www.divi.de/register/intensivregister" target="_blank">DIVI Intensivregister</a>
         </mat-list-item>
 
         <mat-list-item>
-          <a href="https://rki.de" target="_blank">Robert Koch Institut</a>
+          <a i18n="@@infoboxRKI" href="https://rki.de" target="_blank">Robert Koch Institut</a>
         </mat-list-item>
 
         <mat-list-item role="listitem">
-          <a href="https://corona.rki.de/" target="_blank">- Fallzahlen</a>
+          <a i18n="@@infoboxRKICases" href="https://corona.rki.de/" target="_blank">- Fallzahlen</a>
         </mat-list-item>
 
         <mat-list-item role="listitem">
@@ -268,8 +291,32 @@
   </mat-accordion>
 
 
-  <a mat-button (click)="openAbout()">Team</a>
+  <div class="footer">
 
-  <a mat-button (click)="openImpressum()">Impressum</a>
+
+    <a mat-button (click)="openVideo()"   i18n="infobox | infobox@@footer1" >Video</a>
+
+    <a mat-button (click)="openHelp()"    i18n="infobox | infobox@@footer2" >Hilfe</a>
+
+    <a mat-button (click)="openAbout()"   i18n="infobox | infobox@@footer3" >Team</a>
+
+
+    <a mat-button  i18n="@@infoboxImprint" (click)="openImpressum()"    i18n="infobox | infobox@@footer4" >Impressum</a>
+
+    <span class="spacer"></span>
+
+    <mat-form-field class="locale">
+      <mat-label    i18n="infobox | infobox@@footer5" >Sprache</mat-label>
+      <mat-select (selectionChange)="changeLocale($event)" [value]="selectedLocale">
+        <mat-option *ngFor="let locale of supportedLocales" [value]="locale">
+          {{ locale.slice(0,2) }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+
+
+
 
 </mat-card>

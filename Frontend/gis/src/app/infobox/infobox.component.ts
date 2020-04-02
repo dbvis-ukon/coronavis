@@ -1,19 +1,24 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, Inject, LOCALE_ID} from '@angular/core';
 import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {
   CovidNumberCaseChange,
   CovidNumberCaseNormalization,
-  CovidNumberCaseOptions,
   CovidNumberCaseTimeWindow,
   CovidNumberCaseType
 } from '../map/options/covid-number-case-options';
-import { ColormapService } from '../services/colormap.service';
 import { BedType } from '../map/options/bed-type.enum';
-import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { MapOptions } from '../map/options/map-options';
 import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
 import { ImpressumComponent } from '../impressum/impressum.component';
+import { OSMLayerService } from '../services/osm-layer.service';
+import { GlyphLayerService } from '../services/glyph-layer.service';
+import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
+import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
+import {APP_CONFIG_KEY} from "../../constants";
+import { QualitativeColormapService } from '../services/qualitative-colormap.service';
+import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
+import { SupportedLocales, I18nService } from '../services/i18n.service';
 
 @Component({
   selector: 'app-infobox',
@@ -23,13 +28,18 @@ import { ImpressumComponent } from '../impressum/impressum.component';
 export class InfoboxComponent implements OnInit {
 
   constructor(
-    private colormapService: ColormapService,
-    private dialogService: MatDialog
+    private colormapService: QualitativeColormapService,
+    private dialogService: MatDialog,
+    private osmLayerService: OSMLayerService,
+    private glyphLayerService: GlyphLayerService,
+    private bedChoroplethLayerService: BedChoroplethLayerService,
+    private caseChoroplethLayerService: CaseChoroplethLayerService,
+    private i18nService: I18nService
   ) { }
 
   glyphLegend;
 
-  glyphLegendColors = ColormapService.bedStati;
+  glyphLegendColors = QualitativeColormapService.bedStati;
 
   infoboxExtended = true;
 
@@ -53,16 +63,37 @@ export class InfoboxComponent implements OnInit {
 
   eAggregationLevels = AggregationLevel;
 
+
+  supportedLocales: string[];
+
+  selectedLocale: SupportedLocales;
+
+
+  glyphLoading = false;
+  bedChoroplethLoading = false;
+  caseChoroplethLoading = false;
+  osmLoading = false;
+
   ngOnInit(): void {
+    this.supportedLocales = this.i18nService.getSupportedLocales();
+
+    this.i18nService.currentLocale().subscribe(l => {
+      this.selectedLocale = l;
+    })
+
+    this.glyphLayerService.loading$.subscribe(l => this.glyphLoading = l);
+    this.bedChoroplethLayerService.loading$.subscribe(l => this.bedChoroplethLoading = l);
+    this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
+    this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);
+
     this.glyphLegend = [
-      {name: 'ICU low', accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'}, 
-      {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'}, 
+      {name: 'ICU low', accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+      {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
       {name: 'ECMO', accessor: 'showEcmo', color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
     ];
   }
 
   emitCaseChoroplethOptions() {
-    // console.log('emit', this.caseChoroplethOptions);
 
     if(this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
       this.mo.covidNumberCaseOptions.normalization = CovidNumberCaseNormalization.absolut;
@@ -89,6 +120,11 @@ export class InfoboxComponent implements OnInit {
     this.emitMapOptions();
   }
 
+  updateForceDirectedStatus(status: boolean) {
+    this.mo.forceDirectedOn = status;
+    this.emitMapOptions();
+  }
+
   updateBedGlyphAggregationLevel(lvl: AggregationLevel) {
     this.mo.bedGlyphOptions.aggregationLevel = lvl;
 
@@ -102,12 +138,12 @@ export class InfoboxComponent implements OnInit {
   }
 
   updateCovidNumberCaseOptionsEnabled(enabled: boolean) {
-    this.mo.covidNumberCaseOptions.enabled = enabled; 
-    
+    this.mo.covidNumberCaseOptions.enabled = enabled;
+
     if(enabled) {
       this.mo.bedBackgroundOptions.enabled = false;
     }
-    
+
     this.emitMapOptions()
   }
 
@@ -122,6 +158,7 @@ export class InfoboxComponent implements OnInit {
   }
 
   emitMapOptions() {
+    localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(this.mo));
     this.mapOptionsChange.emit({...this.mo});
   }
 
@@ -135,4 +172,21 @@ export class InfoboxComponent implements OnInit {
     this.dialogService.open(ImpressumComponent);
   }
 
+  openVideo() {
+    window.open('https://video.covis.dbvis.de', '_blank');
+    // location.href = 'https://video.covis.dbvis.de';
+  }
+
+  changeLocale(evt) {
+    this.i18nService.updateLocale(evt.value);
+
+    const url = evt.value.slice(0,2);
+
+    location.href = `/${url}/`;
+  }
+
+
+  openHelp() {
+    this.dialogService.open(HelpDialogComponent);
+  }
 }

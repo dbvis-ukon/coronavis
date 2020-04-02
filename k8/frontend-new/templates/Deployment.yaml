@@ -17,6 +17,13 @@ spec:
       labels:
         {{- include "lingvis.labels" . | nindent 8 }}
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: onlyingress
+                operator: DoesNotExist
       containers:
         - name: frontend
           image: registry.dbvis.de/jentner/covid-19-vis/frontend:{{ .Values.sha }}
@@ -25,7 +32,7 @@ spec:
             - containerPort: 80
           readinessProbe:
             httpGet:
-              path: "/"
+              path: "/health"
               port: 80
             initialDelaySeconds: 5
             timeoutSeconds: 5
@@ -33,7 +40,7 @@ spec:
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              path: "/"
+              path: "/health"
               port: 80
             initialDelaySeconds: 6
             timeoutSeconds: 5
