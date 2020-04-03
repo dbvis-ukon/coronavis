@@ -7,7 +7,7 @@ import 'mapbox-gl-leaflet';
 // import 'leaflet-mapbox-gl';
 import {Overlay} from './overlays/overlay';
 import {FeatureCollection} from 'geojson';
-import {Subject, Observable, Subscription} from 'rxjs';
+import {Subject, Observable, Subscription, of} from 'rxjs';
 import {AggregationLevel} from './options/aggregation-level.enum';
 import {CovidNumberCaseOptions} from './options/covid-number-case-options';
 import {MapOptions} from './options/map-options';
@@ -171,20 +171,20 @@ export class MapComponent implements OnInit {
     }
 
     const bedGlyphOptions = JSON.stringify(mo.bedGlyphOptions);
-    if (this.previousOptions.get(MapOptionKeys.bedGlyphOptions) ?? "" !== bedGlyphOptions) {
+    if (this.previousOptions.get(MapOptionKeys.bedGlyphOptions) !== bedGlyphOptions) {
       this.updateGlyphMapLayers(mo.bedGlyphOptions);
       this.bedGlyphOptions$.next(mo.bedGlyphOptions);
     }
     this.previousOptions.set(MapOptionKeys.bedGlyphOptions, bedGlyphOptions);
 
     const bedBackgroundOptions = JSON.stringify(mo.bedBackgroundOptions);
-    if (this.previousOptions.get(MapOptionKeys.bedBackgroundOptions) ?? "" !== bedBackgroundOptions) {
+    if (this.previousOptions.get(MapOptionKeys.bedBackgroundOptions) !== bedBackgroundOptions) {
       this.updateBedBackgroundLayer(mo.bedBackgroundOptions);
     }
     this.previousOptions.set(MapOptionKeys.bedBackgroundOptions, bedBackgroundOptions);
 
     const covidNumberCaseOptions = JSON.stringify(mo.covidNumberCaseOptions);
-    if (this.previousOptions.get(MapOptionKeys.covidNumberCaseOptions) ?? "" !== covidNumberCaseOptions) {
+    if (this.previousOptions.get(MapOptionKeys.covidNumberCaseOptions) !== covidNumberCaseOptions) {
       this.updateCaseChoroplethLayers(mo.covidNumberCaseOptions);
     }
     this.previousOptions.set(MapOptionKeys.covidNumberCaseOptions, covidNumberCaseOptions);
@@ -192,6 +192,9 @@ export class MapComponent implements OnInit {
 
     if (mo.showOsmHospitals && !this.osmHospitalsLayer) {
       this.osmHospitalLayerSubscription = this.osmLayerService.getOSMHospitalLayer()
+      .pipe(
+        switchMap(l => of(l))
+      )
       .subscribe(l => {
         this.osmHospitalsLayer = l.createOverlay();
         this.mymap.addLayer(this.osmHospitalsLayer);
@@ -203,6 +206,9 @@ export class MapComponent implements OnInit {
 
     if (mo.showOsmHeliports && !this.osmHeliportsLayer) {
       this.osmHelipadLayerSubscription = this.osmLayerService.getOSMHeliportLayer()
+      .pipe(
+        switchMap(l => of(l))
+      )
       .subscribe(l => {
         this.osmHeliportsLayer = l.createOverlay();
         this.mymap.addLayer(this.osmHeliportsLayer);
@@ -268,7 +274,11 @@ export class MapComponent implements OnInit {
         }));
       }
 
-      this.glyphLayerSubscription = obs.subscribe(layerGroup => {
+      this.glyphLayerSubscription = obs
+      .pipe(
+        switchMap(l => of(l))
+      )
+      .subscribe(layerGroup => {
         this.aggregationLevelToGlyphMap.set(`${o.aggregationLevel}-${o.forceDirectedOn}`, layerGroup);
 
         this.showGlyphLayer(layerGroup);
@@ -313,6 +323,9 @@ export class MapComponent implements OnInit {
     const key = this.caseChoroplehtLayerService.getKeyCovidNumberCaseOptions(opt);
 
     this.caseChoroplethSubscription = this.caseChoroplehtLayerService.getLayer(opt)
+    .pipe(
+      switchMap(l => of(l))
+    )
     .subscribe(factory => {
       const l = factory.createOverlay();
 
@@ -328,8 +341,13 @@ export class MapComponent implements OnInit {
 
       l.bringToBack();
 
-      // update the glyph map to put it in the front:
-      this.updateGlyphMapLayers(this._mapOptions.bedGlyphOptions);
+      for(const glyphLayer of this.aggregationLevelToGlyphMap.values()) {
+        if(glyphLayer.getLayers().length === 1) {
+          (glyphLayer.getLayers()[0] as SVGOverlay).bringToFront();
+        } else {
+          (glyphLayer.getLayers()[1] as SVGOverlay).bringToFront();
+        }
+      }
     });
   }
 
@@ -353,7 +371,11 @@ export class MapComponent implements OnInit {
 
     if(o.enabled) {
 
-      this.bedChoroplethSubscription = this.bedChoroplethLayerService.getQualitativeLayer(o).subscribe(factory => {
+      this.bedChoroplethSubscription = this.bedChoroplethLayerService.getQualitativeLayer(o)
+      .pipe(
+        switchMap(f => of(f))
+      )
+      .subscribe(factory => {
 
         const layer = factory.createOverlay();
 

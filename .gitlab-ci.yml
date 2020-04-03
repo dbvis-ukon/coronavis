@@ -273,7 +273,7 @@ export-environment:
     - export ENV_TYPE
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
-    - npm install
+    - npm install --unsafe-perm
     - npm run-script build:i18n:${LOCALE}
   artifacts:
     expire_in: 1 day
