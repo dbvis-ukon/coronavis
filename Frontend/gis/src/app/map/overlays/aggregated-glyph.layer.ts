@@ -143,7 +143,11 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
         d.properties._x = p.x;
         d.properties._y = p.y;
         return `translate(${p.x - ((3 * rectSize + padding * 3) / 2)}, ${p.y - (22 / 2)})`;
-      })
+      });
+
+    const container = this.gHospitals
+      .append("g")
+      .attr("class", "container")
       .on('mouseenter touchstart', function (d1) {
         const evt: MouseEvent = d3.event;
         const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX + 5, y: evt.clientY + 5});
@@ -157,7 +161,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
         });
       });
 
-    this.gHospitals
+    container
       .append('rect')
       .attr('class', 'background-rect')
       .attr('width', this.glyphSize.width)
@@ -170,7 +174,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       // .on('mouseout', () => this.tooltipService.close());
 
     // adds white shadow
-    this.gHospitals
+    container
       .append('text')
       .attr('class', 'text-bg aggName')
       .text(d1 => {
@@ -180,7 +184,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('y', '22');
 
 
-    this.gHospitals
+    container
       .append('text')
       .attr('class', 'text-fg aggName')
       .text(d1 => d1.properties.name)
@@ -189,7 +193,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
 
 
     const self = this;
-    this.gHospitals
+    container
       .append('rect')
       .attr('class', `bed ${BedType.icuLow}`)
       .attr('width', `${rectSize}px`)
@@ -198,7 +202,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('y', yOffset)
       .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuLow));
 
-    this.gHospitals
+    container
       .append('rect')
       .attr('class', `bed ${BedType.icuHigh}`)
       .attr('width', `${rectSize}px`)
@@ -207,7 +211,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('x', `${rectSize + padding * 2}px`)
       .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuHigh));
 
-    this.gHospitals
+    container
       .append('rect')
       .attr('class', `bed ${BedType.ecmo}`)
       .attr('width', `${rectSize}px`)
@@ -244,7 +248,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     const scale = Math.pow(level / (zoom), 3);
 
     this.gHospitals
-      .selectAll('*')
+      .selectAll('g.container')
       .transition()
       .duration(500)
       .attr('transform', d => {
