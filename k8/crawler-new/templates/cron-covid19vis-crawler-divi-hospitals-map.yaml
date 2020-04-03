@@ -3,9 +3,9 @@ kind: CronJob
 metadata:
   name: covid19vis-crawler-divi-hospitals-map
   annotations:
-    description: "DIVI Intensivregister detailed bed count per hospital (actual numbers, not colors)"
+    description: "DIVI Intensivregister covid-19 cases and legacy detailed bed count per hospital if available again (actual numbers, not colors)"
 spec:
-  # run every four hours
+  # run every hour
   schedule: "0 */1 * * *"
   jobTemplate:
     spec:
