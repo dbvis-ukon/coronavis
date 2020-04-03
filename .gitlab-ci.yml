@@ -268,6 +268,7 @@ export-environment:
     - export URL_PROTOCOL
     - export VERSION
     - export ENV_TYPE
+    - export SENTRY_DSN
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
     - npm install --unsafe-perm
