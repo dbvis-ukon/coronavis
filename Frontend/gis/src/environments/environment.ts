@@ -12,6 +12,8 @@ export const environment = {
   version: '',
 
   env: 'development',
+
+  dsn: ""
 };
 
 /*

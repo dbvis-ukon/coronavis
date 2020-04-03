@@ -10,67 +10,6 @@ variables:
   URL_SUFFIX: coronavis.dbvis.de
 
 ###########################################
-# SETUP ENVIRONMENT VARIALBES
-###########################################
-
-export-environment:
-  image: debian:stretch-slim
-  stage: prepare
-  script:
-    - echo $CI_COMMIT_BRANCH
-    - echo $CI_COMMIT_REF_NAME
-    # set the version either as a tag (v0.0.1) or as a commit sha (74bac331)
-    - if [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then VERSION=${CI_COMMIT_TAG}; else VERSION=${CI_COMMIT_SHORT_SHA}; fi
-    # the current URL suffix
-    #- URL_SUFFIX="covis.dbvis.de" # defined in the variables section
-    # this shortens the slug to 30 characters and removes all trailing dashes
-    - SHORTENED_CI_COMMIT_REF_SLUG=$(echo ${CI_COMMIT_REF_SLUG} | tr / - | cut -c -30 |  sed -E 's#-+$##')
-    - URL_PREFIX=""
-    - FRONTEND_URL_TILES_PREFIX=""
-    - URL_PROTOCOL="https"
-    - ENV_TYPE="production"
-    - REPLICA_COUNT="2"
-    # multiple things happen here:
-    # URL_PREFIX: 
-    # if tag => ""
-    # if master => "staging."
-    # if fb => "${CI_COMMIT_REF_SLUG}."
-    # Furthermore, the FRONTEND_URL_TILES_PREFIX is set because the tile server will not be deployed on a per fb-basis
-    # FRONTEND_URL_TILES_PREFIX:
-    # if tag => ""
-    # if master => "staging."
-    # if fb => "staging."
-    - if ! [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then FRONTEND_URL_TILES_PREFIX="staging."; ENV_TYPE="staging"; REPLICA_COUNT="1"; if [[ ${CI_COMMIT_BRANCH} =~ ^${STAGING_BRANCH}$ ]]; then URL_PREFIX="staging."; else URL_PREFIX="${SHORTENED_CI_COMMIT_REF_SLUG}."; ENV_TYPE="review"; REPLICA_COUNT="1"; fi fi
-    # Build the frontend url: prefix.suffix
-    - URL_FRONTEND="${URL_PREFIX}${URL_SUFFIX}"
-    # Build the backend url: prefix.api.suffix
-    - URL_BACKEND="${URL_PREFIX}api.${URL_SUFFIX}"
-    # Build the tiles url: prefix.tiles.suffix
-    - URL_TILES="${URL_PREFIX}tiles.${URL_SUFFIX}"
-    # This variable is used in the build job to set the api url in the environment.prod.ts
-    - FRONTEND_URL_BACKEND="${URL_PREFIX}api.${URL_SUFFIX}"
-    # This variable is used in the build job to set the tiles server url in the environment.prod.ts
-    - FRONTEND_URL_TILES="${FRONTEND_URL_TILES_PREFIX}tiles.${URL_SUFFIX}"
-    # all the stuff into the var.env
-    - echo "ENV_TYPE=${ENV_TYPE}" >> var.env
-    - echo "VERSION=${VERSION}" >> var.env
-    - echo "URL_PROTOCOL=${URL_PROTOCOL}" >> var.env
-    - echo "URL_FRONTEND=${URL_FRONTEND}" >> var.env
-    - echo "URL_BACKEND=${URL_BACKEND}" >> var.env
-    - echo "URL_TILES=${URL_TILES}" >> var.env
-    - echo "FRONTEND_URL_BACKEND=${FRONTEND_URL_BACKEND}" >> var.env
-    - echo "FRONTEND_URL_TILES=${FRONTEND_URL_TILES}" >> var.env
-    - echo "REPLICA_COUNT=${REPLICA_COUNT}" >> var.env
-    # DEBUG
-    - cat var.env
-  artifacts:
-    paths:
-      - var.env
-    expire_in: 3000 days
-  tags:
-    - docker
-
-###########################################
 # DEFINE BRANCH TRIGGER RULES
 ###########################################
 
@@ -252,6 +191,85 @@ export-environment:
       allow_failure: true
     # default is on_success, so explicitly set job not to run if none of the above rules matched
     - when: never
+
+###########################################
+# SETUP ENVIRONMENT VARIALBES
+###########################################
+
+export-environment:
+  image: debian:stretch-slim
+  stage: prepare
+  script:
+    - echo $CI_COMMIT_BRANCH
+    - echo $CI_COMMIT_REF_NAME
+    # set the version either as a tag (v0.0.1) or as a commit sha (74bac331)
+    - if [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then VERSION=${CI_COMMIT_TAG}; else VERSION=${CI_COMMIT_SHORT_SHA}; fi
+    # the current URL suffix
+    #- URL_SUFFIX="covis.dbvis.de" # defined in the variables section
+    # this shortens the slug to 30 characters and removes all trailing dashes
+    - SHORTENED_CI_COMMIT_REF_SLUG=$(echo ${CI_COMMIT_REF_SLUG} | tr / - | cut -c -30 |  sed -E 's#-+$##')
+    - URL_PREFIX=""
+    - FRONTEND_URL_TILES_PREFIX=""
+    - URL_PROTOCOL="https"
+    - ENV_TYPE="production"
+    - REPLICA_COUNT="2"
+    # multiple things happen here:
+    # URL_PREFIX:
+    # if tag => ""
+    # if master => "staging."
+    # if fb => "${CI_COMMIT_REF_SLUG}."
+    # Furthermore, the FRONTEND_URL_TILES_PREFIX is set because the tile server will not be deployed on a per fb-basis
+    # FRONTEND_URL_TILES_PREFIX:
+    # if tag => ""
+    # if master => "staging."
+    # if fb => "staging."
+    - if ! [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then FRONTEND_URL_TILES_PREFIX="staging."; ENV_TYPE="staging"; REPLICA_COUNT="1"; if [[ ${CI_COMMIT_BRANCH} =~ ^${STAGING_BRANCH}$ ]]; then URL_PREFIX="staging."; else URL_PREFIX="${SHORTENED_CI_COMMIT_REF_SLUG}."; ENV_TYPE="review"; REPLICA_COUNT="1"; fi fi
+    # Build the frontend url: prefix.suffix
+    - URL_FRONTEND="${URL_PREFIX}${URL_SUFFIX}"
+    # Build the backend url: prefix.api.suffix
+    - URL_BACKEND="${URL_PREFIX}api.${URL_SUFFIX}"
+    # Build the tiles url: prefix.tiles.suffix
+    - URL_TILES="${URL_PREFIX}tiles.${URL_SUFFIX}"
+    # This variable is used in the build job to set the api url in the environment.prod.ts
+    - FRONTEND_URL_BACKEND="${URL_PREFIX}api.${URL_SUFFIX}"
+    # This variable is used in the build job to set the tiles server url in the environment.prod.ts
+    - FRONTEND_URL_TILES="${FRONTEND_URL_TILES_PREFIX}tiles.${URL_SUFFIX}"
+    # all the stuff into the var.env
+    - echo "ENV_TYPE=${ENV_TYPE}" >> var.env
+    - echo "VERSION=${VERSION}" >> var.env
+    - echo "URL_PROTOCOL=${URL_PROTOCOL}" >> var.env
+    - echo "URL_FRONTEND=${URL_FRONTEND}" >> var.env
+    - echo "URL_BACKEND=${URL_BACKEND}" >> var.env
+    - echo "URL_TILES=${URL_TILES}" >> var.env
+    - echo "FRONTEND_URL_BACKEND=${FRONTEND_URL_BACKEND}" >> var.env
+    - echo "FRONTEND_URL_TILES=${FRONTEND_URL_TILES}" >> var.env
+    - echo "REPLICA_COUNT=${REPLICA_COUNT}" >> var.env
+    # DEBUG
+    - cat var.env
+  artifacts:
+    paths:
+      - var.env
+    expire_in: 3000 days
+  tags:
+    - docker
+
+set up sentry release:
+  stage: prepare
+  image:
+    name: getsentry/sentry-cli:1.49.0
+    entrypoint: [""]
+  script:
+    - export SENTRY_AUTH_TOKEN=${SENTRY_AUTH}
+    - export SENTRY_ORG=lingvisio
+    - sentry-cli releases new -p server "$CI_COMMIT_SHA"
+    - sentry-cli releases set-commits "$CI_COMMIT_SHA" --auto --log-level=debug
+    - sentry-cli releases finalize "$CI_COMMIT_SHA"
+    - sentry-cli releases deploys "$CI_COMMIT_SHA" new -e ${CI_COMMIT_REF_NAME}
+  dependencies: []
+  tags:
+    - docker
+  <<: *rules-frontend
+  interruptible: true
 
 ###########################################
 # BUILD

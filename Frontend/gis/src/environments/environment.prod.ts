@@ -8,5 +8,7 @@ export const environment = {
 
   version: '',
 
-  env: 'development'
+  env: 'development',
+
+  dsn: ""
 };
