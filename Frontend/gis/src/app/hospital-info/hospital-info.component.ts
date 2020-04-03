@@ -333,7 +333,7 @@ export class HospitalInfoComponent implements OnInit {
                   Kategorie: bedStatus,
                   num: v,
                   color: this.getCapacityStateColor(bedStatus),
-                  Datum: moment(d.timestamp).add(1, 'days').toDate()
+                  Datum: moment(d.timestamp).add(1, 'days').startOf('day').toDate()
                 }
               );
             }
@@ -346,6 +346,9 @@ export class HospitalInfoComponent implements OnInit {
           counter++;
         }
 
+        console.log(bedAccessor)
+
+        console.log(dataValues)
         // hack deep clone spec
         const spec = JSON.parse(JSON.stringify(this.temporalChartTemplateSpec));
 
