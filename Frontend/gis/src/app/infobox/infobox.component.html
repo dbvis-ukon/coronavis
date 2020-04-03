@@ -11,7 +11,10 @@
 
     <mat-expansion-panel expanded="true">
       <mat-expansion-panel-header>
-        <mat-panel-title i18n="@@infoboxHospitalBeds">Krankenhäuser - Bettenauslastung</mat-panel-title>
+        <mat-panel-title class="flexPanelTitle">
+            <mat-icon>{{ mo.bedGlyphOptions.enabled || mo.bedBackgroundOptions.enabled ? 'toggle_on' : 'toggle_off' }}</mat-icon> 
+            <span i18n="@@infoboxHospitalBeds">Krankenhäuser - Bettenauslastung</span>
+          </mat-panel-title>
       </mat-expansion-panel-header>
 
       <h5>Aggregation</h5>
@@ -131,7 +134,10 @@
 
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-panel-title i18n="@@infoboxCaseView">Fallansicht</mat-panel-title>
+        <mat-panel-title class="flexPanelTitle">
+          <mat-icon>{{ mo.covidNumberCaseOptions.enabled ? 'toggle_on' : 'toggle_off' }}</mat-icon> 
+          <span i18n="@@infoboxCaseView">Fallansicht</span>
+        </mat-panel-title>
       </mat-expansion-panel-header>
       <form class="covid-form">
         <mat-slide-toggle
@@ -261,8 +267,9 @@
 
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-panel-title i18n="@@infoboxGeo">
-          Geographische Verortung
+        <mat-panel-title class="flexPanelTitle">
+          <mat-icon>{{ mo.showOsmHeliports || mo.showOsmHospitals ? 'toggle_on' : 'toggle_off' }}</mat-icon> 
+          <span i18n="@@infoboxGeo">Geographische Verortung</span>
         </mat-panel-title>
         <mat-panel-description>
           <!-- description -->
