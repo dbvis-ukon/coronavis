@@ -154,7 +154,11 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
         d.properties._x = p.x;
         d.properties._y = p.y;
         return `translate(${p.x}, ${p.y})`;
-      })
+      });
+
+    const container = this.gHospitals
+      .append("g")
+      .attr("class", "container")
       .on('mouseenter', (d1, i, n) => {
         const currentElement = n[i];
         const evt: MouseEvent = d3.event;
@@ -182,13 +186,13 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       })
       .on('click', d => this.openDialog(d.properties));
 
-    this.gHospitals
+    container
       .append('rect')
       .attr('class', 'background-rect')
       .attr('width', this.glyphSize.width)
       .attr('height', this.glyphSize.height / 2);
 
-    this.nameHospitalsShadow = this.gHospitals
+    this.nameHospitalsShadow = container
       .append('text')
       .attr('class', 'text-bg hospital')
       .text(d1 => {
@@ -198,7 +202,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .attr('y', '13')
       .call(this.wrap, '50');
 
-    this.nameHospitals = this.gHospitals
+    this.nameHospitals = container
       .append('text')
       .attr('class', 'text-fg hospital')
       .text(d1 => {
@@ -209,21 +213,21 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .call(this.wrap, '50');
 
 
-    this.cityHospitalsShadow = this.gHospitals
+    this.cityHospitalsShadow = container
       .append('text')
       .attr('class', 'text-bg city hiddenLabel')
       .text(d1 => this.shorten_city_name(d1.properties.address))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .attr('y', '22');
 
-    this.cityHospitals = this.gHospitals
+    this.cityHospitals = container
       .append('text')
       .attr('class', 'text-fg city hiddenLabel')
       .text(d1 => this.shorten_city_name(d1.properties.address))
       .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .attr('y', '22');
 
-    this.gHospitals
+    container
       .append('rect')
       .attr('class', `bed ${BedType.icuLow}`)
       .attr('width', `${this.rectSize}px`)
@@ -233,7 +237,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .attr('x', padding)
       .attr('y', yOffset);
 
-    this.gHospitals
+    container
       .append('rect')
       .attr('class', `bed ${BedType.icuHigh}`)
       .attr('width', `${this.rectSize}px`)
@@ -244,7 +248,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
       .attr('y', yOffset)
       .attr('x', `${this.rectSize + padding * 2}px`);
 
-    this.gHospitals
+    container
       .append('rect')
       .attr('class', `bed ${BedType.ecmo}`)
       .attr('width', `${this.rectSize}px`)
@@ -333,7 +337,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     }
 
     this.gHospitals
-      .selectAll('*')
+      .selectAll('g.container')
       .transition()
       .duration(100)
       .attr('transform', d => {
