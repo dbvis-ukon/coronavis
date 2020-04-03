@@ -43,12 +43,10 @@ import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 import { registerLocaleData, DecimalPipe, APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import localeDe from '@angular/common/locales/de';
-import { APP_LOCALE } from 'src/constants';
 import { SupportedLocales } from './services/i18n.service';
 import { TranslatePipe } from './translate.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { MapRootComponent } from './map-root/map-root.component';
-import { local } from 'd3';
 
 // the second parameter 'fr-FR' is optional
 registerLocaleData(localeDe, 'de-DE');
@@ -77,7 +75,6 @@ export const localeProvider = {
             break;
           }
         }
-        console.log('set based on href', strippedBase, locale);
       }
     }
 
@@ -90,13 +87,11 @@ export const localeProvider = {
           break;
         }
       }
-      console.log('set based on browser', locale);
     }
 
     // if it still null use en-US as default
     if(locale === null) {
       locale = SupportedLocales.EN_US;
-      console.log('set default', locale);
     }
 
     return locale;

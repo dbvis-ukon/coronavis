@@ -1,6 +1,5 @@
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { APP_LOCALE } from 'src/constants';
 
 export enum SupportedLocales {
   DE_DE = 'de-DE',
@@ -34,8 +33,6 @@ export class I18nService {
   }
 
   updateLocale(newLocale: SupportedLocales) {
-    localStorage.setItem(APP_LOCALE, JSON.stringify(newLocale));
-
     this.currentLocale$.next(newLocale);
   }
 }
