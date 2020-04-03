@@ -20,7 +20,7 @@ import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.se
 import { OSMLayerService } from '../services/osm-layer.service';
 import { CaseChoropleth } from './overlays/casechoropleth';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { TranslationService } from '../services/translation.service';
 import { MapLocationSettings } from './options/map-location-settings';

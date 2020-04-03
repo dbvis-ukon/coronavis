@@ -46,6 +46,8 @@ import localeDe from '@angular/common/locales/de';
 import { APP_LOCALE } from 'src/constants';
 import { SupportedLocales } from './services/i18n.service';
 import { TranslatePipe } from './translate.pipe';
+import { AppRoutingModule } from './app-routing.module';
+import { MapRootComponent } from './map-root/map-root.component';
 
 // the second parameter 'fr-FR' is optional
 
@@ -95,7 +97,8 @@ if(storedLocale === SupportedLocales.DE_DE) {
     VegaComponent,
     HelpDialogComponent,
     TranslatePipe,
-    OsmTooltipComponent
+    OsmTooltipComponent,
+    MapRootComponent,
   ],
   imports: [
     BrowserModule,
@@ -120,7 +123,8 @@ if(storedLocale === SupportedLocales.DE_DE) {
     MatDialogModule,
     MatSelectModule,
     MatSnackBarModule,
-    MatStepperModule
+    MatStepperModule,
+    AppRoutingModule
   ],
   providers: [localeProvider, PlusminusPipe, DecimalPipe, TranslatePipe],
   bootstrap: [AppComponent]

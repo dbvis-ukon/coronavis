@@ -30,7 +30,7 @@
     "@angular/material": "^9.2.0",
     "@angular/platform-browser": "~9.1.0",
     "@angular/platform-browser-dynamic": "~9.1.0",
-    "@angular/router": "~9.1.0",
+    "@angular/router": "^9.1.0",
     "@ngx-i18nsupport/tooling": "^8.0.3",
     "d3": "^5.15.0",
     "leaflet": "dbvis-ukon/Leaflet#v1.6.0.3-fixed",
