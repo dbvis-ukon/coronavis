@@ -275,6 +275,7 @@ set up sentry release:
     - docker
   <<: *rules-frontend
   interruptible: true
+  allow_failure: true
 
 ###########################################
 # BUILD
