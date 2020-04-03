@@ -132,8 +132,8 @@
         <note category="location">src/app/help-dialog/help-dialog.component.html:15,19</note>
       </notes>
       <segment state="initial">
-        <source>Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten des DIVI[1] (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
-          exakten Kapazitätsdaten des DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
+        <source>Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten der DIVI[1] (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
+          exakten Kapazitätsdaten der DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
           vor Überlastungen erweitert werden. Diese Funktionalitäten sind schon vorhanden, jedoch aufgrund fehlendem
           Datenzugang derzeit deaktiviert.</source>
       <target>The currently integrated data encompass publicly available sources, as provided by DIVI[1] (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Through access to the exact DIVI capacity data, our tool could be enhanced with useful capabilities, particularly the early capacity alert functionality. These Features are already implemented, yet are deactivated due to missing data access.</target></segment>
@@ -145,7 +145,7 @@
       </notes>
       <segment state="initial">
         <source>Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
-          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick kann unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.covis.dbvis.de</pc> gefunden werden.</source>
+          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.coronavis.dbvis.de</pc>.</source>
       <target>The tool is not just a research prototype and can be deployed on short notice. With the help of experts, it will be further developed to provide the best possible support. A short video overview can be found under <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.covis.dbvis.de</pc>.</target></segment>
     </unit><unit id="visdescription16">
       <notes>
@@ -250,7 +250,7 @@
 
       <note category="location">src/app/help-dialog/help-dialog.component.html:49</note></notes>
       <segment state="initial">
-        <source>Die Farbe stellen die Auslastung dar:</source>
+        <source>Die Farben stellen die Auslastung dar:</source>
       <target>The colors represent the hospital load:</target></segment>
     </unit><unit id="visdescription26">
       <notes>
@@ -349,7 +349,7 @@
               Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
               oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
               angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
-              gewählt werden, ob die Darstellung absolut oder pro 100 000 Einwohner angezeigt werden soll. Wenn man auf der
+              gewählt werden, ob die Darstellung absolut oder pro 100.000 Einwohner angezeigt werden soll. Wenn man auf der
               Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</source>
       <target>
       The case numbers come from the official <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI data records</pc>. They can be presented by state, district and county, and can show the current number of cases, as well as those from the last 24 or 72 hours. The total number of recorded cases or the change in the selected period can be displayed. We further distinguish between illnesses and deaths. You can choose whether the data should be displayed in absolute terms or per 100 000 inhabitants. If you hover over a county or district on the map, a tooltip shows exact statistics.
@@ -385,8 +385,8 @@
     </unit><unit id="mobile">
       <notes>
         <note category="description">overlay</note>
-        <note category="location">src/app/overlay-mobile/overlay-mobile.component.html:2</note>
-      </notes>
+        
+      <note category="location">src/app/overlay-mobile/overlay-mobile.component.html:3</note></notes>
       <segment state="initial">
         <source>Diese Applikation ist nicht für mobile Geräte optimiert.</source>
       <target>This application is not optimized for mobile devices.</target></segment>
@@ -508,15 +508,15 @@
     </unit>
     <unit id="infoboxHospitalBeds">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:14</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:16</note></notes>
       <segment state="initial">
         <source>Krankenhäuser - Bettenauslastung</source>
       <target>Hospitals - Bed Capacity</target></segment>
     </unit><unit id="infoboxStates">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:26</note><note category="location">src/app/infobox/infobox.component.html:151</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:30</note><note category="location">src/app/infobox/infobox.component.html:164</note></notes>
       <segment state="initial">
         <source>Länder</source>
       <target>States</target></segment>
@@ -524,14 +524,14 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:26</note><note category="location">src/app/infobox/infobox.component.html:151</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:30</note><note category="location">src/app/infobox/infobox.component.html:164</note></notes>
       <segment state="initial">
         <source>Bundesländer</source>
       <target>States</target></segment>
     </unit><unit id="infoboxRegions">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:27</note><note category="location">src/app/infobox/infobox.component.html:152</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:33</note><note category="location">src/app/infobox/infobox.component.html:167</note></notes>
       <segment state="initial">
         <source>Bezirke</source>
       <target>Districts</target></segment>
@@ -539,14 +539,14 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:27</note><note category="location">src/app/infobox/infobox.component.html:152</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:33</note><note category="location">src/app/infobox/infobox.component.html:167</note></notes>
       <segment state="initial">
         <source>Regierungsbezirke</source>
       <target>Districs</target></segment>
     </unit><unit id="infoboxCounties">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:28</note><note category="location">src/app/infobox/infobox.component.html:153</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:36</note><note category="location">src/app/infobox/infobox.component.html:170</note></notes>
       <segment state="initial">
         <source>Kreise</source>
       <target>Counties</target></segment>
@@ -554,28 +554,28 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:28</note><note category="location">src/app/infobox/infobox.component.html:153</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:36</note><note category="location">src/app/infobox/infobox.component.html:170</note></notes>
       <segment state="initial">
         <source>Landkreise</source>
       <target>Counties</target></segment>
     </unit><unit id="infoboxNone">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:29</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:39</note></notes>
       <segment state="initial">
         <source>Keine</source>
       <target>None</target></segment>
     </unit><unit id="NoneTP">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:29</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:39</note></notes>
       <segment state="initial">
         <source>Ohne Aggregation</source>
       <target>No Aggregation</target></segment>
     </unit><unit id="infoboxBelegungShow">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:42</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:53</note></notes>
       <segment state="initial">
         <source>Bettenauslastung anzeigen / ausblenden
           </source>
@@ -583,50 +583,51 @@
           </target></segment>
     </unit><unit id="infoboxPositionign">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:81</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:86</note></notes>
       <segment state="initial">
         <source>Positionierung</source>
       <target>Icon Positioning</target></segment>
     </unit><unit id="infoboxBackground">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:93</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:103</note></notes>
       <segment state="initial">
         <source>Hintergrund</source>
       <target>Background</target></segment>
     </unit><unit id="infoboxForceDirectedOnTP">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:89</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:95</note></notes>
       <segment state="initial">
         <source>Verdeckungsfrei</source>
       <target>Overlap-Free</target></segment>
     </unit><unit id="ForceDirectedOnTP">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:89</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:95</note></notes>
       <segment state="initial">
         <source>Position der Krankenhäuser entzerren</source>
       <target>Remove overlap between hospitals</target></segment>
     </unit><unit id="infoboxForceDirectedOffTP">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:90</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:98</note></notes>
       <segment state="initial">
-        <source>Geo-Position</source>
+        <source>Exakte Position
+          </source>
       <target>Exact Geo-Position</target></segment>
     </unit><unit id="ForceDirectedOffTP">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:90</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:98</note></notes>
       <segment state="initial">
         <source>Position der Krankenhäuser beibehalten</source>
       <target>Keep hospitals at exact position</target></segment>
     </unit><unit id="infoboxBackgroundShow">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:101</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:111</note></notes>
       <segment state="initial">
         <source>Bettenauslastung im Hintergrund anzeigen / ausblenden
             </source>
@@ -634,21 +635,21 @@
     </unit><unit id="infoboxBackgroundError">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:104</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:114</note></notes>
       <segment state="initial">
         <source>Bitte eine Aggregation Länder, Bezirke, oder Kreise auswählen.</source>
       <target>Please select state, region or county aggregation</target></segment>
     </unit><unit id="infoboxCaseView">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:128</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:139</note></notes>
       <segment state="initial">
         <source>Fallansicht</source>
       <target>Case View</target></segment>
     </unit><unit id="infoboxCaseViewShow">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:135</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:147</note></notes>
       <segment state="initial">
         <source>Covid-19 Fallansicht anzeigen / ausblenden
         </source>
@@ -657,105 +658,115 @@
     </unit><unit id="infoboxAggregation">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:142</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:154</note></notes>
       <segment state="initial">
         <source>Aggregation</source>
       <target>Aggregation</target></segment>
     </unit><unit id="infoboxTime">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:160</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:178</note></notes>
       <segment state="initial">
         <source>Zeitraum</source>
       <target>Time Period</target></segment>
     </unit><unit id="infoboxTimeAll">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:169</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:188</note></notes>
       <segment state="initial">
-        <source>Alle Daten</source>
+        <source>Alle
+                Daten
+              </source>
       <target>All Data</target></segment>
     </unit><unit id="infoboxTime24">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:170</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:192</note></notes>
       <segment state="initial">
         <source>letzte 24 Stunden</source>
       <target>Last 24 Hours</target></segment>
     </unit><unit id="infoboxTime72">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:171</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:194</note></notes>
       <segment state="initial">
-        <source>letzte 72 Stunden</source>
+        <source>letzte 72
+                Stunden
+              </source>
       <target>Last 72 Hours</target></segment>
     </unit><unit id="infoboxCaseNum">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:178</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:203</note></notes>
       <segment state="initial">
         <source>Fallzahlen</source>
       <target>Case Counts</target></segment>
     </unit><unit id="infoboxCasesAll">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:187</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:212</note></notes>
       <segment state="initial">
-        <source>Alle erfassten Fälle</source>
+        <source>Alle erfassten
+                Fälle
+              </source>
       <target>All Recorded Cases</target></segment>
     </unit><unit id="infoboxCasesDiff">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:188</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:216</note></notes>
       <segment state="initial">
         <source>Veränderung im gewählten Zeitraum</source>
       <target>Changes in the Selected Time Period</target></segment>
     </unit><unit id="infoboxType">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:195</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:225</note></notes>
       <segment state="initial">
         <source>Art</source>
       <target>Type</target></segment>
     </unit><unit id="infoboxTypeSick">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:204</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:234</note></notes>
       <segment state="initial">
         <source>Erkrankungen</source>
       <target>Afflictions</target></segment>
     </unit><unit id="infoboxTypeDeath">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:205</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:236</note></notes>
       <segment state="initial">
         <source>Todesfälle</source>
       <target>Deaths</target></segment>
     </unit><unit id="infoboxNorm">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:212</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:244</note></notes>
       <segment state="initial">
         <source>Normalisierung</source>
       <target>Normalization</target></segment>
     </unit><unit id="infoboxNornNone">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:221</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:253</note></notes>
       <segment state="initial">
-        <source>Keine Normalisierung</source>
+        <source>Keine
+                Normalisierung
+              </source>
       <target>No Normalization</target></segment>
     </unit><unit id="infoboxNornYes">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:222</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:257</note></notes>
       <segment state="initial">
-        <source>Je 100.000 Einwohner</source>
+        <source>Je
+                100.000 Einwohner
+              </source>
       <target>Per 100.000 Residents</target></segment>
     </unit><unit id="infoboxGeo">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:233</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:272</note></notes>
       <segment state="initial">
         <source>
           Geographische Verortung
@@ -766,7 +777,7 @@
     </unit><unit id="infoboxGeoHospital">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:248</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:286</note></notes>
       <segment state="initial">
         <source>Krankenhäuser
         </source>
@@ -775,7 +786,7 @@
     </unit><unit id="infoboxGeoHeli">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:256</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:294</note></notes>
       <segment state="initial">
         <source>Hubschrauberlandeplätze
         </source>
@@ -784,7 +795,7 @@
     </unit><unit id="infoboxData">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:264</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:302</note></notes>
       <segment state="initial">
         <source>
           Datenquellen
@@ -795,30 +806,38 @@
     </unit><unit id="infoboxDIVI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:272</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:310</note></notes>
       <segment state="initial">
-        <source>DIVI Intensivregister</source>
+        <source>DIVI
+            Intensivregister</source>
       <target>DIVI ER-Register</target></segment>
     </unit><unit id="infoboxRKI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:276</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:315</note></notes>
       <segment state="initial">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institute</target></segment>
     </unit><unit id="infoboxRKICases">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:280</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:319</note></notes>
       <segment state="initial">
-        <source>- Fallzahlen</source>
+        <source>• Covid-19 Fallzahlen</source>
       <target>- Cases</target></segment>
+    </unit><unit id="infoboxDESTATIS">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:323</note>
+      </notes>
+      <segment state="initial">
+        <source>Statistisches Bundesamt</source>
+      <target>Statistisches Bundesamt</target></segment>
     </unit><unit id="footer1">
       <notes>
         <note category="description"> infobox</note>
         <note category="meaning">infobox </note>
 
-      <note category="location">src/app/infobox/infobox.component.html:297</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:340</note></notes>
       <segment state="initial">
         <source>Video</source>
       <target>Video</target></segment>
@@ -827,7 +846,7 @@
         <note category="description"> infobox</note>
         <note category="meaning">infobox </note>
 
-      <note category="location">src/app/infobox/infobox.component.html:299</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:342</note></notes>
       <segment state="initial">
         <source>Hilfe</source>
       <target>Help</target></segment>
@@ -836,14 +855,14 @@
         <note category="description"> infobox</note>
         <note category="meaning">infobox </note>
 
-      <note category="location">src/app/infobox/infobox.component.html:301</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:344</note></notes>
       <segment state="initial">
         <source>Team</source>
       <target>Team</target></segment>
     </unit><unit id="infoboxImprint">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:304</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:347</note></notes>
       <segment state="initial">
         <source>Impressum</source>
       <target>Imprint</target></segment>
@@ -852,7 +871,7 @@
         <note category="description"> infobox</note>
         <note category="meaning">infobox </note>
 
-      <note category="location">src/app/infobox/infobox.component.html:309</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:352</note></notes>
       <segment state="initial">
         <source>Sprache</source>
       <target>Language</target></segment>
@@ -871,7 +890,7 @@
       <note category="location">src/app/hospital-info/hospital-info.component.html:94</note></notes>
       <segment state="initial">
         <source>
-  Keine zeitliche Entwicklung verfügbar, da ledliglich ein Datenpunkt gemeldet wurde.
+  Keine zeitliche Entwicklung verfügbar, da lediglich ein Datenpunkt gemeldet wurde.
 </source>
       <target>
   No temporal evolution available as only one data point has been reported.
