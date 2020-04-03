@@ -121,6 +121,8 @@ export class HospitalInfoComponent implements OnInit {
 
   totalNumberOfHospitals: number = 0;
 
+  now = new Date();
+
   constructor(private colormapService: QualitativeColormapService,
     private translationService: TranslationService) {
   }
@@ -333,7 +335,7 @@ export class HospitalInfoComponent implements OnInit {
                   Kategorie: bedStatus,
                   num: v,
                   color: this.getCapacityStateColor(bedStatus),
-                  Datum: moment(d.timestamp).add(1, 'days').startOf('day').toDate()
+                  Datum: moment()
                 }
               );
             }
@@ -345,6 +347,8 @@ export class HospitalInfoComponent implements OnInit {
 
           counter++;
         }
+
+        console.log(dataValues);
 
         // hack deep clone spec
         const spec = JSON.parse(JSON.stringify(this.temporalChartTemplateSpec));
