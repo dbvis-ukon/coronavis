@@ -102,7 +102,7 @@ try:
     now = datetime.datetime.now().replace(tzinfo=datetime.timezone(datetime.timedelta(hours=+1)))
     print("db data version:", last_update)
     print("fetched data version:", now)
-    if last_update is not None and abs((current_update - last_update).total_seconds()) <= (60*60 - 120):
+    if last_update is not None and abs((now - last_update).total_seconds()) <= (60*60 - 120):
         print("No new data available (+/- 1h), skip update")
     else:    
         print('Insert new data into DB...')
