@@ -171,20 +171,20 @@ export class MapComponent implements OnInit {
     }
 
     const bedGlyphOptions = JSON.stringify(mo.bedGlyphOptions);
-    if (this.previousOptions.get(MapOptionKeys.bedGlyphOptions) ?? "" !== bedGlyphOptions) {
+    if (this.previousOptions.get(MapOptionKeys.bedGlyphOptions) !== bedGlyphOptions) {
       this.updateGlyphMapLayers(mo.bedGlyphOptions);
       this.bedGlyphOptions$.next(mo.bedGlyphOptions);
     }
     this.previousOptions.set(MapOptionKeys.bedGlyphOptions, bedGlyphOptions);
 
     const bedBackgroundOptions = JSON.stringify(mo.bedBackgroundOptions);
-    if (this.previousOptions.get(MapOptionKeys.bedBackgroundOptions) ?? "" !== bedBackgroundOptions) {
+    if (this.previousOptions.get(MapOptionKeys.bedBackgroundOptions) !== bedBackgroundOptions) {
       this.updateBedBackgroundLayer(mo.bedBackgroundOptions);
     }
     this.previousOptions.set(MapOptionKeys.bedBackgroundOptions, bedBackgroundOptions);
 
     const covidNumberCaseOptions = JSON.stringify(mo.covidNumberCaseOptions);
-    if (this.previousOptions.get(MapOptionKeys.covidNumberCaseOptions) ?? "" !== covidNumberCaseOptions) {
+    if (this.previousOptions.get(MapOptionKeys.covidNumberCaseOptions) !== covidNumberCaseOptions) {
       this.updateCaseChoroplethLayers(mo.covidNumberCaseOptions);
     }
     this.previousOptions.set(MapOptionKeys.covidNumberCaseOptions, covidNumberCaseOptions);
@@ -341,8 +341,13 @@ export class MapComponent implements OnInit {
 
       l.bringToBack();
 
-      // update the glyph map to put it in the front:
-      this.updateGlyphMapLayers(this._mapOptions.bedGlyphOptions);
+      for(const glyphLayer of this.aggregationLevelToGlyphMap.values()) {
+        if(glyphLayer.getLayers().length === 1) {
+          (glyphLayer.getLayers()[0] as SVGOverlay).bringToFront();
+        } else {
+          (glyphLayer.getLayers()[1] as SVGOverlay).bringToFront();
+        }
+      }
     });
   }
 
