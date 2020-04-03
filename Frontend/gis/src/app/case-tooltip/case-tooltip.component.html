@@ -1,7 +1,7 @@
 <div #main class="main">
   <h3>{{ this.data.name }}</h3>
   <mat-divider></mat-divider>
-  {{ this.data.bevoelkerung }} Einwohner
+   {{ this.data.bevoelkerung | number }} <span i18n="case-tooltip|cases@@residents">Einwohner</span>
   <table>
     <thead>
       <tr>
@@ -19,7 +19,7 @@
     <tbody>
       <tr>
         <td i18n="case-tooltip|sick@@sick">Erkrankte</td>
-        <td>{{ this.data.last.cases }}</td>
+        <td>{{ this.data.last.cases | number }}</td>
         <td>{{ this.data.last.cases - this.data.yesterday.cases | plusminus }}</td>
         <td>({{ this.getPercentageChange(this.data.last.cases, this.data.yesterday.cases)}})</td>
         <td>{{ this.data.last.cases - this.data.threeDaysAgo.cases | plusminus }}</td>
@@ -27,7 +27,7 @@
       </tr>
       <tr>
         <td i18n="case-tooltip|deaths@@deaths">Todesfälle</td>
-        <td>{{ this.data.last.deaths }}</td>
+        <td>{{ this.data.last.deaths | number }}</td>
         <td>{{ this.data.last.deaths - this.data.yesterday.deaths | plusminus }}</td>
         <td>({{ this.getPercentageChange(this.data.last.deaths, this.data.yesterday.deaths)}})</td>
         <td>{{ this.data.last.deaths - this.data.threeDaysAgo.deaths | plusminus }}</td>

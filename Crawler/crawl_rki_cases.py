@@ -2,8 +2,6 @@
 # coding: utf-8
 # author: Max Fischer
 
-import numpy as np
-import pandas as pd
 import psycopg2 as pg
 import psycopg2.extras
 import psycopg2.extensions
@@ -54,7 +52,7 @@ for el in data:
     cc = ['case' for i in range(el['AnzahlFall'])]
     cc.extend(['death' for i in range(el['AnzahlTodesfall'])])
     entry = [{
-    'datenbestand': datetime.datetime.strptime(el['Datenstand'], '%d.%m.%Y %H:%M'),
+    'datenbestand': datetime.datetime.strptime(el['Datenstand'], '%d.%m.%Y, %H:%M Uhr'),
     'idbundesland': el['IdBundesland'],
     'bundesland': el['Bundesland'],
     'landkreis': el['Landkreis'],

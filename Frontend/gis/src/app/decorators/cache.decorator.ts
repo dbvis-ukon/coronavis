@@ -18,7 +18,6 @@ export function Cache(options: CacheOptions) {
     target[`${propertyKey}_cached`] = new ReplaySubject(1, options.ttl);
 
     descriptor.value = function(...args) {
-      console.log('arguments are', args);
 
       // I'm not able to capture a defaulting that happens at function level
       /*
@@ -40,7 +39,6 @@ export function Cache(options: CacheOptions) {
         argsNotChanged = argsNotChanged && lastCallArguments[i] == args[i];
       }
 
-      console.log('argsNotChanged', argsNotChanged);
 
       if (!argsNotChanged) { // args change
         this[`${propertyKey}_cached`] = new ReplaySubject(1, options.ttl);
@@ -50,7 +48,6 @@ export function Cache(options: CacheOptions) {
 
       const req: Observable<any> = originalFunction.apply(this, args).pipe(
         tap((response) => {
-          console.log('cache ', `${propertyKey}_cached`);
           this[`${propertyKey}_cached`].next(response);
         })
       );

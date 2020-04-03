@@ -27,11 +27,10 @@ export class GlyphLayerService {
     private matDialog: MatDialog
   ) {}
 
-  getSimpleGlyphLayer(options: Observable<BedGlyphOptions>): Observable<SimpleGlyphLayer> {
+  getSimpleGlyphLayer(options: Observable<BedGlyphOptions>, forceEnabled: boolean): Observable<SimpleGlyphLayer> {
     this.loading$.next(true);
     return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
     .pipe(
-      tap(() => console.log('load simple glyph layer')),
       // map(this.mySingleAggregatedMapper),
       map(divi => {
         return new SimpleGlyphLayer(
@@ -39,6 +38,7 @@ export class GlyphLayerService {
           divi,
           this.tooltipService,
           this.colormapService,
+          forceEnabled,
           options,
           this.matDialog
           );
@@ -47,14 +47,14 @@ export class GlyphLayerService {
     );
   }
 
-  getAggregatedGlyphLayer(aggLevel: AggregationLevel, options: Observable<BedGlyphOptions>): Observable<[AggregatedGlyphLayer, LandkreiseHospitalsLayer]> {
+  getAggregatedGlyphLayer(options: BedGlyphOptions, options$: Observable<BedGlyphOptions>): Observable<[AggregatedGlyphLayer, LandkreiseHospitalsLayer]> {
+    const aggLevel = options.aggregationLevel;
     this.loading$.next(true);
     return forkJoin([
       this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(aggLevel),
       this.hospitalRepository.getHospitalsForAggregationLevel(aggLevel)
     ])
     .pipe(
-      tap(() => console.log('load aggregated glyph layer')),
       map(result => {
         const factory = new AggregatedGlyphLayer(
           'ho_glyph_'+aggLevel,
@@ -62,7 +62,8 @@ export class GlyphLayerService {
           result[0],
           this.tooltipService,
           this.colormapService,
-          options,
+          options.forceDirectedOn,
+          options$,
           this.matDialog
         );
 

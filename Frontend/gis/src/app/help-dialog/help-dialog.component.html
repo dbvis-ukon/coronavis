@@ -1,81 +1,89 @@
 <div mat-dialog-content>
   <mat-horizontal-stepper linear="false" #stepper>
     <mat-step>
-      <ng-template matStepLabel>Das Projekt</ng-template>
+      <ng-template matStepLabel  i18n="help| help@@menu1">Das Projekt</ng-template>
 
       <div class="visdescription">
-        <h1 id="interaktive-visualisierung-zur-analyse-von-intensivbettenkapazitäten-für-covid-19-patienten">Interaktive
+        <h1 id="interaktive-visualisierung-zur-analyse-von-intensivbettenkapazitäten-für-covid-19-patienten"   i18n="help| help@@title1">Interaktive
           Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</h1>
-        <p><em>Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
+        <p><em  i18n="help| help@@visdescription12">Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
             am Besten im Chrome-Browser.</em></p>
-        <p>Die <a href="http://vis.uni-konstanz.de">Arbeitsgruppe Datenanalyse und Visualisierung</a> an der Universität
+        <p  i18n="help| help@@visdescription13">Die <a href="http://vis.uni-konstanz.de">Arbeitsgruppe Datenanalyse und Visualisierung</a> an der Universität
           Konstanz entwickelt dieses Tool, um eine intuitive Übersicht über freie und belegte Bettenkapazitäten in
           Deutschland zu zeigen. Anhand dieser Information können Engpässe früh erkannt und eine Umverteilung oder
           direkte Umleitung von Patientenströmen vorgenommen werden.</p>
-        <p>Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten des DIVI[1] (<a
+        <p  i18n="help| help@@visdescription14">Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten der DIVI[1] (<a
             href="https://www.divi.de/register/intensivregister?view=items">Link</a>). Durch einen Zugriff auf die
-          exakten Kapazitätsdaten des DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
+          exakten Kapazitätsdaten der DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
           vor Überlastungen erweitert werden. Diese Funktionalitäten sind schon vorhanden, jedoch aufgrund fehlendem
           Datenzugang derzeit deaktiviert.</p>
-        <p>Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
-          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick kann unter <a
-            href="https://video.covis.dbvis.de">https://video.covis.dbvis.de</a> gefunden werden.</p>
-        <p>Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
+        <p  i18n="help| help@@visdescription15">Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
+          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <a target="_blank"
+            href="https://video.coronavis.dbvis.de">https://video.coronavis.dbvis.de</a>.</p>
+        <p  i18n="help| help@@visdescription16">Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
           anschauen wollen, kann dieses Fenster geschlossen werden.</p>
-        <p>[1] <a href="http://divi.de">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</a></p>
+        <p  i18n="help| help@@visdescription17">[1] <a href="http://divi.de">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</a></p>
       </div>
       <div>
-        <button mat-button matStepperNext>Zur Beschreibung der Kapazitätsdarstellung</button>
-        <button mat-button (click)="close()">Fenster schließen</button>
+        <button mat-button mat-raised-button color="primary" matStepperNext  i18n="help| help@@button11">Zur Beschreibung der Kapazitätsdarstellung</button>
+        <button mat-button mat-stroked-button (click)="close()"   i18n="help| help@@button12">Fenster schließen</button>
       </div>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Darstellung der Bettenkapazitäten</ng-template>
+      <ng-template matStepLabel  i18n="help| help@@menu2">Darstellung der Bettenkapazitäten</ng-template>
 
       <div class="visdescription">
-        <h1 id="beschreibung-der-darstellung-der-bettenkapazitäten">Beschreibung der Darstellung der Bettenkapazitäten
+        <h1 id="beschreibung-der-darstellung-der-bettenkapazitäten"   i18n="help| help@@title2">Beschreibung der Darstellung der Bettenkapazitäten
         </h1>
-        <p><img src="/assest/covisexpl1.png" alt="Der Text"></p>
-        <p>Die Bettendarstellung erfolgt im Überblick mit drei farbigen Kästchen pro Krankenhaus, welche für die
-          Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
-          stärkere Interventionen dar.</p>
-        <ul>
-          <li>ICU low care: Auslastung der Betten für nichtinvasive Beatmung</li>
-          <li>ICU high care: Auslastung der Betten für invasive Beatmung</li>
-          <li>ECMO: Auslastung der Betten für die Beatmung von Patienten durch extrakorporale Membranoxygenierung</li>
-        </ul>
-        <p>Die Farbe stellen die Auslastung dar:</p>
-        <ul>
-          <li>Grün: Plätze in dieser Behandlungskategorie sind in diesem Klinikum noch vorhanden</li>
-          <li>Gelb: Die Betten in dieser Behandlungskategorie werden knapp</li>
-          <li>Rot: Die Betten in dieser Behandlungskategorie sind komplett ausgelastet</li>
-        </ul>
-        <p>Die Informationen können auch nach Regionen zusammengefasst werden durch die entsprechende Schaltfläche.
-          Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
-          notwendigerweise Kapazitäten gemeldet haben, können unter "Geographische Verortung" hinzugeschaltet werden.
-        </p>
+        <div  class="helpdsc">
+          <img flex="66" class="helpimg" style="max-width: 550px;" src="/assets/covisexpl1.png" alt="Explanation Figure">
+          <div flex="33" class="helptxt">
+            <p i18n="help| help@@visdescription21">Die Bettendarstellung erfolgt im Überblick mit drei farbigen Kästchen pro Krankenhaus, welche für die
+              Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
+              stärkere Interventionen dar.</p>
+            <ul>
+              <li i18n="help| help@@visdescription22">ICU low care: Auslastung der Betten für nichtinvasive Beatmung</li>
+              <li i18n="help| help@@visdescription23">ICU high care: Auslastung der Betten für invasive Beatmung</li>
+              <li i18n="help| help@@visdescription24">ECMO: Auslastung der Betten für die Beatmung von Patienten durch extrakorporale Membranoxygenierung</li>
+            </ul>
+            <p i18n="help| help@@visdescription25">Die Farben stellen die Auslastung dar:</p>
+            <ul>
+              <li i18n="help| help@@visdescription26">Grün: Plätze in dieser Behandlungskategorie sind in diesem Klinikum noch vorhanden</li>
+              <li i18n="help| help@@visdescription27">Gelb: Die Betten in dieser Behandlungskategorie werden knapp</li>
+              <li i18n="help| help@@visdescription28">Rot: Die Betten in dieser Behandlungskategorie sind komplett ausgelastet</li>
+            </ul>
+            <p i18n="help| help@@visdescription29">Die Informationen können auch nach Regionen zusammengefasst werden durch die entsprechende Schaltfläche.
+              Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
+              notwendigerweise Kapazitäten gemeldet haben, können unter "Geographische Verortung" hinzugeschaltet werden.
+            </p>
+          </div>
+        </div>
       </div>
       <div>
-        <button mat-button matStepperPrevious>Zurück</button>
-        <button mat-button matStepperNext>Weiter zur Darstellung der Fallzahlen</button>
-        <button mat-button (click)="close()">Fenster schließen</button>
+        <button mat-button mat-stroked-button matStepperPrevious i18n="help| help@@button21">Zurück</button>
+        <button mat-button mat-raised-button color="primary" matStepperNext  i18n="help| help@@button22">Weiter zur Darstellung der Fallzahlen</button>
+        <button mat-button mat-stroked-button (click)="close()"  i18n="help| help@@button23">Fenster schließen</button>
       </div>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Darstellung der Fallzahlen</ng-template>
+      <ng-template matStepLabel i18n="help| help@@menu3">Darstellung der Fallzahlen</ng-template>
       <div class="visdescription">
-        <h1 id="beschreibung-der-darstellung-der-fallzahlen">Beschreibung der Darstellung der Fallzahlen</h1>
-        <p><img src="/assets/covisexpl2.png" alt="Der Text"></p>
-        <p>Die Fallzahlen stammen aus den offiziellen <a href="esri.de/corona">RKI-Datensätzen</a>. Sie können nach
-          Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
-          oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
-          angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
-          gewählt werden, ob die Darstellung absolut oder pro 100 000 Einwoher angezeigt werden soll. Wenn man auf der
-          Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</p>
+        <h1 id="beschreibung-der-darstellung-der-fallzahlen"   i18n="help| help@@title3">Beschreibung der Darstellung der Fallzahlen</h1>
+        <div  class="helpdsc">
+          <img flex="66" class="helpimg" src="/assets/covisexpl2.png" style="max-width: 700px;" alt="Explanation Figure">
+          <div flex="33" class="helptxt">
+              <p   i18n="help| help@@visdescription3">Die Fallzahlen stammen aus den offiziellen <a href="esri.de/corona">RKI-Datensätzen</a>. Sie können nach
+              Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
+              oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
+              angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
+              gewählt werden, ob die Darstellung absolut oder pro 100.000 Einwohner angezeigt werden soll. Wenn man auf der
+              Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</p>
+          </div>
+        </div>
       </div>
       <div>
-        <button mat-button matStepperPrevious>Zurück</button>
-        <button mat-button (click)="close()">Fenster schließen</button>
+        <button mat-button mat-stroked-button matStepperPrevious  i18n="help| help@@button31">Zurück</button>
+        <button mat-button mat-raised-button color="primary" (click)="close()"  i18n="help| help@@button32">Fenster schließen</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

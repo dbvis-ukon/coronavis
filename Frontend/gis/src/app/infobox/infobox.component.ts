@@ -18,6 +18,8 @@ import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.se
 import {APP_CONFIG_KEY} from "../../constants";
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
+import { SupportedLocales, I18nService } from '../services/i18n.service';
+import {BreakpointObserver} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-infobox',
@@ -33,7 +35,8 @@ export class InfoboxComponent implements OnInit {
     private glyphLayerService: GlyphLayerService,
     private bedChoroplethLayerService: BedChoroplethLayerService,
     private caseChoroplethLayerService: CaseChoroplethLayerService,
-    @Inject(LOCALE_ID) protected localeId: string
+    private i18nService: I18nService,
+    private breakPointObserver: BreakpointObserver
   ) { }
 
   glyphLegend;
@@ -62,12 +65,10 @@ export class InfoboxComponent implements OnInit {
 
   eAggregationLevels = AggregationLevel;
 
-  locales: string[] = [
-    'en',
-    'de'
-  ];
 
-  selectedLocale: string;
+  supportedLocales: string[];
+
+  selectedLocale: SupportedLocales;
 
 
   glyphLoading = false;
@@ -76,16 +77,23 @@ export class InfoboxComponent implements OnInit {
   osmLoading = false;
 
   ngOnInit(): void {
+
+    //close info box if mobile
+    const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
+    if(isSmallScreen){
+      this.infoboxExtended = false;
+    }
+
+    this.supportedLocales = this.i18nService.getSupportedLocales();
+
+    this.i18nService.currentLocale().subscribe(l => {
+      this.selectedLocale = l;
+    })
+
     this.glyphLayerService.loading$.subscribe(l => this.glyphLoading = l);
     this.bedChoroplethLayerService.loading$.subscribe(l => this.bedChoroplethLoading = l);
     this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
     this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);
-
-    if(this.locales.indexOf(this.localeId) > -1) {
-      this.selectedLocale = this.localeId;
-    } else {
-      this.selectedLocale = 'en';
-    }
 
     this.glyphLegend = [
       {name: 'ICU low', accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
@@ -95,7 +103,6 @@ export class InfoboxComponent implements OnInit {
   }
 
   emitCaseChoroplethOptions() {
-    // console.log('emit', this.caseChoroplethOptions);
 
     if(this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
       this.mo.covidNumberCaseOptions.normalization = CovidNumberCaseNormalization.absolut;
@@ -157,6 +164,7 @@ export class InfoboxComponent implements OnInit {
   emitMapOptions() {
     localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(this.mo));
     this.mapOptionsChange.emit({...this.mo});
+    console.log(this.mo);
   }
 
   openAbout() {
@@ -170,11 +178,16 @@ export class InfoboxComponent implements OnInit {
   }
 
   openVideo() {
-    window.open('https://video.covis.dbvis.de', '_blank');
-    // location.href = 'https://video.covis.dbvis.de';
+    window.open('https://video.coronavis.dbvis.de', '_blank');
+    // location.href = 'https://video.coronavis.dbvis.de';
   }
+
   changeLocale(evt) {
-    location.href = `/${evt.value}/`;
+    this.i18nService.updateLocale(evt.value);
+
+    const url = evt.value.slice(0,2);
+
+    location.href = `/${url}/`;
   }
 
 

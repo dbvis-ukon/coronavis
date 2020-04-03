@@ -7,7 +7,7 @@ stages:
 variables:
   K8_NAMESPACE: covid-19-vis
   STAGING_BRANCH: master
-  URL_SUFFIX: covis.dbvis.de
+  URL_SUFFIX: coronavis.dbvis.de
 
 ###########################################
 # SETUP ENVIRONMENT VARIALBES
@@ -29,7 +29,7 @@ export-environment:
     - FRONTEND_URL_TILES_PREFIX=""
     - URL_PROTOCOL="https"
     - ENV_TYPE="production"
-    - REPLICA_COUNT="3"
+    - REPLICA_COUNT="2"
     # multiple things happen here:
     # URL_PREFIX: 
     # if tag => ""
@@ -175,23 +175,22 @@ export-environment:
     when: on_success
   # run if files changed
   # and if it should run on a feature branch or it should run on master
-  - changes:
+  - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+    changes:
+    - Tiles/**/*
+    - k8/tiles-new/**/*
+    when: manual
+  - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    changes:
       - Tiles/**/*
-      - k8/Tiles/**/*
       - k8/tiles-new/**/*
-      - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
-    when: on_success
-  - changes:
-      - Tiles/**/*
-      - k8/Tiles/**/*
-      - k8/tiles-new/**/*
-      - .gitlab-ci.yml
-    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
-    when: on_success
+    when: manual
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
-    when: on_success
+    changes:
+     - Tiles/**/*
+     - k8/tiles-new/**/*
+    when: manual
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
 
@@ -271,7 +270,7 @@ export-environment:
     - export ENV_TYPE
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
-    - npm install
+    - npm install --unsafe-perm
     - npm run-script build:i18n:${LOCALE}
   artifacts:
     expire_in: 1 day
@@ -379,6 +378,7 @@ dockerize-tiles:
     RUN_ON_FB: "no"
     RUN_ON_MASTER: "yes"
     RUN_ON_TAG: "yes"
+    GIT_SUBMODULE_STRATEGY: "recursive"
   <<: *dockerize-template
   <<: *rules-tiles
   needs:
@@ -565,17 +565,20 @@ deploy-frontend-production-new:
     - dockerize-crawler
     - export-environment
 
-  # deploy-crawler-fb:
-  #   extends: .deploy-crawler
-  #   variables:
-  #     ENV_TYPE: review
-  #     RUN_ON_FB: "yes"
-  #
-  # deploy-crawler-staging:
-  #  extends: .deploy-crawler
-  #  variables:
-  #    ENV_TYPE: staging
-  #    RUN_ON_MASTER: "yes"
+# deploy-crawler-fb:
+#   extends: .deploy-crawler-new
+#   variables:
+#     ENV_TYPE: review
+#     RUN_ON_FB: "yes"
+
+deploy-crawler-staging:
+  extends: .deploy-crawler-new
+  before_script:
+    - export KUBECONFIG=$KUBECONFIG_STAGING
+  variables:
+    ENV_TYPE: staging
+    RUN_ON_MASTER: "yes"
+    K8_NAMESPACE: covid-19-vis-staging
 
 deploy-crawler-production-new:
   extends: .deploy-crawler-new
@@ -618,7 +621,7 @@ deploy-crawler-production-new:
     - export-environment
 
 # deploy-tiles-fb:
-#   extends: .deploy-tiles
+#   extends: .deploy-tiles-new
 #   variables:
 #     ENV_TYPE: review
 #     RUN_ON_FB: "yes"

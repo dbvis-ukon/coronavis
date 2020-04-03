@@ -27,7 +27,6 @@ export class CaseChoroplethLayerService {
     this.loading$.next(true);
     return this.getCaseData(options.aggregationLevel)
       .pipe(
-        tap(() => console.log('load case choropleth layer')),
         map(data => new CaseChoropleth(this.getKeyCovidNumberCaseOptions(options), data, options, this.tooltipService, this.colormapService)),
         tap(() => this.loading$.next(false))
       );

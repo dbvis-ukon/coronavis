@@ -31,13 +31,15 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     private data: FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>,
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
+    private forceDirect: boolean,
     private glyphOptions: Observable<BedGlyphOptions>,
     private dialog: MatDialog
 ) {
     super(name, data);
-    console.log(name, data);
 
-    this.forceLayout = new ForceDirectedLayout(this.data as any, this.updateGlyphPositions.bind(this));
+    if (this.forceDirect) {
+      this.forceLayout = new ForceDirectedLayout(this.data as any, granularity, this.updateGlyphPositions.bind(this));
+    }
 
     this.glyphOptions.subscribe(opt => {
       if(!this.gHospitals || !opt) {
@@ -141,10 +143,14 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
         d.properties._x = p.x;
         d.properties._y = p.y;
         return `translate(${p.x - ((3 * rectSize + padding * 3) / 2)}, ${p.y - (22 / 2)})`;
-      })
+      });
+
+    const container = this.gHospitals
+      .append("g")
+      .attr("class", "container")
       .on('mouseenter touchstart', function (d1) {
         const evt: MouseEvent = d3.event;
-        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX, y: evt.clientY});
+        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX + 5, y: evt.clientY + 5});
         t.tooltipData = d1.properties;
         d3.select(this).raise();
       })
@@ -154,6 +160,12 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
           data: d.properties
         });
       });
+
+    container
+      .append('rect')
+      .attr('class', 'background-rect')
+      .attr('width', this.glyphSize.width)
+      .attr('height', this.glyphSize.height/2);
       // .on('mouseenter', d1 => {
       //   const evt: MouseEvent = d3.event;
       //   const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
@@ -162,29 +174,26 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       // .on('mouseout', () => this.tooltipService.close());
 
     // adds white shadow
-    this.gHospitals
+    container
       .append('text')
+      .attr('class', 'text-bg aggName')
       .text(d1 => {
         return d1.properties.name;
       })
       .attr('x', (padding + 3 * rectSize + 4 * padding) / 2)
-      .attr('y', '22')
-      .attr('font-size', '8px')
-      .style('text-anchor', 'middle')
-      .style('stroke', 'white')
-      .style('stroke-width', '4px')
-      .style('opacity', '0.8');
+      .attr('y', '22');
 
-    this.gHospitals
+
+    container
       .append('text')
+      .attr('class', 'text-fg aggName')
       .text(d1 => d1.properties.name)
       .attr('x', (padding + 3 * rectSize + 4 * padding) / 2)
-      .style('text-anchor', 'middle')
-      .attr('y', '22')
-      .attr('font-size', '8px');
+      .attr('y', '22');
+
 
     const self = this;
-    this.gHospitals
+    container
       .append('rect')
       .attr('class', `bed ${BedType.icuLow}`)
       .attr('width', `${rectSize}px`)
@@ -193,7 +202,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('y', yOffset)
       .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuLow));
 
-    this.gHospitals
+    container
       .append('rect')
       .attr('class', `bed ${BedType.icuHigh}`)
       .attr('width', `${rectSize}px`)
@@ -202,7 +211,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .attr('x', `${rectSize + padding * 2}px`)
       .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuHigh));
 
-    this.gHospitals
+    container
       .append('rect')
       .attr('class', `bed ${BedType.ecmo}`)
       .attr('width', `${rectSize}px`)
@@ -222,7 +231,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
 
   updateGlyphPositions() {
     this.gHospitals
-      .transition().duration(100)
+      .transition().duration(500)
       .attr('transform', (d, i) => {
         return `translate(${d.properties.x},${d.properties.y})`;
       });
@@ -239,7 +248,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     const scale = Math.pow(level / (zoom), 3);
 
     this.gHospitals
-      .selectAll('*')
+      .selectAll('g.container')
       .transition()
       .duration(500)
       .attr('transform', d => {
@@ -250,8 +259,10 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       return;
     }
 
-    const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
-    this.forceLayout.update(glyphBoxes, zoom);
+    if (this.forceDirect) {
+      const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
+      this.forceLayout.update(glyphBoxes, zoom);
+    }
   }
 
   setVisibility(v: boolean) {

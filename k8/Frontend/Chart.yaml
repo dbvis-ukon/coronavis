@@ -1,5 +1,0 @@
-apiVersion: v1
-appVersion: "1.0"
-description: Deploys covid-19-vis prototype frontend
-name: covid-19-prototype-frontend
-version: 1.0

@@ -7,7 +7,7 @@ import 'mapbox-gl-leaflet';
 // import 'leaflet-mapbox-gl';
 import {Overlay} from './overlays/overlay';
 import {FeatureCollection} from 'geojson';
-import {Subject, Observable, Subscription} from 'rxjs';
+import {Subject, Observable, Subscription, of} from 'rxjs';
 import {AggregationLevel} from './options/aggregation-level.enum';
 import {CovidNumberCaseOptions} from './options/covid-number-case-options';
 import {MapOptions} from './options/map-options';
@@ -23,6 +23,7 @@ import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.serv
 import { switchMap, map } from 'rxjs/operators';
 import {APP_CONFIG_KEY, MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { TranslationService } from '../services/translation.service';
 
 export enum MapOptionKeys {
   bedGlyphOptions, bedBackgroundOptions, covidNumberCaseOptions, showOsmHospitals, showOsmHeliports
@@ -31,7 +32,7 @@ export enum MapOptionKeys {
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css'],
+  styleUrls: ['./map.component.less'],
   // super important, otherwise the defined css doesn't get added to dynamically created elements, for example, from D3.
   encapsulation: ViewEncapsulation.None,
 })
@@ -65,7 +66,7 @@ export class MapComponent implements OnInit {
 
   private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<FeatureCollection>>();
 
-  private aggregationLevelToGlyphMap = new Map<AggregationLevel, L.LayerGroup<any>>();
+  private aggregationLevelToGlyphMap = new Map<string, L.LayerGroup<any>>();
 
   private osmHospitalsLayer: L.GeoJSON<any>;
 
@@ -88,7 +89,8 @@ export class MapComponent implements OnInit {
     private glyphLayerService: GlyphLayerService,
     private caseChoroplehtLayerService: CaseChoroplethLayerService,
     private osmLayerService: OSMLayerService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private translationService: TranslationService
   ) {
   }
 
@@ -98,19 +100,21 @@ export class MapComponent implements OnInit {
         {
           tileSize: 256,
           // zoomOffset: -1,
-          // attribution: '© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © ' +
-          //   '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> ' +
+                       '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
         });
 
-    // create map, set initial view to basemap and zoom level to center of BW
-    const defaultView: LatLngTuple = [48.6813312, 9.0088299];
-    const defaultZoom = 9;
+    // create map, set initial view to to see whole of Germany (country wide deployment)
+    const defaultView: LatLngTuple = [51.163375, 10.447683];
+    const defaultZoom = 6;
 
     let initialView = JSON.parse(localStorage.getItem(MAP_VIEW_KEY))
     let initialZoom = +localStorage.getItem(MAP_ZOOM_KEY);
 
     if (initialView && initialZoom) {
-      let snackbar = this.snackbar.open("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt", "Zurücksetzen", {
+      let snackbar = this.snackbar.open(
+        this.translationService.translate("Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt"),
+        this.translationService.translate("Zurücksetzen"), {
         politeness: "polite",
         duration: 40000
       });
@@ -125,7 +129,7 @@ export class MapComponent implements OnInit {
 
     this.mymap = L.map('main', {
       minZoom: 6,
-      maxZoom: 11,
+      maxZoom: 14,
       layers: [tiledMap],
       zoomControl: false
     }).setView(initialView, initialZoom);
@@ -167,20 +171,20 @@ export class MapComponent implements OnInit {
     }
 
     const bedGlyphOptions = JSON.stringify(mo.bedGlyphOptions);
-    if (this.previousOptions.get(MapOptionKeys.bedGlyphOptions) ?? "" !== bedGlyphOptions) {
+    if (this.previousOptions.get(MapOptionKeys.bedGlyphOptions) !== bedGlyphOptions) {
       this.updateGlyphMapLayers(mo.bedGlyphOptions);
       this.bedGlyphOptions$.next(mo.bedGlyphOptions);
     }
     this.previousOptions.set(MapOptionKeys.bedGlyphOptions, bedGlyphOptions);
 
     const bedBackgroundOptions = JSON.stringify(mo.bedBackgroundOptions);
-    if (this.previousOptions.get(MapOptionKeys.bedBackgroundOptions) ?? "" !== bedBackgroundOptions) {
+    if (this.previousOptions.get(MapOptionKeys.bedBackgroundOptions) !== bedBackgroundOptions) {
       this.updateBedBackgroundLayer(mo.bedBackgroundOptions);
     }
     this.previousOptions.set(MapOptionKeys.bedBackgroundOptions, bedBackgroundOptions);
 
     const covidNumberCaseOptions = JSON.stringify(mo.covidNumberCaseOptions);
-    if (this.previousOptions.get(MapOptionKeys.covidNumberCaseOptions) ?? "" !== covidNumberCaseOptions) {
+    if (this.previousOptions.get(MapOptionKeys.covidNumberCaseOptions) !== covidNumberCaseOptions) {
       this.updateCaseChoroplethLayers(mo.covidNumberCaseOptions);
     }
     this.previousOptions.set(MapOptionKeys.covidNumberCaseOptions, covidNumberCaseOptions);
@@ -188,22 +192,30 @@ export class MapComponent implements OnInit {
 
     if (mo.showOsmHospitals && !this.osmHospitalsLayer) {
       this.osmHospitalLayerSubscription = this.osmLayerService.getOSMHospitalLayer()
+      .pipe(
+        switchMap(l => of(l))
+      )
       .subscribe(l => {
         this.osmHospitalsLayer = l.createOverlay();
         this.mymap.addLayer(this.osmHospitalsLayer);
       })
     } else if (!mo.showOsmHospitals && this.osmHospitalsLayer) {
       this.mymap.removeLayer(this.osmHospitalsLayer);
+      this.osmHospitalsLayer = null;
     }
 
     if (mo.showOsmHeliports && !this.osmHeliportsLayer) {
       this.osmHelipadLayerSubscription = this.osmLayerService.getOSMHeliportLayer()
+      .pipe(
+        switchMap(l => of(l))
+      )
       .subscribe(l => {
         this.osmHeliportsLayer = l.createOverlay();
         this.mymap.addLayer(this.osmHeliportsLayer);
       })
     } else if (!mo.showOsmHeliports && this.osmHeliportsLayer) {
       this.mymap.removeLayer(this.osmHeliportsLayer);
+      this.osmHeliportsLayer = null;
     }
   }
 
@@ -224,16 +236,16 @@ export class MapComponent implements OnInit {
     }
 
     // internal caching for the glyph positions due to slow force layout:
-    if(this.aggregationLevelToGlyphMap.has(o.aggregationLevel)) {
+    if(this.aggregationLevelToGlyphMap.has(`${o.aggregationLevel}-${o.forceDirectedOn}`)) {
 
-      this.showGlyphLayer(this.aggregationLevelToGlyphMap.get(o.aggregationLevel));
+      this.showGlyphLayer(this.aggregationLevelToGlyphMap.get(`${o.aggregationLevel}-${o.forceDirectedOn}`));
 
     } else {
       // dynamically create the map and load data from api
 
       let obs: Observable<L.LayerGroup>;
       if(o.aggregationLevel === AggregationLevel.none) {
-        obs = this.glyphLayerService.getSimpleGlyphLayer(this.bedGlyphOptions$)
+        obs = this.glyphLayerService.getSimpleGlyphLayer(this.bedGlyphOptions$, o.forceDirectedOn)
         .pipe(
           map(glyphFactory => {
             const glyphLayer = glyphFactory.createOverlay(this.mymap);
@@ -245,7 +257,7 @@ export class MapComponent implements OnInit {
             return layerGroup;
           }));
       } else {
-        obs = this.glyphLayerService.getAggregatedGlyphLayer(o.aggregationLevel, this.bedGlyphOptions$)
+        obs = this.glyphLayerService.getAggregatedGlyphLayer(o, this.bedGlyphOptions$)
         .pipe(
           map(([glyphFactory, backgroundFactory]) => {
 
@@ -262,8 +274,12 @@ export class MapComponent implements OnInit {
         }));
       }
 
-      this.glyphLayerSubscription = obs.subscribe(layerGroup => {
-        this.aggregationLevelToGlyphMap.set(o.aggregationLevel, layerGroup);
+      this.glyphLayerSubscription = obs
+      .pipe(
+        switchMap(l => of(l))
+      )
+      .subscribe(layerGroup => {
+        this.aggregationLevelToGlyphMap.set(`${o.aggregationLevel}-${o.forceDirectedOn}`, layerGroup);
 
         this.showGlyphLayer(layerGroup);
       });
@@ -307,6 +323,9 @@ export class MapComponent implements OnInit {
     const key = this.caseChoroplehtLayerService.getKeyCovidNumberCaseOptions(opt);
 
     this.caseChoroplethSubscription = this.caseChoroplehtLayerService.getLayer(opt)
+    .pipe(
+      switchMap(l => of(l))
+    )
     .subscribe(factory => {
       const l = factory.createOverlay();
 
@@ -322,8 +341,13 @@ export class MapComponent implements OnInit {
 
       l.bringToBack();
 
-      // update the glyph map to put it in the front:
-      this.updateGlyphMapLayers(this._mapOptions.bedGlyphOptions);
+      for(const glyphLayer of this.aggregationLevelToGlyphMap.values()) {
+        if(glyphLayer.getLayers().length === 1) {
+          (glyphLayer.getLayers()[0] as SVGOverlay).bringToFront();
+        } else {
+          (glyphLayer.getLayers()[1] as SVGOverlay).bringToFront();
+        }
+      }
     });
   }
 
@@ -347,7 +371,11 @@ export class MapComponent implements OnInit {
 
     if(o.enabled) {
 
-      this.bedChoroplethSubscription = this.bedChoroplethLayerService.getQualitativeLayer(o).subscribe(factory => {
+      this.bedChoroplethSubscription = this.bedChoroplethLayerService.getQualitativeLayer(o)
+      .pipe(
+        switchMap(f => of(f))
+      )
+      .subscribe(factory => {
 
         const layer = factory.createOverlay();
 
