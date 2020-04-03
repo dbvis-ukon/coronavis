@@ -258,6 +258,11 @@ set up sentry release:
   image:
     name: getsentry/sentry-cli:1.49.0
     entrypoint: [""]
+  variables:
+    RUN_ALWAYS: "no"
+    RUN_ON_FB: "yes"
+    RUN_ON_MASTER: "yes"
+    RUN_ON_TAG: "yes"
   script:
     - export SENTRY_AUTH_TOKEN=${SENTRY_AUTH}
     - export SENTRY_ORG=lingvisio
