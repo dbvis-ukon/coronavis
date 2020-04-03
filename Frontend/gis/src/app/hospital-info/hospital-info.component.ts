@@ -346,9 +346,6 @@ export class HospitalInfoComponent implements OnInit {
           counter++;
         }
 
-        console.log(bedAccessor)
-
-        console.log(dataValues)
         // hack deep clone spec
         const spec = JSON.parse(JSON.stringify(this.temporalChartTemplateSpec));
 
