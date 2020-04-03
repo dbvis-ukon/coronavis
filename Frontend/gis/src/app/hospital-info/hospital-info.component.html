@@ -13,7 +13,7 @@
 
     <div class="data-warning" *ngIf="warnOfOutdatedData">
       <mat-icon color="warn">warning</mat-icon>
-      
+
       <h5 i18n="@@tooltipHospitalOldData">Die Daten sind älter als 24 Stunden.</h5>
     </div>
 
@@ -89,7 +89,7 @@
 <br>
 
 <div *ngIf="specs.length > 0">
-<h4><span i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung:</span> ({{ firstTimestamp | date:'mediumDate'}} - {{ lastUpdate | date:'mediumDate' }})</h4>
+<h4><span i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung:</span> ({{ firstTimestamp | date:'mediumDate'}} - {{ now | date:'mediumDate' }})</h4>
 
 <p *ngIf="data.developments?.length <= 1" i18n="@@hospitalInfoNoTemporalDataAvailable">
   Keine zeitliche Entwicklung verfügbar, da lediglich ein Datenpunkt gemeldet wurde.
