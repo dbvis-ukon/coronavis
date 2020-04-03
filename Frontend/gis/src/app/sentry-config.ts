@@ -11,6 +11,7 @@ Sentry.init({
   beforeSend(event: Sentry.Event, hint?: EventHint): PromiseLike<Sentry.Event | null> | Sentry.Event | null {
     if (event.user) {
       delete event.user.ip_address;
+      delete event.user;
     }
     return event;
   }
