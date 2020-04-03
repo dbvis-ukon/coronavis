@@ -17,31 +17,8 @@ export class I18nService {
   constructor(@Inject(LOCALE_ID) protected localeId: string) {}
 
   initI18n() {
-
-    const l = JSON.parse(localStorage.getItem(APP_LOCALE)) as SupportedLocales;
-    if(this.getSupportedLocales().indexOf(l) > -1) {
-
-      // retrieve from local storage
-      this.updateLocale(l);
-
-      return true;
-
-    } else {
-      const navL = navigator.language.slice(0, 2);
-
-
-      for(const availableLocale of this.getSupportedLocales()) {
-        if(availableLocale.slice(0, 2) === navL) {
-
-          this.updateLocale(availableLocale);
-
-          return true;
-        }
-      }
-
-      this.updateLocale(SupportedLocales.EN_US);
-    }
-    return false;
+    console.log('provided locale id', this.localeId);
+    this.updateLocale(this.localeId as SupportedLocales);
   }
 
   getSupportedLocales() {

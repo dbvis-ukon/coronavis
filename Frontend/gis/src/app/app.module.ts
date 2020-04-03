@@ -40,7 +40,7 @@ import { VegaComponent } from './vega/vega.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 
-import { registerLocaleData, DecimalPipe } from '@angular/common';
+import { registerLocaleData, DecimalPipe, APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import localeDe from '@angular/common/locales/de';
 import { APP_LOCALE } from 'src/constants';
@@ -48,31 +48,61 @@ import { SupportedLocales } from './services/i18n.service';
 import { TranslatePipe } from './translate.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { MapRootComponent } from './map-root/map-root.component';
+import { local } from 'd3';
 
 // the second parameter 'fr-FR' is optional
+registerLocaleData(localeDe, 'de-DE');
+registerLocaleData(localeEn, 'en-US');
 
-
-
-const storedLocale = JSON.parse(localStorage.getItem(APP_LOCALE)) as SupportedLocales;
+// const storedLocale = JSON.parse(localStorage.getItem(APP_LOCALE)) as SupportedLocales;
 
 export const localeProvider = {
   provide: LOCALE_ID,
-  useFactory: () => {
-    if(storedLocale === SupportedLocales.DE_DE) {
-      return 'de-DE'
-    } else {
-      return 'en-US';
+  useFactory: (s: PlatformLocation) => {
+
+    let locale: SupportedLocales = null;
+
+    // get from localStorage
+    // if(storedLocale) {
+    //   locale = storedLocale;
+    // }
+
+    // get form base url e.g. /en/ /de/
+    if(locale === null) {
+      const strippedBase = s.getBaseHrefFromDOM().replace(/\//g, '');
+      if(strippedBase.length === 2) {
+        for(const l of Object.values(SupportedLocales)) {
+          if(l.startsWith(strippedBase)) {
+            locale = l;
+            break;
+          }
+        }
+        console.log('set based on href', strippedBase, locale);
+      }
     }
-  }
+
+    // get from browser settings
+    if(locale === null) {
+      const navL = navigator.language.slice(0, 2);
+      for(const l of Object.values(SupportedLocales)) {
+        if(l.slice(0, 2) === navL) {
+          locale = l;
+          break;
+        }
+      }
+      console.log('set based on browser', locale);
+    }
+
+    // if it still null use en-US as default
+    if(locale === null) {
+      locale = SupportedLocales.EN_US;
+      console.log('set default', locale);
+    }
+
+    return locale;
+  },
+  deps: [PlatformLocation]
 }
-
-
-if(storedLocale === SupportedLocales.DE_DE) {
-  registerLocaleData(localeDe, 'de-DE');
-} else {
-  registerLocaleData(localeEn, 'en-US');
-}
-
 
 
 @NgModule({
@@ -126,7 +156,16 @@ if(storedLocale === SupportedLocales.DE_DE) {
     MatStepperModule,
     AppRoutingModule
   ],
-  providers: [localeProvider, PlusminusPipe, DecimalPipe, TranslatePipe],
+  providers: [
+    localeProvider, 
+    {
+      provide: APP_BASE_HREF,
+      useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
+      deps: [PlatformLocation]
+    },
+    PlusminusPipe, 
+    DecimalPipe, 
+    TranslatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
