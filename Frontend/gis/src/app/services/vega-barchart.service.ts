@@ -61,7 +61,6 @@ export class VegaBarchartService {
         "type": "quantitative",
         "title": "Anzahl Krankenhäuser",
         "scale": {
-          "domain": [0, 10]
         },
         "axis": {
           "tickMinStep": 1,

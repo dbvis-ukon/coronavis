@@ -25,6 +25,8 @@ import { QualitativeTimedStatusAggregation } from '../services/types/qualitateiv
 import { QuantitativeAggregatedHospitalProperties } from '../repositories/types/in/qualitative-hospitals-development';
 import { QuantitativeAggregatedRkiCaseNumberProperties, QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 import { TooltipService } from '../services/tooltip.service';
+import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-infobox',
@@ -34,7 +36,7 @@ import { TooltipService } from '../services/tooltip.service';
 export class InfoboxComponent implements OnInit {
 
   constructor(
-    private colormapService: QualitativeColormapService,
+    public colormapService: QualitativeColormapService,
     private dialogService: MatDialog,
     private osmLayerService: OSMLayerService,
     private glyphLayerService: GlyphLayerService,
@@ -43,7 +45,8 @@ export class InfoboxComponent implements OnInit {
     private i18nService: I18nService,
     private breakPointObserver: BreakpointObserver,
     private countryAggregatorService: CountryAggregatorService,
-    private tooltipService: TooltipService
+    public tooltipService: TooltipService,
+    private translationService: TranslationService
   ) { }
 
   glyphLegend;
@@ -114,9 +117,9 @@ export class InfoboxComponent implements OnInit {
       this.aggregatedDiviStatistics = r;
 
       this.glyphLegend = [
-        {name: 'ICU low', accessor: 'showIcuLow', color: this.colormapService.getBedStatusColor(r, (r) => r.icu_low_care) , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
-        {name: 'ICU high', accessor: 'showIcuHigh', color: this.colormapService.getBedStatusColor(r, (r) => r.icu_high_care), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
-        {name: 'ECMO', accessor: 'showEcmo', color: this.colormapService.getBedStatusColor(r, (r) => r.ecmo_state), description: 'ECMO = Zusätzlich ECMO'}
+        {name: 'ICU low', accessor: 'showIcuLow', accFunc: (r) => r.icu_low_care, description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+        {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (r) => r.icu_high_care, description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
+        {name: 'ECMO', accessor: 'showEcmo', accFunc: (r) => r.ecmo_state, description: 'ECMO = Zusätzlich ECMO'}
       ];
     });
 
@@ -124,6 +127,25 @@ export class InfoboxComponent implements OnInit {
     .subscribe(r => {
       this.aggregatedRkiStatistics = r;
     })
+  }
+
+  openBedTooltip(evt, glypLegendEntity) {
+
+    const t = this.tooltipService.openAtElementRef(BedTooltipComponent, evt.target, null, [
+      {
+        overlayX: 'center',
+        overlayY: 'bottom',
+        originX: 'center',
+        originY: 'top',
+      }
+    ]);
+
+    t.data = this.aggregatedDiviStatistics;
+    t.bedName = glypLegendEntity.name;
+
+    t.explanation = this.translationService.translate(glypLegendEntity.description);
+
+    t.accessorFunc = glypLegendEntity.accFunc;
   }
 
   emitCaseChoroplethOptions() {
@@ -188,7 +210,6 @@ export class InfoboxComponent implements OnInit {
   emitMapOptions() {
     localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(this.mo));
     this.mapOptionsChange.emit({...this.mo});
-    console.log(this.mo);
   }
 
   openAbout() {

@@ -1,7 +1,7 @@
 :host {
     pointer-events: none !important;
     display: block;
-    min-width: 460px;
+    max-width: 300px;
     min-height: 300px;
   
     .main {
@@ -9,6 +9,28 @@
       background: #fff;
       padding: 15px;
       border-radius: 4px;
+      box-shadow: 8px 8px 20px 0px rgba(0,0,0,0.75);
+
+      .numHospitals {
+        margin: 0;
+      }
+
+      .name {
+        margin-bottom: 5px;
+      }
+
+      .hint {
+        font-size: 10px;
+      }
+
+      .chartcontainer {
+        display: flex;
+
+        .explanation {
+          font-size: 10px;
+          padding-top: 10px;
+        }
+      }
     }
   }
   

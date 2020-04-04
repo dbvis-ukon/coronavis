@@ -64,14 +64,16 @@
           <div
             *ngFor="let t of glyphLegend"
             class="glyph-tile"
-            matTooltip="{{t.description | translate }}"
+            (mouseenter)="openBedTooltip($event, t)"
+            (mouseleave)="tooltipService.close()"
             (click)="mo.bedGlyphOptions[t.accessor] = !mo.bedGlyphOptions[t.accessor]; emitMapOptions()"
           >
             <div class="rect"
-                 [ngStyle]="{'background-color': getGlyphColor(t.color), 'border-color': mo.bedGlyphOptions[t.accessor] ? 'grey' : 'lightgrey'}"></div>
+                 [ngStyle]="{'background-color': colormapService.getBedStatusColor(aggregatedDiviStatistics, t.accFunc), 'border-color': mo.bedGlyphOptions[t.accessor] ? 'grey' : 'lightgrey'}"></div>
             <div class="text">{{ t.name }}</div>
           </div>
         </div>
+        <mat-hint class="color-expl" i18n="@@infoboxColorExpl">* Die Farben stellen den bundesweiten Durchschnitt dar.</mat-hint>
         <div class="glyph-color-legend">
           <div
             *ngFor="let t of glyphLegendColors"
