@@ -6,7 +6,7 @@
         <p class="numHospitals" *ngIf="!isSingleHospital">({{ totalNumberOfHospitals }} <span i18n="tooltip | hospitals@reported">gemeldete Krankenhäuser</span>)</p>
       </div>
       <div *ngIf="mode === 'dialog'">
-        <button (click)="dialogReference.close()" mat-icon-button aria-label="Close Dialog" matTooltip="Close Window">
+        <button (click)="close()" mat-icon-button aria-label="Close Dialog" matTooltip="Close Window">
           <mat-icon>close</mat-icon>
         </button>
       </div> 
