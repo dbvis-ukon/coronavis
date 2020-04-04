@@ -10,4 +10,10 @@ export interface MapLocationSettings {
      */
     zoom: number;
 
+
+    allowPanning: boolean;
+
+
+    allowZooming: boolean;
+
 }

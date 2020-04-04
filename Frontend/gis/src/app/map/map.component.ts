@@ -130,7 +130,9 @@ export class MapComponent implements OnInit {
       
       mapLocationSettings = {
         center: defaultView,
-        zoom: defaultZoom
+        zoom: defaultZoom,
+        allowPanning: true,
+        allowZooming: true
       }
 
     }
@@ -150,7 +152,20 @@ export class MapComponent implements OnInit {
       this.emitMapLocationSettings();
     });
 
-    new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
+    if(mapLocationSettings.allowZooming) {
+      new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
+    }
+
+    if(mapLocationSettings.allowPanning === false) {
+      this.mymap.dragging.disable();
+    }
+
+    if(mapLocationSettings.allowZooming === false) {
+      this.mymap.touchZoom.disable();
+      this.mymap.doubleClickZoom.disable();
+      this.mymap.scrollWheelZoom.disable();
+    }
+    
 
     this.updateMap(this._mapOptions);
   }
@@ -158,7 +173,9 @@ export class MapComponent implements OnInit {
   private emitMapLocationSettings() {
     const opt: MapLocationSettings = {
       center: this.mymap.getBounds().getCenter(),
-      zoom: this.mymap.getZoom()
+      zoom: this.mymap.getZoom(),
+      allowPanning: true,
+      allowZooming: true
     };
 
     this.mapLocationSettingsChange.emit(opt);

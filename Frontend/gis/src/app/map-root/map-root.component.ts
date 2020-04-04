@@ -23,7 +23,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { safeDebounce } from '../util/safe-debounce';
 import { UrlHandlerService } from '../services/url-handler.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { merge } from 'lodash-es';
+import { merge, trimEnd } from 'lodash-es';
 
 @Component({
   selector: 'app-map-root',
@@ -35,6 +35,10 @@ export class MapRootComponent implements OnInit {
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
   private defaultMapOptions: MapOptions = {
+    hideInfobox: false,
+
+    extendInfobox: true,
+
     bedGlyphOptions: {
       aggregationLevel: AggregationLevel.none,
       enabled: true,
@@ -71,7 +75,11 @@ export class MapRootComponent implements OnInit {
       lng: 9.0088299
     },
 
-    zoom: 9
+    zoom: 9,
+
+    allowPanning: true,
+
+    allowZooming: true
   };
 
 
@@ -177,7 +185,7 @@ export class MapRootComponent implements OnInit {
       this.mapOptions = mergedMlo;
     } else if (storedMapOptions) {
       // merge with default as basis is necessary when new options are added in further releases
-      this.mapOptions = merge<MapOptions, MapOptions>(this.defaultMapOptions, storedMapOptions);
+      this.mapOptions = merge<MapOptions, MapOptions, any>(this.defaultMapOptions, storedMapOptions, { hideInfobox: false });
       restored = true;
     }
 
@@ -192,7 +200,14 @@ export class MapRootComponent implements OnInit {
       this.initialMapLocationSettings = mergedMls;
     } else if(storedMapLocationSettings) {
       // this.mapLocationSettings$.next(storedMapLocationSettings);
-      this.initialMapLocationSettings = merge<MapLocationSettings, MapLocationSettings>(this.defaultMapLocationSettings, storedMapLocationSettings);
+      this.initialMapLocationSettings = merge<MapLocationSettings, MapLocationSettings, any>(
+        this.defaultMapLocationSettings, 
+        storedMapLocationSettings, 
+        { // overwrite this otherwise the app is broken when it's loaded from local storage
+          allowPanning: true,
+          allowZooming: true
+        }
+      );
       restored = true;
     }
 

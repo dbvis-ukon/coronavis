@@ -1,11 +1,11 @@
 <button
   mat-icon-button
-  (click)="infoboxExtended = !infoboxExtended"
+  (click)="mo.extendInfobox = !mo.extendInfobox; emitMapOptions();"
 >
-  <mat-icon>{{ infoboxExtended ? 'layers_clear' : 'layers' }}</mat-icon>
+  <mat-icon>{{ mo.extendInfobox ? 'layers_clear' : 'layers' }}</mat-icon>
 </button>
 
-<mat-card *ngIf="infoboxExtended">
+<mat-card *ngIf="mo.extendInfobox">
 
   <mat-accordion>
 
@@ -344,7 +344,9 @@
     <a mat-button (click)="openAbout()" i18n="infobox | infobox@@footer3">Team</a>
 
 
-    <a mat-button i18n="@@infoboxImprint" (click)="openImpressum()" i18n="infobox | infobox@@footer4">Impressum</a>
+    <a mat-button (click)="openImpressum()" i18n="infobox | infobox@@footer4">Impressum</a>
+
+    <a mat-button (click)="openShare()" i18n="infobox | infobox@@footer5">Share</a>
 
     <span class="spacer"></span>
 

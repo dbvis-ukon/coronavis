@@ -34,6 +34,9 @@ import { AboutComponent } from './about/about.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatStepperModule } from "@angular/material/stepper";
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 import { VegaComponent } from './vega/vega.component';
@@ -47,6 +50,8 @@ import { SupportedLocales } from './services/i18n.service';
 import { TranslatePipe } from './translate.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { MapRootComponent } from './map-root/map-root.component';
+import { ShareDialogComponent } from './share-dialog/share-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 // the second parameter 'fr-FR' is optional
 registerLocaleData(localeDe, 'de-DE');
@@ -124,10 +129,12 @@ export const localeProvider = {
     TranslatePipe,
     OsmTooltipComponent,
     MapRootComponent,
+    ShareDialogComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    FormsModule,
     OverlayModule,
     BrowserAnimationsModule,
     MatButtonToggleModule,
@@ -149,7 +156,10 @@ export const localeProvider = {
     MatSelectModule,
     MatSnackBarModule,
     MatStepperModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatTabsModule,
   ],
   providers: [
     localeProvider, 

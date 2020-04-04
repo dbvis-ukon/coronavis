@@ -15,11 +15,12 @@ import { OSMLayerService } from '../services/osm-layer.service';
 import { GlyphLayerService } from '../services/glyph-layer.service';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
-import {APP_CONFIG_KEY} from "../../constants";
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { SupportedLocales, I18nService } from '../services/i18n.service';
 import {BreakpointObserver} from "@angular/cdk/layout";
+import { ShareDialogComponent } from '../share-dialog/share-dialog.component';
+import { MapLocationSettings } from '../map/options/map-location-settings';
 
 @Component({
   selector: 'app-infobox',
@@ -43,13 +44,14 @@ export class InfoboxComponent implements OnInit {
 
   glyphLegendColors = QualitativeColormapService.bedStati;
 
-  infoboxExtended = true;
-
   @Input('mapOptions')
   mo: MapOptions;
 
   @Output()
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
+
+  @Input('mapLocationSettings')
+  mls: MapLocationSettings;
 
   // ENUM MAPPING
   // because in HTML, this stuff cannot be accessed
@@ -81,7 +83,7 @@ export class InfoboxComponent implements OnInit {
     //close info box if mobile
     const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
     if(isSmallScreen){
-      this.infoboxExtended = false;
+      this.mo.extendInfobox = false;
     }
 
     this.supportedLocales = this.i18nService.getSupportedLocales();
@@ -191,5 +193,15 @@ export class InfoboxComponent implements OnInit {
 
   openHelp() {
     this.dialogService.open(HelpDialogComponent);
+  }
+
+  openShare() {
+    this.dialogService.open(ShareDialogComponent, {
+      minWidth: '80vw',
+      data: {
+        mo: JSON.parse(JSON.stringify(this.mo)),
+        mls: JSON.parse(JSON.stringify(this.mls))
+      }
+    });
   }
 }

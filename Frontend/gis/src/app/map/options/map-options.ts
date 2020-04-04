@@ -1,9 +1,18 @@
 import {BedGlyphOptions} from './bed-glyph-options';
 import {BedBackgroundOptions} from './bed-background-options';
 import {CovidNumberCaseOptions} from './covid-number-case-options';
-import {AggregationLevel} from "./aggregation-level.enum";
 
 export interface MapOptions {
+
+  /**
+   * Extend the infobox
+   */
+  extendInfobox: boolean;
+
+  /**
+   * Completely hide the infobox inclusive the toggle button
+   */
+  hideInfobox: boolean;
 
   bedGlyphOptions: BedGlyphOptions;
 
