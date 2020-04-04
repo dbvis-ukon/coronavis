@@ -49,6 +49,7 @@ import { TranslatePipe } from './translate.pipe';
 import {SentryErrorHandler} from "./sentry-config";
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import { BedTooltipComponent } from './bed-tooltip/bed-tooltip.component';
 
 // the second parameter 'fr-FR' is optional
 
@@ -98,7 +99,8 @@ if(storedLocale === SupportedLocales.DE_DE) {
     VegaComponent,
     HelpDialogComponent,
     TranslatePipe,
-    OsmTooltipComponent
+    OsmTooltipComponent,
+    BedTooltipComponent
   ],
   imports: [
     BrowserModule,

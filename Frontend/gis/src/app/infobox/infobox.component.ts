@@ -24,6 +24,7 @@ import { CountryAggregatorService } from '../services/country-aggregator.service
 import { QualitativeTimedStatusAggregation } from '../services/types/qualitateive-timed-status-aggregation';
 import { QuantitativeAggregatedHospitalProperties } from '../repositories/types/in/qualitative-hospitals-development';
 import { QuantitativeAggregatedRkiCaseNumberProperties, QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
+import { TooltipService } from '../services/tooltip.service';
 
 @Component({
   selector: 'app-infobox',
@@ -41,7 +42,8 @@ export class InfoboxComponent implements OnInit {
     private caseChoroplethLayerService: CaseChoroplethLayerService,
     private i18nService: I18nService,
     private breakPointObserver: BreakpointObserver,
-    private countryAggregatorService: CountryAggregatorService
+    private countryAggregatorService: CountryAggregatorService,
+    private tooltipService: TooltipService
   ) { }
 
   glyphLegend;
@@ -110,7 +112,6 @@ export class InfoboxComponent implements OnInit {
     this.countryAggregatorService.diviAggregationForCountry()
     .subscribe(r => {
       this.aggregatedDiviStatistics = r;
-      console.log('agg', r);
 
       this.glyphLegend = [
         {name: 'ICU low', accessor: 'showIcuLow', color: this.colormapService.getBedStatusColor(r, (r) => r.icu_low_care) , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},

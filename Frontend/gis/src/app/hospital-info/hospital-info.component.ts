@@ -6,6 +6,10 @@ import {AggregatedHospitalOut} from '../repositories/types/out/aggregated-hospit
 import {BedType} from "../map/options/bed-type.enum";
 import * as moment from 'moment';
 import { TranslationService } from '../services/translation.service';
+import { VegaBarchartService } from '../services/vega-barchart.service';
+import { of } from 'rxjs';
+import { flatMap, map, max, reduce, tap } from 'rxjs/operators';
+import { sum } from 'd3';
 
 @Component({
   selector: 'app-hospital-info',
@@ -56,52 +60,7 @@ export class HospitalInfoComponent implements OnInit {
     }
   };
 
-  barChartTemplateSpec = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-    "height": 100,
-    "description": "A simple bar chart with rounded corners at the end of the bar.",
-    "data": {
-      "values": [
-        {"cat": "Verfügbar", "num": 6, "color": "red"},
-        {"cat": "Begrenzt", "num": 3, "color": "green"},
-        {"cat": "Ausgelastet", "num": 1, "color": "blue"},
-        {"cat": "Nicht verfügbar", "num": 0, "color": "yellow"}
-      ]
-    },
-    "mark": {"type": "bar"},
-    "encoding": {
-      "x": {
-        "field": "cat",
-        "type": "nominal",
-        "title": "ICU Low care",
-        "sort": ["Verfügbar", "Begrenzt", "Ausgelastet", "Nicht verfügbar"],
-        "axis": {
-          "labels": false
-        }
-      },
-      "y": {
-        "field": "num",
-        "type": "quantitative",
-        "title": "Anzahl Krankenhäuser",
-        "scale": {"domain": [0, 10]},
-        "axis": {"tickMinStep": 1, "tickCount": 5},
-      },
-      "color": {
-        "field": "color", "type": "nominal", "scale": null
-      }
-    }, "layer": [{
-      "mark": "bar"
-    }, {
-      "mark": {
-        "type": "text",
-        "align": "center",
-        "dy": -5
-      },
-      "encoding": {
-        "text": {"field": "num", "type": "quantitative"}
-      }
-    }]
-  };
+  
 
   specs = [];
 
@@ -126,7 +85,9 @@ export class HospitalInfoComponent implements OnInit {
   now = new Date();
 
   constructor(private colormapService: QualitativeColormapService,
-    private translationService: TranslationService) {
+    private translationService: TranslationService,
+    private vegaBarchartService: VegaBarchartService
+    ) {
   }
 
   ngOnInit(): void {
@@ -151,7 +112,8 @@ export class HospitalInfoComponent implements OnInit {
 
     this.prepareAddressAndContactInformation();
 
-    this.prepareBarCharts();
+    this.prepareBarCharts()
+    .then(v => this.barChartSpecs = v);
 
     this.prepareTemporalCharts();
 
@@ -186,61 +148,50 @@ export class HospitalInfoComponent implements OnInit {
     this.closeClicked.emit(Math.random());
   }
 
-  private prepareBarCharts() {
+  private async prepareBarCharts() {
     const bedStati = this.glyphLegendColors;
 
-    this.barChartSpecs = [];
-    let maxNum = 0;
+    const barChartSpecs: Array<any> = [];
 
     for (const bedAccessor of this.bedAccessors) {
-      const dataValues = [];
 
-      // fill the data object
-      for (const bedStatus of bedStati) {
-        const v = this.latestDevelopment[bedAccessor][bedStatus] || 0;
-
-        if (bedAccessor === this.bedAccessors[0]) {
-          this.totalNumberOfHospitals += v;
-        }
+      const spec = this.vegaBarchartService.compileChart(this.latestDevelopment, bedAccessor, bedStati, {
+        xAxisTitle: '',
+        yAxisTitle: this.translationService.translate('Anzahl Krankenhäuser')
+      })
 
 
-        dataValues.push(
-          {
-            cat: bedStatus,
-            num: v,
-            color: this.getCapacityStateColor(bedStatus)
-          }
-        );
-
-        if (v > maxNum) {
-          maxNum = v;
-        }
-      }
-
-
-      // hack deep clone spec
-      const spec = JSON.parse(JSON.stringify(this.barChartTemplateSpec));
-
-      // inject data values
-      spec.data.values = dataValues;
-
-      // also overwrite the title
-      spec.encoding.x.title = '';
-
-      spec.encoding.y.title = this.translationService.translate('Anzahl Krankenhäuser');
-
-
-      this.barChartSpecs.push({
+      barChartSpecs.push({
         title: this.bedAccessorsMapping[bedAccessor],
         chart: spec
       });
     }
 
+    const maxNum = await of(barChartSpecs)
+    .pipe(
+      flatMap(d => d),
+      flatMap(d => d.chart.data.values),
+      map((d: any) => d.num as number),
+      max()
+    ).toPromise();
+
+
+
+    of(barChartSpecs[0])
+    .pipe(
+      flatMap(d => d.chart.data.values),
+      map((d: any) => d.num as number),
+      reduce((acc, val) => acc + val)
+    )
+    .subscribe(v => this.totalNumberOfHospitals = v);
+
     // set the max value
-    this.barChartSpecs.forEach(spec => {
+    barChartSpecs.forEach(spec => {
       spec.chart.encoding.y.scale.domain = [0, maxNum + 1];
       spec.chart.encoding.y.axis.tickCount = Math.min(maxNum + 1, 5);
     });
+
+    return barChartSpecs;
   }
 
   private prepareAddressAndContactInformation() {
