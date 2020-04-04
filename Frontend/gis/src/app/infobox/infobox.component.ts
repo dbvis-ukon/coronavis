@@ -104,23 +104,24 @@ export class InfoboxComponent implements OnInit {
     this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
     this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);
 
-    this.glyphLegend = [
-      {name: 'ICU low', accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
-      {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
-      {name: 'ECMO', accessor: 'showEcmo', color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
-    ];
+    
 
 
     this.countryAggregatorService.diviAggregationForCountry()
     .subscribe(r => {
       this.aggregatedDiviStatistics = r;
       console.log('agg', r);
+
+      this.glyphLegend = [
+        {name: 'ICU low', accessor: 'showIcuLow', color: this.colormapService.getBedStatusColor(r, (r) => r.icu_low_care) , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+        {name: 'ICU high', accessor: 'showIcuHigh', color: this.colormapService.getBedStatusColor(r, (r) => r.icu_high_care), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
+        {name: 'ECMO', accessor: 'showEcmo', color: this.colormapService.getBedStatusColor(r, (r) => r.ecmo_state), description: 'ECMO = Zusätzlich ECMO'}
+      ];
     });
 
     this.countryAggregatorService.rkiAggregationForCountry()
     .subscribe(r => {
       this.aggregatedRkiStatistics = r;
-      console.log('agg rki', r);
     })
   }
 

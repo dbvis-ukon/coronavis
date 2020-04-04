@@ -9,8 +9,7 @@ import { QualitativeTimedStatusAggregation } from './types/qualitateive-timed-st
 import { Observable } from 'rxjs';
 import { RKICaseRepository } from '../repositories/rki-case.repository';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
-import { feature } from 'topojson';
-import { QuantitativeAggregatedRkiCaseNumberProperties, QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
+import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 
 @Injectable({
   providedIn: 'root'
