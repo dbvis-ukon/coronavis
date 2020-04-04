@@ -1,4 +1,4 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
+import {NgModule, LOCALE_ID, ErrorHandler} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -46,6 +46,7 @@ import localeDe from '@angular/common/locales/de';
 import { APP_LOCALE } from 'src/constants';
 import { SupportedLocales } from './services/i18n.service';
 import { TranslatePipe } from './translate.pipe';
+import {SentryErrorHandler} from "./sentry-config";
 
 // the second parameter 'fr-FR' is optional
 
@@ -122,7 +123,7 @@ if(storedLocale === SupportedLocales.DE_DE) {
     MatSnackBarModule,
     MatStepperModule
   ],
-  providers: [localeProvider, PlusminusPipe, DecimalPipe, TranslatePipe],
+  providers: [localeProvider, PlusminusPipe, DecimalPipe, TranslatePipe, { provide: ErrorHandler, useClass: SentryErrorHandler }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

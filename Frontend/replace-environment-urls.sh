@@ -21,6 +21,10 @@ echo "Set environment ${ENV_TYPE}"
 
 sed -i -E "s#env\s*?:\s*?['\"].*?['\"]#env: '${ENV_TYPE}'#g" ${ENV_FILE}
 
+echo "Set Sentry DSN"
+
+sed -i -E "s#dsn\s*?:\s*?['\"].*?['\"]#dsn: '${SENTRY_DSN}'#g" ${ENV_FILE}
+
 echo "Modified environment.prod.ts:"
 
 cat ${ENV_FILE}
