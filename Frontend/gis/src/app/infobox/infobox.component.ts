@@ -20,6 +20,10 @@ import { QualitativeColormapService } from '../services/qualitative-colormap.ser
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { SupportedLocales, I18nService } from '../services/i18n.service';
 import {BreakpointObserver} from "@angular/cdk/layout";
+import { CountryAggregatorService } from '../services/country-aggregator.service';
+import { QualitativeTimedStatusAggregation } from '../services/types/qualitateive-timed-status-aggregation';
+import { QuantitativeAggregatedHospitalProperties } from '../repositories/types/in/qualitative-hospitals-development';
+import { QuantitativeAggregatedRkiCaseNumberProperties, QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 
 @Component({
   selector: 'app-infobox',
@@ -36,7 +40,8 @@ export class InfoboxComponent implements OnInit {
     private bedChoroplethLayerService: BedChoroplethLayerService,
     private caseChoroplethLayerService: CaseChoroplethLayerService,
     private i18nService: I18nService,
-    private breakPointObserver: BreakpointObserver
+    private breakPointObserver: BreakpointObserver,
+    private countryAggregatorService: CountryAggregatorService
   ) { }
 
   glyphLegend;
@@ -50,6 +55,10 @@ export class InfoboxComponent implements OnInit {
 
   @Output()
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
+
+  aggregatedDiviStatistics: QualitativeTimedStatusAggregation;
+
+  aggregatedRkiStatistics: QuantitativeAggregatedRkiCasesProperties;
 
   // ENUM MAPPING
   // because in HTML, this stuff cannot be accessed
@@ -100,6 +109,19 @@ export class InfoboxComponent implements OnInit {
       {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
       {name: 'ECMO', accessor: 'showEcmo', color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
     ];
+
+
+    this.countryAggregatorService.diviAggregationForCountry()
+    .subscribe(r => {
+      this.aggregatedDiviStatistics = r;
+      console.log('agg', r);
+    });
+
+    this.countryAggregatorService.rkiAggregationForCountry()
+    .subscribe(r => {
+      this.aggregatedRkiStatistics = r;
+      console.log('agg rki', r);
+    })
   }
 
   emitCaseChoroplethOptions() {
