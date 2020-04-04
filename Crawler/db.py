@@ -6,7 +6,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 import geojson
 import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Float
+from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey
 
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import deferred
@@ -15,6 +15,8 @@ from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
 
 from sqlalchemy.dialects.postgresql import JSONB
+
+from sqlalchemy.orm import relationship
 
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -94,6 +96,95 @@ class Hospital(Base):
     icu_low_state = Column(String(255))
     icu_high_state = Column(String(255))
     ecmo_state = Column(String(255))
+    
+    last_update = Column(DateTime)
+    
+    insert_date = Column(DateTime, default=datetime.datetime.utcnow)
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def __repr__(self):
+        return '<Hospital %r>' % (self.name)
+
+    def as_dict(self):
+        return {
+            'id':
+            self.id,
+            'name':
+            self.name,
+            'address':
+            self.address,
+            'state':
+            self.state,
+            'location':
+            geojson.Feature(geometry=(to_shape(self.location)), properties={}),
+        }
+        
+        
+class HospitalExtendedBeds(Base):
+    """
+    Beds data class
+    """
+    __tablename__ = 'hospital_extended_beds'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    hospital_id = Column(Integer, ForeignKey('hospital_extended.id'))
+    beds_id = Column(Integer, ForeignKey('beds.id'))
+
+    insert_date = Column(DateTime, default=datetime.datetime.utcnow)
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+        
+        
+class Beds(Base):
+    """
+    Bed data class
+    """
+    # db table name
+    __tablename__ = 'beds'
+
+    # columns
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(255), nullable=False)
+    available_beds = Column(Integer)
+    casesecmoyear = Column(Integer)
+    bed_type = Column(String(255))
+    description = Column(String(255))
+    
+    last_update = Column(DateTime)
+    
+    insert_date = Column(DateTime, default=datetime.datetime.utcnow)
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def __repr__(self):
+        return '(' + self.name + ')'
+
+        
+        
+class HospitalExtended(Base):
+    """
+    HospitalExtended data class
+    """
+    __tablename__ = 'hospital_extended'
+    
+    # Name,Adress,String,Kontakt,Bundesland,ICU low care,ICU high care,ECMO,Stand,Location
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    hospital_id = Column(Integer)
+    name = Column(String(255), nullable=False)
+    address = Column(String(255), nullable=False)
+    state = Column(String(255), nullable=False)
+    contact = Column(String(255))
+    location = Column(Geometry(geometry_type='POINT', srid=4326))
+    icu_low_state = Column(String(255))
+    icu_high_state = Column(String(255))
+    ecmo_state = Column(String(255))
+    
+    covidcases = Column(Integer)
     
     last_update = Column(DateTime)
     
