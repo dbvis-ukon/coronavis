@@ -1,8 +1,14 @@
-<!--h1 mat-dialog-title></h1-->
+<!--h1 mat-dialog-title></h1
+<div class="close-button-wrapper">
+  <button class="close-button" (click)="close()" mat-icon-button aria-label="Close Dialog">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>-->
+
 <div class="main" mat-dialog-content>
-  <app-hospital-info [data]="data" mode="dialog"></app-hospital-info>
+  <app-hospital-info (closeClicked)="close()" [data]="data" mode="dialog"></app-hospital-info>
 </div>
-<div style="float: right;" mat-dialog-actions>
+<!-- <div style="float: right;" mat-dialog-actions>
   <button class="mat-raised-button"(click)="close()" i18n="button@@close">Schließen</button>
-</div>
+</div> -->
 

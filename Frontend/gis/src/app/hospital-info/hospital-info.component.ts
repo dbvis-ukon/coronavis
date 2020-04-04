@@ -1,11 +1,10 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {QualitativeColormapService} from '../services/qualitative-colormap.service';
 import {SingleHospitalOut} from '../repositories/types/out/single-hospital-out';
 import {QualitativeTimedStatus} from '../repositories/types/in/qualitative-hospitals-development';
 import {AggregatedHospitalOut} from '../repositories/types/out/aggregated-hospital-out';
 import {BedType} from "../map/options/bed-type.enum";
 import * as moment from 'moment';
-import {QuantitativeColormapService} from '../services/quantitative-colormap.service';
 import { TranslationService } from '../services/translation.service';
 
 @Component({
@@ -26,6 +25,9 @@ export class HospitalInfoComponent implements OnInit {
   mode: 'dialog' | 'tooltip';
   @Input()
   data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
+
+  @Output()
+  closeClicked: EventEmitter<number> = new EventEmitter();
 
   glyphLegendColors = QualitativeColormapService.bedStati;
 
@@ -180,6 +182,9 @@ export class HospitalInfoComponent implements OnInit {
     return this.colormapService.getSingleHospitalColormap()(str);
   }
 
+  close() {
+    this.closeClicked.emit(Math.random());
+  }
 
   private prepareBarCharts() {
     const bedStati = this.glyphLegendColors;

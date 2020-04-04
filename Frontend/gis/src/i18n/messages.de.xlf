@@ -938,6 +938,14 @@
       <segment state="final">
         <source>Kontakt: </source>
       <target>Kontakt: </target></segment>
+    </unit><unit id="legendToggleTooltip">
+      <notes>
+        <note category="location">src/app/legend/legend.component.html:4</note>
+        <note category="location">src/app/legend/legend.component.html:36</note>
+      </notes>
+      <segment state="final">
+        <source>Klicken um Legende ein-/auszuklappen</source>
+      <target>Klicken um Legende ein-/auszuklappen</target></segment>
     </unit><unit id="tooltipHospitalLastUpdate">
       <notes>
 
@@ -964,7 +972,7 @@
         <note category="description">beds</note>
         <note category="meaning">legend</note>
 
-      <note category="location">src/app/legend/legend.component.html:34</note></notes>
+      <note category="location">src/app/legend/legend.component.html:36</note></notes>
       <segment state="final">
         <source>Bettenauslastung</source>
       <target>Bettenauslastung</target></segment>

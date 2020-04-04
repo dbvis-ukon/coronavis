@@ -1,4 +1,4 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
+import {NgModule, LOCALE_ID, ErrorHandler} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -52,6 +52,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MapRootComponent } from './map-root/map-root.component';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { SentryErrorHandler } from './sentry-config';
 
 // the second parameter 'fr-FR' is optional
 registerLocaleData(localeDe, 'de-DE');
@@ -170,7 +171,12 @@ export const localeProvider = {
     },
     PlusminusPipe, 
     DecimalPipe, 
-    TranslatePipe],
+    TranslatePipe,
+    { 
+      provide: ErrorHandler, 
+      useClass: SentryErrorHandler 
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

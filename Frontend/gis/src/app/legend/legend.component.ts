@@ -18,8 +18,18 @@ export class LegendComponent implements OnInit {
 
   agg = AggregationLevel;
   bed = BedType;
+  
+  legendCasesExtended = true;
+  legendBedsExtended = true;
 
   bedStatusColors = QuantitativeColormapService.bedStati;
+  bedStatusIcons = {
+    'Verfügbar': 'V',
+    'Begrenzt': 'B',
+    'Ausgelastet': 'A',
+    'Nicht verfügbar': '–',
+    'Keine Information': '?'
+  };
 
   private _choroplethLayer: CaseChoropleth;
 
@@ -35,6 +45,8 @@ export class LegendComponent implements OnInit {
   }
 
   caseColors = [];
+  casesMin = '';
+  casesMax = '';
 
   constructor(
     private colmapService: QuantitativeColormapService) {
@@ -71,6 +83,8 @@ export class LegendComponent implements OnInit {
     let decimals: number = 0;
 
     const doneMap = new Map<number, boolean>();
+
+    this.casesMin = '';
   
     cmap.range().map((color, i) => {
       const d = cmap.invertExtent(color);
@@ -88,11 +102,12 @@ export class LegendComponent implements OnInit {
 
       d0Fixed = +d0Fixed.toFixed(decimals);
       d1Fixed = +d1Fixed.toFixed(decimals);
+      this.casesMax = d1Fixed + '';
 
       const d0Ceil = Math.ceil(d0Fixed);
       const d1Ceil = Math.ceil(d1Fixed);
 
-      let text = d0Fixed + ((d[1]) ? ' &ndash; ' + d1Fixed : '+' );
+      let text = d0Fixed + ((d[1]) ? ' – ' + d1Fixed : '+' );
 
       let binLowerBound = d0Fixed;
       let binUpperBound = d1Fixed;
@@ -101,21 +116,17 @@ export class LegendComponent implements OnInit {
         if (d1Fixed - d0Fixed < 1) {
           if (d0Ceil === d1Ceil && !doneMap.get(d0Ceil)) {
             doneMap.set(d0Ceil, true);
-            text = Math.floor(d0Fixed) + '';
             binLowerBound = Math.floor(d0Fixed);
           } else if (d1Ceil === d1Fixed) {
-            text = d1Ceil + '';
             binUpperBound = d1Ceil;
           } else {
             return;
           }                    
         } else {
           if (d0Ceil === d1Ceil) {
-            text = d1Ceil + '';
             binLowerBound = d0Ceil;
             binUpperBound = d1Ceil;
           } else {
-            text = d0Ceil + ' &ndash; ' + d1Ceil;
             binLowerBound = d0Ceil;
             binUpperBound = d1Ceil;
           } 
@@ -123,7 +134,10 @@ export class LegendComponent implements OnInit {
       }
 
       if (v.MinMax[0] < d[0] && v.MinMax[1] > d[1] ) {
-
+        if (this.casesMin === '') {
+          this.casesMin = (text === Math.floor(d0Fixed) + '' ? Math.floor(d0Fixed) : d0Fixed) + '';
+        }
+        
         this.caseColors.push(
           {
             color: color,
