@@ -7,6 +7,7 @@ import {BedType} from "../map/options/bed-type.enum";
 import * as moment from 'moment';
 import {QuantitativeColormapService} from '../services/quantitative-colormap.service';
 import { TranslationService } from '../services/translation.service';
+import { HospitalInfoDialogComponent } from '../hospital-info-dialog/hospital-info-dialog.component';
 
 @Component({
   selector: 'app-hospital-info',
@@ -26,6 +27,9 @@ export class HospitalInfoComponent implements OnInit {
   mode: 'dialog' | 'tooltip';
   @Input()
   data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
+
+  @Input()
+  dialogReference: HospitalInfoDialogComponent;
 
   glyphLegendColors = QualitativeColormapService.bedStati;
 
