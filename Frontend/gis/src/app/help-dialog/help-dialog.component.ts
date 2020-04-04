@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import {BreakpointObserver} from "@angular/cdk/layout";
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 
 @Component({
@@ -15,12 +16,18 @@ export class HelpDialogComponent implements OnInit {
     private breakPointObserver: BreakpointObserver
   ) { }
 
+  public isSmallScreen;
+
   ngOnInit(): void {
     //close help dialog if mobile
-    const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
-    if(isSmallScreen){
-      this.dialogRef.close();
-    }
+    this.isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
+    //if(isSmallScreen){
+    //  this.dialogRef.close();
+    //}
+  }
+
+  onResize(event){
+    this.isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
   }
 
   close(): void {
