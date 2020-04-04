@@ -18,6 +18,14 @@ export function getLatest(entries: TimestampedValue[]): number {
   return currentEntry.value;
 }
 
+export function getLatestTimedStatus<T extends QualitativeTimedStatus | QuantitativeTimedStatus>(entries: Array<T>): T | null {
+  if(!entries) {
+    return null;
+  }
+  const last = entries[entries.length - 1];
+  return last;
+}
+
 export function getLatestQuantitativeTimedStatus(entries: Array<AbstractTimedStatus>): QuantitativeTimedStatus {
   if(!entries) {
     return null;
