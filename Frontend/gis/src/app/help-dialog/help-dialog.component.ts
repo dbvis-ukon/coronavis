@@ -26,6 +26,10 @@ export class HelpDialogComponent implements OnInit {
     //}
   }
 
+  onResize(event){
+    this.isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
+  }
+
   close(): void {
     this.dialogRef.close();
   }
