@@ -1,0 +1,66 @@
+<div [ngClass]="{ footer: true, vertical: mode === 'vertical' }">
+
+
+    <a 
+    mat-icon-button 
+    (click)="openVideo()" 
+    i18n-matTooltip="@@buttonPanelTooltipVideo" 
+    matTooltip="Video über CoronaVis (Deutsch)"
+    [matTooltipPosition]="mode === 'vertical' ? 'right' : 'below'"
+    >
+      <mat-icon>live_tv</mat-icon>
+    </a>
+
+    <a 
+    mat-icon-button 
+    (click)="openHelp()" 
+    i18n-matTooltip="@@buttonPanelTooltipHelp" 
+    matTooltip="Hilfe"
+    [matTooltipPosition]="mode === 'vertical' ? 'right' : 'below'"
+    >
+      <mat-icon>help</mat-icon>
+    </a>
+
+    <a 
+    mat-icon-button 
+    (click)="openAbout()" 
+    i18n-matTooltip="@@buttonPanelTooltipTeam" 
+    matTooltip="Team"
+    [matTooltipPosition]="mode === 'vertical' ? 'right' : 'below'"
+    >
+      <mat-icon>group</mat-icon>
+    </a>
+
+
+    <a 
+    mat-icon-button 
+    (click)="openImpressum()" 
+    i18n-matTooltip="@@buttonPanelTooltipImprint" 
+    matTooltip="Impressum"
+    [matTooltipPosition]="mode === 'vertical' ? 'right' : 'below'"
+    >
+      <mat-icon>priority_high</mat-icon>
+    </a>
+
+    <a 
+    *ngIf="!mo.hideInfobox"
+    mat-icon-button 
+    (click)="openShare()" 
+    i18n-matTooltip="@@buttonPanelTooltipShare" 
+    matTooltip="Teilen"
+    [matTooltipPosition]="mode === 'vertical' ? 'right' : 'below'"
+    >
+      <mat-icon>share</mat-icon>
+    </a>
+
+    <span class="spacer"></span>
+
+    <mat-form-field class="locale" *ngIf="!mo.hideInfobox">
+      <mat-label i18n="infobox | infobox@@footer5">Sprache</mat-label>
+      <mat-select (selectionChange)="changeLocale($event)" [value]="selectedLocale">
+        <mat-option *ngFor="let locale of supportedLocales" [value]="locale">
+          {{ locale.slice(0, 2) }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>

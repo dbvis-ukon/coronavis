@@ -53,6 +53,7 @@ import { MapRootComponent } from './map-root/map-root.component';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { SentryErrorHandler } from './sentry-config';
+import { ButtonPanelComponent } from './button-panel/button-panel.component';
 
 // the second parameter 'fr-FR' is optional
 registerLocaleData(localeDe, 'de-DE');
@@ -131,6 +132,7 @@ export const localeProvider = {
     OsmTooltipComponent,
     MapRootComponent,
     ShareDialogComponent,
+    ButtonPanelComponent,
   ],
   imports: [
     BrowserModule,

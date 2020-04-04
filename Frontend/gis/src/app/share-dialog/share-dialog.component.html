@@ -1,4 +1,15 @@
-<h1 mat-dialog-title i18n="@@shareTitle">Visualisierung Teilen</h1>
+<div class="title-row">
+  <h1 mat-dialog-title i18n="@@shareTitle">
+    Visualisierung Teilen
+  </h1>
+
+  <span class="spacer"></span>
+
+  <button (click)="close()" mat-icon-button aria-label="Close Dialog">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
 
 
 <div mat-dialog-content>
@@ -26,7 +37,7 @@
     </mat-tab>
     <mat-tab label="IFrame">
 
-      <p class="intro" i18n="@shareExplIframe">Mit der untenstehenden URL können Sie die Visualisierung mit ihren gewählten Einstellungen und dem momentanen Kartenausschnitt teilen. 
+      <p class="intro" i18n="@shareExplIframe">Mit dem IFrame können Sie die Visualisierung mit ihren gewählten Einstellungen und dem momentanen Kartenausschnitt in ihre Webseite einbetten. 
         Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</p>
     
       <mat-form-field style.fontSize="'8px'" class="urlfield">

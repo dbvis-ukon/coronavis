@@ -68,11 +68,6 @@ export class InfoboxComponent implements OnInit {
   eAggregationLevels = AggregationLevel;
 
 
-  supportedLocales: string[];
-
-  selectedLocale: SupportedLocales;
-
-
   glyphLoading = false;
   bedChoroplethLoading = false;
   caseChoroplethLoading = false;
@@ -85,12 +80,6 @@ export class InfoboxComponent implements OnInit {
     if(isSmallScreen){
       this.mo.extendInfobox = false;
     }
-
-    this.supportedLocales = this.i18nService.getSupportedLocales();
-
-    this.i18nService.currentLocale().subscribe(l => {
-      this.selectedLocale = l;
-    })
 
     this.glyphLayerService.loading$.subscribe(l => this.glyphLoading = l);
     this.bedChoroplethLayerService.loading$.subscribe(l => this.bedChoroplethLoading = l);
@@ -167,41 +156,5 @@ export class InfoboxComponent implements OnInit {
     this.mapOptionsChange.emit({...this.mo});
   }
 
-  openAbout() {
-    this.dialogService.open(AboutComponent, {
-		panelClass: 'popup-panel-white-glass-background'
-	});
-  }
-
-  openImpressum() {
-    this.dialogService.open(ImpressumComponent);
-  }
-
-  openVideo() {
-    window.open('https://video.coronavis.dbvis.de', '_blank');
-    // location.href = 'https://video.coronavis.dbvis.de';
-  }
-
-  changeLocale(evt) {
-    this.i18nService.updateLocale(evt.value);
-
-    const url = evt.value.slice(0,2);
-
-    location.href = `/${url}/`;
-  }
-
-
-  openHelp() {
-    this.dialogService.open(HelpDialogComponent);
-  }
-
-  openShare() {
-    this.dialogService.open(ShareDialogComponent, {
-      minWidth: '80vw',
-      data: {
-        mo: JSON.parse(JSON.stringify(this.mo)),
-        mls: JSON.parse(JSON.stringify(this.mls))
-      }
-    });
-  }
+  
 }
