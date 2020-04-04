@@ -12,7 +12,7 @@ import {BedType} from '../map/options/bed-type.enum';
 import {CaseChoropleth} from '../map/overlays/casechoropleth';
 import {MapOptions} from '../map/options/map-options';
 import {environment} from 'src/environments/environment';
-import {APP_CONFIG_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY} from "../../constants";
+import {APP_CONFIG_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, APP_CONFIG_URL_KEY, MAP_LOCATION_SETTINGS_URL_KEY} from "../../constants";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {HelpDialogComponent} from "../help-dialog/help-dialog.component";
@@ -21,6 +21,9 @@ import { TranslationService } from '../services/translation.service';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { BehaviorSubject, of } from 'rxjs';
 import { safeDebounce } from '../util/safe-debounce';
+import { UrlHandlerService } from '../services/url-handler.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { merge } from 'lodash-es';
 
 @Component({
   selector: 'app-map-root',
@@ -87,11 +90,18 @@ export class MapRootComponent implements OnInit {
   constructor(private snackbar: MatSnackBar,
               private dialog: MatDialog,
               private i18nService: I18nService,
-              private translationService: TranslationService
+              private translationService: TranslationService,
+              private urlHandlerService: UrlHandlerService,
+              private router: Router,
+              private route: ActivatedRoute
               ) {
   }
 
   ngOnInit(): void {
+    //TESTING
+
+    // this.router.navigate(['/map', {mlo: this.urlHandlerService.convertMLOToUrl(this.defaultMapOptions)}]);
+
     this.i18nService.initI18n();
 
 
@@ -123,6 +133,9 @@ export class MapRootComponent implements OnInit {
 
   mapOptionsUpdated(newOptions: MapOptions) {
     this.mapOptions = newOptions;
+
+    console.log(this.urlHandlerService.convertMLOToUrl(this.mapOptions));
+
     localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(newOptions));
   }
 
@@ -148,17 +161,38 @@ export class MapRootComponent implements OnInit {
   }
 
   restoreSettingsFromLocalStorageOrUseDefault() {
+    // try from url params
+    const paramMap = this.route.snapshot.paramMap;
+
     const storedMapOptions = JSON.parse(localStorage.getItem(APP_CONFIG_KEY)) as MapOptions;
+
+    // will show the snack bar if true
     let restored = false;
-    if (storedMapOptions) {
-      this.mapOptions = storedMapOptions;
+
+    if(paramMap.has(APP_CONFIG_URL_KEY)) {
+      const urlMlo = this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY));
+
+      const mergedMlo = merge<MapOptions, MapOptions>(this.defaultMapOptions, urlMlo);
+
+      this.mapOptions = mergedMlo;
+    } else if (storedMapOptions) {
+      // merge with default as basis is necessary when new options are added in further releases
+      this.mapOptions = merge<MapOptions, MapOptions>(this.defaultMapOptions, storedMapOptions);
       restored = true;
     }
 
+
     const storedMapLocationSettings = JSON.parse(localStorage.getItem(MAP_LOCATION_SETTINGS_KEY)) as MapLocationSettings;
-    if(storedMapLocationSettings) {
+
+    if(paramMap.has(MAP_LOCATION_SETTINGS_URL_KEY)) {
+      const urlMls = this.urlHandlerService.convertUrlToMLS(paramMap.get(MAP_LOCATION_SETTINGS_URL_KEY));
+
+      const mergedMls = merge<MapLocationSettings, MapLocationSettings>(this.defaultMapLocationSettings, urlMls);
+
+      this.initialMapLocationSettings = mergedMls;
+    } else if(storedMapLocationSettings) {
       // this.mapLocationSettings$.next(storedMapLocationSettings);
-      this.initialMapLocationSettings = storedMapLocationSettings;
+      this.initialMapLocationSettings = merge<MapLocationSettings, MapLocationSettings>(this.defaultMapLocationSettings, storedMapLocationSettings);
       restored = true;
     }
 

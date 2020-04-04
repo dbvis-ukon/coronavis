@@ -4,6 +4,10 @@ import { MapRootComponent } from './map-root/map-root.component';
 
 const routes: Routes = [
   {
+    path: 'map',
+    component: MapRootComponent
+  },
+  {
     path: '',
     component: MapRootComponent,
   }
