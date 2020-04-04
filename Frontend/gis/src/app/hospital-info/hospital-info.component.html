@@ -1,7 +1,17 @@
 <div>
-  <h3 class="name">{{ data.name }}</h3>
+  <div class="title-row">
+      <div class="title-row-title">
+        <h3 class="name">{{ data.name }}</h3>
+  
+        <p class="numHospitals" *ngIf="!isSingleHospital">({{ totalNumberOfHospitals }} <span i18n="tooltip | hospitals@reported">gemeldete Krankenhäuser</span>)</p>
+      </div>
+      <div *ngIf="mode === 'dialog'">
+        <button (click)="close()" mat-icon-button aria-label="Close Dialog" matTooltip="Close Window">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div> 
+  </div>
 
-  <p class="numHospitals" *ngIf="!isSingleHospital">({{ totalNumberOfHospitals }} <span i18n="tooltip | hospitals@reported">gemeldete Krankenhäuser</span>)</p>
   <mat-divider></mat-divider>
 
   <div class="content">
