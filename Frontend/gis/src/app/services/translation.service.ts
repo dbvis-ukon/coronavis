@@ -27,6 +27,22 @@ export class TranslationService {
       'de-DE': 'Keine Information',
       'en-US': 'No Information'
     },
+    // Abbreviations of capacity stati
+    // Verfügbar
+    {
+      'de-DE': 'V',
+      'en-US': 'A​' // This is 'a<zero-width space>', otherwise 'A' won't translate to 'F' for 'Ausgelastet'
+    },
+    // Begrenzt
+    {
+      'de-DE': 'B',
+      'en-US': 'L'
+    },
+    // Ausgelasted
+    {
+      'de-DE': 'A',
+      'en-US': 'F'
+    },
     {
       'de-DE': 'Der Kartenausschnitt aus Ihrem letzten Besuch wurde wiederhergestellt',
       'en-US': 'The map from your last visit has been restored'

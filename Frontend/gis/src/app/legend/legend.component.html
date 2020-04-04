@@ -1,10 +1,8 @@
 
 
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === false && choroplethLayer">
-  <h5 i18n="legend|cases@@cases">Fallzahlen</h5>
-
-    <div>
-
+  <h5 i18n="legend|cases@@cases" (click)="legendCasesExtended = !legendCasesExtended" i18n-matTooltip="@@legendToggleTooltip" matTooltip="Klicken um Legende ein-/auszuklappen">Fallzahlen</h5>
+    <div *ngIf="legendCasesExtended">
     <table>
 
       <tr *ngFor="let b of caseColors">
@@ -15,24 +13,29 @@
           {{ b.binLowerBound | number }}
         </td>
 
-        <td class="dash">&ndash;</td>
+        <td class="dash">–</td>
 
         <td class="upper">
           {{ b.binUpperBound | number }}
         </td>
       </tr>
-
-
     </table>
-
     </div>
-
+        
+    <div *ngIf="!legendCasesExtended">
+      <div class="row">
+        <div class="text" [innerHtml]="casesMin | number"></div>
+        <div *ngFor="let b of caseColors;"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.binLowerBound | number }} – {{ b.binUpperBound | number }}"></div>
+        <div class="text" [innerHtml]="casesMax | number"></div>
+      </div>
+    </div>
 </div>
 
 
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === true || mo.bedGlyphOptions.enabled === true" >
-  <h5 i18n="legend|beds@@beds">Bettenauslastung</h5>
+  <h5 i18n="legend|beds@@beds" (click)="legendBedsExtended = !legendBedsExtended" i18n-matTooltip="@@legendToggleTooltip" matTooltip="Klicken um Legende ein-/auszuklappen">Bettenauslastung</h5>
 
+  <div *ngIf="legendBedsExtended">
   <table>
     <tr *ngFor="let b of bedStatusColors">
       <td><div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div></td>
@@ -40,6 +43,17 @@
       <td class="text">{{ b | translate }}</td>
     </tr>
   </table>
+  </div>
+  
+  <div *ngIf="!legendBedsExtended">
+    <div class="row">
+      <div class="beside" *ngFor="let b of bedStatusColors;" matTooltip="{{ b | translate }}">
 
+        <div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div>
 
+        <div class="text">{{ bedStatusIcons[b] | translate }}</div>
+
+      </div>
+    </div>
+  </div>
 </div>
