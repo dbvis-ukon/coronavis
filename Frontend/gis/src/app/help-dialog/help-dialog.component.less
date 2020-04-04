@@ -6,19 +6,33 @@ button {
 .helpimg {
   width: 100%;
   height: auto;
-  justify-content: space-around;
-  flex-grow: 4;
+  max-height: auto;
 }
 
-.helptxt {
-  user-select: auto;
-  max-width: 600px;
-  flex-grow: 1;
-  text-align: justify;
-}
 
-.helpdsc {
-  display: flex;
-  flex-flow: nowrap;
-  flex-direction: row;
+@media (max-width: 36em) {
+  mat-dialog-content{
+    padding: 0px;
+  }
+  li {
+    
+    padding-left:0em;
+    margin-left: -2em;
+  }
+  h1 {
+    font-size: medium;
+    font-weight: bold;
+  }
+  mat-stepper-horizontal,
+  mat-horizontal-stepper{
+    width:100%;
+    padding:0px;
+    margin:0px;
+  }
+
+  mat-horizontal-content-container {
+    padding:0px;
+    margin:0px;
+    width:100%;
+  }
 }

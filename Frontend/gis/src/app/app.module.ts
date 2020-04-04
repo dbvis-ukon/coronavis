@@ -48,6 +48,7 @@ import { SupportedLocales } from './services/i18n.service';
 import { TranslatePipe } from './translate.pipe';
 import {SentryErrorHandler} from "./sentry-config";
 import { MatToolbarModule } from '@angular/material/toolbar';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 // the second parameter 'fr-FR' is optional
 
@@ -123,7 +124,8 @@ if(storedLocale === SupportedLocales.DE_DE) {
     MatSelectModule,
     MatSnackBarModule,
     MatStepperModule,
-    MatToolbarModule
+    MatToolbarModule,
+    FlexLayoutModule
   ],
   providers: [localeProvider, PlusminusPipe, DecimalPipe, TranslatePipe, { provide: ErrorHandler, useClass: SentryErrorHandler }],
   bootstrap: [AppComponent]
