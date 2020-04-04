@@ -24,13 +24,13 @@
         <p  i18n="help| help@@visdescription17">[1] <a href="http://divi.de">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</a></p>
       </div>
       <div fxLayout="row" fxLayout.xs="column">
-        <button mat-button mat-raised-button color="primary" matStepperNext  i18n="help| help@@button11">Zur Beschreibung der Kapazitätsdarstellung</button>
+        <button mat-button mat-raised-button color="primary" matStepperNext  i18n="help| help@@button11">{{ isSmallScreen ? 'Weiter' : 'Zur Beschreibung der Kapazitätsdarstellung' }}</button>
         <button mat-button mat-stroked-button (click)="close()"   i18n="help| help@@button12">Fenster schließen</button>
       </div>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel  i18n="help| help@@menu2">{{ isSmallScreen ? "" : 'Darstellung der Bettenkapazitäten' }}</ng-template>
-      <h1 id="beschreibung-der-darstellung-der-bettenkapazitäten"   i18n="help| help@@title2">{{ isSmallScreen ? 'Weiter' : 'Beschreibung der Darstellung der Bettenkapazitäten' }}</h1>
+      <h1 id="beschreibung-der-darstellung-der-bettenkapazitäten"   i18n="help| help@@title2">Beschreibung der Darstellung der Bettenkapazitäten</h1>
       <div fxLayout="row" fxLayout.xs="column" class="visdescription">
         <div fxFlex class="helpimg">
           <img flex="66" class="helpimg" style="max-width: 550px;" src="/assets/covisexpl1.png" alt="Explanation Figure">
