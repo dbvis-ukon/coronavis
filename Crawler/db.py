@@ -122,22 +122,6 @@ class Hospital(Base):
         }
         
         
-class HospitalExtendedBeds(Base):
-    """
-    Beds data class
-    """
-    __tablename__ = 'hospital_extended_beds'
-    
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    hospital_id = Column(Integer, ForeignKey('hospital_extended.id'))
-    beds_id = Column(Integer, ForeignKey('beds.id'))
-
-    insert_date = Column(DateTime, default=datetime.datetime.utcnow)
-
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
-        
-        
 class Beds(Base):
     """
     Bed data class
@@ -147,6 +131,7 @@ class Beds(Base):
 
     # columns
     id = Column(Integer, primary_key=True, autoincrement=True)
+    hospital_id = Column(Integer, ForeignKey('hospital_extended.id'), nullable=False)
     name = Column(String(255), nullable=False)
     available_beds = Column(Integer)
     casesecmoyear = Column(Integer)
