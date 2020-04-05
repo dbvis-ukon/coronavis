@@ -140,7 +140,7 @@ export class MapComponent implements OnInit {
 
     this.mymap = L.map('main', {
       minZoom: 6,
-      maxZoom: 14,
+      maxZoom: 11,
       layers: [tiledMap],
       zoomControl: false
     }).setView(mapLocationSettings.center, mapLocationSettings.zoom);
