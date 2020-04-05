@@ -1,24 +1,15 @@
-import db_config
-
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-
-import geojson
 import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey
-
-from sqlalchemy.orm import backref
-from sqlalchemy.orm import deferred
-
+import db_config
+import geojson
 from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
-
+from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, String,
+                        create_engine)
 from sqlalchemy.dialects.postgresql import JSONB
-
-from sqlalchemy.orm import relationship
-
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import (backref, deferred, relationship, scoped_session,
+                            sessionmaker)
 
 Base = declarative_base()
 
@@ -122,22 +113,6 @@ class Hospital(Base):
         }
         
         
-class HospitalExtendedBeds(Base):
-    """
-    Beds data class
-    """
-    __tablename__ = 'hospital_extended_beds'
-    
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    hospital_id = Column(Integer, ForeignKey('hospital_extended.id'))
-    beds_id = Column(Integer, ForeignKey('beds.id'))
-
-    insert_date = Column(DateTime, default=datetime.datetime.utcnow)
-
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
-        
-        
 class Beds(Base):
     """
     Bed data class
@@ -147,6 +122,7 @@ class Beds(Base):
 
     # columns
     id = Column(Integer, primary_key=True, autoincrement=True)
+    hospital_id = Column(Integer, ForeignKey('hospital_extended.id'), nullable=False)
     name = Column(String(255), nullable=False)
     available_beds = Column(Integer)
     casesecmoyear = Column(Integer)

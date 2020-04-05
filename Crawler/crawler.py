@@ -2,41 +2,30 @@
 DIVI - Hospitals with their capacities
 https://www.divi.de/register/intensivregister?view=items
 """
-import db
-
+import logging
 import time
-import pandas
 import traceback
 
-import requests
+import pandas
 
+import db
+import requests
+from geoalchemy2.shape import to_shape
 from sqlalchemy import func
 
-from geoalchemy2.shape import to_shape 
-
-import logging
 logger = logging.getLogger(__name__)
 
 
 def legends(class_input):
     if class_input == None:
         return 'Nicht verfügbar'
+    if 'NICHT_VERFUEGBAR' in class_input:
+        return 'Ausgelastet'
     if 'VERFUEGBAR' in class_input:
         return 'Verfügbar'
     if 'BEGRENZT' in class_input:
         return 'Begrenzt'
-    if 'NICHT_VERFUEGBAR' in class_input:
-        return 'Ausgelastet'
     return ''
-    
-    
-def get_html_content(url, data):
-    data = urllib.parse.urlencode(data)
-    data = data.encode('utf-8')
-    page = urllib.request.urlopen(url, data)
-
-    html_data = page.read()
-    return html_data
 
 
 def remove_spaces(text):
