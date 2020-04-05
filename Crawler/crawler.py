@@ -6,15 +6,11 @@ import db
 
 import time
 import pandas
+import traceback
 
-import urllib.parse
-import urllib.request
-
-from bs4 import BeautifulSoup
+import requests
 
 from sqlalchemy import func
-
-from geopy.geocoders import Nominatim, ArcGIS, Photon
 
 from geoalchemy2.shape import to_shape 
 
@@ -23,14 +19,14 @@ logger = logging.getLogger(__name__)
 
 
 def legends(class_input):
-    if 'green' in class_input:
-        return 'Verfügbar'
-    if 'yellow' in class_input:
-        return 'Begrenzt'
-    if 'red' in class_input:
-        return 'Ausgelastet'
-    if 'unavailable' in class_input:
+    if class_input == None:
         return 'Nicht verfügbar'
+    if 'VERFUEGBAR' in class_input:
+        return 'Verfügbar'
+    if 'BEGRENZT' in class_input:
+        return 'Begrenzt'
+    if 'NICHT_VERFUEGBAR' in class_input:
+        return 'Ausgelastet'
     return ''
     
     
@@ -71,139 +67,135 @@ def get_geo_location(adress):
     return loc, location
 
 
-def crawl_webpage(url, data):
+def crawl_webpage(url):
     
-    html_data = get_html_content(url, data)
+    r = requests.get(url)
+    rj = r.json()
 
-    soup = BeautifulSoup(html_data, 'html.parser')
-
-    # print(soup.prettify())
-
+    print(rj['rowCount'])
+    
+    url_melde = 'https://www.intensivregister.de/api/public/stammdaten/krankenhausstandort/{0}/meldebereiche'
+    
     hospital_entries = []
-    hospital_table = soup.find(id='dataList').find('tbody').find_all('tr')
-    for hospital_row in hospital_table:
-        hospital_entry = []
-        for i, td in enumerate(hospital_row.find_all('td')):
-            tmp = remove_spaces(td.text)
-            
-            if i == 0:
-                small = td.find_all('small')
-                if len(small) > 1:
-                    adress = ' '.join(small[-2].text.split()) + ', ' + ' '.join(small[-1].text.split())
-                else:
-                    adress = tmp
-                for small in td.find_all('small'):
-                    small.decompose()
-                name = remove_spaces(td.text)
-                hospital_entry.append(name)
-                hospital_entry.append(adress)
-                hospital_entry.append(tmp)
+    hospital_entries_extended = []
+    hospital_beds_entries_extended = []
+    
+    len_ = len(rj['data'])
+    for i, x in enumerate(rj['data']):
+        logger.info(str(i) + ' / ' + str(len_))
+        
+        name = x['krankenhausStandort']['bezeichnung']
+        
+        address = str(x['krankenhausStandort']['strasse'])
+        address += ' '
+        address += str(x['krankenhausStandort']['hausnummer'])
+        address += ' '
+        address += str(x['krankenhausStandort']['plz'])
+        address += ' '
+        address += str(x['krankenhausStandort']['ort'])
+        
+        state = x['krankenhausStandort']['bundesland']
+        
+        location = '('
+        location += str(x['krankenhausStandort']['position']['longitude'])
+        location += ' '
+        location += str(x['krankenhausStandort']['position']['latitude'])
+        location += ')'
+        
+        icu_low_state = legends(x['bettenStatus']['statusLowCare'])
+        
+        icu_high_state = legends(x['bettenStatus']['statusHighCare'])
+        
+        ecmo_state = legends(x['bettenStatus']['statusECMO'])
+        
+        last_update = x['meldezeitpunkt']
+        
+        hospital_id = x['id']
+        
+        tmp_url = url_melde.format(str(hospital_id))
+        r_melde = requests.get(tmp_url)
+        rj_melde = r_melde.json()
+        
+        contact = ''
+        for y in rj_melde:
+            if len(y['ansprechpartner']):
+                for c in y['ansprechpartner']:
+                    contact += str(c['zustaendigkeit']['bezeichnung']) + ' : ' + str(c['nachname']) + ' : Tel. ' + str(c['telefonnummer'])
+                    contact += ', '
             else:
-                if tmp == '' and td.span != None:
-                    tmp = ' '.join(td.span.get('class'))
-                    tmp = legends(tmp)
-                if td.find('a'):
-                    tmp += ' ' + td.find('a').get('href')
-                hospital_entry.append(tmp)
-            
-        hospital_entries.append(hospital_entry)
-        
-    return hospital_entries
-
-
-def get_hospital_geo_locations(hospital_entries):
-    k = 1
-    
-    len_ = len(hospital_entries)
-    for i, hospital_entry in enumerate(hospital_entries):
-        adress = hospital_entry[1]
-        print(str(i + 1) + ' / ' + str(len_))
-        print('Crawled location: ' + adress)
-        
-        loc = '(0 0)'
-        
-        query = db.sess.query(db.Hospital.location).filter_by(address=adress).order_by(db.Hospital.id.desc()).limit(1).scalar()
-        if query is not None:
-            loc = str(to_shape(query)).replace('POINT', '')
-            if not '(0 0)' in loc:
-                print('Entry in Database')
-            
-        if '(0 0)' in loc:
-            try:
-                loc, location = get_geo_location(adress)
-                print('Found location: ' + str(location))
+                for c in y['tags']:
+                    contact += c
+                    contact += ', '
                 
-            except Exception as e:
-                print('Error ' + str(e))
-            
-            k += 1
-            
-        hospital_entry.append(loc)
-        hospital_entries[i] = hospital_entry
+        contact = contact[:-2]
+        if len(contact) > 255:
+            contact = contact[:250]
         
-        if k % 5 == 0:
-            time.sleep(1)
-            k = 1
-            
+        hospital_entry = [
+            name,
+            address,
+            contact,
+            state,
+            icu_low_state,
+            icu_high_state,
+            ecmo_state,
+            last_update,
+            location
+        ]
+        
+        hospital_entries.append(hospital_entry)
+    
     return hospital_entries
 
 
-def full_fetch(quote_page, values):
-    hospital_entries = crawl_webpage(quote_page, values)
-    hospital_entries = get_hospital_geo_locations(hospital_entries)
+def full_fetch(quote_page):
+    hospital_entries = crawl_webpage(quote_page)
     
-    df = pandas.DataFrame(hospital_entries, columns=['Name', 'Adress', 'String', 'Kontakt', 'Bundesland', 'ICU low care', 'ICU high care', 'ECMO', 'Stand', 'Location'])
-    df['Stand'] =  pandas.to_datetime(df['Stand'], format='%d.%m.%Y %H:%M')
+    df = pandas.DataFrame(hospital_entries, columns=[
+        'name', 
+        'address', 
+        'contact', 
+        'state', 
+        'icu_low_state', 
+        'icu_high_state', 
+        'ecmo_state', 
+        'last_update', 
+        'location'])
+    df['last_update'] =  pandas.to_datetime(df['last_update'])
     
     return df
 
-
-def update_fetch(quote_page, values):
-    hospital_entries = crawl_webpage(quote_page, values)
-    
-    df = pandas.DataFrame(hospital_entries, columns=['Name', 'Adress', 'String', 'Kontakt', 'Bundesland', 'ICU low care', 'ICU high care', 'ECMO', 'Stand'])
-    df['Stand'] =  pandas.to_datetime(df['Stand'], format='%d.%m.%Y %H:%M')
-    
-    return df
 
 if __name__ == "__main__":
     
     try:
 
-        quote_page = 'https://www.divi.de/register/intensivregister?view=items'
-        values = {
-            'list': {
-                'limit': 0
-            }
-        }
+        query_page = 'https://www.intensivregister.de/api/public/intensivregister?page=0&size=10000'
 
-        df = full_fetch(quote_page, values)
+        df = full_fetch(query_page)
         
-        # df.to_csv('rki_hospitals.csv')
-        # df = pandas.read_csv('rki_hospitals.csv', index_col=0)
-        
-        df_to_db = df.drop(['String'], axis=1)
-        if len(df_to_db.columns) == 8:
-            df_to_db.columns = ['name', 'address', 'contact', 'state', 'icu_low_state', 'icu_high_state', 'ecmo_state', 'last_update']
-        else:
-            df_to_db.columns = ['name', 'address', 'contact', 'state', 'icu_low_state', 'icu_high_state', 'ecmo_state', 'last_update', 'location']
-
-        df_to_db['location'] = df_to_db['location'].map(lambda x: str(x).replace('None', '0'))
-        df_to_db['location'] = df_to_db['location'].map(lambda x: 'SRID=4326;POINT' + x.replace(',', ''))
+        df['location'] = df['location'].map(lambda x: str(x).replace('None', '0'))
+        df['location'] = df['location'].map(lambda x: 'SRID=4326;POINT' + x.replace(',', ''))
         
         crawl = db.Crawl(**{
-            'url': quote_page,
-            'text': df_to_db.to_json(),
-            'doc': df_to_db.to_json(),
+            'url': query_page,
+            'text': df.to_json(),
+            'doc': df.to_json(),
         })
         db.sess.add(crawl)
         
-        for index, row in df_to_db.iterrows():
+        for index, row in df.iterrows():
             hospital = db.Hospital(**row.to_dict())
             logger.info(hospital)
             db.sess.add(hospital)
 
         db.sess.commit()
+        
+        exit(0)
     
     except Exception as e:
+        tb = traceback.format_exc()
         logger.error(e)
+        logger.error(tb)
+        
+        exit(-1)
