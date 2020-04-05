@@ -74,7 +74,8 @@ WITH hospital_updates AS (
         hospital.insert_date >= '2020-04-05'
     ORDER BY
         hospital.name,
-        hospital.last_update
+        hospital.last_update,
+        hospital.insert_date desc
 ),
 -- aggregate the hospital information per hospital and create a timeseries
 hospital_updates_aggregated AS (
@@ -220,7 +221,8 @@ latest_hospital_update_per_day AS (
     ORDER BY
         h."name",
         h.last_update :: date,
-        h.last_update desc
+        h.last_update desc,
+        h.insert_date desc
 ) -- now we can left join the hospital timeseries with the latest hospital update per day
 -- additionally we fill empty values in the timeseries with the latest available value 
 ,
@@ -482,7 +484,8 @@ latest_hospital_update_per_day AS (
     ORDER BY
         h."name",
         h.last_update :: date,
-        h.last_update desc
+        h.last_update desc,
+        h.insert_date desc
 ) -- now we can left join the hospital timeseries with the latest hospital update per day
 -- additionally we fill empty values in the timeseries with the latest available value 
 ,
@@ -744,7 +747,8 @@ latest_hospital_update_per_day AS (
     ORDER BY
         h."name",
         h.last_update :: date,
-        h.last_update desc
+        h.last_update desc,
+        h.insert_date desc
 ) -- now we can left join the hospital timeseries with the latest hospital update per day
 -- additionally we fill empty values in the timeseries with the latest available value 
 ,
