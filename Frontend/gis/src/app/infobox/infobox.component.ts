@@ -1,20 +1,15 @@
-import {Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {AggregationLevel} from '../map/options/aggregation-level.enum';
-import {
-  CovidNumberCaseChange,
-  CovidNumberCaseNormalization,
-  CovidNumberCaseTimeWindow,
-  CovidNumberCaseType
-} from '../map/options/covid-number-case-options';
+import { BreakpointObserver } from "@angular/cdk/layout";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
+import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
-import { OSMLayerService } from '../services/osm-layer.service';
-import { GlyphLayerService } from '../services/glyph-layer.service';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
+import { GlyphLayerService } from '../services/glyph-layer.service';
+import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
-import {BreakpointObserver} from "@angular/cdk/layout";
-import { MapLocationSettings } from '../map/options/map-location-settings';
 
 @Component({
   selector: 'app-infobox',

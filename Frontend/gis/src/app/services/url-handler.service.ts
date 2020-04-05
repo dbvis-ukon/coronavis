@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
-import { MapOptions } from '../map/options/map-options';
-import { MapLocationSettings } from '../map/options/map-location-settings';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { APP_CONFIG_URL_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from 'src/constants';
+import { MapLocationSettings } from '../map/options/map-location-settings';
+import { MapOptions } from '../map/options/map-options';
 
 @Injectable({
   providedIn: 'root'

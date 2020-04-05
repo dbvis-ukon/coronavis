@@ -1,29 +1,24 @@
-import {Component, OnInit} from '@angular/core';
-import {FeatureCollection} from 'geojson';
-import {Overlay} from '../map/overlays/overlay';
-import {AggregationLevel} from '../map/options/aggregation-level.enum';
-import {
-  CovidNumberCaseChange,
-  CovidNumberCaseNormalization,
-  CovidNumberCaseTimeWindow,
-  CovidNumberCaseType
-} from '../map/options/covid-number-case-options';
-import {BedType} from '../map/options/bed-type.enum';
-import {CaseChoropleth} from '../map/overlays/casechoropleth';
-import {MapOptions} from '../map/options/map-options';
-import {environment} from 'src/environments/environment';
-import {APP_CONFIG_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, APP_CONFIG_URL_KEY, MAP_LOCATION_SETTINGS_URL_KEY} from "../../constants";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {MatDialog} from "@angular/material/dialog";
-import {HelpDialogComponent} from "../help-dialog/help-dialog.component";
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ActivatedRoute } from '@angular/router';
+import { FeatureCollection } from 'geojson';
+import { merge } from 'lodash-es';
+import { BehaviorSubject, of } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { APP_CONFIG_KEY, APP_CONFIG_URL_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from "../../constants";
+import { HelpDialogComponent } from "../help-dialog/help-dialog.component";
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { BedType } from '../map/options/bed-type.enum';
+import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { MapLocationSettings } from '../map/options/map-location-settings';
+import { MapOptions } from '../map/options/map-options';
+import { CaseChoropleth } from '../map/overlays/casechoropleth';
+import { Overlay } from '../map/overlays/overlay';
 import { I18nService } from '../services/i18n.service';
 import { TranslationService } from '../services/translation.service';
-import { MapLocationSettings } from '../map/options/map-location-settings';
-import { BehaviorSubject, of } from 'rxjs';
-import { safeDebounce } from '../util/safe-debounce';
 import { UrlHandlerService } from '../services/url-handler.service';
-import { ActivatedRoute } from '@angular/router';
-import { merge } from 'lodash-es';
+import { safeDebounce } from '../util/safe-debounce';
 
 @Component({
   selector: 'app-map-root',

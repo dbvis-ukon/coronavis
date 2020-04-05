@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { MapRootComponent } from './map-root/map-root.component';
-import { ImpressumComponent } from './impressum/impressum.component';
+import { RouterModule, Routes } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { ImpressumComponent } from './impressum/impressum.component';
+import { MapRootComponent } from './map-root/map-root.component';
 
 const routes: Routes = [
   {

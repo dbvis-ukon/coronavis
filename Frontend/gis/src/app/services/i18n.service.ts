@@ -1,4 +1,4 @@
-import { Injectable, Inject, LOCALE_ID } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export enum SupportedLocales {

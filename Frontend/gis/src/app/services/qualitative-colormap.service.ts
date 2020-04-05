@@ -1,10 +1,7 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as d3 from 'd3';
-import { getLatest } from '../util/timestamped-value';
-import { BedStatusSummary } from './types/bed-status-summary';
-import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { BedType } from '../map/options/bed-type.enum';
-import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
+import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 
 @Injectable({

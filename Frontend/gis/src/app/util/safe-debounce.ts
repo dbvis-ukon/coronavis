@@ -1,5 +1,4 @@
-import { debounceTime, switchMap, takeUntil, skip } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { debounceTime, skip, switchMap, takeUntil } from 'rxjs/operators';
 
 
 export const safeDebounce = (time: number, selector) => (source$) =>

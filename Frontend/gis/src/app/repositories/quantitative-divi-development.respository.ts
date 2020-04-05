@@ -1,15 +1,15 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {environment} from 'src/environments/environment';
-import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { Injectable } from '@angular/core';
+import { Feature, FeatureCollection, MultiPolygon, Point } from 'geojson';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { CachedRepository } from './cached.repository';
-import { QuantitativeHospitalsDevelopment } from './types/in/quantitative-hospitals-development';
-import { QuantitativeTimedStatus } from './types/out/quantitative-timed-status';
-import { AggregatedHospitalOut } from './types/out/aggregated-hospital-out';
-import { SingleHospitalOut } from './types/out/single-hospital-out';
-import { MultiPolygon, FeatureCollection, Feature, Point } from 'geojson';
 import { QuantitativeAggregatedHospitalProperties, QuantitativeSingleHospitalProperties } from './types/in/qualitative-hospitals-development';
+import { QuantitativeHospitalsDevelopment } from './types/in/quantitative-hospitals-development';
+import { AggregatedHospitalOut } from './types/out/aggregated-hospital-out';
+import { QuantitativeTimedStatus } from './types/out/quantitative-timed-status';
+import { SingleHospitalOut } from './types/out/single-hospital-out';
 
 @Injectable({
   providedIn: 'root'
