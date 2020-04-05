@@ -22,8 +22,8 @@ import { MapLocationSettings } from '../map/options/map-location-settings';
 import { BehaviorSubject, of } from 'rxjs';
 import { safeDebounce } from '../util/safe-debounce';
 import { UrlHandlerService } from '../services/url-handler.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { merge, trimEnd } from 'lodash-es';
+import { ActivatedRoute } from '@angular/router';
+import { merge } from 'lodash-es';
 
 @Component({
   selector: 'app-map-root',
@@ -85,13 +85,15 @@ export class MapRootComponent implements OnInit {
   };
 
 
-  mapOptions: MapOptions = JSON.parse(JSON.stringify(this.defaultMapOptions));
+  mapOptions: MapOptions = null;
 
   mapLocationSettings$: BehaviorSubject<MapLocationSettings> = new BehaviorSubject(JSON.parse(JSON.stringify(this.defaultMapLocationSettings)));
 
   currentCaseChoropleth: CaseChoropleth;
 
-  initialMapLocationSettings: MapLocationSettings = JSON.parse(JSON.stringify(this.defaultMapLocationSettings));
+  initialMapLocationSettings: MapLocationSettings = null;
+
+  currentMapLocationSettings: MapLocationSettings = null;
 
   siteId: number;
 
@@ -102,7 +104,6 @@ export class MapRootComponent implements OnInit {
               private i18nService: I18nService,
               private translationService: TranslationService,
               private urlHandlerService: UrlHandlerService,
-              private router: Router,
               private route: ActivatedRoute
               ) {
   }
@@ -129,9 +130,11 @@ export class MapRootComponent implements OnInit {
     // to save cpu/io
     this.mapLocationSettings$.asObservable()
     .pipe(
-      safeDebounce(500, a => of(a))
+      safeDebounce(500, (a: MapLocationSettings) => of(a))
     )
     .subscribe(newLocSettings => {
+      this.currentMapLocationSettings = newLocSettings as MapLocationSettings;
+
       // store data into local storage
       localStorage.setItem(MAP_LOCATION_SETTINGS_KEY, JSON.stringify(newLocSettings));
     });
@@ -189,6 +192,8 @@ export class MapRootComponent implements OnInit {
       // merge with default as basis is necessary when new options are added in further releases
       this.mapOptions = merge<MapOptions, MapOptions, any>(this.defaultMapOptions, storedMapOptions, { hideInfobox: false, showHelpOnStart: true });
       restored = true;
+    } else {
+      this.mapOptions = JSON.parse(JSON.stringify(this.defaultMapOptions));
     }
 
 
@@ -211,6 +216,8 @@ export class MapRootComponent implements OnInit {
         }
       );
       restored = true;
+    } else { // use default
+      this.initialMapLocationSettings = JSON.parse(JSON.stringify(this.defaultMapLocationSettings));
     }
 
     if(restored) {
