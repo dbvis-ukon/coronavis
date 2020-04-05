@@ -1,12 +1,6 @@
-import { Injectable, ComponentRef } from '@angular/core';
-import {
-  Overlay,
-  OverlayPositionBuilder,
-  OverlayRef,
-  ConnectedPosition,
-  GlobalPositionStrategy, FlexibleConnectedPositionStrategyOrigin
-} from '@angular/cdk/overlay';
+import { ConnectedPosition, FlexibleConnectedPositionStrategyOrigin, GlobalPositionStrategy, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
+import { ComponentRef, Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'

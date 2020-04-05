@@ -1,12 +1,10 @@
-import {
-  Injectable
-} from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { TooltipService } from './tooltip.service';
+import { HelipadLayer } from '../map/overlays/helipads';
 import { HospitalLayer } from '../map/overlays/hospital';
 import { OSMRepository } from '../repositories/osm.repository';
-import { HelipadLayer } from '../map/overlays/helipads';
+import { TooltipService } from './tooltip.service';
 
 @Injectable({
   providedIn: 'root'

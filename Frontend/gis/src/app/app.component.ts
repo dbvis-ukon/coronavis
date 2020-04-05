@@ -1,21 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {FeatureCollection} from 'geojson';
-import {Overlay} from './map/overlays/overlay';
-import {AggregationLevel} from './map/options/aggregation-level.enum';
-import {
-  CovidNumberCaseChange,
-  CovidNumberCaseNormalization,
-  CovidNumberCaseTimeWindow,
-  CovidNumberCaseType
-} from './map/options/covid-number-case-options';
-import {BedType} from './map/options/bed-type.enum';
-import {CaseChoropleth} from './map/overlays/casechoropleth';
-import {MapOptions} from './map/options/map-options';
-import {environment} from 'src/environments/environment';
-import {APP_CONFIG_KEY, APP_HELP_SEEN} from "../constants";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {MatDialog} from "@angular/material/dialog";
-import {HelpDialogComponent} from "./help-dialog/help-dialog.component";
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { FeatureCollection } from 'geojson';
+import { environment } from 'src/environments/environment';
+import { APP_CONFIG_KEY, APP_HELP_SEEN } from "../constants";
+import { HelpDialogComponent } from "./help-dialog/help-dialog.component";
+import { AggregationLevel } from './map/options/aggregation-level.enum';
+import { BedType } from './map/options/bed-type.enum';
+import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from './map/options/covid-number-case-options';
+import { MapOptions } from './map/options/map-options';
+import { CaseChoropleth } from './map/overlays/casechoropleth';
+import { Overlay } from './map/overlays/overlay';
 import { I18nService } from './services/i18n.service';
 import { TranslationService } from './services/translation.service';
 

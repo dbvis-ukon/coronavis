@@ -1,6 +1,6 @@
-import { TimestampedValue } from '../repositories/types/in/timestamped-value';
 import { AbstractTimedStatus, QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
-import { QuantitativeTimedStatus, haxx } from '../repositories/types/out/quantitative-timed-status';
+import { TimestampedValue } from '../repositories/types/in/timestamped-value';
+import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
 
 export function getLatest(entries: TimestampedValue[]): number {
   if (entries === undefined) {

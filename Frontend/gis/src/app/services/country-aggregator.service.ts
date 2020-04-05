@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { flatMap, reduce } from 'rxjs/operators';
-import { getLatestTimedStatus } from '../util/timestamped-value';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
+import { RKICaseRepository } from '../repositories/rki-case.repository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
+import { getLatestTimedStatus } from '../util/timestamped-value';
 import { QualitativeColormapService } from './qualitative-colormap.service';
 import { QualitativeTimedStatusAggregation } from './types/qualitateive-timed-status-aggregation';
-import { Observable } from 'rxjs';
-import { RKICaseRepository } from '../repositories/rki-case.repository';
-import { AggregationLevel } from '../map/options/aggregation-level.enum';
-import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 
 @Injectable({
   providedIn: 'root'

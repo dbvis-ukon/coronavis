@@ -1,10 +1,10 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {QualitativeColormapService} from '../services/qualitative-colormap.service';
-import {SingleHospitalOut} from '../repositories/types/out/single-hospital-out';
-import {QualitativeTimedStatus} from '../repositories/types/in/qualitative-hospitals-development';
-import {AggregatedHospitalOut} from '../repositories/types/out/aggregated-hospital-out';
-import {BedType} from "../map/options/bed-type.enum";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as moment from 'moment';
+import { BedType } from "../map/options/bed-type.enum";
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
+import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TranslationService } from '../services/translation.service';
 import { VegaBarchartService } from '../services/vega-barchart.service';
 import { of } from 'rxjs';
