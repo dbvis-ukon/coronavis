@@ -49,6 +49,7 @@ import { TranslatePipe } from './translate.pipe';
 import {SentryErrorHandler} from "./sentry-config";
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {MatTabsModule} from '@angular/material/tabs';
 
 // the second parameter 'fr-FR' is optional
 
@@ -125,7 +126,8 @@ if(storedLocale === SupportedLocales.DE_DE) {
     MatSnackBarModule,
     MatStepperModule,
     MatToolbarModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatTabsModule
   ],
   providers: [localeProvider, PlusminusPipe, DecimalPipe, TranslatePipe, { provide: ErrorHandler, useClass: SentryErrorHandler }],
   bootstrap: [AppComponent]
