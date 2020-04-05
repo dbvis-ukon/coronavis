@@ -57,6 +57,10 @@ import { VegaComponent } from './vega/vega.component';
 
 
 
+
+
+
+
 // the second parameter 'fr-FR' is optional
 registerLocaleData(localeDe, 'de-DE');
 registerLocaleData(localeEn, 'en-US');

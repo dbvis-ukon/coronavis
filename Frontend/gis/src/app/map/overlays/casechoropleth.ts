@@ -1,18 +1,12 @@
-import * as L from 'leaflet';
-import {Overlay} from './overlay';
 import * as d3 from "d3";
-import {TooltipService} from "../../services/tooltip.service";
-import {CaseTooltipComponent} from "../../case-tooltip/case-tooltip.component";
-import {
-  CovidNumberCaseChange,
-  CovidNumberCaseNormalization,
-  CovidNumberCaseOptions,
-  CovidNumberCaseTimeWindow,
-  CovidNumberCaseType
-} from '../options/covid-number-case-options';
-import { QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties } from 'src/app/services/types/quantitative-aggregated-rki-cases-over-time';
+import * as L from 'leaflet';
 import { QuantitativeAggregatedRkiCaseNumberProperties } from 'src/app/repositories/types/in/quantitative-aggregated-rki-cases';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
+import { QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties } from 'src/app/services/types/quantitative-aggregated-rki-cases-over-time';
+import { CaseTooltipComponent } from "../../case-tooltip/case-tooltip.component";
+import { TooltipService } from "../../services/tooltip.service";
+import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../options/covid-number-case-options';
+import { Overlay } from './overlay';
 
 export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTime> {
   private typeAccessor: (d: QuantitativeAggregatedRkiCaseNumberProperties) => number;

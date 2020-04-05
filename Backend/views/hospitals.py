@@ -214,6 +214,9 @@ latest_hospital_update_per_day AS (
         h.ecmo_state
     FROM
         hospital h
+    -- hard limit due to data change of divi
+    WHERE
+        h.insert_date >= '2020-04-05'
     ORDER BY
         h."name",
         h.last_update :: date,
@@ -473,6 +476,9 @@ latest_hospital_update_per_day AS (
         h.ecmo_state
     FROM
         hospital h
+    -- hard limit due to data change of divi
+    WHERE
+        h.insert_date >= '2020-04-05'
     ORDER BY
         h."name",
         h.last_update :: date,
@@ -732,6 +738,9 @@ latest_hospital_update_per_day AS (
         h.ecmo_state
     FROM
         hospital h
+    -- hard limit due to data change of divi
+    WHERE
+        h.insert_date >= '2020-04-05'
     ORDER BY
         h."name",
         h.last_update :: date,
