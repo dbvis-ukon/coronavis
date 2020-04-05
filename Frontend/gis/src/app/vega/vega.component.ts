@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input, TemplateRef } from '@angular/core';
-import {default as embed} from 'vega-embed';
-import { VisualizationSpec } from 'vega-embed';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { default as embed, VisualizationSpec } from 'vega-embed';
 import { I18nService, SupportedLocales } from '../services/i18n.service';
 
 @Component({

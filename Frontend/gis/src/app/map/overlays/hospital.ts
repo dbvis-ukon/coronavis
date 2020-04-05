@@ -1,8 +1,8 @@
 import * as L from 'leaflet';
-import { Overlay } from './overlay';
-import { TooltipService } from 'src/app/services/tooltip.service';
 import { OSMHospitals } from 'src/app/repositories/types/in/osm-hospitals';
-import {OsmTooltipComponent} from "../../osm-tooltip/osm-tooltip.component";
+import { TooltipService } from 'src/app/services/tooltip.service';
+import { OsmTooltipComponent } from "../../osm-tooltip/osm-tooltip.component";
+import { Overlay } from './overlay';
 
 
 const krankenhausIcon = L.icon({

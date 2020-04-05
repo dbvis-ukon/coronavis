@@ -1,16 +1,15 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, forkJoin, Observable} from 'rxjs';
-import {SimpleGlyphLayer} from '../map/overlays/simple-glyph.layer';
-import {BedGlyphOptions} from '../map/options/bed-glyph-options';
-import {map, tap} from 'rxjs/operators';
-import {TooltipService} from './tooltip.service';
-import {MatDialog} from '@angular/material/dialog';
-import {HospitalRepository} from '../repositories/hospital.repository';
-import {AggregatedGlyphLayer} from '../map/overlays/aggregated-glyph.layer';
-import {AggregationLevel} from '../map/options/aggregation-level.enum';
-import {LandkreiseHospitalsLayer} from '../map/overlays/landkreishospitals';
+import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { BedGlyphOptions } from '../map/options/bed-glyph-options';
+import { AggregatedGlyphLayer } from '../map/overlays/aggregated-glyph.layer';
+import { LandkreiseHospitalsLayer } from '../map/overlays/landkreishospitals';
+import { SimpleGlyphLayer } from '../map/overlays/simple-glyph.layer';
+import { HospitalRepository } from '../repositories/hospital.repository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeColormapService } from './qualitative-colormap.service';
+import { TooltipService } from './tooltip.service';
 
 @Injectable({
   providedIn: 'root'

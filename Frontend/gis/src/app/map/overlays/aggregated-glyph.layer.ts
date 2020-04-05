@@ -1,20 +1,20 @@
-import * as L from 'leaflet';
+import { MatDialog } from '@angular/material/dialog';
 import * as d3 from 'd3';
-import {Overlay} from './overlay';
-import {TooltipService} from '../../services/tooltip.service';
-import {Feature, FeatureCollection, MultiPolygon} from "geojson";
-import {Observable} from "rxjs";
-import {BedGlyphOptions} from '../options/bed-glyph-options';
-import {BedType} from '../options/bed-type.enum';
-import {ForceDirectedLayout} from 'src/app/util/forceDirectedLayout';
-import {GlyphLayer} from "./GlyphLayer";
-import {AggregatedHospitalOut} from 'src/app/repositories/types/out/aggregated-hospital-out';
-import {QualitativeTimedStatus} from 'src/app/repositories/types/in/qualitative-hospitals-development';
-import {QualitativeColormapService} from 'src/app/services/qualitative-colormap.service';
-import {MatDialog} from '@angular/material/dialog';
-import {HospitalInfoDialogComponent} from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
-import {GlyphTooltipComponent} from 'src/app/glyph-tooltip/glyph-tooltip.component';
-import {AggregationLevel} from "../options/aggregation-level.enum";
+import { Feature, FeatureCollection, MultiPolygon } from "geojson";
+import * as L from 'leaflet';
+import { Observable } from "rxjs";
+import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
+import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
+import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
+import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
+import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
+import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
+import { TooltipService } from '../../services/tooltip.service';
+import { AggregationLevel } from "../options/aggregation-level.enum";
+import { BedGlyphOptions } from '../options/bed-glyph-options';
+import { BedType } from '../options/bed-type.enum';
+import { GlyphLayer } from "./GlyphLayer";
+import { Overlay } from './overlay';
 
 export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
 
@@ -60,6 +60,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     });
   }
 
+  private rectSize = 10;
   private glyphSize = {
     width: 38,
     height: 28
@@ -69,43 +70,25 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     return this.map.project(latlng, 9);
   }
 
-  // TODO adapt
-  // private getIcuLowScore(d: DiviAggregatedHospital) {
-  //   const v = getLatest(d.icu_low_care_frei) || 0;
-  //   const b = getLatest(d.icu_low_care_belegt) || 0;
-  //   const a = getLatest(d.icu_low_care_einschaetzung)  || 0;
-
-  //   return (b * 2 + a * 3) / (v + b + a);
-  // }
-
-
-  // // TODO adapt
-  // private getIcuHighScore(d: DiviAggregatedHospital) {
-  //   const v = getLatest(d.icu_low_care_frei) || 0;
-  //   const b = getLatest(d.icu_low_care_belegt) || 0;
-  //   const a = getLatest(d.icu_low_care_einschaetzung)  || 0;
-
-  //   return (b * 2 + a * 3) / (v + b + a);
-  // }
-
-  // // TODO adapt
-  // private getEcmoScore(d: DiviAggregatedHospital) {
-  //   const v = getLatest(d.icu_low_care_frei) || 0;
-  //   const b = getLatest(d.icu_low_care_belegt) || 0;
-  //   const a = getLatest(d.icu_low_care_einschaetzung)  || 0;
-
-  //   return (b * 2 + a * 3) / (v + b + a);
-  // }
-
   createOverlay(map: L.Map) {
+    const data = this.data.features;
+
     this.map = map;
 
     this.map.on('zoom', () => this.onZoomed());
 
     const latExtent = d3.extent(this.data.features, i => {
-      return i.properties.centroid.coordinates[1]
+      if (i.properties.centroid.coordinates[1] !== 0) {
+        return i.properties.centroid.coordinates[1];
+      }
+      return NaN;
     });
-    const lngExtent = d3.extent(this.data.features, i => i.properties.centroid.coordinates[0]);
+    const lngExtent = d3.extent(this.data.features, i => {
+      if (i.properties.centroid.coordinates[0] !== 0) {
+        return i.properties.centroid.coordinates[0];
+      }
+      return NaN;
+    });
 
     let latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
 
@@ -123,15 +106,14 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
 
-    const rectSize = 10;
 
     const padding = 2;
     const yOffset = 2;
 
     this.gHospitals = d3.select(svgElement)
-      .style("pointer-events", "none")
+      .style('pointer-events', 'none')
       .selectAll('g.hospital')
-      .data(this.data.features)
+      .data(data)
       .enter()
       .append<SVGGElement>('g')
       .style("pointer-events", "all")
@@ -142,17 +124,18 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
         d.properties.y = p.y;
         d.properties._x = p.x;
         d.properties._y = p.y;
-        return `translate(${p.x - ((3 * rectSize + padding * 3) / 2)}, ${p.y - (22 / 2)})`;
+        return `translate(${p.x - ((3 * this.rectSize + padding * 3) / 2)}, ${p.y - (22 / 2)})`;
       });
 
     const container = this.gHospitals
       .append("g")
       .attr("class", "container")
-      .on('mouseenter touchstart', function (d1) {
+      .on('mouseenter touchstart', (d1, i, n) => {
+        const currentElement = n[i];
         const evt: MouseEvent = d3.event;
-        const t = self.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX + 5, y: evt.clientY + 5});
+        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX + 5, y: evt.clientY + 5});
         t.tooltipData = d1.properties;
-        d3.select(this).raise();
+        d3.select(currentElement).raise();
       })
       .on('mouseleave touchend', () => this.tooltipService.close())
       .on('click', d => {
@@ -165,22 +148,15 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .append('rect')
       .attr('class', 'background-rect')
       .attr('width', this.glyphSize.width)
-      .attr('height', this.glyphSize.height/2);
-      // .on('mouseenter', d1 => {
-      //   const evt: MouseEvent = d3.event;
-      //   const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, { x: evt.clientX, y: evt.clientY });
-      //   t.name = d1.Name;
-      // })
-      // .on('mouseout', () => this.tooltipService.close());
+      .attr('height', this.glyphSize.height / 2);
 
-    // adds white shadow
     container
       .append('text')
       .attr('class', 'text-bg aggName')
       .text(d1 => {
         return d1.properties.name;
       })
-      .attr('x', (padding + 3 * rectSize + 4 * padding) / 2)
+      .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .attr('y', '22');
 
 
@@ -188,16 +164,15 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       .append('text')
       .attr('class', 'text-fg aggName')
       .text(d1 => d1.properties.name)
-      .attr('x', (padding + 3 * rectSize + 4 * padding) / 2)
+      .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
       .attr('y', '22');
 
 
-    const self = this;
     container
       .append('rect')
       .attr('class', `bed ${BedType.icuLow}`)
-      .attr('width', `${rectSize}px`)
-      .attr('height', `${rectSize}px`)
+      .attr('width', `${this.rectSize}px`)
+      .attr('height', `${this.rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
       .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuLow));
@@ -205,19 +180,19 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     container
       .append('rect')
       .attr('class', `bed ${BedType.icuHigh}`)
-      .attr('width', `${rectSize}px`)
-      .attr('height', `${rectSize}px`)
+      .attr('width', `${this.rectSize}px`)
+      .attr('height', `${this.rectSize}px`)
       .attr('y', yOffset)
-      .attr('x', `${rectSize + padding * 2}px`)
+      .attr('x', `${this.rectSize + padding * 2}px`)
       .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuHigh));
 
     container
       .append('rect')
       .attr('class', `bed ${BedType.ecmo}`)
-      .attr('width', `${rectSize}px`)
-      .attr('height', `${rectSize}px`)
+      .attr('width', `${this.rectSize}px`)
+      .attr('height', `${this.rectSize}px`)
       .attr('y', yOffset)
-      .attr('x', `${2 * rectSize + padding * 3}px`)
+      .attr('x', `${2 * this.rectSize + padding * 3}px`)
       .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.ecmo));
 
     this.onZoomed();
@@ -239,19 +214,21 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
 
   onZoomed() {
     const zoom = this.map.getZoom();
+
     let level = 9;
     if (this.granularity === AggregationLevel.governmentDistrict) {
       level = 11;
     } else if (this.granularity === AggregationLevel.state) {
       level = 12;
     }
+    
     const scale = Math.pow(level / (zoom), 3);
 
     this.gHospitals
       .selectAll('g.container')
       .transition()
       .duration(500)
-      .attr('transform', d => {
+      .attr('transform', () => {
         return `scale(${scale}, ${scale})`;
       });
 

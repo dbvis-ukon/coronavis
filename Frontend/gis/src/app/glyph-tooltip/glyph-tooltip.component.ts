@@ -1,8 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {animate, style, transition, trigger} from '@angular/animations';
-import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
+import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
 
 @Component({
   selector: 'app-glyph-tooltip',

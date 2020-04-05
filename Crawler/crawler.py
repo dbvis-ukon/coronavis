@@ -2,19 +2,17 @@
 DIVI - Hospitals with their capacities
 https://www.divi.de/register/intensivregister?view=items
 """
-import db
-
+import logging
 import time
-import pandas
 import traceback
 
-import requests
+import pandas
 
+import db
+import requests
+from geoalchemy2.shape import to_shape
 from sqlalchemy import func
 
-from geoalchemy2.shape import to_shape 
-
-import logging
 logger = logging.getLogger(__name__)
 
 
