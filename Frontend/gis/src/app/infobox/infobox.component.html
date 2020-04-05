@@ -17,8 +17,11 @@
           </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <p class="stats" i18n="@@infoboxNumberOfHospitals">{{ this.aggregatedDiviStatistics.numberOfHospitals | number }} bundesweit gemeldete Krankenhäuser</p>
-      <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ this.aggregatedDiviStatistics.timestamp | date:'full' }}</p>
+      <div *ngIf="aggregatedDiviStatistics">
+        <p class="stats" i18n="@@infoboxNumberOfHospitals">{{ this.aggregatedDiviStatistics.numberOfHospitals | number }} bundesweit gemeldete Krankenhäuser</p>
+        <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ this.aggregatedDiviStatistics.timestamp | date:'full' }}</p>
+      </div>
+      
 
       <h5>Aggregation</h5>
 
@@ -145,9 +148,12 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <p class="stats" i18n="@@infoboxNumberOfCovidCases">{{ this.aggregatedRkiStatistics.cases | number }} bundesweit gemeldete Covid-19 Fälle</p>
-      <p class="stats" i18n="@@infoboxNumberOfCovidDeaths">{{ this.aggregatedRkiStatistics.deaths | number }} bundesweit gemeldete Covid-19 Todesfälle</p>
-      <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ this.aggregatedRkiStatistics.until | date:'full' }}</p>
+      <div *ngIf="aggregatedRkiStatistics">
+        <p class="stats" i18n="@@infoboxNumberOfCovidCases">{{ this.aggregatedRkiStatistics.cases | number }} bundesweit gemeldete Covid-19 Fälle</p>
+        <p class="stats" i18n="@@infoboxNumberOfCovidDeaths">{{ this.aggregatedRkiStatistics.deaths | number }} bundesweit gemeldete Covid-19 Todesfälle</p>
+        <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ this.aggregatedRkiStatistics.until | date:'full' }}</p>
+      </div>
+      
 
       <form class="covid-form">
         <mat-slide-toggle

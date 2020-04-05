@@ -1,32 +1,26 @@
-import {Component, EventEmitter, Input, OnInit, Output, Inject, LOCALE_ID} from '@angular/core';
-import {AggregationLevel} from '../map/options/aggregation-level.enum';
-import {
-  CovidNumberCaseChange,
-  CovidNumberCaseNormalization,
-  CovidNumberCaseTimeWindow,
-  CovidNumberCaseType
-} from '../map/options/covid-number-case-options';
-import { BedType } from '../map/options/bed-type.enum';
-import { MapOptions } from '../map/options/map-options';
+import { BreakpointObserver } from "@angular/cdk/layout";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { APP_CONFIG_KEY } from "../../constants";
 import { AboutComponent } from '../about/about.component';
+import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
+import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { ImpressumComponent } from '../impressum/impressum.component';
-import { OSMLayerService } from '../services/osm-layer.service';
-import { GlyphLayerService } from '../services/glyph-layer.service';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { BedType } from '../map/options/bed-type.enum';
+import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { MapOptions } from '../map/options/map-options';
+import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
-import {APP_CONFIG_KEY} from "../../constants";
-import { QualitativeColormapService } from '../services/qualitative-colormap.service';
-import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
-import { SupportedLocales, I18nService } from '../services/i18n.service';
-import {BreakpointObserver} from "@angular/cdk/layout";
 import { CountryAggregatorService } from '../services/country-aggregator.service';
-import { QualitativeTimedStatusAggregation } from '../services/types/qualitateive-timed-status-aggregation';
-import { QuantitativeAggregatedHospitalProperties } from '../repositories/types/in/qualitative-hospitals-development';
-import { QuantitativeAggregatedRkiCaseNumberProperties, QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
+import { GlyphLayerService } from '../services/glyph-layer.service';
+import { I18nService, SupportedLocales } from '../services/i18n.service';
+import { OSMLayerService } from '../services/osm-layer.service';
+import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TooltipService } from '../services/tooltip.service';
-import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
 import { TranslationService } from '../services/translation.service';
+import { QualitativeTimedStatusAggregation } from '../services/types/qualitateive-timed-status-aggregation';
 
 @Component({
   selector: 'app-infobox',
