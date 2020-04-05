@@ -5,11 +5,14 @@ import { BedType } from '../map/options/bed-type.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
+import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
+import { CountryAggregatorService } from '../services/country-aggregator.service';
 import { GlyphLayerService } from '../services/glyph-layer.service';
 import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
+import { QualitativeTimedStatusAggregation } from '../services/types/qualitateive-timed-status-aggregation';
 
 @Component({
   selector: 'app-infobox',
@@ -24,7 +27,8 @@ export class InfoboxComponent implements OnInit {
     private glyphLayerService: GlyphLayerService,
     private bedChoroplethLayerService: BedChoroplethLayerService,
     private caseChoroplethLayerService: CaseChoroplethLayerService,
-    private breakPointObserver: BreakpointObserver
+    private breakPointObserver: BreakpointObserver,
+    private countryAggregatorService: CountryAggregatorService
   ) { }
 
   glyphLegend;
@@ -39,6 +43,11 @@ export class InfoboxComponent implements OnInit {
 
   @Input('mapLocationSettings')
   mls: MapLocationSettings;
+
+  
+  aggregatedDiviStatistics: QualitativeTimedStatusAggregation;
+
+  aggregatedRkiStatistics: QuantitativeAggregatedRkiCasesProperties;
 
   // ENUM MAPPING
   // because in HTML, this stuff cannot be accessed
@@ -78,6 +87,17 @@ export class InfoboxComponent implements OnInit {
       {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
       {name: 'ECMO', accessor: 'showEcmo', color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
     ];
+
+
+    this.countryAggregatorService.diviAggregationForCountry()
+    .subscribe(r => {
+      this.aggregatedDiviStatistics = r;
+    });
+
+    this.countryAggregatorService.rkiAggregationForCountry()
+    .subscribe(r => {
+      this.aggregatedRkiStatistics = r;
+    })
   }
 
   emitCaseChoroplethOptions() {

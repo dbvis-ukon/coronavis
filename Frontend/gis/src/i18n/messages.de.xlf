@@ -575,6 +575,20 @@
       <segment state="final">
         <source>Krankenhäuser - Bettenauslastung</source>
       <target>Krankenhäuser - Bettenauslastung</target></segment>
+    </unit><unit id="infoboxNumberOfHospitals">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:20</note>
+      </notes>
+      <segment state="final">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.numberOfHospitals }}"/> bundesweit gemeldete Krankenhäuser</source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.numberOfHospitals }}"/> bundesweit gemeldete Krankenhäuser</target></segment>
+    </unit><unit id="infoboxLastUpdate">
+      <notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:21</note><note category="location">src/app/infobox/infobox.component.html:148</note></notes>
+      <segment state="final">
+        <source>Letzter Stand: <ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.timestamp | date:'full' }}"/></source>
+      <target>Letzter Stand: <ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.timestamp | date:'full' }}"/></target></segment>
     </unit><unit id="infoboxStates">
       <notes>
 
@@ -710,6 +724,20 @@
       <segment state="final">
         <source>Fallansicht</source>
       <target>Fallansicht</target></segment>
+    </unit><unit id="infoboxNumberOfCovidCases">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:146</note>
+      </notes>
+      <segment state="final">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.cases | number }}"/> bundesweit gemeldete Covid-19 Fälle</source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.cases | number }}"/> bundesweit gemeldete Covid-19 Fälle</target></segment>
+    </unit><unit id="infoboxNumberOfCovidDeaths">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:147</note>
+      </notes>
+      <segment state="final">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> bundesweit gemeldete Covid-19 Todesfälle</source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> bundesweit gemeldete Covid-19 Todesfälle</target></segment>
     </unit><unit id="infoboxCaseViewShow">
       <notes>
 
@@ -907,6 +935,40 @@
       <segment state="final">
         <source>Statistisches Bundesamt</source>
       <target>Statistisches Bundesamt</target></segment>
+    </unit><unit id="footer1">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+
+      <note category="location">src/app/infobox/infobox.component.html:348</note></notes>
+      <segment state="final">
+        <source>Video</source>
+      <target>Video</target></segment>
+    </unit><unit id="footer2">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+
+      <note category="location">src/app/infobox/infobox.component.html:350</note></notes>
+      <segment state="final">
+        <source>Hilfe</source>
+      <target>Hilfe</target></segment>
+    </unit><unit id="footer3">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+
+      <note category="location">src/app/infobox/infobox.component.html:352</note></notes>
+      <segment state="final">
+        <source>Team</source>
+      <target>Team</target></segment>
+    </unit><unit id="infoboxImprint">
+      <notes>
+
+      <note category="location">src/app/infobox/infobox.component.html:355</note></notes>
+      <segment state="final">
+        <source>Impressum</source>
+      <target>Impressum</target></segment>
     </unit><unit id="footer5">
       <notes>
         <note category="description"> infobox</note>

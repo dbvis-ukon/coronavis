@@ -561,6 +561,20 @@
       <segment state="initial">
         <source>Krankenhäuser - Bettenauslastung</source>
       <target>Hospitals - Bed Capacity</target></segment>
+    </unit><unit id="infoboxNumberOfHospitals">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:20</note>
+      </notes>
+      <segment state="initial">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.numberOfHospitals }}"/> bundesweit gemeldete Krankenhäuser</source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.numberOfHospitals }}"/> nationally reported hospitals</target></segment>
+    </unit><unit id="infoboxLastUpdate">
+      <notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:21</note><note category="location">src/app/infobox/infobox.component.html:148</note></notes>
+      <segment state="initial">
+        <source>Letzter Stand: <ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.timestamp | date:'full' }}"/></source>
+      <target>Last Update: <ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.timestamp | date:'full' }}"/></target></segment>
     </unit><unit id="infoboxStates">
       <notes>
 
@@ -694,6 +708,20 @@
       <segment state="initial">
         <source>Fallansicht</source>
       <target>Case View</target></segment>
+    </unit><unit id="infoboxNumberOfCovidCases">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:146</note>
+      </notes>
+      <segment state="initial">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.cases | number }}"/> bundesweit gemeldete Covid-19 Fälle</source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.cases | number }}"/> nationally reported Covid-19 cases</target></segment>
+    </unit><unit id="infoboxNumberOfCovidDeaths">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:147</note>
+      </notes>
+      <segment state="initial">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> bundesweit gemeldete Covid-19 Todesfälle</source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> nationally reported Covid-19 deaths</target></segment>
     </unit><unit id="infoboxCaseViewShow">
       <notes>
 
@@ -880,6 +908,40 @@
       <segment state="initial">
         <source>Statistisches Bundesamt</source>
       <target>Statistisches Bundesamt</target></segment>
+    </unit><unit id="footer1">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+
+      <note category="location">src/app/infobox/infobox.component.html:348</note></notes>
+      <segment state="initial">
+        <source>Video</source>
+      <target>Video</target></segment>
+    </unit><unit id="footer2">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+
+      <note category="location">src/app/infobox/infobox.component.html:350</note></notes>
+      <segment state="initial">
+        <source>Hilfe</source>
+      <target>Help</target></segment>
+    </unit><unit id="footer3">
+      <notes>
+        <note category="description"> infobox</note>
+        <note category="meaning">infobox </note>
+
+      <note category="location">src/app/infobox/infobox.component.html:352</note></notes>
+      <segment state="initial">
+        <source>Team</source>
+      <target>Team</target></segment>
+    </unit><unit id="infoboxImprint">
+      <notes>
+
+      <note category="location">src/app/infobox/infobox.component.html:355</note></notes>
+      <segment state="initial">
+        <source>Impressum</source>
+      <target>Imprint</target></segment>
     </unit><unit id="footer5">
       <notes>
         <note category="description"> infobox</note>
