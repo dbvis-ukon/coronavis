@@ -54,6 +54,8 @@ import { ShareDialogComponent } from './share-dialog/share-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { SentryErrorHandler } from './sentry-config';
 import { ButtonPanelComponent } from './button-panel/button-panel.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 // the second parameter 'fr-FR' is optional
 registerLocaleData(localeDe, 'de-DE');
@@ -163,6 +165,8 @@ export const localeProvider = {
     MatInputModule,
     MatCheckboxModule,
     MatTabsModule,
+    MatToolbarModule,
+    FlexLayoutModule,
   ],
   providers: [
     localeProvider, 
