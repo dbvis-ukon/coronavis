@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as d3 from 'd3';
-import { QuantitativeBedStatusSummary } from './types/bed-status-summary';
-import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
 import { BedType } from '../map/options/bed-type.enum';
+import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
+import { QuantitativeBedStatusSummary } from './types/bed-status-summary';
 
 @Injectable({
   providedIn: 'root'

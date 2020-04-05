@@ -1,5 +1,5 @@
-import { BedType } from './bed-type.enum';
 import { AggregationLevel } from './aggregation-level.enum';
+import { BedType } from './bed-type.enum';
 
 export interface BedBackgroundOptions {
 

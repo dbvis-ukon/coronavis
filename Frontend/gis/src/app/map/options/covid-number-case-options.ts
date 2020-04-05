@@ -1,4 +1,4 @@
-import {AggregationLevel} from "./aggregation-level.enum";
+import { AggregationLevel } from "./aggregation-level.enum";
 
 export enum CovidNumberCaseChange {
     absolute = 'abs',
