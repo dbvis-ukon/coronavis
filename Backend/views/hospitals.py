@@ -69,6 +69,9 @@ WITH hospital_updates AS (
         hospital.ecmo_state
     FROM
         hospital
+    -- hard limit due to data change of divi
+    WHERE
+        hospital.insert_date >= '2020-04-05'
     ORDER BY
         hospital.name,
         hospital.last_update
@@ -176,9 +179,10 @@ WITH first_update_per_hospital AS (
         DISTINCT ON(h.name) h.name,
         h.last_update AS first_update
     FROM
-        hospital h -- hardcoded to be larger than 16.03.2020 because somehow we have a few reports that have a date from 2013 and this ruins everything later
+        hospital h
+    -- hard limit due to data change of divi
     WHERE
-        h.last_update >= '2020-03-16'
+        h.last_update >= '2020-03-16' AND h.insert_date >= '2020-04-05'
     ORDER BY
         h."name",
         h.last_update :: date
@@ -434,9 +438,10 @@ WITH first_update_per_hospital AS (
         DISTINCT ON(h.name) h.name,
         h.last_update AS first_update
     FROM
-        hospital h -- hardcoded to be larger than 16.03.2020 because somehow we have a few reports that have a date from 2013 and this ruins everything later
+        hospital h
+    -- hard limit due to data change of divi
     WHERE
-        h.last_update >= '2020-03-16'
+        h.last_update >= '2020-03-16' AND h.insert_date >= '2020-04-05'
     ORDER BY
         h."name",
         h.last_update :: date
@@ -692,9 +697,10 @@ WITH first_update_per_hospital AS (
         DISTINCT ON(h.name) h.name,
         h.last_update AS first_update
     FROM
-        hospital h -- hardcoded to be larger than 16.03.2020 because somehow we have a few reports that have a date from 2013 and this ruins everything later
+        hospital h
+    -- hard limit due to data change of divi
     WHERE
-        h.last_update >= '2020-03-16'
+        h.last_update >= '2020-03-16' AND h.insert_date >= '2020-04-05'
     ORDER BY
         h."name",
         h.last_update :: date
