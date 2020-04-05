@@ -1,10 +1,10 @@
 import * as d3 from 'd3';
-import {quadtree} from 'd3';
-import { Point, FeatureCollection } from 'geojson';
-import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
+import { quadtree } from 'd3';
+import { FeatureCollection, Point } from 'geojson';
+import { MAP_FORCE_CACHE_KEY } from "../../constants";
+import { AggregationLevel } from "../map/options/aggregation-level.enum";
 import { AbstractTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
-import {AggregationLevel} from "../map/options/aggregation-level.enum";
-import {MAP_FORCE_CACHE_KEY} from "../../constants";
+import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
 
 export class ForceDirectedLayout {
 

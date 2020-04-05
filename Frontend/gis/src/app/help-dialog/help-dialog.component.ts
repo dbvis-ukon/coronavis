@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { BreakpointObserver } from "@angular/cdk/layout";
+import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import {BreakpointObserver} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-help-dialog',

@@ -1,8 +1,8 @@
 import * as L from 'leaflet';
-import { Overlay } from './overlay';
-import { TooltipService } from 'src/app/services/tooltip.service';
 import { OSMNearbyHelipads } from 'src/app/repositories/types/in/osm-helipads';
-import {OsmTooltipComponent} from "../../osm-tooltip/osm-tooltip.component";
+import { TooltipService } from 'src/app/services/tooltip.service';
+import { OsmTooltipComponent } from "../../osm-tooltip/osm-tooltip.component";
+import { Overlay } from './overlay';
 
 const helipadIcon = L.icon({
    iconUrl: 'assets/Helipad.png',

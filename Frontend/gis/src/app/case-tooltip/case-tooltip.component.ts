@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {animate, style, transition, trigger} from "@angular/animations";
-import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../services/types/quantitative-aggregated-rki-cases-over-time';
+import { animate, style, transition, trigger } from "@angular/animations";
 import { DecimalPipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../services/types/quantitative-aggregated-rki-cases-over-time';
 
 @Component({
   selector: 'app-case-tooltip',
