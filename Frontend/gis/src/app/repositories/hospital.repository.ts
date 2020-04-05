@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { FeatureCollection, Polygon } from 'geojson';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { CachedRepository } from './cached.repository';
-import { FeatureCollection, Polygon } from 'geojson';
 import { QualitativeAggregatedHospitalProperties } from './types/in/qualitative-hospitals-development';
 
 @Injectable({

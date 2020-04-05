@@ -1,8 +1,8 @@
 import { FeatureCollection } from 'geojson';
-
 import * as L from 'leaflet';
-import { Overlay } from './overlay';
 import { TooltipService } from 'src/app/services/tooltip.service';
+import { Overlay } from './overlay';
+
 
 export class LandkreiseHospitalsLayer extends Overlay<FeatureCollection> {
   constructor(

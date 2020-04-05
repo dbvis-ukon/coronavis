@@ -1,7 +1,7 @@
-import { QualitativeAggregatedBedStateCounts } from './qualitative-aggregated-bed-states';
-import { GeneralDevelopment } from './general-development';
-import { QuantitativeHospitalsDevelopment } from './quantitative-hospitals-development';
 import { Point } from 'geojson';
+import { GeneralDevelopment } from './general-development';
+import { QualitativeAggregatedBedStateCounts } from './qualitative-aggregated-bed-states';
+import { QuantitativeHospitalsDevelopment } from './quantitative-hospitals-development';
 
 export type QualitativeSingleHospitalProperties = SingleHospital & QualitativeHospitalDevelopmentExtension;
 

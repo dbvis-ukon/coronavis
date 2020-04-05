@@ -1,4 +1,4 @@
-import { ReplaySubject, race, Observable } from 'rxjs';
+import { Observable, race, ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 export interface CacheOptions {

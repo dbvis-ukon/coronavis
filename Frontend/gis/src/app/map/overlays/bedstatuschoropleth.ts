@@ -1,13 +1,13 @@
+import { Feature, FeatureCollection, Geometry, MultiPolygon } from 'geojson';
 import * as L from 'leaflet';
-import { Overlay } from './overlay';
-import { BedType } from '../options/bed-type.enum';
-import { AggregationLevel } from '../options/aggregation-level.enum';
-import {TooltipService} from "../../services/tooltip.service";
+import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { AbstractTimedStatus, QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
-import { FeatureCollection, MultiPolygon, Feature, Geometry } from 'geojson';
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
-import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
+import { TooltipService } from "../../services/tooltip.service";
+import { AggregationLevel } from '../options/aggregation-level.enum';
+import { BedType } from '../options/bed-type.enum';
+import { Overlay } from './overlay';
 
 export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<FeatureCollection<MultiPolygon, AggregatedHospitalOut<T>>> {
 

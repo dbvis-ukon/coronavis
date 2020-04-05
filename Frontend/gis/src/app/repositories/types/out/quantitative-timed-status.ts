@@ -1,4 +1,4 @@
-import { QuantitativeCovid19Summary, QuantitativeBedStatusSummary } from 'src/app/services/types/bed-status-summary';
+import { QuantitativeBedStatusSummary, QuantitativeCovid19Summary } from 'src/app/services/types/bed-status-summary';
 import { AbstractTimedStatus } from '../in/qualitative-hospitals-development';
 
 export interface haxx {}

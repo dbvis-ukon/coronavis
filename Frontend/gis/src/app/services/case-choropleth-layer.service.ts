@@ -1,14 +1,14 @@
-import {AggregationLevel} from '../map/options/aggregation-level.enum';
-import {BehaviorSubject, forkJoin, Observable} from 'rxjs';
-import {RKICaseRepository} from '../repositories/rki-case.repository';
-import {map, tap} from 'rxjs/operators';
-import {CaseChoropleth} from '../map/overlays/casechoropleth';
-import {CovidNumberCaseOptions} from '../map/options/covid-number-case-options';
-import {TooltipService} from './tooltip.service';
-import {Injectable} from '@angular/core';
-import {Feature, Polygon} from "geojson";
-import { QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties } from './types/quantitative-aggregated-rki-cases-over-time';
+import { Injectable } from '@angular/core';
+import { Feature, Polygon } from "geojson";
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
+import { CaseChoropleth } from '../map/overlays/casechoropleth';
+import { RKICaseRepository } from '../repositories/rki-case.repository';
 import { QualitativeColormapService } from './qualitative-colormap.service';
+import { TooltipService } from './tooltip.service';
+import { QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties } from './types/quantitative-aggregated-rki-cases-over-time';
 
 @Injectable({
   providedIn: 'root'

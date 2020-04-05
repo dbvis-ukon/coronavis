@@ -1,13 +1,12 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {environment} from 'src/environments/environment';
+import { Injectable } from '@angular/core';
+import { FeatureCollection, MultiPolygon, Point } from 'geojson';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
-import { tap } from 'rxjs/operators';
 import { CachedRepository } from './cached.repository';
-import { AggregatedHospitalOut } from './types/out/aggregated-hospital-out';
 import { QualitativeTimedStatus } from './types/in/qualitative-hospitals-development';
+import { AggregatedHospitalOut } from './types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from './types/out/single-hospital-out';
-import { MultiPolygon, FeatureCollection, Point } from 'geojson';
 
 @Injectable({
   providedIn: 'root'

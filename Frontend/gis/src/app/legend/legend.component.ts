@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {AggregationLevel} from '../map/options/aggregation-level.enum';
-import {BedType} from '../map/options/bed-type.enum';
-import { CaseChoropleth } from '../map/overlays/casechoropleth';
+import { Component, Input, OnInit } from '@angular/core';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { BedType } from '../map/options/bed-type.enum';
 import { CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
 import { MapOptions } from '../map/options/map-options';
+import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
 
 @Component({

@@ -1,17 +1,16 @@
-import {Injectable} from "@angular/core";
-import {BedStatusChoropleth} from "../map/overlays/bedstatuschoropleth";
-import { Observable, BehaviorSubject} from "rxjs";
-import { AggregationLevel } from '../map/options/aggregation-level.enum';
-import { BedType } from '../map/options/bed-type.enum';
-import {TooltipService} from "./tooltip.service";
-import { BedBackgroundOptions } from '../map/options/bed-background-options';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
 import { map, tap } from 'rxjs/operators';
-import { QuantitativeDiviDevelopmentRepository } from '../repositories/quantitative-divi-development.respository';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { BedBackgroundOptions } from '../map/options/bed-background-options';
+import { BedType } from '../map/options/bed-type.enum';
+import { BedStatusChoropleth } from "../map/overlays/bedstatuschoropleth";
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
+import { QuantitativeDiviDevelopmentRepository } from '../repositories/quantitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { QualitativeColormapService } from './qualitative-colormap.service';
-import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
 import { QuantitativeColormapService } from './quantitative-colormap.service';
+import { TooltipService } from "./tooltip.service";
 
 @Injectable({
   providedIn: "root"

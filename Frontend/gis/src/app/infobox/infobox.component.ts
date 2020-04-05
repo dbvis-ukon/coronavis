@@ -1,25 +1,23 @@
-import {Component, EventEmitter, Input, OnInit, Output, Inject, LOCALE_ID} from '@angular/core';
-import {AggregationLevel} from '../map/options/aggregation-level.enum';
-import {
-  CovidNumberCaseChange,
-  CovidNumberCaseNormalization,
-  CovidNumberCaseTimeWindow,
-  CovidNumberCaseType
-} from '../map/options/covid-number-case-options';
-import { BedType } from '../map/options/bed-type.enum';
-import { MapOptions } from '../map/options/map-options';
+import { BreakpointObserver } from "@angular/cdk/layout";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { APP_CONFIG_KEY } from "../../constants";
 import { AboutComponent } from '../about/about.component';
+import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { ImpressumComponent } from '../impressum/impressum.component';
-import { OSMLayerService } from '../services/osm-layer.service';
-import { GlyphLayerService } from '../services/glyph-layer.service';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { BedType } from '../map/options/bed-type.enum';
+import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { MapOptions } from '../map/options/map-options';
+import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
-import {APP_CONFIG_KEY} from "../../constants";
+import { CountryAggregatorService } from '../services/country-aggregator.service';
+import { GlyphLayerService } from '../services/glyph-layer.service';
+import { I18nService, SupportedLocales } from '../services/i18n.service';
+import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
-import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
-import { SupportedLocales, I18nService } from '../services/i18n.service';
-import {BreakpointObserver} from "@angular/cdk/layout";
+import { QualitativeTimedStatusAggregation } from '../services/types/qualitateive-timed-status-aggregation';
 
 @Component({
   selector: 'app-infobox',
@@ -36,7 +34,8 @@ export class InfoboxComponent implements OnInit {
     private bedChoroplethLayerService: BedChoroplethLayerService,
     private caseChoroplethLayerService: CaseChoroplethLayerService,
     private i18nService: I18nService,
-    private breakPointObserver: BreakpointObserver
+    private breakPointObserver: BreakpointObserver,
+    private countryAggregatorService: CountryAggregatorService
   ) { }
 
   glyphLegend;
@@ -50,6 +49,10 @@ export class InfoboxComponent implements OnInit {
 
   @Output()
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
+
+  aggregatedDiviStatistics: QualitativeTimedStatusAggregation;
+
+  aggregatedRkiStatistics: QuantitativeAggregatedRkiCasesProperties;
 
   // ENUM MAPPING
   // because in HTML, this stuff cannot be accessed
@@ -100,6 +103,17 @@ export class InfoboxComponent implements OnInit {
       {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
       {name: 'ECMO', accessor: 'showEcmo', color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
     ];
+
+
+    this.countryAggregatorService.diviAggregationForCountry()
+    .subscribe(r => {
+      this.aggregatedDiviStatistics = r;
+    });
+
+    this.countryAggregatorService.rkiAggregationForCountry()
+    .subscribe(r => {
+      this.aggregatedRkiStatistics = r;
+    })
   }
 
   emitCaseChoroplethOptions() {
@@ -164,7 +178,6 @@ export class InfoboxComponent implements OnInit {
   emitMapOptions() {
     localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(this.mo));
     this.mapOptionsChange.emit({...this.mo});
-    console.log(this.mo);
   }
 
   openAbout() {
