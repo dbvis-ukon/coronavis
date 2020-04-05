@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import {BreakpointObserver} from "@angular/cdk/layout";
-import {FlexLayoutModule} from '@angular/flex-layout';
-
 
 @Component({
   selector: 'app-help-dialog',
   templateUrl: './help-dialog.component.html',
   styleUrls: ['./help-dialog.component.less']
 })
+
 export class HelpDialogComponent implements OnInit {
 
   constructor(
