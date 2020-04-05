@@ -71,12 +71,19 @@
       <mat-checkbox [(ngModel)]="mls.allowZooming" (change)="update()" i18n="@@shareAllowZooming">Zoomen der Karte erlauben</mat-checkbox>
     </div>
 
+  </div>
+
+  <div class="addOptions">
     <div>
       <mat-checkbox [(ngModel)]="mo.extendInfobox" (change)="update()" i18n="@@shareExtendInfobox">Optionen-Menu ausklappen</mat-checkbox>
     </div>
 
     <div>
       <mat-checkbox [(ngModel)]="mo.hideInfobox" (change)="update()" i18n="@@shareHideInfobox">Optionen-Menu verstecken</mat-checkbox>
+    </div>
+
+    <div>
+      <mat-checkbox [(ngModel)]="mo.showHelpOnStart" (change)="update()" i18n="@@shareShowHelpOnStart">Hilfe bei Erststart anzeigen</mat-checkbox>
     </div>
   </div>
 </div>

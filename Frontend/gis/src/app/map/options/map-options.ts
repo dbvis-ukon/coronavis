@@ -14,6 +14,11 @@ export interface MapOptions {
    */
   hideInfobox: boolean;
 
+  /**
+   * Show help dialog on start
+   */
+  showHelpOnStart: boolean;
+
   bedGlyphOptions: BedGlyphOptions;
 
   bedBackgroundOptions: BedBackgroundOptions;
