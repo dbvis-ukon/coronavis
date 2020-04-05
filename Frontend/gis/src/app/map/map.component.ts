@@ -1,29 +1,29 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
-
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { FeatureCollection } from 'geojson';
 import * as L from 'leaflet';
-import {GeoJSON, LatLng, LatLngTuple, SVGOverlay} from 'leaflet';
+import { LatLngTuple, SVGOverlay } from 'leaflet';
 import 'mapbox-gl';
 import 'mapbox-gl-leaflet';
-// import 'leaflet-mapbox-gl';
-import {Overlay} from './overlays/overlay';
-import {FeatureCollection} from 'geojson';
-import {Subject, Observable, Subscription, of} from 'rxjs';
-import {AggregationLevel} from './options/aggregation-level.enum';
-import {CovidNumberCaseOptions} from './options/covid-number-case-options';
-import {MapOptions} from './options/map-options';
-import {BedBackgroundOptions} from './options/bed-background-options';
-import {BedGlyphOptions} from './options/bed-glyph-options';
-import {environment} from 'src/environments/environment';
-import { GlyphLayer } from './overlays/GlyphLayer';
-import { GlyphLayerService } from '../services/glyph-layer.service';
-import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
-import { OSMLayerService } from '../services/osm-layer.service';
-import { CaseChoropleth } from './overlays/casechoropleth';
+import { Observable, of, Subject, Subscription } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { MAP_VIEW_KEY, MAP_ZOOM_KEY } from "../../constants";
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
-import { switchMap, map } from 'rxjs/operators';
-import {APP_CONFIG_KEY, MAP_VIEW_KEY, MAP_ZOOM_KEY} from "../../constants";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
+import { GlyphLayerService } from '../services/glyph-layer.service';
+import { OSMLayerService } from '../services/osm-layer.service';
 import { TranslationService } from '../services/translation.service';
+import { AggregationLevel } from './options/aggregation-level.enum';
+import { BedBackgroundOptions } from './options/bed-background-options';
+import { BedGlyphOptions } from './options/bed-glyph-options';
+import { CovidNumberCaseOptions } from './options/covid-number-case-options';
+import { MapOptions } from './options/map-options';
+import { CaseChoropleth } from './overlays/casechoropleth';
+import { GlyphLayer } from './overlays/GlyphLayer';
+// import 'leaflet-mapbox-gl';
+import { Overlay } from './overlays/overlay';
+
 
 export enum MapOptionKeys {
   bedGlyphOptions, bedBackgroundOptions, covidNumberCaseOptions, showOsmHospitals, showOsmHeliports
@@ -129,7 +129,7 @@ export class MapComponent implements OnInit {
 
     this.mymap = L.map('main', {
       minZoom: 6,
-      maxZoom: 14,
+      maxZoom: 11,
       layers: [tiledMap],
       zoomControl: false
     }).setView(initialView, initialZoom);
