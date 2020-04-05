@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
-import { ImpressumComponent } from '../impressum/impressum.component';
 import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { ShareDialogComponent } from '../share-dialog/share-dialog.component';
@@ -45,12 +44,8 @@ export class ButtonPanelComponent implements OnInit {
 
   openAbout() {
     this.dialogService.open(AboutComponent, {
-		panelClass: 'popup-panel-white-glass-background'
-	});
-  }
-
-  openImpressum() {
-    this.dialogService.open(ImpressumComponent);
+		  panelClass: 'popup-panel-white-glass-background'
+	  });
   }
 
   openVideo() {

@@ -31,17 +31,6 @@
       <mat-icon>group</mat-icon>
     </a>
 
-
-    <a 
-    mat-icon-button 
-    (click)="openImpressum()" 
-    i18n-matTooltip="@@buttonPanelTooltipImprint" 
-    matTooltip="Impressum"
-    [matTooltipPosition]="mode === 'vertical' ? 'right' : 'below'"
-    >
-      <mat-icon>priority_high</mat-icon>
-    </a>
-
     <a 
     *ngIf="!mo.hideInfobox"
     mat-icon-button 

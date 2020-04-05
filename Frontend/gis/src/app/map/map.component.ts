@@ -117,7 +117,8 @@ export class MapComponent implements OnInit {
           tileSize: 256,
           // zoomOffset: -1,
           attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> ' +
-                       '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
+                       '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a> | ' +
+                       `<a href="/imprint">${ this.translationService.translate('Impressum') }</a>`
         });
 
     // create map, set initial view to to see whole of Germany (country wide deployment)

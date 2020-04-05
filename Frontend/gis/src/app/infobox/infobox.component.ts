@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, Inject, LOCALE_ID} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {AggregationLevel} from '../map/options/aggregation-level.enum';
 import {
   CovidNumberCaseChange,
@@ -8,18 +8,12 @@ import {
 } from '../map/options/covid-number-case-options';
 import { BedType } from '../map/options/bed-type.enum';
 import { MapOptions } from '../map/options/map-options';
-import { MatDialog } from '@angular/material/dialog';
-import { AboutComponent } from '../about/about.component';
-import { ImpressumComponent } from '../impressum/impressum.component';
 import { OSMLayerService } from '../services/osm-layer.service';
 import { GlyphLayerService } from '../services/glyph-layer.service';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
-import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
-import { SupportedLocales, I18nService } from '../services/i18n.service';
 import {BreakpointObserver} from "@angular/cdk/layout";
-import { ShareDialogComponent } from '../share-dialog/share-dialog.component';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 
 @Component({
@@ -31,12 +25,10 @@ export class InfoboxComponent implements OnInit {
 
   constructor(
     private colormapService: QualitativeColormapService,
-    private dialogService: MatDialog,
     private osmLayerService: OSMLayerService,
     private glyphLayerService: GlyphLayerService,
     private bedChoroplethLayerService: BedChoroplethLayerService,
     private caseChoroplethLayerService: CaseChoroplethLayerService,
-    private i18nService: I18nService,
     private breakPointObserver: BreakpointObserver
   ) { }
 

@@ -1,5 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-impressum',
@@ -8,16 +7,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ImpressumComponent implements OnInit {
 
-  constructor(
-    public dialogRef: MatDialogRef<ImpressumComponent>) {}
+  constructor() {}
 
   ngOnInit(): void {
   }
-
-
-
-  close(): void {
-    this.dialogRef.close();
-  }
-
 }
