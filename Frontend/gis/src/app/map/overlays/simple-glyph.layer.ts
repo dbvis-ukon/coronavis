@@ -186,6 +186,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
         }
       })
       .on('click', d => {
+        this.tooltipService.close();
         this.dialog.open(HospitalInfoDialogComponent, {
           data: d.properties
         });

@@ -139,6 +139,7 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
       })
       .on('mouseleave', () => this.tooltipService.close())
       .on('click', d => {
+        this.tooltipService.close();
         this.dialog.open(HospitalInfoDialogComponent, {
           data: d.properties
         });
