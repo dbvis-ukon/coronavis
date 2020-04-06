@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { AboutComponent } from '../about/about.component';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { MapLocationSettings } from '../map/options/map-location-settings';
@@ -29,8 +31,14 @@ export class ButtonPanelComponent implements OnInit {
 
   constructor(
     private dialogService: MatDialog,
-    private i18nService: I18nService
-  ) { }
+    private i18nService: I18nService,
+    iconRegistry: MatIconRegistry, sanitizer: DomSanitizer
+  ) {
+    iconRegistry.addSvgIcon(
+      'twitter',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/Twitter_bird_logo_2012.svg'));
+  }
+
 
   ngOnInit(): void {
 
