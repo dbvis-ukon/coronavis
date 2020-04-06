@@ -1,0 +1,89 @@
+<div class="title-row">
+  <h1 mat-dialog-title i18n="@@shareTitle">
+    Visualisierung Teilen
+  </h1>
+
+  <span class="spacer"></span>
+
+  <button (click)="close()" mat-icon-button aria-label="Close Dialog">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+
+
+<div mat-dialog-content>
+
+  <mat-tab-group>
+    <mat-tab label="URL">
+
+      <p class="intro" i18n="@shareExplUrl">Mit der untenstehenden URL können Sie die Visualisierung mit ihren gewählten Einstellungen und dem momentanen Kartenausschnitt teilen. 
+        Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</p>
+    
+      <mat-form-field style.fontSize="'8px'" class="urlfield">
+        <mat-label>URL</mat-label>
+        <textarea #urltextarea matInput onclick="this.focus();this.select()" readonly class="url" cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5">{{ url }}</textarea>
+      </mat-form-field>
+    
+      <div class="copyline">
+    
+        <button mat-raised-button (click)="copyInputMessage(urltextarea)" i18n="@@shareCopy">Kopieren</button>
+    
+        <div *ngIf="urlcopied" i18n="@@shareCopied">Erfolgreich in die Zwischenablage kopiert</div>
+    
+      </div>
+
+    </mat-tab>
+    <mat-tab label="IFrame">
+
+      <p class="intro" i18n="@shareExplIframe">Mit dem IFrame können Sie die Visualisierung mit ihren gewählten Einstellungen und dem momentanen Kartenausschnitt in ihre Webseite einbetten. 
+        Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</p>
+    
+      <mat-form-field style.fontSize="'8px'" class="urlfield">
+        <mat-label>URL</mat-label>
+        <textarea #iframetextarea matInput onclick="this.focus();this.select()" readonly class="url" cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5">{{ iframe }}</textarea>
+      </mat-form-field>
+    
+      <div class="copyline">
+    
+        <button mat-raised-button (click)="copyInputMessage(iframetextarea)" i18n="@@shareCopy">Kopieren</button>
+    
+        <div *ngIf="urlcopied" i18n="@@shareCopied">Erfolgreich in die Zwischenablage kopiert</div>
+    
+      </div>
+
+    </mat-tab>
+  </mat-tab-group>
+  
+  
+  <mat-divider style="margin: 10px 0;"></mat-divider>
+
+  <h2>Zusätzliche Optionen</h2>
+
+  <div class="addOptions">
+    <div>
+      <mat-checkbox [(ngModel)]="mls.allowPanning" (change)="update()" i18n="@@shareAllowPanning">Verschieben der Karte erlauben</mat-checkbox>
+    </div>
+  
+    <div>
+      <mat-checkbox [(ngModel)]="mls.allowZooming" (change)="update()" i18n="@@shareAllowZooming">Zoomen der Karte erlauben</mat-checkbox>
+    </div>
+
+  </div>
+
+  <div class="addOptions">
+    <div>
+      <mat-checkbox [(ngModel)]="mo.extendInfobox" (change)="update()" i18n="@@shareExtendInfobox">Optionen-Menu ausklappen</mat-checkbox>
+    </div>
+
+    <div>
+      <mat-checkbox [(ngModel)]="mo.hideInfobox" (change)="update()" i18n="@@shareHideInfobox">Optionen-Menu verstecken</mat-checkbox>
+    </div>
+
+    <div>
+      <mat-checkbox [(ngModel)]="mo.showHelpOnStart" (change)="update()" i18n="@@shareShowHelpOnStart">Hilfe bei Erststart anzeigen</mat-checkbox>
+    </div>
+  </div>
+</div>

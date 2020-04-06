@@ -1,21 +1,16 @@
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { APP_CONFIG_KEY } from "../../constants";
-import { AboutComponent } from '../about/about.component';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
-import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
-import { ImpressumComponent } from '../impressum/impressum.component';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
 import { CountryAggregatorService } from '../services/country-aggregator.service';
 import { GlyphLayerService } from '../services/glyph-layer.service';
-import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TooltipService } from '../services/tooltip.service';
@@ -31,12 +26,10 @@ export class InfoboxComponent implements OnInit {
 
   constructor(
     public colormapService: QualitativeColormapService,
-    private dialogService: MatDialog,
     private osmLayerService: OSMLayerService,
     private glyphLayerService: GlyphLayerService,
     private bedChoroplethLayerService: BedChoroplethLayerService,
     private caseChoroplethLayerService: CaseChoroplethLayerService,
-    private i18nService: I18nService,
     private breakPointObserver: BreakpointObserver,
     private countryAggregatorService: CountryAggregatorService,
     public tooltipService: TooltipService,
@@ -47,14 +40,16 @@ export class InfoboxComponent implements OnInit {
 
   glyphLegendColors = QualitativeColormapService.bedStati;
 
-  infoboxExtended = true;
-
   @Input('mapOptions')
   mo: MapOptions;
 
   @Output()
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
 
+  @Input('mapLocationSettings')
+  mls: MapLocationSettings;
+
+  
   aggregatedDiviStatistics: QualitativeTimedStatusAggregation;
 
   aggregatedRkiStatistics: QuantitativeAggregatedRkiCasesProperties;
@@ -74,11 +69,6 @@ export class InfoboxComponent implements OnInit {
   eAggregationLevels = AggregationLevel;
 
 
-  supportedLocales: string[];
-
-  selectedLocale: SupportedLocales;
-
-
   glyphLoading = false;
   bedChoroplethLoading = false;
   caseChoroplethLoading = false;
@@ -89,14 +79,8 @@ export class InfoboxComponent implements OnInit {
     //close info box if mobile
     const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
     if(isSmallScreen){
-      this.infoboxExtended = false;
+      this.mo.extendInfobox = false;
     }
-
-    this.supportedLocales = this.i18nService.getSupportedLocales();
-
-    this.i18nService.currentLocale().subscribe(l => {
-      this.selectedLocale = l;
-    })
 
     this.glyphLayerService.loading$.subscribe(l => this.glyphLoading = l);
     this.bedChoroplethLayerService.loading$.subscribe(l => this.bedChoroplethLoading = l);
@@ -202,35 +186,8 @@ export class InfoboxComponent implements OnInit {
   }
 
   emitMapOptions() {
-    localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(this.mo));
     this.mapOptionsChange.emit({...this.mo});
   }
 
-  openAbout() {
-    this.dialogService.open(AboutComponent, {
-		panelClass: 'popup-panel-white-glass-background'
-	});
-  }
-
-  openImpressum() {
-    this.dialogService.open(ImpressumComponent);
-  }
-
-  openVideo() {
-    window.open('https://video.coronavis.dbvis.de', '_blank');
-    // location.href = 'https://video.coronavis.dbvis.de';
-  }
-
-  changeLocale(evt) {
-    this.i18nService.updateLocale(evt.value);
-
-    const url = evt.value.slice(0,2);
-
-    location.href = `/${url}/`;
-  }
-
-
-  openHelp() {
-    this.dialogService.open(HelpDialogComponent);
-  }
+  
 }

@@ -7,10 +7,8 @@ import { BedBackgroundOptions } from '../map/options/bed-background-options';
 import { BedType } from '../map/options/bed-type.enum';
 import { BedStatusChoropleth } from "../map/overlays/bedstatuschoropleth";
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
-import { QuantitativeDiviDevelopmentRepository } from '../repositories/quantitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { QualitativeColormapService } from './qualitative-colormap.service';
-import { QuantitativeColormapService } from './quantitative-colormap.service';
 import { TooltipService } from "./tooltip.service";
 
 @Injectable({
@@ -21,9 +19,7 @@ export class BedChoroplethLayerService {
   public loading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
-    private quantitativeDiviDevelopmentRepository: QuantitativeDiviDevelopmentRepository,
     private qualitativeDiviDevelopmentRepository: QualitativeDiviDevelopmentRepository,
-    private quantitativeColorMapService: QuantitativeColormapService, 
     private qualitativeColorMapService: QualitativeColormapService, 
     private tooltipService: TooltipService,
     private matDialog: MatDialog
