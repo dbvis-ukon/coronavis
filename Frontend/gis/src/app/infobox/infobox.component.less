@@ -3,7 +3,8 @@
     color: black;
     max-width: 95vw;
     max-height: 95vh;
-    overflow: auto;
+    overflow: hidden;
+    
 
     /* width */
     &::-webkit-scrollbar {
@@ -25,6 +26,12 @@
     /* Handle on hover */
     &::-webkit-scrollbar-thumb:hover {
         background: rgba(0, 0, 0, 0.3);
+    }
+
+    .mat-card {
+        max-width: 95vw;
+        max-height: 85vh;
+        overflow: auto;
     }
 
     .btngrp {
