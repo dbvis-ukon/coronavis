@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Feature, Polygon } from "geojson";
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -20,14 +21,15 @@ export class CaseChoroplethLayerService {
   constructor(
     private rkiCaseRepository: RKICaseRepository,
     private tooltipService: TooltipService,
-    private colormapService: QualitativeColormapService
+    private colormapService: QualitativeColormapService,
+    private matDialog: MatDialog
   ) {}
 
   public getLayer(options: CovidNumberCaseOptions): Observable < CaseChoropleth > {
     this.loading$.next(true);
     return this.getCaseData(options.aggregationLevel)
       .pipe(
-        map(data => new CaseChoropleth(this.getKeyCovidNumberCaseOptions(options), data, options, this.tooltipService, this.colormapService)),
+        map(data => new CaseChoropleth(this.getKeyCovidNumberCaseOptions(options), data, options, this.tooltipService, this.colormapService, this.matDialog)),
         tap(() => this.loading$.next(false))
       );
   }
