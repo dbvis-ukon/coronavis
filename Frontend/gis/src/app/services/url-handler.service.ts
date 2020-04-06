@@ -40,10 +40,10 @@ export class UrlHandlerService {
   }
 
   private objToUrl(obj: object): string {
-    return btoa(JSON.stringify(obj));
+    return encodeURI(JSON.stringify(obj));
   }
 
   private urlToObj(url: string): object {
-    return JSON.parse(atob(url));
+    return JSON.parse(decodeURI(url));
   }
 }

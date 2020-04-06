@@ -142,8 +142,6 @@ export class MapRootComponent implements OnInit {
   mapOptionsUpdated(newOptions: MapOptions) {
     this.mapOptions = newOptions;
 
-    console.log(this.urlHandlerService.convertMLOToUrl(this.mapOptions));
-
     localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(newOptions));
   }
 
@@ -199,7 +197,7 @@ export class MapRootComponent implements OnInit {
 
       const mergedMls = merge<MapLocationSettings, MapLocationSettings>(this.defaultMapLocationSettings, urlMls);
 
-      this.initialMapLocationSettings = mergedMls;
+      this.initialMapLocationSettings = {...mergedMls};
     } else if(storedMapLocationSettings) {
       // this.mapLocationSettings$.next(storedMapLocationSettings);
       this.initialMapLocationSettings = merge<MapLocationSettings, MapLocationSettings, any>(

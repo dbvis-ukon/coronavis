@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { FeatureCollection } from 'geojson';
 import * as L from 'leaflet';
 import { SVGOverlay } from 'leaflet';
@@ -78,8 +77,6 @@ export class MapComponent implements OnInit {
 
   private mymap: L.Map;
 
-  private choropletDataMap = new Map<AggregationLevel, FeatureCollection>();
-
   private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<FeatureCollection>>();
 
   private aggregationLevelToGlyphMap = new Map<string, L.LayerGroup<any>>();
@@ -100,17 +97,20 @@ export class MapComponent implements OnInit {
   private osmHospitalLayerSubscription: Subscription;
   private osmHelipadLayerSubscription: Subscription;
 
+  private zoomControl: L.Control.Zoom;
+
   constructor(
     private bedChoroplethLayerService: BedChoroplethLayerService,
     private glyphLayerService: GlyphLayerService,
     private caseChoroplehtLayerService: CaseChoroplethLayerService,
     private osmLayerService: OSMLayerService,
-    private snackbar: MatSnackBar,
     private translationService: TranslationService
   ) {
   }
 
   ngOnInit() {
+    this.zoomControl = new L.Control.Zoom({position: 'topright'});
+
     const tiledMap = L.tileLayer(
         `${environment.tileServerUrl}{z}/{x}/{y}.png`,
         {
@@ -125,7 +125,7 @@ export class MapComponent implements OnInit {
     const defaultView: L.LatLngExpression = [51.163375, 10.447683];
     const defaultZoom = 6;
 
-    let mapLocationSettings = this._mapLocationSettings;
+    let mapLocationSettings = JSON.parse(JSON.stringify(this._mapLocationSettings));
 
     if (!mapLocationSettings) {
       
@@ -153,19 +153,8 @@ export class MapComponent implements OnInit {
       this.emitMapLocationSettings();
     });
 
-    if(mapLocationSettings.allowZooming) {
-      new L.Control.Zoom({position: 'topright'}).addTo(this.mymap);
-    }
-
-    if(mapLocationSettings.allowPanning === false) {
-      this.mymap.dragging.disable();
-    }
-
-    if(mapLocationSettings.allowZooming === false) {
-      this.mymap.touchZoom.disable();
-      this.mymap.doubleClickZoom.disable();
-      this.mymap.scrollWheelZoom.disable();
-    }
+    
+    this.updateMapLocation(mapLocationSettings);
     
 
     this.updateMap(this._mapOptions);
@@ -188,6 +177,28 @@ export class MapComponent implements OnInit {
     }
 
     this.mymap.setView(mapLoc.center, mapLoc.zoom);
+
+    if(mapLoc.allowZooming) {
+      this.mymap.addControl(this.zoomControl);
+    } else {
+      this.mymap.removeControl(this.zoomControl);
+    }
+
+    if(mapLoc.allowPanning === false) {
+      this.mymap.dragging.disable();
+    } else {
+      this.mymap.dragging.enable();
+    }
+
+    if(mapLoc.allowZooming === false) {
+      this.mymap.touchZoom.disable();
+      this.mymap.doubleClickZoom.disable();
+      this.mymap.scrollWheelZoom.disable();
+    } else {
+      this.mymap.touchZoom.enable();
+      this.mymap.doubleClickZoom.enable();
+      this.mymap.scrollWheelZoom.enable();
+    }
   }
 
   private updateMap(mo: MapOptions) {

@@ -16,7 +16,6 @@ export class I18nService {
   constructor(@Inject(LOCALE_ID) protected localeId: string) {}
 
   initI18n() {
-    console.log('provided locale id', this.localeId);
     this.updateLocale(this.localeId as SupportedLocales);
   }
 
