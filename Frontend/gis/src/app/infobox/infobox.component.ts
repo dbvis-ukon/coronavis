@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { APP_CONFIG_KEY } from "../../constants";
 import { AboutComponent } from '../about/about.component';
+import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { ImpressumComponent } from '../impressum/impressum.component';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -17,6 +18,8 @@ import { GlyphLayerService } from '../services/glyph-layer.service';
 import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
+import { TooltipService } from '../services/tooltip.service';
+import { TranslationService } from '../services/translation.service';
 import { QualitativeTimedStatusAggregation } from '../services/types/qualitateive-timed-status-aggregation';
 
 @Component({
@@ -27,7 +30,7 @@ import { QualitativeTimedStatusAggregation } from '../services/types/qualitateiv
 export class InfoboxComponent implements OnInit {
 
   constructor(
-    private colormapService: QualitativeColormapService,
+    public colormapService: QualitativeColormapService,
     private dialogService: MatDialog,
     private osmLayerService: OSMLayerService,
     private glyphLayerService: GlyphLayerService,
@@ -35,7 +38,9 @@ export class InfoboxComponent implements OnInit {
     private caseChoroplethLayerService: CaseChoroplethLayerService,
     private i18nService: I18nService,
     private breakPointObserver: BreakpointObserver,
-    private countryAggregatorService: CountryAggregatorService
+    private countryAggregatorService: CountryAggregatorService,
+    public tooltipService: TooltipService,
+    private translationService: TranslationService
   ) { }
 
   glyphLegend;
@@ -98,22 +103,43 @@ export class InfoboxComponent implements OnInit {
     this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
     this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);
 
-    this.glyphLegend = [
-      {name: 'ICU low', accessor: 'showIcuLow', color: this.glyphLegendColors[1] , description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
-      {name: 'ICU high', accessor: 'showIcuHigh', color: this.glyphLegendColors[0], description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
-      {name: 'ECMO', accessor: 'showEcmo', color: this.glyphLegendColors[2], description: 'ECMO = Zusätzlich ECMO'}
-    ];
+    
 
 
     this.countryAggregatorService.diviAggregationForCountry()
     .subscribe(r => {
       this.aggregatedDiviStatistics = r;
+
+      this.glyphLegend = [
+        {name: 'ICU low', accessor: 'showIcuLow', accFunc: (r) => r.icu_low_care, description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+        {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (r) => r.icu_high_care, description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
+        {name: 'ECMO', accessor: 'showEcmo', accFunc: (r) => r.ecmo_state, description: 'ECMO = Zusätzlich ECMO'}
+      ];
     });
 
     this.countryAggregatorService.rkiAggregationForCountry()
     .subscribe(r => {
       this.aggregatedRkiStatistics = r;
     })
+  }
+
+  openBedTooltip(evt, glypLegendEntity) {
+
+    const t = this.tooltipService.openAtElementRef(BedTooltipComponent, evt.target, null, [
+      {
+        overlayX: 'center',
+        overlayY: 'bottom',
+        originX: 'center',
+        originY: 'top',
+      }
+    ]);
+
+    t.data = this.aggregatedDiviStatistics;
+    t.bedName = glypLegendEntity.name;
+
+    t.explanation = this.translationService.translate(glypLegendEntity.description);
+
+    t.accessorFunc = glypLegendEntity.accFunc;
   }
 
   emitCaseChoroplethOptions() {

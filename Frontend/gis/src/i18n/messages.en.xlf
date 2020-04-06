@@ -87,17 +87,17 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:4</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:12</note></notes>
       <segment state="initial">
-        <source>Das Projekt</source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? &quot;&quot; : 'Das Projekt' }}"/> </source>
       <target>The Project</target></segment>
     </unit><unit id="title1">
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:7,8</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:14</note></notes>
       <segment state="initial">
         <source>Interaktive
           Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</source>
@@ -106,8 +106,8 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:9,10</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:16</note></notes>
       <segment state="initial">
         <source>Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
             am Besten im Chrome-Browser.</source>
@@ -116,8 +116,8 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:11,14</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:18</note></notes>
       <segment state="initial">
         <source>Die <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
           Konstanz entwickelt dieses Tool, um eine intuitive Übersicht über freie und belegte Bettenkapazitäten in
@@ -129,8 +129,8 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:15,19</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:22</note></notes>
       <segment state="initial">
         <source>Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten der DIVI[1] (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
           exakten Kapazitätsdaten der DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
@@ -141,8 +141,8 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:20,22</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:27</note></notes>
       <segment state="initial">
         <source>Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
           weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.coronavis.dbvis.de</pc>.</source>
@@ -151,8 +151,8 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:23,24</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:30</note></notes>
       <segment state="initial">
         <source>Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
           anschauen wollen, kann dieses Fenster geschlossen werden.</source>
@@ -161,8 +161,8 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:25</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:32</note></notes>
       <segment state="initial">
         <source>[1] <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></source>
       <target>[1] <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">German Interdisciplinary Association for Intensive and Emergency Medicine (DIVI)</pc></target></segment>
@@ -170,17 +170,17 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:28</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:35</note></notes>
       <segment state="initial">
-        <source>Zur Beschreibung der Kapazitätsdarstellung</source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Zur Beschreibung der Kapazitätsdarstellung' }}"/></source>
       <target>Next to the Depiction of the Bed Capacities</target></segment>
     </unit><unit id="button12">
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:29</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:36</note></notes>
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
@@ -188,17 +188,17 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:33</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:40</note></notes>
       <segment state="initial">
-        <source>Darstellung der Bettenkapazitäten</source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? &quot;&quot; : 'Darstellung der Bettenkapazitäten' }}"/></source>
       <target>Depiction of Hospital Bed Capacities</target></segment>
     </unit><unit id="title2">
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:36,37</note>
-      </notes>
+        
+      <note category="location">src/app/help-dialog/help-dialog.component.html:41</note></notes>
       <segment state="initial">
         <source>Beschreibung der Darstellung der Bettenkapazitäten
         </source>
@@ -209,11 +209,11 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:41</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:47</note></notes>
       <segment state="initial">
         <source>Die Bettendarstellung erfolgt im Überblick mit drei farbigen Kästchen pro Krankenhaus, welche für die
-              Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
-              stärkere Interventionen dar.</source>
+            Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
+            stärkere Interventionen dar.</source>
       <target>An overview of the beds is given by three colored boxes per hospital, which represent the utilization of each treatment type at that hospital.
       The three levels represent increasingly stronger treatment interventions.</target></segment>
     </unit><unit id="visdescription22">
@@ -221,7 +221,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:45</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:51</note></notes>
       <segment state="initial">
         <source>ICU low care: Auslastung der Betten für nichtinvasive Beatmung</source>
       <target>ICU low care: Bed Capacities for Non-Invasive Ventilation</target></segment>
@@ -230,7 +230,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:46</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:52</note></notes>
       <segment state="initial">
         <source>ICU high care: Auslastung der Betten für invasive Beatmung</source>
       <target>ICU high care: Bed Capacities for Invasive Ventilation</target></segment>
@@ -239,7 +239,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:47</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:53</note></notes>
       <segment state="initial">
         <source>ECMO: Auslastung der Betten für die Beatmung von Patienten durch extrakorporale Membranoxygenierung</source>
       <target>ECMO: Bed Capacities for Ventilation using Extracorporeal Membrane Oxygenation</target></segment>
@@ -248,7 +248,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:49</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:55</note></notes>
       <segment state="initial">
         <source>Die Farben stellen die Auslastung dar:</source>
       <target>The colors represent the hospital load:</target></segment>
@@ -257,7 +257,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:51</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:57</note></notes>
       <segment state="initial">
         <source>Grün: Plätze in dieser Behandlungskategorie sind in diesem Klinikum noch vorhanden</source>
       <target>Green: The beds in this treatment category are still available in that particular hospital</target></segment>
@@ -266,7 +266,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:52</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:58</note></notes>
       <segment state="initial">
         <source>Gelb: Die Betten in dieser Behandlungskategorie werden knapp</source>
       <target>Yellow: The beds in this treatment category are becoming scarce</target></segment>
@@ -275,7 +275,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:53</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:59</note></notes>
       <segment state="initial">
         <source>Rot: Die Betten in dieser Behandlungskategorie sind komplett ausgelastet</source>
       <target>Red: The beds in this treatment category are fully occupied</target></segment>
@@ -284,12 +284,12 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:55</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:61</note></notes>
       <segment state="initial">
         <source>Die Informationen können auch nach Regionen zusammengefasst werden durch die entsprechende Schaltfläche.
-              Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
-              notwendigerweise Kapazitäten gemeldet haben, können unter "Geographische Verortung" hinzugeschaltet werden.
-            </source>
+            Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
+            notwendigerweise Kapazitäten gemeldet haben, können unter "Geographische Verortung" hinzugeschaltet werden.
+          </source>
       <target>The information can also be summarized by regions through the clicking the corresponding button.
       In addition, information such as the positions of helipads or other hospitals that did not report capacities can be displayed under "Additional Landmarks."
         </target></segment>
@@ -298,7 +298,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:63</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:68</note></notes>
       <segment state="initial">
         <source>Zurück</source>
       <target>Back</target></segment>
@@ -307,16 +307,16 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:64</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:69</note></notes>
       <segment state="initial">
-        <source>Weiter zur Darstellung der Fallzahlen</source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Weiter zur Darstellung der Fallzahlen' }}"/></source>
       <target>Next to the Depiction of Case Numbers</target></segment>
     </unit><unit id="button23">
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:65</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:70</note></notes>
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
@@ -325,16 +325,16 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:69</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:74</note></notes>
       <segment state="initial">
-        <source>Darstellung der Fallzahlen</source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? &quot;&quot; : 'Darstellung der Fallzahlen' }}"/></source>
       <target>Depiction of Case Numbers</target></segment>
     </unit><unit id="title3">
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:71</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:75</note></notes>
       <segment state="initial">
         <source>Beschreibung der Darstellung der Fallzahlen</source>
       <target>Depiction of Case Numbers</target></segment>
@@ -343,14 +343,14 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:75</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:81</note></notes>
       <segment state="initial">
         <source>Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
-              Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
-              oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
-              angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
-              gewählt werden, ob die Darstellung absolut oder pro 100.000 Einwohner angezeigt werden soll. Wenn man auf der
-              Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</source>
+            Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
+            oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
+            angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
+            gewählt werden, ob die Darstellung absolut oder pro 100.000 Einwohner angezeigt werden soll. Wenn man auf der
+            Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</source>
       <target>
       The case numbers come from the official <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI data records</pc>. They can be presented by state, district and county, and can show the current number of cases, as well as those from the last 24 or 72 hours. The total number of recorded cases or the change in the selected period can be displayed. We further distinguish between illnesses and deaths. You can choose whether the data should be displayed in absolute terms or per 100 000 inhabitants. If you hover over a county or district on the map, a tooltip shows exact statistics.
       </target></segment>
@@ -359,7 +359,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:85</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:90</note></notes>
       <segment state="initial">
         <source>Zurück</source>
       <target>Back</target></segment>
@@ -368,7 +368,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:86</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:91</note></notes>
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
@@ -382,6 +382,13 @@
       <segment state="initial">
         <source>Schließen</source>
       <target>Close</target></segment>
+    </unit><unit id="deutschland">
+      <notes>
+        <note category="location">src/app/bed-tooltip/bed-tooltip.component.html:4</note>
+      </notes>
+      <segment state="initial">
+        <source>Deutschland</source>
+      <target>Germany</target></segment>
     </unit><unit id="mobile">
       <notes>
         <note category="description">overlay</note>
@@ -523,14 +530,14 @@
     </unit><unit id="infoboxLastUpdate">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:21</note><note category="location">src/app/infobox/infobox.component.html:148</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:21</note><note category="location">src/app/infobox/infobox.component.html:150</note></notes>
       <segment state="initial">
         <source>Letzter Stand: <ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.timestamp | date:'full' }}"/></source>
       <target>Last Update: <ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.timestamp | date:'full' }}"/></target></segment>
     </unit><unit id="infoboxStates">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:33</note><note category="location">src/app/infobox/infobox.component.html:172</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:33</note><note category="location">src/app/infobox/infobox.component.html:174</note></notes>
       <segment state="initial">
         <source>Länder</source>
       <target>States</target></segment>
@@ -538,14 +545,14 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:33</note><note category="location">src/app/infobox/infobox.component.html:172</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:33</note><note category="location">src/app/infobox/infobox.component.html:174</note></notes>
       <segment state="initial">
         <source>Bundesländer</source>
       <target>States</target></segment>
     </unit><unit id="infoboxRegions">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:36</note><note category="location">src/app/infobox/infobox.component.html:175</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:36</note><note category="location">src/app/infobox/infobox.component.html:177</note></notes>
       <segment state="initial">
         <source>Bezirke</source>
       <target>Districts</target></segment>
@@ -553,14 +560,14 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:36</note><note category="location">src/app/infobox/infobox.component.html:175</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:36</note><note category="location">src/app/infobox/infobox.component.html:177</note></notes>
       <segment state="initial">
         <source>Regierungsbezirke</source>
       <target>Districs</target></segment>
     </unit><unit id="infoboxCounties">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:39</note><note category="location">src/app/infobox/infobox.component.html:178</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:39</note><note category="location">src/app/infobox/infobox.component.html:180</note></notes>
       <segment state="initial">
         <source>Kreise</source>
       <target>Counties</target></segment>
@@ -568,7 +575,7 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:39</note><note category="location">src/app/infobox/infobox.component.html:178</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:39</note><note category="location">src/app/infobox/infobox.component.html:180</note></notes>
       <segment state="initial">
         <source>Landkreise</source>
       <target>Counties</target></segment>
@@ -595,38 +602,45 @@
           </source>
       <target>Show / Hide Bed Occupancy
           </target></segment>
+    </unit><unit id="infoboxColorExpl">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:76</note>
+      </notes>
+      <segment state="initial">
+        <source>* Die Farben stellen den bundesweiten Durchschnitt dar.</source>
+      <target>* The colors represent the national average.</target></segment>
     </unit><unit id="infoboxPositionign">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:89</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:91</note></notes>
       <segment state="initial">
         <source>Positionierung</source>
       <target>Icon Positioning</target></segment>
     </unit><unit id="infoboxBackground">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:106</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:108</note></notes>
       <segment state="initial">
         <source>Hintergrund</source>
       <target>Background</target></segment>
     </unit><unit id="infoboxForceDirectedOnTP">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:98</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:100</note></notes>
       <segment state="initial">
         <source>Verdeckungsfrei</source>
       <target>Overlap-Free</target></segment>
     </unit><unit id="ForceDirectedOnTP">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:98</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:100</note></notes>
       <segment state="initial">
         <source>Position der Krankenhäuser entzerren</source>
       <target>Remove overlap between hospitals</target></segment>
     </unit><unit id="infoboxForceDirectedOffTP">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:101</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:103</note></notes>
       <segment state="initial">
         <source>Exakte Position
           </source>
@@ -634,14 +648,14 @@
     </unit><unit id="ForceDirectedOffTP">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:101</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:103</note></notes>
       <segment state="initial">
         <source>Position der Krankenhäuser beibehalten</source>
       <target>Keep hospitals at exact position</target></segment>
     </unit><unit id="infoboxBackgroundShow">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:114</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:116</note></notes>
       <segment state="initial">
         <source>Bettenauslastung im Hintergrund anzeigen / ausblenden
             </source>
@@ -649,35 +663,35 @@
     </unit><unit id="infoboxBackgroundError">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:117</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:119</note></notes>
       <segment state="initial">
         <source>Bitte eine Aggregation Länder, Bezirke, oder Kreise auswählen.</source>
       <target>Please select state, region or county aggregation</target></segment>
     </unit><unit id="infoboxCaseView">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:142</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:144</note></notes>
       <segment state="initial">
         <source>Fallansicht</source>
       <target>Case View</target></segment>
     </unit><unit id="infoboxNumberOfCovidCases">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:146</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:148</note></notes>
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.cases | number }}"/> bundesweit gemeldete Covid-19 Fälle</source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.cases | number }}"/> nationally reported Covid-19 cases</target></segment>
     </unit><unit id="infoboxNumberOfCovidDeaths">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:147</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:149</note></notes>
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> bundesweit gemeldete Covid-19 Todesfälle</source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> nationally reported Covid-19 deaths</target></segment>
     </unit><unit id="infoboxCaseViewShow">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:155</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:157</note></notes>
       <segment state="initial">
         <source>Covid-19 Fallansicht anzeigen / ausblenden
         </source>
@@ -686,21 +700,21 @@
     </unit><unit id="infoboxAggregation">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:162</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:164</note></notes>
       <segment state="initial">
         <source>Aggregation</source>
       <target>Aggregation</target></segment>
     </unit><unit id="infoboxTime">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:186</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:188</note></notes>
       <segment state="initial">
         <source>Zeitraum</source>
       <target>Time Period</target></segment>
     </unit><unit id="infoboxTimeAll">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:196</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:198</note></notes>
       <segment state="initial">
         <source>Alle
                 Daten
@@ -709,14 +723,14 @@
     </unit><unit id="infoboxTime24">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:200</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:202</note></notes>
       <segment state="initial">
         <source>letzte 24 Stunden</source>
       <target>Last 24 Hours</target></segment>
     </unit><unit id="infoboxTime72">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:202</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:204</note></notes>
       <segment state="initial">
         <source>letzte 72
                 Stunden
@@ -725,14 +739,14 @@
     </unit><unit id="infoboxCaseNum">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:211</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:213</note></notes>
       <segment state="initial">
         <source>Fallzahlen</source>
       <target>Case Counts</target></segment>
     </unit><unit id="infoboxCasesAll">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:220</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:222</note></notes>
       <segment state="initial">
         <source>Alle erfassten
                 Fälle
@@ -741,42 +755,42 @@
     </unit><unit id="infoboxCasesDiff">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:224</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:226</note></notes>
       <segment state="initial">
         <source>Veränderung im gewählten Zeitraum</source>
       <target>Changes in the Selected Time Period</target></segment>
     </unit><unit id="infoboxType">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:233</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:235</note></notes>
       <segment state="initial">
         <source>Art</source>
       <target>Type</target></segment>
     </unit><unit id="infoboxTypeSick">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:242</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:244</note></notes>
       <segment state="initial">
         <source>Erkrankungen</source>
       <target>Afflictions</target></segment>
     </unit><unit id="infoboxTypeDeath">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:244</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:246</note></notes>
       <segment state="initial">
         <source>Todesfälle</source>
       <target>Deaths</target></segment>
     </unit><unit id="infoboxNorm">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:252</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:254</note></notes>
       <segment state="initial">
         <source>Normalisierung</source>
       <target>Normalization</target></segment>
     </unit><unit id="infoboxNornNone">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:261</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:263</note></notes>
       <segment state="initial">
         <source>Keine
                 Normalisierung
@@ -785,7 +799,7 @@
     </unit><unit id="infoboxNornYes">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:265</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:267</note></notes>
       <segment state="initial">
         <source>Je
                 100.000 Einwohner
@@ -794,7 +808,7 @@
     </unit><unit id="infoboxGeo">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:280</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:282</note></notes>
       <segment state="initial">
         <source>
           Geographische Verortung
@@ -805,7 +819,7 @@
     </unit><unit id="infoboxGeoHospital">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:294</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:296</note></notes>
       <segment state="initial">
         <source>Krankenhäuser
         </source>
@@ -814,7 +828,7 @@
     </unit><unit id="infoboxGeoHeli">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:302</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:304</note></notes>
       <segment state="initial">
         <source>Hubschrauberlandeplätze
         </source>
@@ -823,7 +837,7 @@
     </unit><unit id="infoboxData">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:310</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:312</note></notes>
       <segment state="initial">
         <source>
           Datenquellen
@@ -834,7 +848,7 @@
     </unit><unit id="infoboxDIVI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:318</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:320</note></notes>
       <segment state="initial">
         <source>DIVI
             Intensivregister</source>
@@ -842,21 +856,21 @@
     </unit><unit id="infoboxRKI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:323</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:325</note></notes>
       <segment state="initial">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institute</target></segment>
     </unit><unit id="infoboxRKICases">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:327</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:329</note></notes>
       <segment state="initial">
         <source>• Covid-19 Fallzahlen</source>
       <target>- Cases</target></segment>
     </unit><unit id="infoboxDESTATIS">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:331</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:333</note></notes>
       <segment state="initial">
         <source>Statistisches Bundesamt</source>
       <target>Statistisches Bundesamt</target></segment>
@@ -865,7 +879,7 @@
         <note category="description"> infobox</note>
         <note category="meaning">infobox </note>
 
-      <note category="location">src/app/infobox/infobox.component.html:348</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:350</note></notes>
       <segment state="initial">
         <source>Video</source>
       <target>Video</target></segment>
@@ -874,7 +888,7 @@
         <note category="description"> infobox</note>
         <note category="meaning">infobox </note>
 
-      <note category="location">src/app/infobox/infobox.component.html:350</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:352</note></notes>
       <segment state="initial">
         <source>Hilfe</source>
       <target>Help</target></segment>
@@ -883,14 +897,14 @@
         <note category="description"> infobox</note>
         <note category="meaning">infobox </note>
 
-      <note category="location">src/app/infobox/infobox.component.html:352</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:354</note></notes>
       <segment state="initial">
         <source>Team</source>
       <target>Team</target></segment>
     </unit><unit id="infoboxImprint">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:355</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:357</note></notes>
       <segment state="initial">
         <source>Impressum</source>
       <target>Imprint</target></segment>
@@ -899,7 +913,7 @@
         <note category="description"> infobox</note>
         <note category="meaning">infobox </note>
 
-      <note category="location">src/app/infobox/infobox.component.html:360</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:362</note></notes>
       <segment state="initial">
         <source>Sprache</source>
       <target>Language</target></segment>
@@ -908,7 +922,7 @@
         <note category="description"> hospitals@reported</note>
         <note category="meaning">tooltip </note>
         
-      <note category="location">src/app/hospital-info/hospital-info.component.html:6</note></notes>
+      <note category="location">src/app/bed-tooltip/bed-tooltip.component.html:6</note><note category="location">src/app/hospital-info/hospital-info.component.html:6</note></notes>
       <segment state="initial">
         <source>gemeldete Krankenhäuser</source>
       <target>reported hospitals</target></segment>
@@ -948,10 +962,17 @@
     </unit><unit id="tooltipHospitalLastUpdate">
       <notes>
 
-      <note category="location">src/app/hospital-info/hospital-info.component.html:20</note></notes>
+      <note category="location">src/app/bed-tooltip/bed-tooltip.component.html:12</note><note category="location">src/app/hospital-info/hospital-info.component.html:20</note></notes>
       <segment state="initial">
         <source>Letzter Stand: </source>
       <target>Last Update: </target></segment>
+    </unit><unit id="bedtooltipClickHint">
+      <notes>
+        <note category="location">src/app/bed-tooltip/bed-tooltip.component.html:26</note>
+      </notes>
+      <segment state="initial">
+        <source>Mit einem Mausklick können Sie das Symbol auf der Karte ausblenden.</source>
+      <target>Click to hide this part of the glyph on the map.</target></segment>
     </unit><unit id="tooltipHospitalOldData">
       <notes>
         

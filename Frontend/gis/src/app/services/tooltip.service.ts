@@ -38,7 +38,7 @@ export class TooltipService {
   openAtElementRef<T>(
     tooltipComponent: ComponentType<T>,
     elementRef: FlexibleConnectedPositionStrategyOrigin,
-	onCloseAction: () =>  void | null = null,
+	  onCloseAction: () =>  void | null = null,
     positions: ConnectedPosition[] = [
       {
         overlayX: 'start',
