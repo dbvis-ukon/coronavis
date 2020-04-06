@@ -1,9 +1,13 @@
 :host {
     background-color: white;
     color: black;
+    max-width: 95vw;
+    max-height: 95vh;
+    overflow: hidden;
+    
 
     /* width */
-    ::-webkit-scrollbar {
+    &::-webkit-scrollbar {
         width: 5px;
     }
 
@@ -14,14 +18,20 @@
     // }
 
     /* Handle */
-    ::-webkit-scrollbar-thumb {
+    &::-webkit-scrollbar-thumb {
         background: rgba(0, 0, 0, 0.25);
         // border-radius: 10px;
     }
 
     /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
+    &::-webkit-scrollbar-thumb:hover {
         background: rgba(0, 0, 0, 0.3);
+    }
+
+    .mat-card {
+        max-width: 95vw;
+        max-height: 85vh;
+        overflow: auto;
     }
 
     .btngrp {
@@ -78,6 +88,7 @@
     .glyph-color-legend {
         margin-top: 10px;
         display: flex;
+        flex-wrap: wrap;
         flex-direction: row;
         justify-content: center;
         margin-bottom: 5px;
@@ -86,6 +97,7 @@
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
+            margin-top: 10px;
 
             .circle {
                 border-radius: 50%;

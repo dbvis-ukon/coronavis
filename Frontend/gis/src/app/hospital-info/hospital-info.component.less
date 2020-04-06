@@ -73,21 +73,10 @@ table {
   }
 }
 
-.title-row{
-  display: flex; 
-  flex-direction: row;
-  vertical-align: middle;
-}
-.title-row h3{
-  line-height: 40px;
-}
-.title-row-title {
-  flex: 1 1 auto;
-}
-
 .glyph-color-legend {
   margin-top: 10px;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
   margin-bottom: 5px;
@@ -96,6 +85,7 @@ table {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    margin-top: 10px;
 
     .circle {
       border-radius: 50%;
@@ -136,12 +126,4 @@ table {
 
 .barchartcontainer {
   display: flex;
-}
-
-.numHospitals {
-  margin: 0;
-}
-
-.name {
-  margin: 0;
 }

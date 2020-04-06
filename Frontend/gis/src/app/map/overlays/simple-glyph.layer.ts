@@ -158,7 +158,7 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
     const container = this.gHospitals
       .append("g")
       .attr("class", "container")
-      .on('mouseenter touchstart', (d1, i, n) => {
+      .on('mouseenter', (d1, i, n) => {
         const currentElement = n[i];
         const evt: MouseEvent = d3.event;
         const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX + 5, y: evt.clientY + 5});
@@ -179,13 +179,14 @@ export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements Glyp
         .selectAll("*:not(.pointer-line)")
         .raise();
       })
-      .on('mouseleave touchend', () => {
+      .on('mouseleave', () => {
         this.tooltipService.close();
         if(this.currentHoverLine) {
           this.currentHoverLine.remove();
         }
       })
       .on('click', d => {
+        this.tooltipService.close();
         this.dialog.open(HospitalInfoDialogComponent, {
           data: d.properties
         });

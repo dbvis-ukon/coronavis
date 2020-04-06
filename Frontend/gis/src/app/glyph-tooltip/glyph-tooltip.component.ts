@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { HospitalUtilService } from '../services/hospital-util.service';
 
 @Component({
   selector: 'app-glyph-tooltip',
@@ -27,10 +28,22 @@ export class GlyphTooltipComponent implements OnInit {
   @Input()
   tooltipData: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
 
-  constructor() {
+  isSingleHospital = false;
+
+  totalNumberOfHospitals = 0;
+
+  constructor(
+    private hospitalUtilService: HospitalUtilService
+  ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.isSingleHospital = this.hospitalUtilService.isSingleHospital(this.tooltipData);
+
+    if(!this.isSingleHospital) {
+      this.totalNumberOfHospitals = this.hospitalUtilService.getNumberOfHospitals(this.tooltipData as AggregatedHospitalOut<QualitativeTimedStatus>);
+    }
+    
   }
 
 }

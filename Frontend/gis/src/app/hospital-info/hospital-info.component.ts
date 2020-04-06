@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { of } from 'rxjs';
 import { flatMap, map, max, reduce } from 'rxjs/operators';
@@ -28,9 +28,6 @@ export class HospitalInfoComponent implements OnInit {
   mode: 'dialog' | 'tooltip';
   @Input()
   data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
-
-  @Output()
-  closeClicked: EventEmitter<number> = new EventEmitter();
 
   glyphLegendColors = QualitativeColormapService.bedStati;
 
@@ -141,10 +138,6 @@ export class HospitalInfoComponent implements OnInit {
 
   getGlyphColor(str: string) {
     return this.colormapService.getSingleHospitalColormap()(str);
-  }
-
-  close() {
-    this.closeClicked.emit(Math.random());
   }
 
   private async prepareBarCharts() {

@@ -1,5 +1,7 @@
+import { MatDialog } from '@angular/material/dialog';
 import * as d3 from "d3";
 import * as L from 'leaflet';
+import { CaseDialogComponent } from 'src/app/case-dialog/case-dialog.component';
 import { QuantitativeAggregatedRkiCaseNumberProperties } from 'src/app/repositories/types/in/quantitative-aggregated-rki-cases';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
 import { QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties } from 'src/app/services/types/quantitative-aggregated-rki-cases-over-time';
@@ -17,7 +19,8 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
     hospitals: QuantitativeAggregatedRkiCasesOverTime,
     private options: CovidNumberCaseOptions,
     private tooltipService: TooltipService,
-    private colorsService: QualitativeColormapService
+    private colorsService: QualitativeColormapService,
+    private matDialog: MatDialog
   ) {
     super(name, hospitals);
 
@@ -144,7 +147,12 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
       onEachFeature: (feature, layer) => {
         layer.on({
           // on mouseover update tooltip and highlight county
-          click: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer),
+          click: () => {
+            this.tooltipService.close();
+            this.matDialog.open(CaseDialogComponent, {
+              data: feature.properties
+            })
+          },
           mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer),
           // on mouseover hide tooltip and reset county to normal sytle
           mouseout: (e: L.LeafletMouseEvent) => {

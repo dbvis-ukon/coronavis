@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, tap } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -20,7 +21,8 @@ export class BedChoroplethLayerService {
   constructor(
     private qualitativeDiviDevelopmentRepository: QualitativeDiviDevelopmentRepository,
     private qualitativeColorMapService: QualitativeColormapService, 
-    private tooltipService: TooltipService
+    private tooltipService: TooltipService,
+    private matDialog: MatDialog
     ) {
   }
 
@@ -36,6 +38,7 @@ export class BedChoroplethLayerService {
           option.bedType, 
           this.qualitativeColorMapService, 
           this.tooltipService,
+          this.matDialog
         );
       }),
       tap(() => this.loading$.next(false))

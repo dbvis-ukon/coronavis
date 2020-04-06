@@ -130,15 +130,16 @@ export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements 
     const container = this.gHospitals
       .append("g")
       .attr("class", "container")
-      .on('mouseenter touchstart', (d1, i, n) => {
+      .on('mouseenter', (d1, i, n) => {
         const currentElement = n[i];
         const evt: MouseEvent = d3.event;
         const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX + 5, y: evt.clientY + 5});
         t.tooltipData = d1.properties;
         d3.select(currentElement).raise();
       })
-      .on('mouseleave touchend', () => this.tooltipService.close())
+      .on('mouseleave', () => this.tooltipService.close())
       .on('click', d => {
+        this.tooltipService.close();
         this.dialog.open(HospitalInfoDialogComponent, {
           data: d.properties
         });

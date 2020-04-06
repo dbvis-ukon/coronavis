@@ -34,6 +34,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BedTooltipComponent } from './bed-tooltip/bed-tooltip.component';
 import { ButtonPanelComponent } from './button-panel/button-panel.component';
+import { CaseDialogComponent } from './case-dialog/case-dialog.component';
+import { CaseInfoComponent } from './case-info/case-info.component';
 import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
@@ -137,6 +139,8 @@ export const localeProvider = {
     HelpDialogComponent,
     TranslatePipe,
     OsmTooltipComponent,
+    CaseInfoComponent,
+    CaseDialogComponent,
     MapRootComponent,
     ShareDialogComponent,
     ButtonPanelComponent,

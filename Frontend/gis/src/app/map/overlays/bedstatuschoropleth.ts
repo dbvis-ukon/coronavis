@@ -1,6 +1,8 @@
+import { MatDialog } from '@angular/material/dialog';
 import { Feature, FeatureCollection, Geometry, MultiPolygon } from 'geojson';
 import * as L from 'leaflet';
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
+import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
 import { AbstractTimedStatus, QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
@@ -18,6 +20,7 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<F
     private type: BedType,
     private colorsService: QualitativeColormapService, 
     private tooltipService: TooltipService,
+    private matDialog: MatDialog
     ) {
       super(name, hospitals);
 
@@ -81,10 +84,15 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<F
       onEachFeature: (feature, layer) => {
         layer.on({
           // on mouseover update tooltip and highlight county
-          click: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer),
+          click: () => {
+            this.tooltipService.close();
+            this.matDialog.open(HospitalInfoDialogComponent, {
+              data: feature.properties
+            });
+          },
           mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer),
           // on mouseover hide tooltip and reset county to normal sytle
-          mouseout: (e: L.LeafletMouseEvent) => {
+          mouseout: () => {
             this.tooltipService.close();
           }
         });
