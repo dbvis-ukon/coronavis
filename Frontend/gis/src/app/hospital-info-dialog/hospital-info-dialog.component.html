@@ -5,8 +5,23 @@
   </button>
 </div>-->
 
+<div mat-dialog-title>
+  <div class="title-row">
+    <div class="title-row-title">
+      <h3 class="name">{{ data.name }}</h3>
+
+      <p class="numHospitals" *ngIf="!isSingleHospital">({{ totalNumberOfHospitals }} <span i18n="tooltip | hospitals@reported">gemeldete Krankenhäuser</span>)</p>
+    </div>
+    <div>
+      <button (click)="close()" mat-icon-button aria-label="Close Dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div> 
+  </div>
+</div>
+
 <div class="main" mat-dialog-content>
-  <app-hospital-info (closeClicked)="close()" [data]="data" mode="dialog"></app-hospital-info>
+  <app-hospital-info [data]="data" mode="dialog"></app-hospital-info>
 </div>
 <!-- <div style="float: right;" mat-dialog-actions>
   <button class="mat-raised-button"(click)="close()" i18n="button@@close">Schließen</button>
