@@ -4,14 +4,9 @@ import { TooltipService } from 'src/app/services/tooltip.service';
 import { OsmTooltipComponent } from "../../osm-tooltip/osm-tooltip.component";
 import { Overlay } from './overlay';
 
-const helipadIcon = L.icon({
-   iconUrl: 'assets/Helipad.png',
 
-   iconSize:     [16, 16], // size of the iconow
-   iconAnchor:   [8, 8], // point of the icon which will correspond to marker's location
-});
 
-export class HelipadLayer extends Overlay<OSMNearbyHelipads> {
+export class HelipadLayer extends Overlay < OSMNearbyHelipads > {
   constructor(
     name: string,
     featureCollection: OSMNearbyHelipads,
@@ -21,20 +16,19 @@ export class HelipadLayer extends Overlay<OSMNearbyHelipads> {
   }
 
   createOverlay() {
-    const geojsonMarkerOptions = {
-      radius: 4,
-      fillColor: '#8461c4',
-      // icon: helipadIcon,
-      color: '#8461c4',
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 0.8
-    };
+    const helipadIcon = L.icon({
+      iconUrl: 'assets/Helipad.png',
+
+      iconSize: [16, 16], // size of the iconow
+      iconAnchor: [8, 8], // point of the icon which will correspond to marker's location
+    });
 
     // create geojson layer (looks more complex than it is)
     const helipadLayer = L.geoJSON(this.featureCollection, {
-      pointToLayer: (feature, latlng) => {
-        return L.marker(latlng, {icon: helipadIcon});//L.circleMarker(latlng, geojsonMarkerOptions);
+      pointToLayer: (_, latlng) => {
+        return L.marker(latlng, {
+          icon: helipadIcon
+        }); //L.circleMarker(latlng, geojsonMarkerOptions);
       },
       onEachFeature: (feature, layer) => {
         layer.on({
@@ -47,8 +41,7 @@ export class HelipadLayer extends Overlay<OSMNearbyHelipads> {
           }
         });
       }
-    }
-    );
+    });
 
     const onAction = (e: L.LeafletMouseEvent, feature: any, aggregationLayer: any) => {
       const onCloseAction: () => void = () => {
@@ -63,17 +56,6 @@ export class HelipadLayer extends Overlay<OSMNearbyHelipads> {
 
       tooltipComponent.name = feature.properties.name;
       tooltipComponent.type = "helipad";
-
-      // set highlight style
-      const l = e.target;
-      l.setStyle({
-        weight: 3,
-        color: '#666',
-        dashArray: '',
-        fillOpacity: 0.7
-      });
-
-      // l.bringToFront();
     };
 
     return helipadLayer;
