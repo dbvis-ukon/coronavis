@@ -187,10 +187,17 @@ export class HospitalInfoComponent implements OnInit {
   }
 
   private prepareBarCharts() {
-    const bedStati = this.glyphLegendColors;
-
     this.barChartSpecs = [];
     let maxNum = 0;
+
+    if(!this.latestDevelopment) {
+      return;
+    }
+
+    const bedStati = this.glyphLegendColors;
+
+    
+    
 
     for (const bedAccessor of this.bedAccessors) {
       const dataValues = [];
