@@ -2,18 +2,29 @@
 DIVI - Hospitals with their capacities
 https://www.divi.de/register/intensivregister?view=items
 """
-import logging
+import sys
 import time
+import pandas
+import logging
+import requests
 import traceback
 
-import pandas
-
 import db
-import requests
+
 from geoalchemy2.shape import to_shape
+
 from sqlalchemy import func
+from sqlalchemy.sql import null
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+handler = logging.StreamHandler(sys.stdout)
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+logger.addHandler(handler)
 
 
 def legends(class_input):
@@ -35,33 +46,12 @@ def remove_spaces(text):
     return text
 
 
-def get_geo_location(adress):
-    osm_geolocator = Nominatim(user_agent='COVID-19', timeout=10)
-    arcgis_geolocator = ArcGIS()
-    photon_geolocator = Photon()
-    
-    location = osm_geolocator.geocode(adress)
-    loc = (None, None)
-    if location != None:
-        loc = (location.longitude, location.latitude)
-    else:
-        location = arcgis_geolocator.geocode(adress)
-        if location != None:
-            loc = (location.longitude, location.latitude)
-        else:
-            location = photon_geolocator.geocode(adress)
-            if location != None:
-                loc = (location.longitude, location.latitude)
-        
-    return loc, location
-
-
 def crawl_webpage(url):
     
     r = requests.get(url)
     rj = r.json()
 
-    print(rj['rowCount'])
+    logger.debug(rj['rowCount'])
     
     url_melde = 'https://www.intensivregister.de/api/public/stammdaten/krankenhausstandort/{0}/meldebereiche'
     
@@ -71,7 +61,7 @@ def crawl_webpage(url):
     
     len_ = len(rj['data'])
     for i, x in enumerate(rj['data']):
-        logger.info(str(i) + ' / ' + str(len_))
+        logger.debug(str(i) + ' / ' + str(len_))
         
         name = x['krankenhausStandort']['bezeichnung']
         
@@ -99,11 +89,18 @@ def crawl_webpage(url):
         
         last_update = x['meldezeitpunkt']
         
-        hospital_id = x['id']
+        hospital_id = int(x['id'])
+        
+        covid_cases = x['faelleCovidAktuell']
+        if covid_cases is not None:
+            covid_cases = int(covid_cases)
+        else:
+            covid_cases = null()
         
         tmp_url = url_melde.format(str(hospital_id))
         r_melde = requests.get(tmp_url)
         rj_melde = r_melde.json()
+
         
         contact = ''
         for y in rj_melde:
@@ -115,6 +112,33 @@ def crawl_webpage(url):
                 for c in y['tags']:
                     contact += c
                     contact += ', '
+                    
+            hospital_id_beds = int(y['krankenhausStandort']['id'])
+            name_beds = y['bezeichnung']
+            casesecmoyear_beds = int(y['faelleEcmoJahr'])
+            available_beds_beds = int(y['bettenPlankapazitaet'])
+            description_beds = y['bettenPlankapazitaet']
+            last_update_beds = y['letzteMeldung']
+            if last_update_beds is None:
+                last_update_beds = null()
+            beds_beds = y['krankenhausStandort']['intensivmedizinischePlanbetten']
+            if beds_beds is not None:
+                beds_beds = int(beds_beds)
+            else:
+                beds_beds = null()
+            
+            beds = [
+                hospital_id_beds,
+                name_beds,
+                available_beds_beds,
+                casesecmoyear_beds,
+                beds_beds,
+                description_beds,
+                last_update_beds
+            ]
+            
+            hospital_beds_entries_extended.append(beds)        
+            
                 
         contact = contact[:-2]
         if len(contact) > 255:
@@ -133,14 +157,30 @@ def crawl_webpage(url):
         ]
         
         hospital_entries.append(hospital_entry)
+        
+        hospital_entry = [
+            hospital_id,
+            name,
+            address,
+            contact,
+            state,
+            icu_low_state,
+            icu_high_state,
+            ecmo_state,
+            last_update,
+            location,
+            covid_cases
+        ]
+        
+        hospital_entries_extended.append(hospital_entry)
     
-    return hospital_entries
+    return hospital_entries, hospital_entries_extended, hospital_beds_entries_extended
 
 
 def full_fetch(quote_page):
-    hospital_entries = crawl_webpage(quote_page)
+    hospital_entries, hospital_entries_extended, hospital_entries_extended_beds = crawl_webpage(quote_page)
     
-    df = pandas.DataFrame(hospital_entries, columns=[
+    df_hospital = pandas.DataFrame(hospital_entries, columns=[
         'name', 
         'address', 
         'contact', 
@@ -150,9 +190,33 @@ def full_fetch(quote_page):
         'ecmo_state', 
         'last_update', 
         'location'])
-    df['last_update'] =  pandas.to_datetime(df['last_update'])
+    df_hospital['last_update'] =  pandas.to_datetime(df_hospital['last_update'])
     
-    return df
+    df_hospital_extended = pandas.DataFrame(hospital_entries_extended, columns=[
+        'hospital_id',
+        'name', 
+        'address', 
+        'contact', 
+        'state', 
+        'icu_low_state', 
+        'icu_high_state', 
+        'ecmo_state', 
+        'last_update', 
+        'location',
+        'covid_cases'])
+    df_hospital_extended['last_update'] =  pandas.to_datetime(df_hospital_extended['last_update'])
+    
+    df_beds = pandas.DataFrame(hospital_entries_extended_beds, columns=[
+        'hospital_id', 
+        'name', 
+        'available_beds', 
+        'cases_ecmo_year', 
+        'overall_beds', 
+        'description', 
+        'last_update'])
+    df_beds['last_update'] =  pandas.to_datetime(df_beds['last_update'], errors='ignore')
+    
+    return df_hospital, df_hospital_extended, df_beds
 
 
 if __name__ == "__main__":
@@ -161,24 +225,39 @@ if __name__ == "__main__":
 
         query_page = 'https://www.intensivregister.de/api/public/intensivregister?page=0&size=10000'
 
-        df = full_fetch(query_page)
+        df_hospital, df_hospital_extended, df_beds = full_fetch(query_page)
         
-        df['location'] = df['location'].map(lambda x: str(x).replace('None', '0'))
-        df['location'] = df['location'].map(lambda x: 'SRID=4326;POINT' + x.replace(',', ''))
+        df_hospital['location'] = df_hospital['location'].map(lambda x: str(x).replace('None', '0'))
+        df_hospital['location'] = df_hospital['location'].map(lambda x: 'SRID=4326;POINT' + x.replace(',', ''))
         
-        crawl = db.Crawl(**{
-            'url': query_page,
-            'text': df.to_json(),
-            'doc': df.to_json(),
-        })
-        db.sess.add(crawl)
+        df_hospital_extended['location'] = df_hospital_extended['location'].map(lambda x: str(x).replace('None', '0'))
+        df_hospital_extended['location'] = df_hospital_extended['location'].map(lambda x: 'SRID=4326;POINT' + x.replace(',', ''))
         
-        for index, row in df.iterrows():
+        print(df_hospital_extended)
+        print(df_hospital_extended.shape)
+        input()
+        
+        for index, row in df_hospital.iterrows():
             hospital = db.Hospital(**row.to_dict())
             logger.info(hospital)
             db.sess.add(hospital)
 
         db.sess.commit()
+        
+        for index, row in df_hospital_extended.iterrows():
+            hospital = db.HospitalExtended(**row.to_dict())
+            logger.info(hospital)
+            db.sess.add(hospital)
+
+        db.sess.commit()
+        
+        for index, row in df_beds.iterrows():
+            bed = db.Beds(**row.to_dict())
+            logger.info(bed)
+            db.sess.add(bed)
+
+        db.sess.commit()
+        
         
         exit(0)
     
