@@ -32,6 +32,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AboutComponent } from './about/about.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BedTooltipComponent } from './bed-tooltip/bed-tooltip.component';
 import { ButtonPanelComponent } from './button-panel/button-panel.component';
 import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
@@ -139,6 +140,7 @@ export const localeProvider = {
     MapRootComponent,
     ShareDialogComponent,
     ButtonPanelComponent,
+    BedTooltipComponent
   ],
   imports: [
     BrowserModule,
