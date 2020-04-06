@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as moment from 'moment';
+import { of } from 'rxjs';
+import { flatMap, map, max, reduce } from 'rxjs/operators';
 import { BedType } from "../map/options/bed-type.enum";
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
@@ -7,9 +9,6 @@ import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TranslationService } from '../services/translation.service';
 import { VegaBarchartService } from '../services/vega-barchart.service';
-import { of } from 'rxjs';
-import { flatMap, map, max, reduce, tap } from 'rxjs/operators';
-import { sum } from 'd3';
 
 @Component({
   selector: 'app-hospital-info',
@@ -149,9 +148,16 @@ export class HospitalInfoComponent implements OnInit {
   }
 
   private async prepareBarCharts() {
+    const barChartSpecs = [];
+
+    if(!this.latestDevelopment) {
+      return;
+    }
+
     const bedStati = this.glyphLegendColors;
 
-    const barChartSpecs: Array<any> = [];
+    
+    
 
     for (const bedAccessor of this.bedAccessors) {
 
