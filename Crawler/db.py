@@ -122,11 +122,11 @@ class Beds(Base):
 
     # columns
     id = Column(Integer, primary_key=True, autoincrement=True)
-    hospital_id = Column(Integer, ForeignKey('hospital_extended.id'), nullable=False)
+    hospital_id = Column(Integer, nullable=False)
     name = Column(String(255), nullable=False)
     available_beds = Column(Integer)
-    casesecmoyear = Column(Integer)
-    bed_type = Column(String(255))
+    cases_ecmo_year = Column(Integer)
+    overall_beds = Column(Integer)
     description = Column(String(255))
     
     last_update = Column(DateTime)
@@ -160,7 +160,7 @@ class HospitalExtended(Base):
     icu_high_state = Column(String(255))
     ecmo_state = Column(String(255))
     
-    covidcases = Column(Integer)
+    covid_cases = Column(Integer)
     
     last_update = Column(DateTime)
     
