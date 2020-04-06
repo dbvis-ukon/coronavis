@@ -46,6 +46,8 @@ import { SentryErrorHandler } from "./sentry-config";
 import { SupportedLocales } from './services/i18n.service';
 import { TranslatePipe } from './translate.pipe';
 import { VegaComponent } from './vega/vega.component';
+import { CaseInfoComponent } from './case-info/case-info.component';
+import { CaseDialogComponent } from './case-dialog/case-dialog.component';
 
 
 
@@ -99,7 +101,9 @@ if(storedLocale === SupportedLocales.DE_DE) {
     VegaComponent,
     HelpDialogComponent,
     TranslatePipe,
-    OsmTooltipComponent
+    OsmTooltipComponent,
+    CaseInfoComponent,
+    CaseDialogComponent
   ],
   imports: [
     BrowserModule,
