@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FeatureCollection } from 'geojson';
 import * as L from 'leaflet';
 import { SVGOverlay } from 'leaflet';
@@ -13,9 +14,7 @@ import { GlyphLayerService } from '../services/glyph-layer.service';
 import { OSMLayerService } from '../services/osm-layer.service';
 import { TranslationService } from '../services/translation.service';
 import { AggregationLevel } from './options/aggregation-level.enum';
-import { BedBackgroundOptions } from './options/bed-background-options';
 import { BedGlyphOptions } from './options/bed-glyph-options';
-import { CovidNumberCaseOptions } from './options/covid-number-case-options';
 import { MapLocationSettings } from './options/map-location-settings';
 import { MapOptions } from './options/map-options';
 import { CaseChoropleth } from './overlays/casechoropleth';
@@ -104,7 +103,8 @@ export class MapComponent implements OnInit {
     private glyphLayerService: GlyphLayerService,
     private caseChoroplehtLayerService: CaseChoroplethLayerService,
     private osmLayerService: OSMLayerService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    @Inject(APP_BASE_HREF) private baseHref: string
   ) {
   }
 
@@ -118,7 +118,7 @@ export class MapComponent implements OnInit {
           // zoomOffset: -1,
           attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> ' +
                        '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a> | ' +
-                       `<a href="/imprint">${ this.translationService.translate('Impressum') }</a>`
+                       `<a href="${this.baseHref}imprint">${ this.translationService.translate('Impressum') }</a>`
         });
 
     // create map, set initial view to to see whole of Germany (country wide deployment)
