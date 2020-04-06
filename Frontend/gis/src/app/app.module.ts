@@ -29,6 +29,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_LOCALE } from 'src/constants';
 import { AboutComponent } from './about/about.component';
 import { AppComponent } from './app.component';
+import { BedTooltipComponent } from './bed-tooltip/bed-tooltip.component';
 import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
@@ -99,7 +100,8 @@ if(storedLocale === SupportedLocales.DE_DE) {
     VegaComponent,
     HelpDialogComponent,
     TranslatePipe,
-    OsmTooltipComponent
+    OsmTooltipComponent,
+    BedTooltipComponent
   ],
   imports: [
     BrowserModule,
