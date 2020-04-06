@@ -1,0 +1,26 @@
+<img class="tracking-pxl" src="https://web-analytics.dbvis.de/matomo.php?idsite={{ siteId }}&amp;rec=1" style="border:0" alt="" />
+<div id="container">
+  <app-map
+    id="map"
+    [mapOptions]="mapOptions"
+    (caseChoroplethLayerChange)="currentCaseChoropleth = $event"
+    [mapLocationSettings]="initialMapLocationSettings"
+    (mapLocationSettingsChange)="mapLocationSettingsUpdated($event)"
+  ></app-map>
+
+  <app-infobox
+    class="infobox"
+    [mapOptions]="mapOptions"
+    [mapLocationSettings]="currentMapLocationSettings"
+    (mapOptionsChange)="mapOptionsUpdated($event)"
+  ></app-infobox>
+
+  <app-overlay-brand class="overlay-brand"></app-overlay-brand>
+  <app-legend
+    class="legend"
+    [mapOptions]="mapOptions"
+    [choroplethLayer]="currentCaseChoropleth"
+  ></app-legend>
+  <app-overlay-mobile class="overlay-mobile"></app-overlay-mobile>
+
+</div>

@@ -74,6 +74,10 @@ export class TranslationService {
     {
       'de-DE': 'Anzahl KH',
       'en-US': '# Hospitals'
+    },
+    {
+      'de-DE': 'Impressum',
+      'en-US': 'Imprint'
     }
   ];
 

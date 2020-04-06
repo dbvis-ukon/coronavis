@@ -1,15 +1,7 @@
-import {
-  Injectable
-} from '@angular/core';
-import {
-  QualitativeTimedStatus
-} from '../repositories/types/in/qualitative-hospitals-development';
-import {
-  QualitativeAggregatedBedStateCounts
-} from '../repositories/types/in/qualitative-aggregated-bed-states';
-import {
-  QualitativeColormapService
-} from './qualitative-colormap.service';
+import { Injectable } from '@angular/core';
+import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { QualitativeColormapService } from './qualitative-colormap.service';
 
 @Injectable({
   providedIn: 'root'
@@ -104,6 +96,10 @@ export class VegaBarchartService {
       yAxisTitle: string
     }
     ): any {
+    if(!data) {
+      return null;
+    }
+
     if (!bedStati) {
       bedStati = QualitativeColormapService.bedStati;
     }
