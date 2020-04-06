@@ -22,6 +22,7 @@ export class HospitalUtilService {
     if(!ld) {
       return 0;
     }
+    
     let maxN = 0;
 
     for(const bedAcc of this.getBedAccessorFunctions()) {
@@ -38,7 +39,7 @@ export class HospitalUtilService {
       }
 
       if(sum > maxN) {
-        maxN = 0;
+        maxN = sum;
       }
     }
 
