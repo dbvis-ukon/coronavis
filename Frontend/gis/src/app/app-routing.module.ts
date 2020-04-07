@@ -5,7 +5,7 @@ import { ImpressumComponent } from './impressum/impressum.component';
 import { MapRootComponent } from './map-root/map-root.component';
 
 const routes: Routes = [
-  {
+  { // for share url
     path: 'map',
     component: MapRootComponent
   },
@@ -16,6 +16,10 @@ const routes: Routes = [
   {
     path: '',
     component: MapRootComponent,
+  },
+  { // default to MapRootComponent, don't throw 404
+    path: '**',
+    component: MapRootComponent
   }
 ];
 
