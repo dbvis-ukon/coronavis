@@ -233,10 +233,6 @@ if __name__ == "__main__":
         df_hospital_extended['location'] = df_hospital_extended['location'].map(lambda x: str(x).replace('None', '0'))
         df_hospital_extended['location'] = df_hospital_extended['location'].map(lambda x: 'SRID=4326;POINT' + x.replace(',', ''))
         
-        print(df_hospital_extended)
-        print(df_hospital_extended.shape)
-        input()
-        
         for index, row in df_hospital.iterrows():
             hospital = db.Hospital(**row.to_dict())
             logger.info(hospital)
