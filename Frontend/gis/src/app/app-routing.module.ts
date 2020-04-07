@@ -3,8 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { MapRootComponent } from './map-root/map-root.component';
+import { OverviewComponent } from './overview/overview.component';
 
 const routes: Routes = [
+  {
+    path: 'overview',
+    component: OverviewComponent
+  },
   { // for share url
     path: 'map',
     component: MapRootComponent

@@ -3,18 +3,15 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from '@angular/router';
 import { FeatureCollection } from 'geojson';
-import { merge } from 'lodash-es';
 import { BehaviorSubject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { APP_CONFIG_KEY, APP_CONFIG_URL_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from "../../constants";
 import { HelpDialogComponent } from "../help-dialog/help-dialog.component";
-import { AggregationLevel } from '../map/options/aggregation-level.enum';
-import { BedType } from '../map/options/bed-type.enum';
-import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { Overlay } from '../map/overlays/overlay';
+import { ConfigService } from '../services/config.service';
 import { I18nService } from '../services/i18n.service';
 import { TranslationService } from '../services/translation.service';
 import { UrlHandlerService } from '../services/url-handler.service';
@@ -29,60 +26,14 @@ export class MapRootComponent implements OnInit {
 
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
-  private defaultMapOptions: MapOptions = {
-    hideInfobox: false,
+  
 
-    extendInfobox: true,
-
-    showHelpOnStart: true,
-
-    bedGlyphOptions: {
-      aggregationLevel: AggregationLevel.none,
-      enabled: true,
-      showEcmo: true,
-      showIcuHigh: true,
-      showIcuLow: true,
-      forceDirectedOn: true
-    },
-
-    bedBackgroundOptions: {
-      bedType: BedType.icuLow,
-      enabled: false,
-      aggregationLevel: AggregationLevel.county
-    },
-
-    covidNumberCaseOptions: {
-      change: CovidNumberCaseChange.absolute,
-      normalization: CovidNumberCaseNormalization.absolut,
-      timeWindow: CovidNumberCaseTimeWindow.all,
-      type: CovidNumberCaseType.cases,
-      enabled: false,
-      aggregationLevel: AggregationLevel.county
-    },
-
-    showOsmHeliports: false,
-
-    showOsmHospitals: false
-  };
-
-  private defaultMapLocationSettings: MapLocationSettings = {
-
-    center: {
-      lat: 48.6813312,
-      lng: 9.0088299
-    },
-
-    zoom: 9,
-
-    allowPanning: true,
-
-    allowZooming: true
-  };
+  
 
 
   mapOptions: MapOptions = null;
 
-  mapLocationSettings$: BehaviorSubject<MapLocationSettings> = new BehaviorSubject(JSON.parse(JSON.stringify(this.defaultMapLocationSettings)));
+  mapLocationSettings$: BehaviorSubject<MapLocationSettings> = new BehaviorSubject(null);
 
   currentCaseChoropleth: CaseChoropleth;
 
@@ -94,12 +45,14 @@ export class MapRootComponent implements OnInit {
 
 
   // constructor is here only used to inject services
-  constructor(private snackbar: MatSnackBar,
-              private dialog: MatDialog,
-              private i18nService: I18nService,
-              private translationService: TranslationService,
-              private urlHandlerService: UrlHandlerService,
-              private route: ActivatedRoute
+  constructor(
+    private configService: ConfigService,
+    private snackbar: MatSnackBar,
+    private dialog: MatDialog,
+    private i18nService: I18nService,
+    private translationService: TranslationService,
+    private urlHandlerService: UrlHandlerService,
+    private route: ActivatedRoute
               ) {
   }
 
@@ -178,15 +131,15 @@ export class MapRootComponent implements OnInit {
     if(paramMap.has(APP_CONFIG_URL_KEY)) {
       const urlMlo = this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY));
 
-      const mergedMlo = merge<MapOptions, MapOptions>(this.defaultMapOptions, urlMlo);
+      const mergedMlo = this.configService.overrideMapOptions(urlMlo);
 
       this.mapOptions = mergedMlo;
     } else if (storedMapOptions) {
       // merge with default as basis is necessary when new options are added in further releases
-      this.mapOptions = merge<MapOptions, MapOptions, any>(this.defaultMapOptions, storedMapOptions, { hideInfobox: false, showHelpOnStart: true });
+      this.mapOptions = this.configService.overrideMapOptions(storedMapOptions, { hideInfobox: false, showHelpOnStart: true });
       restored = true;
     } else {
-      this.mapOptions = JSON.parse(JSON.stringify(this.defaultMapOptions));
+      this.mapOptions = this.configService.getDefaultMapOptions();
     }
 
 
@@ -195,22 +148,18 @@ export class MapRootComponent implements OnInit {
     if(paramMap.has(MAP_LOCATION_SETTINGS_URL_KEY)) {
       const urlMls = this.urlHandlerService.convertUrlToMLS(paramMap.get(MAP_LOCATION_SETTINGS_URL_KEY));
 
-      const mergedMls = merge<MapLocationSettings, MapLocationSettings>(this.defaultMapLocationSettings, urlMls);
+      const mergedMls = this.configService.overrideMapLocationSettings(urlMls);
 
       this.initialMapLocationSettings = {...mergedMls};
     } else if(storedMapLocationSettings) {
       // this.mapLocationSettings$.next(storedMapLocationSettings);
-      this.initialMapLocationSettings = merge<MapLocationSettings, MapLocationSettings, any>(
-        this.defaultMapLocationSettings, 
-        storedMapLocationSettings, 
-        { // overwrite this otherwise the app is broken when it's loaded from local storage
-          allowPanning: true,
-          allowZooming: true
-        }
-      );
+      this.initialMapLocationSettings = this.configService.overrideMapLocationSettings(storedMapLocationSettings, {
+        allowPanning: true,
+        allowZooming: true
+      });
       restored = true;
     } else { // use default
-      this.initialMapLocationSettings = JSON.parse(JSON.stringify(this.defaultMapLocationSettings));
+      this.initialMapLocationSettings = this.configService.getDefaultMapLocationSettings();
     }
 
     if(restored) {
@@ -221,8 +170,8 @@ export class MapRootComponent implements OnInit {
         duration: 20000
       });
       snackbar.onAction().subscribe(() => {
-        this.mapOptions = this.defaultMapOptions;
-        this.mapLocationSettings$.next(this.defaultMapLocationSettings);
+        this.mapOptions = this.configService.getDefaultMapOptions();
+        this.mapLocationSettings$.next(this.configService.getDefaultMapLocationSettings());
 
         localStorage.removeItem(APP_CONFIG_KEY);
         localStorage.removeItem(MAP_LOCATION_SETTINGS_KEY);

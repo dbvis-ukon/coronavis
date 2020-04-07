@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -37,6 +38,7 @@ import { ButtonPanelComponent } from './button-panel/button-panel.component';
 import { CaseDialogComponent } from './case-dialog/case-dialog.component';
 import { CaseInfoComponent } from './case-info/case-info.component';
 import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
+import { D3ChoroplethMapComponent } from './d3-choropleth-map/d3-choropleth-map.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
@@ -49,7 +51,9 @@ import { MapComponent } from './map/map.component';
 import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
 import { OverlayMobileComponent } from './overlay-mobile/overlay-mobile.component';
+import { OverviewComponent } from './overview/overview.component';
 import { PlusminusPipe } from './plusminus.pipe';
+import { ResizedDirective } from './resize.directive';
 import { SentryErrorHandler } from './sentry-config';
 import { SupportedLocales } from './services/i18n.service';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
@@ -122,6 +126,7 @@ export const localeProvider = {
     OsmTooltipComponent
   ],
   declarations: [
+    ResizedDirective,
     AppComponent,
     MapComponent,
     GlyphTooltipComponent,
@@ -144,7 +149,9 @@ export const localeProvider = {
     MapRootComponent,
     ShareDialogComponent,
     ButtonPanelComponent,
-    BedTooltipComponent
+    BedTooltipComponent,
+    D3ChoroplethMapComponent,
+    OverviewComponent
   ],
   imports: [
     BrowserModule,
@@ -177,6 +184,7 @@ export const localeProvider = {
     MatTabsModule,
     MatToolbarModule,
     FlexLayoutModule,
+    MatGridListModule
   ],
   providers: [
     localeProvider, 

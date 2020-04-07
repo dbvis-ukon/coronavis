@@ -1,0 +1,11 @@
+
+<mat-grid-list [cols]="gridNumCols" rowHeight="1:1">
+    <mat-grid-tile *ngFor="let d of dataBlob">
+        <div class="mytile">
+            <h4>{{ d.aggLevelFriendly }}</h4>
+            <h4>{{ d.bedTypeFriendly }}</h4>
+            <app-d3-choropleth-map class="map" [data]="d.data | async"></app-d3-choropleth-map>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>
+
