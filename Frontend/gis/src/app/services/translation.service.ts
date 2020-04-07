@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { BedType } from '../map/options/bed-type.enum';
 import { I18nService } from './i18n.service';
 
 @Injectable({
@@ -78,7 +80,37 @@ export class TranslationService {
     {
       'de-DE': 'Impressum',
       'en-US': 'Imprint'
-    }
+    },
+    {
+      'aggLevel': AggregationLevel.county,
+      'de-DE': 'Landkreise',
+      'en-US': 'Counties'
+    },
+    {
+      'aggLevel': AggregationLevel.governmentDistrict,
+      'de-DE': 'Regierungsbezirke',
+      'en-US': 'Districts'
+    },
+    {
+      'aggLevel': AggregationLevel.state,
+      'de-DE': 'Bundesländer',
+      'en-US': 'States'
+    },
+    {
+      'bedType': BedType.icuLow,
+      'de-DE': 'ICU low',
+      'en-US': 'ICU low'
+    },
+    {
+      'bedType': BedType.icuHigh,
+      'de-DE': 'ICU high',
+      'en-US': 'ICU high'
+    },
+    {
+      'bedType': BedType.ecmo,
+      'de-DE': 'ECMO',
+      'en-US': 'ECMO'
+    },
   ];
 
   constructor(

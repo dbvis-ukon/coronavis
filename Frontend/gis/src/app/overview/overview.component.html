@@ -1,11 +1,31 @@
 
-<mat-grid-list [cols]="gridNumCols" rowHeight="1:1">
-    <mat-grid-tile *ngFor="let d of dataBlob">
-        <div class="mytile">
-            <h4>{{ d.aggLevelFriendly }}</h4>
-            <h4>{{ d.bedTypeFriendly }}</h4>
-            <app-d3-choropleth-map class="map" [data]="d.data | async"></app-d3-choropleth-map>
-        </div>
-    </mat-grid-tile>
-</mat-grid-list>
+<mat-tab-group>
+    <mat-tab label="Bed Capacities">
+
+        <mat-grid-list [cols]="gridNumCols" rowHeight="1:1">
+            <mat-grid-tile *ngFor="let d of dataBlob">
+
+                
+
+                <div class="mytile" [routerLink]="['/map', { mlo: urlHandler.convertMLOToUrl(d.mo), mls:  urlHandler.convertMLSToUrl(d.mls)}]">  
+                    <app-d3-choropleth-map class="map" [data]="d.data | async"></app-d3-choropleth-map>
+                </div>
+
+
+                <mat-grid-tile-footer class="footer">
+                    <h4>{{ d.aggLevelFriendly | translate }}</h4>
+                    <span class="spacer"></span>
+                    <h4>{{ d.bedTypeFriendly | translate }}</h4>
+                </mat-grid-tile-footer>
+                
+            </mat-grid-tile>
+        </mat-grid-list>
+    </mat-tab>
+
+
+    <mat-tab label="Covid-19 Case Maps">
+
+    </mat-tab>
+</mat-tab-group>
+
 

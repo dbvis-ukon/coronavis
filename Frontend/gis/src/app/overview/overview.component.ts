@@ -8,6 +8,7 @@ import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { ConfigService } from '../services/config.service';
 import { D3ChoroplethDataService } from '../services/d3-choropleth-data.service';
+import { UrlHandlerService } from '../services/url-handler.service';
 
 @Component({
   selector: 'app-overview',
@@ -31,11 +32,14 @@ export class OverviewComponent implements OnInit {
 
   gridNumCols = 3;
 
+  bedTypes: string[] = [];
+
 
   constructor(
     private breakPointObserver: BreakpointObserver,
     private d3ChoroplethService: D3ChoroplethDataService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    public urlHandler: UrlHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -47,9 +51,9 @@ export class OverviewComponent implements OnInit {
 
     const aggLevels = Object.values(AggregationLevel).filter(d => d !== AggregationLevel.none);
 
-    const bedTypes = Object.values(BedType);
+    this.bedTypes = Object.values(BedType);
 
-    for(const bedType of bedTypes) {
+    for(const bedType of this.bedTypes) {
       for(const aggLevel of aggLevels) {
 
         const mo = this.configService.overrideMapOptions({ 
@@ -59,14 +63,21 @@ export class OverviewComponent implements OnInit {
           bedBackgroundOptions: { 
             enabled: true,
             aggregationLevel: aggLevel,
-            bedType: bedType
+            bedType: bedType as BedType
           },
           covidNumberCaseOptions: {
             enabled: false
           }
         });
 
-        const mls = this.configService.getDefaultMapLocationSettings();
+        const mls = this.configService.overrideMapLocationSettings({
+          zoom: 6,
+
+          center: {
+            lat: 51.1069818075,
+            lng: 10.385780508
+          }
+        });
 
         this.dataBlob.push(
           {

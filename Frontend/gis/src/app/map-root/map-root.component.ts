@@ -4,6 +4,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from '@angular/router';
 import { FeatureCollection } from 'geojson';
 import { BehaviorSubject, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { APP_CONFIG_KEY, APP_CONFIG_URL_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from "../../constants";
 import { HelpDialogComponent } from "../help-dialog/help-dialog.component";
@@ -66,6 +67,13 @@ export class MapRootComponent implements OnInit {
 
     this.restoreSettingsFromLocalStorageOrUseDefault();
 
+    this.route.paramMap.pipe(switchMap(d => {
+      this.restoreSettingsFromLocalStorageOrUseDefault(d);
+
+      return of(d);
+    }))
+    .subscribe();
+
 
     this.displayHelpForNewUser();
 
@@ -119,9 +127,12 @@ export class MapRootComponent implements OnInit {
     }
   }
 
-  restoreSettingsFromLocalStorageOrUseDefault() {
-    // try from url params
-    const paramMap = this.route.snapshot.paramMap;
+  restoreSettingsFromLocalStorageOrUseDefault(paramMap = null) {
+    if(!paramMap) {
+      // try from url params
+      paramMap = this.route.snapshot.paramMap;
+    }
+    
 
     const storedMapOptions = JSON.parse(localStorage.getItem(APP_CONFIG_KEY)) as MapOptions;
 
@@ -132,6 +143,8 @@ export class MapRootComponent implements OnInit {
       const urlMlo = this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY));
 
       const mergedMlo = this.configService.overrideMapOptions(urlMlo);
+
+      console.log('load from url', mergedMlo);
 
       this.mapOptions = mergedMlo;
     } else if (storedMapOptions) {
