@@ -1,6 +1,5 @@
 pandas
 urllib3
-beautifulsoup4
 
 requests
 
@@ -11,3 +10,5 @@ geojson
 SQLAlchemy
 GeoAlchemy2
 psycopg2-binary
+
+sentry_sdk
