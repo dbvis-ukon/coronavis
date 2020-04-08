@@ -157,7 +157,7 @@ export class HospitalInfoComponent implements OnInit {
       const spec = this.vegaBarchartService.compileChart(this.latestDevelopment, bedAccessor, bedStati, {
         xAxisTitle: '',
         yAxisTitle: this.translationService.translate('Anzahl Krankenhäuser'),
-        width: 60
+        width: 55
       })
 
 
