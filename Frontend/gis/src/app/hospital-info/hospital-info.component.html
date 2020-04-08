@@ -90,7 +90,7 @@
 
     <div class="chart-wrapper developmentstatuslabels" fxLayout="row"> 
       <div style="width:200px; margin-left: 10px;" fxBox><span i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung:</span> <!--({{ firstTimestamp | date:'mediumDate'}} - {{ now | date:'mediumDate' }})--> </div>
-      <div style="margin-left: 5px;" fxBox>Stand seit <br> {{ lastUpdate | date:'dd.MM.yyyy' }}  </div>
+      <div style="margin-left: 5px;" fxBox i18n="@@tooltipHospitalTemporalDevelopmentLastUpdate" >Stand seit <br> {{ lastUpdate | date:'shortDate' }}  </div>
     </div>
     <mat-divider></mat-divider>
     <div *ngFor="let s of specs; let i = index" >
