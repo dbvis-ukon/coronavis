@@ -11,6 +11,7 @@ export class VegaBarchartService {
   barChartTemplateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "height": 100,
+    "width":60,
     "description": "A simple bar chart with rounded corners at the end of the bar.",
     "data": {
       "values": [{
@@ -93,7 +94,8 @@ export class VegaBarchartService {
     bedStati: string[] = null,
     chartOptions: {
       xAxisTitle: string,
-      yAxisTitle: string
+      yAxisTitle: string,
+      width: number
     }
     ): any {
     if(!data) {
@@ -132,6 +134,8 @@ export class VegaBarchartService {
     spec.encoding.x.title = chartOptions.xAxisTitle || '';
 
     spec.encoding.y.title = chartOptions.yAxisTitle || '';
+
+    spec.width = chartOptions.width;
 
     return spec;
   }

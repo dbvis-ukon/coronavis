@@ -47,7 +47,8 @@ export class BedTooltipComponent implements OnInit {
 
     this.spec = this.vegaBarchartService.compileChart(this.data, this.accessorFunc, null, {
       xAxisTitle: '',
-      yAxisTitle: this.translationService.translate('Anzahl Krankenhäuser')
+      yAxisTitle: this.translationService.translate('Anzahl Krankenhäuser'),
+      width: 100
     });
   }
 

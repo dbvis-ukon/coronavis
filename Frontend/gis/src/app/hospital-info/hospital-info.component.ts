@@ -33,7 +33,7 @@ export class HospitalInfoComponent implements OnInit {
 
   temporalChartTemplateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-    "width": 350, "height": 50,
+    "width": 260, "height": 50,
     "aggregated": true,
     "data": {
       "values": []
@@ -156,7 +156,8 @@ export class HospitalInfoComponent implements OnInit {
 
       const spec = this.vegaBarchartService.compileChart(this.latestDevelopment, bedAccessor, bedStati, {
         xAxisTitle: '',
-        yAxisTitle: this.translationService.translate('Anzahl Krankenhäuser')
+        yAxisTitle: this.translationService.translate('Anzahl Krankenhäuser'),
+        width: 55
       })
 
 
@@ -309,10 +310,10 @@ export class HospitalInfoComponent implements OnInit {
         // inject data values
         spec.data.values = dataValues;
 
-        if (this.isSingleHospital && (new Date(this.lastUpdate).getTime() - new Date(this.firstTimestamp).getTime() < 2 * 24 * 60 * 60 * 1000)) {
-          //spec.encoding.x.axis.format = '%d.%m (%H:%M)'
-          spec.encoding.x.axis.labelExpr = "[timeFormat(datum.value, '%d.%m'), false ? ' ' : timeFormat(datum.value, '(%H:%M)')]";
-        }
+        //if (this.isSingleHospital && (new Date(this.lastUpdate).getTime() - new Date(this.firstTimestamp).getTime() < 2 * 24 * 60 * 60 * 1000)) {
+
+        //  spec.encoding.x.axis.labelExpr = "[timeFormat(datum.value, '%d.%m'), false ? ' ' : timeFormat(datum.value, '(%H:%M)')]";
+        // }
 
         spec.encoding.y.scale = {
           domain: [0, maxNumSlices]
@@ -321,12 +322,14 @@ export class HospitalInfoComponent implements OnInit {
         if (!this.isSingleHospital) {
           spec.mark.interpolate = 'step-after';
           spec.encoding.y.axis.title = this.translationService.translate('Anzahl KH');
+          spec.encoding.x.axis.tickCount = 5;
           // spec.width = 370;
         } else {
           // is single hospital
           spec.encoding.y.axis = false;
 
           spec.height = spec.height * 0.3;
+          spec.width  = 200;
         }
 
         // also overwrite the title
@@ -335,7 +338,8 @@ export class HospitalInfoComponent implements OnInit {
         if (summedbedcounts > 0) {
           this.specs.push({
             title: this.bedAccessorsMapping[bedAccessor],
-            chart: spec
+            chart: spec,
+            bedtype: bedAccessor == 'icu_low_care' ? this.eBedType.icuLow : (bedAccessor == 'icu_high_care' ? this.eBedType.icuHigh : this.eBedType.ecmo)   
           });
 
 
