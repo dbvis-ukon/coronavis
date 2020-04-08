@@ -322,6 +322,7 @@ export class HospitalInfoComponent implements OnInit {
         if (!this.isSingleHospital) {
           spec.mark.interpolate = 'step-after';
           spec.encoding.y.axis.title = this.translationService.translate('Anzahl KH');
+          spec.encoding.x.axis.tickCount = 5;
           // spec.width = 370;
         } else {
           // is single hospital
