@@ -56,6 +56,11 @@ spec:
                 secretKeyRef:
                   name: database-info
                   key: DB_NAME
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: sentry
+                  key: SENTRY_DSN
             - name: VERSION
               value: {{ .Values.sha | quote }}
           readinessProbe:
