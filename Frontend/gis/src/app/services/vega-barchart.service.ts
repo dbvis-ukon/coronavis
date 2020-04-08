@@ -94,7 +94,8 @@ export class VegaBarchartService {
     bedStati: string[] = null,
     chartOptions: {
       xAxisTitle: string,
-      yAxisTitle: string
+      yAxisTitle: string,
+      width: number
     }
     ): any {
     if(!data) {
@@ -133,6 +134,8 @@ export class VegaBarchartService {
     spec.encoding.x.title = chartOptions.xAxisTitle || '';
 
     spec.encoding.y.title = chartOptions.yAxisTitle || '';
+
+    spec.width = chartOptions.width;
 
     return spec;
   }
