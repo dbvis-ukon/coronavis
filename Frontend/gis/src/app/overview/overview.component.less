@@ -1,20 +1,47 @@
-.mytile {
+.container {
     display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
+    flex-direction: row;
+    overflow: visible;
+    justify-content: space-between;
+    // flex-wrap: wrap-reverse;
+
+    .grid {
+        // position: absolute;
+        // display: block;
+        flex-grow: 4;
+        flex-shrink: 3;
+        min-width: 300px;
+        // flex-basis: content;
+    }
+
+    .text {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+}
+
+.mytile {
     cursor: pointer;
 
-    .map {
-        flex-grow: 1;
-        overflow: hidden;
+    .mapcontainer {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    
+        .map {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+    }
+
+    .footer {
+
+        .spacer {
+            flex: 1 1 auto;
+        }
     }
 }
 
 
-.footer {
 
-    .spacer {
-        flex: 1 1 auto;
-    }
-}
