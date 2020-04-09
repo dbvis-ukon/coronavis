@@ -48,7 +48,6 @@ import { MapRootComponent } from './map-root/map-root.component';
 import { MapComponent } from './map/map.component';
 import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
-import { OverlayMobileComponent } from './overlay-mobile/overlay-mobile.component';
 import { PlusminusPipe } from './plusminus.pipe';
 import { SentryErrorHandler } from './sentry-config';
 import { SupportedLocales } from './services/i18n.service';
@@ -127,7 +126,6 @@ export const localeProvider = {
     GlyphTooltipComponent,
     CaseTooltipComponent,
     OverlayBrandComponent,
-    OverlayMobileComponent,
     InfoboxComponent,
     HospitalInfoComponent,
     HospitalInfoDialogComponent,
