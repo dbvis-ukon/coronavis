@@ -66,7 +66,7 @@ export class GlyphLayerService {
           this.matDialog
         );
 
-        const factoryBg = new LandkreiseHospitalsLayer(name + '_bg', result[1], this.tooltipService);
+        const factoryBg = new LandkreiseHospitalsLayer(name + '_bg', result[1]);
 
 
         // Create a layer group

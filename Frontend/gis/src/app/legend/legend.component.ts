@@ -4,6 +4,8 @@ import { BedType } from '../map/options/bed-type.enum';
 import { CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
 import { MapOptions } from '../map/options/map-options';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
+import { CaseChoroplethColormapService } from '../services/case-choropleth-colormap.service';
+import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
 
 @Component({
@@ -49,15 +51,17 @@ export class LegendComponent implements OnInit {
   casesMax = '';
 
   constructor(
-    private colmapService: QuantitativeColormapService) {
-
+    private bedColormap: QualitativeColormapService,
+    private caseColormap: CaseChoroplethColormapService
+  ) {
+    
   }
 
   ngOnInit(): void {
   }
 
   getBedColor(bedType: string) {
-    return this.colmapService.getSingleHospitalColormap()(bedType);
+    return this.bedColormap.getSingleHospitalColormap()(bedType);
   }
 
   updateCaseColors() {
@@ -67,14 +71,23 @@ export class LegendComponent implements OnInit {
       return;
     }
 
+    // FIXME: Ugly hack to get the data
+    // needs to be refactored in the future
+    // so that the legend receives the data directly
+    const data = this._choroplethLayer.getData();
+
+    const cmap = this.caseColormap.getColorMap();
+
+    const scale = this.caseColormap.getScale(data, this.mo.covidNumberCaseOptions);
+
+    const domainMinMax = this.caseColormap.getDomainExtent(data, this.mo.covidNumberCaseOptions);
+
+
     const norm100k: boolean = this.mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k;
-    const v = this._choroplethLayer;
     let normVal = 1;
     if ((this.mo.covidNumberCaseOptions && norm100k)) {
       normVal = 100000;
     }
-
-    const cmap = QuantitativeColormapService.CChoroplethColorMap;
 
     let lastColor = true;
     let prevColor;
@@ -89,8 +102,8 @@ export class LegendComponent implements OnInit {
     cmap.range().map((color, i) => {
       const d = cmap.invertExtent(color);
 
-      d[0] = v.NormValuesFunc.invert(d[0]);
-      d[1] = v.NormValuesFunc.invert(d[1]);
+      d[0] = scale.invert(d[0]);
+      d[1] = scale.invert(d[1]);
 
       let d0Fixed = (d[0] * normVal);
       let d1Fixed = (d[1] * normVal);
@@ -133,7 +146,7 @@ export class LegendComponent implements OnInit {
         }        
       }
 
-      if (v.MinMax[0] < d[0] && v.MinMax[1] > d[1] ) {
+      if (domainMinMax[0] < d[0] && domainMinMax[1] > d[1] ) {
         if (this.casesMin === '') {
           this.casesMin = (text === Math.floor(d0Fixed) + '' ? Math.floor(d0Fixed) : d0Fixed) + '';
         }
@@ -148,7 +161,7 @@ export class LegendComponent implements OnInit {
         );
 
       }
-      if (v.MinMax[1] <= d[1] && lastColor) {
+      if (domainMinMax[1] <= d[1] && lastColor) {
         lastColor = false;
 
         this.caseColors.push(

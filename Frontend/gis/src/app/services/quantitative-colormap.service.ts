@@ -11,10 +11,6 @@ export class QuantitativeColormapService {
   constructor() {
   }
 
-  public static CChoroplethColorMap = d3.scaleQuantize<string>()
-    .domain([-1, 1])
-    .range([...d3.schemeGreens[8].slice(0, 7).reverse(), '#fff', ...d3.schemeBlues[8].slice(0, 7)]);
-
   public static bedStatusColors = ['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)'];
   public static bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar', 'Keine Information'];
 
@@ -35,10 +31,6 @@ export class QuantitativeColormapService {
     .domain(QuantitativeColormapService.bedStatusThresholds)
     .range(QuantitativeColormapService.bedStatusThresholdsColors);
 
-  private caseChoroplethColorMap = d3.scaleQuantize<string>()
-    .domain([-1, 1])
-    .range([...d3.schemeGreens[8].slice(0, 7).reverse(), '#fff', ...d3.schemeBlues[8].slice(0, 7)]);
-
   private continousColorMap = d3.scaleLinear<string, string>()
     .domain([0, 0.5, 1])
     .range(QuantitativeColormapService.bedStatusColors)
@@ -48,9 +40,6 @@ export class QuantitativeColormapService {
   }
   getSingleHospitalColormapStates(): d3.ScaleThreshold<number, string> {
     return this.singleHospitalCMStates;
-  }
-  getChoroplethCaseColor(normalizedDiff: number): string {
-    return this.caseChoroplethColorMap(normalizedDiff);
   }
 
   public propertyAccessor(type: BedType) {
