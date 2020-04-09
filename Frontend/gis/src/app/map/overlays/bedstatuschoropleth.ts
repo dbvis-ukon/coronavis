@@ -11,7 +11,7 @@ import { AggregationLevel } from '../options/aggregation-level.enum';
 import { BedType } from '../options/bed-type.enum';
 import { Overlay } from './overlay';
 
-export class BedStatusChoropleth<T extends AbstractTimedStatus>extends Overlay<FeatureCollection<MultiPolygon, AggregatedHospitalOut<T>>> {
+export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<AggregatedHospitalOut<T>> {
 
   constructor(
     name: string, 

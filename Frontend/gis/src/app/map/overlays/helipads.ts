@@ -1,15 +1,16 @@
+import { FeatureCollection, Point } from 'geojson';
 import * as L from 'leaflet';
-import { OSMNearbyHelipads } from 'src/app/repositories/types/in/osm-helipads';
+import { OSMHelipadProperties } from 'src/app/repositories/types/in/osm-helipads';
 import { TooltipService } from 'src/app/services/tooltip.service';
 import { OsmTooltipComponent } from "../../osm-tooltip/osm-tooltip.component";
 import { Overlay } from './overlay';
 
 
 
-export class HelipadLayer extends Overlay < OSMNearbyHelipads > {
+export class HelipadLayer extends Overlay < OSMHelipadProperties > {
   constructor(
     name: string,
-    featureCollection: OSMNearbyHelipads,
+    featureCollection: FeatureCollection<Point, OSMHelipadProperties>,
     private tooltipService: TooltipService
   ) {
     super(name, featureCollection);

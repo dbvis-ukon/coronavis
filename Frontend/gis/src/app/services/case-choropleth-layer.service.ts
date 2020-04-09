@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Feature, Polygon } from "geojson";
+import { Feature, FeatureCollection, Polygon } from "geojson";
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { RKICaseRepository } from '../repositories/rki-case.repository';
-import { QualitativeColormapService } from './qualitative-colormap.service';
+import { CaseChoroplethColormapService } from './case-choropleth-colormap.service';
 import { TooltipService } from './tooltip.service';
-import { QuantitativeAggregatedRkiCasesOverTime, QuantitativeAggregatedRkiCasesOverTimeProperties } from './types/quantitative-aggregated-rki-cases-over-time';
+import { QuantitativeAggregatedRkiCasesOverTimeProperties } from './types/quantitative-aggregated-rki-cases-over-time';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class CaseChoroplethLayerService {
   constructor(
     private rkiCaseRepository: RKICaseRepository,
     private tooltipService: TooltipService,
-    private colormapService: QualitativeColormapService,
+    private colormapService: CaseChoroplethColormapService,
     private matDialog: MatDialog
   ) {}
 
@@ -39,7 +39,7 @@ export class CaseChoroplethLayerService {
   }
 
 
-  private getCaseData(agg: AggregationLevel): Observable < QuantitativeAggregatedRkiCasesOverTime > {
+  private getCaseData(agg: AggregationLevel): Observable < FeatureCollection<Polygon, QuantitativeAggregatedRkiCasesOverTimeProperties> > {
     const total = this.rkiCaseRepository.getCasesTotalForAggLevel(agg);
     const yesterday = this.rkiCaseRepository.getCasesYesterdayForAggLevel(agg);
     const threedays = this.rkiCaseRepository.getCasesThreedaysForAggLevel(agg);
@@ -94,7 +94,7 @@ export class CaseChoroplethLayerService {
 
           return {
             features: casesOverTime
-          } as QuantitativeAggregatedRkiCasesOverTime;
+          } as FeatureCollection<Polygon, QuantitativeAggregatedRkiCasesOverTimeProperties>;
         })
       )
   }

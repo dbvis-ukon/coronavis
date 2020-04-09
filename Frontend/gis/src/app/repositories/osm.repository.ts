@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { FeatureCollection, Point } from 'geojson';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { CachedRepository } from './cached.repository';
-import { OSMNearbyHelipads } from './types/in/osm-helipads';
-import { OSMHospitals } from './types/in/osm-hospitals';
+import { OSMHelipadProperties } from './types/in/osm-helipads';
+import { OSMHospitalProperties } from './types/in/osm-hospitals';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,11 @@ export class OSMRepository {
   constructor(private cachedRepository: CachedRepository) {
   }
 
-  getOSMHospitals(): Observable<OSMHospitals> {
-    return this.cachedRepository.get<OSMHospitals>(`${environment.apiUrl}osm/hospitals`);
+  getOSMHospitals(): Observable<FeatureCollection<Point, OSMHospitalProperties>> {
+    return this.cachedRepository.get<FeatureCollection<Point, OSMHospitalProperties>>(`${environment.apiUrl}osm/hospitals`);
   }
 
-  getOSMHelipads(): Observable<OSMNearbyHelipads> {
-    return this.cachedRepository.get<OSMNearbyHelipads>(`${environment.apiUrl}osm/nearby_helipads`);
+  getOSMHelipads(): Observable<FeatureCollection<Point, OSMHelipadProperties>> {
+    return this.cachedRepository.get<FeatureCollection<Point, OSMHelipadProperties>>(`${environment.apiUrl}osm/nearby_helipads`);
   }
 }
