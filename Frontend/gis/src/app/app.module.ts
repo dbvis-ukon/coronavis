@@ -1,6 +1,6 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { APP_BASE_HREF, DecimalPipe, PlatformLocation, registerLocaleData } from '@angular/common';
+import { APP_BASE_HREF, PlatformLocation, registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import localeDe from '@angular/common/locales/de';
 import localeEn from '@angular/common/locales/en';
@@ -15,7 +15,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -38,7 +37,6 @@ import { ButtonPanelComponent } from './button-panel/button-panel.component';
 import { CaseDialogComponent } from './case-dialog/case-dialog.component';
 import { CaseInfoComponent } from './case-info/case-info.component';
 import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
-import { D3ChoroplethMapComponent } from './d3-choropleth-map/d3-choropleth-map.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
@@ -51,13 +49,11 @@ import { MapComponent } from './map/map.component';
 import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
 import { OverlayMobileComponent } from './overlay-mobile/overlay-mobile.component';
-import { OverviewComponent } from './overview/overview.component';
-import { PlusminusPipe } from './plusminus.pipe';
-import { ResizedDirective } from './resize.directive';
+import { OverviewModule } from './overview/overview.module';
 import { SentryErrorHandler } from './sentry-config';
 import { SupportedLocales } from './services/i18n.service';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
-import { TranslatePipe } from './translate.pipe';
+import { SharedModule } from './shared/shared.module';
 import { VegaComponent } from './vega/vega.component';
 
 
@@ -126,7 +122,6 @@ export const localeProvider = {
     OsmTooltipComponent
   ],
   declarations: [
-    ResizedDirective,
     AppComponent,
     MapComponent,
     GlyphTooltipComponent,
@@ -137,12 +132,10 @@ export const localeProvider = {
     HospitalInfoComponent,
     HospitalInfoDialogComponent,
     LegendComponent,
-    PlusminusPipe,
     AboutComponent,
     ImpressumComponent,
     VegaComponent,
     HelpDialogComponent,
-    TranslatePipe,
     OsmTooltipComponent,
     CaseInfoComponent,
     CaseDialogComponent,
@@ -150,15 +143,16 @@ export const localeProvider = {
     ShareDialogComponent,
     ButtonPanelComponent,
     BedTooltipComponent,
-    D3ChoroplethMapComponent,
-    OverviewComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    SharedModule.forRoot(),
     OverlayModule,
     BrowserAnimationsModule,
+    OverviewModule,
+    AppRoutingModule,
     MatButtonToggleModule,
     MatCardModule,
     MatSlideToggleModule,
@@ -178,13 +172,11 @@ export const localeProvider = {
     MatSelectModule,
     MatSnackBarModule,
     MatStepperModule,
-    AppRoutingModule,
     MatInputModule,
     MatCheckboxModule,
     MatTabsModule,
     MatToolbarModule,
-    FlexLayoutModule,
-    MatGridListModule
+    FlexLayoutModule
   ],
   providers: [
     localeProvider, 
@@ -193,9 +185,6 @@ export const localeProvider = {
       useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
       deps: [PlatformLocation]
     },
-    PlusminusPipe, 
-    DecimalPipe, 
-    TranslatePipe,
     { 
       provide: ErrorHandler, 
       useClass: SentryErrorHandler 

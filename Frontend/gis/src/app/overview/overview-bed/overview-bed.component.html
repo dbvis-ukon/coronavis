@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="grid">
+        <mat-grid-list [cols]="gridNumCols" rowHeight="1:1">
+            <mat-grid-tile class="mytile" *ngFor="let d of dataBlobBeds" [routerLink]="['/map', { mlo: urlHandler.convertMLOToUrl(d.mo), mls:  urlHandler.convertMLSToUrl(d.mls)}]">
+
+                
+
+                <div class="mapcontainer">  
+                    <app-d3-choropleth-map class="map" [data]="d.data | async"></app-d3-choropleth-map>
+                </div>
+
+
+                <mat-grid-tile-footer class="footer">
+                    <h4>{{ d.aggLevelFriendly | translate }}</h4>
+                    <span class="spacer"></span>
+                    <h4>{{ d.bedTypeFriendly | translate }}</h4>
+                </mat-grid-tile-footer>
+                
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+
+    <div class="text">
+        <h1>Übersicht Intensivbettenkapazitäten</h1>
+
+        <div *ngIf="aggregatedDiviStatistics">
+            <p class="stats" i18n="@@infoboxNumberOfHospitals">{{ aggregatedDiviStatistics.numberOfHospitals | number }} bundesweit gemeldete Krankenhäuser</p>
+            <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ aggregatedDiviStatistics.timestamp | date:'full' }}</p>
+        </div>
+    </div>
+</div>

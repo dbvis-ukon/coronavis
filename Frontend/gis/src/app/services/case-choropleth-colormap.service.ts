@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { schemeBlues, schemeGreens } from 'd3';
 import { extent, max } from 'd3-array';
 import { scaleLinear, ScaleLinear, scalePow, ScalePower, scaleQuantize } from 'd3-scale';
-import { FeatureCollection, Geometry } from 'geojson';
+import { Feature, FeatureCollection, Geometry } from 'geojson';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { QuantitativeAggregatedRkiCaseNumberProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 import { QuantitativeAggregatedRkiCasesOverTimeProperties } from './types/quantitative-aggregated-rki-cases-over-time';
@@ -23,6 +23,15 @@ export class CaseChoroplethColormapService {
 
   getColorMap() {
     return this.caseChoroplethColorMap;
+  }
+
+
+  getColor(
+    scaleFn: ScalePower<number, number> | ScaleLinear<number, number>, 
+    dataPoint: Feature<Geometry, QuantitativeAggregatedRkiCasesOverTimeProperties>, 
+    options: CovidNumberCaseOptions
+  ): string {
+    return this.getChoroplethCaseColor(scaleFn(this.getCaseNumbers(dataPoint.properties, options)));
   }
 
 

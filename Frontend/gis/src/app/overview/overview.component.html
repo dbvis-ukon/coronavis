@@ -1,48 +1,7 @@
+<mat-toolbar>
+    <a mat-button routerLink="/overview/beds">Beds</a>
 
-<mat-tab-group>
-    <mat-tab label="Bed Capacities">
+    <a mat-button routerLink="/overview/cases">Cases</a>
+</mat-toolbar>
 
-        <div class="container">
-            <div class="grid">
-                <mat-grid-list [cols]="gridNumCols" rowHeight="1:1">
-                    <mat-grid-tile class="mytile" *ngFor="let d of dataBlob" [routerLink]="['/map', { mlo: urlHandler.convertMLOToUrl(d.mo), mls:  urlHandler.convertMLSToUrl(d.mls)}]">
-        
-                        
-        
-                        <div class="mapcontainer">  
-                            <app-d3-choropleth-map class="map" [data]="d.data | async"></app-d3-choropleth-map>
-                        </div>
-        
-        
-                        <mat-grid-tile-footer class="footer">
-                            <h4>{{ d.aggLevelFriendly | translate }}</h4>
-                            <span class="spacer"></span>
-                            <h4>{{ d.bedTypeFriendly | translate }}</h4>
-                        </mat-grid-tile-footer>
-                        
-                    </mat-grid-tile>
-                </mat-grid-list>
-            </div>
-
-            <div class="text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pellentesque at quam et sagittis. Pellentesque et augue nec orci eleifend pellentesque. Ut porta nisl ligula, vel pulvinar mauris pellentesque a. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec ullamcorper fermentum ante id euismod. Maecenas ut nunc pellentesque, dapibus magna et, euismod sapien. Donec congue nec eros sed imperdiet. Pellentesque congue dolor sit amet turpis luctus porta. Quisque volutpat egestas est vel tristique.
-
-Mauris lacus erat, sagittis et vestibulum a, dapibus non ante. Morbi mollis elit odio, bibendum porttitor mi bibendum in. Ut in massa mi. Nulla tempus massa orci, et vulputate erat sagittis porta. Nunc dictum, diam vel elementum faucibus, est dui cursus nibh, vitae faucibus lorem diam et ligula. Vivamus consequat sem id ligula semper dapibus. Integer et lacinia ipsum, ac tempor metus. Pellentesque aliquet velit ut nisl ullamcorper, non semper enim blandit. Phasellus ullamcorper eleifend ligula vitae volutpat. Nam ut tincidunt elit. Sed vitae mauris eleifend, egestas lorem nec, convallis risus.
-
-Mauris placerat eleifend cursus. Maecenas interdum ultricies semper. Pellentesque facilisis vitae metus in lobortis. Aliquam volutpat mi et suscipit porttitor. Maecenas fermentum turpis et eros lobortis blandit. Nullam at vestibulum velit, eu blandit nisi. Quisque interdum dolor at nibh iaculis, lobortis tincidunt purus venenatis. Nunc ac quam quam. Nunc vitae magna nec arcu malesuada faucibus. Nam interdum pretium sapien, et volutpat diam hendrerit sit amet. Nam molestie aliquet libero vitae iaculis. Pellentesque tristique ac lorem sit amet facilisis. Fusce ornare purus est, nec finibus est consectetur quis. Nulla mauris elit, pretium vitae ultrices vitae, commodo at tortor. Etiam imperdiet dui ac nisl molestie, eget vulputate leo blandit.
-
-Ut a lobortis nisi. Phasellus non erat aliquet dolor lobortis maximus. Sed id ornare nunc. Mauris ut odio sit amet neque rutrum fringilla non in eros. Pellentesque quis nunc et mauris porta blandit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc porta mollis accumsan. Integer gravida in sapien eu rutrum.
-
-Mauris pulvinar scelerisque gravida. Integer eu arcu vel diam euismod pretium non ac ipsum. Sed commodo erat sapien, quis aliquam erat pharetra vel. Nulla in egestas risus. Donec pharetra, velit sed fringilla dictum, libero mauris auctor orci, a ornare tortor libero elementum arcu. Suspendisse mollis sem quis tempor pharetra. Integer a tellus interdum, sollicitudin leo sed, dignissim nunc. Aenean quis tellus nec turpis convallis finibus sit amet sit amet nisi. Sed at urna non ligula dictum imperdiet at non lectus. Suspendisse potenti. Curabitur gravida semper tellus maximus accumsan. Nulla lobortis aliquam libero, non luctus lectus. Donec eu nibh turpis. Phasellus arcu leo, molestie nec condimentum ac, efficitur vitae ipsum. Vestibulum volutpat orci velit, eget aliquam velit facilisis at.
-            </div>
-        </div>
-        
-    </mat-tab>
-
-
-    <mat-tab label="Covid-19 Case Maps">
-
-    </mat-tab>
-</mat-tab-group>
-
-
+<router-outlet></router-outlet>

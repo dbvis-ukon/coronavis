@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Feature, FeatureCollection, Polygon } from "geojson";
+import { Feature, FeatureCollection, MultiPolygon } from "geojson";
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -39,7 +39,7 @@ export class CaseChoroplethLayerService {
   }
 
 
-  private getCaseData(agg: AggregationLevel): Observable < FeatureCollection<Polygon, QuantitativeAggregatedRkiCasesOverTimeProperties> > {
+  public getCaseData(agg: AggregationLevel): Observable < FeatureCollection<MultiPolygon, QuantitativeAggregatedRkiCasesOverTimeProperties> > {
     const total = this.rkiCaseRepository.getCasesTotalForAggLevel(agg);
     const yesterday = this.rkiCaseRepository.getCasesYesterdayForAggLevel(agg);
     const threedays = this.rkiCaseRepository.getCasesThreedaysForAggLevel(agg);
@@ -47,7 +47,7 @@ export class CaseChoroplethLayerService {
     return forkJoin([total, yesterday, threedays])
       .pipe(
         map(e => {
-          const casesOverTime: Array<Feature<Polygon, QuantitativeAggregatedRkiCasesOverTimeProperties>> = [];
+          const casesOverTime: Array<Feature<MultiPolygon, QuantitativeAggregatedRkiCasesOverTimeProperties>> = [];
 
           for (let i = 0; i < e[0].features.length; i++) {
             const last = e[0].features[i];
@@ -93,8 +93,9 @@ export class CaseChoroplethLayerService {
           }
 
           return {
-            features: casesOverTime
-          } as FeatureCollection<Polygon, QuantitativeAggregatedRkiCasesOverTimeProperties>;
+            features: casesOverTime,
+            type: 'FeatureCollection'
+          } as FeatureCollection<MultiPolygon, QuantitativeAggregatedRkiCasesOverTimeProperties>;
         })
       )
   }

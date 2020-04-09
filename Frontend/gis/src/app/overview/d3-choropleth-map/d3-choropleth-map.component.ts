@@ -1,17 +1,25 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { geoMercator, geoPath, GeoPath, GeoPermissibleObjects, GeoProjection } from 'd3-geo';
 import { select, Selection } from 'd3-selection';
-import { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { timer } from 'rxjs';
-import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
-import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
-import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
-import { ResizedEvent } from '../resized-event';
+import { QualitativeTimedStatus } from '../../repositories/types/in/qualitative-hospitals-development';
+import { AggregatedHospitalOut } from '../../repositories/types/out/aggregated-hospital-out';
+import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../../services/types/quantitative-aggregated-rki-cases-over-time';
+import { ResizedEvent } from '../../shared/resized-event';
+
+export type D3ChoroplethMapPermissibleFeatureCollection = 
+  FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> | 
+  FeatureCollection<MultiPolygon, QuantitativeAggregatedRkiCasesOverTimeProperties>;
+
+export type D3ChoroplethMapPermissibleFeature = 
+  Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> | 
+  Feature<MultiPolygon, QuantitativeAggregatedRkiCasesOverTimeProperties>;
 
 export interface D3ChoroplethMapData {
-  data: FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> | FeatureCollection<Polygon, QuantitativeAggregatedRkiCasesProperties>;
+  data: D3ChoroplethMapPermissibleFeatureCollection;
 
-  fillFn: (d: Feature<any, AggregatedHospitalOut<QualitativeTimedStatus>> | Feature<any, QuantitativeAggregatedRkiCasesProperties>) => string
+  fillFn: (d: D3ChoroplethMapPermissibleFeature) => string
 
   width: number;
 
@@ -99,6 +107,10 @@ export class D3ChoroplethMapComponent implements OnInit {
       return;
     }
 
+    if(evt.newWidth === 0) {
+      return;
+    }
+
     this._data.width = evt.newWidth;
     this._data.height = evt.newHeight;
 
@@ -119,9 +131,10 @@ export class D3ChoroplethMapComponent implements OnInit {
       .attr('height', `${this._data.height}px`);
 
     const data = this._data.data.features;
+    
 
-    const sel = this.svg.selectAll<SVGPathElement, Feature<Polygon, QuantitativeAggregatedRkiCasesProperties> | Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>>('path')
-      .data<Feature<Polygon, QuantitativeAggregatedRkiCasesProperties> | Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>>(data);
+    const sel = this.svg.selectAll<SVGPathElement, D3ChoroplethMapPermissibleFeature>('path')
+      .data<D3ChoroplethMapPermissibleFeature>(data);
 
     sel  
       .enter()
@@ -129,7 +142,9 @@ export class D3ChoroplethMapComponent implements OnInit {
       .merge(sel)
       .attr('d', this.path)
       .attr('vector-effect', 'non-scaling-stroke')
-      .attr('fill', this._data.fillFn);
+      .attr('fill', this._data.fillFn)
+      .attr('stroke-width', 0.5)
+      .attr('stroke', 'lightgrey');
 
     sel.exit().remove();
   }
