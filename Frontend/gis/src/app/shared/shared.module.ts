@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { LanguageSwitcherComponent } from './language-switcher/language-switcher.component';
 import { PlusminusPipe } from './plusminus.pipe';
 import { ResizedDirective } from './resize.directive';
 import { TranslatePipe } from './translate.pipe';
@@ -10,15 +13,19 @@ import { TranslatePipe } from './translate.pipe';
   declarations: [
     TranslatePipe,
     PlusminusPipe,
-    ResizedDirective
+    ResizedDirective,
+    LanguageSwitcherComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   exports: [
     TranslatePipe,
     PlusminusPipe,
-    ResizedDirective
+    ResizedDirective,
+    LanguageSwitcherComponent
   ]
 })
 export class SharedModule {

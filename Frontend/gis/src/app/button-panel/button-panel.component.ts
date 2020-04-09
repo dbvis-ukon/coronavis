@@ -6,7 +6,6 @@ import { AboutComponent } from '../about/about.component';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
-import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { ShareDialogComponent } from '../share-dialog/share-dialog.component';
 
 @Component({
@@ -25,13 +24,10 @@ export class ButtonPanelComponent implements OnInit {
   @Input()
   mode: 'vertical' | 'horizontal';
 
-  supportedLocales: string[];
 
-  selectedLocale: SupportedLocales;
 
   constructor(
     private dialogService: MatDialog,
-    private i18nService: I18nService,
     iconRegistry: MatIconRegistry, sanitizer: DomSanitizer
   ) {
     iconRegistry.addSvgIcon(
@@ -41,13 +37,6 @@ export class ButtonPanelComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-    
-    this.supportedLocales = this.i18nService.getSupportedLocales();
-
-    this.i18nService.currentLocale().subscribe(l => {
-      this.selectedLocale = l;
-    })
   }
 
   openAbout() {
@@ -61,13 +50,7 @@ export class ButtonPanelComponent implements OnInit {
     // location.href = 'https://video.coronavis.dbvis.de';
   }
 
-  changeLocale(evt) {
-    this.i18nService.updateLocale(evt.value);
 
-    const url = evt.value.slice(0,2);
-
-    location.href = `/${url}/`;
-  }
 
 
   openHelp() {

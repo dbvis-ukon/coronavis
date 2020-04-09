@@ -52,12 +52,5 @@
 
     <span class="spacer"></span>
 
-    <mat-form-field class="locale" *ngIf="!mo.hideInfobox">
-      <mat-label i18n="infobox | infobox@@footer5">Sprache</mat-label>
-      <mat-select (selectionChange)="changeLocale($event)" [value]="selectedLocale">
-        <mat-option *ngFor="let locale of supportedLocales" [value]="locale">
-          {{ locale.slice(0, 2) }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <app-language-switcher class="locale" *ngIf="!mo.hideInfobox"></app-language-switcher>
   </div>
