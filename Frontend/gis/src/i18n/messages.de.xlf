@@ -5,27 +5,27 @@
       <notes>
         <note category="description">cases</note>
         <note category="meaning">case-tooltip</note>
-        <note category="location">src/app/case-tooltip/case-tooltip.component.html:4</note>
-      </notes>
+        
+      <note category="location">src/app/case-dialog/case-dialog.component.html:6</note><note category="location">src/app/case-tooltip/case-tooltip.component.html:3</note></notes>
       <segment state="final">
         <source>Einwohner</source>
       <target>Einwohner</target></segment>
     </unit><unit id="cases">
       <notes>
         <note category="description">cases</note>
-        <note category="meaning">case-tooltip</note>
-        <note category="location">src/app/case-tooltip/case-tooltip.component.html:9</note>
-        <note category="location">src/app/legend/legend.component.html:4</note>
-      </notes>
+        <note category="meaning">legend</note>
+        
+        
+      <note category="location">src/app/legend/legend.component.html:4</note><note category="location">src/app/case-info/case-info.component.html:5</note></notes>
       <segment state="final">
-        <source>Fälle Total</source>
-      <target>Fälle Total</target></segment>
+        <source>Fallzahlen</source>
+      <target>Fallzahlen</target></segment>
     </unit><unit id="changes">
       <notes>
         <note category="description">changes</note>
         <note category="meaning">case-tooltip</note>
-        <note category="location">src/app/case-tooltip/case-tooltip.component.html:10</note>
-      </notes>
+        
+      <note category="location">src/app/case-info/case-info.component.html:6</note></notes>
       <segment state="final">
         <source>Veränderung</source>
       <target>Veränderung</target></segment>
@@ -33,8 +33,8 @@
       <notes>
         <note category="description">24h</note>
         <note category="meaning">case-tooltip</note>
-        <note category="location">src/app/case-tooltip/case-tooltip.component.html:15</note>
-      </notes>
+        
+      <note category="location">src/app/case-info/case-info.component.html:11</note></notes>
       <segment state="final">
         <source>letzte 24h</source>
       <target>letzte 24h</target></segment>
@@ -42,8 +42,8 @@
       <notes>
         <note category="description">72h</note>
         <note category="meaning">case-tooltip</note>
-        <note category="location">src/app/case-tooltip/case-tooltip.component.html:16</note>
-      </notes>
+        
+      <note category="location">src/app/case-info/case-info.component.html:12</note></notes>
       <segment state="final">
         <source>letzte 72h</source>
       <target>letzte 72h</target></segment>
@@ -51,8 +51,8 @@
       <notes>
         <note category="description">sick</note>
         <note category="meaning">case-tooltip</note>
-        <note category="location">src/app/case-tooltip/case-tooltip.component.html:21</note>
-      </notes>
+        
+      <note category="location">src/app/case-info/case-info.component.html:17</note></notes>
       <segment state="final">
         <source>Erkrankte</source>
       <target>Erkrankte</target></segment>
@@ -60,8 +60,8 @@
       <notes>
         <note category="description">deaths</note>
         <note category="meaning">case-tooltip</note>
-        <note category="location">src/app/case-tooltip/case-tooltip.component.html:29</note>
-      </notes>
+        
+      <note category="location">src/app/case-info/case-info.component.html:25</note></notes>
       <segment state="final">
         <source>Todesfälle</source>
       <target>Todesfälle</target></segment>
@@ -69,8 +69,8 @@
       <notes>
         <note category="description">sickScale</note>
         <note category="meaning">case-tooltip</note>
-        <note category="location">src/app/case-tooltip/case-tooltip.component.html:37</note>
-      </notes>
+        
+      <note category="location">src/app/case-info/case-info.component.html:33</note></notes>
       <segment state="final">
         <source>Erkrankte je 100.000 Einwohner</source>
       <target>Erkrankte je 100.000 Einwohner</target></segment>
@@ -78,8 +78,8 @@
       <notes>
         <note category="description">deathScale</note>
         <note category="meaning">case-tooltip</note>
-        <note category="location">src/app/case-tooltip/case-tooltip.component.html:45</note>
-      </notes>
+        
+      <note category="location">src/app/case-info/case-info.component.html:41</note></notes>
       <segment state="final">
         <source>Todesfälle je 100.000 Einwohner</source>
       <target>Todesfälle je 100.000 Einwohner</target></segment>
@@ -469,7 +469,7 @@
     </unit><unit id="countyDataNotFound">
       <notes>
 
-      <note category="location">src/app/hospital-info/hospital-info.component.html:18</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:5</note></notes>
       <segment state="final">
         <source>Es stehen keine Daten zur Verfügung.</source>
       <target>Es stehen keine Daten zur Verfügung.</target></segment>
@@ -961,7 +961,7 @@
         <note category="description"> infobox</note>
         <note category="meaning">infobox </note>
 
-      <note category="location">src/app/button-panel/button-panel.component.html:48</note></notes>
+      <note category="location">src/app/button-panel/button-panel.component.html:56</note></notes>
       <segment state="final">
         <source>Sprache</source>
       <target>Sprache</target></segment>
@@ -970,7 +970,7 @@
         <note category="description"> hospitals@reported</note>
         <note category="meaning">tooltip </note>
         
-      <note category="location">src/app/bed-tooltip/bed-tooltip.component.html:6</note><note category="location">src/app/hospital-info/hospital-info.component.html:6</note></notes>
+      <note category="location">src/app/glyph-tooltip/glyph-tooltip.component.html:7</note><note category="location">src/app/hospital-info-dialog/hospital-info-dialog.component.html:13</note><note category="location">src/app/bed-tooltip/bed-tooltip.component.html:6</note></notes>
       <segment state="final">
         <source>gemeldete Krankenhäuser</source>
       <target>gemeldete Krankenhäuser</target></segment>
@@ -978,26 +978,15 @@
     <unit id="tooltipHospitalAddress">
       <notes>
 
-      <note category="location">src/app/hospital-info/hospital-info.component.html:122</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:135</note></notes>
 
       <segment state="final">
         <source>Adresse: </source>
       <target>Adresse: </target></segment>
-    </unit><unit id="hospitalInfoNoTemporalDataAvailable">
-      <notes>
-
-      <note category="location">src/app/hospital-info/hospital-info.component.html:104</note></notes>
-      <segment state="final">
-        <source>
-  Keine zeitliche Entwicklung verfügbar, da lediglich ein Datenpunkt gemeldet wurde.
-</source>
-      <target>
-  Keine zeitliche Entwicklung verfügbar, da lediglich ein Datenpunkt gemeldet wurde.
-</target></segment>
     </unit><unit id="tooltipHospitalContact">
       <notes>
 
-      <note category="location">src/app/hospital-info/hospital-info.component.html:125</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:138</note></notes>
       <segment state="final">
         <source>Kontakt: </source>
       <target>Kontakt: </target></segment>
@@ -1012,7 +1001,7 @@
     </unit><unit id="tooltipHospitalLastUpdate">
       <notes>
 
-      <note category="location">src/app/bed-tooltip/bed-tooltip.component.html:12</note><note category="location">src/app/hospital-info/hospital-info.component.html:20</note></notes>
+      <note category="location">src/app/bed-tooltip/bed-tooltip.component.html:12</note><note category="location">src/app/hospital-info/hospital-info.component.html:7</note></notes>
       <segment state="final">
         <source>Letzter Stand: </source>
       <target>Letzter Stand: </target></segment>
@@ -1026,17 +1015,24 @@
     </unit><unit id="tooltipHospitalOldData">
       <notes>
         
-      <note category="location">src/app/hospital-info/hospital-info.component.html:27</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:14</note></notes>
       <segment state="final">
         <source>Die Daten sind älter als 24 Stunden.</source>
       <target>Die Daten sind älter als 24 Stunden.</target></segment>
     </unit><unit id="tooltipHospitalTemporalDevelopment">
       <notes>
         
-      <note category="location">src/app/hospital-info/hospital-info.component.html:102</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:92</note><note category="location">src/app/hospital-info/hospital-info.component.html:121</note></notes>
       <segment state="final">
         <source>Zeitliche Entwicklung: </source>
       <target>Zeitliche Entwicklung: </target></segment>
+    </unit><unit id="tooltipHospitalTemporalDevelopmentLastUpdate">
+      <notes>
+        <note category="location">src/app/hospital-info/hospital-info.component.html:93</note>
+      </notes>
+      <segment state="final">
+        <source>Stand seit <ph id="0" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/> <ph id="1" equiv="INTERPOLATION" disp="{{ lastUpdate | date:'shortDate' }}"/>  </source>
+      <target>Stand seit <ph id="0" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/> <ph id="1" equiv="INTERPOLATION" disp="{{ lastUpdate | date:'shortDate' }}"/>  </target></segment>
     </unit><unit id="beds">
       <notes>
         <note category="description">beds</note>
