@@ -284,8 +284,6 @@ set up sentry release:
 .build-frontend: &build-frontend
   stage: build:frontend
   image: node:latest
-  variables:
-    NODE_OPTIONS: "--max_old_space_size=8096"
   script:
     - source var.env
     - cd ./Frontend
