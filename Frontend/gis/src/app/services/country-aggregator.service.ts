@@ -63,13 +63,7 @@ export class CountryAggregatorService {
       map(feature => getLatestTimedStatus<QualitativeTimedStatus>(feature.properties.developments)),
       reduce<QualitativeTimedStatus, QualitativeTimedStatusAggregation>((acc, val) => {
         for(const bed of beds) {
-          if(!acc[bed]) {
-            acc[bed] = {};
-          }
           for(const stat of QualitativeColormapService.bedStati) {
-            if(!acc[bed][stat]) {
-              acc[bed][stat] = 0;
-            }
             acc[bed][stat] += val[bed][stat] || 0;
           }
         }
@@ -79,13 +73,33 @@ export class CountryAggregatorService {
           acc.timestamp = valT;
         }
 
-        if(!acc.numberOfHospitals) {
-          acc.numberOfHospitals = 0;
-        }
-
         acc.numberOfHospitals += 1;
 
         return acc as QualitativeTimedStatusAggregation;
+      },
+      {
+        timestamp: new Date('1990-01-01'),
+        numberOfHospitals: 0,
+        icu_low_care: {
+          Verfügbar: 0,
+          Begrenzt: 0,
+          Ausgelastet: 0,
+          "Nicht verfügbar": 0
+        },
+
+        icu_high_care: {
+          Verfügbar: 0,
+          Begrenzt: 0,
+          Ausgelastet: 0,
+          "Nicht verfügbar": 0
+        },
+
+        ecmo_state: {
+          Verfügbar: 0,
+          Begrenzt: 0,
+          Ausgelastet: 0,
+          "Nicht verfügbar": 0
+        }
       })
     );
   }

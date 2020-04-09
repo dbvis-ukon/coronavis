@@ -6,7 +6,9 @@ import { BedType } from 'src/app/map/options/bed-type.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
 import { MapLocationSettings } from 'src/app/map/options/map-location-settings';
 import { MapOptions } from 'src/app/map/options/map-options';
+import { QuantitativeAggregatedRkiCasesProperties } from 'src/app/repositories/types/in/quantitative-aggregated-rki-cases';
 import { ConfigService } from 'src/app/services/config.service';
+import { CountryAggregatorService } from 'src/app/services/country-aggregator.service';
 import { D3ChoroplethDataService } from 'src/app/services/d3-choropleth-data.service';
 import { UrlHandlerService } from 'src/app/services/url-handler.service';
 import { D3ChoroplethMapData } from '../d3-choropleth-map/d3-choropleth-map.component';
@@ -36,11 +38,14 @@ export class OverviewCaseComponent implements OnInit {
 
   bedTypes: string[];
 
+  aggregatedRkiStatistics: QuantitativeAggregatedRkiCasesProperties;
+
   constructor(
     private breakPointObserver: BreakpointObserver,
     private d3ChoroplethService: D3ChoroplethDataService,
     private configService: ConfigService,
-    public urlHandler: UrlHandlerService
+    public urlHandler: UrlHandlerService,
+    private countryAggregatorService: CountryAggregatorService
   ) { }
 
   ngOnInit(): void {
@@ -48,6 +53,11 @@ export class OverviewCaseComponent implements OnInit {
       .subscribe(matched => {
         this.gridNumCols = matched.matches ? 1 : 3;
       });
+
+    this.countryAggregatorService.rkiAggregationForCountry()
+      .subscribe(r => {
+        this.aggregatedRkiStatistics = r;
+      })
 
 
     const aggLevels = Object.values(AggregationLevel).filter(d => d !== AggregationLevel.none);
