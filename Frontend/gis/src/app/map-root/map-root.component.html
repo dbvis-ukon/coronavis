@@ -9,6 +9,7 @@
   ></app-map>
 
   <app-infobox
+    *ngIf="mapOptions"
     class="infobox"
     [mapOptions]="mapOptions"
     [mapLocationSettings]="currentMapLocationSettings"
@@ -17,6 +18,7 @@
 
   <app-overlay-brand class="overlay-brand"></app-overlay-brand>
   <app-legend
+    *ngIf="mapOptions"
     class="legend"
     [mapOptions]="mapOptions"
     [choroplethLayer]="currentCaseChoropleth"
