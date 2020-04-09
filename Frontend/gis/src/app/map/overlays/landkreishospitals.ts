@@ -1,14 +1,13 @@
-import { FeatureCollection } from 'geojson';
+import { FeatureCollection, Polygon } from 'geojson';
 import * as L from 'leaflet';
-import { TooltipService } from 'src/app/services/tooltip.service';
+import { QualitativeAggregatedHospitalProperties } from 'src/app/repositories/types/in/qualitative-hospitals-development';
 import { Overlay } from './overlay';
 
 
-export class LandkreiseHospitalsLayer extends Overlay<FeatureCollection> {
+export class LandkreiseHospitalsLayer extends Overlay<QualitativeAggregatedHospitalProperties> {
   constructor(
     name: string,
-    featureCollection: FeatureCollection,
-    private tooltipService: TooltipService
+    featureCollection: FeatureCollection<Polygon, QualitativeAggregatedHospitalProperties>
   ) {
     super(name, featureCollection);
   }

@@ -16,7 +16,7 @@ import { BedType } from '../options/bed-type.enum';
 import { GlyphLayer } from "./GlyphLayer";
 import { Overlay } from './overlay';
 
-export class SimpleGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
+export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimedStatus>> implements GlyphLayer {
 
   private gHospitals: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
   private nameHospitals: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;

@@ -1,7 +1,3 @@
-import { FeatureCollection, Point } from 'geojson';
-
-export interface OSMNearbyHelipads extends FeatureCollection<Point, OSMHelipadProperties> {
-}
 
 export interface OSMHelipadProperties {
   osm_id: number;

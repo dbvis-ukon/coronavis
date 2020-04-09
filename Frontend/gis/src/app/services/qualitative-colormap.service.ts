@@ -11,10 +11,6 @@ export class QualitativeColormapService {
   constructor() {
   }
 
-  public static CChoroplethColorMap = d3.scaleQuantize<string>()
-    .domain([-1, 1])
-    .range([...d3.schemeGreens[8].slice(0, 7).reverse(), '#fff', ...d3.schemeBlues[8].slice(0, 7)]);
-
   public static bedStatusColors = ['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)'];
   public static bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar', 'Keine Information'];
 
@@ -31,12 +27,7 @@ export class QualitativeColormapService {
     return this.singleHospitalCM;
   }
 
-  private caseChoroplethColorMap = d3.scaleQuantize<string>()
-    .domain([-1, 1])
-    .range([...d3.schemeGreens[8].slice(0, 7).reverse(), '#fff', ...d3.schemeBlues[8].slice(0, 7)]);
-  getChoroplethCaseColor(normalizedDiff: number): string {
-    return this.caseChoroplethColorMap(normalizedDiff);
-  }
+  
 
   private getMinScore(d: QualitativeAggregatedBedStateCounts) {
     const v = d.Verfügbar || 0;

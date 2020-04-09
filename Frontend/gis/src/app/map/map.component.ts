@@ -1,6 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FeatureCollection } from 'geojson';
 import * as L from 'leaflet';
 import { SVGOverlay } from 'leaflet';
 import 'mapbox-gl';
@@ -78,7 +77,7 @@ export class MapComponent implements OnInit {
 
   private mymap: L.Map;
 
-  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<FeatureCollection>>();
+  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<any>>();
 
   private aggregationLevelToGlyphMap = new Map<string, L.LayerGroup<any>>();
 

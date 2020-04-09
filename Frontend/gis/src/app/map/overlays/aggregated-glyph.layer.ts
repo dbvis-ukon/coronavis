@@ -16,7 +16,7 @@ import { BedType } from '../options/bed-type.enum';
 import { GlyphLayer } from "./GlyphLayer";
 import { Overlay } from './overlay';
 
-export class AggregatedGlyphLayer extends Overlay<FeatureCollection> implements GlyphLayer {
+export class AggregatedGlyphLayer extends Overlay<AggregatedHospitalOut<QualitativeTimedStatus>> implements GlyphLayer {
 
   private gHospitals: d3.Selection<SVGGElement, Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
   private map: L.Map;
