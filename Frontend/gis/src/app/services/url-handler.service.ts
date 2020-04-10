@@ -1,6 +1,4 @@
-import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { default as createCodec } from 'json-url';
 import { APP_CONFIG_URL_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from 'src/constants';
 import { MapLocationSettings } from '../map/options/map-location-settings';
@@ -11,11 +9,12 @@ import { MapOptions } from '../map/options/map-options';
 })
 export class UrlHandlerService {
 
-  private codec;
+  private codec: {
+    compress: (o: object) => Promise<string>;
+    decompress: (s: string) => Promise<object>;
+  };
 
   constructor(
-    private router: Router,
-    private location: Location
   ) {
 
     this.codec = createCodec('lzma');
