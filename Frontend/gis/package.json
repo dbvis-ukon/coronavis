@@ -34,6 +34,7 @@
     "@angular/router": "^9.1.0",
     "@ngx-i18nsupport/tooling": "^8.0.3",
     "@sentry/browser": "^5.15.4",
+    "core-js": "^3.6.5",
     "d3": "^5.15.0",
     "json-url": "^2.5.0",
     "leaflet": "dbvis-ukon/Leaflet#v1.6.0.3-fixed",
