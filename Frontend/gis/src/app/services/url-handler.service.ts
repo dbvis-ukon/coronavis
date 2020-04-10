@@ -1,6 +1,5 @@
-import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { default as createCodec } from 'json-url';
 import { APP_CONFIG_URL_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from 'src/constants';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
@@ -10,40 +9,46 @@ import { MapOptions } from '../map/options/map-options';
 })
 export class UrlHandlerService {
 
-  constructor(
-    private router: Router,
-    private location: Location
-  ) { }
+  private codec: {
+    compress: (o: object) => Promise<string>;
+    decompress: (s: string) => Promise<object>;
+  };
 
-  public getUrl(mo: MapOptions, mls: MapLocationSettings): string {
+  constructor(
+  ) {
+
+    this.codec = createCodec('lzma');
+  }
+
+  public async getUrl(mo: MapOptions, mls: MapLocationSettings): Promise<string> {
     return `${window.location.href}`
     + `map;`
-    + `${APP_CONFIG_URL_KEY}=${this.convertMLOToUrl(mo)};`
-    + `${MAP_LOCATION_SETTINGS_URL_KEY}=${this.convertMLSToUrl(mls)}`;
+    + `${APP_CONFIG_URL_KEY}=${await this.convertMLOToUrl(mo)};`
+    + `${MAP_LOCATION_SETTINGS_URL_KEY}=${await this.convertMLSToUrl(mls)}`;
   }
 
 
-  public convertMLOToUrl(mlo: MapOptions): string {
-    return this.objToUrl(mlo);
+  public async convertMLOToUrl(mlo: MapOptions): Promise<string> {
+    return await this.objToUrl(mlo);
   }
 
-  public convertUrlToMLO(urlParam: string): MapOptions {
-    return this.urlToObj(urlParam) as MapOptions;
+  public async convertUrlToMLO(urlParam: string): Promise<MapOptions> {
+    return await this.urlToObj(urlParam) as MapOptions;
   }
 
-  public convertMLSToUrl(mls: MapLocationSettings) : string {
-    return this.objToUrl(mls);
+  public async convertMLSToUrl(mls: MapLocationSettings) : Promise<string> {
+    return await this.objToUrl(mls);
   }
 
-  public convertUrlToMLS(urlParam: string): MapLocationSettings {
-    return this.urlToObj(urlParam) as MapLocationSettings;
+  public async convertUrlToMLS(urlParam: string): Promise<MapLocationSettings> {
+    return await this.urlToObj(urlParam) as MapLocationSettings;
   }
 
-  private objToUrl(obj: object): string {
-    return encodeURI(JSON.stringify(obj));
+  private async objToUrl(obj: object): Promise<string> {
+    return await this.codec.compress(obj);
   }
 
-  private urlToObj(url: string): object {
-    return JSON.parse(decodeURI(url));
+  private async urlToObj(url: string): Promise<object> {
+    return await this.codec.decompress(url);
   }
 }
