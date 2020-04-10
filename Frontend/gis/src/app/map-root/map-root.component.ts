@@ -136,11 +136,11 @@ export class MapRootComponent implements OnInit {
     let restored = false;
 
     if(paramMap.has(APP_CONFIG_URL_KEY)) {
-      const urlMlo = this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY));
+      this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY)).then(urlMlo => {
+        const mergedMlo = this.configService.overrideMapOptions(urlMlo);
 
-      const mergedMlo = this.configService.overrideMapOptions(urlMlo);
-
-      this.mapOptions = mergedMlo;
+        this.mapOptions = mergedMlo;
+      });
     } else if (storedMapOptions) {
       // merge with default as basis is necessary when new options are added in further releases
       this.mapOptions = this.configService.overrideMapOptions(storedMapOptions, { hideInfobox: false, showHelpOnStart: true });
@@ -153,11 +153,11 @@ export class MapRootComponent implements OnInit {
     const storedMapLocationSettings = JSON.parse(localStorage.getItem(MAP_LOCATION_SETTINGS_KEY)) as MapLocationSettings;
 
     if(paramMap.has(MAP_LOCATION_SETTINGS_URL_KEY)) {
-      const urlMls = this.urlHandlerService.convertUrlToMLS(paramMap.get(MAP_LOCATION_SETTINGS_URL_KEY));
+      this.urlHandlerService.convertUrlToMLS(paramMap.get(MAP_LOCATION_SETTINGS_URL_KEY)).then(urlMls => {
+        const mergedMls = this.configService.overrideMapLocationSettings(urlMls);
 
-      const mergedMls = this.configService.overrideMapLocationSettings(urlMls);
-
-      this.initialMapLocationSettings = {...mergedMls};
+        this.initialMapLocationSettings = mergedMls;
+      });
     } else if(storedMapLocationSettings) {
       // this.mapLocationSettings$.next(storedMapLocationSettings);
       this.initialMapLocationSettings = this.configService.overrideMapLocationSettings(storedMapLocationSettings, {

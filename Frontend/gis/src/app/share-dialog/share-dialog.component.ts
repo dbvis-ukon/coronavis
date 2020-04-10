@@ -41,7 +41,7 @@ export class ShareDialogComponent implements OnInit {
   }
 
   update() {
-    this.url = this.urlHandlerService.getUrl(this.mo, this.mls);
+    this.urlHandlerService.getUrl(this.mo, this.mls).then(url => this.url = url);
 
     this.iframe = `<iframe name="CoronaVis" src="${this.url}" frameborder="0" width="600" height="400"></iframe>`;
   }
