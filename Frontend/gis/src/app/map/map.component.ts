@@ -152,6 +152,13 @@ export class MapComponent implements OnInit {
 
     this.mymap.on('zoom', () => {
       this.emitMapLocationSettings();
+
+      // diable double click on highest zoom level
+      if(this.mymap.getZoom() >= this.mymap.getMaxZoom()) {
+        this.mymap.doubleClickZoom.disable();
+      } else if(this._mapLocationSettings.allowZooming) {
+        this.mymap.doubleClickZoom.enable();
+      }
     });
 
     
