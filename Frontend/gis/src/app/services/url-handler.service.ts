@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as JsonUrl from 'json-url/dist/browser/json-url-single.js';
+import 'json-url/dist/node/codecs';
+import 'lzma/bin/lzma';
 import { APP_CONFIG_URL_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from 'src/constants';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
