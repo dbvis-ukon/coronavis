@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { default as createCodec } from 'json-url';
+import { default as createCodec } from 'json-url/dist/browser/json-url-single.js';
 import { APP_CONFIG_URL_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from 'src/constants';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
@@ -16,7 +16,6 @@ export class UrlHandlerService {
 
   constructor(
   ) {
-
     this.codec = createCodec('lzma');
   }
 
