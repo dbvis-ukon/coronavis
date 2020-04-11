@@ -29,6 +29,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NouisliderModule } from "ng2-nouislider";
 import { AboutComponent } from './about/about.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -52,6 +53,7 @@ import { PlusminusPipe } from './plusminus.pipe';
 import { SentryErrorHandler } from './sentry-config';
 import { SupportedLocales } from './services/i18n.service';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
+import { TimesliderComponent } from './timeslider/timeslider.component';
 import { TranslatePipe } from './translate.pipe';
 import { VegaComponent } from './vega/vega.component';
 
@@ -142,7 +144,8 @@ export const localeProvider = {
     MapRootComponent,
     ShareDialogComponent,
     ButtonPanelComponent,
-    BedTooltipComponent
+    BedTooltipComponent,
+    TimesliderComponent
   ],
   imports: [
     BrowserModule,
@@ -175,6 +178,7 @@ export const localeProvider = {
     MatTabsModule,
     MatToolbarModule,
     FlexLayoutModule,
+    NouisliderModule
   ],
   providers: [
     localeProvider, 

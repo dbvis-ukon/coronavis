@@ -44,6 +44,8 @@
     "mapbox-gl": "^1.8.1",
     "mapbox-gl-leaflet": "0.0.11",
     "moment": "^2.24.0",
+    "ng2-nouislider": "^1.8.2",
+    "nouislider": "^14.2.0",
     "rxjs": "~6.5.4",
     "topojson": "^3.0.2",
     "tslib": "^1.10.0",
