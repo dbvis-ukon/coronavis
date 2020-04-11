@@ -36,7 +36,7 @@ export class ButtonPanelComponent implements OnInit {
   ) {
     iconRegistry.addSvgIcon(
       'twitter',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/Twitter_bird_logo_2012.svg'));
+      sanitizer.bypassSecurityTrustResourceUrl('assets/twitter.svg'));
   }
 
 
