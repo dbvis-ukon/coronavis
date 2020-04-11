@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { default as moment } from 'moment';
+import moment from 'moment';
 import { of } from 'rxjs';
 import { flatMap, map, max, reduce } from 'rxjs/operators';
 import { BedType } from "../map/options/bed-type.enum";
