@@ -70,6 +70,13 @@
 
       <!--<mat-divider></mat-divider>-->
 
+      <app-hospital-search 
+        *ngIf="mo.bedGlyphOptions.enabled"
+        [hospitals]="hospitals" 
+        (selectedHospital)="searchHospitalSelected($event)" 
+        [reset]="resetHospitalSearch"
+      ></app-hospital-search>
+
       <div *ngIf="mo.bedGlyphOptions.enabled">
         <div class="glyph-legend">
           <div
@@ -195,6 +202,8 @@
               </mat-button-toggle>
             </mat-button-toggle-group>
           </div>
+
+          
 
           <!--<mat-divider></mat-divider>-->
 
