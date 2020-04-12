@@ -86,6 +86,31 @@ export class CountryAggregatorService {
         acc.numberOfHospitals += 1;
 
         return acc as QualitativeTimedStatusAggregation;
+      },{
+        timestamp: new Date('1990-01-01'),
+        last_update: new Date('1990-01-01'),
+        numberOfHospitals: 0,
+        icu_low_care: {
+          Verfügbar: 0,
+          Begrenzt: 0,
+          Ausgelastet: 0,
+          "Nicht verfügbar": 0,
+          "": 0
+        },
+        icu_high_care: {
+          Verfügbar: 0,
+          Begrenzt: 0,
+          Ausgelastet: 0,
+          "Nicht verfügbar": 0,
+          "": 0
+        },
+        ecmo_state: {
+          Verfügbar: 0,
+          Begrenzt: 0,
+          Ausgelastet: 0,
+          "Nicht verfügbar": 0,
+          "": 0
+        }
       })
     );
   }
