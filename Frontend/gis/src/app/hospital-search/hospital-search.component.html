@@ -10,8 +10,8 @@
              <button mat-button *ngIf="myControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="myControl.setValue('')">
                 <mat-icon>close</mat-icon>
               </button>
-      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selected($event)">
-        <mat-option *ngFor="let h of filteredOptions | async" [value]="h.properties.name">
+      <mat-autocomplete class="autocomplete" autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngFor="let h of filteredOptions | async" [value]="h.properties.name" class="option">
           {{h.properties.name}}
           <small>{{h.properties.address}}</small>
         </mat-option>
