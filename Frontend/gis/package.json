@@ -38,7 +38,7 @@
     "d3": "^5.15.0",
     "es5-shim": "^4.5.14",
     "es6-shim": "^0.35.5",
-    "json-url": "~2.3.4",
+    "json-url": "^2.5.0",
     "leaflet": "dbvis-ukon/Leaflet#v1.6.0.3-fixed",
     "lodash-es": "^4.17.15",
     "mapbox-gl": "^1.8.1",

@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import JsonUrl from 'json-url';
-import 'json-url/dist/browser/json-url-lzma';
-import 'json-url/dist/browser/json-url-lzstring';
-import 'json-url/dist/browser/json-url-lzw';
-import 'json-url/dist/browser/json-url-msgpack';
-import 'json-url/dist/browser/json-url-safe64';
+import { default as createCodec } from 'json-url';
 import { APP_CONFIG_URL_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from 'src/constants';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
@@ -18,7 +13,7 @@ export class UrlHandlerService {
 
   constructor(
   ) {
-    this.codec = JsonUrl('lzstring');
+    this.codec = createCodec('lzstring');
   }
 
   private async compress(input): Promise<string> {
