@@ -18,7 +18,7 @@ export class UrlHandlerService {
 
   constructor(
   ) {
-    this.codec = JsonUrl('lzma');
+    this.codec = JsonUrl('lzstring');
   }
 
   private async compress(input): Promise<string> {
