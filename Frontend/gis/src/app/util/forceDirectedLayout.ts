@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import { quadtree } from 'd3';
 import { FeatureCollection, Point } from 'geojson';
+import { LocalStorageService } from 'ngx-webstorage';
 import { MAP_FORCE_CACHE_KEY } from "../../constants";
 import { AggregationLevel } from "../map/options/aggregation-level.enum";
 import { AbstractTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -13,7 +14,8 @@ export class ForceDirectedLayout {
 
   private cacheKey: string;
 
-  constructor(private data: FeatureCollection<Point, AbstractHospitalOut<AbstractTimedStatus>>,
+  constructor(private storage: LocalStorageService,
+              private data: FeatureCollection<Point, AbstractHospitalOut<AbstractTimedStatus>>,
               private aggregationLevel: AggregationLevel,
               private finishCallback: () => any) {
     this.sim = d3.forceSimulation(this.data.features.map(d => d.properties))
@@ -22,18 +24,18 @@ export class ForceDirectedLayout {
 
     this.cacheKey = MAP_FORCE_CACHE_KEY + aggregationLevel;
 
-    const cachedLayoutForAggLevel: { [key: number]: number[][] } = JSON.parse(localStorage.getItem(this.cacheKey)) ?? {}
+    const cachedLayoutForAggLevel: { [key: number]: number[][] } = JSON.parse(this.storage.retrieve(this.cacheKey)) ?? {}
     if (Object.keys(cachedLayoutForAggLevel).length > 0) {
       if (Array.from(Object.values(cachedLayoutForAggLevel)).every(levelCache => levelCache.length === data.features.length)) {
         this.levelPositionMap = cachedLayoutForAggLevel;
       } else {
         // Cache length does not match current data;
         this.levelPositionMap = {};
-        localStorage.removeItem(this.cacheKey);
+        this.storage.clear(this.cacheKey);
       }
     } else {
       this.levelPositionMap = {};
-      localStorage.removeItem(this.cacheKey);
+      this.storage.clear(this.cacheKey);
     }
     // = new Map<number, Array<[number, number]>>();
   }
@@ -45,7 +47,7 @@ export class ForceDirectedLayout {
       positions.push([d.properties.x, d.properties.y]);
     });
     this.levelPositionMap[zoom] = positions;
-    localStorage.setItem(this.cacheKey, JSON.stringify(this.levelPositionMap));
+    this.storage.store(this.cacheKey, JSON.stringify(this.levelPositionMap));
 
     this.finishCallback();
   }
