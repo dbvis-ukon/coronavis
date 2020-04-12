@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import * as JsonUrl from 'json-url/dist/browser/json-url-single.js';
-import 'json-url/dist/node/codecs/lzma';
-import 'json-url/dist/node/codecs/lzstring';
-import 'json-url/dist/node/codecs/lzw';
-import 'json-url/dist/node/codecs/pack';
+import JsonUrl from 'json-url';
+import 'json-url/dist/browser/json-url-lzma';
+import 'json-url/dist/browser/json-url-lzstring';
+import 'json-url/dist/browser/json-url-lzw';
+import 'json-url/dist/browser/json-url-msgpack';
+import 'json-url/dist/browser/json-url-safe64';
 import { APP_CONFIG_URL_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from 'src/constants';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
@@ -13,14 +14,22 @@ import { MapOptions } from '../map/options/map-options';
 })
 export class UrlHandlerService {
 
-  private codec: {
-    compress: (o: object) => Promise<string>;
-    decompress: (s: string) => Promise<object>;
-  };
+  private codec;
 
   constructor(
   ) {
-    this.codec = new JsonUrl('lzma');
+    this.codec = JsonUrl('lzma');
+  }
+
+  private async compress(input): Promise<string> {
+    return await this.codec.compress(JSON.stringify(input));
+  }
+
+  private async decompress(input): Promise<object> {
+    const decoded = await this.codec.decompress(input);
+    console.log('decompressed', JSON.parse(decoded));
+    return JSON.parse(decoded);
+    // return decode(lzwcomporess.unpack(atob(input)));
   }
 
   public async getUrl(mo: MapOptions, mls: MapLocationSettings): Promise<string> {
@@ -48,10 +57,10 @@ export class UrlHandlerService {
   }
 
   private async objToUrl(obj: object): Promise<string> {
-    return await this.codec.compress(obj);
+    return await this.compress(obj);
   }
 
-  private async urlToObj(url: string): Promise<object> {
-    return await this.codec.decompress(url);
+  private async urlToObj(url: string): Promise<unknown> {
+    return await this.decompress(url);
   }
 }

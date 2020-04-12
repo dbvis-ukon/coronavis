@@ -210,7 +210,7 @@ export class MapComponent implements OnInit {
   }
 
   private updateMap(mo: MapOptions) {
-    if (!this.mymap) {
+    if (!this.mymap || !mo) {
       return;
     }
 
