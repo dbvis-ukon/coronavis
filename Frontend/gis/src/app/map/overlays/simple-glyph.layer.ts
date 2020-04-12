@@ -2,8 +2,10 @@ import { MatDialog } from '@angular/material/dialog';
 import * as d3 from 'd3';
 import { Feature, FeatureCollection, Point } from "geojson";
 import * as L from 'leaflet';
+import moment from 'moment';
 import { LocalStorageService } from 'ngx-webstorage';
-import { Observable } from 'rxjs';
+import { NEVER, Observable, timer } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
@@ -32,6 +34,10 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
 
   private currentScale: number = 1;
 
+  private oldOptions: BedGlyphOptions = null;
+
+  private currentOptions: BedGlyphOptions = null;
+
   constructor(
     name: string,
     private data: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>,
@@ -49,24 +55,67 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
       this.forceLayout = new ForceDirectedLayout(this.storage, this.data, AggregationLevel.none, this.updateGlyphPositions.bind(this));
     }
 
-    this.glyphOptions.subscribe(opt => {
-      if (!this.gHospitals || !opt) {
-        return;
-      }
+    this.glyphOptions
+    .pipe(
+      debounceTime(10),
+      switchMap(opt => {
+        this.currentOptions = opt;
+        if (!this.gHospitals || !opt) {
+          return NEVER;
+        }
+  
+        if(this.oldOptions?.showIcuLow !== opt.showIcuLow) {
+          this.gHospitals
+            .selectAll(`.bed.${BedType.icuLow}`)
+            .style('opacity', opt.showIcuLow ? '1' : '0');
+        }
+        
+        if(this.oldOptions?.showIcuHigh !== opt.showIcuHigh) {
+          this.gHospitals
+            .selectAll(`.bed.${BedType.icuHigh}`)
+            .style('opacity', opt.showIcuHigh ? '1' : '0');
+        }
+  
+        if(this.oldOptions?.showEcmo !== opt.showEcmo) {
+          this.gHospitals
+            .selectAll(`.bed.${BedType.ecmo}`)
+            .style('opacity', opt.showEcmo ? '1' : '0');
+        }
+  
+        console.log('cmp', this.oldOptions?.date, opt.date);
+  
+        
+        if(this.oldOptions?.date !== opt.date) {
+          timer(10)
+            .subscribe(() => {
+              if(opt.date === 'now') {
+                this.filteredData = this.data.features;
+              } else {
+                const date = moment(opt.date).endOf('day').toDate();
+      
+                console.log('filter data by date', date);
+      
+                // this.filteredData = this.data.features.filter(d => new Date(d.properties.developments[0].timestamp) <= date);
+                this.filteredData = this.data.features;
+              }
+    
+              console.log('fcmp', this.filteredData.length, this.data.features.length);
+      
+              this.updateGlyphs();
+            })
+        }
+        
+  
+  
+        this.oldOptions = JSON.parse(JSON.stringify(opt));
 
-      this.gHospitals
-        .selectAll(`.bed.${BedType.icuLow}`)
-        .style('opacity', opt.showIcuLow ? '1' : '0');
-
-      this.gHospitals
-        .selectAll(`.bed.${BedType.icuHigh}`)
-        .style('opacity', opt.showIcuHigh ? '1' : '0');
-
-      this.gHospitals
-        .selectAll(`.bed.${BedType.ecmo}`)
-        .style('opacity', opt.showEcmo ? '1' : '0');
-    });
+        return NEVER;
+      })
+    )    
+    .subscribe();
   }
+
+  private filteredData: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>[];
 
   private rectSize = 10;
   private glyphSize = {
@@ -82,6 +131,10 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
   private rxSlash = /\/.*/;
   private rxDash = /-([A-Z])[a-zäöü]{6,}/;
   private currentHoverLine;
+
+  private svgElement: SVGSVGElement;
+
+  private svgElementSelection: d3.Selection<SVGSVGElement, null, null, undefined>;
 
   private latLngPoint(latlng: L.LatLngExpression): L.Point {
     return this.map.project(latlng, 9);
@@ -102,6 +155,7 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
 
   createOverlay(map: L.Map) {
     const data = this.data.features;
+    this.filteredData = data;
 
     this.map = map;
 
@@ -131,23 +185,41 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
     const [xMin, xMax] = d3.extent([lpMin.x, lpMax.x]);
     const [yMin, yMax] = d3.extent([lpMin.y, lpMax.y]);
 
-    const svgElement: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    this.svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
-    svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
+    this.svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    this.svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
 
+    this.svgElementSelection = d3.select<SVGSVGElement, null>(this.svgElement)
+      .style('pointer-events', 'none');
 
+    // timer(10).subscribe(() => this.updateGlyphs());
+    this.updateGlyphs();
+    this.updateGlyphs();
+
+    return L.svgOverlay(this.svgElement, latLngBounds, {
+      interactive: true,
+      bubblingMouseEvents: true,
+      zIndex: 3
+    });
+  }
+
+  updateGlyphs() {
+    console.log('update glyphs', this.filteredData.length);
     const padding = 0.5;
     const yOffset = 0.5;
 
-    this.gHospitals = d3.select<SVGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(svgElement)
-      .style('pointer-events', 'none')
+    this.gHospitals = 
+    this.svgElementSelection
       .selectAll<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>('g.hospital')
-      .data<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(data)
+      .data<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(this.filteredData, d => d.properties.name+":"+d.properties.address);
+
+    this.gHospitals 
       .enter()
       .append<SVGGElement>('g')
       .style("pointer-events", "all")
       .attr('class', 'hospital')
+      // .merge(this.gHospitals)
       .attr('transform', d => {
         const p = this.latLngPoint({ lat: d.geometry.coordinates[1], lng: d.geometry.coordinates[0]});
         d.properties.x = p.x;
@@ -242,7 +314,7 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
       .attr('height', `${this.rectSize}px`)
       .attr('x', padding)
       .attr('y', yOffset)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuLow));
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuLow, this.currentOptions?.date));
 
     container
       .append('rect')
@@ -251,7 +323,7 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
       .attr('height', `${this.rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${this.rectSize + padding * 2}px`)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuHigh));
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuHigh, this.currentOptions?.date));
 
     container
       .append('rect')
@@ -260,15 +332,13 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
       .attr('height', `${this.rectSize}px`)
       .attr('y', yOffset)
       .attr('x', `${2 * this.rectSize + padding * 3}px`)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.ecmo));
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.ecmo, this.currentOptions?.date));
+
+    // this.gHospitals
+    //   .exit()
+    //   .remove();
 
     this.onZoomed();
-
-    return L.svgOverlay(svgElement, latLngBounds, {
-      interactive: true,
-      bubblingMouseEvents: true,
-      zIndex: 3
-    });
   }
 
   updateGlyphPositions() {

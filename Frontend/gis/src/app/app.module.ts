@@ -22,6 +22,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatStepperModule } from "@angular/material/stepper";
 import { MatTabsModule } from '@angular/material/tabs';
@@ -177,7 +178,8 @@ export const localeProvider = {
     MatTabsModule,
     MatToolbarModule,
     FlexLayoutModule,
-    NouisliderModule
+    NouisliderModule,
+    MatSliderModule,
   ],
   providers: [
     localeProvider, 

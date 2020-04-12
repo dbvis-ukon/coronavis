@@ -23,6 +23,7 @@ export class ConfigService {
     showHelpOnStart: true,
 
     bedGlyphOptions: {
+      date: 'now',
       aggregationLevel: AggregationLevel.none,
       enabled: true,
       showEcmo: true,

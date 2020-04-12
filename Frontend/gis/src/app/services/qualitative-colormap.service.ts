@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as d3 from 'd3';
+import moment from 'moment';
 import { BedType } from '../map/options/bed-type.enum';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -87,11 +88,23 @@ export class QualitativeColormapService {
       }
     }
   
-    getLatestBedStatusColor(t: Array<QualitativeTimedStatus>, type: BedType) {
+    getLatestBedStatusColor(t: Array<QualitativeTimedStatus>, type: BedType, date: string = 'now') {
       if(!t) {
         return this.getBedStatusColor(null, this.propertyAccessor(type));
       }
-      const latest = t[t.length -1];
+
+      let latest: QualitativeTimedStatus;
+      if(date === null || date === 'now') {
+        latest = t[t.length -1];
+      } else {
+        const actualDate = moment(date).endOf('day').toDate();
+        const filtered = t.filter(d => new Date(d.timestamp) <= actualDate);
+        if(filtered.length === 0) {
+          return this.getBedStatusColor(null, this.propertyAccessor(type));
+        }
+
+        latest = filtered[filtered.length - 1];
+      }
   
       return this.getBedStatusColor(latest, this.propertyAccessor(type));
     }

@@ -29,4 +29,10 @@ export interface BedGlyphOptions {
 
     forceDirectedOn: boolean;
 
+
+    /**
+     * The date to filter in format YYYY-MM-DD
+     */
+    date: string | 'now';
+
 }
