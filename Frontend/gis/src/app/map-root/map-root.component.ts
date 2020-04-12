@@ -115,7 +115,7 @@ export class MapRootComponent implements OnInit {
 
   displayHelpForNewUser() {
     const helpSeen = JSON.parse(localStorage.getItem(APP_HELP_SEEN)) || false;
-    if (this.mapOptions.showHelpOnStart && !helpSeen) {
+    if (this.mapOptions?.showHelpOnStart && !helpSeen) {
       this.dialog.open(HelpDialogComponent)
         .afterClosed().subscribe(d => {
         localStorage.setItem(APP_HELP_SEEN, JSON.stringify(true));
@@ -137,6 +137,7 @@ export class MapRootComponent implements OnInit {
 
     if(paramMap.has(APP_CONFIG_URL_KEY)) {
       this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY)).then(urlMlo => {
+        console.log('map-root', urlMlo);
         const mergedMlo = this.configService.overrideMapOptions(urlMlo);
 
         this.mapOptions = mergedMlo;
