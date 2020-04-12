@@ -14,7 +14,10 @@ Sentry.init({
       delete event.user;
     }
     return event;
-  }
+  },
+  ignoreErrors: [
+    'Non-Error exception captured'
+  ]
 });
 
 @Injectable()
