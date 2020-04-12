@@ -46,6 +46,15 @@ def remove_spaces(text):
     return text
 
 
+
+def get_attr_if_exists(dict_, key_):
+    if key_ in dict_:
+        return dict_[key_]
+    else:
+        return None
+
+
+
 def crawl_webpage(url):
     
     r = requests.get(url)
@@ -91,7 +100,7 @@ def crawl_webpage(url):
         
         hospital_id = int(x['id'])
         
-        covid_cases = x['faelleCovidAktuell']
+        covid_cases = get_attr_if_exists(x, 'faelleCovidAktuell')
         if covid_cases is not None:
             covid_cases = int(covid_cases)
         else:
@@ -259,7 +268,6 @@ if __name__ == "__main__":
     
     except Exception as e:
         tb = traceback.format_exc()
-        logger.error(e)
-        logger.error(tb)
+        logger.error(str(e) + '\n' + str(tb))
         
         exit(-1)
