@@ -27,7 +27,7 @@
       </mat-expansion-panel-header>
 
       <div *ngIf="aggregatedDiviStatistics">
-        <p class="stats" i18n="@@infoboxNumberOfHospitals">{{ this.aggregatedDiviStatistics.numberOfHospitals | number }} bundesweit gemeldete Krankenhäuser</p>
+        <p class="stats" i18n="@@infoboxNumberOfHospitals">{{ this.aggregatedDiviStatistics.numberOfHospitals | number }} bundesweit gemeldete Einrichtungen</p>
         <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ this.aggregatedDiviStatistics.timestamp | date:'full' }}</p>
       </div>
       
