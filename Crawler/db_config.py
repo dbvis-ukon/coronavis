@@ -2,12 +2,12 @@ DATABASE_FILE = 'corona_app'
 SQLALCHEMY_DATABASE_URI = 'postgresql://' # Fallback to Zero
 SQLALCHEMY_ECHO = True
 
-import os
 import logging
+import os
+from urllib.parse import quote
 
 import sentry_sdk
-
-from urllib.parse import quote
+from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +25,10 @@ try:
         SQLALCHEMY_DATABASE_URI = f"postgresql://{quote(DB_USER, safe='')}:{quote(DB_PASS, safe='')}@{quote(DB_HOST, safe='')}:{quote(DB_PORT, safe='')}/{quote(DB_NAME, safe='')}"
 
     SENTRY_DSN = os.environ.get('SENTRY_DSN').replace('\n', '')
-    sentry_sdk.init(SENTRY_DSN)
+    sentry_sdk.init(
+        dsn=SENTRY_DSN, 
+        integrations=[SqlalchemyIntegration()]
+    )
 
 except KeyError as e:
     logger.warning('One or multiple necessary environment variables not set, using config.py file as backup')
-
