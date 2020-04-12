@@ -2,6 +2,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as d3 from 'd3';
 import { Feature, FeatureCollection, Point } from "geojson";
 import * as L from 'leaflet';
+import { LocalStorageService } from 'ngx-webstorage';
 import { Observable } from 'rxjs';
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
@@ -38,13 +39,14 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
     private colormapService: QualitativeColormapService,
     private forceEnabled: boolean,
     private glyphOptions: Observable<BedGlyphOptions>,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private storage: LocalStorageService
   ) {
     super(name, data);
     this.enableDefault = true;
 
     if (forceEnabled) {
-      this.forceLayout = new ForceDirectedLayout(this.data, AggregationLevel.none, this.updateGlyphPositions.bind(this));
+      this.forceLayout = new ForceDirectedLayout(this.storage, this.data, AggregationLevel.none, this.updateGlyphPositions.bind(this));
     }
 
     this.glyphOptions.subscribe(opt => {
