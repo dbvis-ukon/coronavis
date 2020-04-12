@@ -1,12 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 import { AboutComponent } from '../about/about.component';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { I18nService, SupportedLocales } from '../services/i18n.service';
+import { IconService } from '../services/icon.service';
 import { ShareDialogComponent } from '../share-dialog/share-dialog.component';
 
 @Component({
@@ -29,18 +28,18 @@ export class ButtonPanelComponent implements OnInit {
 
   selectedLocale: SupportedLocales;
 
+  twitterLoaded = false;
+
   constructor(
     private dialogService: MatDialog,
     private i18nService: I18nService,
-    iconRegistry: MatIconRegistry, sanitizer: DomSanitizer
+    private iconService: IconService
   ) {
-    iconRegistry.addSvgIcon(
-      'twitter',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/Twitter_bird_logo_2012.svg'));
   }
 
 
   ngOnInit(): void {
+    this.iconService.twitterLoaded$.subscribe(loaded => this.twitterLoaded = loaded);
 
     
     this.supportedLocales = this.i18nService.getSupportedLocales();

@@ -30,6 +30,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NouisliderModule } from "ng2-nouislider";
+import { NgxWebstorageModule } from 'ngx-webstorage';
 import { AboutComponent } from './about/about.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -64,12 +65,9 @@ import { VegaComponent } from './vega/vega.component';
 
 
 
-
 // the second parameter 'fr-FR' is optional
 registerLocaleData(localeDe, 'de-DE');
 registerLocaleData(localeEn, 'en-US');
-
-// const storedLocale = JSON.parse(localStorage.getItem(APP_LOCALE)) as SupportedLocales;
 
 export const localeProvider = {
   provide: LOCALE_ID,
@@ -149,6 +147,7 @@ export const localeProvider = {
   ],
   imports: [
     BrowserModule,
+    NgxWebstorageModule.forRoot(),
     HttpClientModule,
     FormsModule,
     OverlayModule,

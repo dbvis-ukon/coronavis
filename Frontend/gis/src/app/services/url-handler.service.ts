@@ -16,8 +16,7 @@ export class UrlHandlerService {
 
   constructor(
   ) {
-
-    this.codec = createCodec('lzma');
+    this.codec = createCodec('lzstring');
   }
 
   public async getUrl(mo: MapOptions, mls: MapLocationSettings): Promise<string> {
@@ -48,7 +47,7 @@ export class UrlHandlerService {
     return await this.codec.compress(obj);
   }
 
-  private async urlToObj(url: string): Promise<object> {
+  private async urlToObj(url: string): Promise<unknown> {
     return await this.codec.decompress(url);
   }
 }

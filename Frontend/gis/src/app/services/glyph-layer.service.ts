@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Feature, FeatureCollection, Point } from 'geojson';
 import { LatLngExpression } from 'leaflet';
+import { LocalStorageService } from 'ngx-webstorage';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
@@ -27,7 +28,8 @@ export class GlyphLayerService {
     private hospitalRepository: HospitalRepository,
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private storage: LocalStorageService
   ) {}
 
   getSimpleGlyphLayer(options: Observable<BedGlyphOptions>, forceEnabled: boolean): Observable<SimpleGlyphLayer[]> {
@@ -92,7 +94,8 @@ export class GlyphLayerService {
             this.colormapService,
             forceEnabled,
             options,
-            this.matDialog
+            this.matDialog,
+            this.storage
             ));
         }
 
@@ -119,7 +122,8 @@ export class GlyphLayerService {
           this.colormapService,
           options.forceDirectedOn,
           options$,
-          this.matDialog
+          this.matDialog,
+          this.storage
         );
 
         const factoryBg = new LandkreiseHospitalsLayer(name + '_bg', result[1]);
