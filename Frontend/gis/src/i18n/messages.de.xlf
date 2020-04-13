@@ -184,6 +184,13 @@
       <segment state="final">
         <source>Fenster schließen</source>
       <target>Fenster schließen</target></segment>
+    </unit><unit id="helpProjektLabel1">
+      <notes>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:11</note>
+      </notes>
+      <segment state="final">
+        <source> <ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Projekt' : 'Das Projekt' }}"/> </source>
+      <target> <ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Projekt' : 'Das Projekt' }}"/> </target></segment>
     </unit><unit id="title2">
       <notes>
         <note category="description"> help</note>
@@ -313,6 +320,13 @@
       <segment state="final">
         <source>Fenster schließen</source>
       <target>Fenster schließen</target></segment>
+    </unit><unit id="helpProjektLabel2">
+      <notes>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:38</note>
+      </notes>
+      <segment state="final">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Betten' : 'Darstellung der Bettenkapazitäten' }}"/></source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Betten' : 'Darstellung der Bettenkapazitäten' }}"/></target></segment>
     </unit><unit id="title3">
       <notes>
         <note category="description"> help</note>
@@ -359,6 +373,13 @@
       <segment state="final">
         <source>Fenster schließen</source>
       <target>Fenster schließen</target></segment>
+    </unit><unit id="helpProjektLabel3">
+      <notes>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:71</note>
+      </notes>
+      <segment state="final">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Fälle' : 'Darstellung der Fallzahlen' }}"/></source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Fälle' : 'Darstellung der Fallzahlen' }}"/></target></segment>
     </unit><unit id="shareTitle">
       <notes>
         <note category="location">src/app/share-dialog/share-dialog.component.html:2,4</note>

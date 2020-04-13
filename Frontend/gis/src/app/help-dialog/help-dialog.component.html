@@ -8,7 +8,7 @@
 
 <div mat-dialog-content>
   <mat-tab-group #tabGroup >
-    <mat-tab label=" {{ getTabLabel(1) }} " > <!-- isSmallScreen ? 'Projekt' : 'Das Projekt'  | translate -->
+    <mat-tab label=" {{ isSmallScreen ? 'Projekt' : 'Das Projekt' }} " i18n-label="@@helpProjektLabel1">
       <div class="visdescription">
         <h1 id="interaktive-visualisierung-zur-analyse-von-intensivbettenkapazitäten-für-covid-19-patienten"   i18n="help| help@@title1">Interaktive
           Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</h1>
@@ -35,7 +35,7 @@
         <button mat-button mat-stroked-button (click)="close()"   i18n="help| help@@button12">Fenster schließen</button>
       </div>
     </mat-tab>
-    <mat-tab label="{{ getTabLabel(2) }}">
+    <mat-tab label="{{ isSmallScreen ? 'Betten' : 'Darstellung der Bettenkapazitäten' }}" i18n-label="@@helpProjektLabel2">
       <h1 id="beschreibung-der-darstellung-der-bettenkapazitäten"   i18n="help| help@@title2">Beschreibung der Darstellung der Bettenkapazitäten</h1>
       <div fxLayout="row" fxLayout.xs="column" class="visdescription">
         <div fxFlex class="helpimg">
@@ -68,7 +68,7 @@
         <button mat-button mat-stroked-button (click)="close()"  i18n="help| help@@button23">Fenster schließen</button>
       </div>
     </mat-tab>
-    <mat-tab label="{{ getTabLabel(3) }}">
+    <mat-tab label="{{ isSmallScreen ? 'Fälle' : 'Darstellung der Fallzahlen' }}" i18n-label="@@helpProjektLabel3">
       <h1 id="beschreibung-der-darstellung-der-fallzahlen"   i18n="help| help@@title3">Beschreibung der Darstellung der Fallzahlen</h1>
       <div fxLayout="row" fxLayout.xs="column" class="visdescription">
         <div fxFlex class="helpimg">
