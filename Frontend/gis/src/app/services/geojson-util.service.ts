@@ -15,6 +15,14 @@ export class GeojsonUtilService {
 
   constructor() { }
 
+  public isFeatureInBBox<T extends Feature>(f: T, latAcc: (d: T) => number, lngAcc: (d: T) => number, bbox: ExplicitBBox) {
+    return this.isPointInBBox({lat: latAcc(f), lng: lngAcc(f)}, bbox);
+  }
+
+  public isPointInBBox(pt: LatLngLiteral, bbox:ExplicitBBox) {
+    return bbox.min.lat <= pt.lat && bbox.min.lng <= pt.lng && bbox.max.lat >= pt.lat && bbox.max.lng >= pt.lng;
+  }
+
 
   public getBBox<T extends Feature>(fs: T[], latAcc: (d: T) => number, lngAcc: (d: T) => number): ExplicitBBox {
     const bbox: ExplicitBBox = {
@@ -24,16 +32,15 @@ export class GeojsonUtilService {
       },
 
       max: {
-        lat: -1,
-        lng: -1
+        lat: 0,
+        lng: 0
       }
     };
 
     fs.forEach(f => {
       const lat = latAcc(f);
       const lng = lngAcc(f);
-
-      console.log(lat, lng, bbox);
+      
       if(bbox.min.lat > lat) {
         bbox.min.lat = lat;
       }
