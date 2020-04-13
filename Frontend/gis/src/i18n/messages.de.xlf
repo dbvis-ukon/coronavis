@@ -186,7 +186,7 @@
       <target>Fenster schließen</target></segment>
     </unit><unit id="helpProjektLabel1">
       <notes>
-        <note category="location">src/app/help-dialog/help-dialog.component.html:11</note>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:8</note>
       </notes>
       <segment state="final">
         <source> <ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Projekt' : 'Das Projekt' }}"/> </source>
