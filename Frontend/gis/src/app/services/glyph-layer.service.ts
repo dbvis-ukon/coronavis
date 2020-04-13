@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Feature, FeatureCollection, Point } from 'geojson';
-import { LatLngExpression } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -13,6 +12,7 @@ import { HospitalRepository } from '../repositories/hospital.repository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { ExplicitBBox, GeojsonUtilService } from './geojson-util.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
 import { TooltipService } from './tooltip.service';
 
@@ -29,7 +29,8 @@ export class GlyphLayerService {
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
     private matDialog: MatDialog,
-    private storage: LocalStorageService
+    private storage: LocalStorageService,
+    private geojsonUtil: GeojsonUtilService
   ) {}
 
   getSimpleGlyphLayer(options: Observable<BedGlyphOptions>, forceEnabled: boolean): Observable<SimpleGlyphLayer[]> {
@@ -37,52 +38,87 @@ export class GlyphLayerService {
     return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
     .pipe(
       map(data => {
-        // map the data into four quadrants
-        const gerCenter: LatLngExpression = {
-          lat: 51.1069818075,
-          lng: 10.385780508
-        };
+        const filteredFeatures: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>[] = [];
 
-        // coordinates[0] === lng // coorinates[1] === lat
-        const isQuadrant1 = (d: Feature<Point, any>) => d.geometry.coordinates[1] <= gerCenter.lat && d.geometry.coordinates[0] <= gerCenter.lng;
-        const isQuadrant2 = (d: Feature<Point, any>) => d.geometry.coordinates[1] <= gerCenter.lat && d.geometry.coordinates[0] > gerCenter.lng;
-        const isQuadrant3 = (d: Feature<Point, any>) => d.geometry.coordinates[1] > gerCenter.lat && d.geometry.coordinates[0] > gerCenter.lng;
-        const isQuadrant4 = (d: Feature<Point, any>) => d.geometry.coordinates[1] > gerCenter.lat && d.geometry.coordinates[0] <= gerCenter.lng;
-
-        const q1: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>> = {
-          type: 'FeatureCollection',
-          features: []
-        };
-        const q2: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>> = {
-          type: 'FeatureCollection',
-          features: []
-        };
-        const q3: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>> = {
-          type: 'FeatureCollection',
-          features: []
-        };
-        const q4: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>> = {
-          type: 'FeatureCollection',
-          features: []
-        };
-
-        for(const feature of data.features) {
-          if(isQuadrant1(feature)) {
-            q1.features.push(feature);
-          } else if (isQuadrant2(feature)) {
-            q2.features.push(feature);
-          } else if (isQuadrant3(feature)) {
-            q3.features.push(feature);
-          } else if (isQuadrant4(feature)) {
-            q4.features.push(feature);
+        for(const f of data.features) {
+          if(f.geometry.coordinates[0] === 0 || f.geometry.coordinates[1] === 0 || f.geometry.coordinates[0] > 500 || f.geometry.coordinates[1] > 500) {
+            console.warn(`Invalid location for hospital ${f.properties.name}. Will not be shown on the map.`, f);
           } else {
-            throw 'This situation must never happen';
+            filteredFeatures.push(f);
+          }
+        }
+        
+        return {
+          type: 'FeatureCollection',
+          features: filteredFeatures
+        } as FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>
+      }),
+      map(data => {
+        const bbox = this.geojsonUtil.getBBox<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(data.features,
+          d => d.geometry.coordinates[1],
+          d => d.geometry.coordinates[0]);
+
+        const quadrantBBoxes: ExplicitBBox[] = [];
+        const numOfQuadrants = 4;
+        const sqrtNum = Math.sqrt(numOfQuadrants);
+
+        const latStep = (bbox.max.lat - bbox.min.lat) / sqrtNum;
+        const lngStep = (bbox.max.lng - bbox.min.lng) / sqrtNum;
+
+        for(let i = 0; i < sqrtNum; i++) {
+          for(let j = 0; j < sqrtNum; j++) {
+            quadrantBBoxes.push({
+              min: {
+                lat: bbox.min.lat + (i * latStep),
+                lng: bbox.min.lng + (j * lngStep),
+              },
+  
+              // calculation like this to prevent rounding erros
+              max: {
+                lat: bbox.max.lat - ((sqrtNum - i - 1) * latStep),
+                lng: bbox.max.lng - ((sqrtNum - j - 1) * lngStep)
+              }
+            });
           }
         }
 
-        return [q1, q2, q3, q4];
+        const quadrants: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>[] = [...Array(numOfQuadrants)];
+
+        for(const feature of data.features) {
+          let found = false;
+
+          for(let i = 0; i < numOfQuadrants; i++) {
+
+            if(this.geojsonUtil.isFeatureInBBox(
+              feature,
+              d => d.geometry.coordinates[1],
+              d => d.geometry.coordinates[0],
+              quadrantBBoxes[i]
+            )) {
+
+              if(!quadrants[i]) {
+                quadrants[i] = {
+                  type: 'FeatureCollection',
+                  features: []
+                };
+              }
+
+              quadrants[i].features.push(feature);
+
+              found = true;
+              break;
+
+            }
+          }
+
+          if(!found) {
+            console.error('Could not allocate quadrant for feature', feature);
+            throw `Runtime Exception: Could not be allocated to a quadrant`;
+          }
+        }
+
+        return quadrants;
       }),
-      // map(this.mySingleAggregatedMapper),
       map(divi => {
         const simpleGlyphLayerArr: SimpleGlyphLayer[] = [];
 

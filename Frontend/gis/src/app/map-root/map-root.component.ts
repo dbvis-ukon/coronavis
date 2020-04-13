@@ -9,6 +9,7 @@ import { switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { APP_CONFIG_KEY, APP_CONFIG_URL_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from "../../constants";
 import { HelpDialogComponent } from "../help-dialog/help-dialog.component";
+import { FlyTo } from '../map/events/fly-to';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
@@ -44,6 +45,8 @@ export class MapRootComponent implements OnInit {
   currentMapLocationSettings: MapLocationSettings = null;
 
   siteId: number;
+
+  flyTo: FlyTo = null;
 
 
   // constructor is here only used to inject services
@@ -139,7 +142,6 @@ export class MapRootComponent implements OnInit {
 
     if(paramMap.has(APP_CONFIG_URL_KEY)) {
       this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY)).then(urlMlo => {
-        console.log('map-root', urlMlo);
         const mergedMlo = this.configService.overrideMapOptions(urlMlo);
 
         this.mapOptions = mergedMlo;

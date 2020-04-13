@@ -12,6 +12,7 @@ import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.se
 import { GlyphLayerService } from '../services/glyph-layer.service';
 import { OSMLayerService } from '../services/osm-layer.service';
 import { TranslationService } from '../services/translation.service';
+import { FlyTo } from './events/fly-to';
 import { AggregationLevel } from './options/aggregation-level.enum';
 import { BedBackgroundOptions } from './options/bed-background-options';
 import { BedGlyphOptions } from './options/bed-glyph-options';
@@ -72,6 +73,21 @@ export class MapComponent implements OnInit {
 
   @Output()
   caseChoroplethLayerChange: EventEmitter<CaseChoropleth> = new EventEmitter();
+
+  private _flyTo: FlyTo;
+
+  @Input()
+  set flyTo(t: FlyTo) {
+    this._flyTo = t;
+
+    if(this.mymap && t) {
+      this.mymap.flyTo(t.loc, t.zoom);
+    }
+  }
+
+  get flyTo(): FlyTo {
+    return this._flyTo;
+  }
 
   // private layerControl: L.Control.Layers;
 

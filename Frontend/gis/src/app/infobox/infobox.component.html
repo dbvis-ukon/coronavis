@@ -15,7 +15,8 @@
 
 <mat-card *ngIf="mo.extendInfobox && !mo.hideInfobox">
 
-  <mat-accordion>
+  <div class="accordion-container">
+  <mat-accordion class="accordion">
 
     <mat-expansion-panel expanded="true">
       <mat-expansion-panel-header>
@@ -26,7 +27,7 @@
       </mat-expansion-panel-header>
 
       <div *ngIf="aggregatedDiviStatistics">
-        <p class="stats" i18n="@@infoboxNumberOfHospitals">{{ this.aggregatedDiviStatistics.numberOfHospitals | number }} bundesweit gemeldete Krankenhäuser</p>
+        <p class="stats" i18n="@@infoboxNumberOfHospitals">{{ this.aggregatedDiviStatistics.numberOfHospitals | number }} bundesweit gemeldete Einrichtungen</p>
         <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ this.aggregatedDiviStatistics.timestamp | date:'full' }}</p>
       </div>
       
@@ -69,6 +70,13 @@
       </p>
 
       <!--<mat-divider></mat-divider>-->
+
+      <app-hospital-search 
+        *ngIf="mo.bedGlyphOptions.enabled"
+        [hospitals]="hospitals" 
+        (selectedHospital)="searchHospitalSelected($event)" 
+        [reset]="resetHospitalSearch"
+      ></app-hospital-search>
 
       <div *ngIf="mo.bedGlyphOptions.enabled">
         <div class="glyph-legend">
@@ -195,6 +203,8 @@
               </mat-button-toggle>
             </mat-button-toggle-group>
           </div>
+
+          
 
           <!--<mat-divider></mat-divider>-->
 
@@ -356,7 +366,7 @@
 
     </mat-expansion-panel>
   </mat-accordion>
-
+</div>
 
   <app-button-panel class="footer" [mapOptions]="mo" [mapLocationSettings]="mls"></app-button-panel>
 

@@ -6,7 +6,8 @@ import localeDe from '@angular/common/locales/de';
 import localeEn from '@angular/common/locales/en';
 import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
@@ -44,6 +45,7 @@ import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
 import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
+import { HospitalSearchComponent } from './hospital-search/hospital-search.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { LegendComponent } from './legend/legend.component';
@@ -144,6 +146,7 @@ export const localeProvider = {
     ShareDialogComponent,
     ButtonPanelComponent,
     BedTooltipComponent,
+    HospitalSearchComponent,
     TimesliderComponent
   ],
   imports: [
@@ -180,6 +183,8 @@ export const localeProvider = {
     FlexLayoutModule,
     NouisliderModule,
     MatSliderModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ],
   providers: [
     localeProvider, 
