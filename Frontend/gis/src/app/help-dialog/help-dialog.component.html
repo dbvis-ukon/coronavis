@@ -6,6 +6,8 @@
 </div>
 
 <span class="hidden-placeholder" i18n='@@helpProjektLabel1' #label1>{isSmallScreen, select, true {Projekt} false {Das Projekt}}</span>
+<span class="hidden-placeholder" i18n='@@helpProjektLabel2' #label2>{isSmallScreen, select, true {Betten} false {Darstellung der Bettenkapazitäten}}</span>
+<span class="hidden-placeholder" i18n='@@helpProjektLabel3' #label3>{isSmallScreen, select, true {Fälle} false {Darstellung der Fallzahlen}}</span>
 
 <div mat-dialog-content>
   <mat-tab-group #tabGroup >
@@ -36,7 +38,7 @@
         <button mat-button mat-stroked-button (click)="close()"   i18n="help| help@@button12">Fenster schließen</button>
       </div>
     </mat-tab>
-    <mat-tab label="{{ isSmallScreen ? 'Betten' : 'Darstellung der Bettenkapazitäten' }}" i18n-label="@@helpProjektLabel2">
+    <mat-tab [label]="label2.textContent">
       <h1 id="beschreibung-der-darstellung-der-bettenkapazitäten"   i18n="help| help@@title2">Beschreibung der Darstellung der Bettenkapazitäten</h1>
       <div fxLayout="row" fxLayout.xs="column" class="visdescription">
         <div fxFlex class="helpimg">
@@ -69,7 +71,7 @@
         <button mat-button mat-stroked-button (click)="close()"  i18n="help| help@@button23">Fenster schließen</button>
       </div>
     </mat-tab>
-    <mat-tab label="{{ isSmallScreen ? 'Fälle' : 'Darstellung der Fallzahlen' }}" i18n-label="@@helpProjektLabel3">
+    <mat-tab [label]="label3.textContent">
       <h1 id="beschreibung-der-darstellung-der-fallzahlen"   i18n="help| help@@title3">Beschreibung der Darstellung der Fallzahlen</h1>
       <div fxLayout="row" fxLayout.xs="column" class="visdescription">
         <div fxFlex class="helpimg">
