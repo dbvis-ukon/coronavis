@@ -443,14 +443,14 @@
       </notes>
       <segment state="initial">
         <source>{VAR_SELECT, select, true {Projekt} false {Das Projekt} }</source>
-      <target>{VAR_SELECT, select, true {Beds} false {The Project} }</target></segment>
+      <target>{VAR_SELECT, select, true {Project} false {The Project} }</target></segment>
     </unit><unit id="helpProjektLabel2">
       <notes>
         <note category="location">src/app/help-dialog/help-dialog.component.html:9</note>
       </notes>
       <segment state="initial">
         <source>{VAR_SELECT, select, true {Betten} false {Darstellung der Bettenkapazitäten} }</source>
-      <target>{VAR_SELECT, select, true {Betten} false {Representation of Bed Capacities} }</target></segment>
+      <target>{VAR_SELECT, select, true {Beds} false {Representation of Bed Capacities} }</target></segment>
     </unit><unit id="helpProjektLabel3">
       <notes>
         <note category="location">src/app/help-dialog/help-dialog.component.html:10</note>
