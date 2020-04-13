@@ -1,127 +1,24 @@
 import { MatDialog } from '@angular/material/dialog';
-import * as d3 from 'd3';
+import { select } from 'd3-selection';
 import { Feature, FeatureCollection, Point } from "geojson";
-import * as L from 'leaflet';
-import moment from 'moment';
 import { LocalStorageService } from 'ngx-webstorage';
-import { NEVER, Observable, timer } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
-import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
-import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
+import { Observable } from 'rxjs';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
 import { SingleHospitalOut } from 'src/app/repositories/types/out/single-hospital-out';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
-import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
 import { AggregationLevel } from "../options/aggregation-level.enum";
 import { BedGlyphOptions } from '../options/bed-glyph-options';
-import { BedType } from '../options/bed-type.enum';
+import { AbstractGlyphLayer } from './abstract-glyph.layer';
 import { GlyphLayer } from "./GlyphLayer";
-import { Overlay } from './overlay';
 
-export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimedStatus>> implements GlyphLayer {
+export class SimpleGlyphLayer extends AbstractGlyphLayer<Point, SingleHospitalOut<QualitativeTimedStatus>> implements GlyphLayer {
+  
 
-  private gHospitals: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
   private nameHospitals: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
   private cityHospitals: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
   private nameHospitalsShadow: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
   private cityHospitalsShadow: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGElement, unknown>;
-  private map: L.Map;
-
-  private visible: boolean = false;
-
-  private forceLayout: ForceDirectedLayout;
-
-  private currentScale: number = 1;
-
-  private oldOptions: BedGlyphOptions = null;
-
-  private currentOptions: BedGlyphOptions = null;
-
-  constructor(
-    name: string,
-    private data: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>,
-    private tooltipService: TooltipService,
-    private colormapService: QualitativeColormapService,
-    private forceEnabled: boolean,
-    private glyphOptions: Observable<BedGlyphOptions>,
-    private dialog: MatDialog,
-    private storage: LocalStorageService
-  ) {
-    super(name, data);
-    this.enableDefault = true;
-
-    if (forceEnabled) {
-      this.forceLayout = new ForceDirectedLayout(this.storage, this.data, AggregationLevel.none, this.updateGlyphPositions.bind(this));
-    }
-
-    this.glyphOptions
-    .pipe(
-      debounceTime(10),
-      switchMap(opt => {
-        this.currentOptions = opt;
-        if (!this.gHospitals || !opt) {
-          return NEVER;
-        }
-  
-        if(this.oldOptions?.showIcuLow !== opt.showIcuLow) {
-          this.gHospitals
-            .selectAll(`.bed.${BedType.icuLow}`)
-            .style('opacity', opt.showIcuLow ? '1' : '0');
-        }
-        
-        if(this.oldOptions?.showIcuHigh !== opt.showIcuHigh) {
-          this.gHospitals
-            .selectAll(`.bed.${BedType.icuHigh}`)
-            .style('opacity', opt.showIcuHigh ? '1' : '0');
-        }
-  
-        if(this.oldOptions?.showEcmo !== opt.showEcmo) {
-          this.gHospitals
-            .selectAll(`.bed.${BedType.ecmo}`)
-            .style('opacity', opt.showEcmo ? '1' : '0');
-        }
-  
-        console.log('cmp', this.oldOptions?.date, opt.date);
-  
-        
-        if(this.oldOptions?.date !== opt.date) {
-          timer(10)
-            .subscribe(() => {
-              if(opt.date === 'now') {
-                this.filteredData = this.data.features;
-              } else {
-                const date = moment(opt.date).endOf('day').toDate();
-      
-                console.log('filter data by date', date);
-      
-                // this.filteredData = this.data.features.filter(d => new Date(d.properties.developments[0].timestamp) <= date);
-                this.filteredData = this.data.features;
-              }
-    
-              console.log('fcmp', this.filteredData.length, this.data.features.length);
-      
-              this.updateGlyphs();
-            })
-        }
-        
-  
-  
-        this.oldOptions = JSON.parse(JSON.stringify(opt));
-
-        return NEVER;
-      })
-    )    
-    .subscribe();
-  }
-
-  private filteredData: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>[];
-
-  private rectSize = 10;
-  private glyphSize = {
-    width: 38,
-    height: 28
-  };
 
   // Some cities have double names. These are the first parts
   private doubleNames = new Set(['Sankt', 'St.', 'Bergisch', 'Königs', 'Lutherstadt', 'Schwäbisch']);
@@ -132,13 +29,67 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
   private rxDash = /-([A-Z])[a-zäöü]{6,}/;
   private currentHoverLine;
 
-  private svgElement: SVGSVGElement;
 
-  private svgElementSelection: d3.Selection<SVGSVGElement, null, null, undefined>;
-
-  private latLngPoint(latlng: L.LatLngExpression): L.Point {
-    return this.map.project(latlng, 9);
+  constructor(
+    name: string,
+    data: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>,
+    tooltipService: TooltipService,
+    colormapService: QualitativeColormapService,
+    forceEnabled: boolean,
+    glyphOptions: Observable<BedGlyphOptions>,
+    dialog: MatDialog,
+    storage: LocalStorageService
+  ) {
+    super(name, data, AggregationLevel.none, tooltipService, colormapService, forceEnabled, glyphOptions, dialog, storage);
   }
+
+  latAcc(d: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>): number {
+    return d.geometry.coordinates[1];
+  }
+
+  lngAcc(d: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>): number {
+    return d.geometry.coordinates[0];
+  }
+  
+  appendText(container: d3.Selection<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, SVGSVGElement, unknown>) {
+    this.nameHospitalsShadow = container
+      .append('text')
+      .attr('class', 'text-bg hospital')
+      .text(d1 => {
+        return d1.properties.name;
+      })
+      .attr('x', (this.rectPadding + 3 * this.rectSize + 4 * this.rectPadding) / 2)
+      .attr('y', '13')
+      .call(this.wrap, '50');
+
+    this.nameHospitals = container
+      .append('text')
+      .attr('class', 'text-fg hospital')
+      .text(d1 => {
+        return d1.properties.name;
+      })
+      .attr('x', (this.rectPadding + 3 * this.rectSize + 4 * this.rectPadding) / 2)
+      .attr('y', '13')
+      .call(this.wrap, '50');
+
+
+    this.cityHospitalsShadow = container
+      .append('text')
+      .attr('class', 'text-bg city hiddenLabel')
+      .text(d1 => this.shorten_city_name(d1.properties.address))
+      .attr('x', (this.rectPadding + 3 * this.rectSize + 4 * this.rectPadding) / 2)
+      .attr('y', '22');
+
+    this.cityHospitals = container
+      .append('text')
+      .attr('class', 'text-fg city hiddenLabel')
+      .text(d1 => this.shorten_city_name(d1.properties.address))
+      .attr('x', (this.rectPadding + 3 * this.rectSize + 4 * this.rectPadding) / 2)
+      .attr('y', '22');
+  }
+
+
+
 
   // Extract the city name from the address and shorten
   private shorten_city_name(address) {
@@ -153,200 +104,32 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
     return this.doubleNames.has(nameParts[0]) ? nameParts.slice(0, 2).join(' ') : nameParts[0];
   }
 
-  createOverlay(map: L.Map) {
-    const data = this.data.features;
-    this.filteredData = data;
+  onMouseEnter(d: Feature <Point, SingleHospitalOut<QualitativeTimedStatus>> , i: number, n: SVGElement[] | ArrayLike < SVGElement > ): SVGElement {
+    const currentElement = super.onMouseEnter(d, i, n);
 
-    this.map = map;
-
-    this.map.on('zoom', () => this.onZoomed());
-
-    const latExtent = d3.extent(data, i => {
-      if (i.geometry.coordinates[1] !== 0) {
-        return i.geometry.coordinates[1];
-      }
-      return NaN;
-    });
-    const lngExtent = d3.extent(data, i => {
-      if (i.geometry.coordinates[0] !== 0) {
-        return i.geometry.coordinates[0]
-      }
-      return NaN;
-    });
-
-    let latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
-
-    latLngBounds = latLngBounds.pad(10);
-
-    const lpMin = this.latLngPoint(latLngBounds.getSouthWest());
-    const lpMax = this.latLngPoint(latLngBounds.getNorthEast());
-
-    // just to make everything bulletproof
-    const [xMin, xMax] = d3.extent([lpMin.x, lpMax.x]);
-    const [yMin, yMax] = d3.extent([lpMin.y, lpMax.y]);
-
-    this.svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-
-    this.svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    this.svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
-
-    this.svgElementSelection = d3.select<SVGSVGElement, null>(this.svgElement)
-      .style('pointer-events', 'none');
-
-    // timer(10).subscribe(() => this.updateGlyphs());
-    this.updateGlyphs();
-    this.updateGlyphs();
-
-    return L.svgOverlay(this.svgElement, latLngBounds, {
-      interactive: true,
-      bubblingMouseEvents: true,
-      zIndex: 3
-    });
-  }
-
-  updateGlyphs() {
-    console.log('update glyphs', this.filteredData.length);
-    const padding = 0.5;
-    const yOffset = 0.5;
-
-    this.gHospitals = 
-    this.svgElementSelection
-      .selectAll<SVGGElement, Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>('g.hospital')
-      .data<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(this.filteredData, d => d.properties.name+":"+d.properties.address);
-
-    this.gHospitals 
-      .enter()
-      .append<SVGGElement>('g')
-      .style("pointer-events", "all")
-      .attr('class', 'hospital')
-      // .merge(this.gHospitals)
-      .attr('transform', d => {
-        const p = this.latLngPoint({ lat: d.geometry.coordinates[1], lng: d.geometry.coordinates[0]});
-        d.properties.x = p.x;
-        d.properties.y = p.y;
-        d.properties._x = p.x;
-        d.properties._y = p.y;
-        return `translate(${p.x}, ${p.y})`;
-      });
-
-    const container = this.gHospitals
-      .append("g")
-      .attr("class", "container")
-      .on('mouseenter', (d1, i, n) => {
-        const currentElement = n[i];
-        const evt: MouseEvent = d3.event;
-        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {x: evt.clientX + 5, y: evt.clientY + 5});
-        t.tooltipData = d1.properties;
-        d3.select(currentElement).raise();
-
-        this.currentHoverLine = d3.select(currentElement)
+    this.currentHoverLine = select(currentElement)
         .append<SVGLineElement>("line")
         .attr('class', 'pointer-line')
         //.firstChild.insert<SVGLineElement>("line", )
         .attr("x1", 1) //`translate(${d1.properties.x})` d1.geometry.coordinates[1]
         .attr("y1", 1)
-        .attr("x2", d1.properties._x-d1.properties.x)
-        .attr("y2", d1.properties._y-d1.properties.y)
+        .attr("x2", d.properties._x - d.properties.x)
+        .attr("y2", d.properties._y - d.properties.y)
         .lower();
 
-        d3.select(currentElement)
+      select(currentElement)
         .selectAll("*:not(.pointer-line)")
         .raise();
-      })
-      .on('mouseleave', () => {
-        this.tooltipService.close();
-        if(this.currentHoverLine) {
-          this.currentHoverLine.remove();
-        }
-      })
-      .on('click', d => {
-        this.tooltipService.close();
-        this.dialog.open(HospitalInfoDialogComponent, {
-          data: d.properties
-        });
-      });
 
-    container
-      .append('rect')
-      .attr('class', 'background-rect')
-      .attr('width', this.glyphSize.width)
-      .attr('height', this.glyphSize.height / 2);
-
-    this.nameHospitalsShadow = container
-      .append('text')
-      .attr('class', 'text-bg hospital')
-      .text(d1 => {
-        return d1.properties.name;
-      })
-      .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
-      .attr('y', '13')
-      .call(this.wrap, '50');
-
-    this.nameHospitals = container
-      .append('text')
-      .attr('class', 'text-fg hospital')
-      .text(d1 => {
-        return d1.properties.name;
-      })
-      .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
-      .attr('y', '13')
-      .call(this.wrap, '50');
-
-
-    this.cityHospitalsShadow = container
-      .append('text')
-      .attr('class', 'text-bg city hiddenLabel')
-      .text(d1 => this.shorten_city_name(d1.properties.address))
-      .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
-      .attr('y', '22');
-
-    this.cityHospitals = container
-      .append('text')
-      .attr('class', 'text-fg city hiddenLabel')
-      .text(d1 => this.shorten_city_name(d1.properties.address))
-      .attr('x', (padding + 3 * this.rectSize + 4 * padding) / 2)
-      .attr('y', '22');
-
-    container
-      .append('rect')
-      .attr('class', `bed ${BedType.icuLow}`)
-      .attr('width', `${this.rectSize}px`)
-      .attr('height', `${this.rectSize}px`)
-      .attr('x', padding)
-      .attr('y', yOffset)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuLow, this.currentOptions?.date));
-
-    container
-      .append('rect')
-      .attr('class', `bed ${BedType.icuHigh}`)
-      .attr('width', `${this.rectSize}px`)
-      .attr('height', `${this.rectSize}px`)
-      .attr('y', yOffset)
-      .attr('x', `${this.rectSize + padding * 2}px`)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuHigh, this.currentOptions?.date));
-
-    container
-      .append('rect')
-      .attr('class', `bed ${BedType.ecmo}`)
-      .attr('width', `${this.rectSize}px`)
-      .attr('height', `${this.rectSize}px`)
-      .attr('y', yOffset)
-      .attr('x', `${2 * this.rectSize + padding * 3}px`)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.ecmo, this.currentOptions?.date));
-
-    // this.gHospitals
-    //   .exit()
-    //   .remove();
-
-    this.onZoomed();
+      return currentElement;
   }
 
-  updateGlyphPositions() {
-    this.gHospitals
-      .transition().duration(500)
-      .attr('transform', (d, i) => {
-        return `translate(${d.properties.x},${d.properties.y})`;
-      });
+  onMouseLeave(): void {
+    super.onMouseLeave();
+
+    if(this.currentHoverLine) {
+      this.currentHoverLine.remove();
+    }
   }
 
   onZoomed() {
@@ -362,7 +145,6 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
     if (zoom > 12) {
       scale = scale / (Math.pow(1.5, (zoom - 12)));
     }
-    this.currentScale = scale;
 
     this.glyphSize.width = 40;
     this.glyphSize.height = 28;
@@ -430,7 +212,7 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
 
   wrap(text, width) {
     text.each(function() {
-      let text = d3.select(this),
+      let text = select(this),
         words = text.text().split(' ').reverse(),
         word,
         line = [],
@@ -451,13 +233,5 @@ export class SimpleGlyphLayer extends Overlay<SingleHospitalOut<QualitativeTimed
         }
       }
     });
-  }
-
-  setVisibility(v: boolean) {
-    this.visible = v;
-
-    if (this.visible) {
-      this.onZoomed();
-    }
   }
 }
