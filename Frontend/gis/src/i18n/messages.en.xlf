@@ -165,7 +165,7 @@
       <note category="location">src/app/help-dialog/help-dialog.component.html:34</note></notes>
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Zur Beschreibung der Kapazitätsdarstellung' }}"/></source>
-      <target><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Next' : 'Next to the Depiction of the Bed Capacities' }}"/></target></segment>
+      <target>Next to the Depiction of the Bed Capacities</target></segment>
     </unit><unit id="button12">
       <notes>
         <note category="description"> help</note>
@@ -175,13 +175,13 @@
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
-    </unit><unit id="helpProjektLabel1">
+    </unit><unit id="helpProjektLabel1" datatype="html">
       <notes>
         <note category="location">src/app/help-dialog/help-dialog.component.html:11</note>
       </notes>
       <segment state="initial">
         <source> <ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Project' : 'Das Projekt' }}"/> </source>
-      <target> <ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Project' : 'The Project' }}"/> </target></segment>
+      <target> The Project </target></segment>
     </unit><unit id="title2">
       <notes>
         <note category="description"> help</note>
@@ -299,7 +299,7 @@
       <note category="location">src/app/help-dialog/help-dialog.component.html:67</note></notes>
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Weiter zur Darstellung der Fallzahlen' }}"/></source>
-      <target><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Next' : 'Next to the Depiction of Case Numbers' }}"/></target></segment>
+      <target>Next to the Depiction of Case Numbers</target></segment>
     </unit><unit id="button23">
       <notes>
         <note category="description"> help</note>
@@ -315,7 +315,7 @@
       </notes>
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Betten' : 'Darstellung der Bettenkapazitäten' }}"/></source>
-      <target><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Beds' : 'Representation of Bed Capacities' }}"/></target></segment>
+      <target>Representation of Bed Capacities</target></segment>
     </unit><unit id="title3">
       <notes>
         <note category="description"> help</note>
@@ -365,7 +365,7 @@
       </notes>
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Fälle' : 'Darstellung der Fallzahlen' }}"/></source>
-      <target><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Cases' : 'Representation of Cases' }}"/></target></segment>
+      <target>Representation of Cases</target></segment>
     </unit><unit id="shareTitle">
       <notes>
         <note category="location">src/app/share-dialog/share-dialog.component.html:2,4</note>
