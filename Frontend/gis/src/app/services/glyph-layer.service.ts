@@ -13,6 +13,7 @@ import { HospitalRepository } from '../repositories/hospital.repository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { ExplicitBBox, GeojsonUtilService } from './geojson-util.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
 import { TooltipService } from './tooltip.service';
 
@@ -29,7 +30,8 @@ export class GlyphLayerService {
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
     private matDialog: MatDialog,
-    private storage: LocalStorageService
+    private storage: LocalStorageService,
+    private geojsonUtil: GeojsonUtilService
   ) {}
 
   getSimpleGlyphLayer(options: Observable<BedGlyphOptions>, forceEnabled: boolean): Observable<SimpleGlyphLayer[]> {
@@ -37,6 +39,31 @@ export class GlyphLayerService {
     return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
     .pipe(
       map(data => {
+        const bbox = this.geojsonUtil.getBBox<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(data.features,
+          d => d.geometry.coordinates[1],
+          d => d.geometry.coordinates[0]);
+
+        const quadrantBBoxes: ExplicitBBox[] = [];
+        const latStep = (bbox.max.lat - bbox.min.lat) / 4;
+        const lngStep = (bbox.max.lng - bbox.min.lng) / 4;
+
+        for(let i = 0; i <= 4; i++) {
+          quadrantBBoxes.push({
+            min: {
+              lat: bbox.min.lat + (i * latStep),
+              lng: bbox.min.lng + (i * lngStep),
+            },
+
+            max: {
+              lat: bbox.min.lat + ((i+1) * latStep),
+              lng: bbox.min.lng + ((i+1) * lngStep)
+            }
+          });
+        }
+
+        console.log('bbox', bbox);
+        console.log('quadrants', quadrantBBoxes);
+
         // map the data into four quadrants
         const gerCenter: LatLngExpression = {
           lat: 51.1069818075,
