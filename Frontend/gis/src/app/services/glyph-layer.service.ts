@@ -39,6 +39,22 @@ export class GlyphLayerService {
     return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
     .pipe(
       map(data => {
+        const filteredFeatures: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>[] = [];
+
+        for(const f of data.features) {
+          if(f.geometry.coordinates[0] === 0 || f.geometry.coordinates[1] === 0) {
+            console.warn(`Invalid location for hospital ${f.properties.name}. Will not be shown on the map.`);
+          } else {
+            filteredFeatures.push(f);
+          }
+        }
+        
+        return {
+          type: 'FeatureCollection',
+          features: filteredFeatures
+        } as FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>
+      }),
+      map(data => {
         const bbox = this.geojsonUtil.getBBox<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(data.features,
           d => d.geometry.coordinates[1],
           d => d.geometry.coordinates[0]);
