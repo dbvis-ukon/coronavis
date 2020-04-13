@@ -6,7 +6,8 @@ import localeDe from '@angular/common/locales/de';
 import localeEn from '@angular/common/locales/en';
 import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
@@ -29,6 +30,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 import { AboutComponent } from './about/about.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -41,6 +43,7 @@ import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
 import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
+import { HospitalSearchComponent } from './hospital-search/hospital-search.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { LegendComponent } from './legend/legend.component';
@@ -48,7 +51,6 @@ import { MapRootComponent } from './map-root/map-root.component';
 import { MapComponent } from './map/map.component';
 import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
-import { OverlayMobileComponent } from './overlay-mobile/overlay-mobile.component';
 import { OverviewModule } from './overview/overview.module';
 import { SentryErrorHandler } from './sentry-config';
 import { SupportedLocales } from './services/i18n.service';
@@ -63,12 +65,9 @@ import { VegaComponent } from './vega/vega.component';
 
 
 
-
 // the second parameter 'fr-FR' is optional
 registerLocaleData(localeDe, 'de-DE');
 registerLocaleData(localeEn, 'en-US');
-
-// const storedLocale = JSON.parse(localStorage.getItem(APP_LOCALE)) as SupportedLocales;
 
 export const localeProvider = {
   provide: LOCALE_ID,
@@ -127,7 +126,6 @@ export const localeProvider = {
     GlyphTooltipComponent,
     CaseTooltipComponent,
     OverlayBrandComponent,
-    OverlayMobileComponent,
     InfoboxComponent,
     HospitalInfoComponent,
     HospitalInfoDialogComponent,
@@ -143,9 +141,11 @@ export const localeProvider = {
     ShareDialogComponent,
     ButtonPanelComponent,
     BedTooltipComponent,
+    HospitalSearchComponent
   ],
   imports: [
     BrowserModule,
+    NgxWebstorageModule.forRoot(),
     HttpClientModule,
     FormsModule,
     SharedModule.forRoot(),
@@ -176,7 +176,9 @@ export const localeProvider = {
     MatCheckboxModule,
     MatTabsModule,
     MatToolbarModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ],
   providers: [
     localeProvider, 

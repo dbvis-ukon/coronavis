@@ -90,7 +90,8 @@
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
+              "vendorChunk": true,
+              "es5BrowserSupport": true,
               "buildOptimizer": true,
               "budgets": [
                 {

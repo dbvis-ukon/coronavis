@@ -3,6 +3,9 @@
  * https://angular.io/guide/migration-localize
  */
 import '@angular/localize/init';
+// Core-JS ES2015 support for browsers: https://angular.io/guide/browser-support#suggested-polyfills
+// https://github.com/zloirock/core-js
+import 'core-js'; // Run `npm install --save core-js`.
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
  * You can add your own extra polyfills to this file.
@@ -29,6 +32,8 @@ import '@angular/localize/init';
  * Standard animation support in Angular DOES NOT require any polyfills (as of Angular 6.0).
  */
 // import 'web-animations-js';  // Run `npm install --save web-animations-js`.
+import 'es5-shim';
+import 'es6-shim';
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents
  * user can disable parts of macroTask/DomEvents patch by setting following flags
@@ -56,6 +61,8 @@ import '@angular/localize/init';
  * Zone JS is required by default for Angular itself.
  */
 import 'zone.js/dist/zone'; // Included with Angular CLI.
+
+
 
 
 /***************************************************************************************************

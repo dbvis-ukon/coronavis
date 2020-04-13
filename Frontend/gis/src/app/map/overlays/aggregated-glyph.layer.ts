@@ -2,6 +2,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as d3 from 'd3';
 import { Feature, FeatureCollection, MultiPolygon } from "geojson";
 import * as L from 'leaflet';
+import { LocalStorageService } from 'ngx-webstorage';
 import { Observable } from "rxjs";
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
@@ -33,12 +34,13 @@ export class AggregatedGlyphLayer extends Overlay<AggregatedHospitalOut<Qualitat
     private colormapService: QualitativeColormapService,
     private forceDirect: boolean,
     private glyphOptions: Observable<BedGlyphOptions>,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private storage: LocalStorageService
 ) {
     super(name, data);
 
     if (this.forceDirect) {
-      this.forceLayout = new ForceDirectedLayout(this.data as any, granularity, this.updateGlyphPositions.bind(this));
+      this.forceLayout = new ForceDirectedLayout(this.storage, this.data as any, granularity, this.updateGlyphPositions.bind(this));
     }
 
     this.glyphOptions.subscribe(opt => {

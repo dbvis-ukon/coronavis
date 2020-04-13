@@ -14,7 +14,10 @@ Sentry.init({
       delete event.user;
     }
     return event;
-  }
+  },
+  ignoreErrors: [
+    'Non-Error exception captured'
+  ]
 });
 
 @Injectable()
@@ -22,5 +25,6 @@ export class SentryErrorHandler implements ErrorHandler {
   constructor() {}
   handleError(error) {
     Sentry.captureException(error.originalError || error);
+    throw error;
   }
 }

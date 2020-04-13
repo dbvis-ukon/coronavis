@@ -3,11 +3,13 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from '@angular/router';
 import { FeatureCollection } from 'geojson';
+import { LocalStorageService } from 'ngx-webstorage';
 import { BehaviorSubject, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { APP_CONFIG_KEY, APP_CONFIG_URL_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from "../../constants";
 import { HelpDialogComponent } from "../help-dialog/help-dialog.component";
+import { FlyTo } from '../map/events/fly-to';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
@@ -44,6 +46,8 @@ export class MapRootComponent implements OnInit {
 
   siteId: number;
 
+  flyTo: FlyTo = null;
+
 
   // constructor is here only used to inject services
   constructor(
@@ -53,15 +57,12 @@ export class MapRootComponent implements OnInit {
     private i18nService: I18nService,
     private translationService: TranslationService,
     private urlHandlerService: UrlHandlerService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private storage: LocalStorageService
               ) {
   }
 
   ngOnInit(): void {
-    //TESTING
-
-    // this.router.navigate(['/map', {mlo: this.urlHandlerService.convertMLOToUrl(this.defaultMapOptions)}]);
-
     this.i18nService.initI18n();
 
 
@@ -92,7 +93,7 @@ export class MapRootComponent implements OnInit {
       this.currentMapLocationSettings = newLocSettings as MapLocationSettings;
 
       // store data into local storage
-      localStorage.setItem(MAP_LOCATION_SETTINGS_KEY, JSON.stringify(newLocSettings));
+      this.storage.store(MAP_LOCATION_SETTINGS_KEY, JSON.stringify(newLocSettings));
     });
   }
 
@@ -103,7 +104,7 @@ export class MapRootComponent implements OnInit {
   mapOptionsUpdated(newOptions: MapOptions) {
     this.mapOptions = newOptions;
 
-    localStorage.setItem(APP_CONFIG_KEY, JSON.stringify(newOptions));
+    this.storage.store(APP_CONFIG_KEY, JSON.stringify(newOptions));
   }
 
   initTrackingPixel() {
@@ -118,11 +119,11 @@ export class MapRootComponent implements OnInit {
   }
 
   displayHelpForNewUser() {
-    const helpSeen = JSON.parse(localStorage.getItem(APP_HELP_SEEN)) || false;
-    if (this.mapOptions.showHelpOnStart && !helpSeen) {
+    const helpSeen = JSON.parse(this.storage.retrieve(APP_HELP_SEEN)) || false;
+    if (this.mapOptions?.showHelpOnStart && !helpSeen) {
       this.dialog.open(HelpDialogComponent)
         .afterClosed().subscribe(d => {
-        localStorage.setItem(APP_HELP_SEEN, JSON.stringify(true));
+        this.storage.store(APP_HELP_SEEN, JSON.stringify(true));
       });
     }
   }
@@ -134,19 +135,17 @@ export class MapRootComponent implements OnInit {
     }
     
 
-    const storedMapOptions = JSON.parse(localStorage.getItem(APP_CONFIG_KEY)) as MapOptions;
+    const storedMapOptions = JSON.parse(this.storage.retrieve(APP_CONFIG_KEY)) as MapOptions;
 
-    // will show the snack bar if true
+    // will show the snack bar if truet
     let restored = false;
 
     if(paramMap.has(APP_CONFIG_URL_KEY)) {
-      const urlMlo = this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY));
+      this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY)).then(urlMlo => {
+        const mergedMlo = this.configService.overrideMapOptions(urlMlo);
 
-      const mergedMlo = this.configService.overrideMapOptions(urlMlo);
-
-      console.log('load from url', mergedMlo);
-
-      this.mapOptions = mergedMlo;
+        this.mapOptions = mergedMlo;
+      });
     } else if (storedMapOptions) {
       // merge with default as basis is necessary when new options are added in further releases
       this.mapOptions = this.configService.overrideMapOptions(storedMapOptions, { hideInfobox: false, showHelpOnStart: true });
@@ -156,14 +155,14 @@ export class MapRootComponent implements OnInit {
     }
 
 
-    const storedMapLocationSettings = JSON.parse(localStorage.getItem(MAP_LOCATION_SETTINGS_KEY)) as MapLocationSettings;
+    const storedMapLocationSettings = JSON.parse(this.storage.retrieve(MAP_LOCATION_SETTINGS_KEY)) as MapLocationSettings;
 
     if(paramMap.has(MAP_LOCATION_SETTINGS_URL_KEY)) {
-      const urlMls = this.urlHandlerService.convertUrlToMLS(paramMap.get(MAP_LOCATION_SETTINGS_URL_KEY));
+      this.urlHandlerService.convertUrlToMLS(paramMap.get(MAP_LOCATION_SETTINGS_URL_KEY)).then(urlMls => {
+        const mergedMls = this.configService.overrideMapLocationSettings(urlMls);
 
-      const mergedMls = this.configService.overrideMapLocationSettings(urlMls);
-
-      this.initialMapLocationSettings = {...mergedMls};
+        this.initialMapLocationSettings = mergedMls;
+      });
     } else if(storedMapLocationSettings) {
       // this.mapLocationSettings$.next(storedMapLocationSettings);
       this.initialMapLocationSettings = this.configService.overrideMapLocationSettings(storedMapLocationSettings, {
@@ -186,8 +185,8 @@ export class MapRootComponent implements OnInit {
         this.mapOptions = this.configService.getDefaultMapOptions();
         this.mapLocationSettings$.next(this.configService.getDefaultMapLocationSettings());
 
-        localStorage.removeItem(APP_CONFIG_KEY);
-        localStorage.removeItem(MAP_LOCATION_SETTINGS_KEY);
+        this.storage.clear(APP_CONFIG_KEY);
+        this.storage.clear(MAP_LOCATION_SETTINGS_KEY);
       });
     }
   }

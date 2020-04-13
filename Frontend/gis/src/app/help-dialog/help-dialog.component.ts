@@ -32,5 +32,5 @@ export class HelpDialogComponent implements OnInit {
   close(): void {
     this.dialogRef.close();
   }
-
+  
 }

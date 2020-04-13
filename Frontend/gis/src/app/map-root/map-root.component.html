@@ -6,21 +6,24 @@
     (caseChoroplethLayerChange)="currentCaseChoropleth = $event"
     [mapLocationSettings]="initialMapLocationSettings"
     (mapLocationSettingsChange)="mapLocationSettingsUpdated($event)"
+    [flyTo]="flyTo"
   ></app-map>
 
   <app-infobox
+    *ngIf="mapOptions"
     class="infobox"
     [mapOptions]="mapOptions"
     [mapLocationSettings]="currentMapLocationSettings"
     (mapOptionsChange)="mapOptionsUpdated($event)"
+    (flyTo)="flyTo = $event"
   ></app-infobox>
 
   <app-overlay-brand class="overlay-brand"></app-overlay-brand>
   <app-legend
+    *ngIf="mapOptions"
     class="legend"
     [mapOptions]="mapOptions"
     [choroplethLayer]="currentCaseChoropleth"
   ></app-legend>
-  <app-overlay-mobile class="overlay-mobile"></app-overlay-mobile>
 
 </div>

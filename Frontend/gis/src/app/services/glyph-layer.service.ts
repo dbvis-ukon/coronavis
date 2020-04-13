@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Feature, FeatureCollection, Point } from 'geojson';
+import { LocalStorageService } from 'ngx-webstorage';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
@@ -8,6 +10,9 @@ import { LandkreiseHospitalsLayer } from '../map/overlays/landkreishospitals';
 import { SimpleGlyphLayer } from '../map/overlays/simple-glyph.layer';
 import { HospitalRepository } from '../repositories/hospital.repository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { ExplicitBBox, GeojsonUtilService } from './geojson-util.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
 import { TooltipService } from './tooltip.service';
 
@@ -23,24 +28,114 @@ export class GlyphLayerService {
     private hospitalRepository: HospitalRepository,
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private storage: LocalStorageService,
+    private geojsonUtil: GeojsonUtilService
   ) {}
 
-  getSimpleGlyphLayer(options: Observable<BedGlyphOptions>, forceEnabled: boolean): Observable<SimpleGlyphLayer> {
+  getSimpleGlyphLayer(options: Observable<BedGlyphOptions>, forceEnabled: boolean): Observable<SimpleGlyphLayer[]> {
     this.loading$.next(true);
     return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
     .pipe(
-      // map(this.mySingleAggregatedMapper),
+      map(data => {
+        const filteredFeatures: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>[] = [];
+
+        for(const f of data.features) {
+          if(f.geometry.coordinates[0] === 0 || f.geometry.coordinates[1] === 0 || f.geometry.coordinates[0] > 500 || f.geometry.coordinates[1] > 500) {
+            console.warn(`Invalid location for hospital ${f.properties.name}. Will not be shown on the map.`, f);
+          } else {
+            filteredFeatures.push(f);
+          }
+        }
+        
+        return {
+          type: 'FeatureCollection',
+          features: filteredFeatures
+        } as FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>
+      }),
+      map(data => {
+        const bbox = this.geojsonUtil.getBBox<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(data.features,
+          d => d.geometry.coordinates[1],
+          d => d.geometry.coordinates[0]);
+
+        const quadrantBBoxes: ExplicitBBox[] = [];
+        const numOfQuadrants = 4;
+        const sqrtNum = Math.sqrt(numOfQuadrants);
+
+        const latStep = (bbox.max.lat - bbox.min.lat) / sqrtNum;
+        const lngStep = (bbox.max.lng - bbox.min.lng) / sqrtNum;
+
+        for(let i = 0; i < sqrtNum; i++) {
+          for(let j = 0; j < sqrtNum; j++) {
+            quadrantBBoxes.push({
+              min: {
+                lat: bbox.min.lat + (i * latStep),
+                lng: bbox.min.lng + (j * lngStep),
+              },
+  
+              // calculation like this to prevent rounding erros
+              max: {
+                lat: bbox.max.lat - ((sqrtNum - i - 1) * latStep),
+                lng: bbox.max.lng - ((sqrtNum - j - 1) * lngStep)
+              }
+            });
+          }
+        }
+
+        const quadrants: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>[] = [...Array(numOfQuadrants)];
+
+        for(const feature of data.features) {
+          let found = false;
+
+          for(let i = 0; i < numOfQuadrants; i++) {
+
+            if(this.geojsonUtil.isFeatureInBBox(
+              feature,
+              d => d.geometry.coordinates[1],
+              d => d.geometry.coordinates[0],
+              quadrantBBoxes[i]
+            )) {
+
+              if(!quadrants[i]) {
+                quadrants[i] = {
+                  type: 'FeatureCollection',
+                  features: []
+                };
+              }
+
+              quadrants[i].features.push(feature);
+
+              found = true;
+              break;
+
+            }
+          }
+
+          if(!found) {
+            console.error('Could not allocate quadrant for feature', feature);
+            throw `Runtime Exception: Could not be allocated to a quadrant`;
+          }
+        }
+
+        return quadrants;
+      }),
       map(divi => {
-        return new SimpleGlyphLayer(
-          'ho_none',
-          divi,
-          this.tooltipService,
-          this.colormapService,
-          forceEnabled,
-          options,
-          this.matDialog
-          );
+        const simpleGlyphLayerArr: SimpleGlyphLayer[] = [];
+
+        for(const fc of divi) {
+          simpleGlyphLayerArr.push(new SimpleGlyphLayer(
+            'ho_none',
+            fc,
+            this.tooltipService,
+            this.colormapService,
+            forceEnabled,
+            options,
+            this.matDialog,
+            this.storage
+            ));
+        }
+
+        return simpleGlyphLayerArr;
       }),
       tap(() => this.loading$.next(false))
     );
@@ -63,7 +158,8 @@ export class GlyphLayerService {
           this.colormapService,
           options.forceDirectedOn,
           options$,
-          this.matDialog
+          this.matDialog,
+          this.storage
         );
 
         const factoryBg = new LandkreiseHospitalsLayer(name + '_bg', result[1]);

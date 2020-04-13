@@ -12,6 +12,7 @@ import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.se
 import { GlyphLayerService } from '../services/glyph-layer.service';
 import { OSMLayerService } from '../services/osm-layer.service';
 import { TranslationService } from '../services/translation.service';
+import { FlyTo } from './events/fly-to';
 import { AggregationLevel } from './options/aggregation-level.enum';
 import { BedBackgroundOptions } from './options/bed-background-options';
 import { BedGlyphOptions } from './options/bed-glyph-options';
@@ -73,11 +74,26 @@ export class MapComponent implements OnInit {
   @Output()
   caseChoroplethLayerChange: EventEmitter<CaseChoropleth> = new EventEmitter();
 
+  private _flyTo: FlyTo;
+
+  @Input()
+  set flyTo(t: FlyTo) {
+    this._flyTo = t;
+
+    if(this.mymap && t) {
+      this.mymap.flyTo(t.loc, t.zoom);
+    }
+  }
+
+  get flyTo(): FlyTo {
+    return this._flyTo;
+  }
+
   // private layerControl: L.Control.Layers;
 
   private mymap: L.Map;
 
-  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<any>>();
+  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<any>[]>();
 
   private aggregationLevelToGlyphMap = new Map<string, L.LayerGroup<any>>();
 
@@ -141,7 +157,7 @@ export class MapComponent implements OnInit {
 
     this.mymap = L.map('main', {
       minZoom: 6,
-      maxZoom: 11,
+      maxZoom: 13,
       layers: [tiledMap],
       zoomControl: false
     }).setView(mapLocationSettings.center, mapLocationSettings.zoom);
@@ -152,6 +168,13 @@ export class MapComponent implements OnInit {
 
     this.mymap.on('zoom', () => {
       this.emitMapLocationSettings();
+
+      // diable double click on highest zoom level
+      if(this.mymap.getZoom() >= this.mymap.getMaxZoom()) {
+        this.mymap.doubleClickZoom.disable();
+      } else if(this._mapLocationSettings.allowZooming) {
+        this.mymap.doubleClickZoom.enable();
+      }
     });
 
     
@@ -203,7 +226,7 @@ export class MapComponent implements OnInit {
   }
 
   private updateMap(mo: MapOptions) {
-    if (!this.mymap) {
+    if (!this.mymap || !mo) {
       return;
     }
 
@@ -282,8 +305,7 @@ export class MapComponent implements OnInit {
     this.aggregationLevelToGlyphMap.forEach(l => {
       this.mymap.removeLayer(l);
 
-      (this.layerToFactoryMap.get(l) as unknown as GlyphLayer).setVisibility(false);
-
+      this.layerToFactoryMap.get(l).forEach(f => (f as unknown as GlyphLayer).setVisibility(false));
     });
   }
 
@@ -305,12 +327,17 @@ export class MapComponent implements OnInit {
       if(o.aggregationLevel === AggregationLevel.none) {
         obs = this.glyphLayerService.getSimpleGlyphLayer(this.bedGlyphOptions$, o.forceDirectedOn)
         .pipe(
-          map(glyphFactory => {
-            const glyphLayer = glyphFactory.createOverlay(this.mymap);
+          map(glyphFactories => {
 
-            const layerGroup = L.layerGroup([glyphLayer]);
+            const layerGroup = L.layerGroup([]);
 
-            this.layerToFactoryMap.set(layerGroup, glyphFactory);
+            for(const glyphFactory of glyphFactories) {
+              const glyphLayer = glyphFactory.createOverlay(this.mymap);
+
+              layerGroup.addLayer(glyphLayer);
+            } 
+
+            this.layerToFactoryMap.set(layerGroup, glyphFactories);
 
             return layerGroup;
           }));
@@ -326,7 +353,7 @@ export class MapComponent implements OnInit {
           // Create a layer group
           const layerGroup = L.layerGroup([bgLayer, glyphLayer]);
 
-          this.layerToFactoryMap.set(layerGroup, glyphFactory);
+          this.layerToFactoryMap.set(layerGroup, [glyphFactory]);
 
           return layerGroup;
         }));
@@ -349,9 +376,13 @@ export class MapComponent implements OnInit {
 
     this.mymap.addLayer(l);
 
-    (this.layerToFactoryMap.get(l) as unknown as GlyphLayer).setVisibility(true);
+    this.layerToFactoryMap.get(l).forEach(f => (f as unknown as GlyphLayer).setVisibility(true));
 
-    if (l.getLayers().length > 1) {
+    this.bringGlyphLayersToFront(l);
+  }
+
+  private bringGlyphLayersToFront(l: L.LayerGroup) {
+    if (l.getLayers().length === 2) {
 
       // aggregation glyph layer groups
       (l.getLayers()[1] as SVGOverlay).bringToFront();
@@ -359,8 +390,10 @@ export class MapComponent implements OnInit {
 
     } else {
 
-      // single glyph layer group (only contains one item)
-      (l.getLayers()[0] as SVGOverlay).bringToFront();
+      // simple glyph layers with four quadrants
+      for(const svgLayer of l.getLayers()) {
+        (svgLayer as SVGOverlay).bringToFront();
+      }
     }
   }
 
@@ -391,7 +424,7 @@ export class MapComponent implements OnInit {
 
       this.covidNumberCaseOptionsKeyToLayer.set(key, l);
 
-      this.layerToFactoryMap.set(l, factory);
+      this.layerToFactoryMap.set(l, [factory]);
 
       this.mymap.addLayer(l);
 
@@ -400,11 +433,7 @@ export class MapComponent implements OnInit {
       l.bringToBack();
 
       for(const glyphLayer of this.aggregationLevelToGlyphMap.values()) {
-        if(glyphLayer.getLayers().length === 1) {
-          (glyphLayer.getLayers()[0] as SVGOverlay).bringToFront();
-        } else {
-          (glyphLayer.getLayers()[1] as SVGOverlay).bringToFront();
-        }
+        this.bringGlyphLayersToFront(glyphLayer);
       }
     });
   }
