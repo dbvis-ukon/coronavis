@@ -179,7 +179,7 @@ export class MapRootComponent implements OnInit {
         this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"),
         this.translationService.translate("Zurücksetzen"), {
         politeness: "polite",
-        duration: 20000
+        duration: 5000
       });
       snackbar.onAction().subscribe(() => {
         this.mapOptions = this.configService.getDefaultMapOptions();

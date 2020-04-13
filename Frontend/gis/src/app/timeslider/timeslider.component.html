@@ -1,29 +1,29 @@
 
-<div class="cur">
+<!-- <div class="cur">
     {{ currentTimeDate | date:'shortDate' }}
-</div>
+</div> -->
 
-<!-- <nouislider 
+<nouislider 
 *ngIf="timeExtent"
-class="slider" 
+class="timeslider" 
 [config]="nouiConfig"
 [min]="timeExtent[0]" 
 [max]="timeExtent[1]" 
 [step]="24 * 60 * 60"
 [(ngModel)]="currentTime" 
-(ngModelChange)="sliderChanging($event)" 
-(change)="sliderChanged($event)"
-></nouislider> -->
+(ngModelChange)="nouiSliderChanging($event)" 
+(change)="nouiSliderChanged($event)"
+></nouislider>
 
 
-<mat-slider
+<!-- <mat-slider
         class="slider"
         [max]="timeExtent[1]"
         [min]="timeExtent[0]"
         [step]="24 * 60 * 60"
         [tickInterval]="numTicks"
         [(ngModel)]="currentTime"
-        (input)="sliderChanging($event)"
-        (change)="sliderChanged($event)"
+        (input)="matSliderChanging($event)"
+        (change)="matSliderChanged($event)"
 >
-    </mat-slider>
+    </mat-slider> -->

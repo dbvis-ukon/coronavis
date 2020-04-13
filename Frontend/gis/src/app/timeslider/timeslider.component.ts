@@ -28,7 +28,7 @@ export class TimeFormatter implements NouiFormatter {
 export class TimesliderComponent implements OnInit {
 
   nouiConfig = {
-    tooltips: false
+    tooltips: new TimeFormatter()
   }
 
   numTicks = 10;
@@ -90,9 +90,26 @@ export class TimesliderComponent implements OnInit {
   
   }
 
-  sliderChanging(evt: MatSliderChange) {
-    console.log('changing', evt);
-    const mDate = moment.unix(evt.value).endOf('day');
+  nouiSliderChanging(value: number) {
+    this.sliderChanging(value);
+  }
+
+  nouiSliderChanged(value: number) {
+    this.sliderChanged(value);
+  }
+
+  matSliderChanging(evt: MatSliderChange) {
+    this.sliderChanging(evt.value);
+  }
+
+  matSliderChanged(evt: MatSliderChange) {
+    this.sliderChanged(evt.value);
+  }
+
+
+  private sliderChanging(value: number) {
+    console.log('changing', value);
+    const mDate = moment.unix(value).endOf('day');
     this.currentTimeDate = mDate.toDate();
 
     // console.log('emit', mDate.format('YYYY-MM-DD'));
@@ -103,10 +120,10 @@ export class TimesliderComponent implements OnInit {
     // }));
   }
 
-  sliderChanged(evt: MatSliderChange) {
-    console.log('changed', evt);
+  private sliderChanged(value: number) {
+    console.log('changed', value);
 
-    const mDate = moment.unix(evt.value);
+    const mDate = moment.unix(value);
     this.currentTimeDate = mDate.toDate();
 
     this.mapOptionsChange.emit(this.configService.overrideMapOptions(this._mo, {
