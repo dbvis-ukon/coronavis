@@ -33,6 +33,7 @@ export class ConfigService {
     },
 
     bedBackgroundOptions: {
+      date: 'now',
       bedType: BedType.icuLow,
       enabled: false,
       aggregationLevel: AggregationLevel.county

@@ -34,8 +34,7 @@ export class BedChoroplethLayerService {
         return new BedStatusChoropleth(
           this.getName(option.aggregationLevel, option.bedType), 
           data, 
-          option.aggregationLevel, 
-          option.bedType, 
+          option,
           this.qualitativeColorMapService, 
           this.tooltipService,
           this.matDialog

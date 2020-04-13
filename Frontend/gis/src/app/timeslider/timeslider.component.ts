@@ -4,6 +4,7 @@ import { Feature, Point } from 'geojson';
 import moment from 'moment';
 import { NouiFormatter } from 'ng2-nouislider';
 import { flatMap, map, reduce, tap } from 'rxjs/operators';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { MapOptions } from '../map/options/map-options';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -108,27 +109,34 @@ export class TimesliderComponent implements OnInit {
 
 
   private sliderChanging(value: number) {
-    console.log('changing', value);
+    // console.log('changing', value);
     const mDate = moment.unix(value).endOf('day');
     this.currentTimeDate = mDate.toDate();
-
-    // console.log('emit', mDate.format('YYYY-MM-DD'));
-    // this.mapOptionsChange.emit(this.configService.overrideMapOptions(this._mo, {
-    //   bedGlyphOptions: {
-    //     date: mDate.format('YYYY-MM-DD')
-    //   }
-    // }));
+    this.emit(mDate.format('YYYY-MM-DD'), true);
   }
 
   private sliderChanged(value: number) {
-    console.log('changed', value);
+    // console.log('changed', value);
 
     const mDate = moment.unix(value);
     this.currentTimeDate = mDate.toDate();
 
+    this.emit(mDate.format('YYYY-MM-DD'), false);
+  }
+
+  emit(date: string, changing: boolean) {
+    if(changing && this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
+      // do not update with single glyphs as it causes too much lag
+      return;
+    }
+
+
     this.mapOptionsChange.emit(this.configService.overrideMapOptions(this._mo, {
       bedGlyphOptions: {
-        date: mDate.format('YYYY-MM-DD')
+        date: date
+      },
+      bedBackgroundOptions: {
+        date: date
       }
     }));
   }
