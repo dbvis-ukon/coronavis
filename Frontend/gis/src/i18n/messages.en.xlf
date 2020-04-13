@@ -88,7 +88,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:13</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:16</note></notes>
       <segment state="initial">
         <source>Interaktive
           Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</source>
@@ -98,7 +98,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:15</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:18</note></notes>
       <segment state="initial">
         <source>Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
             am Besten im Chrome-Browser.</source>
@@ -108,7 +108,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:17</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:20</note></notes>
       <segment state="initial">
         <source>Die <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
           Konstanz entwickelt dieses Tool, um eine intuitive Übersicht über freie und belegte Bettenkapazitäten in
@@ -121,7 +121,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:21</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:24</note></notes>
       <segment state="initial">
         <source>Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten der DIVI[1] (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
           exakten Kapazitätsdaten der DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
@@ -133,7 +133,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:26</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:29</note></notes>
       <segment state="initial">
         <source>Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
           weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.coronavis.dbvis.de</pc>.</source>
@@ -143,7 +143,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:29</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:32</note></notes>
       <segment state="initial">
         <source>Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
           anschauen wollen, kann dieses Fenster geschlossen werden.</source>
@@ -153,7 +153,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:31</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:34</note></notes>
       <segment state="initial">
         <source>[1] <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></source>
       <target>[1] <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">German Interdisciplinary Association for Intensive and Emergency Medicine (DIVI)</pc></target></segment>
@@ -162,7 +162,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:34</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:37</note></notes>
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Zur Beschreibung der Kapazitätsdarstellung' }}"/></source>
       <target>Next to the Depiction of the Bed Capacities</target></segment>
@@ -171,7 +171,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:35</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:38</note></notes>
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
@@ -180,7 +180,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:39</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:42</note></notes>
       <segment state="initial">
         <source>Beschreibung der Darstellung der Bettenkapazitäten
         </source>
@@ -191,7 +191,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:45</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:48</note></notes>
       <segment state="initial">
         <source>Die Bettendarstellung erfolgt im Überblick mit drei farbigen Kästchen pro Krankenhaus, welche für die
             Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
@@ -203,7 +203,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:49</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:52</note></notes>
       <segment state="initial">
         <source>ICU low care: Auslastung der Betten für nichtinvasive Beatmung</source>
       <target>ICU low care: Bed Capacities for Non-Invasive Ventilation</target></segment>
@@ -212,7 +212,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:50</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:53</note></notes>
       <segment state="initial">
         <source>ICU high care: Auslastung der Betten für invasive Beatmung</source>
       <target>ICU high care: Bed Capacities for Invasive Ventilation</target></segment>
@@ -221,7 +221,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:51</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:54</note></notes>
       <segment state="initial">
         <source>ECMO: Auslastung der Betten für die Beatmung von Patienten durch extrakorporale Membranoxygenierung</source>
       <target>ECMO: Bed Capacities for Ventilation using Extracorporeal Membrane Oxygenation</target></segment>
@@ -230,7 +230,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:53</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:56</note></notes>
       <segment state="initial">
         <source>Die Farben stellen die Auslastung dar:</source>
       <target>The colors represent the hospital load:</target></segment>
@@ -239,7 +239,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:55</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:58</note></notes>
       <segment state="initial">
         <source>Grün: Plätze in dieser Behandlungskategorie sind in diesem Klinikum noch vorhanden</source>
       <target>Green: The beds in this treatment category are still available in that particular hospital</target></segment>
@@ -248,7 +248,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:56</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:59</note></notes>
       <segment state="initial">
         <source>Gelb: Die Betten in dieser Behandlungskategorie werden knapp</source>
       <target>Yellow: The beds in this treatment category are becoming scarce</target></segment>
@@ -257,7 +257,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:57</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:60</note></notes>
       <segment state="initial">
         <source>Rot: Die Betten in dieser Behandlungskategorie sind komplett ausgelastet</source>
       <target>Red: The beds in this treatment category are fully occupied</target></segment>
@@ -266,7 +266,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:59</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:62</note></notes>
       <segment state="initial">
         <source>Die Informationen können auch nach Regionen zusammengefasst werden durch die entsprechende Schaltfläche.
             Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
@@ -280,7 +280,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:66</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:69</note></notes>
       <segment state="initial">
         <source>Zurück</source>
       <target>Back</target></segment>
@@ -289,7 +289,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:67</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:70</note></notes>
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Weiter zur Darstellung der Fallzahlen' }}"/></source>
       <target>Next to the Depiction of Case Numbers</target></segment>
@@ -298,7 +298,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:68</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:71</note></notes>
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
@@ -307,7 +307,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:72</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:75</note></notes>
       <segment state="initial">
         <source>Beschreibung der Darstellung der Fallzahlen</source>
       <target>Depiction of Case Numbers</target></segment>
@@ -316,7 +316,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:78</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:81</note></notes>
       <segment state="initial">
         <source>Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
             Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
@@ -332,7 +332,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:87</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:90</note></notes>
       <segment state="initial">
         <source>Zurück</source>
       <target>Back</target></segment>
@@ -341,7 +341,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:88</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:91</note></notes>
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
@@ -437,6 +437,27 @@
       <segment state="initial">
         <source>Schließen</source>
       <target>Close</target></segment>
+    </unit><unit id="helpProjektLabel1">
+      <notes>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:8</note>
+      </notes>
+      <segment state="initial">
+        <source>{VAR_SELECT, select, true {Projekt} false {Das Projekt} }</source>
+      <target>{VAR_SELECT, select, true {Project} false {The Project} }</target></segment>
+    </unit><unit id="helpProjektLabel2">
+      <notes>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:9</note>
+      </notes>
+      <segment state="initial">
+        <source>{VAR_SELECT, select, true {Betten} false {Darstellung der Bettenkapazitäten} }</source>
+      <target>{VAR_SELECT, select, true {Beds} false {Representation of Bed Capacities} }</target></segment>
+    </unit><unit id="helpProjektLabel3">
+      <notes>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:10</note>
+      </notes>
+      <segment state="initial">
+        <source>{VAR_SELECT, select, true {Fälle} false {Darstellung der Fallzahlen} }</source>
+      <target>{VAR_SELECT, select, true {Cases} false {Representation of Cases} }</target></segment>
     </unit><unit id="deutschland">
       <notes>
         <note category="location">src/app/bed-tooltip/bed-tooltip.component.html:4</note>
