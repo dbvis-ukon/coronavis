@@ -27,7 +27,8 @@
       </mat-expansion-panel-header>
 
       <div *ngIf="aggregatedDiviStatistics">
-        <p class="stats" i18n="@@infoboxNumberOfHospitals">{{ this.aggregatedDiviStatistics.numberOfHospitals | number }} bundesweit gemeldete Einrichtungen</p>
+        <p class="stats with-addon" i18n="@@infoboxNumberOfHospitals">{{ numUnfilteredHospitals | number }} bundesweit gemeldete Einrichtungen</p>
+        <p class="stats"><small i18n="@@infoboxNumberOfHospitalsAddon">(davon {{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }} ausgeblendet da die letzte Datenaktualisierung älter als 5 Tage ist)</small></p>
         <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ this.aggregatedDiviStatistics.timestamp | date:'full' }}</p>
       </div>
       
