@@ -78,30 +78,6 @@ export class TranslationService {
     {
       'de-DE': 'Impressum',
       'en-US': 'Imprint'
-    },
-    {
-      'de-DE': 'Das Projekt',
-      'en-US': 'The Project'
-    },
-    {
-      'de-DE': 'Projekt',
-      'en-US': 'Project'
-    },
-    {
-      'de-DE': 'Darstellung der Bettenkapazitäten',
-      'en-US': 'Representation of Bed Capacities'
-    },
-    {
-      'de-DE': 'Betten',
-      'en-US': 'Beds'
-    },
-    {
-      'de-DE': 'Darstellung der Fallzahlen',
-      'en-US': 'Representation of Cases'
-    },
-    {
-      'de-DE': 'Fälle',
-      'en-US': 'Cases'
     }
   ];
 
