@@ -35,7 +35,7 @@
         <button mat-button mat-stroked-button (click)="close()"   i18n="help| help@@button12">Fenster schließen</button>
       </div>
     </mat-tab>
-    <mat-tab label="{{ isSmallScreen ? 'Betten' : 'Darstellung der Bettenkapazitäten' }}">
+    <mat-tab label="{{ getTabLabel(2) }}">
       <h1 id="beschreibung-der-darstellung-der-bettenkapazitäten"   i18n="help| help@@title2">Beschreibung der Darstellung der Bettenkapazitäten</h1>
       <div fxLayout="row" fxLayout.xs="column" class="visdescription">
         <div fxFlex class="helpimg">
@@ -68,7 +68,7 @@
         <button mat-button mat-stroked-button (click)="close()"  i18n="help| help@@button23">Fenster schließen</button>
       </div>
     </mat-tab>
-    <mat-tab label="{{ isSmallScreen ? 'Fälle' : 'Darstellung der Fallzahlen' }}">
+    <mat-tab label="{{ getTabLabel(3) }}">
       <h1 id="beschreibung-der-darstellung-der-fallzahlen"   i18n="help| help@@title3">Beschreibung der Darstellung der Fallzahlen</h1>
       <div fxLayout="row" fxLayout.xs="column" class="visdescription">
         <div fxFlex class="helpimg">

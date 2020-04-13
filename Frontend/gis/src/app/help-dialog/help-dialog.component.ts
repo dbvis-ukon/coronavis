@@ -37,7 +37,9 @@ export class HelpDialogComponent implements OnInit {
 
   getTabLabel(tabid): string{
     switch(tabid){
-      case 1: return this.translationService.translate('Das Projekt'); // this.translationService.translate(this.isSmallScreen ? 'Projekt' : 'Das Projekt')
+      case 1: return this.translationService.translate(this.isSmallScreen ? 'Projekt' : 'Das Projekt');  
+      case 2: return this.translationService.translate(this.isSmallScreen ? 'Betten' : 'Darstellung der Bettenkapazitäten'); 
+      case 3: return this.translationService.translate(this.isSmallScreen ? 'Fälle' : 'Darstellung der Fallzahlen'); 
     }
     return '';
   }
