@@ -8,7 +8,7 @@
 
 <div mat-dialog-content>
   <mat-tab-group #tabGroup >
-    <mat-tab label=" {{ isSmallScreen ? 'Projekt' : 'Das Projekt' }} " >
+    <mat-tab label=" {{ getTabLabel(1) }} " > <!-- isSmallScreen ? 'Projekt' : 'Das Projekt'  | translate -->
       <div class="visdescription">
         <h1 id="interaktive-visualisierung-zur-analyse-von-intensivbettenkapazitäten-für-covid-19-patienten"   i18n="help| help@@title1">Interaktive
           Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</h1>

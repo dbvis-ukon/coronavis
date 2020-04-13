@@ -1,6 +1,7 @@
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-help-dialog',
@@ -12,7 +13,8 @@ export class HelpDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<HelpDialogComponent>,
-    private breakPointObserver: BreakpointObserver
+    private breakPointObserver: BreakpointObserver,
+    private translationService: TranslationService
   ) { }
 
   public isSmallScreen;
@@ -31,6 +33,13 @@ export class HelpDialogComponent implements OnInit {
 
   close(): void {
     this.dialogRef.close();
+  }
+
+  getTabLabel(tabid): string{
+    switch(tabid){
+      case 1: return this.translationService.translate('Das Projekt'); // this.translationService.translate(this.isSmallScreen ? 'Projekt' : 'Das Projekt')
+    }
+    return '';
   }
 
 }

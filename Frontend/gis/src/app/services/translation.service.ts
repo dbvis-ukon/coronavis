@@ -78,6 +78,14 @@ export class TranslationService {
     {
       'de-DE': 'Impressum',
       'en-US': 'Imprint'
+    },
+    {
+      'de-DE': 'Das Projekt',
+      'en-US': 'The Project'
+    },
+    {
+      'de-DE': 'Projekt',
+      'en-US': 'Project'
     }
   ];
 
