@@ -175,13 +175,6 @@
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
-    </unit><unit id="helpProjektLabel1" datatype="html">
-      <notes>
-        
-      <note category="location">src/app/help-dialog/help-dialog.component.html:8</note></notes>
-      <segment state="initial">
-        <source>{VAR_SELECT, select, true {Projekt} false {Das Projekt} }</source>
-      <target>{VAR_SELECT, select, true {Project} false {The Project} }</target></segment>
     </unit><unit id="title2">
       <notes>
         <note category="description"> help</note>
@@ -309,13 +302,6 @@
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
-    </unit><unit id="helpProjektLabel2" datatype="html">
-      <notes>
-        
-      <note category="location">src/app/help-dialog/help-dialog.component.html:9</note></notes>
-      <segment state="initial">
-        <source>{VAR_SELECT, select, true {Betten} false {Darstellung der Bettenkapazitäten} }</source>
-      <target>{VAR_SELECT, select, true {Beds} false {Representation of Bed Capacities} }</target></segment>
     </unit><unit id="title3">
       <notes>
         <note category="description"> help</note>
@@ -359,13 +345,6 @@
       <segment state="initial">
         <source>Fenster schließen</source>
       <target>Close Window</target></segment>
-    </unit><unit id="helpProjektLabel3" datatype="html">
-      <notes>
-        
-      <note category="location">src/app/help-dialog/help-dialog.component.html:10</note></notes>
-      <segment state="initial">
-        <source>{VAR_SELECT, select, true {Fälle} false {Darstellung der Fallzahlen} }</source>
-      <target>{VAR_SELECT, select, true {Cases} false {Representation of Cases} }</target></segment>
     </unit><unit id="shareTitle">
       <notes>
         <note category="location">src/app/share-dialog/share-dialog.component.html:2,4</note>
@@ -458,6 +437,27 @@
       <segment state="initial">
         <source>Schließen</source>
       <target>Close</target></segment>
+    </unit><unit id="helpProjektLabel1">
+      <notes>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:8</note>
+      </notes>
+      <segment state="initial">
+        <source>{VAR_SELECT, select, true {Projekt} false {Das Projekt} }</source>
+      <target>{VAR_SELECT, select, true {Beds} false {The Project} }</target></segment>
+    </unit><unit id="helpProjektLabel2">
+      <notes>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:9</note>
+      </notes>
+      <segment state="initial">
+        <source>{VAR_SELECT, select, true {Betten} false {Darstellung der Bettenkapazitäten} }</source>
+      <target>{VAR_SELECT, select, true {Betten} false {Representation of Bed Capacities} }</target></segment>
+    </unit><unit id="helpProjektLabel3">
+      <notes>
+        <note category="location">src/app/help-dialog/help-dialog.component.html:10</note>
+      </notes>
+      <segment state="initial">
+        <source>{VAR_SELECT, select, true {Fälle} false {Darstellung der Fallzahlen} }</source>
+      <target>{VAR_SELECT, select, true {Cases} false {Representation of Cases} }</target></segment>
     </unit><unit id="deutschland">
       <notes>
         <note category="location">src/app/bed-tooltip/bed-tooltip.component.html:4</note>
