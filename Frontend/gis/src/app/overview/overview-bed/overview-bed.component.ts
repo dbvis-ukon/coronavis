@@ -5,12 +5,31 @@ import { AggregationLevel } from 'src/app/map/options/aggregation-level.enum';
 import { BedType } from 'src/app/map/options/bed-type.enum';
 import { MapLocationSettings } from 'src/app/map/options/map-location-settings';
 import { MapOptions } from 'src/app/map/options/map-options';
+import { QualitativeDiviDevelopmentRepository } from 'src/app/repositories/qualitative-divi-development.respository';
 import { ConfigService } from 'src/app/services/config.service';
 import { CountryAggregatorService } from 'src/app/services/country-aggregator.service';
 import { D3ChoroplethDataService } from 'src/app/services/d3-choropleth-data.service';
 import { QualitativeTimedStatusAggregation } from 'src/app/services/types/qualitateive-timed-status-aggregation';
 import { UrlHandlerService } from 'src/app/services/url-handler.service';
 import { D3ChoroplethMapData } from '../d3-choropleth-map/d3-choropleth-map.component';
+
+export interface OverviewDataBlob {
+  data: Observable<D3ChoroplethMapData>;
+
+  mo: MapOptions;
+
+  mls: MapLocationSettings;
+
+  moUrl: string;
+
+  mlsUrl: string;
+}
+
+interface BedDataBlob extends OverviewDataBlob {
+  aggLevelFriendly: string;
+
+  bedTypeFriendly: string;
+}
 
 @Component({
   selector: 'app-overview-bed',
@@ -19,17 +38,7 @@ import { D3ChoroplethMapData } from '../d3-choropleth-map/d3-choropleth-map.comp
 })
 export class OverviewBedComponent implements OnInit {
 
-  dataBlobBeds: Array<{
-    data: Observable<D3ChoroplethMapData>,
-
-    mo: MapOptions,
-
-    mls: MapLocationSettings,
-
-    aggLevelFriendly: string,
-
-    bedTypeFriendly: string
-  }> = [];
+  dataBlobBeds: BedDataBlob[] = [];
 
 
   gridNumCols = 3;
@@ -44,7 +53,8 @@ export class OverviewBedComponent implements OnInit {
     private d3ChoroplethService: D3ChoroplethDataService,
     private configService: ConfigService,
     public urlHandler: UrlHandlerService,
-    private countryAggregatorService: CountryAggregatorService
+    private countryAggregatorService: CountryAggregatorService,
+    private diviRepo: QualitativeDiviDevelopmentRepository
   ) { }
 
   ngOnInit(): void {
@@ -59,13 +69,15 @@ export class OverviewBedComponent implements OnInit {
         this.aggregatedDiviStatistics = r;
       });
 
+    
 
-    // const aggLevels = Object.values(AggregationLevel).filter(d => d !== AggregationLevel.none);
+    this.initBlobs().then(blobs => this.dataBlobBeds = blobs);
+  }
 
-    // this.bedTypes = Object.values(BedType);
+  private async initBlobs(): Promise<BedDataBlob[]> {
+    const aggLevels = Object.values(AggregationLevel).filter(d => d !== AggregationLevel.none);
 
-    const aggLevels = [AggregationLevel.state];
-    this.bedTypes = [BedType.icuLow];
+    this.bedTypes = Object.values(BedType);
 
     const mls = this.configService.overrideMapLocationSettings({
       zoom: 6,
@@ -75,6 +87,8 @@ export class OverviewBedComponent implements OnInit {
         lng: 10.385780508
       }
     });
+
+    const blobs: BedDataBlob[] = [];
 
     for(const bedType of this.bedTypes) {
       for(const aggLevel of aggLevels) {
@@ -94,8 +108,7 @@ export class OverviewBedComponent implements OnInit {
           }
         });
 
-        this.dataBlobBeds.push(
-          {
+        const blob: BedDataBlob = {
             data: this.d3ChoroplethService.get(mo, mls),
 
             mo: mo,
@@ -104,11 +117,18 @@ export class OverviewBedComponent implements OnInit {
 
             aggLevelFriendly: aggLevel,
 
-            bedTypeFriendly: bedType
-          }          
-        )
+            bedTypeFriendly: bedType,
+
+            moUrl: await this.urlHandler.convertMLOToUrl(mo),
+
+            mlsUrl: await this.urlHandler.convertMLSToUrl(mls)
+          };
+        
+        blobs.push(blob);
       }
     }
+
+    return blobs;
   }
 
 }

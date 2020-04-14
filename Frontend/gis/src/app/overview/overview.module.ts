@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -20,7 +19,6 @@ import { OverviewComponent } from './overview.component';
     OverviewCaseComponent,
   ],
   imports: [
-    CommonModule,
     SharedModule.forRoot(),
     OverviewRoutingModule,
     MatGridListModule,

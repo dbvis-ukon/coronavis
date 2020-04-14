@@ -1,17 +1,20 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { AggregationLevel } from 'src/app/map/options/aggregation-level.enum';
 import { BedType } from 'src/app/map/options/bed-type.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
-import { MapLocationSettings } from 'src/app/map/options/map-location-settings';
-import { MapOptions } from 'src/app/map/options/map-options';
 import { QuantitativeAggregatedRkiCasesProperties } from 'src/app/repositories/types/in/quantitative-aggregated-rki-cases';
 import { ConfigService } from 'src/app/services/config.service';
 import { CountryAggregatorService } from 'src/app/services/country-aggregator.service';
 import { D3ChoroplethDataService } from 'src/app/services/d3-choropleth-data.service';
 import { UrlHandlerService } from 'src/app/services/url-handler.service';
-import { D3ChoroplethMapData } from '../d3-choropleth-map/d3-choropleth-map.component';
+import { OverviewDataBlob } from '../overview-bed/overview-bed.component';
+
+interface CovidDataBlob extends OverviewDataBlob {
+  aggLevelFriendly: string;
+
+  confDescription: string;
+}
 
 @Component({
   selector: 'app-overview-case',
@@ -20,17 +23,7 @@ import { D3ChoroplethMapData } from '../d3-choropleth-map/d3-choropleth-map.comp
 })
 export class OverviewCaseComponent implements OnInit {
 
-  dataBlobCases: Array<{
-    data: Observable<D3ChoroplethMapData>,
-
-    mo: MapOptions,
-
-    mls: MapLocationSettings,
-
-    aggLevelFriendly: string,
-
-    confDescription: string
-  }> = [];
+  dataBlobCases: CovidDataBlob[] = [];
 
 
   gridNumCols = 3;
@@ -60,6 +53,11 @@ export class OverviewCaseComponent implements OnInit {
       })
 
 
+    this.initDataBlobs()
+    .then(blobs => this.dataBlobCases = blobs);
+  }
+
+  private async initDataBlobs(): Promise<CovidDataBlob[]> {
     const aggLevels = Object.values(AggregationLevel).filter(d => d !== AggregationLevel.none);
 
     this.bedTypes = Object.values(BedType);
@@ -145,6 +143,7 @@ export class OverviewCaseComponent implements OnInit {
       
     ];
 
+    const blobs: CovidDataBlob[] = [];
 
     for(const caseConfig of caseConfigs) {
       for(const aggLevel of aggLevels) {
@@ -155,10 +154,14 @@ export class OverviewCaseComponent implements OnInit {
           }
         });
 
-        this.dataBlobCases.push({
+        blobs.push({
           mo: conf,
 
           mls: mls,
+
+          moUrl: await this.urlHandler.convertMLOToUrl(conf),
+
+          mlsUrl: await this.urlHandler.convertMLSToUrl(mls),
 
           data: this.d3ChoroplethService.get(conf, mls),
 
@@ -169,6 +172,8 @@ export class OverviewCaseComponent implements OnInit {
 
       }
     }
+
+    return blobs;
   }
 
 }

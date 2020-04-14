@@ -1,7 +1,7 @@
 <div class="container">
     <div class="grid">
         <mat-grid-list [cols]="gridNumCols" rowHeight="1:1">
-            <mat-grid-tile class="mytile" *ngFor="let d of dataBlobCases" [routerLink]="['/map', { mlo: urlHandler.convertMLOToUrl(d.mo), mls:  urlHandler.convertMLSToUrl(d.mls)}]">
+            <mat-grid-tile class="mytile" *ngFor="let d of dataBlobCases" [routerLink]="['/map', { mlo: d.moUrl, mls: d.mlsUrl}]">
 
                 
 

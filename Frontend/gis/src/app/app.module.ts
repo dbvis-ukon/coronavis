@@ -1,7 +1,6 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { APP_BASE_HREF, PlatformLocation, registerLocaleData } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import localeDe from '@angular/common/locales/de';
 import localeEn from '@angular/common/locales/en';
 import { LOCALE_ID, NgModule } from '@angular/core';
@@ -145,7 +144,6 @@ export const localeProvider = {
   imports: [
     BrowserModule,
     SharedModule.forRoot(),
-    HttpClientModule,
     FormsModule,
     OverlayModule,
     BrowserAnimationsModule,

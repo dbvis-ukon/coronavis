@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -18,10 +19,13 @@ import { TranslatePipe } from './translate.pipe';
   ],
   imports: [
     CommonModule,
+    HttpClientModule,
     MatFormFieldModule,
     MatSelectModule
   ],
   exports: [
+    CommonModule,
+    HttpClientModule,
     TranslatePipe,
     PlusminusPipe,
     ResizedDirective,
@@ -32,7 +36,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
-      providers: [TranslatePipe, PlusminusPipe]
+      providers: []
     };
   }
 }
