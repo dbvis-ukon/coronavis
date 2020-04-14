@@ -41,9 +41,10 @@ export class ShareDialogComponent implements OnInit {
   }
 
   update() {
-    this.urlHandlerService.getUrl(this.mo, this.mls).then(url => this.url = url);
-
-    this.iframe = `<iframe name="CoronaVis" src="${this.url}" frameborder="0" width="600" height="400"></iframe>`;
+    this.urlHandlerService.getUrl(this.mo, this.mls).then(url => {
+      this.url = url;
+      this.iframe = `<iframe name="CoronaVis" src="${url}" frameborder="0" width="600" height="400"></iframe>`;
+    });
   }
 
   copyInputMessage(inputElement){
