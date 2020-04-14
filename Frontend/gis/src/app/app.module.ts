@@ -140,7 +140,7 @@ export const localeProvider = {
     ShareDialogComponent,
     ButtonPanelComponent,
     BedTooltipComponent,
-    HospitalSearchComponent
+    HospitalSearchComponent,
   ],
   imports: [
     CommonModule,

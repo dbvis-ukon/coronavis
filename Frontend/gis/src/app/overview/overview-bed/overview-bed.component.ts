@@ -92,7 +92,7 @@ export class OverviewBedComponent implements OnInit {
 
         const mo = this.configService.overrideMapOptions({ 
           bedGlyphOptions: {
-            enabled: false,
+            enabled: true,
             aggregationLevel: aggLevel
           },
           bedBackgroundOptions: { 

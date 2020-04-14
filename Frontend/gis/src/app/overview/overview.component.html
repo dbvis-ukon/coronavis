@@ -1,9 +1,12 @@
 <mat-toolbar>
+
+    <a mat-button routerLink="/overview" routerLinkActive="mat-primary" [routerLinkActiveOptions]="{exact: true}">Introduction</a>
+
     <a mat-button routerLink="/overview/beds" routerLinkActive="mat-primary">Beds</a>
 
     <a mat-button routerLink="/overview/cases" routerLinkActive="mat-primary">Cases</a>
 
-    <a mat-button routerLink="/map" routerLinkActive="mat-primary">Interactive Map</a>
+    <a mat-button routerLink="/map" routerLinkActive="mat-primary">Live Hospital View</a>
 
     <span class="spacer"></span>
 
