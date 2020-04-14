@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Feature, MultiPolygon } from 'geojson';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { D3ChoroplethMapData } from '../overview/d3-choropleth-map/d3-choropleth-map.component';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
-import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
-import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { CaseChoroplethColormapService } from './case-choropleth-colormap.service';
 import { CaseChoroplethLayerService } from './case-choropleth-layer.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
@@ -27,19 +25,23 @@ export class D3ChoroplethDataService {
 
 
   public get(mo: MapOptions, mls: MapLocationSettings): Observable<D3ChoroplethMapData> {
+    console.log('get d3 data');
     if(mo.bedBackgroundOptions.enabled) {
+      console.log('get for agg elvel');
       return this.bedRepo.getDiviDevelopmentForAggLevel(mo.bedBackgroundOptions.aggregationLevel)
       .pipe(
+        tap(d => console.log('data', d)),
         map(d => {
-          return {
-            data: d,
+          return null;
+          // return {
+          //   data: d,
 
-            width: 200,
+          //   width: 200,
 
-            height: 200,
+          //   height: 200,
 
-            fillFn: (d: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>) => this.bedColorMap.getLatestBedStatusColor(d.properties.developments, mo.bedBackgroundOptions.bedType)
-          }
+          //   fillFn: (d: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>) => this.bedColorMap.getLatestBedStatusColor(d.properties.developments, mo.bedBackgroundOptions.bedType)
+          // }
         })
       );
     } 

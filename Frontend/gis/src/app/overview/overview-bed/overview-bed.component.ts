@@ -48,6 +48,7 @@ export class OverviewBedComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log('init bed');
     this.breakPointObserver.observe(['(max-width: 500px)'])
       .subscribe(matched => {
         this.gridNumCols = matched.matches ? 1 : 3;
@@ -59,9 +60,12 @@ export class OverviewBedComponent implements OnInit {
       });
 
 
-    const aggLevels = Object.values(AggregationLevel).filter(d => d !== AggregationLevel.none);
+    // const aggLevels = Object.values(AggregationLevel).filter(d => d !== AggregationLevel.none);
 
-    this.bedTypes = Object.values(BedType);
+    // this.bedTypes = Object.values(BedType);
+
+    const aggLevels = [AggregationLevel.state];
+    this.bedTypes = [BedType.icuLow];
 
     const mls = this.configService.overrideMapLocationSettings({
       zoom: 6,

@@ -4,7 +4,7 @@ import { APP_BASE_HREF, PlatformLocation, registerLocaleData } from '@angular/co
 import { HttpClientModule } from '@angular/common/http';
 import localeDe from '@angular/common/locales/de';
 import localeEn from '@angular/common/locales/en';
-import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -52,7 +52,6 @@ import { MapComponent } from './map/map.component';
 import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
 import { OverviewModule } from './overview/overview.module';
-import { SentryErrorHandler } from './sentry-config';
 import { SupportedLocales } from './services/i18n.service';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
 import { SharedModule } from './shared/shared.module';
@@ -168,9 +167,7 @@ export const localeProvider = {
     MatDialogModule,
     MatProgressBarModule,
     MatSnackBarModule,
-    MatDialogModule,
     MatSelectModule,
-    MatSnackBarModule,
     MatStepperModule,
     MatInputModule,
     MatCheckboxModule,
@@ -187,10 +184,10 @@ export const localeProvider = {
       useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
       deps: [PlatformLocation]
     },
-    { 
-      provide: ErrorHandler, 
-      useClass: SentryErrorHandler 
-    }
+    // { 
+    //   provide: ErrorHandler, 
+    //   useClass: SentryErrorHandler 
+    // }
   ],
   bootstrap: [AppComponent]
 })

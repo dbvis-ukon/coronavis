@@ -16,6 +16,7 @@ export class QualitativeDiviDevelopmentRepository {
   constructor(private cachedRepository: CachedRepository) {}
 
   private getDiviDevelopmentCounties(): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
+    console.log('get divi county');
     return this.cachedRepository.get <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> (`${environment.apiUrl}hospitals/development/landkreise`);
   }
 
@@ -24,6 +25,7 @@ export class QualitativeDiviDevelopmentRepository {
   }
 
   private getDiviDevelopmentStates(): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
+    console.log('get state data');
     return this.cachedRepository.get <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> (`${environment.apiUrl}hospitals/development/bundeslaender`);
   }
 
@@ -32,6 +34,8 @@ export class QualitativeDiviDevelopmentRepository {
   }
 
   public getDiviDevelopmentForAggLevel(aggregationLevel: AggregationLevel): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
+    console.log('get for agg level', aggregationLevel);
+
     switch(aggregationLevel) {
         
       case AggregationLevel.county:
@@ -41,6 +45,7 @@ export class QualitativeDiviDevelopmentRepository {
         return this.getDiviDevelopmentGovernmentDistricts();
 
       case AggregationLevel.state:
+        console.log('get into state');
         return this.getDiviDevelopmentStates();
 
       default:
