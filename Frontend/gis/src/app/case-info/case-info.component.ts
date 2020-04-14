@@ -5,7 +5,8 @@ import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../services/ty
 @Component({
   selector: 'app-case-info',
   templateUrl: './case-info.component.html',
-  styleUrls: ['./case-info.component.less']
+  styleUrls: ['./case-info.component.less'],
+  providers: [DecimalPipe]
 })
 export class CaseInfoComponent implements OnInit {
 

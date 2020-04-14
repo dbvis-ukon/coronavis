@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -36,13 +36,18 @@ import { WithLoadingPipe } from './with-loading.pipe';
     LanguageSwitcherComponent,
     WithLoadingPipe,
     BedInlineLegendComponent
+  ],
+  providers: [
+    TranslatePipe,
+    PlusminusPipe,
+    WithLoadingPipe,
+    DatePipe
   ]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
-      ngModule: SharedModule,
-      providers: []
+      ngModule: SharedModule
     };
   }
 }

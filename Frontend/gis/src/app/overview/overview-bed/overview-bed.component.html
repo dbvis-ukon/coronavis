@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [ngClass]="{ 'mobile': gridNumCols === 1 }">
     <div class="grid">
         <mat-grid-list [cols]="gridNumCols" rowHeight="1:1">
             <mat-grid-tile class="mytile" *ngFor="let d of dataBlobBeds" [routerLink]="['/map', { mlo: d.moUrl, mls: d.mlsUrl}]">
