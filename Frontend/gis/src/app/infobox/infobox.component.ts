@@ -32,20 +32,6 @@ import { QualitativeTimedStatusAggregation } from '../services/types/qualitateiv
 })
 export class InfoboxComponent implements OnInit {
 
-  constructor(
-    public colormapService: QualitativeColormapService,
-    private osmLayerService: OSMLayerService,
-    private glyphLayerService: GlyphLayerService,
-    private bedChoroplethLayerService: BedChoroplethLayerService,
-    private caseChoroplethLayerService: CaseChoroplethLayerService,
-    private breakPointObserver: BreakpointObserver,
-    private countryAggregatorService: CountryAggregatorService,
-    public tooltipService: TooltipService,
-    private translationService: TranslationService,
-    private hospitalRepo: QualitativeDiviDevelopmentRepository,
-    private hospitalUtils: HospitalUtilService
-  ) { }
-
   glyphLegend;
 
   glyphLegendColors = QualitativeColormapService.bedStati;
@@ -89,6 +75,22 @@ export class InfoboxComponent implements OnInit {
   hospitals: HospitalSearchFeatureCollectionPermissible;
   resetHospitalSearch: number;
 
+  numUnfilteredHospitals: number;
+
+  constructor(
+    public colormapService: QualitativeColormapService,
+    private osmLayerService: OSMLayerService,
+    private glyphLayerService: GlyphLayerService,
+    private bedChoroplethLayerService: BedChoroplethLayerService,
+    private caseChoroplethLayerService: CaseChoroplethLayerService,
+    private breakPointObserver: BreakpointObserver,
+    private countryAggregatorService: CountryAggregatorService,
+    public tooltipService: TooltipService,
+    private translationService: TranslationService,
+    private hospitalRepo: QualitativeDiviDevelopmentRepository,
+    private hospitalUtils: HospitalUtilService
+  ) { }
+
   ngOnInit(): void {
 
     //close info box if mobile
@@ -120,6 +122,9 @@ export class InfoboxComponent implements OnInit {
     .subscribe(r => {
       this.aggregatedRkiStatistics = r;
     });
+
+    this.hospitalRepo.getDiviDevelopmentSingleHospitals(false)
+    .subscribe(d => this.numUnfilteredHospitals = d.features.length);
 
     this.updateHospitals();
   }
