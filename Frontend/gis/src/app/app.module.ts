@@ -144,10 +144,9 @@ export const localeProvider = {
   ],
   imports: [
     BrowserModule,
-    NgxWebstorageModule.forRoot(),
+    SharedModule.forRoot(),
     HttpClientModule,
     FormsModule,
-    SharedModule.forRoot(),
     OverlayModule,
     BrowserAnimationsModule,
     OverviewModule,
@@ -175,7 +174,8 @@ export const localeProvider = {
     MatToolbarModule,
     FlexLayoutModule,
     MatAutocompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxWebstorageModule.forRoot(),
   ],
   providers: [
     localeProvider, 
