@@ -392,6 +392,13 @@
         Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</source>
       <target>You can embed this visualization with your current settings and your selected map section in your website.
       Note, that the data is automatically updated and the visualization may change accorrdingly.</target></segment>
+    </unit><unit id="shareAdditionalOptions">
+      <notes>
+        <note category="location">src/app/share-dialog/share-dialog.component.html:63</note>
+      </notes>
+      <segment state="initial">
+        <source>Zusätzliche Optionen</source>
+      <target>Additional Options</target></segment>
     </unit><unit id="shareAllowPanning">
       <notes>
         <note category="location">src/app/share-dialog/share-dialog.component.html:67</note>
