@@ -16,7 +16,6 @@ export class CachedRepository {
     if(this.cache.has(url)) {
       return of(this.cache.get(url));
     } else {
-      console.log('http request', url);
       return this.http.get<T>(url)
       .pipe(
         tap(data => this.cache.set(url, data)),

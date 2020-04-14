@@ -27,9 +27,7 @@ export class D3ChoroplethDataService {
 
 
   public get(mo: MapOptions, mls: MapLocationSettings): Observable<D3ChoroplethMapData> {
-    console.log('get d3 data');
     if(mo.bedBackgroundOptions.enabled) {
-      console.log('get for agg elvel');
       return this.bedRepo.getDiviDevelopmentForAggLevel(mo.bedBackgroundOptions.aggregationLevel)
       .pipe(
         map(d => {
@@ -50,8 +48,6 @@ export class D3ChoroplethDataService {
       .pipe(
         map(d => {
           const scale = this.caseColorMap.getScale(d, mo.covidNumberCaseOptions);
-
-          console.log('case data', d);
 
           return {
             data: d,

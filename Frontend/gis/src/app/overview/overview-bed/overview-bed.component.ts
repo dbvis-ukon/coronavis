@@ -5,7 +5,6 @@ import { AggregationLevel } from 'src/app/map/options/aggregation-level.enum';
 import { BedType } from 'src/app/map/options/bed-type.enum';
 import { MapLocationSettings } from 'src/app/map/options/map-location-settings';
 import { MapOptions } from 'src/app/map/options/map-options';
-import { QualitativeDiviDevelopmentRepository } from 'src/app/repositories/qualitative-divi-development.respository';
 import { ConfigService } from 'src/app/services/config.service';
 import { CountryAggregatorService } from 'src/app/services/country-aggregator.service';
 import { D3ChoroplethDataService } from 'src/app/services/d3-choropleth-data.service';
@@ -53,12 +52,10 @@ export class OverviewBedComponent implements OnInit {
     private d3ChoroplethService: D3ChoroplethDataService,
     private configService: ConfigService,
     public urlHandler: UrlHandlerService,
-    private countryAggregatorService: CountryAggregatorService,
-    private diviRepo: QualitativeDiviDevelopmentRepository
+    private countryAggregatorService: CountryAggregatorService
   ) { }
 
   ngOnInit(): void {
-    console.log('init bed');
     this.breakPointObserver.observe(['(max-width: 500px)'])
       .subscribe(matched => {
         this.gridNumCols = matched.matches ? 1 : 3;
