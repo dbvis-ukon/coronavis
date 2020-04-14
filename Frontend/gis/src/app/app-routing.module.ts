@@ -20,11 +20,11 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: MapRootComponent,
+    component: OverviewComponent,
   },
   { // default to MapRootComponent, don't throw 404
     path: '**',
-    component: MapRootComponent
+    component: OverviewComponent
   }
 ];
 
