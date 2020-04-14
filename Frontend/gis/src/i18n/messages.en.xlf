@@ -600,8 +600,8 @@
         <note category="location">src/app/infobox/infobox.component.html:31</note>
       </notes>
       <segment state="initial">
-        <source>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet da die letzte Datenaktualisierung älter als 5 Tage ist)</source>
-      <target>(<ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> removed because their data is older than 5 days)</target></segment>
+        <source>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</source>
+      <target>(<ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> removed because their data are older than 5 days)</target></segment>
     </unit><unit id="infoboxLastUpdate">
       <notes>
         

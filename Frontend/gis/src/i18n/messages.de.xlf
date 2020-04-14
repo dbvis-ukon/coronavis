@@ -614,8 +614,8 @@
         <note category="location">src/app/infobox/infobox.component.html:31</note>
       </notes>
       <segment state="final">
-        <source>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet da die letzte Datenaktualisierung älter als 5 Tage ist)</source>
-      <target>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet da die letzte Datenaktualisierung älter als 5 Tage ist)</target></segment>
+        <source>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</source>
+      <target>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</target></segment>
     </unit><unit id="infoboxLastUpdate">
       <notes>
         
