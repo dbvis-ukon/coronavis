@@ -392,6 +392,13 @@
         Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</source>
       <target>You can embed this visualization with your current settings and your selected map section in your website.
       Note, that the data is automatically updated and the visualization may change accorrdingly.</target></segment>
+    </unit><unit id="shareAdditionalOptions">
+      <notes>
+        <note category="location">src/app/share-dialog/share-dialog.component.html:63</note>
+      </notes>
+      <segment state="initial">
+        <source>Zusätzliche Optionen</source>
+      <target>Additional Options</target></segment>
     </unit><unit id="shareAllowPanning">
       <notes>
         <note category="location">src/app/share-dialog/share-dialog.component.html:67</note>
@@ -600,8 +607,8 @@
         <note category="location">src/app/infobox/infobox.component.html:31</note>
       </notes>
       <segment state="initial">
-        <source>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet da die letzte Datenaktualisierung älter als 5 Tage ist)</source>
-      <target>(<ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> removed because their data is older than 5 days)</target></segment>
+        <source>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</source>
+      <target>(<ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> removed because their data are older than 5 days)</target></segment>
     </unit><unit id="infoboxLastUpdate">
       <notes>
         

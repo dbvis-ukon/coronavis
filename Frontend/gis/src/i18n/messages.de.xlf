@@ -406,6 +406,13 @@
         Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</source>
       <target>Mit dem IFrame können Sie die Visualisierung mit ihren gewählten Einstellungen und dem momentanen Kartenausschnitt in ihre Webseite einbetten. 
         Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</target></segment>
+    </unit><unit id="shareAdditionalOptions">
+      <notes>
+        <note category="location">src/app/share-dialog/share-dialog.component.html:63</note>
+      </notes>
+      <segment state="final">
+        <source>Zusätzliche Optionen</source>
+      <target>Zusätzliche Optionen</target></segment>
     </unit><unit id="shareAllowPanning">
       <notes>
         <note category="location">src/app/share-dialog/share-dialog.component.html:67</note>
@@ -614,8 +621,8 @@
         <note category="location">src/app/infobox/infobox.component.html:31</note>
       </notes>
       <segment state="final">
-        <source>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet da die letzte Datenaktualisierung älter als 5 Tage ist)</source>
-      <target>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet da die letzte Datenaktualisierung älter als 5 Tage ist)</target></segment>
+        <source>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</source>
+      <target>(davon <ph id="0" equiv="INTERPOLATION" disp="{{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }}"/> ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</target></segment>
     </unit><unit id="infoboxLastUpdate">
       <notes>
         
