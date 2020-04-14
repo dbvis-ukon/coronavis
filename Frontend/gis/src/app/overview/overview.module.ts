@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { SharedModule } from '../shared/shared.module';
 import { D3ChoroplethMapComponent } from './d3-choropleth-map/d3-choropleth-map.component';
@@ -23,7 +24,8 @@ import { OverviewComponent } from './overview.component';
     OverviewRoutingModule,
     MatGridListModule,
     MatToolbarModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressSpinnerModule
   ],
   providers: [
   ],

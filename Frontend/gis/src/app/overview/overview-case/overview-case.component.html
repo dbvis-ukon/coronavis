@@ -4,9 +4,9 @@
             <mat-grid-tile class="mytile" *ngFor="let d of dataBlobCases" [routerLink]="['/map', { mlo: d.moUrl, mls: d.mlsUrl}]">
 
                 
-
-                <div class="mapcontainer">  
-                    <app-d3-choropleth-map class="map" [data]="d.data | async"></app-d3-choropleth-map>
+                <div class="mapcontainer" *ngIf="d.data | withLoading | async as data">
+                    <mat-spinner class="loading" *ngIf="data.loading"></mat-spinner>
+                    <app-d3-choropleth-map class="map" *ngIf="data.value" [data]="data.value"></app-d3-choropleth-map>
                 </div>
 
 

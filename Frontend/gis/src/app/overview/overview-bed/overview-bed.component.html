@@ -5,8 +5,9 @@
 
                 
 
-                <div class="mapcontainer">  
-                    <app-d3-choropleth-map class="map" [data]="d.data | async"></app-d3-choropleth-map>
+                <div class="mapcontainer" *ngIf="d.data | withLoading | async as data">
+                    <mat-spinner class="loading" *ngIf="data.loading"></mat-spinner>
+                    <app-d3-choropleth-map class="map" *ngIf="data.value" [data]="data.value"></app-d3-choropleth-map>
                 </div>
 
 
@@ -26,6 +27,11 @@
         <div *ngIf="aggregatedDiviStatistics">
             <p class="stats" i18n="@@infoboxNumberOfHospitals">{{ aggregatedDiviStatistics.numberOfHospitals | number }} bundesweit gemeldete Krankenhäuser</p>
             <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ aggregatedDiviStatistics.timestamp | date:'full' }}</p>
+        </div>
+
+        <div class="legend-wrapper">
+            <span>Legende: </span>
+            <app-bed-inline-legend class="align-left"></app-bed-inline-legend>
         </div>
 
         <p>

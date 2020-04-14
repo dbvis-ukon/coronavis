@@ -34,8 +34,6 @@ export class InfoboxComponent implements OnInit {
 
   glyphLegend;
 
-  glyphLegendColors = QualitativeColormapService.bedStati;
-
   @Input('mapOptions')
   mo: MapOptions;
 
@@ -173,10 +171,6 @@ export class InfoboxComponent implements OnInit {
     }
 
     this.emitMapOptions();
-  }
-
-  getGlyphColor(str: string) {
-    return this.colormapService.getSingleHospitalColormap()(str);
   }
 
   updateBedBackgroundBedType(state: BedType) {

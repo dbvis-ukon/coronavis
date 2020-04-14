@@ -99,7 +99,7 @@ export class OverviewCaseComponent implements OnInit {
           }
         }),
 
-        desc: 'Covid 19 Erkrankungen gesamt'
+        desc: 'Erkrankungen gesamt'
       },
 
       {
@@ -112,7 +112,7 @@ export class OverviewCaseComponent implements OnInit {
           }
         }),
 
-        desc: 'Covid 19 Todesfälle gesamt'
+        desc: 'Todesfälle gesamt'
       },
 
       {
@@ -125,7 +125,7 @@ export class OverviewCaseComponent implements OnInit {
           }
         }),
 
-        desc: 'Covid 19 Erkrankungen letzte 24h'
+        desc: 'Erkrankungen letzte 24h'
       },
 
       {
@@ -138,7 +138,7 @@ export class OverviewCaseComponent implements OnInit {
           }
         }),
 
-        desc: 'Covid 19 Todesfälle letzte 24h'
+        desc: 'Todesfälle letzte 24h'
       },
       
     ];

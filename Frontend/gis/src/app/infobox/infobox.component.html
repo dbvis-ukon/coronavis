@@ -94,16 +94,8 @@
           </div>
         </div>
         <mat-hint class="color-expl" i18n="@@infoboxColorExpl">* Die Farben stellen den bundesweiten Durchschnitt dar.</mat-hint>
-        <div class="glyph-color-legend">
-          <div
-            *ngFor="let t of glyphLegendColors"
-            class="glyph-tile"
-
-          >
-            <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
-            <div class="text">{{ t | translate }}</div>
-          </div>
-        </div>
+        
+        <app-bed-inline-legend></app-bed-inline-legend>
 
         <mat-divider></mat-divider>
         <br/>
