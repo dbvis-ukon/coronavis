@@ -58,8 +58,6 @@ export class TimesliderComponent implements OnInit {
 
   modePlaying$ = new BehaviorSubject<boolean>(false);
 
-  timer$: Observable<number> = interval(2000);
-
   constructor(
     private diviRepo: QualitativeDiviDevelopmentRepository,
     private configService: ConfigService,
@@ -88,11 +86,11 @@ export class TimesliderComponent implements OnInit {
         this.timeExtent = extent;
 
         this.numTicks = moment.unix(this.timeExtent[1]).diff(moment.unix(this.timeExtent[0]), 'days');
-
-        console.log('numTicks', this.numTicks);
       });
 
-      const source$ = interval(1000);
+
+
+      const source$ = interval(2000);
 
 
       const ons$ = this.modePlaying$.pipe(filter(v=>!v));
@@ -103,7 +101,6 @@ export class TimesliderComponent implements OnInit {
           repeatWhen(()=>offs$)
         )
       .subscribe(d => {
-        console.log('interval', d);
         this.onTimer();
       });
   }
@@ -126,15 +123,12 @@ export class TimesliderComponent implements OnInit {
 
 
   private sliderChanging(value: number) {
-    // console.log('changing', value);
     const mDate = moment.unix(value).endOf('day');
     this.currentTimeDate = mDate.toDate();
     this.emit(mDate.format('YYYY-MM-DD'), true);
   }
 
   private sliderChanged(value: number) {
-    // console.log('changed', value);
-
     const mDate = moment.unix(value);
     this.currentTimeDate = mDate.toDate();
 
@@ -153,8 +147,6 @@ export class TimesliderComponent implements OnInit {
 
     const date = moment.unix(nextTime).format('YYYY-MM-DD');
 
-    console.log('emit', date)
-
     this.emit(date, false);
   }
 
@@ -166,7 +158,8 @@ export class TimesliderComponent implements OnInit {
   }
 
   emit(date: string, changing: boolean) {
-    if(changing && this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
+    if(changing && (this._mo.bedGlyphOptions.enabled || this._mo.bedBackgroundOptions.enabled)
+      && (this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none || this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.county)) {
       // do not update with single glyphs as it causes too much lag
       return;
     }

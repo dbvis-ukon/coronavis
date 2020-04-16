@@ -4,13 +4,13 @@ import { extent } from 'd3-array';
 import { select, Selection } from 'd3-selection';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import L from 'leaflet';
-import moment from 'moment';
 import { LocalStorageService } from 'ngx-webstorage';
-import { NEVER, Observable, timer } from 'rxjs';
+import { NEVER, Observable } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
-import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
+import { AbstractTimedStatus, QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
+import { AbstractHospitalOut } from 'src/app/repositories/types/out/abstract-hospital-out';
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from 'src/app/repositories/types/out/single-hospital-out';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
@@ -94,28 +94,31 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
             .style('opacity', opt.showEcmo ? '1' : '0');
         }
   
-        console.log('cmp', this.oldOptions?.date, opt.date);
-  
-        
         if(this.oldOptions?.date !== opt.date) {
-          timer(10)
-            .subscribe(() => {
-              let filteredData;
-              if(opt.date === 'now') {
-                filteredData = this.data.features;
-              } else {
-                const date = moment(opt.date).endOf('day').toDate();
+          this.gHospitals
+            .selectAll(`.bed`)
+            .style('fill', (d: Feature<Geometry, AbstractHospitalOut<AbstractTimedStatus>>, i, n) => {
+              const bedType = select(n[i]).attr('data-bedtype') as BedType;
+              return this.colormapService.getLatestBedStatusColor(d.properties.developments as any, bedType, opt.date);
+            });
+          // timer(10)
+          //   .subscribe(() => {
+          //     let filteredData;
+          //     if(opt.date === 'now') {
+          //       filteredData = this.data.features;
+          //     } else {
+          //       const date = moment(opt.date).endOf('day').toDate();
       
-                console.log('filter data by date', date);
+          //       console.log('filter data by date', date);
       
-                // this.filteredData = this.data.features.filter(d => new Date(d.properties.developments[0].timestamp) <= date);
-                filteredData = this.data.features;
-              }
+          //       // this.filteredData = this.data.features.filter(d => new Date(d.properties.developments[0].timestamp) <= date);
+          //       filteredData = this.data.features;
+          //     }
     
-              console.log('fcmp', filteredData.length, this.data.features.length);
+          //     console.log('fcmp', filteredData.length, this.data.features.length);
       
-              this.updateGlyphs(filteredData);
-            })
+          //     this.updateGlyphs(filteredData);
+          //   })
         }
         
   
@@ -215,7 +218,6 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
 
 
   onMouseEnter(d: Feature < G, T > , i: number, n: SVGElement[] | ArrayLike < SVGElement > ): SVGElement {
-    console.log('hover', d);
     const currentElement = n[i];
     const evt: MouseEvent = currentEvent;
 
@@ -310,6 +312,7 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
       .attr('class', `bed ${BedType.icuLow}`)
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
+      .attr('data-bedtype', BedType.icuLow)
       .attr('x', this.rectPadding)
       .attr('y', this.rectYOffset)
       .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuLow, this.currentOptions?.date));
@@ -319,6 +322,7 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
       .attr('class', `bed ${BedType.icuHigh}`)
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
+      .attr('data-bedtype', BedType.icuHigh)
       .attr('x', `${this.rectSize + this.rectPadding * 2}px`)
       .attr('y', this.rectYOffset)
       .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuHigh, this.currentOptions?.date));
@@ -328,6 +332,7 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
       .attr('class', `bed ${BedType.ecmo}`)
       .attr('width', `${this.rectSize}px`)
       .attr('height', `${this.rectSize}px`)
+      .attr('data-bedtype', BedType.ecmo)
       .attr('x', `${2 * this.rectSize + this.rectPadding * 3}px`)
       .attr('y', this.rectYOffset)
       .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.ecmo, this.currentOptions?.date));

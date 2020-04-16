@@ -49,8 +49,6 @@ export class AggregatedGlyphLayer extends AbstractGlyphLayer < MultiPolygon, Agg
     } as L.Point;
 
 
-    // console.log('transformd', p, newpt);
-
     return newpt;
   }
 
