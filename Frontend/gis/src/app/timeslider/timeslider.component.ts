@@ -3,7 +3,8 @@ import { MatSliderChange } from '@angular/material/slider';
 import { Feature, Point } from 'geojson';
 import moment from 'moment';
 import { NouiFormatter } from 'ng2-nouislider';
-import { flatMap, map, reduce, tap } from 'rxjs/operators';
+import { BehaviorSubject, interval, NEVER, Observable } from 'rxjs';
+import { filter, flatMap, map, reduce, repeatWhen, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { MapOptions } from '../map/options/map-options';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
@@ -55,8 +56,9 @@ export class TimesliderComponent implements OnInit {
   @Output()
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
 
+  modePlaying$ = new BehaviorSubject<boolean>(false);
 
-  modePlaying: boolean = false;
+  timer$: Observable<number> = interval(2000);
 
   constructor(
     private diviRepo: QualitativeDiviDevelopmentRepository,
@@ -90,8 +92,20 @@ export class TimesliderComponent implements OnInit {
         console.log('numTicks', this.numTicks);
       });
 
+      const source$ = interval(1000);
 
-  
+
+      const ons$ = this.modePlaying$.pipe(filter(v=>!v));
+      const offs$ = this.modePlaying$.pipe(filter(v=>v));
+
+      source$.pipe(
+          takeUntil(ons$),
+          repeatWhen(()=>offs$)
+        )
+      .subscribe(d => {
+        console.log('interval', d);
+        this.onTimer();
+      });
   }
 
   nouiSliderChanging(value: number) {
@@ -125,6 +139,30 @@ export class TimesliderComponent implements OnInit {
     this.currentTimeDate = mDate.toDate();
 
     this.emit(mDate.format('YYYY-MM-DD'), false);
+  }
+
+  // function is called for every interval
+  onTimer() {
+    let nextTime = moment.unix(this.currentTime).add(1, 'day').unix();
+
+    if(nextTime > this.timeExtent[1]) {
+      nextTime = this.timeExtent[0];
+    }
+
+    this.currentTime = nextTime;
+
+    const date = moment.unix(nextTime).format('YYYY-MM-DD');
+
+    console.log('emit', date)
+
+    this.emit(date, false);
+  }
+
+  pausableInterval(ms: number, pauser: Observable<boolean>) {
+    let x = 0;
+    const source = interval(ms);
+  
+    return pauser.pipe(switchMap(paused => paused ? NEVER : source.pipe(map(() => x++))));
   }
 
   emit(date: string, changing: boolean) {
