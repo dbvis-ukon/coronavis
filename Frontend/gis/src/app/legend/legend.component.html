@@ -13,9 +13,9 @@
           {{ getBinStr(b.min) }}
         </td>
 
-        <td class="dash">–</td>
+        <td class="dash" *ngIf="b.min !== b.max">–</td>
 
-        <td class="upper">
+        <td class="upper" *ngIf="b.min !== b.max">
           {{ getBinStr(b.max) }}
         </td>
       </tr>

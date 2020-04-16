@@ -50,29 +50,6 @@ export class CaseChoroplethColormapService {
         max: max
       } as ColorMapBin;
     })
-    // filter out bins that do not capture a full number
-    .filter(b => {
-      if(!onlyFullNumbers) {
-        return true;
-      }
-
-      const minFull = Math.ceil(b.min);
-      const maxFull = Math.floor(b.max);
-
-      return (minFull >= b.min && minFull <= b.max) || (maxFull <= b.max && maxFull >= b.min);
-    })
-    // round bin limits to full numbers
-    .map(b => {
-      if(!onlyFullNumbers) {
-        return b;
-      }
-
-      return {
-        color: b.color,
-        min: Math.round(b.min),
-        max: Math.round(b.max)
-      } as ColorMapBin;
-    })
     // filter out all bins not in the extent
     .filter(b => {
       if(!dataExtent) {
@@ -108,6 +85,45 @@ export class CaseChoroplethColormapService {
       }
 
       return b;
+    })
+    // filter out bins that do not capture a full number
+    .filter(b => {
+      if(!onlyFullNumbers) {
+        return true;
+      }
+
+      const minFull = Math.ceil(b.min);
+      const maxFull = Math.floor(b.max);
+
+      return (minFull >= b.min && minFull <= b.max) || (maxFull <= b.max && maxFull >= b.min);
+    })
+    // round bin limits to full numbers
+    .map((b, i, arr) => {
+      if(!onlyFullNumbers) {
+        return b;
+      }
+
+      const max = i > 0 && i < arr.length-1 ? Math.round(b.max) - 1 : Math.round(b.max);
+
+      return {
+        color: b.color,
+        min: Math.round(b.min),
+        max: max
+      } as ColorMapBin;
+    })
+    // filter out double bins
+    .filter((b, i, arr) => {
+      if(i === 0) {
+        return true;
+      }
+
+      const last = arr[i-1];
+
+      if(onlyFullNumbers && last.max === b.min) {
+        return false;
+      }
+
+      return true;
     })
   }
 

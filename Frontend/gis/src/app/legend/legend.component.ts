@@ -82,8 +82,6 @@ export class LegendComponent implements OnInit {
     // so that the legend receives the data directly
     const data = this._choroplethLayer.getData();
 
-    const cmap = this.caseColormap.getColorMap();
-
     const scale = this.caseColormap.getScale(data, this.mo.covidNumberCaseOptions);
 
     const actualExtent = this.caseColormap.getDomainExtent(data, this.mo.covidNumberCaseOptions, true);
@@ -93,7 +91,21 @@ export class LegendComponent implements OnInit {
     const fullNumbers = this.mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.absolut 
     && this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute;
 
-    this.caseBins = this.caseColormap.getColorMapBins(scale, fullNumbers, actualExtent);
+    this.caseBins = this.caseColormap.getColorMapBins(scale, fullNumbers, actualExtent)
+    .map(b => {
+      if(this.mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k && this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute) {
+        return {
+          color: b.color,
+          min: b.min * 100000,
+          max: b.max * 100000
+        }
+      }
+
+      // else 
+      return b;
+    });
+
+    console.log('bins w/o full numbers', this.caseColormap.getColorMapBins(scale, false, actualExtent));
 
     console.log('bins', actualExtent, this.caseBins);
 
@@ -198,15 +210,15 @@ export class LegendComponent implements OnInit {
 
   getBinStr(v: number): string {
     if(this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
-      return `${v > 0 ? '+' : ''}${this.numberPipe.transform(v, '1.0-2')} %`;
+      return `${v > 0 ? '+' : ''}${this.numberPipe.transform(v, '1.0-1')} %`;
     }
 
     if(this.mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {
-      return this.plusMinusPipe.transform(v);
+      return this.plusMinusPipe.transform(v, '1.0-2');
     }
 
 
-    return this.numberPipe.transform(v, '1.0-2');
+    return this.numberPipe.transform(v, '1.0-1');
   }
 
 }
