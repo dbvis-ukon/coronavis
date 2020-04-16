@@ -1,22 +1,27 @@
 
 
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === false && choroplethLayer">
-  <h5 i18n="legend|cases@@cases" (click)="legendCasesExtended = !legendCasesExtended" i18n-matTooltip="@@legendToggleTooltip" matTooltip="Klicken um Legende ein-/auszuklappen">Fallzahlen</h5>
+  <h5 
+  class="title"
+  (click)="legendCasesExtended = !legendCasesExtended" 
+  i18n-matTooltip="@@legendToggleTooltip" 
+  matTooltip="Klicken um Legende ein-/auszuklappen"
+  >{{ title }}</h5>
     <div *ngIf="legendCasesExtended">
     <table>
 
-      <tr *ngFor="let b of caseColors">
+      <tr *ngFor="let b of caseBins">
 
         <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
 
         <td class="lower">
-          {{ b.binLowerBound | number }}
+          {{ getBinStr(b.min) }}
         </td>
 
-        <td class="dash">–</td>
+        <td class="dash" *ngIf="b.min !== b.max">–</td>
 
-        <td class="upper">
-          {{ b.binUpperBound | number }}
+        <td class="upper" *ngIf="b.min !== b.max">
+          {{ getBinStr(b.max) }}
         </td>
       </tr>
     </table>
@@ -24,10 +29,14 @@
         
     <div *ngIf="!legendCasesExtended">
       <div class="row">
-        <div class="text" [innerHtml]="casesMin | number"></div>
-        <div *ngFor="let b of caseColors;"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.binLowerBound | number }} – {{ b.binUpperBound | number }}"></div>
-        <div class="text" [innerHtml]="casesMax | number"></div>
+        <div class="text" [innerHtml]="getBinStr(caseBins[0].min)"></div>
+        <div *ngFor="let b of caseBins"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ getBinStr(b.min) }} – {{ getBinStr(b.max) }}"></div>
+        <div class="text" [innerHtml]="getBinStr(caseBins[caseBins.length - 1].max)"></div>
       </div>
+    </div>
+
+    <div>
+      <h5 class="source" i18n="@@legendDatasourceRki">Datenquelle: <a href="https://rki.de">Robert Koch Institut</a></h5>
     </div>
 </div>
 
@@ -55,5 +64,9 @@
 
       </div>
     </div>
+  </div>
+
+  <div>
+    <h5 class="source" i18n="@@legendDatasourceDivi">Datenquelle: <a href="https://intensivregister.de">DIVI Intensivregister</a></h5>
   </div>
 </div>

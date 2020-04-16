@@ -36,6 +36,7 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
         }, onCloseAction);
 
       tooltipComponent.data = feature.properties;
+      tooltipComponent.options = this.options;
 
       // set highlight style
       const l = e.target;
@@ -72,7 +73,10 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
           click: () => {
             this.tooltipService.close();
             this.matDialog.open(CaseDialogComponent, {
-              data: feature.properties
+              data: {
+                data: feature.properties,
+                options: this.options
+              }
             })
           },
           mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer),

@@ -42,6 +42,9 @@ import { CaseDialogComponent } from './case-dialog/case-dialog.component';
 import { CaseInfoComponent } from './case-info/case-info.component';
 import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
+import { HelpDialogBedsComponent } from './help-dialog-beds/help-dialog-beds.component';
+import { HelpDialogCasesComponent } from './help-dialog-cases/help-dialog-cases.component';
+import { HelpDialogTheprojectComponent } from './help-dialog-theproject/help-dialog-theproject.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
 import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
@@ -147,7 +150,10 @@ export const localeProvider = {
     ButtonPanelComponent,
     BedTooltipComponent,
     HospitalSearchComponent,
-    TimesliderComponent
+    TimesliderComponent,
+    HelpDialogBedsComponent,
+    HelpDialogCasesComponent,
+    HelpDialogTheprojectComponent
   ],
   imports: [
     BrowserModule,

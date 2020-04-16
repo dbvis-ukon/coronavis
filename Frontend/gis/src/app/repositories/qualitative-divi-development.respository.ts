@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FeatureCollection, MultiPolygon, Point } from 'geojson';
+import moment from 'moment';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { CachedRepository } from './cached.repository';
@@ -27,8 +29,25 @@ export class QualitativeDiviDevelopmentRepository {
     return this.cachedRepository.get <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> (`${environment.apiUrl}hospitals/development/bundeslaender`);
   }
 
-  public getDiviDevelopmentSingleHospitals(): Observable <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> {
-    return this.cachedRepository.get <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> (`${environment.apiUrl}hospitals/development`);
+  public getDiviDevelopmentSingleHospitals(filter: boolean = true): Observable <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> {
+    return this.cachedRepository.get <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> (`${environment.apiUrl}hospitals/development`)
+    .pipe(
+      map(d => {
+        if(!filter) {
+          return d;
+        }
+
+        
+        const filteredFeatures = d.features
+        .filter(f => moment().diff(moment(f.properties.developments[f.properties.developments.length - 1].timestamp), 'days') <= 5);
+
+        
+        return {
+          type: 'FeatureCollection',
+          features: filteredFeatures
+        } as FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>
+      })
+    )
   }
 
   public getDiviDevelopmentForAggLevel(aggregationLevel: AggregationLevel): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
