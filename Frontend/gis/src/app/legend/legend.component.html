@@ -1,7 +1,13 @@
 
 
 <div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === false && choroplethLayer">
-  <h5 i18n="legend|cases@@cases" (click)="legendCasesExtended = !legendCasesExtended" i18n-matTooltip="@@legendToggleTooltip" matTooltip="Klicken um Legende ein-/auszuklappen">Fallzahlen</h5>
+  <h5 
+  class="title"
+  i18n="legend|cases@@cases" 
+  (click)="legendCasesExtended = !legendCasesExtended" 
+  i18n-matTooltip="@@legendToggleTooltip" 
+  matTooltip="Klicken um Legende ein-/auszuklappen"
+  >{{ title }}</h5>
     <div *ngIf="legendCasesExtended">
     <table>
 
@@ -29,6 +35,10 @@
         <div class="text" [innerHtml]="getBinStr(caseBins[caseBins.length - 1].max)"></div>
       </div>
     </div>
+
+    <div>
+      <h5 class="source" i18n="@@legendDatasourceRki">Datenquelle: <a href="https://rki.de">Robert Koch Institut</a></h5>
+    </div>
 </div>
 
 
@@ -55,5 +65,9 @@
 
       </div>
     </div>
+  </div>
+
+  <div>
+    <h5 class="source" i18n="@@legendDatasourceDivi">Datenquelle: <a href="https://intensivregister.de">DIVI Intensivregister</a></h5>
   </div>
 </div>

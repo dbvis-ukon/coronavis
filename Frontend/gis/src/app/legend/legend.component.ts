@@ -2,11 +2,12 @@ import { DecimalPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
-import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow } from '../map/options/covid-number-case-options';
+import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { MapOptions } from '../map/options/map-options';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { PlusminusPipe } from '../plusminus.pipe';
 import { CaseChoroplethColormapService, ColorMapBin } from '../services/case-choropleth-colormap.service';
+import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
 
@@ -54,11 +55,14 @@ export class LegendComponent implements OnInit {
 
   eChange = CovidNumberCaseChange;
 
+  title: string;
+
   constructor(
     private bedColormap: QualitativeColormapService,
     private caseColormap: CaseChoroplethColormapService,
     private plusMinusPipe: PlusminusPipe,
-    private numberPipe: DecimalPipe
+    private numberPipe: DecimalPipe,
+    private i18n: I18nService
   ) {
     
   }
@@ -109,103 +113,7 @@ export class LegendComponent implements OnInit {
 
     console.log('bins', actualExtent, this.caseBins);
 
-    // const domainMinMax = this.caseColormap.getDomainExtent(data, this.mo.covidNumberCaseOptions);
-
-
-    // const norm100k: boolean = this.mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k;
-    // let normVal = 1;
-    // if ((this.mo.covidNumberCaseOptions && norm100k)) {
-    //   normVal = 100000;
-    // }
-
-    // let lastColor = true;
-    // let prevColor;
-    // let prevD;
-
-    // let decimals: number = 0;
-
-    // const doneMap = new Map<number, boolean>();
-
-    // this.casesMin = '';
-  
-    // cmap.range().map((color, i) => {
-    //   const d = cmap.invertExtent(color);
-
-    //   d[0] = scale.invert(d[0]);
-    //   d[1] = scale.invert(d[1]);
-
-    //   let d0Fixed = (d[0] * normVal);
-    //   let d1Fixed = (d[1] * normVal);
-
-    //   // Calculate number of appropriate decimals:
-    //   while (d0Fixed.toFixed(decimals) === d1Fixed.toFixed(decimals)) {
-    //     decimals++; // Keep this decimals level for all following  steps
-    //   }
-
-    //   d0Fixed = +d0Fixed.toFixed(decimals);
-    //   d1Fixed = +d1Fixed.toFixed(decimals);
-    //   this.casesMax = d1Fixed + '';
-
-    //   const d0Ceil = Math.ceil(d0Fixed);
-    //   const d1Ceil = Math.ceil(d1Fixed);
-
-    //   let text = d0Fixed + ((d[1]) ? ' – ' + d1Fixed : '+' );
-
-    //   let binLowerBound = d0Fixed;
-    //   let binUpperBound = d1Fixed;
-
-    //   if (!norm100k) {
-    //     if (d1Fixed - d0Fixed < 1) {
-    //       if (d0Ceil === d1Ceil && !doneMap.get(d0Ceil)) {
-    //         doneMap.set(d0Ceil, true);
-    //         binLowerBound = Math.floor(d0Fixed);
-    //       } else if (d1Ceil === d1Fixed) {
-    //         binUpperBound = d1Ceil;
-    //       } else {
-    //         return;
-    //       }                    
-    //     } else {
-    //       if (d0Ceil === d1Ceil) {
-    //         binLowerBound = d0Ceil;
-    //         binUpperBound = d1Ceil;
-    //       } else {
-    //         binLowerBound = d0Ceil;
-    //         binUpperBound = d1Ceil;
-    //       } 
-    //     }        
-    //   }
-
-    //   if (domainMinMax[0] < d[0] && domainMinMax[1] > d[1] ) {
-    //     if (this.casesMin === '') {
-    //       this.casesMin = (text === Math.floor(d0Fixed) + '' ? Math.floor(d0Fixed) : d0Fixed) + '';
-    //     }
-        
-    //     this.caseColors.push(
-    //       {
-    //         color: color,
-    //         text: text,
-    //         binLowerBound,
-    //         binUpperBound,
-    //       }
-    //     );
-
-    //   }
-    //   if (domainMinMax[1] <= d[1] && lastColor) {
-    //     lastColor = false;
-
-    //     this.caseColors.push(
-    //       {
-    //         color: color,
-    //         text: text,
-    //         binLowerBound,
-    //         binUpperBound
-    //       }
-    //     );
-
-    //   }
-    //   prevColor = color;
-    //   prevD = d;
-    // });
+    this.title = this.getTitle();
   }
 
   getBinStr(v: number): string {
@@ -219,6 +127,92 @@ export class LegendComponent implements OnInit {
 
 
     return this.numberPipe.transform(v, '1.0-1');
+  }
+
+  getTitle(): string {
+    return this.i18n.getCurrentLocale() === SupportedLocales.DE_DE ? this.getTitleDe() : this.getTitleEn();
+  }
+
+  getTitleEn() {
+    let title = '';
+
+    if(this.mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {
+      if(this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
+        title += "Percentage change";
+      } else {
+        title += "Change"
+      }
+
+      title += this.mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours ? " (24h)" : " (72h)";
+
+      title += " of ";
+    }
+
+    title += this.mo.covidNumberCaseOptions.type === CovidNumberCaseType.cases ? "Covid-19 afflictions" : "Covid-19 deaths"
+
+
+    if(this.mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k) {
+      title += ` per ${this.numberPipe.transform(100000)} residents`;
+    }
+
+    title += " per "
+
+    switch(this.mo.covidNumberCaseOptions.aggregationLevel) {
+      case AggregationLevel.county:
+        title += "county";
+        break;
+      
+      case AggregationLevel.governmentDistrict:
+        title += "district";
+        break;
+
+      case AggregationLevel.state:
+        title += "state";
+        break;
+    }
+
+    return title;
+  }
+
+  getTitleDe() {
+    let title = '';
+
+    if(this.mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {
+      if(this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
+        title += "Prozentuale ";
+      }
+
+      title += "Veränderung"
+
+      title += this.mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours ? " (24h)" : " (72h)";
+
+      title += " der ";
+    }
+
+    title += this.mo.covidNumberCaseOptions.type === CovidNumberCaseType.cases ? "Covid-19 Erkrankungen" : "Covid-19 Todesfälle"
+
+
+    if(this.mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k) {
+      title += ` je ${this.numberPipe.transform(100000)} Einwohner`;
+    }
+
+    title += " pro "
+
+    switch(this.mo.covidNumberCaseOptions.aggregationLevel) {
+      case AggregationLevel.county:
+        title += "Landkreis";
+        break;
+      
+      case AggregationLevel.governmentDistrict:
+        title += "Regierungsbezirk";
+        break;
+
+      case AggregationLevel.state:
+        title += "Bundesland";
+        break;
+    }
+
+    return title;
   }
 
 }

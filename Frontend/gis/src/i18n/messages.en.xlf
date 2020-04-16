@@ -16,9 +16,9 @@
         <note category="meaning">legend</note>
         
         
-      <note category="location">src/app/legend/legend.component.html:4</note><note category="location">src/app/case-info/case-info.component.html:5</note></notes>
+      <note category="location">src/app/legend/legend.component.html:10</note><note category="location">src/app/case-info/case-info.component.html:5</note></notes>
       <segment state="initial">
-        <source>Fallzahlen</source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ title }}"/></source>
       <target>Total Cases</target></segment>
     </unit><unit id="changes">
       <notes>
@@ -61,7 +61,7 @@
         <note category="description">deaths</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:25</note></notes>
+      <note category="location">src/app/case-info/case-info.component.html:55</note></notes>
       <segment state="initial">
         <source>Todesfälle</source>
       <target>Deaths</target></segment>
@@ -70,7 +70,7 @@
         <note category="description">sickScale</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:33</note></notes>
+      <note category="location">src/app/case-info/case-info.component.html:93</note></notes>
       <segment state="initial">
         <source>Erkrankte je 100.000 Einwohner</source>
       <target>Afflicted per 100.000 Residents</target></segment>
@@ -79,7 +79,7 @@
         <note category="description">deathScale</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:41</note></notes>
+      <note category="location">src/app/case-info/case-info.component.html:131</note></notes>
       <segment state="initial">
         <source>Todesfälle je 100.000 Einwohner</source>
       <target>Deaths per 100.000 Residents</target></segment>
@@ -990,12 +990,19 @@
       <target>Contact: </target></segment>
     </unit><unit id="legendToggleTooltip">
       <notes>
-        <note category="location">src/app/legend/legend.component.html:4</note>
-        <note category="location">src/app/legend/legend.component.html:36</note>
-      </notes>
+        
+        
+      <note category="location">src/app/legend/legend.component.html:9</note><note category="location">src/app/legend/legend.component.html:46</note></notes>
       <segment state="initial">
         <source>Klicken um Legende ein-/auszuklappen</source>
       <target>Click to toggle legend</target></segment>
+    </unit><unit id="legendDatasourceRki">
+      <notes>
+        <note category="location">src/app/legend/legend.component.html:40</note>
+      </notes>
+      <segment state="initial">
+        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institut</pc></source>
+      <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institute</pc></target></segment>
     </unit><unit id="tooltipHospitalLastUpdate">
       <notes>
 
@@ -1037,10 +1044,17 @@
         <note category="description">beds</note>
         <note category="meaning">legend</note>
 
-      <note category="location">src/app/legend/legend.component.html:36</note></notes>
+      <note category="location">src/app/legend/legend.component.html:46</note></notes>
       <segment state="initial">
         <source>Bettenauslastung</source>
       <target>Bed Capacity</target></segment>
+    </unit><unit id="legendDatasourceDivi">
+      <notes>
+        <note category="location">src/app/legend/legend.component.html:71</note>
+      </notes>
+      <segment state="initial">
+        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></source>
+      <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI ICU Registry</pc></target></segment>
     </unit><unit id="buttonPanelTooltipVideo">
       <notes>
         <note category="location">src/app/button-panel/button-panel.component.html:8</note>
