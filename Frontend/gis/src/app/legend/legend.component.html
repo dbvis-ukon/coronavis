@@ -5,18 +5,18 @@
     <div *ngIf="legendCasesExtended">
     <table>
 
-      <tr *ngFor="let b of caseColors">
+      <tr *ngFor="let b of caseBins">
 
         <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
 
         <td class="lower">
-          {{ b.binLowerBound | number }}
+          {{ getBinStr(b.min) }}
         </td>
 
         <td class="dash">–</td>
 
         <td class="upper">
-          {{ b.binUpperBound | number }}
+          {{ getBinStr(b.max) }}
         </td>
       </tr>
     </table>
@@ -24,9 +24,9 @@
         
     <div *ngIf="!legendCasesExtended">
       <div class="row">
-        <div class="text" [innerHtml]="casesMin | number"></div>
-        <div *ngFor="let b of caseColors;"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.binLowerBound | number }} – {{ b.binUpperBound | number }}"></div>
-        <div class="text" [innerHtml]="casesMax | number"></div>
+        <div class="text" [innerHtml]="getBinStr(caseBins[0].min)"></div>
+        <div *ngFor="let b of caseBins"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ getBinStr(b.min) }} – {{ getBinStr(b.max) }}"></div>
+        <div class="text" [innerHtml]="getBinStr(caseBins[caseBins.length - 1].max)"></div>
       </div>
     </div>
 </div>

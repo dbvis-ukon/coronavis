@@ -78,7 +78,7 @@
             <div
             [ngClass]="{'active': isActive(eType.deaths, eNorm.absolut, eTime.seventyTwoHours, eChange.absolute)}"
             >
-                ({{ this.getPercentageChange(this.data.last.deaths, this.data.yesterday.deaths)}})
+                {{ this.data.last.deaths - this.data.threeDaysAgo.deaths | plusminus }}
             </div>
         </td>
         <td>
