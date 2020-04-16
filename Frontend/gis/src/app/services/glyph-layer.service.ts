@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Feature, FeatureCollection, Point } from 'geojson';
 import { LocalStorageService } from 'ngx-webstorage';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { AggregatedGlyphLayer } from '../map/overlays/aggregated-glyph.layer';
@@ -144,16 +144,13 @@ export class GlyphLayerService {
   getAggregatedGlyphLayer(options: BedGlyphOptions, options$: Observable<BedGlyphOptions>): Observable<[AggregatedGlyphLayer, LandkreiseHospitalsLayer]> {
     const aggLevel = options.aggregationLevel;
     this.loading$.next(true);
-    return forkJoin([
-      this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(aggLevel),
-      this.hospitalRepository.getHospitalsForAggregationLevel(aggLevel)
-    ])
+    return this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(aggLevel)
     .pipe(
       map(result => {
         const factory = new AggregatedGlyphLayer(
           'ho_glyph_'+aggLevel,
           aggLevel,
-          result[0],
+          result,
           this.tooltipService,
           this.colormapService,
           options.forceDirectedOn,
@@ -162,7 +159,7 @@ export class GlyphLayerService {
           this.storage
         );
 
-        const factoryBg = new LandkreiseHospitalsLayer(name + '_bg', result[1]);
+        const factoryBg = new LandkreiseHospitalsLayer(name + '_bg', result);
 
 
         // Create a layer group
