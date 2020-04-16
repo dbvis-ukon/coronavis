@@ -7,7 +7,7 @@ import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitativ
 import { RKICaseRepository } from '../repositories/rki-case.repository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
-import { getLatestTimedStatus } from '../util/timestamped-value';
+import { HospitalUtilService } from './hospital-util.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
 import { QualitativeTimedStatusAggregation } from './types/qualitateive-timed-status-aggregation';
 
@@ -18,7 +18,8 @@ export class CountryAggregatorService {
 
   constructor(
     private diviDevelopmentRepository: QualitativeDiviDevelopmentRepository,
-    private rkiCaseRepository: RKICaseRepository
+    private rkiCaseRepository: RKICaseRepository,
+    private hospitalUtil: HospitalUtilService
   ) { }
 
   public rkiAggregationForCountry(): Observable<QuantitativeAggregatedRkiCasesProperties> {
@@ -50,18 +51,21 @@ export class CountryAggregatorService {
     );
   }
 
-  public diviAggregationForCountry(): Observable<QualitativeTimedStatusAggregation> {
+  public diviAggregationForCountry(refDate: Date): Observable<QualitativeTimedStatusAggregation> {
     const beds = [
       'icu_low_care',
       'icu_high_care',
       'ecmo_state'
     ];
 
-    return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
+    return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals(refDate)
     .pipe(
       flatMap(fc => fc.features),
-      map(feature => getLatestTimedStatus<QualitativeTimedStatus>(feature.properties.developments)),
+      map(feature => this.hospitalUtil.getLatestTimedStatus(feature.properties.developments, refDate)),
       reduce<QualitativeTimedStatus, QualitativeTimedStatusAggregation>((acc, val) => {
+        if(!val) {
+          return acc;
+        }
         for(const bed of beds) {
           if(!acc[bed]) {
             acc[bed] = {};

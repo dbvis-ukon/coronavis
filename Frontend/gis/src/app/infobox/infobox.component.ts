@@ -2,6 +2,9 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Feature, MultiPolygon, Point } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
+import moment from 'moment';
+import { BehaviorSubject } from 'rxjs';
+import { distinctUntilChanged, flatMap, map, toArray } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
 import { HospitalSearchFeatureCollectionPermissible } from '../hospital-search/hospital-search.component';
 import { FlyTo } from '../map/events/fly-to';
@@ -36,8 +39,23 @@ export class InfoboxComponent implements OnInit {
 
   glyphLegendColors = QualitativeColormapService.bedStati;
 
+  private _mo: MapOptions;
+
   @Input('mapOptions')
-  mo: MapOptions;
+  set mo(mo: MapOptions) {
+    this._mo = mo;
+
+    if(!mo) {
+      return;
+    }
+
+    this.refDay$.next(mo.bedGlyphOptions.date);
+  }
+
+  get mo(): MapOptions {
+    return this._mo;
+  }
+
 
   @Output()
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
@@ -77,6 +95,8 @@ export class InfoboxComponent implements OnInit {
 
   numUnfilteredHospitals: number;
 
+  private refDay$: BehaviorSubject<string> = new BehaviorSubject('now');
+
   constructor(
     public colormapService: QualitativeColormapService,
     private osmLayerService: OSMLayerService,
@@ -102,12 +122,30 @@ export class InfoboxComponent implements OnInit {
     this.glyphLayerService.loading$.subscribe(l => this.glyphLoading = l);
     this.bedChoroplethLayerService.loading$.subscribe(l => this.bedChoroplethLoading = l);
     this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
-    this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);
+    this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);  
 
-    
+    this.refDay$
+    .pipe(
+      distinctUntilChanged(),
+      map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate())
+    )
+    .subscribe(date => {
+      this.updateHospitalStatistics(date);
+    })
 
 
-    this.countryAggregatorService.diviAggregationForCountry()
+    this.countryAggregatorService.rkiAggregationForCountry()
+    .subscribe(r => {
+      this.aggregatedRkiStatistics = r;
+    });
+
+    this.updateHospitals();
+  }
+
+  updateHospitalStatistics(refDate: Date) {
+    console.log('date updated', refDate);
+
+    this.countryAggregatorService.diviAggregationForCountry(refDate)
     .subscribe(r => {
       this.aggregatedDiviStatistics = r;
 
@@ -118,15 +156,13 @@ export class InfoboxComponent implements OnInit {
       ];
     });
 
-    this.countryAggregatorService.rkiAggregationForCountry()
-    .subscribe(r => {
-      this.aggregatedRkiStatistics = r;
-    });
-
-    this.hospitalRepo.getDiviDevelopmentSingleHospitals(false)
-    .subscribe(d => this.numUnfilteredHospitals = d.features.length);
-
-    this.updateHospitals();
+    this.hospitalRepo.getDiviDevelopmentSingleHospitals(null)
+    .pipe(
+      flatMap(fc => fc.features),
+      this.hospitalUtils.filterByDate(refDate),
+      toArray()
+    )
+    .subscribe(d => this.numUnfilteredHospitals = d.length);
   }
 
   updateHospitals() {

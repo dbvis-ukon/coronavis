@@ -5,7 +5,7 @@ import { select, Selection } from 'd3-selection';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import L from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage';
-import { NEVER, Observable } from 'rxjs';
+import { NEVER, Observable, timer } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
@@ -95,12 +95,16 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
         }
   
         if(this.oldOptions?.date !== opt.date) {
-          this.gHospitals
+          timer(1)
+          .subscribe(() => {
+            this.gHospitals
             .selectAll(`.bed`)
             .style('fill', (d: Feature<Geometry, AbstractHospitalOut<AbstractTimedStatus>>, i, n) => {
               const bedType = select(n[i]).attr('data-bedtype') as BedType;
               return this.colormapService.getLatestBedStatusColor(d.properties.developments as any, bedType, opt.date);
             });
+          })
+          
           // timer(10)
           //   .subscribe(() => {
           //     let filteredData;

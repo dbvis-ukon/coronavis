@@ -29,17 +29,17 @@ export class QualitativeDiviDevelopmentRepository {
     return this.cachedRepository.get <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> (`${environment.apiUrl}hospitals/development/bundeslaender`);
   }
 
-  public getDiviDevelopmentSingleHospitals(filter: boolean = true): Observable <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> {
+  public getDiviDevelopmentSingleHospitals(refDate: Date = new Date(), dayThreshold: number = 5): Observable <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> {
     return this.cachedRepository.get <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> (`${environment.apiUrl}hospitals/development`)
     .pipe(
       map(d => {
-        if(!filter) {
+        if(!refDate) {
           return d;
         }
 
         
         const filteredFeatures = d.features
-        .filter(f => moment().diff(moment(f.properties.developments[f.properties.developments.length - 1].timestamp), 'days') <= 5);
+        .filter(f => moment(refDate).diff(moment(f.properties.developments[f.properties.developments.length - 1].timestamp), 'days') <= dayThreshold);
 
         
         return {

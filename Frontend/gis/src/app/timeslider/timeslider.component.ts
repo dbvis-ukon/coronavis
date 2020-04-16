@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
 import { Feature, Point } from 'geojson';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { NouiFormatter } from 'ng2-nouislider';
 import { BehaviorSubject, interval, NEVER, Observable } from 'rxjs';
-import { filter, flatMap, map, reduce, repeatWhen, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { filter, flatMap, map, reduce, repeatWhen, switchMap, takeUntil } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { MapOptions } from '../map/options/map-options';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
@@ -13,12 +13,14 @@ import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out
 import { ConfigService } from '../services/config.service';
 
 export class TimeFormatter implements NouiFormatter {
+  constructor(public startDay: Moment) {}
+
   to(value: number): string {
-    return moment.unix(value).format('YYYY-MM-DD');
+    return this.startDay.clone().add(value, 'days').format('YYYY-MM-DD');
   };
 
   from(value: string): number {
-    return moment(value).unix();
+    return moment.utc(value).diff(this.startDay, 'days');
   }
 }
 
@@ -29,17 +31,15 @@ export class TimeFormatter implements NouiFormatter {
 })
 export class TimesliderComponent implements OnInit {
 
-  nouiConfig = {
-    tooltips: new TimeFormatter()
-  }
+  timeFormatter: TimeFormatter;
+
+  nouiConfig;
 
   numTicks = 10;
 
-  currentTimeDate: Date = moment().endOf('day').toDate();
+  currentTime: number = 0;
 
-  currentTime: number = moment().endOf('day').unix();
-
-  timeExtent: [number, number] = [moment('2020-03-12').startOf('day').unix(), moment().endOf('day').unix()];
+  timeExtent: [number, number] = [0, 10];
 
 
   private _mo: MapOptions;
@@ -57,6 +57,8 @@ export class TimesliderComponent implements OnInit {
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
 
   modePlaying$ = new BehaviorSubject<boolean>(false);
+
+  stepSize = 1;
 
   constructor(
     private diviRepo: QualitativeDiviDevelopmentRepository,
@@ -79,13 +81,25 @@ export class TimesliderComponent implements OnInit {
 
         return acc;
       }),
-      tap(d => console.log('extent date', d)),
-      map<[Date, Date], [number, number]>(extent => [moment(extent[0]).startOf('day').unix(), moment(extent[1]).endOf('day').unix()]),
-      tap(d => console.log('extent', d))
       ).subscribe(extent => {
-        this.timeExtent = extent;
+        this.timeExtent = [0, moment(extent[1]).startOf('day').diff(moment(extent[0]).startOf('day'), 'days')];
 
-        this.numTicks = moment.unix(this.timeExtent[1]).diff(moment.unix(this.timeExtent[0]), 'days');
+        this.timeFormatter = new TimeFormatter(moment.utc(extent[0]).startOf('day'));
+
+        this.nouiConfig = {
+          tooltips: this.timeFormatter,
+          range: {
+            'min': this.timeExtent[0],
+            'max': this.timeExtent[1]
+          },
+          step: 1
+        }
+
+        if(this._mo) {
+          this.currentTime = this.timeFormatter.from(this._mo.bedGlyphOptions.date);
+        }
+
+        this.numTicks = this.timeExtent[1] - this.timeExtent[0];
       });
 
 
@@ -123,21 +137,18 @@ export class TimesliderComponent implements OnInit {
 
 
   private sliderChanging(value: number) {
-    const mDate = moment.unix(value).endOf('day');
-    this.currentTimeDate = mDate.toDate();
+    const mDate = this.sliderValueToMoment(value);
     this.emit(mDate.format('YYYY-MM-DD'), true);
   }
 
   private sliderChanged(value: number) {
-    const mDate = moment.unix(value);
-    this.currentTimeDate = mDate.toDate();
-
+    const mDate = this.sliderValueToMoment(value);
     this.emit(mDate.format('YYYY-MM-DD'), false);
   }
 
   // function is called for every interval
   onTimer() {
-    let nextTime = moment.unix(this.currentTime).add(1, 'day').unix();
+    let nextTime = this.currentTime + 1;
 
     if(nextTime > this.timeExtent[1]) {
       nextTime = this.timeExtent[0];
@@ -145,7 +156,7 @@ export class TimesliderComponent implements OnInit {
 
     this.currentTime = nextTime;
 
-    const date = moment.unix(nextTime).format('YYYY-MM-DD');
+    const date = this.sliderValueToMoment(nextTime).format('YYYY-MM-DD');
 
     this.emit(date, false);
   }
@@ -173,6 +184,14 @@ export class TimesliderComponent implements OnInit {
         date: date
       }
     }));
+  }
+
+  sliderValueToMoment(val: number): Moment {
+    return this.timeFormatter.startDay.clone().add(val, 'days');
+  }
+
+  momentToSliderValue(mom: Moment): number {
+    return mom.diff(this.timeFormatter.startDay, 'days');
   }
 
 }

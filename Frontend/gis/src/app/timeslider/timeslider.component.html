@@ -4,12 +4,9 @@
 </div> -->
 <div class="slider-container">
     <nouislider 
-    *ngIf="timeExtent"
+    *ngIf="nouiConfig"
     class="timeslider" 
     [config]="nouiConfig"
-    [min]="timeExtent[0]" 
-    [max]="timeExtent[1]" 
-    [step]="24 * 60 * 60"
     [(ngModel)]="currentTime" 
     (ngModelChange)="nouiSliderChanging($event)" 
     (change)="nouiSliderChanged($event)"

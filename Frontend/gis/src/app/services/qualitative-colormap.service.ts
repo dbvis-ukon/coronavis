@@ -4,12 +4,15 @@ import moment from 'moment';
 import { BedType } from '../map/options/bed-type.enum';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { HospitalUtilService } from './hospital-util.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QualitativeColormapService {
-  constructor() {
+  constructor(
+    private hospitalUtil: HospitalUtilService
+  ) {
   }
 
   public static bedStatusColors = ['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)'];
@@ -98,12 +101,7 @@ export class QualitativeColormapService {
         latest = t[t.length -1];
       } else {
         const actualDate = moment(date).endOf('day').toDate();
-        const filtered = t.filter(d => new Date(d.timestamp) <= actualDate);
-        if(filtered.length === 0) {
-          return this.getBedStatusColor(null, this.propertyAccessor(type));
-        }
-
-        latest = filtered[filtered.length - 1];
+        latest = this.hospitalUtil.getLatestTimedStatus(t, actualDate);
       }
   
       return this.getBedStatusColor(latest, this.propertyAccessor(type));

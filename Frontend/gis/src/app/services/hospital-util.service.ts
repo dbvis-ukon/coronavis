@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Feature, FeatureCollection, MultiPolygon, Point } from 'geojson';
+import { Feature, FeatureCollection, Geometry, MultiPolygon, Point } from 'geojson';
+import moment from 'moment';
+import { filter } from 'rxjs/operators';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
-import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { AbstractTimedStatus, QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
@@ -12,6 +15,10 @@ import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out
 export class HospitalUtilService {
 
   constructor() { }
+
+  public filterByDate(date: Date) {
+    return filter<Feature<Geometry, AbstractHospitalOut<AbstractTimedStatus>>>(h => this.getLatestTimedStatus(h.properties.developments, date) !== null);
+  }
 
   public isSingleHospitalFeatureCollection(fc: FeatureCollection<Point, SingleHospitalOut<any>> | FeatureCollection<MultiPolygon, AggregatedHospitalOut<any>>): fc is FeatureCollection<Point, SingleHospitalOut<any>> {
     return this.isSingleHospitalFeature(fc.features[0]);
@@ -71,10 +78,21 @@ export class HospitalUtilService {
     ];
   }
 
-  public getLatestTimedStatus<T extends QualitativeTimedStatus | QuantitativeTimedStatus>(entries: Array<T>): T | null {
+  public getLatestTimedStatus<T extends AbstractTimedStatus>(entries: Array<T>, beforeDate?: Date): T | null {
     if(!entries) {
       return null;
     }
+    
+    if(beforeDate) {
+      const mDate = moment(beforeDate);
+      const filtered = entries.filter(d => moment(d.timestamp).isSameOrBefore(mDate));
+      if(filtered.length === 0) {
+        return null;
+      }
+
+      return filtered[filtered.length - 1];
+    }
+
     const last = entries[entries.length - 1];
     return last;
   }
