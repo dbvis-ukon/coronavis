@@ -395,29 +395,201 @@
       <segment state="final">
         <source>Beschreibung der Darstellung der Fallzahlen</source>
       <target>Beschreibung der Darstellung der Fallzahlen</target></segment>
-    </unit><unit id="visdescription3">
+    </unit><unit id="help-dialog-cases-image">
+      <notes>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:6</note>
+      </notes>
+      <segment state="final">
+        <source>/assets/help-dialog-cases-de.png</source>
+      <target>/assets/help-dialog-cases-de.png</target></segment>
+    </unit><unit id="helpdialog-cases-1">
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-
-      <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:9</note></notes>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:9,11</note>
+      </notes>
       <segment state="final">
         <source>
-            Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
-            Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
-            oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
-            angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
-            gewählt werden, ob die Darstellung absolut oder pro 100.000 Einwohner angezeigt werden soll. Wenn man auf
-            der Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.
+            So wählen Sie die Darstellung der Erkrankung- und Todesfälle (Fallzahlen):
         </source>
       <target>
-            Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
-            Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
-            oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
-            angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
-            gewählt werden, ob die Darstellung absolut oder pro 100.000 Einwohner angezeigt werden soll. Wenn man auf
-            der Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.
+            So wählen Sie die Darstellung der Erkrankung- und Todesfälle (Fallzahlen):
         </target></segment>
+    </unit><unit id="helpdialog-cases-2">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:12,14</note>
+      </notes>
+      <segment state="final">
+        <source>
+            Die Fallzahlen basieren auf den offiziellen Daten des Robert-Koch-Institutes (RKI; <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätze</pc>).
+        </source>
+      <target>
+            Die Fallzahlen basieren auf den offiziellen Daten des Robert-Koch-Institutes (RKI; <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätze</pc>).
+        </target></segment>
+    </unit><unit id="helpdialog-cases-3">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:16</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b>">Wo?</pc> (A) Wählen zwischen der Darstellung für die:</pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b>">Wo?</pc> (A) Wählen zwischen der Darstellung für die:</pc></target></segment>
+    </unit><unit id="helpdialog-cases-3.1">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:18</note>
+      </notes>
+      <segment state="final">
+        <source>Bundesländer (Länder), </source>
+      <target>Bundesländer (Länder), </target></segment>
+    </unit><unit id="helpdialog-cases-3.2">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:19</note>
+      </notes>
+      <segment state="final">
+        <source>Regierungsbezirke (Bezirke), </source>
+      <target>Regierungsbezirke (Bezirke), </target></segment>
+    </unit><unit id="helpdialog-cases-3.3">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:20</note>
+      </notes>
+      <segment state="final">
+        <source>Landkreise (Kreise) </source>
+      <target>Landkreise (Kreise) </target></segment>
+    </unit><unit id="helpdialog-cases-4">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:23</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b>">Wann?</pc> (B) Wählen Sie zwischen: </pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b>">Wann?</pc> (B) Wählen Sie zwischen: </pc></target></segment>
+    </unit><unit id="helpdialog-cases-4.1">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:25</note>
+      </notes>
+      <segment state="final">
+        <source>Gesamte verfügbare Zeitspanne</source>
+      <target>Gesamte verfügbare Zeitspanne</target></segment>
+    </unit><unit id="helpdialog-cases-4.2">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:26</note>
+      </notes>
+      <segment state="final">
+        <source>Letzten 24 Stunden</source>
+      <target>Letzten 24 Stunden</target></segment>
+    </unit><unit id="helpdialog-cases-4.3">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:27</note>
+      </notes>
+      <segment state="final">
+        <source>Letzten 72 Stunden</source>
+      <target>Letzten 72 Stunden</target></segment>
+    </unit><unit id="helpdialog-cases-5">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:30</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b>">Veränderung?</pc> (C) Wählen Sie zwischend der Darstellung für: </pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b>">Veränderung?</pc> (C) Wählen Sie zwischend der Darstellung für: </pc></target></segment>
+    </unit><unit id="helpdialog-cases-5.1">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:32</note>
+      </notes>
+      <segment state="final">
+        <source>Alle Fälle</source>
+      <target>Alle Fälle</target></segment>
+    </unit><unit id="helpdialog-cases-5.2">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:33</note>
+      </notes>
+      <segment state="final">
+        <source>Veränderung in den letzten 24/72 Stunden</source>
+      <target>Veränderung in den letzten 24/72 Stunden</target></segment>
+    </unit><unit id="helpdialog-cases-6">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:36</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b>">Fallart?</pc> (D) Wählen zwischen der Darstellung für: </pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b>">Fallart?</pc> (D) Wählen zwischen der Darstellung für: </pc></target></segment>
+    </unit><unit id="helpdialog-cases-6.1">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:38</note>
+      </notes>
+      <segment state="final">
+        <source>Erkrankungen </source>
+      <target>Erkrankungen </target></segment>
+    </unit><unit id="helpdialog-cases-6.2">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:39</note>
+      </notes>
+      <segment state="final">
+        <source>Todesfälle</source>
+      <target>Todesfälle</target></segment>
+    </unit><unit id="helpdialog-cases-7">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:42</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b>">Bezugsgröße?</pc> (E) Wählen Sie zwischen der Darstellung für: </pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b>">Bezugsgröße?</pc> (E) Wählen Sie zwischen der Darstellung für: </pc></target></segment>
+    </unit><unit id="helpdialog-cases-7.1">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:44</note>
+      </notes>
+      <segment state="final">
+        <source>Alle (absolute) Fälle</source>
+      <target>Alle (absolute) Fälle</target></segment>
+    </unit><unit id="helpdialog-cases-7.2">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:45</note>
+      </notes>
+      <segment state="final">
+        <source>Fälle pro 100.000 Einwohner</source>
+      <target>Fälle pro 100.000 Einwohner</target></segment>
+    </unit><unit id="helpdialog-cases-8">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:48</note>
+      </notes>
+      <segment state="final">
+        <source>Wenn Sie mit der Maus über die Karte fahren, werden Ihnen für den jeweiligen gewählten Ort genaue Zahlen angezeigt (G). </source>
+      <target>Wenn Sie mit der Maus über die Karte fahren, werden Ihnen für den jeweiligen gewählten Ort genaue Zahlen angezeigt (G). </target></segment>
     </unit><unit id="button31">
       <notes>
         <note category="description"> help</note>
