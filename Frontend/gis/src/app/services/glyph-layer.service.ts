@@ -8,7 +8,6 @@ import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { AggregatedGlyphLayer } from '../map/overlays/aggregated-glyph.layer';
 import { LandkreiseHospitalsLayer } from '../map/overlays/landkreishospitals';
 import { SimpleGlyphLayer } from '../map/overlays/simple-glyph.layer';
-import { HospitalRepository } from '../repositories/hospital.repository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
@@ -25,7 +24,6 @@ export class GlyphLayerService {
 
   constructor(
     private diviDevelopmentRepository: QualitativeDiviDevelopmentRepository,
-    private hospitalRepository: HospitalRepository,
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
     private matDialog: MatDialog,
