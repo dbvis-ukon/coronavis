@@ -12,27 +12,7 @@
 <div mat-dialog-content>
   <mat-tab-group #tabGroup >
     <mat-tab [label]="label1.textContent">
-      <div class="visdescription">
-        <h1 id="interaktive-visualisierung-zur-analyse-von-intensivbettenkapazitäten-für-covid-19-patienten"   i18n="help| help@@title1">Interaktive
-          Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</h1>
-        <p><em  i18n="help| help@@visdescription12">Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
-            am Besten im Chrome-Browser.</em></p>
-        <p  i18n="help| help@@visdescription13">Die <a href="http://vis.uni-konstanz.de">Arbeitsgruppe Datenanalyse und Visualisierung</a> an der Universität
-          Konstanz entwickelt dieses Tool, um eine intuitive Übersicht über freie und belegte Bettenkapazitäten in
-          Deutschland zu zeigen. Anhand dieser Information können Engpässe früh erkannt und eine Umverteilung oder
-          direkte Umleitung von Patientenströmen vorgenommen werden.</p>
-        <p  i18n="help| help@@visdescription14">Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten der DIVI[1] (<a
-            href="https://www.divi.de/register/intensivregister?view=items">Link</a>). Durch einen Zugriff auf die
-          exakten Kapazitätsdaten der DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
-          vor Überlastungen erweitert werden. Diese Funktionalitäten sind schon vorhanden, jedoch aufgrund fehlendem
-          Datenzugang derzeit deaktiviert.</p>
-        <p  i18n="help| help@@visdescription15">Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
-          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <a target="_blank"
-            href="https://video.coronavis.dbvis.de">https://video.coronavis.dbvis.de</a>.</p>
-        <p  i18n="help| help@@visdescription16">Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
-          anschauen wollen, kann dieses Fenster geschlossen werden.</p>
-        <p  i18n="help| help@@visdescription17">[1] <a href="http://divi.de">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</a></p>
-      </div>
+      <app-help-dialog-theproject></app-help-dialog-theproject>
       <div fxLayout="row" fxLayout.xs="column">
         <button mat-button mat-raised-button color="primary"  (click)="tabGroup.selectedIndex=1"  i18n="help| help@@button11">{{ isSmallScreen ? 'Weiter' : 'Zur Beschreibung der Kapazitätsdarstellung' }}</button>
         <button mat-button mat-stroked-button (click)="close()"   i18n="help| help@@button12">Fenster schließen</button>

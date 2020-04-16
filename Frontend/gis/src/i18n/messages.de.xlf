@@ -83,95 +83,12 @@
       <segment state="final">
         <source>Todesfälle je 100.000 Einwohner</source>
       <target>Todesfälle je 100.000 Einwohner</target></segment>
-    </unit><unit id="title1">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-        
-      <note category="location">src/app/help-dialog/help-dialog.component.html:16</note></notes>
-      <segment state="final">
-        <source>Interaktive
-          Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</source>
-      <target>Interaktive
-          Visualisierung zur Analyse von Intensivbettenkapazitäten für Covid-19-Patienten</target></segment>
-    </unit><unit id="visdescription12">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-        
-      <note category="location">src/app/help-dialog/help-dialog.component.html:18</note></notes>
-      <segment state="final">
-        <source>Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
-            am Besten im Chrome-Browser.</source>
-      <target>Bitte erlauben Sie einige Sekunden, bis die Kapazitätsdarstellungen geladen sind. Das Tool funktioniert
-            am Besten im Chrome-Browser.</target></segment>
-    </unit><unit id="visdescription13">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-        
-      <note category="location">src/app/help-dialog/help-dialog.component.html:20</note></notes>
-      <segment state="final">
-        <source>Die <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
-          Konstanz entwickelt dieses Tool, um eine intuitive Übersicht über freie und belegte Bettenkapazitäten in
-          Deutschland zu zeigen. Anhand dieser Information können Engpässe früh erkannt und eine Umverteilung oder
-          direkte Umleitung von Patientenströmen vorgenommen werden.</source>
-      <target>Die <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
-          Konstanz entwickelt dieses Tool, um eine intuitive Übersicht über freie und belegte Bettenkapazitäten in
-          Deutschland zu zeigen. Anhand dieser Information können Engpässe früh erkannt und eine Umverteilung oder
-          direkte Umleitung von Patientenströmen vorgenommen werden.</target></segment>
-    </unit><unit id="visdescription14">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-        
-      <note category="location">src/app/help-dialog/help-dialog.component.html:24</note></notes>
-      <segment state="final">
-        <source>Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten der DIVI[1] (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
-          exakten Kapazitätsdaten der DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
-          vor Überlastungen erweitert werden. Diese Funktionalitäten sind schon vorhanden, jedoch aufgrund fehlendem
-          Datenzugang derzeit deaktiviert.</source>
-      <target>Die derzeit integrierten Daten umfassen die öffentlichen Bettenauslastungsdaten der DIVI[1] (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>). Durch einen Zugriff auf die
-          exakten Kapazitätsdaten der DIVI könnte unser Tool um nützliche Funktionalitäten, insbesondere die Frühwarnung
-          vor Überlastungen erweitert werden. Diese Funktionalitäten sind schon vorhanden, jedoch aufgrund fehlendem
-          Datenzugang derzeit deaktiviert.</target></segment>
-    </unit><unit id="visdescription15">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-        
-      <note category="location">src/app/help-dialog/help-dialog.component.html:29</note></notes>
-      <segment state="final">
-        <source>Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
-          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.coronavis.dbvis.de</pc>.</source>
-      <target>Das Tool ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird mit Experten sinnvoll
-          weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.coronavis.dbvis.de</pc>.</target></segment>
-    </unit><unit id="visdescription16">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-        
-      <note category="location">src/app/help-dialog/help-dialog.component.html:32</note></notes>
-      <segment state="final">
-        <source>Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
-          anschauen wollen, kann dieses Fenster geschlossen werden.</source>
-      <target>Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten des Tools vor. Wenn Sie direkt das Tool
-          anschauen wollen, kann dieses Fenster geschlossen werden.</target></segment>
-    </unit><unit id="visdescription17">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-        
-      <note category="location">src/app/help-dialog/help-dialog.component.html:34</note></notes>
-      <segment state="final">
-        <source>[1] <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></source>
-      <target>[1] <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Deutsche interdisziplinäre Vereinigung für Intensiv- und Notfallmedizin</pc></target></segment>
     </unit><unit id="button11">
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:37</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:17</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Zur Beschreibung der Kapazitätsdarstellung' }}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Zur Beschreibung der Kapazitätsdarstellung' }}"/></target></segment>
@@ -180,7 +97,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:38</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:18</note></notes>
       <segment state="final">
         <source>Fenster schließen</source>
       <target>Fenster schließen</target></segment>
@@ -364,7 +281,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:44</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:24</note></notes>
       <segment state="final">
         <source>Zurück</source>
       <target>Zurück</target></segment>
@@ -373,7 +290,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:45</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:25</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Weiter zur Darstellung der Fallzahlen' }}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Weiter zur Darstellung der Fallzahlen' }}"/></target></segment>
@@ -382,7 +299,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:46</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:26</note></notes>
       <segment state="final">
         <source>Fenster schließen</source>
       <target>Fenster schließen</target></segment>
@@ -590,12 +507,121 @@
       <segment state="final">
         <source>Wenn Sie mit der Maus über die Karte fahren, werden Ihnen für den jeweiligen gewählten Ort genaue Zahlen angezeigt (G). </source>
       <target>Wenn Sie mit der Maus über die Karte fahren, werden Ihnen für den jeweiligen gewählten Ort genaue Zahlen angezeigt (G). </target></segment>
+    </unit><unit id="helpdialog-theproject-1">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-theproject/help-dialog-theproject.component.html:3,5</note>
+      </notes>
+      <segment state="final">
+        <source>
+        Freie und belegte Betten für Covid-19-Patienten in Deutschland: CoronaVIS- Interaktive Darstellung und Analyse
+    </source>
+      <target>
+        Freie und belegte Betten für Covid-19-Patienten in Deutschland: CoronaVIS- Interaktive Darstellung und Analyse
+    </target></segment>
+    </unit><unit id="helpdialog-theproject-2">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-theproject/help-dialog-theproject.component.html:7,9</note>
+      </notes>
+      <segment state="final">
+        <source>
+        Hier finden Sie eine aktuelle Übersicht über die Bettenkapazitäten in Deutschland. Anhand der Information können Sie aktuelle Entwicklungen deutschlandweit verfolgen. Ziel des CoronaVIS-Tools ist es, dass mögliche Engpässe früh erkannt und die Verteilung von Patienten optimiert und freie Betten zeitnah genutzt werden können.
+    </source>
+      <target>
+        Hier finden Sie eine aktuelle Übersicht über die Bettenkapazitäten in Deutschland. Anhand der Information können Sie aktuelle Entwicklungen deutschlandweit verfolgen. Ziel des CoronaVIS-Tools ist es, dass mögliche Engpässe früh erkannt und die Verteilung von Patienten optimiert und freie Betten zeitnah genutzt werden können.
+    </target></segment>
+    </unit><unit id="helpdialog-theproject-3">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-theproject/help-dialog-theproject.component.html:11,14</note>
+      </notes>
+      <segment state="final">
+        <source>
+            Die aktuellen Kapazitäten werden für die Darstellungen geladen. Der Vorgang kann einige Sekunden dauern. Die
+            Darstellung funktioniert am Besten im Chrome-Browser.
+        </source>
+      <target>
+            Die aktuellen Kapazitäten werden für die Darstellungen geladen. Der Vorgang kann einige Sekunden dauern. Die
+            Darstellung funktioniert am Besten im Chrome-Browser.
+        </target></segment>
+    </unit><unit id="helpdialog-theproject-4">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-theproject/help-dialog-theproject.component.html:16,20</note>
+      </notes>
+      <segment state="final">
+        <source>
+        CoronaVIS - die visuelle Darstellung von freien und belegten Betten für Covid-19-Patienten wird von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
+        Konstanz entwickelt und betreut.
+    </source>
+      <target>
+        CoronaVIS - die visuelle Darstellung von freien und belegten Betten für Covid-19-Patienten wird von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität
+        Konstanz entwickelt und betreut.
+    </target></segment>
+    </unit><unit id="helpdialog-theproject-5">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-theproject/help-dialog-theproject.component.html:21,29</note>
+      </notes>
+      <segment state="final">
+        <source>
+        Die Darstellungen der Bettenkapazität in CoronaVIS basiert derzeit auf den öffentlichen Daten der Deutschen
+        Interdisziplinären Vereinigung für Intensiv- und Notfallmedizin (DIVI) (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>) zur Bettenauslastung. Bitte
+        beachten Sie, dass derzeit kein Zugriff auf die nichtöffentlichen exakten Kapazitätsdaten der DIVI erfolgen
+        kann. Deshalb können Frühwarnungen vor Überlastungen derzeit nicht erfolgen. Diese Frühwarn-Funktionalität und
+        weitere Funktionen sind bereits entwickelt und in CoronaVIS enthalten, jedoch aufgrund des fehlenden Zugangs zu
+        den nichtöffentlichen exakten Kapazitätsdaten der DIVI sind diese derzeit nicht aktiviert.
+    </source>
+      <target>
+        Die Darstellungen der Bettenkapazität in CoronaVIS basiert derzeit auf den öffentlichen Daten der Deutschen
+        Interdisziplinären Vereinigung für Intensiv- und Notfallmedizin (DIVI) (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Link</pc>) zur Bettenauslastung. Bitte
+        beachten Sie, dass derzeit kein Zugriff auf die nichtöffentlichen exakten Kapazitätsdaten der DIVI erfolgen
+        kann. Deshalb können Frühwarnungen vor Überlastungen derzeit nicht erfolgen. Diese Frühwarn-Funktionalität und
+        weitere Funktionen sind bereits entwickelt und in CoronaVIS enthalten, jedoch aufgrund des fehlenden Zugangs zu
+        den nichtöffentlichen exakten Kapazitätsdaten der DIVI sind diese derzeit nicht aktiviert.
+    </target></segment>
+    </unit><unit id="helpdialog-theproject-6">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-theproject/help-dialog-theproject.component.html:30,35</note>
+      </notes>
+      <segment state="final">
+        <source>
+        CoronaVIS ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird in Zusammenarbeit mit
+        Experten kontinuierlich weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen
+        Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.coronavis.dbvis.de</pc>.
+    </source>
+      <target>
+        CoronaVIS ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird in Zusammenarbeit mit
+        Experten kontinuierlich weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen
+        Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">https://video.coronavis.dbvis.de</pc>.
+    </target></segment>
+    </unit><unit id="helpdialog-theproject-7">
+      <notes>
+        <note category="description"> help</note>
+        <note category="meaning">help</note>
+        <note category="location">src/app/help-dialog-theproject/help-dialog-theproject.component.html:36,38</note>
+      </notes>
+      <segment state="final">
+        <source>
+        Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten von CoronaVIS vor. Wenn Sie direkt CoronaVIS nutzen möchten, schließen Sie bitte dieses Fenster.
+    </source>
+      <target>
+        Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten von CoronaVIS vor. Wenn Sie direkt CoronaVIS nutzen möchten, schließen Sie bitte dieses Fenster.
+    </target></segment>
     </unit><unit id="button31">
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:52</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:32</note></notes>
       <segment state="final">
         <source>Zurück</source>
       <target>Zurück</target></segment>
@@ -604,7 +630,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:53</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:33</note></notes>
       <segment state="final">
         <source>Fenster schließen</source>
       <target>Fenster schließen</target></segment>

@@ -59,6 +59,7 @@ import { TranslatePipe } from './translate.pipe';
 import { VegaComponent } from './vega/vega.component';
 import { HelpDialogBedsComponent } from './help-dialog-beds/help-dialog-beds.component';
 import { HelpDialogCasesComponent } from './help-dialog-cases/help-dialog-cases.component';
+import { HelpDialogTheprojectComponent } from './help-dialog-theproject/help-dialog-theproject.component';
 
 
 
@@ -147,7 +148,8 @@ export const localeProvider = {
     BedTooltipComponent,
     HospitalSearchComponent,
     HelpDialogBedsComponent,
-    HelpDialogCasesComponent
+    HelpDialogCasesComponent,
+    HelpDialogTheprojectComponent
   ],
   imports: [
     BrowserModule,
