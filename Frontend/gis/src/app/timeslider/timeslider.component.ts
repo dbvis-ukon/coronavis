@@ -55,6 +55,9 @@ export class TimesliderComponent implements OnInit {
   @Output()
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
 
+
+  modePlaying: boolean = false;
+
   constructor(
     private diviRepo: QualitativeDiviDevelopmentRepository,
     private configService: ConfigService,

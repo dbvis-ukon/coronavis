@@ -2,18 +2,25 @@
 <!-- <div class="cur">
     {{ currentTimeDate | date:'shortDate' }}
 </div> -->
+<div class="slider-container">
+    <nouislider 
+    *ngIf="timeExtent"
+    class="timeslider" 
+    [config]="nouiConfig"
+    [min]="timeExtent[0]" 
+    [max]="timeExtent[1]" 
+    [step]="24 * 60 * 60"
+    [(ngModel)]="currentTime" 
+    (ngModelChange)="nouiSliderChanging($event)" 
+    (change)="nouiSliderChanged($event)"
+    ></nouislider>
+</div>
 
-<nouislider 
-*ngIf="timeExtent"
-class="timeslider" 
-[config]="nouiConfig"
-[min]="timeExtent[0]" 
-[max]="timeExtent[1]" 
-[step]="24 * 60 * 60"
-[(ngModel)]="currentTime" 
-(ngModelChange)="nouiSliderChanging($event)" 
-(change)="nouiSliderChanged($event)"
-></nouislider>
+
+<button class="play" mat-mini-fab aria-label="Play animation">
+    <mat-icon *ngIf="modePlaying === false">play_arrow</mat-icon>
+    <mat-icon *ngIf="modePlaying === true">pause</mat-icon>
+</button>
 
 
 <!-- <mat-slider

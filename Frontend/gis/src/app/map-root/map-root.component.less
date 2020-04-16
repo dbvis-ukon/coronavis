@@ -37,6 +37,10 @@
     bottom: 25px;
     right: 10px;
     z-index: 1002;
+
+    &.mobile {
+      bottom: 110px;
+    }
   }
 
   .timeslider {
@@ -44,7 +48,14 @@
     bottom: 25px;
     left: 50%;
     z-index: 1002;
-    width: 10vw;
+    width: 20vw;
+    transform: translate(-50%);
+
+    &.mobile {
+      left: 10px;
+      width: 95vw;
+      transform: translate(0%);
+    }
   }
   
   .tracking-pxl {

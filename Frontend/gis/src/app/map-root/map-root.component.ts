@@ -1,3 +1,4 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -48,6 +49,8 @@ export class MapRootComponent implements OnInit {
 
   flyTo: FlyTo = null;
 
+  isMobile = false;
+
 
   // constructor is here only used to inject services
   constructor(
@@ -58,11 +61,14 @@ export class MapRootComponent implements OnInit {
     private translationService: TranslationService,
     private urlHandlerService: UrlHandlerService,
     private route: ActivatedRoute,
-    private storage: LocalStorageService
+    private storage: LocalStorageService,
+    private breakpoint: BreakpointObserver
               ) {
   }
 
   ngOnInit(): void {
+    this.breakpoint.observe('(max-width: 500px)').subscribe(d => this.isMobile = d.matches);
+
     this.i18nService.initI18n();
 
 
@@ -177,9 +183,11 @@ export class MapRootComponent implements OnInit {
     if(restored) {
       let snackbar = this.snackbar.open(
         this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"),
-        this.translationService.translate("Zurücksetzen"), {
+        this.translationService.translate("Zurücksetzen"), 
+        {
         politeness: "polite",
-        duration: 5000
+        duration: 5000,
+        verticalPosition: 'top'
       });
       snackbar.onAction().subscribe(() => {
         this.mapOptions = this.configService.getDefaultMapOptions();
