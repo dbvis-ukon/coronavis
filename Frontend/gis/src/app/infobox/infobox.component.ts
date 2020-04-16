@@ -130,7 +130,7 @@ export class InfoboxComponent implements OnInit {
       map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate())
     )
     .subscribe(date => {
-      this.updateHospitalStatistics(date);
+      // this.updateHospitalStatistics(date);
     })
 
 
@@ -143,6 +143,7 @@ export class InfoboxComponent implements OnInit {
   }
 
   updateHospitalStatistics(refDate: Date) {
+    const start = new Date().getTime();
     console.log('date updated', refDate);
 
     this.countryAggregatorService.diviAggregationForCountry(refDate)
@@ -154,6 +155,8 @@ export class InfoboxComponent implements OnInit {
         {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (r) => r.icu_high_care, description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
         {name: 'ECMO', accessor: 'showEcmo', accFunc: (r) => r.ecmo_state, description: 'ECMO = Zusätzlich ECMO'}
       ];
+
+      console.log('calc stats', new Date().getTime() - start);      
     });
 
     this.hospitalRepo.getDiviDevelopmentSingleHospitals(null)
@@ -162,7 +165,10 @@ export class InfoboxComponent implements OnInit {
       this.hospitalUtils.filterByDate(refDate),
       toArray()
     )
-    .subscribe(d => this.numUnfilteredHospitals = d.length);
+    .subscribe(d => {
+      this.numUnfilteredHospitals = d.length;
+      console.log('calc stats unfiltered', new Date().getTime() - start);
+    });
   }
 
   updateHospitals() {

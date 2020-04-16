@@ -4,7 +4,9 @@ from flask import Blueprint, jsonify
 
 from cache import cache
 from db import db
-from models.hospital import Hospital, HospitalsPerLandkreis, HospitalsPerRegierungsbezirk, HospitalsPerBundesland
+from models.hospital import (Hospital, HospitalsPerBundesland,
+                             HospitalsPerLandkreis,
+                             HospitalsPerRegierungsbezirk)
 from views.helpers import __as_feature_collection
 
 routes = Blueprint('hospitals', __name__, url_prefix='/hospitals')
@@ -269,6 +271,7 @@ places_per_landkreis_per_timestamp AS (
         l.geom,
         filled_hospital_timeseries.timestamp,
         max(filled_hospital_timeseries.last_update) AS last_update,
+        count(filled_hospital_timeseries.name) AS numHospitals,
         sum(
             CASE
                 WHEN filled_hospital_timeseries.icu_low_state = 'Verfügbar' THEN 1
@@ -364,6 +367,8 @@ SELECT
                 places_per_landkreis_per_timestamp.timestamp,
                 'last_update',
                 places_per_landkreis_per_timestamp.last_update,
+                'numHospitals',
+                places_per_landkreis_per_timestamp.numHospitals,
                 'icu_low_care',
                 json_build_object(
                     'Verfügbar',
@@ -532,6 +537,7 @@ places_per_regierungsbezirk_per_timestamp AS (
         r.geom,
         filled_hospital_timeseries.timestamp,
         max(filled_hospital_timeseries.last_update) AS last_update,
+        count(filled_hospital_timeseries.name) AS numHospitals,
         sum(
             CASE
                 WHEN filled_hospital_timeseries.icu_low_state = 'Verfügbar' THEN 1
@@ -627,6 +633,8 @@ SELECT
                 places_per_regierungsbezirk_per_timestamp.timestamp,
                 'last_update',
                 places_per_regierungsbezirk_per_timestamp.last_update,
+                'numHospitals',
+                places_per_regierungsbezirk_per_timestamp.numHospitals,
                 'icu_low_care',
                 json_build_object(
                     'Verfügbar',
@@ -795,6 +803,7 @@ places_per_bundesland_per_timestamp AS (
         b.geom,
         filled_hospital_timeseries.timestamp,
         max(filled_hospital_timeseries.last_update) AS last_update,
+        count(filled_hospital_timeseries.name) AS numHospitals,
         sum(
             CASE
                 WHEN filled_hospital_timeseries.icu_low_state = 'Verfügbar' THEN 1
@@ -890,6 +899,8 @@ SELECT
                 places_per_bundesland_per_timestamp.timestamp,
                 'last_update',
                 places_per_bundesland_per_timestamp.last_update,
+                'numHospitals',
+                places_per_bundesland_per_timestamp.numHospitals,
                 'icu_low_care',
                 json_build_object(
                     'Verfügbar',
