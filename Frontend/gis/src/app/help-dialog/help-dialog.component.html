@@ -39,32 +39,7 @@
       </div>
     </mat-tab>
     <mat-tab [label]="label2.textContent">
-      <h1 id="beschreibung-der-darstellung-der-bettenkapazitäten"   i18n="help| help@@title2">Beschreibung der Darstellung der Bettenkapazitäten</h1>
-      <div fxLayout="row" fxLayout.xs="column" class="visdescription">
-        <div fxFlex class="helpimg">
-          <img flex="66" class="helpimg" style="max-width: 550px;" src="/assets/covisexpl1.png" alt="Explanation Figure">
-        </div>
-        <div fxFlex class="helptxt">
-          <p i18n="help| help@@visdescription21">Die Bettendarstellung erfolgt im Überblick mit drei farbigen Kästchen pro Krankenhaus, welche für die
-            Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
-            stärkere Interventionen dar.</p>
-          <ul>
-            <li i18n="help| help@@visdescription22">ICU low care: Auslastung der Betten für nichtinvasive Beatmung</li>
-            <li i18n="help| help@@visdescription23">ICU high care: Auslastung der Betten für invasive Beatmung</li>
-            <li i18n="help| help@@visdescription24">ECMO: Auslastung der Betten für die Beatmung von Patienten durch extrakorporale Membranoxygenierung</li>
-          </ul>
-          <p i18n="help| help@@visdescription25">Die Farben stellen die Auslastung dar:</p>
-          <ul>
-            <li i18n="help| help@@visdescription26">Grün: Plätze in dieser Behandlungskategorie sind in diesem Klinikum noch vorhanden</li>
-            <li i18n="help| help@@visdescription27">Gelb: Die Betten in dieser Behandlungskategorie werden knapp</li>
-            <li i18n="help| help@@visdescription28">Rot: Die Betten in dieser Behandlungskategorie sind komplett ausgelastet</li>
-          </ul>
-          <p i18n="help| help@@visdescription29">Die Informationen können auch nach Regionen zusammengefasst werden durch die entsprechende Schaltfläche.
-            Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
-            notwendigerweise Kapazitäten gemeldet haben, können unter "Geographische Verortung" hinzugeschaltet werden.
-          </p>
-        </div>
-      </div>
+      <app-help-dialog-beds></app-help-dialog-beds>
       <div fxLayout="row" fxLayout.xs="column">
         <button mat-button mat-stroked-button (click)="tabGroup.selectedIndex=0"  i18n="help| help@@button21">Zurück</button>
         <button mat-button mat-raised-button color="primary" (click)="tabGroup.selectedIndex=2"  i18n="help| help@@button22">{{ isSmallScreen ? 'Weiter' : 'Weiter zur Darstellung der Fallzahlen' }}</button>
@@ -72,20 +47,7 @@
       </div>
     </mat-tab>
     <mat-tab [label]="label3.textContent">
-      <h1 id="beschreibung-der-darstellung-der-fallzahlen"   i18n="help| help@@title3">Beschreibung der Darstellung der Fallzahlen</h1>
-      <div fxLayout="row" fxLayout.xs="column" class="visdescription">
-        <div fxFlex class="helpimg">
-          <img class="helpimg" src="/assets/covisexpl2.png" style="max-width: 550px;" alt="Explanation Figure">
-        </div>
-        <div fxFlex class="helptxt">
-            <p   i18n="help| help@@visdescription3">Die Fallzahlen stammen aus den offiziellen <a href="esri.de/corona">RKI-Datensätzen</a>. Sie können nach
-            Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
-            oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
-            angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
-            gewählt werden, ob die Darstellung absolut oder pro 100.000 Einwohner angezeigt werden soll. Wenn man auf der
-            Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</p>
-        </div>
-      </div>
+      <app-help-dialog-cases></app-help-dialog-cases>
       <div fxLayout="row" fxLayout.xs="column"> 
         <button mat-button mat-stroked-button  (click)="tabGroup.selectedIndex=1" i18n="help| help@@button31">Zurück</button>
         <button mat-button mat-raised-button color="primary" (click)="close()"  i18n="help| help@@button32">Fenster schließen</button> 

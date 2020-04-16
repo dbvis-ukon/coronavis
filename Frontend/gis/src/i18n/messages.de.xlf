@@ -189,109 +189,25 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
         
-      <note category="location">src/app/help-dialog/help-dialog.component.html:42</note></notes>
+      <note category="location">src/app/help-dialog-beds/help-dialog-beds.component.html:1</note></notes>
       <segment state="final">
         <source>Beschreibung der Darstellung der Bettenkapazitäten
         </source>
       <target>Beschreibung der Darstellung der Bettenkapazitäten
         </target></segment>
-    </unit><unit id="visdescription21">
+    </unit><unit id="help-dialog-beds-image">
       <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-
-      <note category="location">src/app/help-dialog/help-dialog.component.html:48</note></notes>
+        <note category="location">src/app/help-dialog-beds/help-dialog-beds.component.html:4</note>
+      </notes>
       <segment state="final">
-        <source>Die Bettendarstellung erfolgt im Überblick mit drei farbigen Kästchen pro Krankenhaus, welche für die
-            Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
-            stärkere Interventionen dar.</source>
-      <target>Die Bettendarstellung erfolgt im Überblick mit drei farbigen Kästchen pro Krankenhaus, welche für die
-            Auslastung der jeweiligen Behandlungsarten in einem Klinikum stehen. Die drei Stufen stellen zunehmend
-            stärkere Interventionen dar.</target></segment>
-    </unit><unit id="visdescription22">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-
-      <note category="location">src/app/help-dialog/help-dialog.component.html:52</note></notes>
-      <segment state="final">
-        <source>ICU low care: Auslastung der Betten für nichtinvasive Beatmung</source>
-      <target>ICU low care: Auslastung der Betten für nichtinvasive Beatmung</target></segment>
-    </unit><unit id="visdescription23">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-
-      <note category="location">src/app/help-dialog/help-dialog.component.html:53</note></notes>
-      <segment state="final">
-        <source>ICU high care: Auslastung der Betten für invasive Beatmung</source>
-      <target>ICU high care: Auslastung der Betten für invasive Beatmung</target></segment>
-    </unit><unit id="visdescription24">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-
-      <note category="location">src/app/help-dialog/help-dialog.component.html:54</note></notes>
-      <segment state="final">
-        <source>ECMO: Auslastung der Betten für die Beatmung von Patienten durch extrakorporale Membranoxygenierung</source>
-      <target>ECMO: Auslastung der Betten für die Beatmung von Patienten durch extrakorporale Membranoxygenierung</target></segment>
-    </unit><unit id="visdescription25">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-
-      <note category="location">src/app/help-dialog/help-dialog.component.html:56</note></notes>
-      <segment state="final">
-        <source>Die Farben stellen die Auslastung dar:</source>
-      <target>Die Farben stellen die Auslastung dar:</target></segment>
-    </unit><unit id="visdescription26">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-
-      <note category="location">src/app/help-dialog/help-dialog.component.html:58</note></notes>
-      <segment state="final">
-        <source>Grün: Plätze in dieser Behandlungskategorie sind in diesem Klinikum noch vorhanden</source>
-      <target>Grün: Plätze in dieser Behandlungskategorie sind in diesem Klinikum noch vorhanden</target></segment>
-    </unit><unit id="visdescription27">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-
-      <note category="location">src/app/help-dialog/help-dialog.component.html:59</note></notes>
-      <segment state="final">
-        <source>Gelb: Die Betten in dieser Behandlungskategorie werden knapp</source>
-      <target>Gelb: Die Betten in dieser Behandlungskategorie werden knapp</target></segment>
-    </unit><unit id="visdescription28">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-
-      <note category="location">src/app/help-dialog/help-dialog.component.html:60</note></notes>
-      <segment state="final">
-        <source>Rot: Die Betten in dieser Behandlungskategorie sind komplett ausgelastet</source>
-      <target>Rot: Die Betten in dieser Behandlungskategorie sind komplett ausgelastet</target></segment>
-    </unit><unit id="visdescription29">
-      <notes>
-        <note category="description"> help</note>
-        <note category="meaning">help</note>
-
-      <note category="location">src/app/help-dialog/help-dialog.component.html:62</note></notes>
-      <segment state="final">
-        <source>Die Informationen können auch nach Regionen zusammengefasst werden durch die entsprechende Schaltfläche.
-            Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
-            notwendigerweise Kapazitäten gemeldet haben, können unter "Geographische Verortung" hinzugeschaltet werden.
-          </source>
-      <target>Die Informationen können auch nach Regionen zusammengefasst werden durch die entsprechende Schaltfläche.
-            Zusatzinformationen wie die Positionen von Helikopterlandeplätzen oder anderen Krankenhäusern, die nicht
-            notwendigerweise Kapazitäten gemeldet haben, können unter "Geographische Verortung" hinzugeschaltet werden.
-          </target></segment>
+        <source>/assets/help-dialog-beds-de.png</source>
+      <target>/assets/help-dialog-beds-de.png</target></segment>
     </unit><unit id="button21">
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:69</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:44</note></notes>
       <segment state="final">
         <source>Zurück</source>
       <target>Zurück</target></segment>
@@ -300,7 +216,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:70</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:45</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Weiter zur Darstellung der Fallzahlen' }}"/></source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ isSmallScreen ? 'Weiter' : 'Weiter zur Darstellung der Fallzahlen' }}"/></target></segment>
@@ -309,7 +225,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:71</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:46</note></notes>
       <segment state="final">
         <source>Fenster schließen</source>
       <target>Fenster schließen</target></segment>
@@ -318,7 +234,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:75</note></notes>
+      <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:1</note></notes>
       <segment state="final">
         <source>Beschreibung der Darstellung der Fallzahlen</source>
       <target>Beschreibung der Darstellung der Fallzahlen</target></segment>
@@ -327,26 +243,30 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:81</note></notes>
+      <note category="location">src/app/help-dialog-cases/help-dialog-cases.component.html:9</note></notes>
       <segment state="final">
-        <source>Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
+        <source>
+            Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
             Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
             oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
             angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
-            gewählt werden, ob die Darstellung absolut oder pro 100.000 Einwohner angezeigt werden soll. Wenn man auf der
-            Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</source>
-      <target>Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
+            gewählt werden, ob die Darstellung absolut oder pro 100.000 Einwohner angezeigt werden soll. Wenn man auf
+            der Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.
+        </source>
+      <target>
+            Die Fallzahlen stammen aus den offiziellen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">RKI-Datensätzen</pc>. Sie können nach
             Ländern, Bezirken und Kreisen dargestellt werden, und zwar die aktuellen Zahlen, als auch in den letzten 24
             oder 72 Stunden. Dabei können die Gesamtzahl der erfassten Fälle oder die Veränderung im gewählten Zeitraum
             angezeigt werden. Es kann weiter unterschieden werden zwischen Erkrankungen und Todesfällen. Außerdem kann
-            gewählt werden, ob die Darstellung absolut oder pro 100.000 Einwohner angezeigt werden soll. Wenn man auf der
-            Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.</target></segment>
+            gewählt werden, ob die Darstellung absolut oder pro 100.000 Einwohner angezeigt werden soll. Wenn man auf
+            der Karte über einen Kreis oder Bezirk fährt, zeigt ein Tooltip genaue Statistiken.
+        </target></segment>
     </unit><unit id="button31">
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:90</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:52</note></notes>
       <segment state="final">
         <source>Zurück</source>
       <target>Zurück</target></segment>
@@ -355,7 +275,7 @@
         <note category="description"> help</note>
         <note category="meaning">help</note>
 
-      <note category="location">src/app/help-dialog/help-dialog.component.html:91</note></notes>
+      <note category="location">src/app/help-dialog/help-dialog.component.html:53</note></notes>
       <segment state="final">
         <source>Fenster schließen</source>
       <target>Fenster schließen</target></segment>

@@ -57,6 +57,8 @@ import { SupportedLocales } from './services/i18n.service';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
 import { TranslatePipe } from './translate.pipe';
 import { VegaComponent } from './vega/vega.component';
+import { HelpDialogBedsComponent } from './help-dialog-beds/help-dialog-beds.component';
+import { HelpDialogCasesComponent } from './help-dialog-cases/help-dialog-cases.component';
 
 
 
@@ -143,7 +145,9 @@ export const localeProvider = {
     ShareDialogComponent,
     ButtonPanelComponent,
     BedTooltipComponent,
-    HospitalSearchComponent
+    HospitalSearchComponent,
+    HelpDialogBedsComponent,
+    HelpDialogCasesComponent
   ],
   imports: [
     BrowserModule,
