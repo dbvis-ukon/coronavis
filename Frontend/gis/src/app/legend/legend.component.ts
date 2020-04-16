@@ -90,8 +90,6 @@ export class LegendComponent implements OnInit {
 
     const actualExtent = this.caseColormap.getDomainExtent(data, this.mo.covidNumberCaseOptions, true);
 
-    console.log('new logic', this.caseColormap.getColorMapBins(scale));
-
     const fullNumbers = this.mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.absolut 
     && this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute;
 
@@ -109,10 +107,6 @@ export class LegendComponent implements OnInit {
       return b;
     });
 
-    console.log('bins w/o full numbers', this.caseColormap.getColorMapBins(scale, false, actualExtent));
-
-    console.log('bins', actualExtent, this.caseBins);
-
     this.title = this.getTitle();
   }
 
@@ -129,11 +123,11 @@ export class LegendComponent implements OnInit {
     return this.numberPipe.transform(v, '1.0-1');
   }
 
-  getTitle(): string {
+  private getTitle(): string {
     return this.i18n.getCurrentLocale() === SupportedLocales.DE_DE ? this.getTitleDe() : this.getTitleEn();
   }
 
-  getTitleEn() {
+  private getTitleEn() {
     let title = '';
 
     if(this.mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {
@@ -174,7 +168,7 @@ export class LegendComponent implements OnInit {
     return title;
   }
 
-  getTitleDe() {
+  private getTitleDe() {
     let title = '';
 
     if(this.mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {

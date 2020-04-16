@@ -13,12 +13,12 @@
     </unit><unit id="cases">
       <notes>
         <note category="description">cases</note>
-        <note category="meaning">legend</note>
+        <note category="meaning">case-tooltip</note>
         
         
-      <note category="location">src/app/legend/legend.component.html:10</note><note category="location">src/app/case-info/case-info.component.html:5</note></notes>
+      <note category="location">src/app/case-info/case-info.component.html:5</note></notes>
       <segment state="initial">
-        <source><ph id="0" equiv="INTERPOLATION" disp="{{ title }}"/></source>
+        <source>Fälle Total</source>
       <target>Total Cases</target></segment>
     </unit><unit id="changes">
       <notes>
@@ -992,14 +992,14 @@
       <notes>
         
         
-      <note category="location">src/app/legend/legend.component.html:9</note><note category="location">src/app/legend/legend.component.html:46</note></notes>
+      <note category="location">src/app/legend/legend.component.html:8</note><note category="location">src/app/legend/legend.component.html:45</note></notes>
       <segment state="initial">
         <source>Klicken um Legende ein-/auszuklappen</source>
       <target>Click to toggle legend</target></segment>
     </unit><unit id="legendDatasourceRki">
       <notes>
-        <note category="location">src/app/legend/legend.component.html:40</note>
-      </notes>
+        
+      <note category="location">src/app/legend/legend.component.html:39</note></notes>
       <segment state="initial">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institut</pc></source>
       <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institute</pc></target></segment>
@@ -1044,14 +1044,14 @@
         <note category="description">beds</note>
         <note category="meaning">legend</note>
 
-      <note category="location">src/app/legend/legend.component.html:46</note></notes>
+      <note category="location">src/app/legend/legend.component.html:45</note></notes>
       <segment state="initial">
         <source>Bettenauslastung</source>
       <target>Bed Capacity</target></segment>
     </unit><unit id="legendDatasourceDivi">
       <notes>
-        <note category="location">src/app/legend/legend.component.html:71</note>
-      </notes>
+        
+      <note category="location">src/app/legend/legend.component.html:70</note></notes>
       <segment state="initial">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></source>
       <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI ICU Registry</pc></target></segment>
