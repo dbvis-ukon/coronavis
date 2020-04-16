@@ -9,7 +9,6 @@ import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hos
 import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 import { HospitalUtilService } from './hospital-util.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
-import { QualitativeTimedStatusAggregation } from './types/qualitateive-timed-status-aggregation';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +50,7 @@ export class CountryAggregatorService {
     );
   }
 
-  public diviAggregationForCountry(refDate: Date): Observable<QualitativeTimedStatusAggregation> {
+  public diviAggregationForCountry(refDate: Date): Observable<QualitativeTimedStatus> {
     const beds = [
       'icu_low_care',
       'icu_high_care',
@@ -62,7 +61,7 @@ export class CountryAggregatorService {
     .pipe(
       flatMap(fc => fc.features),
       map(feature => this.hospitalUtil.getLatestTimedStatus(feature.properties.developments, refDate)),
-      reduce<QualitativeTimedStatus, QualitativeTimedStatusAggregation>((acc, val) => {
+      reduce<QualitativeTimedStatus, QualitativeTimedStatus>((acc, val) => {
         if(!val) {
           return acc;
         }
@@ -83,17 +82,13 @@ export class CountryAggregatorService {
           acc.timestamp = valT;
         }
 
-        if(!acc.numberOfHospitals) {
-          acc.numberOfHospitals = 0;
-        }
+        acc.numHospitals += 1;
 
-        acc.numberOfHospitals += 1;
-
-        return acc as QualitativeTimedStatusAggregation;
+        return acc as QualitativeTimedStatus;
       },{
         timestamp: new Date('1990-01-01'),
         last_update: new Date('1990-01-01'),
-        numberOfHospitals: 0,
+        numHospitals: 0,
         icu_low_care: {
           Verfügbar: 0,
           Begrenzt: 0,

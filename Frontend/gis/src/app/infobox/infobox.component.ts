@@ -3,8 +3,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Feature, MultiPolygon, Point } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
 import moment from 'moment';
-import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged, flatMap, map, toArray } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { count, distinctUntilChanged, flatMap, map, switchMap } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
 import { HospitalSearchFeatureCollectionPermissible } from '../hospital-search/hospital-search.component';
 import { FlyTo } from '../map/events/fly-to';
@@ -14,6 +14,7 @@ import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTim
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
@@ -26,7 +27,6 @@ import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TooltipService } from '../services/tooltip.service';
 import { TranslationService } from '../services/translation.service';
-import { QualitativeTimedStatusAggregation } from '../services/types/qualitateive-timed-status-aggregation';
 
 @Component({
   selector: 'app-infobox',
@@ -66,7 +66,7 @@ export class InfoboxComponent implements OnInit {
   @Output()
   flyTo = new EventEmitter<FlyTo>();
   
-  aggregatedDiviStatistics: QualitativeTimedStatusAggregation;
+  aggregatedDiviStatistics: QualitativeTimedStatus;
 
   aggregatedRkiStatistics: QuantitativeAggregatedRkiCasesProperties;
 
@@ -127,10 +127,30 @@ export class InfoboxComponent implements OnInit {
     this.refDay$
     .pipe(
       distinctUntilChanged(),
-      map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate())
+      map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate()),
+      switchMap<Date, Observable<[QualitativeTimedStatus, number]>>(refDate => {
+        return forkJoin([
+          this.countryAggregatorService.diviAggregationForCountry(refDate),
+          this.hospitalRepo.getDiviDevelopmentSingleHospitals(null)
+            .pipe(
+              flatMap(fc => fc.features),
+              this.hospitalUtils.filterByDate(refDate),
+              count()
+            )
+        ])
+      })
     )
-    .subscribe(date => {
-      // this.updateHospitalStatistics(date);
+    .subscribe(result => {
+      const r = result[0];
+      this.aggregatedDiviStatistics = r;
+
+      this.glyphLegend = [
+        {name: 'ICU low', accessor: 'showIcuLow', accFunc: (r) => r.icu_low_care, description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+        {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (r) => r.icu_high_care, description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
+        {name: 'ECMO', accessor: 'showEcmo', accFunc: (r) => r.ecmo_state, description: 'ECMO = Zusätzlich ECMO'}
+      ];
+
+      this.numUnfilteredHospitals = result[1];
     })
 
 
@@ -140,35 +160,6 @@ export class InfoboxComponent implements OnInit {
     });
 
     this.updateHospitals();
-  }
-
-  updateHospitalStatistics(refDate: Date) {
-    const start = new Date().getTime();
-    console.log('date updated', refDate);
-
-    this.countryAggregatorService.diviAggregationForCountry(refDate)
-    .subscribe(r => {
-      this.aggregatedDiviStatistics = r;
-
-      this.glyphLegend = [
-        {name: 'ICU low', accessor: 'showIcuLow', accFunc: (r) => r.icu_low_care, description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
-        {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (r) => r.icu_high_care, description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
-        {name: 'ECMO', accessor: 'showEcmo', accFunc: (r) => r.ecmo_state, description: 'ECMO = Zusätzlich ECMO'}
-      ];
-
-      console.log('calc stats', new Date().getTime() - start);      
-    });
-
-    this.hospitalRepo.getDiviDevelopmentSingleHospitals(null)
-    .pipe(
-      flatMap(fc => fc.features),
-      this.hospitalUtils.filterByDate(refDate),
-      toArray()
-    )
-    .subscribe(d => {
-      this.numUnfilteredHospitals = d.length;
-      console.log('calc stats unfiltered', new Date().getTime() - start);
-    });
   }
 
   updateHospitals() {

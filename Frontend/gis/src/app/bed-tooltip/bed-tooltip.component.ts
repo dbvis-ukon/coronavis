@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { trigger, animate, transition, style } from '@angular/animations';
-import { QualitativeTimedStatusAggregation } from '../services/types/qualitateive-timed-status-aggregation';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
-import { VegaBarchartService } from '../services/vega-barchart.service';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { TranslationService } from '../services/translation.service';
+import { VegaBarchartService } from '../services/vega-barchart.service';
 
 @Component({
   selector: 'app-bed-tooltip',
@@ -24,13 +24,13 @@ import { TranslationService } from '../services/translation.service';
 export class BedTooltipComponent implements OnInit {
 
   @Input()
-  data: QualitativeTimedStatusAggregation;
+  data: QualitativeTimedStatus;
 
   @Input()
   bedName: string;
 
   @Input()
-  accessorFunc: (d: QualitativeTimedStatusAggregation) => QualitativeAggregatedBedStateCounts;
+  accessorFunc: (d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts;
 
   @Input()
   explanation: string;

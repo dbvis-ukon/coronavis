@@ -138,7 +138,7 @@ export class TimesliderComponent implements OnInit {
 
   private sliderChanging(value: number) {
     const mDate = this.sliderValueToMoment(value);
-    this.emit(mDate.format('YYYY-MM-DD'), true);
+    // this.emit(mDate.format('YYYY-MM-DD'), true);
   }
 
   private sliderChanged(value: number) {
