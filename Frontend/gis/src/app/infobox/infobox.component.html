@@ -248,7 +248,7 @@
                 Fälle
               </mat-button-toggle>
               <mat-button-toggle i18n="@@infoboxCasesDiff" [value]="eCovidNumberCaseChange.relative"
-                                 [disabled]="eCovidNumberCaseTimeWindow.all == mo.covidNumberCaseOptions.timeWindow">
+                                 [disabled]="eCovidNumberCaseTimeWindow.all === mo.covidNumberCaseOptions.timeWindow || eCovidNumberCaseNormalization.per100k === mo.covidNumberCaseOptions.normalization">
                 Veränderung im gewählten Zeitraum
               </mat-button-toggle>
             </mat-button-toggle-group>

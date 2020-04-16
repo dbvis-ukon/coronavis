@@ -1,5 +1,6 @@
 import { animate, style, transition, trigger } from "@angular/animations";
 import { Component, Input, OnInit } from '@angular/core';
+import { CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
 import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../services/types/quantitative-aggregated-rki-cases-over-time';
 
 @Component({
@@ -22,6 +23,9 @@ export class CaseTooltipComponent implements OnInit {
 
   @Input()
   public data: QuantitativeAggregatedRkiCasesOverTimeProperties;
+
+  @Input()
+  public options: CovidNumberCaseOptions;
 
   constructor() {}
 

@@ -1,9 +1,9 @@
 <div mat-dialog-title>
   <div class="title-row">
     <div class="title-row-title">
-      <h3 class="name">{{ data.name }}</h3>
+      <h3 class="name">{{ data.data.name }}</h3>
 
-      <p class="numHospitals">{{ this.data.bevoelkerung | number }} <span i18n="case-tooltip|cases@@residents">Einwohner</span></p>
+      <p class="numHospitals">{{ this.data.data.bevoelkerung | number }} <span i18n="case-tooltip|cases@@residents">Einwohner</span></p>
     </div>
     <div>
       <button (click)="close()" mat-icon-button aria-label="Close Dialog">
@@ -14,5 +14,5 @@
 </div>
 
 <div mat-dialog-content>
-    <app-case-info [data]="data"></app-case-info>
+    <app-case-info [data]="data.data" [options]="data.options"></app-case-info>
 </div>

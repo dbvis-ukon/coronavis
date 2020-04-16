@@ -15,35 +15,155 @@
     <tbody>
     <tr>
         <td i18n="case-tooltip|sick@@sick">Erkrankte</td>
-        <td>{{ this.data.last.cases | number }}</td>
-        <td>{{ this.data.last.cases - this.data.yesterday.cases | plusminus }}</td>
-        <td>({{ this.getPercentageChange(this.data.last.cases, this.data.yesterday.cases)}})</td>
-        <td>{{ this.data.last.cases - this.data.threeDaysAgo.cases | plusminus }}</td>
-        <td>({{ this.getPercentageChange(this.data.last.cases, this.data.threeDaysAgo.cases)}})</td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.cases, eNorm.absolut, eTime.all, eChange.absolute)}"
+            >
+                {{ this.data.last.cases | number }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.cases, eNorm.absolut, eTime.twentyFourhours, eChange.absolute)}"
+            >
+                {{ this.data.last.cases - this.data.yesterday.cases | plusminus }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.cases, eNorm.absolut, eTime.twentyFourhours, eChange.relative)}"
+            >
+                ({{ this.getPercentageChange(this.data.last.cases, this.data.yesterday.cases)}})
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.cases, eNorm.absolut, eTime.seventyTwoHours, eChange.absolute)}"
+            >
+                {{ this.data.last.cases - this.data.threeDaysAgo.cases | plusminus }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.cases, eNorm.absolut, eTime.seventyTwoHours, eChange.relative)}"
+            >
+                ({{ this.getPercentageChange(this.data.last.cases, this.data.threeDaysAgo.cases)}})
+            </div>
+        </td>
     </tr>
     <tr>
         <td i18n="case-tooltip|deaths@@deaths">Todesfälle</td>
-        <td>{{ this.data.last.deaths | number }}</td>
-        <td>{{ this.data.last.deaths - this.data.yesterday.deaths | plusminus }}</td>
-        <td>({{ this.getPercentageChange(this.data.last.deaths, this.data.yesterday.deaths)}})</td>
-        <td>{{ this.data.last.deaths - this.data.threeDaysAgo.deaths | plusminus }}</td>
-        <td>({{ this.getPercentageChange(this.data.last.deaths, this.data.threeDaysAgo.deaths)}})</td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.absolut, eTime.all, eChange.absolute)}"
+            >
+                {{ this.data.last.deaths | number }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.absolut, eTime.twentyFourhours, eChange.absolute)}"
+            >
+                {{ this.data.last.deaths - this.data.yesterday.deaths | plusminus }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.absolut, eTime.twentyFourhours, eChange.relative)}"
+            >
+                ({{ this.getPercentageChange(this.data.last.deaths, this.data.yesterday.deaths)}})
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.absolut, eTime.seventyTwoHours, eChange.absolute)}"
+            >
+                {{ this.data.last.deaths - this.data.threeDaysAgo.deaths | plusminus }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.absolut, eTime.seventyTwoHours, eChange.relative)}"
+            >
+                ({{ this.getPercentageChange(this.data.last.deaths, this.data.threeDaysAgo.deaths)}})
+            </div>
+        </td>
     </tr>
     <tr>
         <td i18n="case-tooltip|sickScale@@sickScale">Erkrankte je 100.000 Einwohner</td>
-        <td>{{ this.getCasesPer100kInhabitants(this.data.last.cases) }}</td>
-        <td>{{ this.getCasesPer100kInhabitants(this.data.last.cases - this.data.yesterday.cases, true) }}</td>
-        <td>({{ this.getPercentageChange(this.data.last.cases, this.data.yesterday.cases)}})</td>
-        <td>{{ this.getCasesPer100kInhabitants(this.data.last.cases - this.data.threeDaysAgo.cases, true) }}</td>
-        <td>({{ this.getPercentageChange(this.data.last.cases, this.data.threeDaysAgo.cases)}})</td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.all, eChange.absolute)}"
+            >
+                {{ this.getCasesPer100kInhabitants(this.data.last.cases) }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.twentyFourhours, eChange.absolute)}"
+            >
+                {{ this.getCasesPer100kInhabitants(this.data.last.cases - this.data.yesterday.cases, true) }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.twentyFourhours, eChange.relative)}"
+            >
+                ({{ this.getPercentageChange(this.data.last.cases, this.data.yesterday.cases)}})
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.seventyTwoHours, eChange.absolute)}"
+            >
+                {{ this.getCasesPer100kInhabitants(this.data.last.cases - this.data.threeDaysAgo.cases, true) }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.seventyTwoHours, eChange.relative)}"
+            >
+                ({{ this.getPercentageChange(this.data.last.cases, this.data.threeDaysAgo.cases)}})
+            </div>
+        </td>
     </tr>
     <tr>
         <td i18n="case-tooltip|deathScale@@deathScale">Todesfälle je 100.000 Einwohner</td>
-        <td>{{ this.getCasesPer100kInhabitants(this.data.last.deaths) }}</td>
-        <td>{{ this.getCasesPer100kInhabitants(this.data.last.deaths - this.data.yesterday.deaths, true) }}</td>
-        <td>({{ this.getPercentageChange(this.data.last.deaths, this.data.yesterday.deaths)}})</td>
-        <td>{{ this.getCasesPer100kInhabitants(this.data.last.deaths - this.data.threeDaysAgo.deaths, true) }}</td>
-        <td>({{ this.getPercentageChange(this.data.last.deaths, this.data.threeDaysAgo.deaths)}})</td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.all, eChange.absolute)}"
+            >
+                {{ this.getCasesPer100kInhabitants(this.data.last.deaths) }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.twentyFourhours, eChange.absolute)}"
+            >
+                {{ this.getCasesPer100kInhabitants(this.data.last.deaths - this.data.yesterday.deaths, true) }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.twentyFourhours, eChange.relative)}"
+            >
+                ({{ this.getPercentageChange(this.data.last.deaths, this.data.yesterday.deaths)}})
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.seventyTwoHours, eChange.absolute)}"
+            >
+                {{ this.getCasesPer100kInhabitants(this.data.last.deaths - this.data.threeDaysAgo.deaths, true) }}
+            </div>
+        </td>
+        <td>
+            <div
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.seventyTwoHours, eChange.relative)}"
+            >
+                ({{ this.getPercentageChange(this.data.last.deaths, this.data.threeDaysAgo.deaths)}})
+            </div>
+        </td>
     </tr>
     </tbody>
 </table>

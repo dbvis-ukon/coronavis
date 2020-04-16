@@ -1,5 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../services/types/quantitative-aggregated-rki-cases-over-time';
 
 @Component({
@@ -11,6 +12,18 @@ export class CaseInfoComponent implements OnInit {
 
   @Input()
   public data: QuantitativeAggregatedRkiCasesOverTimeProperties;
+
+  @Input()
+  public options: CovidNumberCaseOptions;
+
+
+  eChange = CovidNumberCaseChange;
+
+  eTime = CovidNumberCaseTimeWindow;
+
+  eType = CovidNumberCaseType;
+
+  eNorm = CovidNumberCaseNormalization;
 
   constructor(private numberPipe: DecimalPipe) { }
 
@@ -32,6 +45,10 @@ export class CaseInfoComponent implements OnInit {
       return ("war 0");
     }
     return `${change > 0 ? '+' : ''}${this.numberPipe.transform(change, '1.0-1')}%`
+  }
+
+  isActive(eType: CovidNumberCaseType, eNorm: CovidNumberCaseNormalization, eTime: CovidNumberCaseTimeWindow, eChange: CovidNumberCaseChange) {
+    return this.options.type === eType && this.options.change === eChange && this.options.normalization === eNorm && this.options.timeWindow === eTime;
   }
 
 }
