@@ -35,22 +35,22 @@ export class GlyphLayerService {
     this.loading$.next(true);
     return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals()
     .pipe(
-      map(data => {
-        const filteredFeatures: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>[] = [];
+      // map(data => {
+      //   const filteredFeatures: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>[] = [];
 
-        for(const f of data.features) {
-          if(f.geometry.coordinates[0] === 0 || f.geometry.coordinates[1] === 0 || f.geometry.coordinates[0] > 500 || f.geometry.coordinates[1] > 500) {
-            console.warn(`Invalid location for hospital ${f.properties.name}. Will not be shown on the map.`, f);
-          } else {
-            filteredFeatures.push(f);
-          }
-        }
+      //   for(const f of data.features) {
+      //     if(f.geometry.coordinates[0] === 0 || f.geometry.coordinates[1] === 0 || f.geometry.coordinates[0] > 500 || f.geometry.coordinates[1] > 500) {
+      //       console.warn(`Invalid location for hospital ${f.properties.name}. Will not be shown on the map.`, f);
+      //     } else {
+      //       filteredFeatures.push(f);
+      //     }
+      //   }
         
-        return {
-          type: 'FeatureCollection',
-          features: filteredFeatures
-        } as FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>
-      }),
+      //   return {
+      //     type: 'FeatureCollection',
+      //     features: filteredFeatures
+      //   } as FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>
+      // }),
       map(data => {
         const bbox = this.geojsonUtil.getBBox<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>>(data.features,
           d => d.geometry.coordinates[1],

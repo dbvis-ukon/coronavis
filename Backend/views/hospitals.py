@@ -55,7 +55,7 @@ def get_hospitals_by_bundeslander():
 
 
 @routes.route('/development', methods=['GET'])
-@cache.cached()
+# @cache.cached()
 def get_categorical_hospital_development():
     """
         Return all Hospitals
@@ -118,6 +118,10 @@ hospital_information AS (
         hospital.insert_date
     FROM
         hospital
+    WHERE st_x(location) > 0
+        AND st_x(location) < 999
+        AND st_y(location) > 0
+        AND st_y(location) < 999
     ORDER BY
         hospital.name
 ) -- join hospital timeseries with hospital metadata
@@ -141,6 +145,11 @@ FROM
             helipads.geom
         FROM
             helipads
+        -- remove invalid geo locations
+        WHERE st_x(location) > 0
+        AND st_x(location) < 999
+        AND st_y(location) > 0
+        AND st_y(location) < 999
         ORDER BY
             (hi.location <-> helipads.geom)
         LIMIT
