@@ -3,8 +3,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Feature, MultiPolygon, Point } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
 import moment from 'moment';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
-import { count, distinctUntilChanged, flatMap, map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin } from 'rxjs';
+import { distinctUntilChanged, map, mergeMap, tap } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
 import { HospitalSearchFeatureCollectionPermissible } from '../hospital-search/hospital-search.component';
 import { FlyTo } from '../map/events/fly-to';
@@ -65,6 +65,8 @@ export class InfoboxComponent implements OnInit {
 
   @Output()
   flyTo = new EventEmitter<FlyTo>();
+
+  aggregateStatisticsLoading: boolean = false;
   
   aggregatedDiviStatistics: QualitativeTimedStatus;
 
@@ -124,23 +126,38 @@ export class InfoboxComponent implements OnInit {
     this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
     this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);  
 
+    // this.refDay$
+    // .pipe(
+    //   distinctUntilChanged(),
+    //   map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate()),
+    //   mergeMap(refDate => this.countryAggregatorService.diviAggregationForCountry(refDate))
+    // )
+    // .subscribe(r => {
+    //   this.aggregatedDiviStatistics = r;
+
+    //   this.glyphLegend = [
+    //     {name: 'ICU low', accessor: 'showIcuLow', accFunc: (r) => r.icu_low_care, description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+    //     {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (r) => r.icu_high_care, description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
+    //     {name: 'ECMO', accessor: 'showEcmo', accFunc: (r) => r.ecmo_state, description: 'ECMO = Zusätzlich ECMO'}
+    //   ];
+    // });
+
     this.refDay$
     .pipe(
       distinctUntilChanged(),
+      tap(() => this.aggregateStatisticsLoading = true),
       map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate()),
-      switchMap<Date, Observable<[QualitativeTimedStatus, number]>>(refDate => {
-        return forkJoin([
-          this.countryAggregatorService.diviAggregationForCountry(refDate),
-          this.hospitalRepo.getDiviDevelopmentSingleHospitals(null)
-            .pipe(
-              flatMap(fc => fc.features),
-              this.hospitalUtils.filterByDate(refDate),
-              count()
-            )
-        ])
-      })
+      tap(refDate => console.log('refdate', refDate)),
+      mergeMap(refDate => {
+        const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate)
+        const unfiltered = this.countryAggregatorService.diviAggregationForCountryUnfiltered(refDate);
+
+        return forkJoin([filtered, unfiltered]);
+      }),
+      tap(() => this.aggregateStatisticsLoading = false)
     )
     .subscribe(result => {
+      console.log('result', result);
       const r = result[0];
       this.aggregatedDiviStatistics = r;
 
@@ -150,7 +167,7 @@ export class InfoboxComponent implements OnInit {
         {name: 'ECMO', accessor: 'showEcmo', accFunc: (r) => r.ecmo_state, description: 'ECMO = Zusätzlich ECMO'}
       ];
 
-      this.numUnfilteredHospitals = result[1];
+      this.numUnfilteredHospitals = result[1].numHospitals;
     })
 
 

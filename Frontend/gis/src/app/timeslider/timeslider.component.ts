@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
-import { Feature, Point } from 'geojson';
+import { Feature, MultiPolygon } from 'geojson';
 import moment, { Moment } from 'moment';
 import { NouiFormatter } from 'ng2-nouislider';
 import { BehaviorSubject, interval, NEVER, Observable } from 'rxjs';
@@ -9,7 +9,7 @@ import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { MapOptions } from '../map/options/map-options';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
-import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { ConfigService } from '../services/config.service';
 
 export class TimeFormatter implements NouiFormatter {
@@ -20,7 +20,7 @@ export class TimeFormatter implements NouiFormatter {
   };
 
   from(value: string): number {
-    return moment.utc(value).diff(this.startDay, 'days');
+    return moment(value).diff(this.startDay, 'days');
   }
 }
 
@@ -66,10 +66,10 @@ export class TimesliderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.diviRepo.getDiviDevelopmentSingleHospitals()
+    this.diviRepo.getDiviDevelopmentCountries(new Date(), -1)
     .pipe(
       flatMap(d => d.features),
-      map<Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, [Date, Date]>(d => [new Date(d.properties.developments[0].timestamp), new Date(d.properties.developments[d.properties.developments.length - 1].timestamp)]),
+      map<Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, [Moment, Moment]>(d => [moment(d.properties.developments[0].timestamp), moment(d.properties.developments[d.properties.developments.length - 1].timestamp)]),
       reduce((acc, val) => {
         if(!acc[0] || acc[0] > val[0]) {
           acc[0] = val[0];
@@ -82,9 +82,12 @@ export class TimesliderComponent implements OnInit {
         return acc;
       }),
       ).subscribe(extent => {
-        this.timeExtent = [0, moment(extent[1]).startOf('day').diff(moment(extent[0]).startOf('day'), 'days')];
+        const firstDay = extent[0].startOf('day');
+        const lastDay = extent[1].startOf('day');
 
-        this.timeFormatter = new TimeFormatter(moment.utc(extent[0]).startOf('day'));
+        this.timeExtent = [0, lastDay.diff(firstDay, 'days')];
+
+        this.timeFormatter = new TimeFormatter(firstDay);
 
         this.nouiConfig = {
           tooltips: this.timeFormatter,
@@ -96,7 +99,7 @@ export class TimesliderComponent implements OnInit {
         }
 
         if(this._mo) {
-          this.currentTime = this.timeFormatter.from(this._mo.bedGlyphOptions.date);
+          this.currentTime = this.timeFormatter.from(this._mo.bedGlyphOptions.date === 'now' ? moment().format('YYYY-MM-DD') : this._mo.bedGlyphOptions.date);
         }
 
         this.numTicks = this.timeExtent[1] - this.timeExtent[0];
@@ -104,7 +107,7 @@ export class TimesliderComponent implements OnInit {
 
 
 
-      const source$ = interval(2000);
+      const source$ = interval(1000);
 
 
       const ons$ = this.modePlaying$.pipe(filter(v=>!v));
@@ -142,8 +145,7 @@ export class TimesliderComponent implements OnInit {
   }
 
   private sliderChanged(value: number) {
-    const mDate = this.sliderValueToMoment(value);
-    this.emit(mDate.format('YYYY-MM-DD'), false);
+    this.emit(value, false);
   }
 
   // function is called for every interval
@@ -156,9 +158,7 @@ export class TimesliderComponent implements OnInit {
 
     this.currentTime = nextTime;
 
-    const date = this.sliderValueToMoment(nextTime).format('YYYY-MM-DD');
-
-    this.emit(date, false);
+    this.emit(nextTime, false);
   }
 
   pausableInterval(ms: number, pauser: Observable<boolean>) {
@@ -168,13 +168,17 @@ export class TimesliderComponent implements OnInit {
     return pauser.pipe(switchMap(paused => paused ? NEVER : source.pipe(map(() => x++))));
   }
 
-  emit(date: string, changing: boolean) {
+  emit(numDays: number, changing: boolean) {
     if(changing && (this._mo.bedGlyphOptions.enabled || this._mo.bedBackgroundOptions.enabled)
       && (this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none || this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.county)) {
       // do not update with single glyphs as it causes too much lag
       return;
     }
 
+    let date = this.sliderValueToMoment(numDays).format('YYYY-MM-DD');
+    if(date === moment().format('YYYY-MM-DD')) {
+      date = 'now';
+    }
 
     this.mapOptionsChange.emit(this.configService.overrideMapOptions(this._mo, {
       bedGlyphOptions: {

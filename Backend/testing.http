@@ -1,0 +1,1 @@
+GET http://localhost:5000/hospitals/development/laender?refDate=2020-04-06

@@ -26,6 +26,8 @@
           </mat-panel-title>
       </mat-expansion-panel-header>
 
+      <mat-progress-bar *ngIf="aggregateStatisticsLoading" mode="indeterminate"></mat-progress-bar>
+
       <div *ngIf="aggregatedDiviStatistics">
         <p class="stats with-addon" i18n="@@infoboxNumberOfHospitals">{{ numUnfilteredHospitals | number }} bundesweit gemeldete Einrichtungen</p>
         <p class="stats"><small i18n="@@infoboxNumberOfHospitalsAddon">(davon {{ (numUnfilteredHospitals - aggregatedDiviStatistics.numHospitals) | number }} ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</small></p>

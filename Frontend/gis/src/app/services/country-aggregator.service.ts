@@ -1,25 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import moment from 'moment';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import { flatMap, reduce } from 'rxjs/operators';
+import { flatMap, reduce, tap } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { RKICaseRepository } from '../repositories/rki-case.repository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
-import { HospitalUtilService } from './hospital-util.service';
-import { QualitativeColormapService } from './qualitative-colormap.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CountryAggregatorService {
 
+  private diviFilteredMap: Map<string, QualitativeTimedStatus> = new Map();
+  private diviUnfilteredMap: Map<string, QualitativeTimedStatus> = new Map();
+
   constructor(
     private diviDevelopmentRepository: QualitativeDiviDevelopmentRepository,
-    private rkiCaseRepository: RKICaseRepository,
-    private hospitalUtil: HospitalUtilService
-  ) { }
+    private rkiCaseRepository: RKICaseRepository
+  ) {
+  }
 
   public rkiAggregationForCountry(): Observable<QuantitativeAggregatedRkiCasesProperties> {
     return this.rkiCaseRepository.getCasesTotalForAggLevel(AggregationLevel.state)
@@ -51,66 +53,52 @@ export class CountryAggregatorService {
   }
 
   public diviAggregationForCountry(refDate: Date): Observable<QualitativeTimedStatus> {
-    const beds = [
-      'icu_low_care',
-      'icu_high_care',
-      'ecmo_state'
-    ];
-
-    return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals(refDate)
-    .pipe(
-      flatMap(fc => fc.features),
-      map(feature => this.hospitalUtil.getLatestTimedStatus(feature.properties.developments, refDate)),
-      reduce<QualitativeTimedStatus, QualitativeTimedStatus>((acc, val) => {
-        if(!val) {
-          return acc;
-        }
-        for(const bed of beds) {
-          if(!acc[bed]) {
-            acc[bed] = {};
-          }
-          for(const stat of QualitativeColormapService.bedStati) {
-            if(!acc[bed][stat]) {
-              acc[bed][stat] = 0;
-            }
-            acc[bed][stat] += val[bed][stat] || 0;
-          }
-        }
-        const accT = new Date(acc.timestamp);
-        const valT = new Date(val.timestamp)
-        if(accT < valT) {
-          acc.timestamp = valT;
-        }
-
-        acc.numHospitals += 1;
-
-        return acc as QualitativeTimedStatus;
-      },{
-        timestamp: new Date('1990-01-01'),
-        last_update: new Date('1990-01-01'),
-        numHospitals: 0,
-        icu_low_care: {
-          Verfügbar: 0,
-          Begrenzt: 0,
-          Ausgelastet: 0,
-          "Nicht verfügbar": 0,
-          "": 0
-        },
-        icu_high_care: {
-          Verfügbar: 0,
-          Begrenzt: 0,
-          Ausgelastet: 0,
-          "Nicht verfügbar": 0,
-          "": 0
-        },
-        ecmo_state: {
-          Verfügbar: 0,
-          Begrenzt: 0,
-          Ausgelastet: 0,
-          "Nicht verfügbar": 0,
-          "": 0
-        }
-      })
-    );
+    return this.useCachedMap(refDate, this.diviFilteredMap, 5);
   }
+
+  public diviAggregationForCountryUnfiltered(refDate: Date): Observable<QualitativeTimedStatus> {
+    return this.useCachedMap(refDate, this.diviUnfilteredMap, -1);
+  }
+
+  private useCachedMap(refDate: Date, cache: Map<string, QualitativeTimedStatus>, lastNumberOfDays: number) {
+    if(!refDate) {
+      refDate = new Date();
+    }
+    const t = moment(refDate).format('YYYY-MM-DD');
+
+    const cached = cache.get(t);
+
+    if(cached) {
+      return of(cached);
+    }
+
+    const uncached = this.fetchMap(cache, lastNumberOfDays)
+    .pipe(
+      map(map => {
+        return map.get(t);
+      }),
+    );
+
+    return uncached;
+  }
+
+  private fetchMap(writeToCache: Map<string, QualitativeTimedStatus>, lastNumberOfDays: number): Observable<Map<string, QualitativeTimedStatus>> {
+    return this.diviDevelopmentRepository.getDiviDevelopmentCountries(new Date(), lastNumberOfDays)
+    .pipe(
+      map(fc => fc.features[0]),
+      map(feature => {
+        const map: Map<string, QualitativeTimedStatus> = new Map();
+
+        feature.properties.developments.forEach(d => {
+          const t = moment(d.timestamp).format('YYYY-MM-DD');
+
+          map.set(t, d);
+        })
+
+        return map;
+      }),
+      tap(m => writeToCache = m),
+    )
+  }
+
 }

@@ -84,13 +84,28 @@ export class HospitalUtilService {
     }
     
     if(beforeDate) {
-      const mDate = moment(beforeDate);
-      const filtered = entries.filter(d => moment(d.timestamp).isSameOrBefore(mDate));
+      const mDate = moment(beforeDate).startOf('day');
+
+      const filtered = []
+      for(let i = entries.length - 1; i >= 0; i--) {
+        const d = entries[i];
+        const t = moment(d.timestamp).startOf('day');
+
+        // console.log(t.format('YYYY-MM-DD'), mDate.format('YYYY-MM-DD'), t.isSameOrBefore(mDate), t.isSameOrAfter(mDate))
+
+        if(t.isSameOrBefore(mDate)) {
+          // console.log('add', moment(d.timestamp));
+          filtered.push(d);
+          break;
+        }
+      }
+
       if(filtered.length === 0) {
         return null;
       }
 
-      return filtered[filtered.length - 1];
+      // because it is reversed with the for loop
+      return filtered[0];
     }
 
     const last = entries[entries.length - 1];
