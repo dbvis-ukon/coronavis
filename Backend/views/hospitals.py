@@ -163,7 +163,7 @@ FROM
             1
     ) b ON true""")
 
-    maxDaysOld = request.args.get('maxDaysOld') or '2020-01-01'
+    maxDaysOld = request.args.get('maxDaysOld') or '1000'
     refDate = request.args.get('refDate') or datetime.datetime.today().strftime('%Y-%m-%d')
     sql_result = db.engine.execute(sql_stmt, maxDaysOld = maxDaysOld, refDate = refDate).fetchall()
 
@@ -540,7 +540,7 @@ GROUP BY
     places_per_regierungsbezirk_per_timestamp.geom
 """)
 
-    maxDaysOld = request.args.get('maxDaysOld') or '2020-01-01'
+    maxDaysOld = request.args.get('maxDaysOld') or '1000'
     refDate = request.args.get('refDate') or datetime.datetime.today().strftime('%Y-%m-%d')
     sql_result = db.engine.execute(sql_stmt, maxDaysOld = maxDaysOld, refDate = refDate).fetchall()
 
@@ -920,7 +920,6 @@ GROUP BY
 
     maxDaysOld = request.args.get('maxDaysOld') or '1000'
     refDate = request.args.get('refDate') or datetime.datetime.today().strftime('%Y-%m-%d')
-
     sql_result = db.engine.execute(sql_stmt, maxDaysOld = maxDaysOld, refDate = refDate).fetchall()
 
     features = []
