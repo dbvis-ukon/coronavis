@@ -105,10 +105,10 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
 
 
     // Resize glyph bounding boxes + show/hide labels
-    if (this.map.getZoom() >= 12) {
+    if (zoom >= 12) {
       this.showNameHospitals = true
       // true, true
-    } else if (this.map.getZoom() === 11) {
+    } else if (zoom <= 11 && zoom >= 9) {
       this.showCityHospitals = true;
     }
   }

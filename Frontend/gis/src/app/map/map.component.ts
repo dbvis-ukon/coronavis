@@ -157,6 +157,7 @@ export class MapComponent implements OnInit {
     }
 
     this.mymap = L.map('main', {
+      preferCanvas: true,
       minZoom: 6,
       maxZoom: 13,
       layers: [tiledMap],

@@ -1,23 +1,43 @@
 import { MatDialog } from '@angular/material/dialog/dialog';
 import { Selection } from 'd3-selection';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
-import L, { DomUtil, Point } from 'leaflet';
+import L, { DomUtil, LeafletMouseEvent, Point } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage/public_api';
-import { BehaviorSubject, NEVER, timer } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import * as Quadtree from 'quadtree-lib';
+import { BehaviorSubject, NEVER, Observable, Subject, timer } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
+import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from 'src/app/repositories/types/out/single-hospital-out';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
 import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
-import { CanvasLayer, IViewInfo, Map } from 'src/app/util/ts-canvas-layer';
+import { CanvasLayer, IViewInfo } from 'src/app/util/ts-canvas-layer';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import { BedGlyphOptions } from '../options/bed-glyph-options';
 import { BedType } from '../options/bed-type.enum';
 import { GlyphLayer } from './GlyphLayer';
 
+export interface MyQuadTreeItem<Payload> {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  payload: Payload;
+}
+
+export interface GlyphEvent<G extends Geometry, T extends SingleHospitalOut < QualitativeTimedStatus > | AggregatedHospitalOut < QualitativeTimedStatus >> {
+  mouse: LeafletMouseEvent;
+
+  item: Feature<G, T>;
+}
+
 export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends SingleHospitalOut < QualitativeTimedStatus > | AggregatedHospitalOut < QualitativeTimedStatus >> extends CanvasLayer implements GlyphLayer {
+
+  protected quadtree: Quadtree<MyQuadTreeItem<Feature<G, T>>>;
+
   protected visible: boolean = false;
 
   protected gHospitals: Selection < SVGGElement, Feature < G, T > , SVGSVGElement, unknown > ;
@@ -42,6 +62,10 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
   protected viewInfo: IViewInfo;
 
+  protected mouseMove$: Subject<LeafletMouseEvent> = new Subject();
+
+  protected click$: Subject<LeafletMouseEvent> = new Subject();
+
 
   constructor(
     name: string,
@@ -53,8 +77,11 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     protected dialog: MatDialog,
     protected storage: LocalStorageService
   ) {
-    super(null);
-
+    super({
+      interactive: true,
+      bubblingMouseEvents: true
+    });
+    
     this.forceLayout = new ForceDirectedLayout(this.storage, this.data as any, granularity, this.updateGlyphPositions.bind(this));
 
     this.currentOptions = this.glyphOptions$.value;
@@ -100,21 +127,47 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       })
     )    
     .subscribe();
-  }
 
-  public onAdd(map: Map) {
-    super.onAdd(map);
 
-    this._map.on('zoom', () => this.onZoomed());
+    this.onMouseMove()
+    .subscribe(e => {
+      if(e === null) {
+        this.tooltipService.close();
+        DomUtil.removeClass(this._canvas, 'glyphHit');
+        return;
+      }
 
-    this.onZoomed();
-    
-    return this;
+      DomUtil.addClass(this._canvas, 'glyphHit');
+
+      const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {
+        x: e.mouse.originalEvent.clientX + 5,
+        y: e.mouse.originalEvent.clientY + 5
+      });
+      t.tooltipData = e.item.properties;
+
+      
+    });
+
+    this.onClick()
+    .subscribe(e => {
+      this.tooltipService.close();
+
+      if(!e) {
+        return;
+      }
+
+      this.dialog.open(HospitalInfoDialogComponent, {
+        data: e.item.properties
+      });
+    });
   }
 
   // this function is called whenever the canvas needs to redraw itself
   public onDrawLayer(options: IViewInfo) {
     this.viewInfo = options;
+
+    this.quadtree = new Quadtree({width: options.size.x, height: options.size.y});
+
     this.ctx = options.canvas.getContext('2d');
 
     this.clearCanvas();
@@ -125,6 +178,16 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     DomUtil.setPosition(this._canvas, topLeft)
 
     this.drawGlyphs();
+  }
+
+  onLayerDidMount() {
+    this._map.on('zoom', () => this.onZoomed());
+
+    this.on('mousemove', (e: LeafletMouseEvent) => this.mouseMove$.next(e));
+
+    this.on('click', (e: LeafletMouseEvent) => this.click$.next(e));
+
+    this.onZoomed();
   }
 
   protected abstract latAcc(d: Feature < G, T > ): number;
@@ -222,6 +285,14 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
   protected drawGlyph(glyphData: Feature<G, T>) {
     const pt = this.getGlyphPixelPos(glyphData);
+
+    this.quadtree.push({
+      x: pt.x,      //Mandatory
+      y: pt.y,      //Mandatory
+      width: this.getGlyphWidth(),   //Optional, defaults to 1
+      height: this.getGlyphHeight(),   //Optional, defaults to 1
+      payload: glyphData
+    }) //Optional, defaults to false
     
     this.drawGlyphRects(glyphData, pt);
 
@@ -313,6 +384,46 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     }
     lines.push(line);
     return lines;
+  }
+
+  protected findItem(e: LeafletMouseEvent): Feature<G, T> | null {
+    if(!this.quadtree) {
+      return null;
+    }
+
+    const items = this.quadtree.colliding({x: e.layerPoint.x - 2, y: e.layerPoint.y - 2, width: 4, height: 4});
+    if(items && items.length > 0) {
+      return items[0].payload;
+    }
+
+    return null;
+  }
+
+  protected onMouseMove(): Observable<GlyphEvent<G, T> | null> {
+    return this.mouseMove$
+    .pipe(
+      map(e => {
+        const item = this.findItem(e);
+        if(!item) {
+          return null
+        }
+        return {mouse: e, item};
+      }),
+      distinctUntilChanged((x, y) => x?.item === y?.item)
+    )
+  }
+
+  protected onClick(): Observable<GlyphEvent<G, T> | null> {
+    return this.click$
+    .pipe(
+      map(e => {
+        const item = this.findItem(e);
+        if(!item) {
+          return null
+        }
+        return {mouse: e, item};
+      }),
+    )
   }
 
 }

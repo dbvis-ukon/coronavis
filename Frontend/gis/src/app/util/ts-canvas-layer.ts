@@ -7,7 +7,7 @@
   originally created and motivated by L.CanvasOverlay  available here: https://gist.github.com/Sumbera/11114288
 */
 
-import { Bounds, Browser, DomUtil, LatLng, LatLngBounds, Layer, LayerOptions, LeafletEventHandlerFn, Map as LMap, Point, ResizeEvent, Util, ZoomAnimEvent } from 'leaflet'
+import { Bounds, Browser, DomUtil, InteractiveLayerOptions, LatLng, LatLngBounds, Layer, LeafletEventHandlerFn, LeafletMouseEvent, Map as LMap, Point, ResizeEvent, Util, ZoomAnimEvent } from 'leaflet'
 
 // tslint:disable:interface-name
 export interface Map extends LMap {
@@ -32,7 +32,7 @@ export class CanvasLayer extends Layer {
     private _frame: any
 
     // -- initialized is called on prototype
-    constructor(options?: LayerOptions) {
+    constructor(options?: InteractiveLayerOptions) {
         super(options)
         this._map = null
         this._canvas = null
@@ -47,6 +47,8 @@ export class CanvasLayer extends Layer {
         const events: { [index: string]: LeafletEventHandlerFn } = {
             // resize: this._onLayerDidResize,
             moveend: this._onLayerDidMove,
+            click: this._onClick,
+            mousemove: this._onMouseMove
         }
         if (this._map.options.zoomAnimation && Browser.any3d) {
             events.zoomanim = this._animateZoom
@@ -111,6 +113,21 @@ export class CanvasLayer extends Layer {
         const topLeft = this._map.containerPointToLayerPoint([0, 0])
         DomUtil.setPosition(this._canvas, topLeft)
         this.drawLayer();
+    }
+
+    //-------------------------------------------------------------
+    private _onClick(e: LeafletMouseEvent) {
+        const evented = this as any;
+    	if (evented._events.click) {
+            evented._events.click[0].fn(e);
+        }
+    }
+
+    private _onMouseMove(e: LeafletMouseEvent) {
+        const evented = this as any;
+        if (evented._events.mousemove) {
+            evented._events.mousemove[0].fn(e);
+        }
     }
 
     // --------------------------------------------------------------------------------
