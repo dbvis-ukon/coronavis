@@ -1,32 +1,24 @@
 import { MatDialog } from '@angular/material/dialog/dialog';
-import { event as currentEvent } from 'd3';
-import { extent } from 'd3-array';
-import { select, Selection } from 'd3-selection';
+import { Selection } from 'd3-selection';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
-import L from 'leaflet';
+import L, { DomUtil, Point } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage/public_api';
-import { NEVER, timer } from 'rxjs';
-import { Observable } from 'rxjs/internal/Observable';
+import { BehaviorSubject, NEVER, timer } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
-import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
-import { AbstractTimedStatus, QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
-import { AbstractHospitalOut } from 'src/app/repositories/types/out/abstract-hospital-out';
+import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from 'src/app/repositories/types/out/single-hospital-out';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
 import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
+import { CanvasLayer, IViewInfo, Map } from 'src/app/util/ts-canvas-layer';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import { BedGlyphOptions } from '../options/bed-glyph-options';
 import { BedType } from '../options/bed-type.enum';
 import { GlyphLayer } from './GlyphLayer';
-import { Overlay } from './overlay';
 
-export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleHospitalOut < QualitativeTimedStatus > | AggregatedHospitalOut < QualitativeTimedStatus >> extends Overlay < T > implements GlyphLayer {
+export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends SingleHospitalOut < QualitativeTimedStatus > | AggregatedHospitalOut < QualitativeTimedStatus >> extends CanvasLayer implements GlyphLayer {
   protected visible: boolean = false;
-
-  protected map: L.Map;
 
   protected gHospitals: Selection < SVGGElement, Feature < G, T > , SVGSVGElement, unknown > ;
 
@@ -42,12 +34,13 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
 
   protected rectPadding = 0.5;
 
-  protected rectYOffset = 0.5;
+  protected rectYOffset = 3;
 
-  protected glyphSize = {
-    width: 38,
-    height: 28
-  };
+  protected ctx: CanvasRenderingContext2D;
+
+  protected currentScale: number = 1;
+
+  protected viewInfo: IViewInfo;
 
 
   constructor(
@@ -56,16 +49,15 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
     protected granularity: AggregationLevel,
     protected tooltipService: TooltipService,
     protected colormapService: QualitativeColormapService,
-    protected forceEnabled: boolean,
-    protected glyphOptions$: Observable<BedGlyphOptions>,
+    protected glyphOptions$: BehaviorSubject<BedGlyphOptions>,
     protected dialog: MatDialog,
     protected storage: LocalStorageService
   ) {
-    super(name, data);
+    super(null);
 
-    if (this.forceEnabled) {
-      this.forceLayout = new ForceDirectedLayout(this.storage, this.data as any, granularity, this.updateGlyphPositions.bind(this));
-    }
+    this.forceLayout = new ForceDirectedLayout(this.storage, this.data as any, granularity, this.updateGlyphPositions.bind(this));
+
+    this.currentOptions = this.glyphOptions$.value;
 
     this.glyphOptions$
     .pipe(
@@ -77,52 +69,27 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
         }
   
         if(this.oldOptions?.showIcuLow !== opt.showIcuLow) {
-          this.gHospitals
-            .selectAll(`.bed.${BedType.icuLow}`)
-            .style('opacity', opt.showIcuLow ? '1' : '0');
+          this.drawGlyphs();
         }
         
         if(this.oldOptions?.showIcuHigh !== opt.showIcuHigh) {
-          this.gHospitals
-            .selectAll(`.bed.${BedType.icuHigh}`)
-            .style('opacity', opt.showIcuHigh ? '1' : '0');
+          this.drawGlyphs();
         }
   
         if(this.oldOptions?.showEcmo !== opt.showEcmo) {
-          this.gHospitals
-            .selectAll(`.bed.${BedType.ecmo}`)
-            .style('opacity', opt.showEcmo ? '1' : '0');
+          this.drawGlyphs();
+        }
+
+        if(this.oldOptions?.forceDirectedOn !== opt.forceDirectedOn) {
+          this.calculateOverlapFree();
         }
   
         if(this.oldOptions?.date !== opt.date) {
           timer(1)
           .subscribe(() => {
-            this.gHospitals
-            .selectAll(`.bed`)
-            .style('fill', (d: Feature<Geometry, AbstractHospitalOut<AbstractTimedStatus>>, i, n) => {
-              const bedType = select(n[i]).attr('data-bedtype') as BedType;
-              return this.colormapService.getLatestBedStatusColor(d.properties.developments as any, bedType, opt.date);
-            });
+            this.drawGlyphs();
           })
           
-          // timer(10)
-          //   .subscribe(() => {
-          //     let filteredData;
-          //     if(opt.date === 'now') {
-          //       filteredData = this.data.features;
-          //     } else {
-          //       const date = moment(opt.date).endOf('day').toDate();
-      
-          //       console.log('filter data by date', date);
-      
-          //       // this.filteredData = this.data.features.filter(d => new Date(d.properties.developments[0].timestamp) <= date);
-          //       filteredData = this.data.features;
-          //     }
-    
-          //     console.log('fcmp', filteredData.length, this.data.features.length);
-      
-          //     this.updateGlyphs(filteredData);
-          //   })
         }
         
   
@@ -135,37 +102,68 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
     .subscribe();
   }
 
-  abstract latAcc(d: Feature < G, T > ): number;
+  public onAdd(map: Map) {
+    super.onAdd(map);
 
-  abstract lngAcc(d: Feature < G, T > ): number;
+    this._map.on('zoom', () => this.onZoomed());
 
-  abstract onZoomed(): void;
-
-  createOverlay(map: L.Map) {
-    this.map = map;
+    this.onZoomed();
     
-    const bounds = this.getBounds();
-    const svgElement = this.initSVGSVGElement(bounds);
-
-    
-    this.updateGlyphs(this.data.features);
-
-    // why 2 times? why? WHY? WHYYYYYYYYYYYY?
-    this.updateGlyphs(this.data.features);
-
-    this.map.on('zoom', () => this.onZoomed());
-
-    return L.svgOverlay(svgElement, bounds, {
-      interactive: true,
-      bubblingMouseEvents: true,
-      zIndex: 3
-    });
+    return this;
   }
 
-  getTransformPixelPosition(p: L.Point): L.Point {
+  // this function is called whenever the canvas needs to redraw itself
+  public onDrawLayer(options: IViewInfo) {
+    this.viewInfo = options;
+    this.ctx = options.canvas.getContext('2d');
+
+    this.clearCanvas();
+
+    this.updateCurrentScale();
+
+    const topLeft = this._map.containerPointToLayerPoint([0, 0])
+    DomUtil.setPosition(this._canvas, topLeft)
+
+    this.drawGlyphs();
+  }
+
+  protected abstract latAcc(d: Feature < G, T > ): number;
+
+  protected abstract lngAcc(d: Feature < G, T > ): number;
+
+  protected abstract updateCurrentScale(): void;
+
+  protected abstract drawAdditionalFeatures(data: Feature<G, T>, pt: Point);
+
+  protected onZoomed() {
+    if(!this._map) {
+      return;
+    }
+    // update glyph positions because they are based on the zoom level
+    this.data.features.forEach(d => {
+      const pt = this._map.latLngToLayerPoint(this.getLatLng(d));
+      // const pt = this.latLngPoint(this.getLatLng(d));
+      d.properties._x = pt.x;
+      d.properties.x = pt.x;
+
+      d.properties._y = pt.y;
+      d.properties.y = pt.y;
+    });
+    
+    this.calculateOverlapFree();
+  }
+
+  protected getGlyphWidth() {
+    return (3 * this.rectSize + 4 * this.rectPadding) * this.currentScale;
+  }
+
+  protected getGlyphHeight() {
+    return (this.rectSize + 2 * this.rectPadding) * this.currentScale;
+  }
+
+  protected getTransformPixelPosition(p: L.Point): L.Point {
     return p;
   }
-
 
   setVisibility(v: boolean) {
     this.visible = v;
@@ -175,171 +173,146 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
     }
   }
 
-  latLngPoint(latlng: L.LatLngExpression): L.Point {
-    return this.map.project(latlng, 9);
+  protected getLatLng(d: Feature<G , T>): L.LatLngLiteral {
+    return {lat: this.latAcc(d), lng: this.lngAcc(d)};
   }
 
-  getBounds(): L.LatLngBounds {
-    const latExtent = extent(this.data.features, i => this.latAcc(i));
-    const lngExtent = extent(this.data.features, i => this.lngAcc(i));
-
-    let latLngBounds = new L.LatLngBounds([latExtent[0], lngExtent[0]], [latExtent[1], lngExtent[1]]);
-
-    latLngBounds = latLngBounds.pad(10);
-
-    return latLngBounds;
-  }
-
-  initSVGSVGElement(latLngBounds: L.LatLngBounds): SVGSVGElement {
-    const lpMin = this.latLngPoint(latLngBounds.getSouthWest());
-    const lpMax = this.latLngPoint(latLngBounds.getNorthEast());
-
-    // just to make everything bulletproof
-    const [xMin, xMax] = extent([lpMin.x, lpMax.x]);
-    const [yMin, yMax] = extent([lpMin.y, lpMax.y]);
-
-    const svgElement: SVGSVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-
-    svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    svgElement.setAttribute('viewBox', `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`);
-
-
-    this.svgSelection = select(svgElement)
-      .style('pointer-events', 'none');
-
-    return svgElement;
+  protected getGlyphPixelPos(d: Feature<G, T>): L.Point {
+    return new Point(d.properties.x, d.properties.y);
   }
 
 
-  updateGlyphPositions() {
-    this.gHospitals
-      .transition().duration(500)
-      .attr('transform', (d, i) => {
-        const pt = this.getTransformPixelPosition({x: d.properties.x, y: d.properties.y} as L.Point);
-        return `translate(${pt.x},${pt.y})`;
-      });
+  protected clearCanvas() {
+    if(!this.ctx) {
+      return;
+    }
+    // remove everything
+    this.ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
   }
 
 
-  onMouseEnter(d: Feature < G, T > , i: number, n: SVGElement[] | ArrayLike < SVGElement > ): SVGElement {
-    const currentElement = n[i];
-    const evt: MouseEvent = currentEvent;
-
-    const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {
-      x: evt.clientX + 5,
-      y: evt.clientY + 5
-    });
-    t.tooltipData = d.properties;
-
-    select(currentElement).raise();
-
-    return currentElement;
-  }
-
-  onMouseLeave(): void {
-    this.tooltipService.close();
-  }
-
-  onClick(d: Feature < G, T > ): void {
-    this.tooltipService.close();
-    this.dialog.open(HospitalInfoDialogComponent, {
-      data: d.properties
-    });
-  }
-
-  updateGlyphs(data: Feature<G, T>[]) {
-    this.updateGlyphG(data);
-
-    const container = this.appendGlyphContainer();
+  protected updateGlyphPositions() {
+    if(!this.ctx) {
+      return;
+    }
     
-    this.appendBackgroundRect(container);
+    this.clearCanvas();
+
+    this.drawGlyphs();
+  }
+
+  protected drawGlyphs() {
+    if(!this.data || !this._map) {
+      return;
+    }
+
+    const topLeft = this._map.containerPointToLayerPoint([0, 0]);
+    this.ctx.translate(-topLeft.x, -topLeft.y);
+
+    for(const g of this.data.features) {
+      const latLng = this.getLatLng(g);
+
+      if(!this.viewInfo.bounds.contains(latLng)) {
+        continue;
+      }
+
+      this.drawGlyph(g);
+    }
+  }
+
+  protected drawGlyph(glyphData: Feature<G, T>) {
+    const pt = this.getGlyphPixelPos(glyphData);
     
-    this.appendText(container);
-    
-    this.appendGlyphRects(container);
+    this.drawGlyphRects(glyphData, pt);
 
-    this.onZoomed();
+    this.drawAdditionalFeatures(glyphData, pt);
   }
 
-  updateGlyphG(data: Feature < G, T > []) {
-    this.gHospitals =
+  protected drawGlyphRects(glyphData: Feature<G, T>, pt: Point) {
+    const width = this.getGlyphWidth();
+    const height = this.getGlyphHeight();
 
-      this.svgSelection
-      .selectAll < SVGGElement, Feature < G, T >> ('g.hospital')
-      .data < Feature < G, T >> (data, d => d.properties.name);
+    // white background
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillRect(pt.x, pt.y, width, height);
 
-    this.gHospitals
-      .enter()
-      .append < SVGGElement > ('g')
-      .style("pointer-events", "all")
-      .attr('class', 'hospital')
-      .merge(this.gHospitals)
-      .attr('transform', d => {
-        const p = this.latLngPoint({lat: this.latAcc(d), lng: this.lngAcc(d) });
-        d.properties.x = p.x;
-        d.properties.y = p.y;
-        d.properties._x = p.x;
-        d.properties._y = p.y;
-
-        const p2 = this.getTransformPixelPosition(p);
-
-        return `translate(${p2.x}, ${p2.y})`;
-      });
-
-    this.gHospitals
-      .exit()
-      .remove();
+    if(this.currentOptions.showIcuLow) {
+      this.drawGlyphRect(pt, glyphData, BedType.icuLow, 0);
+    }
+    if(this.currentOptions.showIcuHigh) {
+      this.drawGlyphRect(pt, glyphData, BedType.icuHigh, 1);
+    }
+    if(this.currentOptions.showEcmo) {
+      this.drawGlyphRect(pt, glyphData, BedType.ecmo, 2);
+    }
   }
 
-  appendGlyphContainer(): Selection < SVGGElement, Feature < G, T > , SVGSVGElement, unknown > {
-    return this.gHospitals
-      .append("g")
-      .attr("class", "container")
-      .on('mouseenter', (d,i,n) => this.onMouseEnter(d, i, n))
-      .on('mouseleave', () => this.onMouseLeave())
-      .on('click', (d) => this.onClick(d));
+  protected drawGlyphRect(glyphPos: Point, glyphData: Feature<G, T>, bedType: BedType, idx: number) {
+    const xPos = (this.rectPadding + idx * this.rectSize + idx * this.rectPadding) * this.currentScale; 
+    const yPos = (this.rectPadding) * this.currentScale;
+
+    this.ctx.fillStyle = this.colormapService.getLatestBedStatusColor(glyphData.properties.developments, bedType, this.currentOptions?.date);
+    this.ctx.fillRect(glyphPos.x + xPos, glyphPos.y + yPos, this.rectSize * this.currentScale, this.rectSize * this.currentScale);
   }
 
-  appendBackgroundRect(container: Selection < SVGGElement, Feature < G, T > , SVGSVGElement, unknown > ) {
-    container
-      .append('rect')
-      .attr('class', 'background-rect')
-      .attr('width', this.glyphSize.width)
-      .attr('height', this.glyphSize.height / 2);
+
+
+  // @method bringToFront(): this
+	// Brings the layer to the top of all overlays.
+	bringToFront(): this {
+		if (this._map) {
+			DomUtil.toFront(this._canvas);
+		}
+		return this;
+	}
+
+	// @method bringToBack(): this
+	// Brings the layer to the bottom of all overlays.
+	bringToBack(): this {
+		if (this._map) {
+			DomUtil.toBack(this._canvas);
+		}
+		return this;
+  }
+  
+  protected calculateOverlapFree() {
+    if(!this.currentOptions.forceDirectedOn || !this._map) {
+      return;
+    }
+
+    const glyphBoxes = [[-this.getGlyphWidth() / 2, -this.getGlyphHeight() / 2], [this.getGlyphWidth() / 2, this.getGlyphHeight() / 2]];
+
+    console.log('calculate overlap free for', this._map.getZoom(), glyphBoxes)
+
+    timer(1)
+    .subscribe(() => this.forceLayout.update(glyphBoxes, this._map.getZoom()));
   }
 
-  abstract appendText(container: Selection < SVGGElement, Feature < G, T > , SVGSVGElement, unknown > );
+  /**
+   * Taken from: https://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
+   * @param text 
+   * @param maxWidth 
+   */
+  protected getWrappedText(text: string, maxWidth: number): string[] {
+    const words = text.split(' ');
+    let line = '';
 
-  appendGlyphRects(container: Selection < SVGGElement, Feature < G, T > , SVGSVGElement, unknown > ) {
-    container
-      .append('rect')
-      .attr('class', `bed ${BedType.icuLow}`)
-      .attr('width', `${this.rectSize}px`)
-      .attr('height', `${this.rectSize}px`)
-      .attr('data-bedtype', BedType.icuLow)
-      .attr('x', this.rectPadding)
-      .attr('y', this.rectYOffset)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuLow, this.currentOptions?.date));
+    const lines: string[] = [];
 
-    container
-      .append('rect')
-      .attr('class', `bed ${BedType.icuHigh}`)
-      .attr('width', `${this.rectSize}px`)
-      .attr('height', `${this.rectSize}px`)
-      .attr('data-bedtype', BedType.icuHigh)
-      .attr('x', `${this.rectSize + this.rectPadding * 2}px`)
-      .attr('y', this.rectYOffset)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuHigh, this.currentOptions?.date));
-
-    container
-      .append('rect')
-      .attr('class', `bed ${BedType.ecmo}`)
-      .attr('width', `${this.rectSize}px`)
-      .attr('height', `${this.rectSize}px`)
-      .attr('data-bedtype', BedType.ecmo)
-      .attr('x', `${2 * this.rectSize + this.rectPadding * 3}px`)
-      .attr('y', this.rectYOffset)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.ecmo, this.currentOptions?.date));
+    for(let n = 0; n < words.length; n++) {
+      let testLine = line + words[n] + ' ';
+      let metrics = this.ctx.measureText(testLine);
+      let testWidth = metrics.width;
+      if (testWidth > maxWidth && n > 0) {
+        lines.push(line);
+        line = words[n] + ' ';
+      }
+      else {
+        line = testLine;
+      }
+    }
+    lines.push(line);
+    return lines;
   }
 
 }

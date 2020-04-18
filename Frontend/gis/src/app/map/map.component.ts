@@ -4,7 +4,7 @@ import * as L from 'leaflet';
 import { SVGOverlay } from 'leaflet';
 import 'mapbox-gl';
 import 'mapbox-gl-leaflet';
-import { Observable, of, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
@@ -23,6 +23,7 @@ import { CaseChoropleth } from './overlays/casechoropleth';
 import { GlyphLayer } from './overlays/GlyphLayer';
 // import 'leaflet-mapbox-gl';
 import { Overlay } from './overlays/overlay';
+import { SingleGlyphCanvasLayer } from './overlays/single-glyph-canvas.layer';
 
 
 export enum MapOptionKeys {
@@ -40,7 +41,7 @@ export class MapComponent implements OnInit {
 
   @ViewChild('main') main;
 
-  private bedGlyphOptions$: Subject<BedGlyphOptions> = new Subject();
+  private bedGlyphOptions$: BehaviorSubject<BedGlyphOptions> = new BehaviorSubject(null);
 
   private _mapOptions: MapOptions;
 
@@ -93,7 +94,7 @@ export class MapComponent implements OnInit {
 
   private mymap: L.Map;
 
-  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<any>[]>();
+  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<any>[] | SingleGlyphCanvasLayer[]>();
 
   private aggregationLevelToGlyphMap = new Map<string, L.LayerGroup<any>>();
 
@@ -325,14 +326,13 @@ export class MapComponent implements OnInit {
 
       let obs: Observable<L.LayerGroup>;
       if(o.aggregationLevel === AggregationLevel.none) {
-        obs = this.glyphLayerService.getSimpleGlyphLayer(this.bedGlyphOptions$, o.forceDirectedOn)
+        obs = this.glyphLayerService.getSimpleGlyphLayer(this.bedGlyphOptions$)
         .pipe(
           map(glyphFactories => {
 
             const layerGroup = L.layerGroup([]);
 
-            for(const glyphFactory of glyphFactories) {
-              const glyphLayer = glyphFactory.createOverlay(this.mymap);
+            for(const glyphLayer of glyphFactories) {
 
               layerGroup.addLayer(glyphLayer);
             } 

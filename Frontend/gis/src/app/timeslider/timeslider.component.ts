@@ -5,7 +5,6 @@ import moment, { Moment } from 'moment';
 import { NouiFormatter } from 'ng2-nouislider';
 import { BehaviorSubject, interval, NEVER, Observable } from 'rxjs';
 import { filter, flatMap, map, reduce, repeatWhen, switchMap, takeUntil } from 'rxjs/operators';
-import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { MapOptions } from '../map/options/map-options';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -140,8 +139,7 @@ export class TimesliderComponent implements OnInit {
 
 
   private sliderChanging(value: number) {
-    const mDate = this.sliderValueToMoment(value);
-    // this.emit(mDate.format('YYYY-MM-DD'), true);
+    this.emit(value, true);
   }
 
   private sliderChanged(value: number) {
@@ -169,11 +167,11 @@ export class TimesliderComponent implements OnInit {
   }
 
   emit(numDays: number, changing: boolean) {
-    if(changing && (this._mo.bedGlyphOptions.enabled || this._mo.bedBackgroundOptions.enabled)
-      && (this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none || this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.county)) {
-      // do not update with single glyphs as it causes too much lag
-      return;
-    }
+    // if(changing && (this._mo.bedGlyphOptions.enabled || this._mo.bedBackgroundOptions.enabled)
+    //   && (this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none || this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.county)) {
+    //   // do not update with single glyphs as it causes too much lag
+    //   return;
+    // }
 
     let date = this.sliderValueToMoment(numDays).format('YYYY-MM-DD');
     if(date === moment().format('YYYY-MM-DD')) {
