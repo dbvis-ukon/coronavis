@@ -147,7 +147,7 @@ export class InfoboxComponent implements OnInit {
       distinctUntilChanged(),
       tap(() => this.aggregateStatisticsLoading = true),
       map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate()),
-      tap(refDate => console.log('refdate', refDate)),
+      // tap(refDate => console.log('refdate', refDate)),
       mergeMap(refDate => {
         const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate)
         const unfiltered = this.countryAggregatorService.diviAggregationForCountryUnfiltered(refDate);
@@ -157,7 +157,7 @@ export class InfoboxComponent implements OnInit {
       tap(() => this.aggregateStatisticsLoading = false)
     )
     .subscribe(result => {
-      console.log('result', result);
+      // console.log('result', result);
       const r = result[0];
       this.aggregatedDiviStatistics = r;
 

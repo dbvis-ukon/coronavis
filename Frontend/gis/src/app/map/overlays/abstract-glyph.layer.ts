@@ -319,7 +319,7 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
       .attr('data-bedtype', BedType.icuLow)
       .attr('x', this.rectPadding)
       .attr('y', this.rectYOffset)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuLow, this.currentOptions?.date));
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties, BedType.icuLow, this.currentOptions?.date));
 
     container
       .append('rect')
@@ -329,7 +329,7 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
       .attr('data-bedtype', BedType.icuHigh)
       .attr('x', `${this.rectSize + this.rectPadding * 2}px`)
       .attr('y', this.rectYOffset)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.icuHigh, this.currentOptions?.date));
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties, BedType.icuHigh, this.currentOptions?.date));
 
     container
       .append('rect')
@@ -339,7 +339,7 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
       .attr('data-bedtype', BedType.ecmo)
       .attr('x', `${2 * this.rectSize + this.rectPadding * 3}px`)
       .attr('y', this.rectYOffset)
-      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties.developments, BedType.ecmo, this.currentOptions?.date));
+      .style('fill', d1 => this.colormapService.getLatestBedStatusColor(d1.properties, BedType.ecmo, this.currentOptions?.date));
   }
 
 }

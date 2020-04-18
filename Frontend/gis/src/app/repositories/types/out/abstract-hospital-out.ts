@@ -7,4 +7,6 @@ export interface AbstractHospitalOut<T extends AbstractTimedStatus> {
     _y?:number;
 
     developments: Array<T>;
+
+    developmentsDayIdx: Map<string, T>;
 }

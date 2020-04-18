@@ -322,7 +322,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     const xPos = (this.rectPadding + idx * this.rectSize + idx * this.rectPadding) * this.currentScale; 
     const yPos = (this.rectPadding) * this.currentScale;
 
-    this.ctx.fillStyle = this.colormapService.getLatestBedStatusColor(glyphData.properties.developments, bedType, this.currentOptions?.date);
+    this.ctx.fillStyle = this.colormapService.getLatestBedStatusColor(glyphData.properties, bedType, this.currentOptions?.date);
     this.ctx.fillRect(glyphPos.x + xPos, glyphPos.y + yPos, this.rectSize * this.currentScale, this.rectSize * this.currentScale);
   }
 

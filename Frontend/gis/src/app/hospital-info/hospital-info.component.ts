@@ -126,7 +126,7 @@ export class HospitalInfoComponent implements OnInit {
   }
 
   getStatusColorFor(bedStatus: BedType) {
-    return this.colormapService.getLatestBedStatusColor(this.singleHospital.developments, bedStatus);
+    return this.colormapService.getLatestBedStatusColor(this.singleHospital, bedStatus);
   }
 
   getStatusDescriptionFor(bedStatus: BedType) {

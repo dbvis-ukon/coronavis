@@ -4,6 +4,7 @@ import moment from 'moment';
 import { BedType } from '../map/options/bed-type.enum';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
 import { HospitalUtilService } from './hospital-util.service';
 
 @Injectable({
@@ -91,17 +92,28 @@ export class QualitativeColormapService {
       }
     }
   
-    getLatestBedStatusColor(t: Array<QualitativeTimedStatus>, type: BedType, date: string = 'now') {
-      if(!t) {
+    getLatestBedStatusColor(p: AbstractHospitalOut<QualitativeTimedStatus>, type: BedType, date: string = 'now') {
+      if(!p) {
         return this.getBedStatusColor(null, this.propertyAccessor(type));
       }
+
+      const t = p.developments;
 
       let latest: QualitativeTimedStatus;
       if(date === null || date === 'now') {
         latest = t[t.length -1];
       } else {
         const actualDate = moment(date).endOf('day').toDate();
+        const strDate = moment(date).format('YYYY-MM-DD');
+
+        const status = p.developmentsDayIdx?.get(strDate);
+        if(status) {
+          return this.getBedStatusColor(status, this.propertyAccessor(type));
+        }
+
         latest = this.hospitalUtil.getLatestTimedStatus(t, actualDate);
+
+        // console.log('need to use fallback method', strDate, latest, p);
       }
   
       return this.getBedStatusColor(latest, this.propertyAccessor(type));
