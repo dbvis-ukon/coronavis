@@ -90,7 +90,7 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
     let scale = 1;
 
     if(zoom < 9) {
-      scale = Math.pow(zoom / 9, 2);
+      scale = Math.pow(zoom / 9, 3);
     }
 
     if(zoom >= 11) {

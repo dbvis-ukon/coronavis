@@ -100,7 +100,7 @@ export class AggregatedGlyphLayer extends AbstractGlyphLayer < MultiPolygon, Agg
         [-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2],
         [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]
       ];
-      this.forceLayout.update(glyphBoxes, zoom);
+      this.forceLayout.update(glyphBoxes, this.data, zoom);
     }
   }
 

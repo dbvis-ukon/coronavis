@@ -30,7 +30,7 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
 
   protected gHospitals: Selection < SVGGElement, Feature < G, T > , SVGSVGElement, unknown > ;
 
-  protected forceLayout: ForceDirectedLayout;
+  protected forceLayout: ForceDirectedLayout<G, T>;
 
   protected svgSelection: Selection < SVGSVGElement, unknown, null, undefined > ;
 
@@ -64,7 +64,7 @@ export abstract class AbstractGlyphLayer < G extends Geometry, T extends SingleH
     super(name, data);
 
     if (this.forceEnabled) {
-      this.forceLayout = new ForceDirectedLayout(this.storage, this.data as any, granularity, this.updateGlyphPositions.bind(this));
+      this.forceLayout = new ForceDirectedLayout(this.storage, granularity);
     }
 
     this.glyphOptions$

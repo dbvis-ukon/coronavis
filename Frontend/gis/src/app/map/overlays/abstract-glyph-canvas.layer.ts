@@ -42,7 +42,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
   protected gHospitals: Selection < SVGGElement, Feature < G, T > , SVGSVGElement, unknown > ;
 
-  protected forceLayout: ForceDirectedLayout;
+  protected forceLayout: ForceDirectedLayout<G, T>;
 
   protected svgSelection: Selection < SVGSVGElement, unknown, null, undefined > ;
 
@@ -82,7 +82,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       bubblingMouseEvents: true
     });
     
-    this.forceLayout = new ForceDirectedLayout(this.storage, this.data as any, granularity, this.updateGlyphPositions.bind(this));
+    this.forceLayout = new ForceDirectedLayout<G, T>(this.storage, granularity);
 
     this.currentOptions = this.glyphOptions$.value;
 
@@ -160,22 +160,34 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
         data: e.item.properties
       });
     });
+
+
+    this.forceLayout.getEvents()
+    .subscribe(e => {
+      this.data = e.data;
+
+      this.drawGlyphs();
+    });
   }
 
   // this function is called whenever the canvas needs to redraw itself
   public onDrawLayer(options: IViewInfo) {
     this.viewInfo = options;
 
+    if(this.quadtree) {
+      this.quadtree.clear();
+    }
+
     this.quadtree = new Quadtree({width: options.size.x, height: options.size.y});
 
     this.ctx = options.canvas.getContext('2d');
 
-    this.clearCanvas();
-
     this.updateCurrentScale();
 
     const topLeft = this._map.containerPointToLayerPoint([0, 0])
-    DomUtil.setPosition(this._canvas, topLeft)
+    DomUtil.setPosition(this._canvas, topLeft);
+
+    this.ctx.translate(-topLeft.x, -topLeft.y);
 
     this.drawGlyphs();
   }
@@ -202,16 +214,6 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     if(!this._map) {
       return;
     }
-    // update glyph positions because they are based on the zoom level
-    this.data.features.forEach(d => {
-      const pt = this._map.latLngToLayerPoint(this.getLatLng(d));
-      // const pt = this.latLngPoint(this.getLatLng(d));
-      d.properties._x = pt.x;
-      d.properties.x = pt.x;
-
-      d.properties._y = pt.y;
-      d.properties.y = pt.y;
-    });
     
     this.calculateOverlapFree();
   }
@@ -249,28 +251,19 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     if(!this.ctx) {
       return;
     }
+
+    const topLeft = this._map.containerPointToLayerPoint([0, 0])
+
     // remove everything
-    this.ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
-  }
-
-
-  protected updateGlyphPositions() {
-    if(!this.ctx) {
-      return;
-    }
-    
-    this.clearCanvas();
-
-    this.drawGlyphs();
+    this.ctx.clearRect(topLeft.x, topLeft.y, this._canvas.width + Math.abs(topLeft.x), this._canvas.height + Math.abs(topLeft.y));
   }
 
   protected drawGlyphs() {
-    if(!this.data || !this._map) {
+    if(!this.data || !this._map || !this.ctx) {
       return;
     }
 
-    const topLeft = this._map.containerPointToLayerPoint([0, 0]);
-    this.ctx.translate(-topLeft.x, -topLeft.y);
+    this.clearCanvas();
 
     for(const g of this.data.features) {
       const latLng = this.getLatLng(g);
@@ -347,16 +340,30 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   }
   
   protected calculateOverlapFree() {
-    if(!this.currentOptions.forceDirectedOn || !this._map) {
+    if(!this.data || !this._map) {
+      return;
+    }
+
+    this.updateCurrentScale();
+
+    // update glyph positions because they are based on the zoom level
+    this.data.features.forEach(d => {
+      const pt = this._map.latLngToLayerPoint(this.getLatLng(d));
+      // const pt = this.latLngPoint(this.getLatLng(d));
+      d.properties._x = pt.x;
+      d.properties.x = pt.x;
+
+      d.properties._y = pt.y;
+      d.properties.y = pt.y;
+    });
+
+    if(!this.currentOptions.forceDirectedOn) {
       return;
     }
 
     const glyphBoxes = [[-this.getGlyphWidth() / 2, -this.getGlyphHeight() / 2], [this.getGlyphWidth() / 2, this.getGlyphHeight() / 2]];
 
-    console.log('calculate overlap free for', this._map.getZoom(), glyphBoxes)
-
-    timer(1)
-    .subscribe(() => this.forceLayout.update(glyphBoxes, this._map.getZoom()));
+    this.forceLayout.update(glyphBoxes, this.data, this._map.getZoom());
   }
 
   /**

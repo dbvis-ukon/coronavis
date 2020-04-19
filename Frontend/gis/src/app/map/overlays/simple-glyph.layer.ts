@@ -206,7 +206,7 @@ export class SimpleGlyphLayer extends AbstractGlyphLayer<Point, SingleHospitalOu
 
     if (this.forceEnabled) {
       const glyphBoxes = [[-this.glyphSize.width * scale / 2, -this.glyphSize.height * scale / 2], [this.glyphSize.width * scale / 2, this.glyphSize.height * scale / 2]];
-      this.forceLayout.update(glyphBoxes, zoom);
+      this.forceLayout.update(glyphBoxes, this.data, zoom);
     }
   }
 
