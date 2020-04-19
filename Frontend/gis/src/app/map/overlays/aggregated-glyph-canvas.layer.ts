@@ -68,10 +68,6 @@ export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPo
       scale = Math.pow(zoom / 5, 2);
     }
 
-    console.log('scale', zoom, scale);
-
-    // scale = Math.pow(level / (zoom), 3);
-
     this.currentScale = scale;
   }
 
