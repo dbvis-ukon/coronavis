@@ -5,7 +5,6 @@ export class TestCanvasLayer extends CanvasLayer {
   
 
   public onDrawLayer(options: IViewInfo) {
-    console.log('draw layer');
     const ctx = options.canvas.getContext('2d');
 
     const data = [];

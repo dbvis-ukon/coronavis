@@ -157,7 +157,10 @@ export class InfoboxComponent implements OnInit {
       tap(() => this.aggregateStatisticsLoading = false)
     )
     .subscribe(result => {
-      // console.log('statistics result', result);
+      console.log('statistics result', result);
+      if(!result[0]) {
+        return;
+      }
       
       const r = result[0];
       this.aggregatedDiviStatistics = r;

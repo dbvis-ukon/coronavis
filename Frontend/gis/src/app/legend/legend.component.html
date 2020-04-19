@@ -1,27 +1,28 @@
 
 
-<div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === false && choroplethLayer">
+<div class="legend bedlegend" *ngIf="(mo$ | async)?.bedBackgroundOptions.enabled === false && choroplethLayer$ | async">
   <h5 
   class="title"
   (click)="legendCasesExtended = !legendCasesExtended" 
   i18n-matTooltip="@@legendToggleTooltip" 
   matTooltip="Klicken um Legende ein-/auszuklappen"
-  >{{ title }}</h5>
+  matTooltipPosition="above"
+  >{{ title$ | async }}</h5>
     <div *ngIf="legendCasesExtended">
     <table>
 
-      <tr *ngFor="let b of caseBins">
+      <tr *ngFor="let b of caseBins$ | async">
 
         <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
 
         <td class="lower">
-          {{ getBinStr(b.min) }}
+          {{ b.minStr }}
         </td>
 
         <td class="dash" *ngIf="b.min !== b.max">–</td>
 
         <td class="upper" *ngIf="b.min !== b.max">
-          {{ getBinStr(b.max) }}
+          {{ b.maxStr }}
         </td>
       </tr>
     </table>
@@ -29,9 +30,9 @@
         
     <div *ngIf="!legendCasesExtended">
       <div class="row">
-        <div class="text" [innerHtml]="getBinStr(caseBins[0].min)"></div>
-        <div *ngFor="let b of caseBins"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ getBinStr(b.min) }} – {{ getBinStr(b.max) }}"></div>
-        <div class="text" [innerHtml]="getBinStr(caseBins[caseBins.length - 1].max)"></div>
+        <div class="text" [innerHtml]="(caseBins$ | async)[0].minStr"></div>
+        <div *ngFor="let b of caseBins$ | async"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.minStr }} – {{ b.maxStr }}"></div>
+        <div class="text" [innerHtml]="(caseBins$ | async)[(caseBins$ | async).length - 1].maxStr"></div>
       </div>
     </div>
 
@@ -41,8 +42,14 @@
 </div>
 
 
-<div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === true || mo.bedGlyphOptions.enabled === true" >
-  <h5 i18n="legend|beds@@beds" (click)="legendBedsExtended = !legendBedsExtended" i18n-matTooltip="@@legendToggleTooltip" matTooltip="Klicken um Legende ein-/auszuklappen">Bettenauslastung</h5>
+<div class="legend bedlegend" *ngIf="(mo$ | async)?.bedBackgroundOptions.enabled === true || (mo$ | async)?.bedGlyphOptions.enabled === true" >
+  <h5 i18n="legend|beds@@beds" 
+  class="title" 
+  (click)="legendBedsExtended = !legendBedsExtended" 
+  i18n-matTooltip="@@legendToggleTooltip" 
+  matTooltip="Klicken um Legende ein-/auszuklappen"
+  matTooltipPosition="above"
+  >Bettenauslastung</h5>
 
   <div *ngIf="legendBedsExtended">
   <table>

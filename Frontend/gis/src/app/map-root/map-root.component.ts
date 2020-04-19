@@ -5,7 +5,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from '@angular/router';
 import { FeatureCollection } from 'geojson';
 import { LocalStorageService } from 'ngx-webstorage';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { APP_CONFIG_KEY, APP_CONFIG_URL_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from "../../constants";
@@ -37,9 +37,11 @@ export class MapRootComponent implements OnInit {
 
   mapOptions: MapOptions = null;
 
+  mapOptions$: Subject<MapOptions> = new BehaviorSubject(null);
+
   mapLocationSettings$: BehaviorSubject<MapLocationSettings> = new BehaviorSubject(null);
 
-  currentCaseChoropleth: CaseChoropleth;
+  currentCaseChoropleth$: Subject<CaseChoropleth> = new BehaviorSubject(null);
 
   initialMapLocationSettings: MapLocationSettings = null;
 
@@ -101,6 +103,15 @@ export class MapRootComponent implements OnInit {
       // store data into local storage
       this.storage.store(MAP_LOCATION_SETTINGS_KEY, JSON.stringify(newLocSettings));
     });
+
+
+    this.mapOptions$
+    .pipe(
+      safeDebounce(500, (a: MapOptions) => of(a))
+    )
+    .subscribe(mo => {
+      this.storage.store(APP_CONFIG_KEY, JSON.stringify(mo));
+    });
   }
 
   mapLocationSettingsUpdated(newSettings: MapLocationSettings) {
@@ -110,7 +121,7 @@ export class MapRootComponent implements OnInit {
   mapOptionsUpdated(newOptions: MapOptions) {
     this.mapOptions = newOptions;
 
-    this.storage.store(APP_CONFIG_KEY, JSON.stringify(newOptions));
+    this.mapOptions$.next(newOptions);
   }
 
   initTrackingPixel() {
@@ -143,7 +154,7 @@ export class MapRootComponent implements OnInit {
 
     const storedMapOptions = JSON.parse(this.storage.retrieve(APP_CONFIG_KEY)) as MapOptions;
 
-    // will show the snack bar if truet
+    // will show the snack bar if true
     let restored = false;
 
     if(paramMap.has(APP_CONFIG_URL_KEY)) {
@@ -151,13 +162,22 @@ export class MapRootComponent implements OnInit {
         const mergedMlo = this.configService.overrideMapOptions(urlMlo);
 
         this.mapOptions = mergedMlo;
+
+        this.mapOptions$.next(this.mapOptions);
       });
     } else if (storedMapOptions) {
       // merge with default as basis is necessary when new options are added in further releases
-      this.mapOptions = this.configService.overrideMapOptions(storedMapOptions, { hideInfobox: false, showHelpOnStart: true });
+      this.mapOptions = this.configService.overrideMapOptions(
+        storedMapOptions, 
+        { hideInfobox: false, showHelpOnStart: true, bedGlyphOptions: {date: 'now'}, bedBackgroundOptions: {date: 'now'} }
+      );
       restored = true;
+
+      this.mapOptions$.next(this.mapOptions);
     } else {
       this.mapOptions = this.configService.getDefaultMapOptions();
+
+      this.mapOptions$.next(this.mapOptions);
     }
 
 
