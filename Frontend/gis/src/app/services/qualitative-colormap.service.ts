@@ -93,7 +93,7 @@ export class QualitativeColormapService {
     }
   
     getLatestBedStatusColor(p: AbstractHospitalOut<QualitativeTimedStatus>, type: BedType, date: string = 'now') {
-      if(!p) {
+      if(!p || !p.developments) {
         return this.getBedStatusColor(null, this.propertyAccessor(type));
       }
 
