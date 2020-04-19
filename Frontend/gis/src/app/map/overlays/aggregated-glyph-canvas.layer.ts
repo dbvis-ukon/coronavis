@@ -1,0 +1,60 @@
+import { MatDialog } from '@angular/material/dialog';
+import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
+import { LocalStorageService } from 'ngx-webstorage';
+import { BehaviorSubject } from 'rxjs';
+import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
+import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
+import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
+import { TooltipService } from 'src/app/services/tooltip.service';
+import { AggregationLevel } from '../options/aggregation-level.enum';
+import { BedGlyphOptions } from '../options/bed-glyph-options';
+import { AbstractGlyphCanvasLayer } from './abstract-glyph-canvas.layer';
+
+export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> {
+
+  constructor(
+    name: string,
+    data: FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>,
+    aggLevel: AggregationLevel,
+    tooltipService: TooltipService,
+    colormapService: QualitativeColormapService,
+    glyphOptions: BehaviorSubject<BedGlyphOptions>,
+    dialog: MatDialog,
+    storage: LocalStorageService
+  ) {
+    super(name, data, aggLevel, tooltipService, colormapService, glyphOptions, dialog, storage);
+  }
+
+  latAcc(d: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>): number {
+    return d.properties.centroid.coordinates[1];
+  }
+  
+  lngAcc(d: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>): number {
+    return d.properties.centroid.coordinates[0];
+  }
+
+  protected drawAdditionalFeatures(data: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, pt: L.Point) {
+    this.drawText(data.properties.name, pt, 0);
+  }
+
+
+
+  updateCurrentScale(): void {
+    const zoom = this._map.getZoom();
+
+    // let scale = Math.pow(9 / (zoom), 2);
+    let scale = 1;
+
+    let level = 9;
+    if (this.granularity === AggregationLevel.governmentDistrict) {
+      level = 11;
+    } else if (this.granularity === AggregationLevel.state) {
+      level = 12;
+    }
+
+    scale = Math.pow(level / (zoom), 3);
+
+    this.currentScale = scale;
+  }
+
+}

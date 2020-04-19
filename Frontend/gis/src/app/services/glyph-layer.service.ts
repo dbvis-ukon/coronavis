@@ -4,7 +4,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
-import { AggregatedGlyphLayer } from '../map/overlays/aggregated-glyph.layer';
+import { AggregatedGlyphCanvasLayer } from '../map/overlays/aggregated-glyph-canvas.layer';
 import { LandkreiseHospitalsLayer } from '../map/overlays/landkreishospitals';
 import { SingleGlyphCanvasLayer } from '../map/overlays/single-glyph-canvas.layer';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
@@ -133,19 +133,18 @@ export class GlyphLayerService {
     );
   }
 
-  getAggregatedGlyphLayer(options: BedGlyphOptions, options$: Observable<BedGlyphOptions>): Observable<[AggregatedGlyphLayer, LandkreiseHospitalsLayer]> {
+  getAggregatedGlyphLayer(options: BedGlyphOptions, options$: BehaviorSubject<BedGlyphOptions>): Observable<[AggregatedGlyphCanvasLayer, LandkreiseHospitalsLayer]> {
     const aggLevel = options.aggregationLevel;
     this.loading$.next(true);
     return this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(aggLevel)
     .pipe(
       map(result => {
-        const factory = new AggregatedGlyphLayer(
+        const factory = new AggregatedGlyphCanvasLayer(
           'ho_glyph_'+aggLevel,
-          aggLevel,
           result,
+          aggLevel,
           this.tooltipService,
           this.colormapService,
-          options.forceDirectedOn,
           options$,
           this.matDialog,
           this.storage
@@ -157,7 +156,7 @@ export class GlyphLayerService {
         // Create a layer group
         return [factory, factoryBg];
       }),
-      tap<[AggregatedGlyphLayer, LandkreiseHospitalsLayer]>(() => this.loading$.next(false))
+      tap<[AggregatedGlyphCanvasLayer, LandkreiseHospitalsLayer]>(() => this.loading$.next(false))
     )
   }
 

@@ -426,4 +426,33 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     )
   }
 
+    // returns height of this wrapped text
+    protected drawText(text: string, pt: L.Point, yOffset: number): number {
+      this.ctx.save();
+  
+      const centerX = pt.x + (this.getGlyphWidth() / 2);
+      const belowGlyhY = pt.y + this.getGlyphHeight() + this.rectYOffset + yOffset;
+  
+  
+      this.ctx.font = "bold 11px Roboto";
+      this.ctx.fillStyle = 'black';
+      this.ctx.shadowOffsetX = 1;
+      this.ctx.shadowOffsetY = 1;
+      this.ctx.shadowColor = "rgba(255,255,255,1)";
+      this.ctx.shadowBlur = 4;
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'top';
+  
+      const lineHeight = 11;
+      const wrappedText = this.getWrappedText(text, this.getGlyphWidth() * 4);
+  
+      for(let i = 0; i < wrappedText.length; i++) {
+        this.ctx.fillText(wrappedText[i], centerX, belowGlyhY + i * lineHeight);
+      }
+      
+      this.ctx.restore();
+  
+      return lineHeight * wrappedText.length;
+    }
+
 }

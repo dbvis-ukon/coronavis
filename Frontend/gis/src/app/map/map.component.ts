@@ -19,6 +19,7 @@ import { BedGlyphOptions } from './options/bed-glyph-options';
 import { CovidNumberCaseOptions } from './options/covid-number-case-options';
 import { MapLocationSettings } from './options/map-location-settings';
 import { MapOptions } from './options/map-options';
+import { AggregatedGlyphCanvasLayer } from './overlays/aggregated-glyph-canvas.layer';
 import { CaseChoropleth } from './overlays/casechoropleth';
 import { GlyphLayer } from './overlays/GlyphLayer';
 // import 'leaflet-mapbox-gl';
@@ -94,7 +95,7 @@ export class MapComponent implements OnInit {
 
   private mymap: L.Map;
 
-  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<any>[] | SingleGlyphCanvasLayer[]>();
+  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<any>[] | SingleGlyphCanvasLayer[] | AggregatedGlyphCanvasLayer[]>();
 
   private aggregationLevelToGlyphMap = new Map<string, L.LayerGroup<any>>();
 
@@ -345,16 +346,14 @@ export class MapComponent implements OnInit {
       } else {
         obs = this.glyphLayerService.getAggregatedGlyphLayer(o, this.bedGlyphOptions$)
         .pipe(
-          map(([glyphFactory, backgroundFactory]) => {
-
-          const glyphLayer = glyphFactory.createOverlay(this.mymap);
+          map(([glyphLayer, backgroundFactory]) => {
 
           const bgLayer = backgroundFactory.createOverlay();
 
           // Create a layer group
           const layerGroup = L.layerGroup([bgLayer, glyphLayer]);
 
-          this.layerToFactoryMap.set(layerGroup, [glyphFactory]);
+          this.layerToFactoryMap.set(layerGroup, [glyphLayer]);
 
           return layerGroup;
         }));
