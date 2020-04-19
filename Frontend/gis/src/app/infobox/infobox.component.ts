@@ -158,6 +158,10 @@ export class InfoboxComponent implements OnInit {
     )
     .subscribe(result => {
       // console.log('result', result);
+      if(!result[0] || !result[1]) {
+        return;
+      }
+      
       const r = result[0];
       this.aggregatedDiviStatistics = r;
 
