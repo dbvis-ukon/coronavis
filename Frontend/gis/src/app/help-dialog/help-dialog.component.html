@@ -14,7 +14,7 @@
     <mat-tab [label]="label1.textContent">
       <app-help-dialog-theproject></app-help-dialog-theproject>
       <div fxLayout="row" fxLayout.xs="column">
-        <button mat-button mat-raised-button color="primary"  (click)="tabGroup.selectedIndex=1"  i18n="help| help@@button11">{{ isSmallScreen ? 'Weiter' : 'Zur Beschreibung der Kapazitätsdarstellung' }}</button>
+        <button mat-button mat-raised-button color="primary"  (click)="tabGroup.selectedIndex=1"  i18n="help| help@@button11">{{ (isSmallScreen$ | async).matches ? 'Weiter' : 'Zur Beschreibung der Kapazitätsdarstellung' }}</button>
         <button mat-button mat-stroked-button (click)="close()"   i18n="help| help@@button12">Fenster schließen</button>
       </div>
     </mat-tab>
@@ -22,7 +22,7 @@
       <app-help-dialog-beds></app-help-dialog-beds>
       <div fxLayout="row" fxLayout.xs="column">
         <button mat-button mat-stroked-button (click)="tabGroup.selectedIndex=0"  i18n="help| help@@button21">Zurück</button>
-        <button mat-button mat-raised-button color="primary" (click)="tabGroup.selectedIndex=2"  i18n="help| help@@button22">{{ isSmallScreen ? 'Weiter' : 'Weiter zur Darstellung der Fallzahlen' }}</button>
+        <button mat-button mat-raised-button color="primary" (click)="tabGroup.selectedIndex=2"  i18n="help| help@@button22">{{ (isSmallScreen$ | async).matches ? 'Weiter' : 'Weiter zur Darstellung der Fallzahlen' }}</button>
         <button mat-button mat-stroked-button (click)="close()"  i18n="help| help@@button23">Fenster schließen</button>
       </div>
     </mat-tab>

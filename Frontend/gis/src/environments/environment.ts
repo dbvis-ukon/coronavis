@@ -9,7 +9,7 @@ export const environment = {
 
   tileServerUrl: 'https://staging.tiles.coronavis.dbvis.de/',
 
-  version: '',
+  version: 'development',
 
   env: 'development',
 

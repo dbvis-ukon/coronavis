@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { TranslationService } from '../services/translation.service';
@@ -20,6 +20,7 @@ import { VegaBarchartService } from '../services/vega-barchart.service';
       ]),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BedTooltipComponent implements OnInit {
 
