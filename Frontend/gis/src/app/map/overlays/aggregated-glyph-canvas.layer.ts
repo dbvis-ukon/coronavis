@@ -45,14 +45,15 @@ export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPo
     // let scale = Math.pow(9 / (zoom), 2);
     let scale = 1;
 
-    let level = 9;
-    if (this.granularity === AggregationLevel.governmentDistrict) {
-      level = 11;
+    if (this.granularity === AggregationLevel.governmentDistrict && zoom >= 7) {
+      scale = Math.pow(zoom / 7, 2);
     } else if (this.granularity === AggregationLevel.state) {
-      level = 12;
+      scale = Math.pow(zoom / 5, 2);
     }
 
-    scale = Math.pow(level / (zoom), 3);
+    console.log('scale', zoom, scale);
+
+    // scale = Math.pow(level / (zoom), 3);
 
     this.currentScale = scale;
   }
