@@ -432,9 +432,11 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   
       const centerX = pt.x + (this.getGlyphWidth() / 2);
       const belowGlyhY = pt.y + this.getGlyphHeight() + this.rectYOffset + yOffset;
+
+      const fontSizeAndHeight = Math.round(11 * this.currentScale);
   
   
-      this.ctx.font = "bold 11px Roboto";
+      this.ctx.font = `bold ${fontSizeAndHeight}px Roboto`;
       this.ctx.fillStyle = 'black';
       this.ctx.shadowOffsetX = 1;
       this.ctx.shadowOffsetY = 1;
@@ -443,7 +445,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       this.ctx.textAlign = 'center';
       this.ctx.textBaseline = 'top';
   
-      const lineHeight = 11;
+      const lineHeight = fontSizeAndHeight;
       const wrappedText = this.getWrappedText(text, this.getGlyphWidth() * 4);
   
       for(let i = 0; i < wrappedText.length; i++) {

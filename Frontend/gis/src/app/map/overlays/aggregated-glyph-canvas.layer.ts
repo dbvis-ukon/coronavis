@@ -12,6 +12,8 @@ import { AbstractGlyphCanvasLayer } from './abstract-glyph-canvas.layer';
 
 export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> {
 
+  protected showText: boolean = true;
+
   constructor(
     name: string,
     data: FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>,
@@ -34,7 +36,9 @@ export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPo
   }
 
   protected drawAdditionalFeatures(data: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, pt: L.Point) {
-    this.drawText(data.properties.name, pt, 0);
+    if(this.showText) {
+      this.drawText(data.properties.name, pt, 0);
+    }
   }
 
 
@@ -45,7 +49,20 @@ export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPo
     // let scale = Math.pow(9 / (zoom), 2);
     let scale = 1;
 
-    if (this.granularity === AggregationLevel.governmentDistrict && zoom >= 7) {
+    this.showText = true;
+
+    if(this.granularity === AggregationLevel.county) {
+      if(zoom <= 7) {
+        this.showText = false;
+      }
+      if(zoom < 8) {
+        scale = Math.pow(zoom / 8, 2);
+      }
+
+      if(zoom > 10) {
+        scale = Math.pow(zoom / 10, 2);
+      }
+    } else if (this.granularity === AggregationLevel.governmentDistrict && zoom >= 7) {
       scale = Math.pow(zoom / 7, 2);
     } else if (this.granularity === AggregationLevel.state) {
       scale = Math.pow(zoom / 5, 2);
