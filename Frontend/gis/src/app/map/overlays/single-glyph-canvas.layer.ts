@@ -93,8 +93,8 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
       scale = Math.pow(zoom / 9, 3);
     }
 
-    if(zoom >= 11) {
-      scale = Math.pow(zoom/ 11, 2);
+    if(zoom >= 10) {
+      scale = Math.pow(zoom / 10, 2);
     }
 
     this.currentScale = scale;
@@ -108,7 +108,7 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
     if (zoom >= 12) {
       this.showNameHospitals = true
       // true, true
-    } else if (zoom <= 11 && zoom >= 9) {
+    } else if (zoom <= 11 && zoom >= 10) {
       this.showCityHospitals = true;
     }
   }
