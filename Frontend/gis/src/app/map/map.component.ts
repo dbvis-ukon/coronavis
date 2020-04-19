@@ -372,6 +372,12 @@ export class MapComponent implements OnInit {
   }
 
   private showGlyphLayer(l: L.LayerGroup) {
+    // if the layer is already there we don't need to remove it and add it again
+    // this is the case when only the date changes with the time slider
+    if(this.mymap.hasLayer(l)) {
+      return;
+    }
+
     this.removeGlyphMapLayers();
 
     this.mymap.addLayer(l);

@@ -65,7 +65,8 @@ export class ForceDirectedLayout<G extends Geometry, P extends AbstractHospitalO
     this.data = data;
 
     this.sim = forceSimulation(this.data.features.map(d => d.properties))
-    .alpha(0.1)
+    // .alpha(0.1)
+    // .alphaMin(0.0001)
     .stop();
 
     this.loadOrInvalidateCache();
@@ -94,8 +95,9 @@ export class ForceDirectedLayout<G extends Geometry, P extends AbstractHospitalO
       this.sim.force("collide", (rectCollide2(glyphSizes).strength(0.5) as any).iterations(2) as any)
       .force('x', forceX<P>().x(d => d._x).strength(1))
       .force('y', forceY<P>().y(d => d._y).strength(0.5))
-      .alpha(0.1)
-       .velocityDecay(0.6)
+      .alphaDecay(0.3)
+      // .alpha(0.1)
+      //  .velocityDecay(0.6)
         .restart()
         .on('tick', () => this.obs$.next({
           type: 'tick',

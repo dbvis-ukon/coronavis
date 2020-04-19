@@ -5,7 +5,7 @@ import L, { DomUtil, LeafletMouseEvent, Point } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage/public_api';
 import * as Quadtree from 'quadtree-lib';
 import { BehaviorSubject, NEVER, Observable, Subject, timer } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
@@ -20,7 +20,7 @@ import { BedGlyphOptions } from '../options/bed-glyph-options';
 import { BedType } from '../options/bed-type.enum';
 import { GlyphLayer } from './GlyphLayer';
 
-export interface MyQuadTreeItem<Payload> {
+export interface MyQuadTreeItem < Payload > {
   x: number;
   y: number;
   width: number;
@@ -28,21 +28,20 @@ export interface MyQuadTreeItem<Payload> {
   payload: Payload;
 }
 
-export interface GlyphEvent<G extends Geometry, T extends SingleHospitalOut < QualitativeTimedStatus > | AggregatedHospitalOut < QualitativeTimedStatus >> {
+export interface GlyphEvent < G extends Geometry, T extends SingleHospitalOut < QualitativeTimedStatus > | AggregatedHospitalOut < QualitativeTimedStatus >> {
   mouse: LeafletMouseEvent;
 
-  item: Feature<G, T>;
+  item: Feature < G,
+  T > ;
 }
 
 export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends SingleHospitalOut < QualitativeTimedStatus > | AggregatedHospitalOut < QualitativeTimedStatus >> extends CanvasLayer implements GlyphLayer {
 
-  protected quadtree: Quadtree<MyQuadTreeItem<Feature<G, T>>>;
+  protected quadtree: Quadtree < MyQuadTreeItem < Feature < G, T >>> ;
 
   protected visible: boolean = false;
 
-  protected gHospitals: Selection < SVGGElement, Feature < G, T > , SVGSVGElement, unknown > ;
-
-  protected forceLayout: ForceDirectedLayout<G, T>;
+  protected forceLayout: ForceDirectedLayout < G, T > ;
 
   protected svgSelection: Selection < SVGSVGElement, unknown, null, undefined > ;
 
@@ -62,18 +61,20 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
   protected viewInfo: IViewInfo;
 
-  protected mouseMove$: Subject<LeafletMouseEvent> = new Subject();
+  protected mouseMove$: Subject < LeafletMouseEvent > = new Subject();
 
-  protected click$: Subject<LeafletMouseEvent> = new Subject();
+  protected click$: Subject < LeafletMouseEvent > = new Subject();
+
+  private initiallyMounted = false;
 
 
   constructor(
     name: string,
-    protected data: FeatureCollection < G, T >,
+    protected data: FeatureCollection < G, T > ,
     protected granularity: AggregationLevel,
     protected tooltipService: TooltipService,
     protected colormapService: QualitativeColormapService,
-    protected glyphOptions$: BehaviorSubject<BedGlyphOptions>,
+    protected glyphOptions$: BehaviorSubject < BedGlyphOptions > ,
     protected dialog: MatDialog,
     protected storage: LocalStorageService
   ) {
@@ -81,104 +82,105 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       interactive: true,
       bubblingMouseEvents: true
     });
-    
-    this.forceLayout = new ForceDirectedLayout<G, T>(this.storage, granularity);
+
+    this.forceLayout = new ForceDirectedLayout < G, T > (this.storage, granularity);
 
     this.currentOptions = this.glyphOptions$.value;
+    this.oldOptions = this.glyphOptions$.value;
 
     this.glyphOptions$
-    .pipe(
-      debounceTime(10),
-      switchMap(opt => {
-        this.currentOptions = opt;
-        if (!this.gHospitals || !opt) {
-          return NEVER;
-        }
-  
-        if(this.oldOptions?.showIcuLow !== opt.showIcuLow) {
-          this.drawGlyphs();
-        }
-        
-        if(this.oldOptions?.showIcuHigh !== opt.showIcuHigh) {
-          this.drawGlyphs();
-        }
-  
-        if(this.oldOptions?.showEcmo !== opt.showEcmo) {
-          this.drawGlyphs();
-        }
+      .pipe(
+        switchMap(opt => {
+          this.currentOptions = opt;
 
-        if(this.oldOptions?.forceDirectedOn !== opt.forceDirectedOn) {
-          this.calculateOverlapFree();
-        }
-  
-        if(this.oldOptions?.date !== opt.date) {
-          timer(1)
-          .subscribe(() => {
+          if (!this.ctx || !opt) {
+            return NEVER;
+          }
+
+          if (this.oldOptions?.showIcuLow !== opt.showIcuLow) {
             this.drawGlyphs();
-          })
-          
-        }
-        
-  
-  
-        this.oldOptions = JSON.parse(JSON.stringify(opt));
+          }
 
-        return NEVER;
-      })
-    )    
-    .subscribe();
+          if (this.oldOptions?.showIcuHigh !== opt.showIcuHigh) {
+            this.drawGlyphs();
+          }
+
+          if (this.oldOptions?.showEcmo !== opt.showEcmo) {
+            this.drawGlyphs();
+          }
+
+          if (this.oldOptions?.forceDirectedOn !== opt.forceDirectedOn) {
+            this.calculateOverlapFree();
+          }
+
+          if (this.oldOptions?.date !== opt.date) {
+            timer(10)
+            .subscribe(() => this.drawGlyphs());
+          }
+
+
+
+          this.oldOptions = JSON.parse(JSON.stringify(opt));
+
+          return NEVER;
+        })
+      )
+      .subscribe();
 
 
     this.onMouseMove()
-    .subscribe(e => {
-      if(e === null) {
-        this.tooltipService.close();
-        DomUtil.removeClass(this._canvas, 'glyphHit');
-        return;
-      }
+      .subscribe(e => {
+        if (e === null) {
+          this.tooltipService.close();
+          DomUtil.removeClass(this._canvas, 'glyphHit');
+          return;
+        }
 
-      DomUtil.addClass(this._canvas, 'glyphHit');
+        DomUtil.addClass(this._canvas, 'glyphHit');
 
-      const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {
-        x: e.mouse.originalEvent.clientX + 5,
-        y: e.mouse.originalEvent.clientY + 5
+        const t = this.tooltipService.openAtElementRef(GlyphTooltipComponent, {
+          x: e.mouse.originalEvent.clientX + 5,
+          y: e.mouse.originalEvent.clientY + 5
+        });
+        t.tooltipData = e.item.properties;
+
+
       });
-      t.tooltipData = e.item.properties;
-
-      
-    });
 
     this.onClick()
-    .subscribe(e => {
-      this.tooltipService.close();
+      .subscribe(e => {
+        this.tooltipService.close();
 
-      if(!e) {
-        return;
-      }
+        if (!e) {
+          return;
+        }
 
-      this.dialog.open(HospitalInfoDialogComponent, {
-        data: e.item.properties
+        this.dialog.open(HospitalInfoDialogComponent, {
+          data: e.item.properties
+        });
       });
-    });
 
 
     this.forceLayout.getEvents()
-    .subscribe(e => {
-      this.data = e.data;
+      .subscribe(e => {
+        this.data = e.data;
 
-      this.drawGlyphs();
-    });
+        this.drawGlyphs();
+      });
   }
 
   // this function is called whenever the canvas needs to redraw itself
   public onDrawLayer(options: IViewInfo) {
     this.viewInfo = options;
 
-    if(this.quadtree) {
+    if (this.quadtree) {
       this.quadtree.clear();
     }
 
-    this.quadtree = new Quadtree({width: options.size.x, height: options.size.y});
+    this.quadtree = new Quadtree({
+      width: options.size.x,
+      height: options.size.y
+    });
 
     this.ctx = options.canvas.getContext('2d');
 
@@ -193,6 +195,10 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   }
 
   onLayerDidMount() {
+    if(this.initiallyMounted) {
+      return;
+    }
+
     this._map.on('zoom', () => this.onZoomed());
 
     this.on('mousemove', (e: LeafletMouseEvent) => this.mouseMove$.next(e));
@@ -200,6 +206,8 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     this.on('click', (e: LeafletMouseEvent) => this.click$.next(e));
 
     this.onZoomed();
+
+    this.initiallyMounted = true;
   }
 
   protected abstract latAcc(d: Feature < G, T > ): number;
@@ -208,13 +216,13 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
   protected abstract updateCurrentScale(): void;
 
-  protected abstract drawAdditionalFeatures(data: Feature<G, T>, pt: Point);
+  protected abstract drawAdditionalFeatures(data: Feature < G, T > , pt: Point);
 
   protected onZoomed() {
-    if(!this._map) {
+    if (!this._map) {
       return;
     }
-    
+
     this.calculateOverlapFree();
   }
 
@@ -231,6 +239,9 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   }
 
   setVisibility(v: boolean) {
+    if(this.visible === v) {
+      return;
+    }
     this.visible = v;
 
     if (this.visible) {
@@ -238,17 +249,20 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     }
   }
 
-  protected getLatLng(d: Feature<G , T>): L.LatLngLiteral {
-    return {lat: this.latAcc(d), lng: this.lngAcc(d)};
+  protected getLatLng(d: Feature < G, T > ): L.LatLngLiteral {
+    return {
+      lat: this.latAcc(d),
+      lng: this.lngAcc(d)
+    };
   }
 
-  protected getGlyphPixelPos(d: Feature<G, T>): L.Point {
+  protected getGlyphPixelPos(d: Feature < G, T > ): L.Point {
     return new Point(d.properties.x, d.properties.y);
   }
 
 
   protected clearCanvas() {
-    if(!this.ctx) {
+    if (!this.ctx) {
       return;
     }
 
@@ -259,16 +273,16 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   }
 
   protected drawGlyphs() {
-    if(!this.data || !this._map || !this.ctx) {
+    if (!this.data || !this._map || !this.ctx) {
       return;
     }
 
     this.clearCanvas();
 
-    for(const g of this.data.features) {
+    for (const g of this.data.features) {
       const latLng = this.getLatLng(g);
 
-      if(!this.viewInfo.bounds.contains(latLng)) {
+      if (!this.viewInfo.bounds.contains(latLng)) {
         continue;
       }
 
@@ -276,23 +290,23 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     }
   }
 
-  protected drawGlyph(glyphData: Feature<G, T>) {
+  protected drawGlyph(glyphData: Feature < G, T > ) {
     const pt = this.getGlyphPixelPos(glyphData);
 
     this.quadtree.push({
-      x: pt.x,      //Mandatory
-      y: pt.y,      //Mandatory
-      width: this.getGlyphWidth(),   //Optional, defaults to 1
-      height: this.getGlyphHeight(),   //Optional, defaults to 1
+      x: pt.x, //Mandatory
+      y: pt.y, //Mandatory
+      width: this.getGlyphWidth(), //Optional, defaults to 1
+      height: this.getGlyphHeight(), //Optional, defaults to 1
       payload: glyphData
     }) //Optional, defaults to false
-    
+
     this.drawGlyphRects(glyphData, pt);
 
     this.drawAdditionalFeatures(glyphData, pt);
   }
 
-  protected drawGlyphRects(glyphData: Feature<G, T>, pt: Point) {
+  protected drawGlyphRects(glyphData: Feature < G, T > , pt: Point) {
     const width = this.getGlyphWidth();
     const height = this.getGlyphHeight();
 
@@ -300,19 +314,19 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     this.ctx.fillStyle = 'white';
     this.ctx.fillRect(pt.x, pt.y, width, height);
 
-    if(this.currentOptions.showIcuLow) {
+    if (this.currentOptions.showIcuLow) {
       this.drawGlyphRect(pt, glyphData, BedType.icuLow, 0);
     }
-    if(this.currentOptions.showIcuHigh) {
+    if (this.currentOptions.showIcuHigh) {
       this.drawGlyphRect(pt, glyphData, BedType.icuHigh, 1);
     }
-    if(this.currentOptions.showEcmo) {
+    if (this.currentOptions.showEcmo) {
       this.drawGlyphRect(pt, glyphData, BedType.ecmo, 2);
     }
   }
 
-  protected drawGlyphRect(glyphPos: Point, glyphData: Feature<G, T>, bedType: BedType, idx: number) {
-    const xPos = (this.rectPadding + idx * this.rectSize + idx * this.rectPadding) * this.currentScale; 
+  protected drawGlyphRect(glyphPos: Point, glyphData: Feature < G, T > , bedType: BedType, idx: number) {
+    const xPos = (this.rectPadding + idx * this.rectSize + idx * this.rectPadding) * this.currentScale;
     const yPos = (this.rectPadding) * this.currentScale;
 
     this.ctx.fillStyle = this.colormapService.getLatestBedStatusColor(glyphData.properties, bedType, this.currentOptions?.date);
@@ -322,25 +336,25 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
 
   // @method bringToFront(): this
-	// Brings the layer to the top of all overlays.
-	bringToFront(): this {
-		if (this._map) {
-			DomUtil.toFront(this._canvas);
-		}
-		return this;
-	}
-
-	// @method bringToBack(): this
-	// Brings the layer to the bottom of all overlays.
-	bringToBack(): this {
-		if (this._map) {
-			DomUtil.toBack(this._canvas);
-		}
-		return this;
+  // Brings the layer to the top of all overlays.
+  bringToFront(): this {
+    if (this._map) {
+      DomUtil.toFront(this._canvas);
+    }
+    return this;
   }
-  
+
+  // @method bringToBack(): this
+  // Brings the layer to the bottom of all overlays.
+  bringToBack(): this {
+    if (this._map) {
+      DomUtil.toBack(this._canvas);
+    }
+    return this;
+  }
+
   protected calculateOverlapFree() {
-    if(!this.data || !this._map) {
+    if (!this.data || !this._map) {
       return;
     }
 
@@ -357,12 +371,16 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       d.properties.y = pt.y;
     });
 
-    if(!this.currentOptions.forceDirectedOn) {
+    if (!this.currentOptions.forceDirectedOn || !this.visible) {
       return;
     }
 
-    const glyphBoxes = [[-this.getGlyphWidth() / 2, -this.getGlyphHeight() / 2], [this.getGlyphWidth() / 2, this.getGlyphHeight() / 2]];
+    const glyphBoxes = [
+      [-this.getGlyphWidth() / 2, -this.getGlyphHeight() / 2],
+      [this.getGlyphWidth() / 2, this.getGlyphHeight() / 2]
+    ];
 
+    ('force layou update');
     this.forceLayout.update(glyphBoxes, this.data, this._map.getZoom());
   }
 
@@ -377,15 +395,14 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
     const lines: string[] = [];
 
-    for(let n = 0; n < words.length; n++) {
+    for (let n = 0; n < words.length; n++) {
       let testLine = line + words[n] + ' ';
       let metrics = this.ctx.measureText(testLine);
       let testWidth = metrics.width;
       if (testWidth > maxWidth && n > 0) {
         lines.push(line);
         line = words[n] + ' ';
-      }
-      else {
+      } else {
         line = testLine;
       }
     }
@@ -393,75 +410,86 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     return lines;
   }
 
-  protected findItem(e: LeafletMouseEvent): Feature<G, T> | null {
-    if(!this.quadtree) {
+  protected findItem(e: LeafletMouseEvent): Feature < G, T > | null {
+    if (!this.quadtree) {
       return null;
     }
 
-    const items = this.quadtree.colliding({x: e.layerPoint.x - 2, y: e.layerPoint.y - 2, width: 4, height: 4});
-    if(items && items.length > 0) {
+    const items = this.quadtree.colliding({
+      x: e.layerPoint.x - 2,
+      y: e.layerPoint.y - 2,
+      width: 4,
+      height: 4
+    });
+    if (items && items.length > 0) {
       return items[0].payload;
     }
 
     return null;
   }
 
-  protected onMouseMove(): Observable<GlyphEvent<G, T> | null> {
+  protected onMouseMove(): Observable < GlyphEvent < G, T > | null > {
     return this.mouseMove$
-    .pipe(
-      map(e => {
-        const item = this.findItem(e);
-        if(!item) {
-          return null
-        }
-        return {mouse: e, item};
-      }),
-      distinctUntilChanged((x, y) => x?.item === y?.item)
-    )
+      .pipe(
+        map(e => {
+          const item = this.findItem(e);
+          if (!item) {
+            return null
+          }
+          return {
+            mouse: e,
+            item
+          };
+        }),
+        distinctUntilChanged((x, y) => x?.item === y?.item)
+      )
   }
 
-  protected onClick(): Observable<GlyphEvent<G, T> | null> {
+  protected onClick(): Observable < GlyphEvent < G, T > | null > {
     return this.click$
-    .pipe(
-      map(e => {
-        const item = this.findItem(e);
-        if(!item) {
-          return null
-        }
-        return {mouse: e, item};
-      }),
-    )
+      .pipe(
+        map(e => {
+          const item = this.findItem(e);
+          if (!item) {
+            return null
+          }
+          return {
+            mouse: e,
+            item
+          };
+        }),
+      )
   }
 
-    // returns height of this wrapped text
-    protected drawText(text: string, pt: L.Point, yOffset: number): number {
-      this.ctx.save();
-  
-      const centerX = pt.x + (this.getGlyphWidth() / 2);
-      const belowGlyhY = pt.y + this.getGlyphHeight() + this.rectYOffset + yOffset;
+  // returns height of this wrapped text
+  protected drawText(text: string, pt: L.Point, yOffset: number): number {
+    this.ctx.save();
 
-      const fontSizeAndHeight = Math.round(11 * this.currentScale);
-  
-  
-      this.ctx.font = `bold ${fontSizeAndHeight}px Roboto`;
-      this.ctx.fillStyle = 'black';
-      this.ctx.shadowOffsetX = 1;
-      this.ctx.shadowOffsetY = 1;
-      this.ctx.shadowColor = "rgba(255,255,255,1)";
-      this.ctx.shadowBlur = 4;
-      this.ctx.textAlign = 'center';
-      this.ctx.textBaseline = 'top';
-  
-      const lineHeight = fontSizeAndHeight;
-      const wrappedText = this.getWrappedText(text, this.getGlyphWidth() * 4);
-  
-      for(let i = 0; i < wrappedText.length; i++) {
-        this.ctx.fillText(wrappedText[i], centerX, belowGlyhY + i * lineHeight);
-      }
-      
-      this.ctx.restore();
-  
-      return lineHeight * wrappedText.length;
+    const centerX = pt.x + (this.getGlyphWidth() / 2);
+    const belowGlyhY = pt.y + this.getGlyphHeight() + this.rectYOffset + yOffset;
+
+    const fontSizeAndHeight = Math.round(11 * this.currentScale);
+
+
+    this.ctx.font = `bold ${fontSizeAndHeight}px Roboto`;
+    this.ctx.fillStyle = 'black';
+    this.ctx.shadowOffsetX = 1;
+    this.ctx.shadowOffsetY = 1;
+    this.ctx.shadowColor = "rgba(255,255,255,1)";
+    this.ctx.shadowBlur = 4;
+    this.ctx.textAlign = 'center';
+    this.ctx.textBaseline = 'top';
+
+    const lineHeight = fontSizeAndHeight;
+    const wrappedText = this.getWrappedText(text, this.getGlyphWidth() * 4);
+
+    for (let i = 0; i < wrappedText.length; i++) {
+      this.ctx.fillText(wrappedText[i], centerX, belowGlyhY + i * lineHeight);
     }
+
+    this.ctx.restore();
+
+    return lineHeight * wrappedText.length;
+  }
 
 }
