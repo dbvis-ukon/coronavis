@@ -126,6 +126,9 @@ export class QualitativeDiviDevelopmentRepository {
   }
 
   private addIndex<T extends SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>>(d: QualitativeSingleHospitalProperties | QualitativeAggregatedHospitalProperties): T {
+    if(!d.developments) {
+      return;
+    }
     const first = moment(d.developments[0].timestamp).endOf('day');
 
     const last = moment(d.developments[d.developments.length - 1].timestamp).endOf('day');
