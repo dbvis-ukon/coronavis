@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import moment from 'moment';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import { flatMap, reduce, tap } from 'rxjs/operators';
+import { concatMap, flatMap, reduce, tap } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { RKICaseRepository } from '../repositories/rki-case.repository';
@@ -61,25 +61,24 @@ export class CountryAggregatorService {
   }
 
   private useCachedMap(refDate: Date, cache: Map<string, QualitativeTimedStatus>, lastNumberOfDays: number) {
-    if(!refDate) {
-      refDate = new Date();
-    }
-    const t = moment(refDate).format('YYYY-MM-DD');
-
-    const cached = cache.get(t);
-
-    if(cached) {
-      return of(cached);
-    }
-
-    const uncached = this.fetchMap(cache, lastNumberOfDays)
+    return of(cache)
     .pipe(
-      map(map => {
-        return map.get(t);
-      }),
-    );
+      concatMap(m => {
+        if(!refDate) {
+          refDate = new Date();
+        }
+        const t = moment(refDate).format('YYYY-MM-DD');
+        if(m.size === 0) {
+          return this.fetchMap(cache, lastNumberOfDays)
+          .pipe(
+            map(fm => fm.get(t))
+          )
+        }
 
-    return uncached;
+        // else
+        return of(m.get(t));
+      })
+    );
   }
 
   private fetchMap(writeToCache: Map<string, QualitativeTimedStatus>, lastNumberOfDays: number): Observable<Map<string, QualitativeTimedStatus>> {
