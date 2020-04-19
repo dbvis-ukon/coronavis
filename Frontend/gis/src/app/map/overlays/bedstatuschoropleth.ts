@@ -59,7 +59,7 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
     const aggregationLayer = L.geoJSON(this.featureCollection, {
       style: (feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>) => {
         return {
-          fillColor: this.colorsService.getLatestBedStatusColor(feature.properties.developments as any, this.options.bedType, this.options.date),
+          fillColor: this.colorsService.getLatestBedStatusColor(feature.properties, this.options.bedType, this.options.date),
           weight: 0.5,
           opacity: 1,
           color: 'gray',
