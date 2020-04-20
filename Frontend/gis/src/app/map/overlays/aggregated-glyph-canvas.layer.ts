@@ -36,11 +36,11 @@ export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPo
     return d.properties.centroid.coordinates[0];
   }
 
-  protected drawAdditionalFeatures(data: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, pt: L.Point) {
+  protected drawAdditionalFeatures(data: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, pt: L.Point, isHovered: boolean) {
     let bounds = new Bounds(pt, pt);
     
     if(this.showText) {
-      const b = this.drawText(data.properties.name, pt, 0);
+      const b = this.drawText(data.properties.name, pt, 0, isHovered);
 
       bounds = bounds
         .extend(b.min)

@@ -5,7 +5,7 @@ import L, { Bounds, DomUtil, LeafletMouseEvent, Point } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage/public_api';
 import * as Quadtree from 'quadtree-lib';
 import { BehaviorSubject, NEVER, Observable, Subject, timer } from 'rxjs';
-import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
@@ -66,6 +66,8 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   protected click$: Subject < LeafletMouseEvent > = new Subject();
 
   private initiallyMounted = false;
+
+  protected currentlyHoveredGlyph: Feature<G, T>;
 
 
   constructor(
@@ -133,6 +135,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
         if (e === null) {
           this.tooltipService.close();
           DomUtil.removeClass(this._canvas, 'glyphHit');
+          this.drawGlyphs();
           return;
         }
 
@@ -145,6 +148,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
         t.tooltipData = e.item.properties;
 
 
+        this.drawGlyphs();
       });
 
     this.onClick()
@@ -216,7 +220,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
   protected abstract updateCurrentScale(): void;
 
-  protected abstract drawAdditionalFeatures(data: Feature < G, T > , pt: Point): Bounds;
+  protected abstract drawAdditionalFeatures(data: Feature < G, T > , pt: Point, isHovered: boolean): Bounds;
 
   protected onZoomed() {
     if (!this._map) {
@@ -287,18 +291,17 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   }
 
   protected drawGlyph(glyphData: Feature < G, T > ) {
+    const isCurrentlyHovered = this.currentlyHoveredGlyph === glyphData;
+
     const pt = this.getGlyphPixelPos(glyphData);
 
-    let bounds = this.drawGlyphRects(glyphData, pt);
+    let bounds = this.drawGlyphRects(glyphData, pt, isCurrentlyHovered);
 
-    let boundsAdd = this.drawAdditionalFeatures(glyphData, pt);
+    let boundsAdd = this.drawAdditionalFeatures(glyphData, pt, isCurrentlyHovered);
 
     bounds = bounds
       .extend(boundsAdd.min)
       .extend(boundsAdd.max);
-
-    this.ctx.fillStyle = 'rgba(255, 0, 0, 0.4)';
-    this.ctx.fillRect(bounds.min.x, bounds.min.y, bounds.getSize().x, bounds.getSize().y);
 
     this.quadtree.push({
       x: bounds.min.x, //Mandatory
@@ -309,13 +312,15 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     }) //Optional, defaults to false
   }
 
-  protected drawGlyphRects(glyphData: Feature < G, T > , pt: Point): Bounds {
+  protected drawGlyphRects(glyphData: Feature < G, T > , pt: Point, isHovered: boolean): Bounds {
     const width = this.getGlyphWidth();
     const height = this.getGlyphHeight();
 
+    const hoveredBounds = isHovered ? 3 : 0;
+
     // white background
     this.ctx.fillStyle = 'white';
-    this.ctx.fillRect(pt.x, pt.y, width, height);
+    this.ctx.fillRect(pt.x - hoveredBounds, pt.y - hoveredBounds, width + hoveredBounds * 2, height + hoveredBounds * 2);
 
     if (this.currentOptions.showIcuLow) {
       this.drawGlyphRect(pt, glyphData, BedType.icuLow, 0);
@@ -447,7 +452,8 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
             item
           };
         }),
-        distinctUntilChanged((x, y) => x?.item === y?.item)
+        distinctUntilChanged((x, y) => x?.item === y?.item),
+        tap(d => this.currentlyHoveredGlyph = d?.item)
       )
   }
 
@@ -468,7 +474,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   }
 
   // returns height of this wrapped text
-  protected drawText(text: string, pt: L.Point, yOffset: number): Bounds {
+  protected drawText(text: string, pt: L.Point, yOffset: number, isHovered: boolean): Bounds {
     this.ctx.save();
 
     const centerX = pt.x + (this.getGlyphWidth() / 2);
@@ -476,9 +482,12 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
     const fontSizeAndHeight = Math.round(11 * this.currentScale);
 
+    this.ctx.strokeStyle = 'white';
+    this.ctx.lineWidth = 1;
+
 
     this.ctx.font = `bold ${fontSizeAndHeight}px Roboto`;
-    this.ctx.fillStyle = 'black';
+    this.ctx.fillStyle = isHovered ? '#193e8a' : 'black';
     this.ctx.shadowOffsetX = 1;
     this.ctx.shadowOffsetY = 1;
     this.ctx.shadowColor = "rgba(255,255,255,1)";
@@ -490,6 +499,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     const wrappedText = this.getWrappedText(text, this.getGlyphWidth() * 4);
 
     for (let i = 0; i < wrappedText.length; i++) {
+      this.ctx.strokeText(wrappedText[i].line, centerX, belowGlyhY + i * lineHeight);
       this.ctx.fillText(wrappedText[i].line, centerX, belowGlyhY + i * lineHeight);
     }
 

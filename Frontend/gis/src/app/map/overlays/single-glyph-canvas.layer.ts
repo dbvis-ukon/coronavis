@@ -44,11 +44,11 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
     return d.geometry.coordinates[0];
   }
 
-  protected drawAdditionalFeatures(data: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, pt: L.Point) {
+  protected drawAdditionalFeatures(data: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, pt: L.Point, isHovered: boolean) {
     let bounds = new Bounds(pt, pt);
 
     if(this.showNameHospitals) {
-      const b = this.drawText(data.properties.name, pt, 0);
+      const b = this.drawText(data.properties.name, pt, 0, isHovered);
       bounds = bounds
         .extend(b.min)
         .extend(b.max);
@@ -56,7 +56,7 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
 
 
     if(this.showCityHospitals) {
-      const b2 = this.drawText(this.shorten_city_name(data.properties.address), pt, 0);
+      const b2 = this.drawText(this.shorten_city_name(data.properties.address), pt, 0, isHovered);
       bounds = bounds
         .extend(b2.min)
         .extend(b2.max);
