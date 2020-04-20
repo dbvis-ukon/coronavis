@@ -1,5 +1,6 @@
 import { MatDialog } from '@angular/material/dialog';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
+import { Bounds, Point } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage';
 import { BehaviorSubject } from 'rxjs';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
@@ -36,9 +37,21 @@ export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPo
   }
 
   protected drawAdditionalFeatures(data: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, pt: L.Point) {
+    let bounds = new Bounds(pt, pt);
+    
     if(this.showText) {
-      this.drawText(data.properties.name, pt, 0);
+      const b = this.drawText(data.properties.name, pt, 0);
+
+      bounds = bounds
+        .extend(b.min)
+        .extend(b.max);
     }
+
+    return bounds;
+  }
+
+  protected getGlyphPixelPos(d: Feature <MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> ): L.Point {
+    return new Point(d.properties.x - (this.getGlyphWidth() / 2), d.properties.y - (this.getGlyphHeight() / 2));
   }
 
 

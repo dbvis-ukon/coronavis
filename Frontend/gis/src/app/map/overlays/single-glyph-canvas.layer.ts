@@ -1,5 +1,6 @@
 import { MatDialog } from '@angular/material/dialog';
 import { Feature, FeatureCollection, Point } from 'geojson';
+import { Bounds } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage';
 import { BehaviorSubject } from 'rxjs';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
@@ -39,48 +40,29 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
     return d.geometry.coordinates[1];
   }
   
-  lngAcc(d: import("geojson").Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>): number {
+  lngAcc(d: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>): number {
     return d.geometry.coordinates[0];
   }
 
   protected drawAdditionalFeatures(data: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, pt: L.Point) {
+    let bounds = new Bounds(pt, pt);
+
     if(this.showNameHospitals) {
-      this.drawText(data.properties.name, pt, 0);
+      const b = this.drawText(data.properties.name, pt, 0);
+      bounds = bounds
+        .extend(b.min)
+        .extend(b.max);
     }
 
 
     if(this.showCityHospitals) {
-      this.drawText(this.shorten_city_name(data.properties.address), pt, 0);
+      const b2 = this.drawText(this.shorten_city_name(data.properties.address), pt, 0);
+      bounds = bounds
+        .extend(b2.min)
+        .extend(b2.max);
     }
-  }
 
-  // returns height of this wrapped text
-  protected drawText(text: string, pt: L.Point, yOffset: number): number {
-    this.ctx.save();
-
-    const centerX = pt.x + (this.getGlyphWidth() / 2);
-    const belowGlyhY = pt.y + this.getGlyphHeight() + this.rectYOffset + yOffset;
-
-
-    this.ctx.font = "bold 11px Roboto";
-    this.ctx.fillStyle = 'black';
-    this.ctx.shadowOffsetX = 1;
-    this.ctx.shadowOffsetY = 1;
-    this.ctx.shadowColor = "rgba(255,255,255,1)";
-    this.ctx.shadowBlur = 4;
-    this.ctx.textAlign = 'center';
-    this.ctx.textBaseline = 'top';
-
-    const lineHeight = 11;
-    const wrappedText = this.getWrappedText(text, this.getGlyphWidth() * 4);
-
-    for(let i = 0; i < wrappedText.length; i++) {
-      this.ctx.fillText(wrappedText[i], centerX, belowGlyhY + i * lineHeight);
-    }
-    
-    this.ctx.restore();
-
-    return lineHeight * wrappedText.length;
+    return bounds;
   }
 
   updateCurrentScale(): void {

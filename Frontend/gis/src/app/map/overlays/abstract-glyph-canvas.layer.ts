@@ -1,7 +1,7 @@
 import { MatDialog } from '@angular/material/dialog/dialog';
 import { Selection } from 'd3-selection';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
-import L, { DomUtil, LeafletMouseEvent, Point } from 'leaflet';
+import L, { Bounds, DomUtil, LeafletMouseEvent, Point } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage/public_api';
 import * as Quadtree from 'quadtree-lib';
 import { BehaviorSubject, NEVER, Observable, Subject, timer } from 'rxjs';
@@ -216,7 +216,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
   protected abstract updateCurrentScale(): void;
 
-  protected abstract drawAdditionalFeatures(data: Feature < G, T > , pt: Point);
+  protected abstract drawAdditionalFeatures(data: Feature < G, T > , pt: Point): Bounds;
 
   protected onZoomed() {
     if (!this._map) {
@@ -232,10 +232,6 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
   protected getGlyphHeight() {
     return (this.rectSize + 2 * this.rectPadding) * this.currentScale;
-  }
-
-  protected getTransformPixelPosition(p: L.Point): L.Point {
-    return p;
   }
 
   setVisibility(v: boolean) {
@@ -293,20 +289,27 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   protected drawGlyph(glyphData: Feature < G, T > ) {
     const pt = this.getGlyphPixelPos(glyphData);
 
+    let bounds = this.drawGlyphRects(glyphData, pt);
+
+    let boundsAdd = this.drawAdditionalFeatures(glyphData, pt);
+
+    bounds = bounds
+      .extend(boundsAdd.min)
+      .extend(boundsAdd.max);
+
+    this.ctx.fillStyle = 'rgba(255, 0, 0, 0.4)';
+    this.ctx.fillRect(bounds.min.x, bounds.min.y, bounds.getSize().x, bounds.getSize().y);
+
     this.quadtree.push({
-      x: pt.x, //Mandatory
-      y: pt.y, //Mandatory
-      width: this.getGlyphWidth(), //Optional, defaults to 1
-      height: this.getGlyphHeight(), //Optional, defaults to 1
+      x: bounds.min.x, //Mandatory
+      y: bounds.min.y, //Mandatory
+      width: bounds.getSize().x, //Optional, defaults to 1
+      height: bounds.getSize().y, //Optional, defaults to 1
       payload: glyphData
     }) //Optional, defaults to false
-
-    this.drawGlyphRects(glyphData, pt);
-
-    this.drawAdditionalFeatures(glyphData, pt);
   }
 
-  protected drawGlyphRects(glyphData: Feature < G, T > , pt: Point) {
+  protected drawGlyphRects(glyphData: Feature < G, T > , pt: Point): Bounds {
     const width = this.getGlyphWidth();
     const height = this.getGlyphHeight();
 
@@ -323,6 +326,8 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     if (this.currentOptions.showEcmo) {
       this.drawGlyphRect(pt, glyphData, BedType.ecmo, 2);
     }
+
+    return new Bounds(pt, new Point(pt.x + width, pt.y + height));
   }
 
   protected drawGlyphRect(glyphPos: Point, glyphData: Feature < G, T > , bedType: BedType, idx: number) {
@@ -389,24 +394,25 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
    * @param text 
    * @param maxWidth 
    */
-  protected getWrappedText(text: string, maxWidth: number): string[] {
+  protected getWrappedText(text: string, maxWidth: number): {line: string; width: number}[] {
     const words = text.split(' ');
     let line = '';
 
-    const lines: string[] = [];
+    const lines:  {line: string; width: number}[] = [];
 
+    let testWidth;
     for (let n = 0; n < words.length; n++) {
       let testLine = line + words[n] + ' ';
       let metrics = this.ctx.measureText(testLine);
-      let testWidth = metrics.width;
+      testWidth = metrics.width;
       if (testWidth > maxWidth && n > 0) {
-        lines.push(line);
+        lines.push({line: line, width: this.ctx.measureText(line).width});
         line = words[n] + ' ';
       } else {
         line = testLine;
       }
     }
-    lines.push(line);
+    lines.push({line: line, width: this.ctx.measureText(line).width});
     return lines;
   }
 
@@ -416,10 +422,10 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     }
 
     const items = this.quadtree.colliding({
-      x: e.layerPoint.x - 2,
-      y: e.layerPoint.y - 2,
-      width: 4,
-      height: 4
+      x: e.layerPoint.x - 5,
+      y: e.layerPoint.y - 5,
+      width: 10,
+      height: 10
     });
     if (items && items.length > 0) {
       return items[0].payload;
@@ -462,7 +468,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   }
 
   // returns height of this wrapped text
-  protected drawText(text: string, pt: L.Point, yOffset: number): number {
+  protected drawText(text: string, pt: L.Point, yOffset: number): Bounds {
     this.ctx.save();
 
     const centerX = pt.x + (this.getGlyphWidth() / 2);
@@ -484,12 +490,17 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     const wrappedText = this.getWrappedText(text, this.getGlyphWidth() * 4);
 
     for (let i = 0; i < wrappedText.length; i++) {
-      this.ctx.fillText(wrappedText[i], centerX, belowGlyhY + i * lineHeight);
+      this.ctx.fillText(wrappedText[i].line, centerX, belowGlyhY + i * lineHeight);
     }
+
+    const maxWidth = wrappedText.map(m => m.width).reduce((agg, val) => Math.max(agg || 0, val));
 
     this.ctx.restore();
 
-    return lineHeight * wrappedText.length;
+    return new Bounds(
+      new Point(centerX - (maxWidth / 2), belowGlyhY), 
+      new Point(centerX + (maxWidth / 2), belowGlyhY + lineHeight * wrappedText.length)
+    );
   }
 
 }
