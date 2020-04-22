@@ -26,12 +26,12 @@
           </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <mat-progress-bar *ngIf="aggregateStatisticsLoading" mode="indeterminate"></mat-progress-bar>
+      <mat-progress-bar *ngIf="!combinedStats$" mode="indeterminate"></mat-progress-bar>
 
-      <div *ngIf="aggregatedDiviStatistics">
-        <p class="stats with-addon" i18n="@@infoboxNumberOfHospitals">{{ numUnfilteredHospitals | number }} bundesweit gemeldete Einrichtungen</p>
-        <p class="stats"><small i18n="@@infoboxNumberOfHospitalsAddon">(davon {{ (numUnfilteredHospitals - aggregatedDiviStatistics.numHospitals) | number }} ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</small></p>
-        <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ this.aggregatedDiviStatistics.last_update | date:'full' }}</p>
+      <div *ngIf="combinedStats$ | async; let c">
+        <p class="stats with-addon" i18n="@@infoboxNumberOfHospitals">{{ c.diviUnfiltered.numHospitals | number }} bundesweit gemeldete Einrichtungen</p>
+        <p class="stats"><small i18n="@@infoboxNumberOfHospitalsAddon">(davon {{ (c.diviUnfiltered.numHospitals - c.diviFiltered.numHospitals) | number }} ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</small></p>
+        <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ c.diviFiltered.last_update | date:'full' }}</p>
       </div>
       
 
@@ -82,16 +82,16 @@
       ></app-hospital-search>
 
       <div *ngIf="mo.bedGlyphOptions.enabled">
-        <div class="glyph-legend">
+        <div class="glyph-legend" *ngIf="combinedStats$ | async; let c">
           <div
-            *ngFor="let t of glyphLegend"
+            *ngFor="let t of c.glyphData"
             class="glyph-tile"
             (mouseenter)="openBedTooltip($event, t)"
             (mouseleave)="tooltipService.close()"
             (click)="mo.bedGlyphOptions[t.accessor] = !mo.bedGlyphOptions[t.accessor]; emitMapOptions()"
           >
             <div class="rect"
-                 [ngStyle]="{'background-color': colormapService.getBedStatusColor(aggregatedDiviStatistics, t.accFunc), 'border-color': mo.bedGlyphOptions[t.accessor] ? 'grey' : 'lightgrey'}"></div>
+                 [ngStyle]="{'background-color': t.color, 'border-color': mo.bedGlyphOptions[t.accessor] ? 'grey' : 'lightgrey'}"></div>
             <div class="text">{{ t.name }}</div>
           </div>
         </div>
@@ -167,10 +167,10 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <div *ngIf="aggregatedRkiStatistics">
-        <p class="stats" i18n="@@infoboxNumberOfCovidCases">{{ this.aggregatedRkiStatistics.cases | number }} bundesweit gemeldete Covid-19 Fälle</p>
-        <p class="stats" i18n="@@infoboxNumberOfCovidDeaths">{{ this.aggregatedRkiStatistics.deaths | number }} bundesweit gemeldete Covid-19 Todesfälle</p>
-        <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ this.aggregatedRkiStatistics.timestamp | date:'full' }}</p>
+      <div *ngIf="(combinedStats$ | async); let c">
+        <p class="stats" i18n="@@infoboxNumberOfCovidCases">{{ c.rki?.cases | number }} bundesweit gemeldete Covid-19 Fälle</p>
+        <p class="stats" i18n="@@infoboxNumberOfCovidDeaths">{{ c.rki?.deaths | number }} bundesweit gemeldete Covid-19 Todesfälle</p>
+        <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ c.rki?.timestamp | date:'full' }}</p>
       </div>
       
 

@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Feature, MultiPolygon, Point } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
 import moment from 'moment';
-import { BehaviorSubject, forkJoin } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { distinctUntilChanged, map, mergeMap, tap } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
 import { HospitalSearchFeatureCollectionPermissible } from '../hospital-search/hospital-search.component';
@@ -27,6 +27,19 @@ import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TooltipService } from '../services/tooltip.service';
 import { TranslationService } from '../services/translation.service';
+
+interface CombinedStatistics {
+  diviFiltered: QualitativeTimedStatus;
+  diviUnfiltered: QualitativeTimedStatus;
+  rki: RKICaseTimedStatus;
+
+  glyphData: {
+    name: string;
+    accessor: string;
+    color: string;
+    description: string;
+  }[];
+}
 
 @Component({
   selector: 'app-infobox',
@@ -66,12 +79,8 @@ export class InfoboxComponent implements OnInit {
   @Output()
   flyTo = new EventEmitter<FlyTo>();
 
-  aggregateStatisticsLoading: boolean = false;
+  aggregateStatisticsLoading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   
-  aggregatedDiviStatistics: QualitativeTimedStatus;
-
-  aggregatedRkiStatistics: RKICaseTimedStatus;
-
   // ENUM MAPPING
   // because in HTML, this stuff cannot be accessed
   eCovidNumberCaseTimeWindow = CovidNumberCaseTimeWindow;
@@ -95,9 +104,9 @@ export class InfoboxComponent implements OnInit {
   hospitals: HospitalSearchFeatureCollectionPermissible;
   resetHospitalSearch: number;
 
-  numUnfilteredHospitals: number;
-
   private refDay$: BehaviorSubject<string> = new BehaviorSubject('now');
+
+  combinedStats$: Observable<CombinedStatistics>;
 
   constructor(
     public colormapService: QualitativeColormapService,
@@ -126,26 +135,10 @@ export class InfoboxComponent implements OnInit {
     this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
     this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);  
 
-    // this.refDay$
-    // .pipe(
-    //   distinctUntilChanged(),
-    //   map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate()),
-    //   mergeMap(refDate => this.countryAggregatorService.diviAggregationForCountry(refDate))
-    // )
-    // .subscribe(r => {
-    //   this.aggregatedDiviStatistics = r;
-
-    //   this.glyphLegend = [
-    //     {name: 'ICU low', accessor: 'showIcuLow', accFunc: (r) => r.icu_low_care, description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
-    //     {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (r) => r.icu_high_care, description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
-    //     {name: 'ECMO', accessor: 'showEcmo', accFunc: (r) => r.ecmo_state, description: 'ECMO = Zusätzlich ECMO'}
-    //   ];
-    // });
-
-    this.refDay$
+    this.combinedStats$ = this.refDay$
     .pipe(
       distinctUntilChanged(),
-      tap(() => this.aggregateStatisticsLoading = true),
+      tap(() => this.aggregateStatisticsLoading$.next(true)),
       map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate()),
       // tap(refDate => console.log('refdate', refDate)),
       mergeMap(refDate => {
@@ -156,28 +149,20 @@ export class InfoboxComponent implements OnInit {
 
         return forkJoin([filtered, unfiltered, rki]);
       }),
-      tap(() => this.aggregateStatisticsLoading = false)
-    )
-    .subscribe(result => {
-      console.log('statistics result', result);
-      if(!result[0]) {
-        return;
-      }
-      
-      const r = result[0];
-      this.aggregatedDiviStatistics = r;
-
-      this.glyphLegend = [
-        {name: 'ICU low', accessor: 'showIcuLow', accFunc: (r) => r.icu_low_care, description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
-        {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (r) => r.icu_high_care, description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
-        {name: 'ECMO', accessor: 'showEcmo', accFunc: (r) => r.ecmo_state, description: 'ECMO = Zusätzlich ECMO'}
-      ];
-
-      this.numUnfilteredHospitals = result[1].numHospitals;
-
-
-      this.aggregatedRkiStatistics = result[2];
-    })
+      map(([diviFiltered, diviUnfiltered, rki]) => {
+        return {
+          diviFiltered,
+          diviUnfiltered,
+          rki,
+          glyphData: [
+            {name: 'ICU low', accessor: 'showIcuLow', color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_low_care), description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+            {name: 'ICU high', accessor: 'showIcuHigh', color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_high_care), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
+            {name: 'ECMO', accessor: 'showEcmo', color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.ecmo_state), description: 'ECMO = Zusätzlich ECMO'}
+          ]
+        } as CombinedStatistics
+      }),
+      tap(() => this.aggregateStatisticsLoading$.next(false))
+    );
 
 
     this.updateHospitals();
@@ -208,7 +193,7 @@ export class InfoboxComponent implements OnInit {
       }
     ]);
 
-    t.data = this.aggregatedDiviStatistics;
+    // t.data = this.aggregatedDiviStatistics;
     t.bedName = glypLegendEntity.name;
 
     t.explanation = this.translationService.translate(glypLegendEntity.description);
