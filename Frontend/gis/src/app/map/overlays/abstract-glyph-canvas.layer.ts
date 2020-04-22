@@ -288,6 +288,11 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
       this.drawGlyph(g);
     }
+
+    // draw hovered glyph again so it's on top
+    if(this.currentlyHoveredGlyph) {
+      this.drawGlyph(this.currentlyHoveredGlyph);
+    }
   }
 
   protected drawGlyph(glyphData: Feature < G, T > ) {
