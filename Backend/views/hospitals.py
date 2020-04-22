@@ -284,6 +284,7 @@ places_per_landkreis_per_timestamp AS (
     FROM
         landkreise l
         LEFT JOIN filled_hospital_timeseries ON ST_Contains(l.geom, filled_hospital_timeseries.geom)
+    WHERE timestamp IS NOT NULL
     GROUP BY
         l.ids,
         l.name,
@@ -522,6 +523,7 @@ places_per_regierungsbezirk_per_timestamp AS (
     FROM
         regierungsbezirke r
         LEFT JOIN filled_hospital_timeseries ON ST_Contains(r.geom, filled_hospital_timeseries.geom)
+    WHERE timestamp IS NOT NULL
     GROUP BY
         r.ids,
         r.name,
@@ -761,6 +763,7 @@ places_per_bundesland_per_timestamp AS (
     FROM
         bundeslaender b
         LEFT JOIN filled_hospital_timeseries ON ST_Contains(b.geom, filled_hospital_timeseries.geom)
+    WHERE timestamp IS NOT NULL
     GROUP BY
         b.ids,
         b.name,
@@ -1000,6 +1003,7 @@ places_per_bundesland_per_timestamp AS (
     FROM
         germany ger
         LEFT JOIN filled_hospital_timeseries ON ST_Contains(ger.geom, filled_hospital_timeseries.geom)
+    WHERE timestamp IS NOT NULL
     GROUP BY
         ger.ids,
         ger.name,
