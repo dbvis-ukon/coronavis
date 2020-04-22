@@ -13,6 +13,7 @@ import { CaseChoroplethColormapService, ColorMapBin } from '../services/case-cho
 import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
+import { getMoment } from '../util/date-util';
 
 interface LegendColorMapBin extends ColorMapBin {
   minStr: string;
@@ -51,7 +52,8 @@ export class LegendComponent implements OnInit {
 
   caseBins$: Observable<LegendColorMapBin[]>;
 
-  title$: Observable<string>;
+  titleBeds$: Observable<string>;
+  titleCases$: Observable<string>;
 
   constructor(
     private bedColormap: QualitativeColormapService,
@@ -65,13 +67,16 @@ export class LegendComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.title$ = this.mo$
+    this.titleCases$ = this.mo$
     .pipe(
       // tap(m => console.log('new mo', m)),
       // distinctUntilChanged((a, b) => JSON.stringify(a?.covidNumberCaseOptions) === JSON.stringify(b?.covidNumberCaseOptions)),
       // tap(m => console.log('changed!')),
-      map(mo => this.getTitle(mo))
+      map(mo => this.getTitleCases(mo))
     );
+
+    this.titleBeds$ = this.mo$
+    .pipe(map(mo => this.getTitleBeds(mo)));
 
     this.caseBins$ = combineLatest(this.mo$, this.choroplethLayer$)
     .pipe(
@@ -140,11 +145,108 @@ export class LegendComponent implements OnInit {
     return this.numberPipe.transform(v, '1.0-1');
   }
 
-  private getTitle(mo: MapOptions): string {
-    return this.i18n.getCurrentLocale() === SupportedLocales.DE_DE ? this.getTitleDe(mo) : this.getTitleEn(mo);
+  private getTitleBeds(mo: MapOptions): string {
+    return this.i18n.getCurrentLocale() === SupportedLocales.DE_DE ? this.getTitleBedsDe(mo) : this.getTitleBedsEn(mo);
   }
 
-  private getTitleEn(mo: MapOptions) {
+  private getTitleBedsEn(mo: MapOptions): string {
+    let title = 'Bed Capacity'
+
+    if(mo.bedBackgroundOptions.enabled) {
+      switch(mo.bedBackgroundOptions.bedType) {
+        case BedType.icuLow:
+          title += ' ICU low';
+          break;
+  
+        case BedType.icuHigh:
+          title += ' ICU high';
+          break;
+  
+        case BedType.ecmo:
+          title += ' ECMO';
+          break;
+      }
+    }
+    
+
+    title += ' by ';
+
+    switch(mo.bedGlyphOptions.aggregationLevel) {
+      case AggregationLevel.county:
+        title += "counties";
+        break;
+      
+      case AggregationLevel.governmentDistrict:
+        title += "districts";
+        break;
+
+      case AggregationLevel.state:
+        title += "states";
+        break;
+      
+      case AggregationLevel.none:
+        title += "facilities";
+        break;
+    }
+
+    title += ' on ';
+
+    title += this.datePipe.transform(getMoment(mo.bedBackgroundOptions.date).toDate(), 'shortDate');
+
+    return title;
+  }
+
+  private getTitleBedsDe(mo: MapOptions): string {
+    let title = 'Bettenauslastung'
+
+    if(mo.bedBackgroundOptions.enabled) {
+      switch(mo.bedBackgroundOptions.bedType) {
+        case BedType.icuLow:
+          title += ' ICU low';
+          break;
+  
+        case BedType.icuHigh:
+          title += ' ICU high';
+          break;
+  
+        case BedType.ecmo:
+          title += ' ECMO';
+          break;
+      }
+    }
+
+    title += ' für ';
+
+    switch(mo.bedGlyphOptions.aggregationLevel) {
+      case AggregationLevel.county:
+        title += "Landkreise";
+        break;
+      
+      case AggregationLevel.governmentDistrict:
+        title += "Regierungsbezirke";
+        break;
+
+      case AggregationLevel.state:
+        title += "Bundesländer";
+        break;
+
+      case AggregationLevel.none:
+        title += "Einrichtungen";
+        break;
+    }
+
+    title += ' am ';
+
+    title += this.datePipe.transform(getMoment(mo.bedBackgroundOptions.date).toDate(), 'shortDate');
+
+    return title;
+  }
+
+  private getTitleCases(mo: MapOptions): string {
+    return this.i18n.getCurrentLocale() === SupportedLocales.DE_DE ? this.getTitleCasesDe(mo) : this.getTitleCasesEn(mo);
+  }
+
+  private getTitleCasesEn(mo: MapOptions) {
     let title = '';
 
     if(mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {
@@ -188,12 +290,12 @@ export class LegendComponent implements OnInit {
       title += " on "
     }
   
-    title += this.datePipe.transform(mo.covidNumberCaseOptions.date === 'now' ? moment().toDate() : moment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
+    title += this.datePipe.transform(getMoment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
 
     return title;
   }
 
-  private getTitleDe(mo: MapOptions) {
+  private getTitleCasesDe(mo: MapOptions) {
     let title = '';
 
     if(mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {

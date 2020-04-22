@@ -7,7 +7,7 @@
   i18n-matTooltip="@@legendToggleTooltip" 
   matTooltip="Klicken um Legende ein-/auszuklappen"
   matTooltipPosition="above"
-  >{{ title$ | async }}</h5>
+  >{{ titleCases$ | async }}</h5>
     <div *ngIf="legendCasesExtended">
     <table>
 
@@ -43,13 +43,13 @@
 
 
 <div class="legend bedlegend" *ngIf="(mo$ | async)?.bedBackgroundOptions.enabled === true || (mo$ | async)?.bedGlyphOptions.enabled === true" >
-  <h5 i18n="legend|beds@@beds" 
+  <h5
   class="title" 
   (click)="legendBedsExtended = !legendBedsExtended" 
   i18n-matTooltip="@@legendToggleTooltip" 
   matTooltip="Klicken um Legende ein-/auszuklappen"
   matTooltipPosition="above"
-  >Bettenauslastung</h5>
+  >{{ titleBeds$ | async }}</h5>
 
   <div *ngIf="legendBedsExtended">
   <table>
