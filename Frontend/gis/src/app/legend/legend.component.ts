@@ -181,8 +181,12 @@ export class LegendComponent implements OnInit {
         break;
     }
 
-    title += " on "
-
+    if(mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
+      title += " until "
+    } else {
+      title += " on "
+    }
+  
     title += this.datePipe.transform(mo.covidNumberCaseOptions.date === 'now' ? moment().toDate() : moment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
 
     return title;
@@ -226,7 +230,11 @@ export class LegendComponent implements OnInit {
         break;
     }
 
-    title += " am "
+    if(mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
+      title += " bis "
+    } else {
+      title += " am "
+    }
 
     title += this.datePipe.transform(mo.covidNumberCaseOptions.date === 'now' ? moment().toDate() : moment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
 
