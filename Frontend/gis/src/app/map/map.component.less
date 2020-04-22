@@ -89,6 +89,14 @@ svg text {
   text-rendering: geometricprecision;
 }
 
-.glyphHit {
+.leaflet-layer.mousedown {
+  cursor: grabbing;
+}
+
+.leaflet-layer.glyphHit {
   cursor: pointer;
+
+  &.mousedown {
+    cursor: pointer;
+  }
 }

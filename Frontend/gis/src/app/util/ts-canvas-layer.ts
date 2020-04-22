@@ -47,6 +47,8 @@ export class CanvasLayer extends Layer {
         const events: { [index: string]: LeafletEventHandlerFn } = {
             // resize: this._onLayerDidResize,
             moveend: this._onLayerDidMove,
+            mousedown: () => DomUtil.addClass(this._canvas, 'mousedown'),
+            mouseup: () => DomUtil.removeClass(this._canvas, 'mousedown'),
             click: this._onClick,
             mousemove: this._onMouseMove
         }
