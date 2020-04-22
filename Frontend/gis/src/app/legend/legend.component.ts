@@ -1,9 +1,8 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { isEqual } from 'lodash-es';
 import moment from 'moment';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
@@ -68,14 +67,15 @@ export class LegendComponent implements OnInit {
   ngOnInit(): void {
     this.title$ = this.mo$
     .pipe(
-      tap(m => console.log('new mo', m)),
-      distinctUntilChanged((a, b) => !isEqual(a?.covidNumberCaseOptions, b?.covidNumberCaseOptions)),
+      // tap(m => console.log('new mo', m)),
+      // distinctUntilChanged((a, b) => JSON.stringify(a?.covidNumberCaseOptions) === JSON.stringify(b?.covidNumberCaseOptions)),
+      // tap(m => console.log('changed!')),
       map(mo => this.getTitle(mo))
     );
 
     this.caseBins$ = combineLatest(this.mo$, this.choroplethLayer$)
     .pipe(
-      distinctUntilChanged(([a], [b]) => !isEqual(a?.covidNumberCaseOptions, b?.covidNumberCaseOptions)),
+      // distinctUntilChanged(([a], [b]) => !isEqual(a?.covidNumberCaseOptions, b?.covidNumberCaseOptions)),
       map(([mo, c]) => this.updateCaseColors(mo, c))
     );
   }
