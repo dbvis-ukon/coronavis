@@ -16,4 +16,8 @@ export class RKICaseDevelopmentRepository {
   getCasesDevelopmentForAggLevel(aggLevel: AggregationLevel): Observable<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>> {
     return this.cachedRepository.get<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}cases/development/${aggLevel}`);
   }
+
+  getCasesDevelopmentForCountries(): Observable<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>> {
+    return this.cachedRepository.get<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}cases/development/laender`);
+  }
 }

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import moment from 'moment';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import { concatMap, flatMap, reduce, tap } from 'rxjs/operators';
-import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { concatMap, tap } from 'rxjs/operators';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
-import { RKICaseRepository } from '../repositories/rki-case.repository';
+import { RKICaseDevelopmentRepository } from '../repositories/rki-case-development.repository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
-import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
+import { RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
+import { getStrDate } from '../util/date-util';
 
 @Injectable({
   providedIn: 'root'
@@ -19,37 +19,19 @@ export class CountryAggregatorService {
 
   constructor(
     private diviDevelopmentRepository: QualitativeDiviDevelopmentRepository,
-    private rkiCaseRepository: RKICaseRepository
+    private rkiCaseRepository: RKICaseDevelopmentRepository
   ) {
   }
 
-  public rkiAggregationForCountry(): Observable<QuantitativeAggregatedRkiCasesProperties> {
-    return this.rkiCaseRepository.getCasesTotalForAggLevel(AggregationLevel.state)
+  public rkiAggregationForCountry(refDate: Date): Observable<RKICaseTimedStatus | undefined> {
+    return this.rkiCaseRepository.getCasesDevelopmentForCountries()
     .pipe(
-      flatMap(fc => fc.features),
-      map(f => f.properties),
-      reduce((agg, val) => {
-        agg.bevoelkerung += val.bevoelkerung;
-        agg.cases += val.cases
-        agg.deaths += val.deaths;
-        
-        const aggT = new Date(agg.until);
-        const valT = new Date(val.until);
+      map(fc => {
+        const strDate = getStrDate(refDate);
 
-        if(aggT < valT) {
-          agg.until = valT;
-        }
-
-        return agg;
-      }, {
-        bevoelkerung: 0,
-        cases: 0,
-        deaths: 0,
-        until: new Date('1990-01-01'),
-        ids: null,
-        name: null
+        return fc.features[0].properties.developmentDays[strDate];
       })
-    );
+    )
   }
 
   public diviAggregationForCountry(refDate: Date): Observable<QualitativeTimedStatus> {

@@ -15,7 +15,7 @@ import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
-import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
+import { RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
@@ -70,7 +70,7 @@ export class InfoboxComponent implements OnInit {
   
   aggregatedDiviStatistics: QualitativeTimedStatus;
 
-  aggregatedRkiStatistics: QuantitativeAggregatedRkiCasesProperties;
+  aggregatedRkiStatistics: RKICaseTimedStatus;
 
   // ENUM MAPPING
   // because in HTML, this stuff cannot be accessed
@@ -152,7 +152,9 @@ export class InfoboxComponent implements OnInit {
         const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate)
         const unfiltered = this.countryAggregatorService.diviAggregationForCountryUnfiltered(refDate);
 
-        return forkJoin([filtered, unfiltered]);
+        const rki = this.countryAggregatorService.rkiAggregationForCountry(refDate);
+
+        return forkJoin([filtered, unfiltered, rki]);
       }),
       tap(() => this.aggregateStatisticsLoading = false)
     )
@@ -172,13 +174,11 @@ export class InfoboxComponent implements OnInit {
       ];
 
       this.numUnfilteredHospitals = result[1].numHospitals;
+
+
+      this.aggregatedRkiStatistics = result[2];
     })
 
-
-    this.countryAggregatorService.rkiAggregationForCountry()
-    .subscribe(r => {
-      this.aggregatedRkiStatistics = r;
-    });
 
     this.updateHospitals();
   }
