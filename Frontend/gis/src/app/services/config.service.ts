@@ -40,6 +40,7 @@ export class ConfigService {
     },
 
     covidNumberCaseOptions: {
+      date: 'now',
       change: CovidNumberCaseChange.absolute,
       normalization: CovidNumberCaseNormalization.absolut,
       timeWindow: CovidNumberCaseTimeWindow.all,

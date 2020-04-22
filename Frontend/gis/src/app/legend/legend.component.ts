@@ -1,5 +1,7 @@
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { isEqual } from 'lodash-es';
+import moment from 'moment';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -57,7 +59,8 @@ export class LegendComponent implements OnInit {
     private caseColormap: CaseChoroplethColormapService,
     private plusMinusPipe: PlusminusPipe,
     private numberPipe: DecimalPipe,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private datePipe: DatePipe
   ) {
     
   }
@@ -65,13 +68,13 @@ export class LegendComponent implements OnInit {
   ngOnInit(): void {
     this.title$ = this.mo$
     .pipe(
-      distinctUntilChanged((a, b) => a?.covidNumberCaseOptions !== b?.covidNumberCaseOptions),
+      distinctUntilChanged((a, b) => isEqual(a?.covidNumberCaseOptions, b?.covidNumberCaseOptions)),
       map(mo => this.getTitle(mo))
     );
 
     this.caseBins$ = combineLatest(this.mo$, this.choroplethLayer$)
     .pipe(
-      distinctUntilChanged(([a], [b]) => a?.covidNumberCaseOptions !== b?.covidNumberCaseOptions),
+      distinctUntilChanged(([a], [b]) => isEqual(a?.covidNumberCaseOptions, b?.covidNumberCaseOptions)),
       map(([mo, c]) => this.updateCaseColors(mo, c))
     );
   }
@@ -178,6 +181,10 @@ export class LegendComponent implements OnInit {
         break;
     }
 
+    title += " on "
+
+    title += this.datePipe.transform(mo.covidNumberCaseOptions.date === 'now' ? moment().toDate() : moment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
+
     return title;
   }
 
@@ -218,6 +225,10 @@ export class LegendComponent implements OnInit {
         title += "Bundesland";
         break;
     }
+
+    title += " am "
+
+    title += this.datePipe.transform(mo.covidNumberCaseOptions.date === 'now' ? moment().toDate() : moment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
 
     return title;
   }

@@ -1,7 +1,8 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
-import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../services/types/quantitative-aggregated-rki-cases-over-time';
+import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
+import { CaseUtilService } from '../services/case-util.service';
 
 @Component({
   selector: 'app-case-info',
@@ -11,7 +12,7 @@ import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../services/ty
 export class CaseInfoComponent implements OnInit {
 
   @Input()
-  public data: QuantitativeAggregatedRkiCasesOverTimeProperties;
+  public data: RKICaseDevelopmentProperties;
 
   @Input()
   public options: CovidNumberCaseOptions;
@@ -25,13 +26,23 @@ export class CaseInfoComponent implements OnInit {
 
   eNorm = CovidNumberCaseNormalization;
 
-  constructor(private numberPipe: DecimalPipe) { }
+  curTimedStatus: RKICaseTimedStatus;
+
+  twentyFourHTimedStatus: RKICaseTimedStatus;
+
+  seventyTwoHTimedStatus: RKICaseTimedStatus;
+
+  constructor(private numberPipe: DecimalPipe, private caseUtil: CaseUtilService) { }
 
   ngOnInit(): void {
+    [this.curTimedStatus, this.twentyFourHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.twentyFourhours);
+    [this.curTimedStatus, this.seventyTwoHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.seventyTwoHours);
+
+    console.log('name', this.data.name, this.curTimedStatus, this.twentyFourHTimedStatus, this.seventyTwoHTimedStatus);
   }
 
-  public getCasesPer100kInhabitants(count: number, addPlus: boolean = false): string {
-    const v = ((count / this.data.bevoelkerung) * 100000);
+  public getCasesPer100kInhabitants(count: number, status: RKICaseTimedStatus, addPlus: boolean = false): string {
+    const v = ((count / status.population) * 100000);
 
     return `${v > 0 && addPlus ? '+' : ''}${this.numberPipe.transform(v, '1.0-2')}`;
   }

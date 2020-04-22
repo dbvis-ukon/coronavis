@@ -1,6 +1,6 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { APP_BASE_HREF, DecimalPipe, PlatformLocation, registerLocaleData } from '@angular/common';
+import { APP_BASE_HREF, DatePipe, DecimalPipe, PlatformLocation, registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import localeDe from '@angular/common/locales/de';
 import localeEn from '@angular/common/locales/en';
@@ -201,6 +201,7 @@ export const localeProvider = {
     },
     PlusminusPipe, 
     DecimalPipe, 
+    DatePipe,
     TranslatePipe,
     { 
       provide: ErrorHandler, 

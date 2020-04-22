@@ -1,7 +1,8 @@
 import { animate, style, transition, trigger } from "@angular/animations";
 import { Component, Input, OnInit } from '@angular/core';
 import { CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
-import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../services/types/quantitative-aggregated-rki-cases-over-time';
+import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
+import { CaseUtilService } from '../services/case-util.service';
 
 @Component({
   selector: 'app-case-tooltip',
@@ -22,16 +23,19 @@ import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../services/ty
 export class CaseTooltipComponent implements OnInit {
 
   @Input()
-  public data: QuantitativeAggregatedRkiCasesOverTimeProperties;
+  public data: RKICaseDevelopmentProperties;
 
   @Input()
   public options: CovidNumberCaseOptions;
 
-  constructor() {}
+  currentTimedStatus: RKICaseTimedStatus;
+
+  constructor(private caseUtil: CaseUtilService) {}
 
   
 
   ngOnInit(): void {
+    this.currentTimedStatus = this.caseUtil.getTimedStatusWithOptions(this.data, this.options);
   }
 
 }

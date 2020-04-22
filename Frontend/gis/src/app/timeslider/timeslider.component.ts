@@ -184,6 +184,9 @@ export class TimesliderComponent implements OnInit {
       },
       bedBackgroundOptions: {
         date: date
+      },
+      covidNumberCaseOptions: {
+        date: date
       }
     }));
   }
