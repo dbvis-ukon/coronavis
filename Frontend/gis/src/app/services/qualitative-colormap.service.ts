@@ -106,9 +106,11 @@ export class QualitativeColormapService {
         const actualDate = moment(date).endOf('day').toDate();
         const strDate = moment(date).format('YYYY-MM-DD');
 
-        const status = p.developmentsDayIdx?.get(strDate);
-        if(status) {
-          return this.getBedStatusColor(status, this.propertyAccessor(type));
+        if(p?.developmentDays) {
+          const status = p?.developmentDays[strDate];
+          if(status) {
+            return this.getBedStatusColor(status, this.propertyAccessor(type));
+          }
         }
 
         latest = this.hospitalUtil.getLatestTimedStatus(t, actualDate);

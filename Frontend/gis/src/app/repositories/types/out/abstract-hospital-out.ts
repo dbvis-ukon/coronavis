@@ -8,5 +8,5 @@ export interface AbstractHospitalOut<T extends AbstractTimedStatus> {
 
     developments: Array<T>;
 
-    developmentsDayIdx: Map<string, T>;
+    developmentDays: {[key: string]: T};
 }

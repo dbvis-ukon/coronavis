@@ -32,13 +32,12 @@ export interface SingleHospital {
     helipad_nearby: boolean;
 }
 
-export interface QualitativeHospitalDevelopment extends Array<QualitativeTimedStatus> {}
-
-
 export interface QualitativeHospitalDevelopmentExtension extends GeneralDevelopment {
 
 
-    developments: QualitativeHospitalDevelopment;
+    developments: Array<QualitativeTimedStatus>;
+
+    developmentDays: {[key: string]: QualitativeTimedStatus };
 }
 
 

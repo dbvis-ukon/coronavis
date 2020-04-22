@@ -343,7 +343,56 @@ SELECT
             ORDER BY
                 places_per_landkreis_per_timestamp.timestamp
         )
-    END AS development
+    END AS development,
+    CASE
+        WHEN min(places_per_landkreis_per_timestamp.timestamp) IS NULL THEN NULL
+        ELSE json_object_agg(
+            places_per_landkreis_per_timestamp.timestamp::date,
+            json_build_object(
+                'timestamp',
+                places_per_landkreis_per_timestamp.timestamp,
+                'last_update',
+                places_per_landkreis_per_timestamp.last_update,
+                'numHospitals',
+                places_per_landkreis_per_timestamp.numHospitals,
+                'icu_low_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_landkreis_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_landkreis_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_landkreis_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_landkreis_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_landkreis_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_landkreis_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_landkreis_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_landkreis_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_landkreis_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_landkreis_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_landkreis_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_landkreis_per_timestamp.ecmo_low_nv
+                )
+            )
+            ORDER BY
+                places_per_landkreis_per_timestamp.timestamp
+        )
+    END AS developmentDays
 FROM
     places_per_landkreis_per_timestamp
 GROUP BY
@@ -365,7 +414,8 @@ GROUP BY
                 "id": r[0],
                 "name": r[1],
                 "centroid": r[3],
-                "developments": r[4]
+                "developments": r[4],
+                "developmentDays": r[5]
             }
         }
 
@@ -531,7 +581,56 @@ SELECT
             ORDER BY
                 places_per_regierungsbezirk_per_timestamp.timestamp
         )
-    END AS development
+    END AS development,
+    CASE
+        WHEN min(places_per_regierungsbezirk_per_timestamp.timestamp) IS NULL THEN NULL
+        ELSE json_object_agg(
+            places_per_regierungsbezirk_per_timestamp.timestamp::date,
+            json_build_object(
+                'timestamp',
+                places_per_regierungsbezirk_per_timestamp.timestamp,
+                'last_update',
+                places_per_regierungsbezirk_per_timestamp.last_update,
+                'numHospitals',
+                places_per_regierungsbezirk_per_timestamp.numHospitals,
+                'icu_low_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_nv
+                )
+            )
+            ORDER BY
+                places_per_regierungsbezirk_per_timestamp.timestamp
+        )
+    END AS developmentDays
 FROM
     places_per_regierungsbezirk_per_timestamp
 GROUP BY
@@ -553,7 +652,8 @@ GROUP BY
                 "id": r[0],
                 "name": r[1],
                 "centroid": r[3],
-                "developments": r[4]
+                "developments": r[4],
+                "developmentDays": r[5]
             }
         }
 
@@ -720,7 +820,56 @@ SELECT
             ORDER BY
                 places_per_bundesland_per_timestamp.timestamp
         )
-    END AS development
+    END AS development,
+    CASE
+        WHEN min(places_per_bundesland_per_timestamp.timestamp) IS NULL THEN NULL
+        ELSE json_object_agg(
+            places_per_bundesland_per_timestamp.timestamp::date,
+            json_build_object(
+                'timestamp',
+                places_per_bundesland_per_timestamp.timestamp,
+                'last_update',
+                places_per_bundesland_per_timestamp.last_update,
+                'numHospitals',
+                places_per_bundesland_per_timestamp.numHospitals,
+                'icu_low_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_nv
+                )
+            )
+            ORDER BY
+                places_per_bundesland_per_timestamp.timestamp
+        )
+    END AS developmentDays
 FROM
     places_per_bundesland_per_timestamp
 GROUP BY
@@ -742,7 +891,8 @@ GROUP BY
                 "id": r[0],
                 "name": r[1],
                 "centroid": r[3],
-                "developments": r[4]
+                "developments": r[4],
+                "developmentDays": r[5]
             }
         }
 
@@ -909,7 +1059,56 @@ SELECT
             ORDER BY
                 places_per_bundesland_per_timestamp.timestamp
         )
-    END AS development
+    END AS development,
+    CASE
+        WHEN min(places_per_bundesland_per_timestamp.timestamp) IS NULL THEN NULL
+        ELSE json_object_agg(
+            places_per_bundesland_per_timestamp.timestamp::date,
+            json_build_object(
+                'timestamp',
+                places_per_bundesland_per_timestamp.timestamp,
+                'last_update',
+                places_per_bundesland_per_timestamp.last_update,
+                'numHospitals',
+                places_per_bundesland_per_timestamp.numHospitals,
+                'icu_low_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_nv
+                )
+            )
+            ORDER BY
+                places_per_bundesland_per_timestamp.timestamp
+        )
+    END AS developmentDays
 FROM
     places_per_bundesland_per_timestamp
 GROUP BY
@@ -931,7 +1130,8 @@ GROUP BY
                 "id": r[0],
                 "name": r[1],
                 "centroid": r[3],
-                "developments": r[4]
+                "developments": r[4],
+                "developmentDays": r[5]
             }
         }
 
