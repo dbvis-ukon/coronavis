@@ -1,9 +1,7 @@
 import { QuantitativeBedStatusSummary, QuantitativeCovid19Summary } from 'src/app/services/types/bed-status-summary';
 import { AbstractTimedStatus } from '../in/qualitative-hospitals-development';
 
-export interface haxx {}
-
-export interface QuantitativeTimedStatus extends AbstractTimedStatus, haxx {
+export interface QuantitativeTimedStatus extends AbstractTimedStatus {
 
     covid19: QuantitativeCovid19Summary;
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Feature } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
 
-export interface ExplicitBBox {
+interface ExplicitBBox {
   min: LatLngLiteral;
 
   max: LatLngLiteral;

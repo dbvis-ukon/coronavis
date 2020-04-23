@@ -6,7 +6,7 @@ import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTim
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 
-export type RecursivePartial<T> = {
+type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
 

@@ -10,7 +10,7 @@
 import { Bounds, Browser, DomUtil, InteractiveLayerOptions, LatLng, LatLngBounds, Layer, LeafletEventHandlerFn, LeafletMouseEvent, Map as LMap, Point, ResizeEvent, Util, ZoomAnimEvent } from 'leaflet'
 
 // tslint:disable:interface-name
-export interface Map extends LMap {
+interface Map extends LMap {
     _latLngBoundsToNewLayerBounds(ll: LatLngBounds, z: number, c: LatLng): Bounds
 }
 

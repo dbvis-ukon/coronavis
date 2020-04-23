@@ -75,7 +75,7 @@ import { VegaComponent } from './vega/vega.component';
 registerLocaleData(localeDe, 'de-DE');
 registerLocaleData(localeEn, 'en-US');
 
-export const localeProvider = {
+const localeProvider = {
   provide: LOCALE_ID,
   useFactory: (s: PlatformLocation) => {
 

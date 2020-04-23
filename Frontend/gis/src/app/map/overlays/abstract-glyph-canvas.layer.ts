@@ -20,7 +20,7 @@ import { BedGlyphOptions } from '../options/bed-glyph-options';
 import { BedType } from '../options/bed-type.enum';
 import { GlyphLayer } from './GlyphLayer';
 
-export interface MyQuadTreeItem < Payload > {
+interface MyQuadTreeItem < Payload > {
   x: number;
   y: number;
   width: number;
@@ -28,7 +28,7 @@ export interface MyQuadTreeItem < Payload > {
   payload: Payload;
 }
 
-export interface GlyphEvent < G extends Geometry, T extends SingleHospitalOut < QualitativeTimedStatus > | AggregatedHospitalOut < QualitativeTimedStatus >> {
+interface GlyphEvent < G extends Geometry, T extends SingleHospitalOut < QualitativeTimedStatus > | AggregatedHospitalOut < QualitativeTimedStatus >> {
   mouse: LeafletMouseEvent;
 
   item: Feature < G,

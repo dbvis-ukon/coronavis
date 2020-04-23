@@ -9,7 +9,7 @@ import { AggregationLevel } from "../map/options/aggregation-level.enum";
 import { AbstractTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
 
-export interface ForceDirectedLayoutEvent<D> {
+interface ForceDirectedLayoutEvent<D> {
   type: 'tick' | 'end';
 
   zoom: number;

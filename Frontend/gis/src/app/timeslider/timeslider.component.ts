@@ -11,7 +11,7 @@ import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hos
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { ConfigService } from '../services/config.service';
 
-export class TimeFormatter implements NouiFormatter {
+class TimeFormatter implements NouiFormatter {
   constructor(public startDay: Moment) {}
 
   to(value: number): string {

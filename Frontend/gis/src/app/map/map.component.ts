@@ -27,7 +27,7 @@ import { Overlay } from './overlays/overlay';
 import { SingleGlyphCanvasLayer } from './overlays/single-glyph-canvas.layer';
 
 
-export enum MapOptionKeys {
+enum MapOptionKeys {
   bedGlyphOptions, bedBackgroundOptions, covidNumberCaseOptions, showOsmHospitals, showOsmHeliports
 }
 
