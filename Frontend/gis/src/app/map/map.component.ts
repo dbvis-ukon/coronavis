@@ -2,8 +2,6 @@ import { APP_BASE_HREF } from '@angular/common';
 import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import * as L from 'leaflet';
 import { SVGOverlay } from 'leaflet';
-import 'mapbox-gl';
-import 'mapbox-gl-leaflet';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
