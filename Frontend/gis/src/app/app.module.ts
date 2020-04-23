@@ -3,7 +3,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { APP_BASE_HREF, DatePipe, DecimalPipe, PlatformLocation, registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import localeDe from '@angular/common/locales/de';
-import localeEn from '@angular/common/locales/en';
 import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -62,6 +61,7 @@ import { SupportedLocales } from './services/i18n.service';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
 import { TimesliderComponent } from './timeslider/timeslider.component';
 import { TranslatePipe } from './translate.pipe';
+import localeEn from './util/locales/en';
 import { VegaComponent } from './vega/vega.component';
 
 

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
 import { Feature, MultiPolygon } from 'geojson';
@@ -12,10 +13,10 @@ import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hosp
 import { ConfigService } from '../services/config.service';
 
 class TimeFormatter implements NouiFormatter {
-  constructor(public startDay: Moment) {}
+  constructor(public startDay: Moment, private datePipe: DatePipe) {}
 
   to(value: number): string {
-    return this.startDay.clone().add(value, 'days').format('YYYY-MM-DD');
+    return this.datePipe.transform(this.startDay.clone().add(value, 'days').toDate(), 'shortDate');
   };
 
   from(value: string): number {
@@ -62,6 +63,7 @@ export class TimesliderComponent implements OnInit {
   constructor(
     private diviRepo: QualitativeDiviDevelopmentRepository,
     private configService: ConfigService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -86,7 +88,7 @@ export class TimesliderComponent implements OnInit {
 
         this.timeExtent = [0, lastDay.diff(firstDay, 'days')];
 
-        this.timeFormatter = new TimeFormatter(firstDay);
+        this.timeFormatter = new TimeFormatter(firstDay, this.datePipe);
 
         this.nouiConfig = {
           tooltips: this.timeFormatter,
