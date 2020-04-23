@@ -28,11 +28,17 @@
 
       <mat-progress-bar *ngIf="!combinedStats$" mode="indeterminate"></mat-progress-bar>
 
-      <div *ngIf="combinedStats$ | async; let c">
-        <p class="stats with-addon" i18n="@@infoboxNumberOfHospitals">{{ c.diviUnfiltered.numHospitals | number }} bundesweit gemeldete Einrichtungen</p>
-        <p class="stats"><small i18n="@@infoboxNumberOfHospitalsAddon">(davon {{ (c.diviUnfiltered.numHospitals - c.diviFiltered.numHospitals) | number }} ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</small></p>
-        <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ c.diviFiltered.last_update | date:'full' }}</p>
+      <div *ngIf="combinedStats$ | async as c">
+        <div *ngIf="c.diviFiltered !== undefined && c.diviUnfiltered !== undefined; else noDiviData">
+          <p class="stats with-addon" i18n="@@infoboxNumberOfHospitals">{{ c.diviUnfiltered.numHospitals | number }} bundesweit gemeldete Einrichtungen</p>
+          <p class="stats"><small i18n="@@infoboxNumberOfHospitalsAddon">(davon {{ (c.diviUnfiltered.numHospitals - c.diviFiltered.numHospitals) | number }} ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</small></p>
+          <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ c.diviFiltered.last_update | date:'full' }}</p>
+        </div>
+        <ng-template #noDiviData>
+          <div class="stats" i18n="@@infoboxNoDiviData">Es stehen momentan keine Bettenkapazitätsdaten<br>für diesen Zeitpunkt zur Verfügung.</div>
+        </ng-template>
       </div>
+      
       
 
       <h5>Aggregation</h5>
