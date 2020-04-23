@@ -142,6 +142,9 @@ export class CanvasLayer extends Layer {
 
     // ------------------------------------------------------------------------------
     private drawLayer() {
+        if(!this._map || !this._canvas) {
+            return;
+        }
         // -- todo make the viewInfo properties  flat objects.
         const _size = this._map.getSize()
         this._canvas.width = _size.x
