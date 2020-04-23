@@ -1,7 +1,18 @@
-> Please read this document carefully as it is the starter for your practical exercises.
+# CoronaVis
 
-# Environment variables
-To access the database during development, you need to have a valid .env file in the root directory of this project. You can use the .env_example file as a starting point and just fill in the database connection details you get from anyone associated with this project.
+This is a volunteer project by members of the [Data Analysis and Visualization Group](http://vis.uni.kn) and the [Visual Computing Group](https://www.cgmi.uni-konstanz.de/en/) at the [University of Konstanz](http://uni.kn).
 
-# Running the project
-To run the project, use the command ```docker-compose up```.
+The live version is available at [https://coronavis.dbvis.de](https://coronavis.dbvis.de).
+
+CoronaVis visualizes intensive care unit (ICU) bed capacities of German hospitals (provided by [DIVI](https://divi.de)) as well as data from the COVID-19 pandemic (provided by [Robert Koch Institut](https://rki.de)).
+
+## Contributions
+
+Contributions are welcome! 
+Please note that we access publicly available data.
+If a country or region you know is providing similar data please let us know.
+We are constantly seeking to expand our map and add more countries.
+
+## Contact
+
+You can get in contact with us by writing an issue, via [twitter (@dbvis)](https://twitter.com/dbvis), or email at support[at]dbvis.inf.uni-konstanz.de.
