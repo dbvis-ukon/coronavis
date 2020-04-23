@@ -1,7 +1,10 @@
-import { BreakpointObserver } from "@angular/cdk/layout";
+import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Feature, MultiPolygon, Point } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
+import moment from 'moment';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { distinctUntilChanged, map, mergeMap, tap } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
 import { HospitalSearchFeatureCollectionPermissible } from '../hospital-search/hospital-search.component';
 import { FlyTo } from '../map/events/fly-to';
@@ -11,7 +14,9 @@ import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTim
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
-import { QuantitativeAggregatedRkiCasesProperties } from '../repositories/types/in/quantitative-aggregated-rki-cases';
+import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
+import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
@@ -23,7 +28,22 @@ import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TooltipService } from '../services/tooltip.service';
 import { TranslationService } from '../services/translation.service';
-import { QualitativeTimedStatusAggregation } from '../services/types/qualitateive-timed-status-aggregation';
+
+interface GlyphEntity {
+  name: string;
+  accessor: string;
+  accFunc: (d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts
+  color: string;
+  description: string;
+}
+
+interface CombinedStatistics {
+  diviFiltered: QualitativeTimedStatus;
+  diviUnfiltered: QualitativeTimedStatus;
+  rki: RKICaseTimedStatus;
+
+  glyphData: GlyphEntity[];
+}
 
 @Component({
   selector: 'app-infobox',
@@ -36,8 +56,23 @@ export class InfoboxComponent implements OnInit {
 
   glyphLegendColors = QualitativeColormapService.bedStati;
 
+  private _mo: MapOptions;
+
   @Input('mapOptions')
-  mo: MapOptions;
+  set mo(mo: MapOptions) {
+    this._mo = mo;
+
+    if(!mo) {
+      return;
+    }
+
+    this.refDay$.next(mo.bedGlyphOptions.date);
+  }
+
+  get mo(): MapOptions {
+    return this._mo;
+  }
+
 
   @Output()
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
@@ -47,11 +82,9 @@ export class InfoboxComponent implements OnInit {
 
   @Output()
   flyTo = new EventEmitter<FlyTo>();
+
+  aggregateStatisticsLoading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   
-  aggregatedDiviStatistics: QualitativeTimedStatusAggregation;
-
-  aggregatedRkiStatistics: QuantitativeAggregatedRkiCasesProperties;
-
   // ENUM MAPPING
   // because in HTML, this stuff cannot be accessed
   eCovidNumberCaseTimeWindow = CovidNumberCaseTimeWindow;
@@ -75,7 +108,13 @@ export class InfoboxComponent implements OnInit {
   hospitals: HospitalSearchFeatureCollectionPermissible;
   resetHospitalSearch: number;
 
-  numUnfilteredHospitals: number;
+  private refDay$: BehaviorSubject<string> = new BehaviorSubject('now');
+
+  combinedStats$: Observable<CombinedStatistics>;
+
+  private aggregatedDiviStatistics: QualitativeTimedStatus;
+
+  isMobile$: Observable<BreakpointState>;
 
   constructor(
     public colormapService: QualitativeColormapService,
@@ -92,6 +131,7 @@ export class InfoboxComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isMobile$ = this.breakPointObserver.observe('(max-width: 500px');
 
     //close info box if mobile
     const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
@@ -102,29 +142,38 @@ export class InfoboxComponent implements OnInit {
     this.glyphLayerService.loading$.subscribe(l => this.glyphLoading = l);
     this.bedChoroplethLayerService.loading$.subscribe(l => this.bedChoroplethLoading = l);
     this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
-    this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);
+    this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);  
 
-    
+    this.combinedStats$ = this.refDay$
+    .pipe(
+      distinctUntilChanged(),
+      tap(() => this.aggregateStatisticsLoading$.next(true)),
+      map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate()),
+      // tap(refDate => console.log('refdate', refDate)),
+      mergeMap(refDate => {
+        const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate);
+        const unfiltered = this.countryAggregatorService.diviAggregationForCountryUnfiltered(refDate);
 
+        const rki = this.countryAggregatorService.rkiAggregationForCountry(refDate);
 
-    this.countryAggregatorService.diviAggregationForCountry()
-    .subscribe(r => {
-      this.aggregatedDiviStatistics = r;
+        return forkJoin([filtered, unfiltered, rki]);
+      }),
+      map(([diviFiltered, diviUnfiltered, rki]) => {
+        this.aggregatedDiviStatistics = diviFiltered;
+        return {
+          diviFiltered,
+          diviUnfiltered,
+          rki,
+          glyphData: [
+            {name: 'ICU low', accessor: 'showIcuLow', accFunc: (d: QualitativeTimedStatus) => d.icu_low_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_low_care), description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+            {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (d: QualitativeTimedStatus) => d.icu_high_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_high_care), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
+            {name: 'ECMO', accessor: 'showEcmo', accFunc: (d: QualitativeTimedStatus) => d.ecmo_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.ecmo_state), description: 'ECMO = Zusätzlich ECMO'}
+          ]
+        } as CombinedStatistics
+      }),
+      tap(() => this.aggregateStatisticsLoading$.next(false))
+    );
 
-      this.glyphLegend = [
-        {name: 'ICU low', accessor: 'showIcuLow', accFunc: (r) => r.icu_low_care, description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
-        {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (r) => r.icu_high_care, description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
-        {name: 'ECMO', accessor: 'showEcmo', accFunc: (r) => r.ecmo_state, description: 'ECMO = Zusätzlich ECMO'}
-      ];
-    });
-
-    this.countryAggregatorService.rkiAggregationForCountry()
-    .subscribe(r => {
-      this.aggregatedRkiStatistics = r;
-    });
-
-    this.hospitalRepo.getDiviDevelopmentSingleHospitals(false)
-    .subscribe(d => this.numUnfilteredHospitals = d.features.length);
 
     this.updateHospitals();
   }
@@ -143,23 +192,22 @@ export class InfoboxComponent implements OnInit {
     }
   }
 
-  openBedTooltip(evt, glypLegendEntity) {
-
-    const t = this.tooltipService.openAtElementRef(BedTooltipComponent, evt.target, null, [
-      {
-        overlayX: 'center',
-        overlayY: 'bottom',
-        originX: 'center',
-        originY: 'top',
-      }
-    ]);
-
-    t.data = this.aggregatedDiviStatistics;
-    t.bedName = glypLegendEntity.name;
-
-    t.explanation = this.translationService.translate(glypLegendEntity.description);
-
-    t.accessorFunc = glypLegendEntity.accFunc;
+  openBedTooltip(evt, glypLegendEntity: GlyphEntity) {
+      const t = this.tooltipService.openAtElementRef(BedTooltipComponent, evt.target, null, [
+        {
+          overlayX: 'center',
+          overlayY: 'bottom',
+          originX: 'center',
+          originY: 'top',
+        }
+      ]);
+  
+      t.data = this.aggregatedDiviStatistics;
+      t.bedName = glypLegendEntity.name;
+  
+      t.explanation = this.translationService.translate(glypLegendEntity.description);
+  
+      t.accessorFunc = glypLegendEntity.accFunc;
   }
 
   emitCaseChoroplethOptions() {

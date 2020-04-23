@@ -35,6 +35,8 @@ export enum CovidNumberCaseChange {
 
     enabled?: boolean;
 
+    date: string;
+
     change: CovidNumberCaseChange;
 
     timeWindow: CovidNumberCaseTimeWindow;

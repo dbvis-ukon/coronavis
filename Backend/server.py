@@ -1,25 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
 import logging
+import os
 
+# add sentry integration
+import sentry_sdk
 from flask import Flask
 from flask_compress import Compress
 from flask_cors import CORS
+from sentry_sdk.integrations.flask import FlaskIntegration
+from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
-from views import cases
-from views import divi
-from views import health
-from views import hospitals
-from views import osm
-from views import version
-
-from db import db
 from cache import cache
+from db import db
+from views import cases, divi, health, hospitals, osm, version
 
 # Create Flask application
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+
+
+SENTRY_DSN = os.environ.get('SENTRY_DSN').replace('\n', '')
+VERSION = os.environ.get('VERSION').replace('\n', '')
+ENVIRONMENT = os.environ.get('ENVIRONMENT').replace('\n', '')
+sentry_sdk.init(
+    environment=ENVIRONMENT,
+    release=VERSION,
+    dsn=SENTRY_DSN, 
+    integrations=[FlaskIntegration(), SqlalchemyIntegration()])
 
 try:
     DB_HOST = os.environ.get('DB_HOST')

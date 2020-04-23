@@ -88,3 +88,15 @@ g.hospital {
 svg text {
   text-rendering: geometricprecision;
 }
+
+.leaflet-layer.mousedown {
+  cursor: grabbing;
+}
+
+.leaflet-layer.glyphHit {
+  cursor: pointer;
+
+  &.mousedown {
+    cursor: pointer;
+  }
+}

@@ -7,8 +7,7 @@ import { AbstractTimedStatus, QualitativeTimedStatus } from 'src/app/repositorie
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
 import { TooltipService } from "../../services/tooltip.service";
-import { AggregationLevel } from '../options/aggregation-level.enum';
-import { BedType } from '../options/bed-type.enum';
+import { BedBackgroundOptions } from '../options/bed-background-options';
 import { Overlay } from './overlay';
 
 export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<AggregatedHospitalOut<T>> {
@@ -16,8 +15,7 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
   constructor(
     name: string, 
     hospitals: FeatureCollection<MultiPolygon, AggregatedHospitalOut<T>>, 
-    private aggregationLevel: AggregationLevel, 
-    private type: BedType,
+    private options: BedBackgroundOptions,
     private colorsService: QualitativeColormapService, 
     private tooltipService: TooltipService,
     private matDialog: MatDialog
@@ -25,17 +23,6 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
       super(name, hospitals);
 
   }
-
-  
-
-  getAggregationLevel(): AggregationLevel {
-    return this.aggregationLevel;
-  }
-
-  getGlyphState(): BedType {
-    return this.type;
-  }
-
 
   createOverlay() {
     const onAction = (e: L.LeafletMouseEvent, feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>, aggregationLayer: any) => {
@@ -72,7 +59,7 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
     const aggregationLayer = L.geoJSON(this.featureCollection, {
       style: (feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>) => {
         return {
-          fillColor: this.colorsService.getLatestBedStatusColor(feature.properties.developments as any, this.type),
+          fillColor: this.colorsService.getLatestBedStatusColor(feature.properties, this.options.bedType, this.options.date),
           weight: 0.5,
           opacity: 1,
           color: 'gray',

@@ -1,10 +1,14 @@
+import datetime
 import json
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
+from sqlalchemy import text
 
 from cache import cache
 from db import db
-from models.hospital import Hospital, HospitalsPerLandkreis, HospitalsPerRegierungsbezirk, HospitalsPerBundesland
+from models.hospital import (Hospital, HospitalsPerBundesland,
+                             HospitalsPerLandkreis,
+                             HospitalsPerRegierungsbezirk)
 from views.helpers import __as_feature_collection
 
 routes = Blueprint('hospitals', __name__, url_prefix='/hospitals')
@@ -53,13 +57,13 @@ def get_hospitals_by_bundeslander():
 
 
 @routes.route('/development', methods=['GET'])
-@cache.cached()
+@cache.cached(query_string = True)
 def get_categorical_hospital_development():
     """
         Return all Hospitals
     """
-    sql_stmt = """
--- get all updates of all hospitals
+    sql_stmt = text(
+    """-- get all updates of all hospitals
 WITH hospital_updates AS (
     SELECT
         DISTINCT ON (hospital.name, hospital.last_update) hospital.name,
@@ -71,7 +75,8 @@ WITH hospital_updates AS (
         hospital
     -- hard limit due to data change of divi
     WHERE
-        hospital.insert_date >= '2020-04-05'
+        hospital.insert_date::date >= '2020-04-05'
+    AND hospital.last_update::date <= :refDate ::date
     ORDER BY
         hospital.name,
         hospital.last_update,
@@ -103,19 +108,27 @@ hospital_updates_aggregated AS (
 -- get hospital metadata such as location and address
 hospital_information AS (
     SELECT
-        DISTINCT ON (hospital.name) hospital.id,
+        MAX(id) as id,
         hospital.name,
-        hospital.address,
-        hospital.state,
-        hospital.contact,
-        hospital.location,
-        hospital.icu_low_state,
-        hospital.icu_high_state,
-        hospital.ecmo_state,
-        hospital.last_update,
-        hospital.insert_date
+        (MAX(ARRAY[lpad(id::text, 20, '0'), address]))[2] AS address,
+        (MAX(ARRAY[lpad(id::text, 20, '0'), state]))[2] AS state,
+        (MAX(ARRAY[lpad(id::text, 20, '0'), contact]))[2] AS contact,
+        (MAX(ARRAY[lpad(id::text, 20, '0'), state]))[2] AS state,
+        st_geomfromtext((MAX(ARRAY[lpad(id::text, 20, '0'), st_astext(location)]))[2], 4326) AS location,
+        (MAX(ARRAY[lpad(id::text, 20, '0'), icu_low_state]))[2] AS icu_low_state,
+        (MAX(ARRAY[lpad(id::text, 20, '0'), icu_high_state]))[2] AS icu_high_state,
+        (MAX(ARRAY[lpad(id::text, 20, '0'), ecmo_state]))[2] AS ecmo_state,
+        MAX(hospital.last_update) AS last_update,
+        MAX(hospital.insert_date) AS insert_date
     FROM
         hospital
+    WHERE st_x(location) > 0
+        AND st_x(location) < 999
+        AND st_y(location) > 0
+        AND st_y(location) < 999
+    GROUP BY
+        hospital.name
+    HAVING (:refDate ::date - MAX(last_update)::timestamp)::interval <= (:maxDaysOld || ' days')::interval
     ORDER BY
         hospital.name
 ) -- join hospital timeseries with hospital metadata
@@ -139,13 +152,20 @@ FROM
             helipads.geom
         FROM
             helipads
+        -- remove invalid geo locations
+        WHERE st_x(location) > 0
+        AND st_x(location) < 999
+        AND st_y(location) > 0
+        AND st_y(location) < 999
         ORDER BY
             (hi.location <-> helipads.geom)
         LIMIT
             1
-    ) b ON true;
-"""
-    sql_result = db.engine.execute(sql_stmt).fetchall()
+    ) b ON true""")
+
+    maxDaysOld = request.args.get('maxDaysOld') or '1000'
+    refDate = request.args.get('refDate') or datetime.datetime.today().strftime('%Y-%m-%d')
+    sql_result = db.engine.execute(sql_stmt, maxDaysOld = maxDaysOld, refDate = refDate).fetchall()
 
     features = []
     for r in sql_result:
@@ -168,98 +188,17 @@ FROM
     return jsonify(featurecollection), 200
 
 @routes.route('/development/landkreise', methods=['GET'])
-@cache.cached()
+@cache.cached(query_string = True)
 def get_categorical_hospital_development_per_landkreise():
     """
         Return all Hospitals
     """
-    sql_stmt = """
+    sql_stmt = text("""
 -- get the first update per hospital
-WITH first_update_per_hospital AS (
-    SELECT
-        DISTINCT ON(h.name) h.name,
-        h.last_update AS first_update
-    FROM
-        hospital h
-    -- hard limit due to data change of divi
-    WHERE
-        h.last_update >= '2020-03-16' AND h.insert_date >= '2020-04-05'
-    ORDER BY
-        h."name",
-        h.last_update :: date
-) -- create a timeseries for each hospital from first_update of hospital to now()
-,
-hospital_time_series AS (
-    SELECT
-        first_update_per_hospital.name,
-        b.timestamp
-    FROM
-        first_update_per_hospital
-        JOIN LATERAL (
-            SELECT
-                generate_series(
-                    first_update_per_hospital.first_update :: date,
-                    now() :: date,
-                    '1 day' :: interval
-                ) AS timestamp
-        ) b ON TRUE
-) -- now get the latest update per hospital per day
-,
-latest_hospital_update_per_day AS (
-    SELECT
-        DISTINCT ON(h.name, h.last_update :: date) h.name,
-        h.LOCATION AS geom,
-        h.last_update,
-        h.icu_low_state,
-        h.icu_high_state,
-        h.ecmo_state
-    FROM
-        hospital h
-    -- hard limit due to data change of divi
-    WHERE
-        h.insert_date >= '2020-04-05'
-    ORDER BY
-        h."name",
-        h.last_update :: date,
-        h.last_update desc,
-        h.insert_date desc
-) -- now we can left join the hospital timeseries with the latest hospital update per day
--- additionally we fill empty values in the timeseries with the latest available value 
-,
-filled_hospital_timeseries AS (
-    SELECT
-        t.name,
-        FIRST_VALUE(t.geom) over (partition by grp_close) as geom,
-        t.timestamp,
-        first_value(last_update) over (partition by grp_close) as last_update,
-        first_value(icu_low_state) over (partition by grp_close) as icu_low_state,
-        first_value(icu_high_state) over (partition by grp_close) as icu_high_state,
-        first_value(ecmo_state) over (partition by grp_close) as ecmo_state
-    FROM
-        (
-            SELECT
-                hospital_time_series.name,
-                hospital_time_series.timestamp,
-                latest_hospital_update_per_day.geom,
-                latest_hospital_update_per_day.last_update,
-                latest_hospital_update_per_day.icu_low_state,
-                latest_hospital_update_per_day.icu_high_state,
-                latest_hospital_update_per_day.ecmo_state,
-                -- this group allows us to partition the data later which we need to fill null values in the middle of the timeseries
-                sum(
-                    case
-                        when latest_hospital_update_per_day.last_update is not null then 1
-                    END
-                ) over (
-                    order by
-                        hospital_time_series.name,
-                        hospital_time_series.timestamp
-                ) as grp_close
-            FROM
-                hospital_time_series
-                LEFT JOIN latest_hospital_update_per_day ON hospital_time_series.name = latest_hospital_update_per_day.name
-                AND hospital_time_series.timestamp = latest_hospital_update_per_day.last_update :: date
-        ) t
+WITH filled_hospital_timeseries AS (
+    SELECT * FROM filled_hospital_timeseries_with_fix f
+    WHERE f.timestamp::date <= :refDate ::date
+    AND f.timestamp - f.last_update <= (:maxDaysOld || ' days') ::interval
 ) -- now we can group our data per landkreis, per day and sum up the number of available icu and ecmo beds
 ,
 places_per_landkreis_per_timestamp AS (
@@ -269,6 +208,7 @@ places_per_landkreis_per_timestamp AS (
         l.geom,
         filled_hospital_timeseries.timestamp,
         max(filled_hospital_timeseries.last_update) AS last_update,
+        count(filled_hospital_timeseries.name) AS numHospitals,
         sum(
             CASE
                 WHEN filled_hospital_timeseries.icu_low_state = 'Verfügbar' THEN 1
@@ -344,6 +284,7 @@ places_per_landkreis_per_timestamp AS (
     FROM
         landkreise l
         LEFT JOIN filled_hospital_timeseries ON ST_Contains(l.geom, filled_hospital_timeseries.geom)
+    WHERE timestamp IS NOT NULL
     GROUP BY
         l.ids,
         l.name,
@@ -364,6 +305,8 @@ SELECT
                 places_per_landkreis_per_timestamp.timestamp,
                 'last_update',
                 places_per_landkreis_per_timestamp.last_update,
+                'numHospitals',
+                places_per_landkreis_per_timestamp.numHospitals,
                 'icu_low_care',
                 json_build_object(
                     'Verfügbar',
@@ -401,15 +344,67 @@ SELECT
             ORDER BY
                 places_per_landkreis_per_timestamp.timestamp
         )
-    END AS development
+    END AS development,
+    CASE
+        WHEN min(places_per_landkreis_per_timestamp.timestamp) IS NULL THEN NULL
+        ELSE json_object_agg(
+            places_per_landkreis_per_timestamp.timestamp::date,
+            json_build_object(
+                'timestamp',
+                places_per_landkreis_per_timestamp.timestamp,
+                'last_update',
+                places_per_landkreis_per_timestamp.last_update,
+                'numHospitals',
+                places_per_landkreis_per_timestamp.numHospitals,
+                'icu_low_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_landkreis_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_landkreis_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_landkreis_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_landkreis_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_landkreis_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_landkreis_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_landkreis_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_landkreis_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_landkreis_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_landkreis_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_landkreis_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_landkreis_per_timestamp.ecmo_low_nv
+                )
+            )
+            ORDER BY
+                places_per_landkreis_per_timestamp.timestamp
+        )
+    END AS developmentDays
 FROM
     places_per_landkreis_per_timestamp
 GROUP BY
     places_per_landkreis_per_timestamp.ids,
     places_per_landkreis_per_timestamp.name,
     places_per_landkreis_per_timestamp.geom
-"""
-    sql_result = db.engine.execute(sql_stmt).fetchall()
+""")
+
+    maxDaysOld = request.args.get('maxDaysOld') or '1000'
+    refDate = request.args.get('refDate') or datetime.datetime.today().strftime('%Y-%m-%d')
+    sql_result = db.engine.execute(sql_stmt, maxDaysOld = maxDaysOld, refDate = refDate).fetchall()
 
     features = []
     for r in sql_result:
@@ -420,7 +415,8 @@ GROUP BY
                 "id": r[0],
                 "name": r[1],
                 "centroid": r[3],
-                "developments": r[4]
+                "developments": r[4],
+                "developmentDays": r[5]
             }
         }
 
@@ -431,98 +427,17 @@ GROUP BY
     return jsonify(featurecollection), 200
 
 @routes.route('/development/regierungsbezirke', methods=['GET'])
-@cache.cached()
+@cache.cached(query_string = True)
 def get_categorical_hospital_development_per_regierungsbezirk():
     """
         Return all Hospitals
     """
-    sql_stmt = """
+    sql_stmt = text("""
 -- get the first update per hospital
-WITH first_update_per_hospital AS (
-    SELECT
-        DISTINCT ON(h.name) h.name,
-        h.last_update AS first_update
-    FROM
-        hospital h
-    -- hard limit due to data change of divi
-    WHERE
-        h.last_update >= '2020-03-16' AND h.insert_date >= '2020-04-05'
-    ORDER BY
-        h."name",
-        h.last_update :: date
-) -- create a timeseries for each hospital from first_update of hospital to now()
-,
-hospital_time_series AS (
-    SELECT
-        first_update_per_hospital.name,
-        b.timestamp
-    FROM
-        first_update_per_hospital
-        JOIN LATERAL (
-            SELECT
-                generate_series(
-                    first_update_per_hospital.first_update :: date,
-                    now() :: date,
-                    '1 day' :: interval
-                ) AS timestamp
-        ) b ON TRUE
-) -- now get the latest update per hospital per day
-,
-latest_hospital_update_per_day AS (
-    SELECT
-        DISTINCT ON(h.name, h.last_update :: date) h.name,
-        h.LOCATION AS geom,
-        h.last_update,
-        h.icu_low_state,
-        h.icu_high_state,
-        h.ecmo_state
-    FROM
-        hospital h
-    -- hard limit due to data change of divi
-    WHERE
-        h.insert_date >= '2020-04-05'
-    ORDER BY
-        h."name",
-        h.last_update :: date,
-        h.last_update desc,
-        h.insert_date desc
-) -- now we can left join the hospital timeseries with the latest hospital update per day
--- additionally we fill empty values in the timeseries with the latest available value 
-,
-filled_hospital_timeseries AS (
-    SELECT
-        t.name,
-        FIRST_VALUE(t.geom) over (partition by grp_close) as geom,
-        t.timestamp,
-        first_value(last_update) over (partition by grp_close) as last_update,
-        first_value(icu_low_state) over (partition by grp_close) as icu_low_state,
-        first_value(icu_high_state) over (partition by grp_close) as icu_high_state,
-        first_value(ecmo_state) over (partition by grp_close) as ecmo_state
-    FROM
-        (
-            SELECT
-                hospital_time_series.name,
-                hospital_time_series.timestamp,
-                latest_hospital_update_per_day.geom,
-                latest_hospital_update_per_day.last_update,
-                latest_hospital_update_per_day.icu_low_state,
-                latest_hospital_update_per_day.icu_high_state,
-                latest_hospital_update_per_day.ecmo_state,
-                -- this group allows us to partition the data later which we need to fill null values in the middle of the timeseries
-                sum(
-                    case
-                        when latest_hospital_update_per_day.last_update is not null then 1
-                    END
-                ) over (
-                    order by
-                        hospital_time_series.name,
-                        hospital_time_series.timestamp
-                ) as grp_close
-            FROM
-                hospital_time_series
-                LEFT JOIN latest_hospital_update_per_day ON hospital_time_series.name = latest_hospital_update_per_day.name
-                AND hospital_time_series.timestamp = latest_hospital_update_per_day.last_update :: date
-        ) t
+WITH filled_hospital_timeseries AS (
+    SELECT * FROM filled_hospital_timeseries_with_fix f
+    WHERE f.timestamp::date <= :refDate ::date
+    AND f.timestamp - f.last_update <= (:maxDaysOld || ' days') ::interval
 ) -- now we can group our data per landkreis, per day and sum up the number of available icu and ecmo beds
 ,
 places_per_regierungsbezirk_per_timestamp AS (
@@ -532,6 +447,7 @@ places_per_regierungsbezirk_per_timestamp AS (
         r.geom,
         filled_hospital_timeseries.timestamp,
         max(filled_hospital_timeseries.last_update) AS last_update,
+        count(filled_hospital_timeseries.name) AS numHospitals,
         sum(
             CASE
                 WHEN filled_hospital_timeseries.icu_low_state = 'Verfügbar' THEN 1
@@ -607,6 +523,7 @@ places_per_regierungsbezirk_per_timestamp AS (
     FROM
         regierungsbezirke r
         LEFT JOIN filled_hospital_timeseries ON ST_Contains(r.geom, filled_hospital_timeseries.geom)
+    WHERE timestamp IS NOT NULL
     GROUP BY
         r.ids,
         r.name,
@@ -627,6 +544,8 @@ SELECT
                 places_per_regierungsbezirk_per_timestamp.timestamp,
                 'last_update',
                 places_per_regierungsbezirk_per_timestamp.last_update,
+                'numHospitals',
+                places_per_regierungsbezirk_per_timestamp.numHospitals,
                 'icu_low_care',
                 json_build_object(
                     'Verfügbar',
@@ -664,15 +583,67 @@ SELECT
             ORDER BY
                 places_per_regierungsbezirk_per_timestamp.timestamp
         )
-    END AS development
+    END AS development,
+    CASE
+        WHEN min(places_per_regierungsbezirk_per_timestamp.timestamp) IS NULL THEN NULL
+        ELSE json_object_agg(
+            places_per_regierungsbezirk_per_timestamp.timestamp::date,
+            json_build_object(
+                'timestamp',
+                places_per_regierungsbezirk_per_timestamp.timestamp,
+                'last_update',
+                places_per_regierungsbezirk_per_timestamp.last_update,
+                'numHospitals',
+                places_per_regierungsbezirk_per_timestamp.numHospitals,
+                'icu_low_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_regierungsbezirk_per_timestamp.ecmo_low_nv
+                )
+            )
+            ORDER BY
+                places_per_regierungsbezirk_per_timestamp.timestamp
+        )
+    END AS developmentDays
 FROM
     places_per_regierungsbezirk_per_timestamp
 GROUP BY
     places_per_regierungsbezirk_per_timestamp.ids,
     places_per_regierungsbezirk_per_timestamp.name,
     places_per_regierungsbezirk_per_timestamp.geom
-"""
-    sql_result = db.engine.execute(sql_stmt).fetchall()
+""")
+
+    maxDaysOld = request.args.get('maxDaysOld') or '1000'
+    refDate = request.args.get('refDate') or datetime.datetime.today().strftime('%Y-%m-%d')
+    sql_result = db.engine.execute(sql_stmt, maxDaysOld = maxDaysOld, refDate = refDate).fetchall()
 
     features = []
     for r in sql_result:
@@ -683,7 +654,8 @@ GROUP BY
                 "id": r[0],
                 "name": r[1],
                 "centroid": r[3],
-                "developments": r[4]
+                "developments": r[4],
+                "developmentDays": r[5]
             }
         }
 
@@ -694,98 +666,18 @@ GROUP BY
     return jsonify(featurecollection), 200
 
 @routes.route('/development/bundeslaender', methods=['GET'])
-@cache.cached()
+@cache.cached(query_string = True)
 def get_categorical_hospital_development_per_bundesland():
     """
         Return all Hospitals
     """
-    sql_stmt = """
+    sql_stmt = text("""
 -- get the first update per hospital
-WITH first_update_per_hospital AS (
-    SELECT
-        DISTINCT ON(h.name) h.name,
-        h.last_update AS first_update
-    FROM
-        hospital h
-    -- hard limit due to data change of divi
-    WHERE
-        h.last_update >= '2020-03-16' AND h.insert_date >= '2020-04-05'
-    ORDER BY
-        h."name",
-        h.last_update :: date
-) -- create a timeseries for each hospital from first_update of hospital to now()
-,
-hospital_time_series AS (
-    SELECT
-        first_update_per_hospital.name,
-        b.timestamp
-    FROM
-        first_update_per_hospital
-        JOIN LATERAL (
-            SELECT
-                generate_series(
-                    first_update_per_hospital.first_update :: date,
-                    now() :: date,
-                    '1 day' :: interval
-                ) AS timestamp
-        ) b ON TRUE
-) -- now get the latest update per hospital per day
-,
-latest_hospital_update_per_day AS (
-    SELECT
-        DISTINCT ON(h.name, h.last_update :: date) h.name,
-        h.LOCATION AS geom,
-        h.last_update,
-        h.icu_low_state,
-        h.icu_high_state,
-        h.ecmo_state
-    FROM
-        hospital h
-    -- hard limit due to data change of divi
-    WHERE
-        h.insert_date >= '2020-04-05'
-    ORDER BY
-        h."name",
-        h.last_update :: date,
-        h.last_update desc,
-        h.insert_date desc
-) -- now we can left join the hospital timeseries with the latest hospital update per day
--- additionally we fill empty values in the timeseries with the latest available value 
-,
-filled_hospital_timeseries AS (
-    SELECT
-        t.name,
-        FIRST_VALUE(t.geom) over (partition by grp_close) as geom,
-        t.timestamp,
-        first_value(last_update) over (partition by grp_close) as last_update,
-        first_value(icu_low_state) over (partition by grp_close) as icu_low_state,
-        first_value(icu_high_state) over (partition by grp_close) as icu_high_state,
-        first_value(ecmo_state) over (partition by grp_close) as ecmo_state
-    FROM
-        (
-            SELECT
-                hospital_time_series.name,
-                hospital_time_series.timestamp,
-                latest_hospital_update_per_day.geom,
-                latest_hospital_update_per_day.last_update,
-                latest_hospital_update_per_day.icu_low_state,
-                latest_hospital_update_per_day.icu_high_state,
-                latest_hospital_update_per_day.ecmo_state,
-                -- this group allows us to partition the data later which we need to fill null values in the middle of the timeseries
-                sum(
-                    case
-                        when latest_hospital_update_per_day.last_update is not null then 1
-                    END
-                ) over (
-                    order by
-                        hospital_time_series.name,
-                        hospital_time_series.timestamp
-                ) as grp_close
-            FROM
-                hospital_time_series
-                LEFT JOIN latest_hospital_update_per_day ON hospital_time_series.name = latest_hospital_update_per_day.name
-                AND hospital_time_series.timestamp = latest_hospital_update_per_day.last_update :: date
-        ) t
+WITH filled_hospital_timeseries AS (
+    SELECT * FROM filled_hospital_timeseries_with_fix f
+    WHERE f.timestamp::date <= :refDate ::date
+    AND f.timestamp - f.last_update <= (:maxDaysOld || ' days') ::interval
+
 ) -- now we can group our data per landkreis, per day and sum up the number of available icu and ecmo beds
 ,
 places_per_bundesland_per_timestamp AS (
@@ -795,6 +687,7 @@ places_per_bundesland_per_timestamp AS (
         b.geom,
         filled_hospital_timeseries.timestamp,
         max(filled_hospital_timeseries.last_update) AS last_update,
+        count(filled_hospital_timeseries.name) AS numHospitals,
         sum(
             CASE
                 WHEN filled_hospital_timeseries.icu_low_state = 'Verfügbar' THEN 1
@@ -870,6 +763,7 @@ places_per_bundesland_per_timestamp AS (
     FROM
         bundeslaender b
         LEFT JOIN filled_hospital_timeseries ON ST_Contains(b.geom, filled_hospital_timeseries.geom)
+    WHERE timestamp IS NOT NULL
     GROUP BY
         b.ids,
         b.name,
@@ -890,6 +784,8 @@ SELECT
                 places_per_bundesland_per_timestamp.timestamp,
                 'last_update',
                 places_per_bundesland_per_timestamp.last_update,
+                'numHospitals',
+                places_per_bundesland_per_timestamp.numHospitals,
                 'icu_low_care',
                 json_build_object(
                     'Verfügbar',
@@ -927,15 +823,67 @@ SELECT
             ORDER BY
                 places_per_bundesland_per_timestamp.timestamp
         )
-    END AS development
+    END AS development,
+    CASE
+        WHEN min(places_per_bundesland_per_timestamp.timestamp) IS NULL THEN NULL
+        ELSE json_object_agg(
+            places_per_bundesland_per_timestamp.timestamp::date,
+            json_build_object(
+                'timestamp',
+                places_per_bundesland_per_timestamp.timestamp,
+                'last_update',
+                places_per_bundesland_per_timestamp.last_update,
+                'numHospitals',
+                places_per_bundesland_per_timestamp.numHospitals,
+                'icu_low_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_nv
+                )
+            )
+            ORDER BY
+                places_per_bundesland_per_timestamp.timestamp
+        )
+    END AS developmentDays
 FROM
     places_per_bundesland_per_timestamp
 GROUP BY
     places_per_bundesland_per_timestamp.ids,
     places_per_bundesland_per_timestamp.name,
     places_per_bundesland_per_timestamp.geom
-"""
-    sql_result = db.engine.execute(sql_stmt).fetchall()
+""")
+
+    maxDaysOld = request.args.get('maxDaysOld') or '1000'
+    refDate = request.args.get('refDate') or datetime.datetime.today().strftime('%Y-%m-%d')
+    sql_result = db.engine.execute(sql_stmt, maxDaysOld = maxDaysOld, refDate = refDate).fetchall()
 
     features = []
     for r in sql_result:
@@ -946,7 +894,248 @@ GROUP BY
                 "id": r[0],
                 "name": r[1],
                 "centroid": r[3],
-                "developments": r[4]
+                "developments": r[4],
+                "developmentDays": r[5]
+            }
+        }
+
+        features.append(feature)
+
+    featurecollection = {"type": "FeatureCollection", "features": features}
+
+    return jsonify(featurecollection), 200
+
+
+
+@routes.route('/development/laender', methods=['GET'])
+@cache.cached(query_string = True)
+def get_categorical_hospital_development_per_land():
+    """
+        Return all Hospitals
+    """
+    sql_stmt = text("""
+    -- get the first update per hospital
+WITH filled_hospital_timeseries AS (
+    SELECT * FROM filled_hospital_timeseries_with_fix f
+    WHERE f.timestamp::date <= :refDate ::date
+    AND f.timestamp - f.last_update <= (:maxDaysOld || ' days') ::interval
+),
+places_per_bundesland_per_timestamp AS (
+    SELECT
+        ger.ids,
+        ger.name,
+        ger.geom,
+        filled_hospital_timeseries.timestamp,
+        max(filled_hospital_timeseries.last_update) AS last_update,
+        count(filled_hospital_timeseries.name) AS numHospitals,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.icu_low_state = 'Verfügbar' THEN 1
+                ELSE 0
+            END
+        ) AS icu_low_v,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.icu_low_state = 'Begrenzt' THEN 1
+                ELSE 0
+            END
+        ) AS icu_low_b,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.icu_low_state = 'Ausgelastet' THEN 1
+                ELSE 0
+            END
+        ) AS icu_low_a,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.icu_low_state = 'Nicht verfügbar' THEN 1
+                ELSE 0
+            END
+        ) AS icu_low_nv,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.icu_high_state = 'Verfügbar' THEN 1
+                ELSE 0
+            END
+        ) AS icu_high_v,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.icu_high_state = 'Begrenzt' THEN 1
+                ELSE 0
+            END
+        ) AS icu_high_b,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.icu_high_state = 'Ausgelastet' THEN 1
+                ELSE 0
+            END
+        ) AS icu_high_a,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.icu_high_state = 'Nicht verfügbar' THEN 1
+                ELSE 0
+            END
+        ) AS icu_high_nv,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.ecmo_state = 'Verfügbar' THEN 1
+                ELSE 0
+            END
+        ) AS ecmo_low_v,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.ecmo_state = 'Begrenzt' THEN 1
+                ELSE 0
+            END
+        ) AS ecmo_low_b,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.ecmo_state = 'Ausgelastet' THEN 1
+                ELSE 0
+            END
+        ) AS ecmo_low_a,
+        sum(
+            CASE
+                WHEN filled_hospital_timeseries.ecmo_state = 'Nicht verfügbar' THEN 1
+                ELSE 0
+            END
+        ) AS ecmo_low_nv
+    FROM
+        germany ger
+        LEFT JOIN filled_hospital_timeseries ON ST_Contains(ger.geom, filled_hospital_timeseries.geom)
+    WHERE timestamp IS NOT NULL
+    GROUP BY
+        ger.ids,
+        ger.name,
+        ger.geom,
+        filled_hospital_timeseries.timestamp
+) -- now for the final aggregation by landkreis
+SELECT
+    places_per_bundesland_per_timestamp.ids AS id,
+    places_per_bundesland_per_timestamp.name,
+    st_asgeojson(places_per_bundesland_per_timestamp.geom) :: json AS geom,
+    st_asgeojson(st_centroid(places_per_bundesland_per_timestamp.geom)):: json AS centroid,
+    -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
+    CASE
+        WHEN min(places_per_bundesland_per_timestamp.timestamp) IS NULL THEN NULL
+        ELSE json_agg(
+            json_build_object(
+                'timestamp',
+                places_per_bundesland_per_timestamp.timestamp,
+                'last_update',
+                places_per_bundesland_per_timestamp.last_update,
+                'numHospitals',
+                places_per_bundesland_per_timestamp.numHospitals,
+                'icu_low_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_nv
+                )
+            )
+            ORDER BY
+                places_per_bundesland_per_timestamp.timestamp
+        )
+    END AS development,
+    CASE
+        WHEN min(places_per_bundesland_per_timestamp.timestamp) IS NULL THEN NULL
+        ELSE json_object_agg(
+            places_per_bundesland_per_timestamp.timestamp::date,
+            json_build_object(
+                'timestamp',
+                places_per_bundesland_per_timestamp.timestamp,
+                'last_update',
+                places_per_bundesland_per_timestamp.last_update,
+                'numHospitals',
+                places_per_bundesland_per_timestamp.numHospitals,
+                'icu_low_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_low_nv
+                ),
+                'icu_high_care',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.icu_high_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.icu_high_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.icu_high_nv
+                ),
+                'ecmo_state',
+                json_build_object(
+                    'Verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_v,
+                    'Begrenzt',
+                    places_per_bundesland_per_timestamp.ecmo_low_b,
+                    'Ausgelastet',
+                    places_per_bundesland_per_timestamp.ecmo_low_a,
+                    'Nicht verfügbar',
+                    places_per_bundesland_per_timestamp.ecmo_low_nv
+                )
+            )
+            ORDER BY
+                places_per_bundesland_per_timestamp.timestamp
+        )
+    END AS developmentDays
+FROM
+    places_per_bundesland_per_timestamp
+GROUP BY
+    places_per_bundesland_per_timestamp.ids,
+    places_per_bundesland_per_timestamp.name,
+    places_per_bundesland_per_timestamp.geom
+""")
+
+    maxDaysOld = request.args.get('maxDaysOld') or '1000'
+    refDate = request.args.get('refDate') or datetime.datetime.today().strftime('%Y-%m-%d')
+    sql_result = db.engine.execute(sql_stmt, maxDaysOld = maxDaysOld, refDate = refDate).fetchall()
+
+    features = []
+    for r in sql_result:
+        feature = {
+            "type": 'Feature',
+            "geometry": r[2],
+            "properties": {
+                "id": r[0],
+                "name": r[1],
+                "centroid": r[3],
+                "developments": r[4],
+                "developmentDays": r[5]
             }
         }
 

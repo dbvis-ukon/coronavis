@@ -28,14 +28,13 @@ export class BedChoroplethLayerService {
 
   public getQualitativeLayer(option: BedBackgroundOptions): Observable<BedStatusChoropleth<QualitativeTimedStatus>> {
     this.loading$.next(true);
-    return this.qualitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel)
+    return this.qualitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel, new Date(), -1)
     .pipe(
       map(data => {
         return new BedStatusChoropleth(
           this.getName(option.aggregationLevel, option.bedType), 
           data, 
-          option.aggregationLevel, 
-          option.bedType, 
+          option,
           this.qualitativeColorMapService, 
           this.tooltipService,
           this.matDialog

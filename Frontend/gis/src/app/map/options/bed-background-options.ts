@@ -9,4 +9,10 @@ export interface BedBackgroundOptions {
 
     bedType: BedType;
 
+
+    /**
+     * A string formatted in YYYY-MM-DD
+     */
+    date: string | 'now';
+
 }

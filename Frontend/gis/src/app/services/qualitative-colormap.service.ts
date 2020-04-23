@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
 import * as d3 from 'd3';
+import moment from 'moment';
 import { BedType } from '../map/options/bed-type.enum';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
+import { HospitalUtilService } from './hospital-util.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QualitativeColormapService {
-  constructor() {
+  constructor(
+    private hospitalUtil: HospitalUtilService
+  ) {
   }
 
   public static bedStatusColors = ['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)'];
@@ -87,11 +92,31 @@ export class QualitativeColormapService {
       }
     }
   
-    getLatestBedStatusColor(t: Array<QualitativeTimedStatus>, type: BedType) {
-      if(!t) {
+    getLatestBedStatusColor(p: AbstractHospitalOut<QualitativeTimedStatus>, type: BedType, date: string = 'now') {
+      if(!p || !p.developments) {
         return this.getBedStatusColor(null, this.propertyAccessor(type));
       }
-      const latest = t[t.length -1];
+
+      const t = p.developments;
+
+      let latest: QualitativeTimedStatus;
+      if(date === null || date === 'now') {
+        latest = t[t.length -1];
+      } else {
+        const actualDate = moment(date).endOf('day').toDate();
+        const strDate = moment(date).format('YYYY-MM-DD');
+
+        if(p?.developmentDays) {
+          const status = p?.developmentDays[strDate];
+          if(status) {
+            return this.getBedStatusColor(status, this.propertyAccessor(type));
+          }
+        }
+
+        latest = this.hospitalUtil.getLatestTimedStatus(t, actualDate);
+
+        // console.log('need to use fallback method', strDate, latest, p);
+      }
   
       return this.getBedStatusColor(latest, this.propertyAccessor(type));
     }

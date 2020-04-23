@@ -2,19 +2,18 @@
 DIVI - Hospitals with their capacities
 https://www.divi.de/register/intensivregister?view=items
 """
+import logging
 import sys
 import time
-import pandas
-import logging
-import requests
 import traceback
 
-import db
-
+import pandas
 from geoalchemy2.shape import to_shape
-
 from sqlalchemy import func
 from sqlalchemy.sql import null
+
+import db
+import requests
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -263,11 +262,13 @@ if __name__ == "__main__":
 
         db.sess.commit()
         
-        
+        db.sess.execute("REFRESH MATERIALIZED VIEW filled_hospital_timeseries_with_fix")
+        db.sess.commit()
+
         exit(0)
     
     except Exception as e:
         tb = traceback.format_exc()
         logger.error(str(e) + '\n' + str(tb))
         
-        exit(-1)
+        exit(1)

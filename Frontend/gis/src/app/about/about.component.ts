@@ -1,40 +1,36 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-about',
   templateUrl: './about.component.html',
-  styleUrls: ['./about.component.less']
+  styleUrls: ['./about.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AboutComponent implements OnInit {
 
-  frontendVersion: string;
+  frontendVersion$: Observable<string>;
 
-  apiVersion: string;
+  apiVersion$: Observable<string>;
 
-  tileServerVersion: string;
+  tileServerVersion$: Observable<string>;
 
   constructor(
     public dialogRef: MatDialogRef<AboutComponent>,
     private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.frontendVersion = environment.version;
+    this.frontendVersion$ = of(environment.version);
 
-    this.http.get(
-      `${environment.apiUrl}version`, { responseType: 'text'} )
-    .subscribe(v => {
-      this.apiVersion = v;
-    });
+    this.apiVersion$ = this.http.get(
+      `${environment.apiUrl}version`, { responseType: 'text'} );
 
-    this.http.get(
+    this.tileServerVersion$ = this.http.get(
       `${environment.tileServerUrl}version`, { responseType: 'text' }
     )
-    .subscribe(v => {
-      this.tileServerVersion = v;
-    });
 
   }
 

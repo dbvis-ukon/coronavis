@@ -2,9 +2,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import * as L from 'leaflet';
 import { SVGOverlay } from 'leaflet';
-import 'mapbox-gl';
-import 'mapbox-gl-leaflet';
-import { Observable, of, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
@@ -19,13 +17,15 @@ import { BedGlyphOptions } from './options/bed-glyph-options';
 import { CovidNumberCaseOptions } from './options/covid-number-case-options';
 import { MapLocationSettings } from './options/map-location-settings';
 import { MapOptions } from './options/map-options';
+import { AggregatedGlyphCanvasLayer } from './overlays/aggregated-glyph-canvas.layer';
 import { CaseChoropleth } from './overlays/casechoropleth';
 import { GlyphLayer } from './overlays/GlyphLayer';
 // import 'leaflet-mapbox-gl';
 import { Overlay } from './overlays/overlay';
+import { SingleGlyphCanvasLayer } from './overlays/single-glyph-canvas.layer';
 
 
-export enum MapOptionKeys {
+enum MapOptionKeys {
   bedGlyphOptions, bedBackgroundOptions, covidNumberCaseOptions, showOsmHospitals, showOsmHeliports
 }
 
@@ -40,7 +40,7 @@ export class MapComponent implements OnInit {
 
   @ViewChild('main') main;
 
-  private bedGlyphOptions$: Subject<BedGlyphOptions> = new Subject();
+  private bedGlyphOptions$: BehaviorSubject<BedGlyphOptions> = new BehaviorSubject(null);
 
   private _mapOptions: MapOptions;
 
@@ -93,7 +93,7 @@ export class MapComponent implements OnInit {
 
   private mymap: L.Map;
 
-  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<any>[]>();
+  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<any>[] | SingleGlyphCanvasLayer[] | AggregatedGlyphCanvasLayer[]>();
 
   private aggregationLevelToGlyphMap = new Map<string, L.LayerGroup<any>>();
 
@@ -156,6 +156,7 @@ export class MapComponent implements OnInit {
     }
 
     this.mymap = L.map('main', {
+      preferCanvas: true,
       minZoom: 6,
       maxZoom: 13,
       layers: [tiledMap],
@@ -325,14 +326,13 @@ export class MapComponent implements OnInit {
 
       let obs: Observable<L.LayerGroup>;
       if(o.aggregationLevel === AggregationLevel.none) {
-        obs = this.glyphLayerService.getSimpleGlyphLayer(this.bedGlyphOptions$, o.forceDirectedOn)
+        obs = this.glyphLayerService.getSimpleGlyphLayer(this.bedGlyphOptions$)
         .pipe(
           map(glyphFactories => {
 
             const layerGroup = L.layerGroup([]);
 
-            for(const glyphFactory of glyphFactories) {
-              const glyphLayer = glyphFactory.createOverlay(this.mymap);
+            for(const glyphLayer of glyphFactories) {
 
               layerGroup.addLayer(glyphLayer);
             } 
@@ -344,16 +344,14 @@ export class MapComponent implements OnInit {
       } else {
         obs = this.glyphLayerService.getAggregatedGlyphLayer(o, this.bedGlyphOptions$)
         .pipe(
-          map(([glyphFactory, backgroundFactory]) => {
-
-          const glyphLayer = glyphFactory.createOverlay(this.mymap);
+          map(([glyphLayer, backgroundFactory]) => {
 
           const bgLayer = backgroundFactory.createOverlay();
 
           // Create a layer group
           const layerGroup = L.layerGroup([bgLayer, glyphLayer]);
 
-          this.layerToFactoryMap.set(layerGroup, [glyphFactory]);
+          this.layerToFactoryMap.set(layerGroup, [glyphLayer]);
 
           return layerGroup;
         }));
@@ -372,6 +370,12 @@ export class MapComponent implements OnInit {
   }
 
   private showGlyphLayer(l: L.LayerGroup) {
+    // if the layer is already there we don't need to remove it and add it again
+    // this is the case when only the date changes with the time slider
+    if(this.mymap.hasLayer(l)) {
+      return;
+    }
+
     this.removeGlyphMapLayers();
 
     this.mymap.addLayer(l);
