@@ -1,6 +1,6 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { APP_BASE_HREF, CommonModule, PlatformLocation, registerLocaleData } from '@angular/common';
+import { APP_BASE_HREF, CommonModule, DatePipe, DecimalPipe, PlatformLocation, registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -58,9 +58,10 @@ import { OverviewModule } from './overview/overview.module';
 import { SentryErrorHandler } from './sentry-config';
 import { SupportedLocales } from './services/i18n.service';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
+import { PlusminusPipe } from './shared/plusminus.pipe';
 import { SharedModule } from './shared/shared.module';
+import { TranslatePipe } from './shared/translate.pipe';
 import { TimesliderComponent } from './timeslider/timeslider.component';
-import { TranslatePipe } from './translate.pipe';
 import localeEn from './util/locales/en';
 import { VegaComponent } from './vega/vega.component';
 
