@@ -2,7 +2,6 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { APP_BASE_HREF, CommonModule, PlatformLocation, registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
-import localeEn from '@angular/common/locales/en';
 import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,6 +21,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatStepperModule } from "@angular/material/stepper";
 import { MatTabsModule } from '@angular/material/tabs';
@@ -29,6 +29,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NouisliderModule } from "ng2-nouislider";
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { AboutComponent } from './about/about.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -39,6 +40,9 @@ import { CaseDialogComponent } from './case-dialog/case-dialog.component';
 import { CaseInfoComponent } from './case-info/case-info.component';
 import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
+import { HelpDialogBedsComponent } from './help-dialog-beds/help-dialog-beds.component';
+import { HelpDialogCasesComponent } from './help-dialog-cases/help-dialog-cases.component';
+import { HelpDialogTheprojectComponent } from './help-dialog-theproject/help-dialog-theproject.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
 import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
@@ -55,6 +59,9 @@ import { SentryErrorHandler } from './sentry-config';
 import { SupportedLocales } from './services/i18n.service';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
 import { SharedModule } from './shared/shared.module';
+import { TimesliderComponent } from './timeslider/timeslider.component';
+import { TranslatePipe } from './translate.pipe';
+import localeEn from './util/locales/en';
 import { VegaComponent } from './vega/vega.component';
 
 
@@ -68,7 +75,7 @@ import { VegaComponent } from './vega/vega.component';
 registerLocaleData(localeDe, 'de-DE');
 registerLocaleData(localeEn, 'en-US');
 
-export const localeProvider = {
+const localeProvider = {
   provide: LOCALE_ID,
   useFactory: (s: PlatformLocation) => {
 
@@ -141,6 +148,10 @@ export const localeProvider = {
     ButtonPanelComponent,
     BedTooltipComponent,
     HospitalSearchComponent,
+    TimesliderComponent,
+    HelpDialogBedsComponent,
+    HelpDialogCasesComponent,
+    HelpDialogTheprojectComponent
   ],
   imports: [
     CommonModule,
@@ -173,6 +184,8 @@ export const localeProvider = {
     MatTabsModule,
     MatToolbarModule,
     FlexLayoutModule,
+    NouisliderModule,
+    MatSliderModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
     NgxWebstorageModule.forRoot(),
@@ -184,6 +197,10 @@ export const localeProvider = {
       useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
       deps: [PlatformLocation]
     },
+    PlusminusPipe, 
+    DecimalPipe, 
+    DatePipe,
+    TranslatePipe,
     { 
       provide: ErrorHandler, 
       useClass: SentryErrorHandler 

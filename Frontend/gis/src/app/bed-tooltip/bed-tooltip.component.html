@@ -3,13 +3,15 @@
         <div class="title-row-title">
           <h3 class="name"><span i18n="@@deutschland">Deutschland</span> - {{ bedName }}</h3>
     
-          <p class="numHospitals">({{ data.numberOfHospitals }} <span i18n="tooltip | hospitals@reported">gemeldete Krankenhäuser</span>)</p>
+          <p class="numHospitals" *ngIf="data?.numHospitals">({{ data?.numHospitals }} <span i18n="tooltip | hospitals@reported">gemeldete Krankenhäuser</span>)</p>
         </div>
     </div>
   
     <mat-divider></mat-divider>
 
-    <h4><span i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </span> <span>{{ data.timestamp | date:'medium' }}</span></h4>
+    <h4 *ngIf="!data?.last_update" i18n="@@bedTooltipNoData">Es stehen momentan keine Bettenkapazitätsdaten für diesen Zeitpunkt zur Verfügung.</h4>
+
+    <h4 *ngIf="data?.last_update"><span i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </span> <span>{{ data?.last_update | date:'medium' }}</span></h4>
 
     <div class="chartcontainer">
 

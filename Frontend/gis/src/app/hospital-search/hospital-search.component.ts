@@ -8,7 +8,7 @@ import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hosp
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
 import { HospitalUtilService } from '../services/hospital-util.service';
 
-export type HospitalSearchFeaturePermissible = Feature<Point, SingleHospitalOut<any> | Feature<MultiPolygon, AggregatedHospitalOut<any>>>;
+type HospitalSearchFeaturePermissible = Feature<Point, SingleHospitalOut<any> | Feature<MultiPolygon, AggregatedHospitalOut<any>>>;
 export type HospitalSearchFeatureCollectionPermissible = FeatureCollection<Point, SingleHospitalOut<any>> | FeatureCollection<MultiPolygon, AggregatedHospitalOut<any>>;
 
 @Component({

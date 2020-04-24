@@ -1,22 +1,28 @@
 
 
-<div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === false && choroplethLayer">
-  <h5 i18n="legend|cases@@cases" (click)="legendCasesExtended = !legendCasesExtended" i18n-matTooltip="@@legendToggleTooltip" matTooltip="Klicken um Legende ein-/auszuklappen">Fallzahlen</h5>
+<div class="legend bedlegend" *ngIf="(mo$ | async)?.bedBackgroundOptions.enabled === false && choroplethLayer$ | async">
+  <h5 
+  class="title"
+  (click)="legendCasesExtended = !legendCasesExtended" 
+  i18n-matTooltip="@@legendToggleTooltip" 
+  matTooltip="Klicken um Legende ein-/auszuklappen"
+  matTooltipPosition="above"
+  >{{ titleCases$ | async }}</h5>
     <div *ngIf="legendCasesExtended">
     <table>
 
-      <tr *ngFor="let b of caseColors">
+      <tr *ngFor="let b of caseBins$ | async">
 
         <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
 
         <td class="lower">
-          {{ b.binLowerBound | number }}
+          {{ b.minStr }}
         </td>
 
-        <td class="dash">–</td>
+        <td class="dash" *ngIf="b.min !== b.max">–</td>
 
-        <td class="upper">
-          {{ b.binUpperBound | number }}
+        <td class="upper" *ngIf="b.min !== b.max">
+          {{ b.maxStr }}
         </td>
       </tr>
     </table>
@@ -24,16 +30,26 @@
         
     <div *ngIf="!legendCasesExtended">
       <div class="row">
-        <div class="text" [innerHtml]="casesMin | number"></div>
-        <div *ngFor="let b of caseColors;"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.binLowerBound | number }} – {{ b.binUpperBound | number }}"></div>
-        <div class="text" [innerHtml]="casesMax | number"></div>
+        <div class="text" [innerHtml]="(caseBins$ | async)[0].minStr"></div>
+        <div *ngFor="let b of caseBins$ | async"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.minStr }} – {{ b.maxStr }}"></div>
+        <div class="text" [innerHtml]="(caseBins$ | async)[(caseBins$ | async).length - 1].maxStr"></div>
       </div>
+    </div>
+
+    <div>
+      <h5 class="source" i18n="@@legendDatasourceRki">Datenquelle: <a href="https://rki.de">Robert Koch Institut</a></h5>
     </div>
 </div>
 
 
-<div class="legend bedlegend" *ngIf="mo.bedBackgroundOptions.enabled === true || mo.bedGlyphOptions.enabled === true" >
-  <h5 i18n="legend|beds@@beds" (click)="legendBedsExtended = !legendBedsExtended" i18n-matTooltip="@@legendToggleTooltip" matTooltip="Klicken um Legende ein-/auszuklappen">Bettenauslastung</h5>
+<div class="legend bedlegend" *ngIf="(mo$ | async)?.bedBackgroundOptions.enabled === true || (mo$ | async)?.bedGlyphOptions.enabled === true" >
+  <h5
+  class="title" 
+  (click)="legendBedsExtended = !legendBedsExtended" 
+  i18n-matTooltip="@@legendToggleTooltip" 
+  matTooltip="Klicken um Legende ein-/auszuklappen"
+  matTooltipPosition="above"
+  >{{ titleBeds$ | async }}</h5>
 
   <div *ngIf="legendBedsExtended">
   <table>
@@ -55,5 +71,9 @@
 
       </div>
     </div>
+  </div>
+
+  <div>
+    <h5 class="source" i18n="@@legendDatasourceDivi">Datenquelle: <a href="https://intensivregister.de">DIVI Intensivregister</a></h5>
   </div>
 </div>

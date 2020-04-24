@@ -9,10 +9,14 @@
     
 
     .mat-card {
-        max-width: 95vw;
+        max-width: 40vw;
         max-height: calc(~"80vh - 45px");
         overflow: hidden;
         background-color: transparent;
+
+        &.mobile {
+            max-width: 95vw;
+        }
 
         .accordion-container {
             max-height: calc(~"80vh - 130px");
@@ -186,6 +190,7 @@ h5 {
 
 .stats {
     color: #8c8c8c;
+    max-width: 25em;
 
     &.with-addon {
         margin-bottom: 0px;

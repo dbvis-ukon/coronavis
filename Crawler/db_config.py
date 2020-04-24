@@ -25,10 +25,16 @@ try:
         SQLALCHEMY_DATABASE_URI = f"postgresql://{quote(DB_USER, safe='')}:{quote(DB_PASS, safe='')}@{quote(DB_HOST, safe='')}:{quote(DB_PORT, safe='')}/{quote(DB_NAME, safe='')}"
 
     SENTRY_DSN = os.environ.get('SENTRY_DSN').replace('\n', '')
+    VERSION = os.environ.get('VERSION').replace('\n', '')
+    ENVIRONMENT = os.environ.get('ENVIRONMENT').replace('\n', '')
     sentry_sdk.init(
+        environment=ENVIRONMENT,
+        release=VERSION,
         dsn=SENTRY_DSN, 
         integrations=[SqlalchemyIntegration()]
     )
 
 except KeyError as e:
-    logger.warning('One or multiple necessary environment variables not set, using config.py file as backup')
+    logger.warning('One or multiple necessary environment variables not set.')
+    raise e
+    exit(1)

@@ -51,8 +51,8 @@ spec:
                   key: SENTRY_DSN
             - name: VERSION
               value: {{ .Values.sha | quote }}
-            - name: ENV_TYPE
-              value: {{ .Values.envType | quote }}
+            - name: ENVIRONMENT
+              value: {{ .Values.environment | quote }}
           restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server

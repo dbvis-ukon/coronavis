@@ -32,13 +32,12 @@ export interface SingleHospital {
     helipad_nearby: boolean;
 }
 
-export interface QualitativeHospitalDevelopment extends Array<QualitativeTimedStatus> {}
+interface QualitativeHospitalDevelopmentExtension extends GeneralDevelopment {
 
 
-export interface QualitativeHospitalDevelopmentExtension extends GeneralDevelopment {
+    developments: Array<QualitativeTimedStatus>;
 
-
-    developments: QualitativeHospitalDevelopment;
+    developmentDays: {[key: string]: QualitativeTimedStatus };
 }
 
 
@@ -48,6 +47,11 @@ export interface AbstractTimedStatus {
 
 
 export interface QualitativeTimedStatus extends AbstractTimedStatus {
+
+    /**
+     * Only available in an aggregation
+     */
+    numHospitals?: number;
 
     last_update?: Date;
     

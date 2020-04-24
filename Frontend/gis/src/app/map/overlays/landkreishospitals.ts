@@ -1,13 +1,12 @@
-import { FeatureCollection, Polygon } from 'geojson';
+import { FeatureCollection, MultiPolygon } from 'geojson';
 import * as L from 'leaflet';
-import { QualitativeAggregatedHospitalProperties } from 'src/app/repositories/types/in/qualitative-hospitals-development';
 import { Overlay } from './overlay';
 
 
-export class LandkreiseHospitalsLayer extends Overlay<QualitativeAggregatedHospitalProperties> {
+export class LandkreiseHospitalsLayer extends Overlay<any> {
   constructor(
     name: string,
-    featureCollection: FeatureCollection<Polygon, QualitativeAggregatedHospitalProperties>
+    featureCollection: FeatureCollection<MultiPolygon, any>
   ) {
     super(name, featureCollection);
   }

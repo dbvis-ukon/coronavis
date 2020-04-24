@@ -6,6 +6,7 @@ import { BedType } from "../map/options/bed-type.enum";
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TranslationService } from '../services/translation.service';
 import { VegaBarchartService } from '../services/vega-barchart.service';
@@ -82,7 +83,8 @@ export class HospitalInfoComponent implements OnInit {
 
   constructor(private colormapService: QualitativeColormapService,
     private translationService: TranslationService,
-    private vegaBarchartService: VegaBarchartService
+    private vegaBarchartService: VegaBarchartService,
+    private i18nService: I18nService
     ) {
   }
 
@@ -126,7 +128,7 @@ export class HospitalInfoComponent implements OnInit {
   }
 
   getStatusColorFor(bedStatus: BedType) {
-    return this.colormapService.getLatestBedStatusColor(this.singleHospital.developments, bedStatus);
+    return this.colormapService.getLatestBedStatusColor(this.singleHospital, bedStatus);
   }
 
   getStatusDescriptionFor(bedStatus: BedType) {
@@ -330,6 +332,12 @@ export class HospitalInfoComponent implements OnInit {
 
         // also overwrite the title
         spec.encoding.x.title = '';
+
+        if(this.i18nService.getCurrentLocale() === SupportedLocales.DE_DE) {
+          spec.encoding.x.axis.format = '%d.%m';
+        } else {
+          spec.encoding.x.axis.format = '%m/%d';
+        }
 
         if (summedbedcounts > 0) {
           this.specs.push({

@@ -6,7 +6,7 @@ import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTim
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 
-export type RecursivePartial<T> = {
+type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
 
@@ -23,6 +23,7 @@ export class ConfigService {
     showHelpOnStart: true,
 
     bedGlyphOptions: {
+      date: 'now',
       aggregationLevel: AggregationLevel.none,
       enabled: true,
       showEcmo: true,
@@ -32,12 +33,14 @@ export class ConfigService {
     },
 
     bedBackgroundOptions: {
+      date: 'now',
       bedType: BedType.icuLow,
       enabled: false,
       aggregationLevel: AggregationLevel.county
     },
 
     covidNumberCaseOptions: {
+      date: 'now',
       change: CovidNumberCaseChange.absolute,
       normalization: CovidNumberCaseNormalization.absolut,
       timeWindow: CovidNumberCaseTimeWindow.all,

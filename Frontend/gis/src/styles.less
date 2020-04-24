@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/cdk/overlay-prebuilt.css';
 @import '~leaflet/dist/leaflet.css';
+@import "~nouislider/distribute/nouislider.min.css";
 
 html, body { height: 100%; }
 body { 
@@ -27,6 +28,21 @@ body {
   _:-ms-lang(x), _:-webkit-full-screen { .mat-dialog-container  {
     background: #EDEDED;
   }
+  }
+}
+
+
+.timeslider .slider.mat-slider.mat-slider-horizontal .mat-slider-wrapper {
+  margin-right: 18px;
+}
+
+.timeslider {
+  .noUi-handle {
+    cursor: grab;
+
+    &.noUi-active {
+      cursor: grabbing;
+    }
   }
 }
 

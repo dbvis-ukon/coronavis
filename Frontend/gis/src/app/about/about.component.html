@@ -252,16 +252,16 @@
 <div class="bottom-panel" mat-dialog-actions>
   <div class="versions">
     <p>Version: 
-      <a *ngIf="frontendVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ frontendVersion }}">{{ frontendVersion }}</a>
-      <span *ngIf="!frontendVersion" i18n="development@@versionDevelopmentFlag">development</span>
+      <a *ngIf="frontendVersion$" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ frontendVersion$ | async }}">{{ frontendVersion$ | async }}</a>
+      <span *ngIf="!frontendVersion$" i18n="development@@versionDevelopmentFlag">development</span>
     </p>
     <p>API Version: 
-      <a *ngIf="apiVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ apiVersion }}">{{ apiVersion }}</a>
-      <span *ngIf="!apiVersion" i18n="unknown@@versionUnknownFlag">unknown</span>
+      <a *ngIf="apiVersion$" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ apiVersion$ | async }}">{{ apiVersion$ | async }}</a>
+      <span *ngIf="!apiVersion$" i18n="unknown@@versionUnknownFlag">unknown</span>
     </p>
     <p>Tile Server Version: 
-      <a *ngIf="tileServerVersion" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ tileServerVersion }}">{{ tileServerVersion }}</a>
-      <span *ngIf="!tileServerVersion" i18n="unknown@@versionUnknownFlag">unknown</span>
+      <a *ngIf="tileServerVersion$" href="https://gitlab.dbvis.de/jentner/covid-19-vis/-/commit/{{ tileServerVersion$ | async }}">{{ tileServerVersion$ | async }}</a>
+      <span *ngIf="!tileServerVersion$" i18n="unknown@@versionUnknownFlag">unknown</span>
     </p>
   </div>
 

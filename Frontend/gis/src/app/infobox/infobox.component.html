@@ -13,7 +13,7 @@
   mode="vertical"
 ></app-button-panel>
 
-<mat-card *ngIf="mo.extendInfobox && !mo.hideInfobox">
+<mat-card *ngIf="mo.extendInfobox && !mo.hideInfobox" [ngClass]="{'mobile': (isMobile$ | async)?.matches === true}">
 
   <div class="accordion-container">
   <mat-accordion class="accordion">
@@ -26,11 +26,19 @@
           </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <div *ngIf="aggregatedDiviStatistics">
-        <p class="stats with-addon" i18n="@@infoboxNumberOfHospitals">{{ numUnfilteredHospitals | number }} bundesweit gemeldete Einrichtungen</p>
-        <p class="stats"><small i18n="@@infoboxNumberOfHospitalsAddon">(davon {{ (numUnfilteredHospitals - aggregatedDiviStatistics.numberOfHospitals) | number }} ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</small></p>
-        <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ this.aggregatedDiviStatistics.timestamp | date:'full' }}</p>
+      <mat-progress-bar *ngIf="!combinedStats$" mode="indeterminate"></mat-progress-bar>
+
+      <div *ngIf="combinedStats$ | async as c">
+        <div *ngIf="c.diviFiltered !== undefined && c.diviUnfiltered !== undefined; else noDiviData">
+          <p class="stats with-addon" i18n="@@infoboxNumberOfHospitals">{{ c.diviUnfiltered.numHospitals | number }} bundesweit gemeldete Einrichtungen</p>
+          <p class="stats"><small i18n="@@infoboxNumberOfHospitalsAddon">(davon {{ (c.diviUnfiltered.numHospitals - c.diviFiltered.numHospitals) | number }} ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</small></p>
+          <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ c.diviFiltered.last_update | date:'full' }}</p>
+        </div>
+        <ng-template #noDiviData>
+          <div class="stats" i18n="@@infoboxNoDiviData">Es stehen momentan keine Bettenkapazitätsdaten<br>für diesen Zeitpunkt zur Verfügung.</div>
+        </ng-template>
       </div>
+      
       
 
       <h5>Aggregation</h5>
@@ -80,16 +88,16 @@
       ></app-hospital-search>
 
       <div *ngIf="mo.bedGlyphOptions.enabled">
-        <div class="glyph-legend">
+        <div class="glyph-legend" *ngIf="combinedStats$ | async; let c">
           <div
-            *ngFor="let t of glyphLegend"
+            *ngFor="let t of c.glyphData"
             class="glyph-tile"
             (mouseenter)="openBedTooltip($event, t)"
             (mouseleave)="tooltipService.close()"
             (click)="mo.bedGlyphOptions[t.accessor] = !mo.bedGlyphOptions[t.accessor]; emitMapOptions()"
           >
             <div class="rect"
-                 [ngStyle]="{'background-color': colormapService.getBedStatusColor(aggregatedDiviStatistics, t.accFunc), 'border-color': mo.bedGlyphOptions[t.accessor] ? 'grey' : 'lightgrey'}"></div>
+                 [ngStyle]="{'background-color': t.color, 'border-color': mo.bedGlyphOptions[t.accessor] ? 'grey' : 'lightgrey'}"></div>
             <div class="text">{{ t.name }}</div>
           </div>
         </div>
@@ -157,10 +165,10 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <div *ngIf="aggregatedRkiStatistics">
-        <p class="stats" i18n="@@infoboxNumberOfCovidCases">{{ this.aggregatedRkiStatistics.cases | number }} bundesweit gemeldete Covid-19 Fälle</p>
-        <p class="stats" i18n="@@infoboxNumberOfCovidDeaths">{{ this.aggregatedRkiStatistics.deaths | number }} bundesweit gemeldete Covid-19 Todesfälle</p>
-        <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ this.aggregatedRkiStatistics.until | date:'full' }}</p>
+      <div *ngIf="(combinedStats$ | async); let c">
+        <p class="stats" i18n="@@infoboxNumberOfCovidCases">{{ c.rki?.cases | number }} bundesweit gemeldete Covid-19 Fälle</p>
+        <p class="stats" i18n="@@infoboxNumberOfCovidDeaths">{{ c.rki?.deaths | number }} bundesweit gemeldete Covid-19 Todesfälle</p>
+        <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ c.rki?.timestamp | date:'full' }}</p>
       </div>
       
 
@@ -240,7 +248,7 @@
                 Fälle
               </mat-button-toggle>
               <mat-button-toggle i18n="@@infoboxCasesDiff" [value]="eCovidNumberCaseChange.relative"
-                                 [disabled]="eCovidNumberCaseTimeWindow.all == mo.covidNumberCaseOptions.timeWindow">
+                                 [disabled]="eCovidNumberCaseTimeWindow.all === mo.covidNumberCaseOptions.timeWindow || eCovidNumberCaseNormalization.per100k === mo.covidNumberCaseOptions.normalization">
                 Veränderung im gewählten Zeitraum
               </mat-button-toggle>
             </mat-button-toggle-group>

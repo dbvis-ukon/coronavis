@@ -2,19 +2,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import * as L from 'leaflet';
 import { CaseDialogComponent } from 'src/app/case-dialog/case-dialog.component';
+import { RKICaseDevelopmentProperties } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { CaseChoroplethColormapService } from 'src/app/services/case-choropleth-colormap.service';
-import { QuantitativeAggregatedRkiCasesOverTimeProperties } from 'src/app/services/types/quantitative-aggregated-rki-cases-over-time';
 import { CaseTooltipComponent } from "../../case-tooltip/case-tooltip.component";
 import { TooltipService } from "../../services/tooltip.service";
 import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
 import { Overlay } from './overlay';
 
-export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTimeProperties> {
+export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
   
 
   constructor(
     name: string,
-    hospitals: FeatureCollection<Geometry, QuantitativeAggregatedRkiCasesOverTimeProperties>,
+    hospitals: FeatureCollection<Geometry, RKICaseDevelopmentProperties>,
     private options: CovidNumberCaseOptions,
     private tooltipService: TooltipService,
     private colorsService: CaseChoroplethColormapService,
@@ -24,7 +24,10 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
   }
 
   createOverlay() {
-    const onAction = (e: L.LeafletMouseEvent, feature: any, aggregationLayer: any) => {
+    const onAction = (e: L.LeafletMouseEvent, 
+    feature: Feature<Geometry, RKICaseDevelopmentProperties>, 
+    aggregationLayer: L.GeoJSON<RKICaseDevelopmentProperties>) => {
+      
       const onCloseAction: () => void = () => {
         aggregationLayer.resetStyle(e.target);
       };
@@ -36,6 +39,7 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
         }, onCloseAction);
 
       tooltipComponent.data = feature.properties;
+      tooltipComponent.options = this.options;
 
       // set highlight style
       const l = e.target;
@@ -53,7 +57,7 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
 
     // create geojson layer (looks more complex than it is)
     const aggregationLayer = L.geoJSON(this.featureCollection, {
-      style: (feature: Feature<Geometry, QuantitativeAggregatedRkiCasesOverTimeProperties>) => {
+      style: (feature: Feature<Geometry, RKICaseDevelopmentProperties>) => {
 
         const numbers = this.colorsService.getCaseNumbers(feature.properties, this.options);
 
@@ -72,7 +76,10 @@ export class CaseChoropleth extends Overlay<QuantitativeAggregatedRkiCasesOverTi
           click: () => {
             this.tooltipService.close();
             this.matDialog.open(CaseDialogComponent, {
-              data: feature.properties
+              data: {
+                data: feature.properties,
+                options: this.options
+              }
             })
           },
           mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer),

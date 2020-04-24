@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -12,13 +12,18 @@ export class CachedRepository {
 
   constructor(private http: HttpClient) {}
 
-  get<T>(url: string): Observable<T> {
-    if(this.cache.has(url)) {
-      return of(this.cache.get(url));
+  get<T>(url: string, params?: HttpParams): Observable<T> {
+
+    const key = url+"?"+(params?.toString() || "");
+
+    if(this.cache.has(key)) {
+      // console.log('cache hit', key);
+      return of(this.cache.get(key));
     } else {
-      return this.http.get<T>(url)
+      // console.log('no cache', key);
+      return this.http.get<T>(url, {params: params})
       .pipe(
-        tap(data => this.cache.set(url, data)),
+        tap(data => this.cache.set(key, data))
       );
     }
   }

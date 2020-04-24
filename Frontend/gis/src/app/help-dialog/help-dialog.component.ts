@@ -1,11 +1,13 @@
-import { BreakpointObserver } from "@angular/cdk/layout";
-import { Component, OnInit } from '@angular/core';
+import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-help-dialog',
   templateUrl: './help-dialog.component.html',
-  styleUrls: ['./help-dialog.component.less']
+  styleUrls: ['./help-dialog.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class HelpDialogComponent implements OnInit {
@@ -15,18 +17,14 @@ export class HelpDialogComponent implements OnInit {
     private breakPointObserver: BreakpointObserver
   ) { }
 
-  public isSmallScreen;
+  public isSmallScreen$: Observable<BreakpointState>;
+
+  isSmallScreen: boolean;
 
   ngOnInit(): void {
-    //close help dialog if mobile
-    this.isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
-    //if(isSmallScreen){
-    //  this.dialogRef.close();
-    //}
-  }
+    this.isSmallScreen$ = this.breakPointObserver.observe('(max-width: 500px)');
 
-  onResize(event){
-    this.isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
+    this.isSmallScreen$.subscribe(s => this.isSmallScreen = s.matches);
   }
 
   close(): void {
