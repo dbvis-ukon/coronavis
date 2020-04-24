@@ -11,6 +11,7 @@ import { catchError, map, retry } from 'rxjs/operators';
 export class IconService {
 
   public twitterLoaded$ = new BehaviorSubject<boolean>(false);
+  public githubLoaded$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private iconRegistry: MatIconRegistry,
@@ -26,6 +27,12 @@ export class IconService {
     .subscribe(svg => {
       this.iconRegistry.addSvgIconLiteral('twitter', svg);
       this.twitterLoaded$.next(true);
+    });
+
+    this.getSvg(`assets/github.svg`)
+    .subscribe(svg => {
+      this.iconRegistry.addSvgIconLiteral('github', svg);
+      this.githubLoaded$.next(true);
     });
   }
 
