@@ -28,20 +28,16 @@ export class ButtonPanelComponent implements OnInit {
 
   selectedLocale: SupportedLocales;
 
-  twitterLoaded = false;
 
   constructor(
     private dialogService: MatDialog,
     private i18nService: I18nService,
-    private iconService: IconService
+    public iconService: IconService
   ) {
   }
 
 
   ngOnInit(): void {
-    this.iconService.twitterLoaded$.subscribe(loaded => this.twitterLoaded = loaded);
-
-    
     this.supportedLocales = this.i18nService.getSupportedLocales();
 
     this.i18nService.currentLocale().subscribe(l => {
