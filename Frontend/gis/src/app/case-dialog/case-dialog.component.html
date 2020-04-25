@@ -3,7 +3,7 @@
     <div class="title-row-title">
       <h3 class="name">{{ data.data.name }}</h3>
 
-      <p class="numHospitals">{{ this.currentTimedStatus.population | number }} <span i18n="case-tooltip|cases@@residents">Einwohner</span></p>
+      <p class="numHospitals" *ngIf="this.currentTimedStatus">{{ this.currentTimedStatus.population | number }} <span i18n="case-tooltip|cases@@residents">Einwohner</span></p>
     </div>
     <div>
       <button (click)="close()" mat-icon-button aria-label="Close Dialog">

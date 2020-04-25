@@ -43,21 +43,51 @@
     </a>
 
     <a
-    *ngIf="twitterLoaded"
+    *ngIf="(iconService.twitterLoaded$ | async)"
     mat-icon-button
     href="https://twitter.com/intent/tweet?screen_name=dbvis&button_hashtag=coronavis&ref_src=twsrc%5Etfw"
     target="_blank"
+    i18n-matTooltip="@@buttonPanelTooltipTwitter" 
+    matTooltip="Twittern sie über CoronaVis"
+    [matTooltipPosition]="mode === 'vertical' ? 'right' : 'below'"
     >
       <mat-icon svgIcon="twitter" aria-hidden="false" aria-label="Tweet #coronavis"></mat-icon>
     </a>
 
     <a
-    *ngIf="!twitterLoaded"
+    *ngIf="!(iconService.twitterLoaded$ | async)"
     mat-button
     href="https://twitter.com/intent/tweet?screen_name=dbvis&button_hashtag=coronavis&ref_src=twsrc%5Etfw"
     target="_blank"
+    i18n-matTooltip="@@buttonPanelTooltipTwitter" 
+    matTooltip="Twittern sie über CoronaVis"
+    [matTooltipPosition]="mode === 'vertical' ? 'right' : 'below'"
     >
       tweet #coronavis
+    </a>
+
+    <a
+    *ngIf="(iconService.githubLoaded$ | async)"
+    mat-icon-button
+    href="https://github.com/dbvis-ukon/coronavis"
+    target="_blank"
+    i18n-matTooltip="@@buttonPanelTooltipGitHub" 
+    matTooltip="Source Code auf GitHub"
+    [matTooltipPosition]="mode === 'vertical' ? 'right' : 'below'"
+    >
+      <mat-icon svgIcon="github" aria-hidden="false" aria-label="GitHub"></mat-icon>
+    </a>
+
+    <a
+    *ngIf="!(iconService.githubLoaded$ | async)"
+    mat-button
+    href="https://github.com/dbvis-ukon/coronavis"
+    target="_blank"
+    i18n-matTooltip="@@buttonPanelTooltipGitHub" 
+    matTooltip="Source Code auf GitHub"
+    [matTooltipPosition]="mode === 'vertical' ? 'right' : 'below'"
+    >
+      GitHub
     </a>
 
     <span class="spacer"></span>

@@ -29,7 +29,7 @@
     </div>
         
     <div *ngIf="!legendCasesExtended">
-      <div class="row">
+      <div class="row" *ngIf="(caseBins$ | async)">
         <div class="text" [innerHtml]="(caseBins$ | async)[0].minStr"></div>
         <div *ngFor="let b of caseBins$ | async"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.minStr }} – {{ b.maxStr }}"></div>
         <div class="text" [innerHtml]="(caseBins$ | async)[(caseBins$ | async).length - 1].maxStr"></div>

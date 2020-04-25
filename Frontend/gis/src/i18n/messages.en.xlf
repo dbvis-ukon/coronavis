@@ -1255,7 +1255,7 @@
         <note category="description"> infobox</note>
         <note category="meaning">infobox </note>
 
-      <note category="location">src/app/button-panel/button-panel.component.html:66</note></notes>
+      <note category="location">src/app/button-panel/button-panel.component.html:96</note></notes>
       <segment state="initial">
         <source>Sprache</source>
       <target>Language</target></segment>
@@ -1368,6 +1368,22 @@
       <segment state="initial">
         <source>Teilen</source>
       <target>Share</target></segment>
+    </unit><unit id="buttonPanelTooltipTwitter">
+      <notes>
+        <note category="location">src/app/button-panel/button-panel.component.html:51</note>
+        <note category="location">src/app/button-panel/button-panel.component.html:63</note>
+      </notes>
+      <segment state="initial">
+        <source>Twittern sie über CoronaVis</source>
+      <target>Tweet about CoronaVis</target></segment>
+    </unit><unit id="buttonPanelTooltipGitHub">
+      <notes>
+        <note category="location">src/app/button-panel/button-panel.component.html:75</note>
+        <note category="location">src/app/button-panel/button-panel.component.html:87</note>
+      </notes>
+      <segment state="initial">
+        <source>Source Code auf GitHub</source>
+      <target>Find the source code on github</target></segment>
     </unit>
   </file>
 </xliff>
