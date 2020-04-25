@@ -4,7 +4,6 @@ import { AboutComponent } from '../about/about.component';
 import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
-import { I18nService } from '../services/i18n.service';
 import { IconService } from '../services/icon.service';
 import { ShareDialogComponent } from '../share-dialog/share-dialog.component';
 
@@ -29,7 +28,6 @@ export class ButtonPanelComponent implements OnInit {
 
   constructor(
     private dialogService: MatDialog,
-    private i18nService: I18nService,
     public iconService: IconService
   ) {
   }
