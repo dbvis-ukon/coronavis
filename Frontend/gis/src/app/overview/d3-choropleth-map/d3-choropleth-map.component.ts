@@ -3,18 +3,18 @@ import { geoMercator, geoPath, GeoPath, GeoPermissibleObjects, GeoProjection } f
 import { select, Selection } from 'd3-selection';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { timer } from 'rxjs';
+import { RKICaseDevelopmentProperties } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { QualitativeTimedStatus } from '../../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../../repositories/types/out/aggregated-hospital-out';
-import { QuantitativeAggregatedRkiCasesOverTimeProperties } from '../../services/types/quantitative-aggregated-rki-cases-over-time';
 import { ResizedEvent } from '../../shared/resized-event';
 
 export type D3ChoroplethMapPermissibleFeatureCollection = 
   FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> | 
-  FeatureCollection<MultiPolygon, QuantitativeAggregatedRkiCasesOverTimeProperties>;
+  FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>;
 
 export type D3ChoroplethMapPermissibleFeature = 
   Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> | 
-  Feature<MultiPolygon, QuantitativeAggregatedRkiCasesOverTimeProperties>;
+  Feature<MultiPolygon, RKICaseDevelopmentProperties>;
 
 export interface D3ChoroplethMapData {
   data: D3ChoroplethMapPermissibleFeatureCollection;

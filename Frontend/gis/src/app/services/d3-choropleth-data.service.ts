@@ -6,12 +6,12 @@ import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { D3ChoroplethMapData } from '../overview/d3-choropleth-map/d3-choropleth-map.component';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
+import { RKICaseDevelopmentRepository } from '../repositories/rki-case-development.repository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
+import { RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { CaseChoroplethColormapService } from './case-choropleth-colormap.service';
-import { CaseChoroplethLayerService } from './case-choropleth-layer.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
-import { QuantitativeAggregatedRkiCasesOverTimeProperties } from './types/quantitative-aggregated-rki-cases-over-time';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class D3ChoroplethDataService {
 
   constructor(
     private bedRepo: QualitativeDiviDevelopmentRepository,
-    private caseRepo: CaseChoroplethLayerService,
+    private caseRepo: RKICaseDevelopmentRepository,
     private bedColorMap: QualitativeColormapService,
     private caseColorMap: CaseChoroplethColormapService
   ) { }
@@ -38,13 +38,13 @@ export class D3ChoroplethDataService {
 
             height: 200,
 
-            fillFn: (d: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>) => this.bedColorMap.getLatestBedStatusColor(d.properties.developments, mo.bedBackgroundOptions.bedType)
+            fillFn: (d1: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>) => this.bedColorMap.getLatestBedStatusColor(d1.properties, mo.bedBackgroundOptions.bedType)
           }
         })
       );
     } 
     else if(mo.covidNumberCaseOptions.enabled) {
-      return this.caseRepo.getCaseData(mo.covidNumberCaseOptions.aggregationLevel)
+      return this.caseRepo.getCasesDevelopmentForAggLevel(mo.covidNumberCaseOptions.aggregationLevel)
       .pipe(
         map(d => {
           const scale = this.caseColorMap.getScale(d, mo.covidNumberCaseOptions);
@@ -56,7 +56,7 @@ export class D3ChoroplethDataService {
 
             height: 600,
 
-            fillFn: (d: Feature<MultiPolygon, QuantitativeAggregatedRkiCasesOverTimeProperties>) => this.caseColorMap.getColor(scale, d, mo.covidNumberCaseOptions)
+            fillFn: (d: Feature<MultiPolygon, RKICaseDevelopmentProperties>) => this.caseColorMap.getColor(scale, d, mo.covidNumberCaseOptions)
           }
         })
       );

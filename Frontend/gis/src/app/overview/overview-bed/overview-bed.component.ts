@@ -5,10 +5,10 @@ import { AggregationLevel } from 'src/app/map/options/aggregation-level.enum';
 import { BedType } from 'src/app/map/options/bed-type.enum';
 import { MapLocationSettings } from 'src/app/map/options/map-location-settings';
 import { MapOptions } from 'src/app/map/options/map-options';
+import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
 import { ConfigService } from 'src/app/services/config.service';
 import { CountryAggregatorService } from 'src/app/services/country-aggregator.service';
 import { D3ChoroplethDataService } from 'src/app/services/d3-choropleth-data.service';
-import { QualitativeTimedStatusAggregation } from 'src/app/services/types/qualitateive-timed-status-aggregation';
 import { UrlHandlerService } from 'src/app/services/url-handler.service';
 import { D3ChoroplethMapData } from '../d3-choropleth-map/d3-choropleth-map.component';
 
@@ -45,7 +45,7 @@ export class OverviewBedComponent implements OnInit {
 
   bedTypes: string[];
 
-  aggregatedDiviStatistics: QualitativeTimedStatusAggregation;
+  aggregatedDiviStatistics: QualitativeTimedStatus;
 
   constructor(
     private breakPointObserver: BreakpointObserver,
@@ -61,7 +61,7 @@ export class OverviewBedComponent implements OnInit {
         this.gridNumCols = matched.matches ? 1 : 3;
       });
 
-      this.countryAggregatorService.diviAggregationForCountry()
+      this.countryAggregatorService.diviAggregationForCountry(new Date())
       .subscribe(r => {
         this.aggregatedDiviStatistics = r;
       });

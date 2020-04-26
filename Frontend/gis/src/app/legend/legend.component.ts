@@ -8,11 +8,11 @@ import { BedType } from '../map/options/bed-type.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { MapOptions } from '../map/options/map-options';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
-import { PlusminusPipe } from '../plusminus.pipe';
 import { CaseChoroplethColormapService, ColorMapBin } from '../services/case-choropleth-colormap.service';
 import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
+import { PlusminusPipe } from '../shared/plusminus.pipe';
 import { getMoment } from '../util/date-util';
 
 interface LegendColorMapBin extends ColorMapBin {

@@ -25,7 +25,7 @@
         <h1>Übersicht Intensivbettenkapazitäten</h1>
 
         <div *ngIf="aggregatedDiviStatistics">
-            <p class="stats" i18n="@@infoboxNumberOfHospitals">{{ aggregatedDiviStatistics.numberOfHospitals | number }} bundesweit gemeldete Krankenhäuser</p>
+            <p class="stats" i18n="@@infoboxNumberOfHospitals">{{ aggregatedDiviStatistics.numHospitals | number }} bundesweit gemeldete Krankenhäuser</p>
             <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ aggregatedDiviStatistics.timestamp | date:'full' }}</p>
         </div>
 
