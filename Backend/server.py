@@ -3,31 +3,39 @@
 import logging
 import os
 
-# add sentry integration
-import sentry_sdk
 from flask import Flask
 from flask_compress import Compress
 from flask_cors import CORS
-from sentry_sdk.integrations.flask import FlaskIntegration
-from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
 from cache import cache
 from db import db
 from views import cases, divi, health, hospitals, osm, version
 
+# add sentry integration
+
+
+
+
 # Create Flask application
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
+if os.environ.get('SENTRY_DSN') is not None:
+    import sentry_sdk
+    from sentry_sdk.integrations.flask import FlaskIntegration
+    from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
-SENTRY_DSN = os.environ.get('SENTRY_DSN').replace('\n', '')
-VERSION = os.environ.get('VERSION').replace('\n', '')
-ENVIRONMENT = os.environ.get('ENVIRONMENT').replace('\n', '')
-sentry_sdk.init(
-    environment=ENVIRONMENT,
-    release=VERSION,
-    dsn=SENTRY_DSN, 
-    integrations=[FlaskIntegration(), SqlalchemyIntegration()])
+    SENTRY_DSN = os.environ.get('SENTRY_DSN').replace('\n', '')
+    VERSION = os.environ.get('VERSION').replace('\n', '')
+    ENVIRONMENT = os.environ.get('ENVIRONMENT').replace('\n', '')
+    sentry_sdk.init(
+        environment=ENVIRONMENT,
+        release=VERSION,
+        dsn=SENTRY_DSN, 
+        integrations=[FlaskIntegration(), SqlalchemyIntegration()])
+else:
+    app.logger.warning('No SENTRY_DSN environment variable set, will not report errors to sentry.io')
+
 
 try:
     DB_HOST = os.environ.get('DB_HOST')
@@ -44,7 +52,7 @@ try:
         DB_CONNECTION_STRING = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     
 except KeyError as e:
-    logging.warning('One or multiple necessary environment variables not set, using config.py file as backup')
+    app.logger.warning('One or multiple necessary environment variables not set, using config.py file as backup')
     #DB_CONNECTION_STRING = config.SQLALCHEMY_DATABASE_URI
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
