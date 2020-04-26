@@ -27,9 +27,20 @@ export class HospitalInfoComponent implements OnInit {
 
   @Input()
   mode: 'dialog' | 'tooltip';
-  @Input()
-  data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
 
+  private _data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
+
+  @Input()
+  set data(d: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>) {
+    this._data = d;
+
+    this.updateData();
+  }
+
+  get data(): SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus> {
+    return this._data;
+  }
+ 
   glyphLegendColors = QualitativeColormapService.bedStati;
 
   temporalChartTemplateSpec = {
@@ -89,7 +100,10 @@ export class HospitalInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.updateData();
+  }
 
+  private updateData() {
     if ((this.data as SingleHospitalOut<QualitativeTimedStatus>).address) {
       this.isSingleHospital = true;
       this.singleHospital = this.data as SingleHospitalOut<QualitativeTimedStatus>;
@@ -114,8 +128,6 @@ export class HospitalInfoComponent implements OnInit {
     .then(v => this.barChartSpecs = v);
 
     this.prepareTemporalCharts();
-
-
   }
 
   // getTrendIcon(entries: TimestampedValue[]): string {
