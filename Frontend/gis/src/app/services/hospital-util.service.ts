@@ -21,15 +21,15 @@ export class HospitalUtilService {
   }
 
   public isSingleHospitalFeatureCollection(fc: FeatureCollection<Point, SingleHospitalOut<any>> | FeatureCollection<MultiPolygon, AggregatedHospitalOut<any>>): fc is FeatureCollection<Point, SingleHospitalOut<any>> {
-    return this.isSingleHospitalFeature(fc.features[0]);
+    return this.isSingleHospitalFeature(fc?.features[0]);
   }
 
   public isSingleHospitalFeature(hf: Feature<Point, SingleHospitalOut<any>> | Feature<MultiPolygon, AggregatedHospitalOut<any>>): hf is Feature<Point, SingleHospitalOut<any>> {
-    return this.isSingleHospital(hf.properties);
+    return this.isSingleHospital(hf?.properties);
   }
 
   public isSingleHospital(hospital: SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus>): hospital is SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus> {
-    return (hospital as SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus>).address !== undefined;
+    return hospital !== undefined && (hospital as SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus>).address !== undefined;
   }
 
   public getNumberOfHospitals(hospitalAgg: AggregatedHospitalOut<QualitativeTimedStatus>): number {
