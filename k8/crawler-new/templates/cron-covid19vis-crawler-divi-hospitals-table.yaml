@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: "DIVI Intensivregister for hospitals stating availability of beds"  
 spec:
-  # run every four hours
+  # run every hour
   schedule: "0 */1 * * *"
   jobTemplate:
     spec:

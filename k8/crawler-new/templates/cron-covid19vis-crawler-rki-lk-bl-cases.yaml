@@ -5,8 +5,8 @@ metadata:
   annotations:
     description: "RKI cases on LK and BL level aggregated"
 spec:
-  # run at 9am
-  schedule: "0 9 * * *"
+  # run at 9am (7 utc)
+  schedule: "0 7 * * *"
   jobTemplate:
     spec:
       backoffLimit: 2
