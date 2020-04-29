@@ -66,26 +66,27 @@ def get_categorical_hospital_development():
     """-- get all updates of all hospitals
 WITH hospital_updates AS (
     SELECT
-        DISTINCT ON (hospital.name, hospital.last_update) hospital.name,
-        hospital.last_update,
-        hospital.icu_low_state,
-        hospital.icu_high_state,
-        hospital.ecmo_state
+        DISTINCT ON (h.hospital_id, h.last_update)
+                                                     h.hospital_id,
+                                                     h.name,
+        h.last_update,
+        h.icu_low_state,
+        h.icu_high_state,
+        h.ecmo_state
     FROM
-        hospital
+        hospital_extended h
     -- hard limit due to data change of divi
-    WHERE
-        hospital.insert_date::date >= '2020-04-05'
-    AND hospital.last_update::date <= :refDate ::date
+    WHERE h.last_update::date <= :refDate ::date
     ORDER BY
-        hospital.name,
-        hospital.last_update,
-        hospital.insert_date desc
+        h.hospital_id,
+        h.last_update,
+        h.name,
+        h.insert_date desc
 ),
 -- aggregate the hospital information per hospital and create a timeseries
 hospital_updates_aggregated AS (
     SELECT
-        h.name,
+        h.hospital_id,
         json_agg(
             json_build_object(
                 'timestamp',
@@ -103,37 +104,38 @@ hospital_updates_aggregated AS (
     FROM
         hospital_updates h
     GROUP BY
-        h.name
+        h.hospital_id
 ),
 -- get hospital metadata such as location and address
 hospital_information AS (
     SELECT
         MAX(id) as id,
-        hospital.name,
-        (MAX(ARRAY[lpad(id::text, 20, '0'), address]))[2] AS address,
-        (MAX(ARRAY[lpad(id::text, 20, '0'), state]))[2] AS state,
-        (MAX(ARRAY[lpad(id::text, 20, '0'), contact]))[2] AS contact,
-        (MAX(ARRAY[lpad(id::text, 20, '0'), state]))[2] AS state,
-        st_geomfromtext((MAX(ARRAY[lpad(id::text, 20, '0'), st_astext(location)]))[2], 4326) AS location,
-        (MAX(ARRAY[lpad(id::text, 20, '0'), icu_low_state]))[2] AS icu_low_state,
-        (MAX(ARRAY[lpad(id::text, 20, '0'), icu_high_state]))[2] AS icu_high_state,
-        (MAX(ARRAY[lpad(id::text, 20, '0'), ecmo_state]))[2] AS ecmo_state,
-        MAX(hospital.last_update) AS last_update,
-        MAX(hospital.insert_date) AS insert_date
+        hospital_id,
+        (MAX(ARRAY[h.last_update::text, name]))[2] AS name,
+        (MAX(ARRAY[h.last_update::text, address]))[2] AS address,
+        (MAX(ARRAY[h.last_update::text, state]))[2] AS state,
+        (MAX(ARRAY[h.last_update::text, contact]))[2] AS contact,
+        (MAX(ARRAY[h.last_update::text, state]))[2] AS state,
+        st_geomfromtext((MAX(ARRAY[h.last_update::text, st_astext(location)]))[2], 4326) AS location,
+        (MAX(ARRAY[h.last_update::text, icu_low_state]))[2] AS icu_low_state,
+        (MAX(ARRAY[h.last_update::text, icu_high_state]))[2] AS icu_high_state,
+        (MAX(ARRAY[h.last_update::text, ecmo_state]))[2] AS ecmo_state,
+        MAX(h.last_update) AS last_update,
+        MAX(h.insert_date) AS insert_date
     FROM
-        hospital
+        hospital_extended h
     WHERE st_x(location) > 0
         AND st_x(location) < 999
         AND st_y(location) > 0
         AND st_y(location) < 999
     GROUP BY
-        hospital.name
+        h.hospital_id
     HAVING (:refDate ::date - MAX(last_update)::timestamp)::interval <= (:maxDaysOld || ' days')::interval
     ORDER BY
-        hospital.name
+        h.hospital_id
 ) -- join hospital timeseries with hospital metadata
 SELECT
-    agg.name,
+    hi.name,
     hi.address,
     hi.contact,
     st_asgeojson(hi.location)::json AS geojson,
@@ -144,7 +146,7 @@ SELECT
     agg.json_agg AS development
 FROM
     hospital_updates_aggregated agg
-    JOIN hospital_information hi ON agg.name :: text = hi.name :: text
+    JOIN hospital_information hi ON agg.hospital_id = hi.hospital_id
     JOIN LATERAL (
         SELECT
             helipads.osm_id,
@@ -161,7 +163,8 @@ FROM
             (hi.location <-> helipads.geom)
         LIMIT
             1
-    ) b ON true""")
+    ) b ON true
+""")
 
     maxDaysOld = request.args.get('maxDaysOld') or '1000'
     refDate = request.args.get('refDate') or datetime.datetime.today().strftime('%Y-%m-%d')
