@@ -1,9 +1,15 @@
+@import '../../media-queryies.less';
+
 :host {
     background-color: rgba(255, 255, 255, 0.8);
     color: black;
     max-width: 95vw;
     max-height: 80vh;
     overflow: hidden;
+
+    @media @phone {
+        background-color: white;
+    }
     
 
     
@@ -14,7 +20,7 @@
         overflow: hidden;
         background-color: transparent;
 
-        &.mobile {
+        @media @phone, @tablet {
             max-width: 95vw;
         }
 

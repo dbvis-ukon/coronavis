@@ -1,4 +1,4 @@
-import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import { BreakpointObserver } from "@angular/cdk/layout";
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Feature, MultiPolygon, Point } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
@@ -114,8 +114,6 @@ export class InfoboxComponent implements OnInit {
 
   private aggregatedDiviStatistics: QualitativeTimedStatus;
 
-  isMobile$: Observable<BreakpointState>;
-
   constructor(
     public colormapService: QualitativeColormapService,
     private osmLayerService: OSMLayerService,
@@ -131,8 +129,6 @@ export class InfoboxComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.isMobile$ = this.breakPointObserver.observe('(max-width: 500px');
-
     //close info box if mobile
     const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
     if(isSmallScreen){
