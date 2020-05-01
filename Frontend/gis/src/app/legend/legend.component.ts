@@ -1,3 +1,4 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import moment from 'moment';
@@ -61,12 +62,15 @@ export class LegendComponent implements OnInit {
     private plusMinusPipe: PlusminusPipe,
     private numberPipe: DecimalPipe,
     private i18n: I18nService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private breakpointObs: BreakpointObserver
   ) {
     
   }
 
   ngOnInit(): void {
+    this.legendBedsExtended = this.legendCasesExtended = !this.breakpointObs.isMatched('only screen and (max-width: 499px)')
+
     this.titleCases$ = this.mo$
     .pipe(
       // tap(m => console.log('new mo', m)),

@@ -13,7 +13,7 @@
   mode="vertical"
 ></app-button-panel>
 
-<mat-card *ngIf="mo.extendInfobox && !mo.hideInfobox" [ngClass]="{'mobile': (isMobile$ | async)?.matches === true}">
+<mat-card *ngIf="mo.extendInfobox && !mo.hideInfobox">
 
   <div class="accordion-container">
   <mat-accordion class="accordion">
