@@ -27,6 +27,11 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
     const onAction = (e: L.LeafletMouseEvent, 
     feature: Feature<Geometry, RKICaseDevelopmentProperties>, 
     aggregationLayer: L.GeoJSON<RKICaseDevelopmentProperties>) => {
+
+      // touch drag zoom:
+      if(e.originalEvent.type === 'mousemove') {
+        return;
+      }
       
       const onCloseAction: () => void = () => {
         aggregationLayer.resetStyle(e.target);
@@ -73,7 +78,8 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
       onEachFeature: (feature, layer) => {
         layer.on({
           // on mouseover update tooltip and highlight county
-          click: () => {
+          click: (e) => {
+            console.log('click', e);
             this.tooltipService.close();
             this.matDialog.open(CaseDialogComponent, {
               data: {
