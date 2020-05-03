@@ -26,6 +26,11 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
 
   createOverlay() {
     const onAction = (e: L.LeafletMouseEvent, feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>, aggregationLayer: any) => {
+      // touch drag zoom:
+      if(e.originalEvent.type === 'mousemove') {
+        return;
+      }
+
       const onCloseAction: () => void = () => {
         aggregationLayer.resetStyle(e.target);
       };
