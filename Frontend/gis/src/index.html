@@ -38,23 +38,23 @@
       var touchpoints = []
 
       function registerTouch(e) {
-        var touch = e.touches[0] || e.changedTouches[0]
+        var touches = e.touches || e.changedTouches
         // console.log('registerTouch', touch, e);
-        if(!touch) {
+        if(!touches) {
           return;
         }
-        e.touches.forEach((t, i) => {
-          console.log('register ', i, t.pageX, t.pageY);
-        });
-        var point = {
-          x: touch.pageX,
-          y: touch.pageY
+        // register every finger as a touchpoint
+        for(const touch of touches) {
+          const point = {
+            x: touch.pageX,
+            y: touch.pageY
+          }
+          touchpoints.push(point)
+          setTimeout(function () {
+            // remove touchpoint from list after keep_ms
+            touchpoints.splice(touchpoints.indexOf(point), 1)
+          }, keep_ms)
         }
-        touchpoints.push(point)
-        setTimeout(function () {
-          // remove touchpoint from list after keep_ms
-          touchpoints.splice(touchpoints.indexOf(point), 1)
-        }, keep_ms)
       }
 
       function handleMouseEvent(e) {
