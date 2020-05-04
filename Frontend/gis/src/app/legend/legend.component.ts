@@ -348,4 +348,8 @@ export class LegendComponent implements OnInit {
     return title;
   }
 
+  test(evt) {
+    console.log(evt);
+  }
+
 }

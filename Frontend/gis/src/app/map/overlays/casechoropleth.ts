@@ -10,8 +10,6 @@ import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
 import { Overlay } from './overlay';
 
 export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
-  
-
   constructor(
     name: string,
     hospitals: FeatureCollection<Geometry, RKICaseDevelopmentProperties>,
@@ -28,8 +26,8 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
     feature: Feature<Geometry, RKICaseDevelopmentProperties>, 
     aggregationLayer: L.GeoJSON<RKICaseDevelopmentProperties>) => {
 
-      // touch drag zoom:
-      if(e.originalEvent.type === 'mousemove') {
+      console.log('mouse', e);
+      if((e.originalEvent as any).triggeredByTouch) {
         return;
       }
       

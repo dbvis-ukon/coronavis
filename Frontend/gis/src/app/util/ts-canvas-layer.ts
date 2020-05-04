@@ -127,6 +127,9 @@ export class CanvasLayer extends Layer {
 
     private _onMouseMove(e: LeafletMouseEvent) {
         const evented = this as any;
+        const map = evented._map;
+        if (!map || map.dragging.moving() || map._animatingZoom) { return; }
+
         if (evented._events.mousemove) {
             evented._events.mousemove[0].fn(e);
         }

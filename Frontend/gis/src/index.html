@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>CoronaVis by DBVIS Group</title>
@@ -8,30 +9,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-  <link rel="icon" type="image/gif" href="/assets/icons/favicon.gif"/>
-  <link rel="icon" type="image/png" href="/assets/icons/favicon.png"/>
-  <link rel="icon" type="image/png" href="/assets/icons/favicon-96x96.png" sizes="96x96"/>
-  <link rel="icon" type="image/png" href="/assets/icons/favicon-160x160.png" sizes="160x160"/>
-  <link rel="icon" type="image/png" href="/assets/icons/favicon-192x192.png" sizes="192x192"/>
-  <link rel="icon" type="image/png" href="/assets/icons/favicon-196x196.png" sizes="196x196"/>
+  <link rel="icon" type="image/gif" href="/assets/icons/favicon.gif" />
+  <link rel="icon" type="image/png" href="/assets/icons/favicon.png" />
+  <link rel="icon" type="image/png" href="/assets/icons/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/png" href="/assets/icons/favicon-160x160.png" sizes="160x160" />
+  <link rel="icon" type="image/png" href="/assets/icons/favicon-192x192.png" sizes="192x192" />
+  <link rel="icon" type="image/png" href="/assets/icons/favicon-196x196.png" sizes="196x196" />
 
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png"/>
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-57x57.png" sizes="57x57"/>
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-60x60.png" sizes="60x60"/>
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-72x72.png" sizes="72x72"/>
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-76x76.png" sizes="76x76"/>
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-114x114.png" sizes="114x114"/>
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-120x120.png" sizes="120x120"/>
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-128x128.png" sizes="128x128"/>
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-144x144.png" sizes="144x144"/>
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-152x152.png" sizes="152x152"/>
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180x180.png" sizes="180x180"/>
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-precomposed.png"/>
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-57x57.png" sizes="57x57" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-60x60.png" sizes="60x60" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-72x72.png" sizes="72x72" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-76x76.png" sizes="76x76" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-114x114.png" sizes="114x114" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-120x120.png" sizes="120x120" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-128x128.png" sizes="128x128" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-144x144.png" sizes="144x144" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-152x152.png" sizes="152x152" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180x180.png" sizes="180x180" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-precomposed.png" />
 
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script>
+    (function (target) {
+      var keep_ms = 1000 // how long to keep the touchevents
+      var kill = false // wether to kill any mouse events triggered by touch
+      var touchpoints = []
+
+      function registerTouch(e) {
+        var touch = e.touches[0] || e.changedTouches[0]
+        // console.log('registerTouch', touch, e);
+        if(!touch) {
+          return;
+        }
+        var point = {
+          x: touch.pageX,
+          y: touch.pageY
+        }
+        touchpoints.push(point)
+        setTimeout(function () {
+          // remove touchpoint from list after keep_ms
+          touchpoints.splice(touchpoints.indexOf(point), 1)
+        }, keep_ms)
+      }
+
+      function handleMouseEvent(e) {
+        for (var i in touchpoints) {
+          //check if mouseevent's position is (almost) identical to any previously registered touch events' positions
+          if (Math.abs(touchpoints[i].x - e.pageX) < 2 && Math.abs(touchpoints[i].y - e.pageY) < 2) {
+            //set flag on event
+            e.triggeredByTouch = true
+            //if wanted, kill the event
+            if (kill) {
+              e.cancel = true
+              e.returnValue = false
+              e.cancelBubble = true
+              e.preventDefault()
+              e.stopPropagation()
+            }
+            return
+          }
+        }
+      }
+
+      target.addEventListener('touchstart', registerTouch, true);
+      target.addEventListener('touchend', registerTouch, true);
+
+      // which mouse events to monitor
+      target.addEventListener('mouseover', handleMouseEvent, true);
+      target.addEventListener('mouseenter', handleMouseEvent, true);
+      target.addEventListener('click', handleMouseEvent, true);
+      target.addEventListener('mousemove', handleMouseEvent, true);
+      //target.addEventListener('click',handleMouseEvent,true) - uncomment or add others if wanted
+    })(document)
+
+  </script>
 </head>
+
 <body class="mat-typography">
   <app-root></app-root>
 </body>
+
 </html>
