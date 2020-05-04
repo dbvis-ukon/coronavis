@@ -24,10 +24,12 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
   createOverlay() {
     const onAction = (e: L.LeafletMouseEvent, 
     feature: Feature<Geometry, RKICaseDevelopmentProperties>, 
-    aggregationLayer: L.GeoJSON<RKICaseDevelopmentProperties>) => {
+    aggregationLayer: L.GeoJSON<RKICaseDevelopmentProperties>,
+    layer: L.Layer) => {
+      const map = (layer as any)._map;
 
       console.log('mouse', e);
-      if((e.originalEvent as any).triggeredByTouch) {
+      if((e.originalEvent as any).triggeredByTouch || !map || map.dragging.moving() || map._animatingZoom) {
         return;
       }
       
@@ -86,7 +88,7 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
               }
             })
           },
-          mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer),
+          mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer, layer),
           // on mouseover hide tooltip and reset county to normal sytle
           mouseout: (e: L.LeafletMouseEvent) => {
             this.tooltipService.close();
