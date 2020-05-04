@@ -43,6 +43,9 @@
         if(!touch) {
           return;
         }
+        e.touches.forEach((t, i) => {
+          console.log('register ', i, t.pageX, t.pageY);
+        });
         var point = {
           x: touch.pageX,
           y: touch.pageY
