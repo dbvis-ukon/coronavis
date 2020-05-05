@@ -137,7 +137,7 @@ class Beds(Base):
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        return '(' + self.name + ')'
+        return '<Beds %r>' % (self.name)
 
         
         
@@ -170,7 +170,7 @@ class HospitalExtended(Base):
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        return '<Hospital %r>' % (self.name)
+        return '<HospitalExtended %r>' % (self.name)
 
     def as_dict(self):
         return {
