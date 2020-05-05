@@ -31,64 +31,6 @@
 
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <script>
-    (function (target) {
-      var keep_ms = 1000 // how long to keep the touchevents
-      var kill = false // wether to kill any mouse events triggered by touch
-      var touchpoints = []
-
-      function registerTouch(e) {
-        var touches = e.touches || e.changedTouches
-        // console.log('registerTouch', touch, e);
-        if(!touches) {
-          return;
-        }
-        // register every finger as a touchpoint
-        for(const touch of touches) {
-          const point = {
-            x: touch.pageX,
-            y: touch.pageY
-          }
-          touchpoints.push(point)
-          setTimeout(function () {
-            // remove touchpoint from list after keep_ms
-            touchpoints.splice(touchpoints.indexOf(point), 1)
-          }, keep_ms)
-        }
-      }
-
-      function handleMouseEvent(e) {
-        for (var i in touchpoints) {
-          //check if mouseevent's position is (almost) identical to any previously registered touch events' positions
-          if (Math.abs(touchpoints[i].x - e.pageX) < 2 && Math.abs(touchpoints[i].y - e.pageY) < 2) {
-            //set flag on event
-            e.triggeredByTouch = true
-            //if wanted, kill the event
-            if (kill) {
-              e.cancel = true
-              e.returnValue = false
-              e.cancelBubble = true
-              e.preventDefault()
-              e.stopPropagation()
-            }
-            return
-          }
-        }
-      }
-
-      target.addEventListener('touchstart', registerTouch, true);
-      target.addEventListener('touchmove', registerTouch, true);
-      target.addEventListener('touchend', registerTouch, true);
-
-      // which mouse events to monitor
-      target.addEventListener('mouseover', handleMouseEvent, true);
-      target.addEventListener('mouseenter', handleMouseEvent, true);
-      target.addEventListener('click', handleMouseEvent, true);
-      target.addEventListener('mousemove', handleMouseEvent, true);
-      //target.addEventListener('click',handleMouseEvent,true) - uncomment or add others if wanted
-    })(document)
-
-  </script>
 </head>
 
 <body class="mat-typography">
