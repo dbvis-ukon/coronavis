@@ -9,6 +9,7 @@ import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.serv
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
 import { GlyphLayerService } from '../services/glyph-layer.service';
 import { OSMLayerService } from '../services/osm-layer.service';
+import { TooltipService } from '../services/tooltip.service';
 import { TranslationService } from '../services/translation.service';
 import { FlyTo } from './events/fly-to';
 import { AggregationLevel } from './options/aggregation-level.enum';
@@ -121,7 +122,8 @@ export class MapComponent implements OnInit {
     private caseChoroplehtLayerService: CaseChoroplethLayerService,
     private osmLayerService: OSMLayerService,
     private translationService: TranslationService,
-    @Inject(APP_BASE_HREF) private baseHref: string
+    @Inject(APP_BASE_HREF) private baseHref: string,
+    private tooltipService: TooltipService
   ) {
   }
 
@@ -166,6 +168,10 @@ export class MapComponent implements OnInit {
     this.mymap.on('moveend', () => {
       this.emitMapLocationSettings();
     });
+
+    this.mymap.on('movestart', () => this.tooltipService.close());
+    this.mymap.on('zoomstart', () => this.tooltipService.close());
+    this.mymap.on('dragstart', () => this.tooltipService.close());
 
     this.mymap.on('zoom', () => {
       this.emitMapLocationSettings();
