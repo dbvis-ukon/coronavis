@@ -10,8 +10,6 @@ import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
 import { Overlay } from './overlay';
 
 export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
-  
-
   constructor(
     name: string,
     hospitals: FeatureCollection<Geometry, RKICaseDevelopmentProperties>,
@@ -26,7 +24,15 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
   createOverlay() {
     const onAction = (e: L.LeafletMouseEvent, 
     feature: Feature<Geometry, RKICaseDevelopmentProperties>, 
-    aggregationLayer: L.GeoJSON<RKICaseDevelopmentProperties>) => {
+    aggregationLayer: L.GeoJSON<RKICaseDevelopmentProperties>,
+    layer: L.Layer) => {
+      const map = (layer as any)._map;
+
+      const touches = (e.originalEvent as any).touches;
+
+      if((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map || map.dragging.moving() || map._animatingZoom) {
+        return;
+      }
       
       const onCloseAction: () => void = () => {
         aggregationLayer.resetStyle(e.target);
@@ -73,7 +79,8 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
       onEachFeature: (feature, layer) => {
         layer.on({
           // on mouseover update tooltip and highlight county
-          click: () => {
+          click: (e) => {
+            console.log('click', e);
             this.tooltipService.close();
             this.matDialog.open(CaseDialogComponent, {
               data: {
@@ -82,7 +89,7 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
               }
             })
           },
-          mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer),
+          mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer, layer),
           // on mouseover hide tooltip and reset county to normal sytle
           mouseout: (e: L.LeafletMouseEvent) => {
             this.tooltipService.close();

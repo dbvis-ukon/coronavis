@@ -5,7 +5,7 @@ import L, { Bounds, DomUtil, LeafletMouseEvent, Point } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage/public_api';
 import * as Quadtree from 'quadtree-lib';
 import { BehaviorSubject, NEVER, Observable, Subject, timer } from 'rxjs';
-import { distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
@@ -447,6 +447,17 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   protected onMouseMove(): Observable < GlyphEvent < G, T > | null > {
     return this.mouseMove$
       .pipe(
+        filter(e => {
+          const map = this._map as any;
+
+          const touches = (e.originalEvent as any).touches;
+    
+          if((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map || map.dragging.moving() || map._animatingZoom) {
+            return false;
+          }
+
+          return true;
+        }),
         map(e => {
           const item = this.findItem(e);
           if (!item) {
