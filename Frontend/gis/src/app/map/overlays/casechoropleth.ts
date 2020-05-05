@@ -30,11 +30,9 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
 
       const touches = (e.originalEvent as any).touches;
 
-      console.log('mouse', e);
       if((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map || map.dragging.moving() || map._animatingZoom) {
         return;
       }
-      console.log('mouseover fired', JSON.stringify(e.originalEvent));
       
       const onCloseAction: () => void = () => {
         aggregationLayer.resetStyle(e.target);
