@@ -18,12 +18,8 @@ import { BedGlyphOptions } from './options/bed-glyph-options';
 import { CovidNumberCaseOptions } from './options/covid-number-case-options';
 import { MapLocationSettings } from './options/map-location-settings';
 import { MapOptions } from './options/map-options';
-import { AggregatedGlyphCanvasLayer } from './overlays/aggregated-glyph-canvas.layer';
 import { CaseChoropleth } from './overlays/casechoropleth';
 import { GlyphLayer } from './overlays/GlyphLayer';
-// import 'leaflet-mapbox-gl';
-import { Overlay } from './overlays/overlay';
-import { SingleGlyphCanvasLayer } from './overlays/single-glyph-canvas.layer';
 
 
 enum MapOptionKeys {
@@ -42,6 +38,10 @@ export class MapComponent implements OnInit {
   @ViewChild('main') main;
 
   private bedGlyphOptions$: BehaviorSubject<BedGlyphOptions> = new BehaviorSubject(null);
+
+  private bedBackgroundOptions$: BehaviorSubject<BedBackgroundOptions> = new BehaviorSubject(null);
+
+  private caseChoroplethOptions$: BehaviorSubject<CovidNumberCaseOptions> = new BehaviorSubject(null);
 
   private _mapOptions: MapOptions;
 
@@ -94,7 +94,7 @@ export class MapComponent implements OnInit {
 
   private mymap: L.Map;
 
-  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, Overlay<any>[] | SingleGlyphCanvasLayer[] | AggregatedGlyphCanvasLayer[]>();
+  private layerToFactoryMap = new Map<L.SVGOverlay | L.LayerGroup<any>, GlyphLayer[]>();
 
   private aggregationLevelToGlyphMap = new Map<string, L.LayerGroup<any>>();
 
@@ -102,9 +102,9 @@ export class MapComponent implements OnInit {
 
   private osmHeliportsLayer: L.GeoJSON<any>;
 
-  private covidNumberCaseOptionsKeyToLayer = new Map<String, L.GeoJSON<any>>();
+  private covidNumberCaseOptionsKeyToLayer = new Map<String, L.LayerGroup>();
 
-  private _lastBedCoroplethLayer: L.GeoJSON<any> | null;
+  private _lastBedCoroplethLayer: L.LayerGroup | null;
 
   private previousOptions = new Map();
 
@@ -267,12 +267,14 @@ export class MapComponent implements OnInit {
 
     const bedBackgroundOptions = JSON.stringify(mo.bedBackgroundOptions);
     if (this.previousOptions.get(MapOptionKeys.bedBackgroundOptions) !== bedBackgroundOptions) {
+      this.bedBackgroundOptions$.next(mo.bedBackgroundOptions);
       this.updateBedBackgroundLayer(mo.bedBackgroundOptions);
     }
     this.previousOptions.set(MapOptionKeys.bedBackgroundOptions, bedBackgroundOptions);
 
     const covidNumberCaseOptions = JSON.stringify(mo.covidNumberCaseOptions);
     if (this.previousOptions.get(MapOptionKeys.covidNumberCaseOptions) !== covidNumberCaseOptions) {
+      this.caseChoroplethOptions$.next(mo.covidNumberCaseOptions);
       this.updateCaseChoroplethLayers(mo.covidNumberCaseOptions);
     }
     this.previousOptions.set(MapOptionKeys.covidNumberCaseOptions, covidNumberCaseOptions);
@@ -423,24 +425,26 @@ export class MapComponent implements OnInit {
 
     const key = this.caseChoroplehtLayerService.getKeyCovidNumberCaseOptions(opt);
 
-    this.caseChoroplethSubscription = this.caseChoroplehtLayerService.getLayer(opt)
+    this.caseChoroplethSubscription = this.caseChoroplehtLayerService.getLayer(this.caseChoroplethOptions$)
     .pipe(
       switchMap(l => of(l))
     )
-    .subscribe(factory => {
-      const l = factory.createOverlay();
+    .subscribe(([factory, labels]) => {
+      const background = factory.createOverlay();
+
+      const l = L.layerGroup([background, labels]);
 
       this.removeCaseChoroplethLayers();
 
       this.covidNumberCaseOptionsKeyToLayer.set(key, l);
 
-      this.layerToFactoryMap.set(l, [factory]);
+      this.layerToFactoryMap.set(l, [labels]);
 
       this.mymap.addLayer(l);
 
       this.caseChoroplethLayerChange.emit(factory as CaseChoropleth);
 
-      l.bringToBack();
+      background.bringToBack();
 
       for(const glyphLayer of this.aggregationLevelToGlyphMap.values()) {
         this.bringGlyphLayersToFront(glyphLayer);
@@ -468,13 +472,15 @@ export class MapComponent implements OnInit {
 
     if(o.enabled) {
 
-      this.bedChoroplethSubscription = this.bedChoroplethLayerService.getQualitativeLayer(o)
+      this.bedChoroplethSubscription = this.bedChoroplethLayerService.getQualitativeLayer(this.bedBackgroundOptions$)
       .pipe(
         switchMap(f => of(f))
       )
-      .subscribe(factory => {
+      .subscribe(([factory, labels]) => {
 
-        const layer = factory.createOverlay();
+
+        const background = factory.createOverlay();
+        const layer = L.layerGroup([background, labels]);
 
         this.removeBedChoroplethLayers();
 
@@ -482,7 +488,7 @@ export class MapComponent implements OnInit {
 
         this._lastBedCoroplethLayer = layer;
 
-        layer.bringToBack();
+        background.bringToBack();
       });
 
     }

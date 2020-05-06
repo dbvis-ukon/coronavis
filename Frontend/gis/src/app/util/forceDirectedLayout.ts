@@ -6,8 +6,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, Subject } from 'rxjs';
 import { MAP_FORCE_CACHE_KEY } from "../../constants";
 import { AggregationLevel } from "../map/options/aggregation-level.enum";
-import { AbstractTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
-import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
+import { ForceLayoutProperties } from '../repositories/types/out/abstract-hospital-out';
 
 interface ForceDirectedLayoutEvent<D> {
   type: 'tick' | 'end';
@@ -17,7 +16,7 @@ interface ForceDirectedLayoutEvent<D> {
   data: D;
 }
 
-export class ForceDirectedLayout<G extends Geometry, P extends AbstractHospitalOut<AbstractTimedStatus>> {
+export class ForceDirectedLayout<G extends Geometry, P extends ForceLayoutProperties> {
 
   private levelPositionMap: { [key: number]: number[][] };
   private sim: Simulation<P, any>;

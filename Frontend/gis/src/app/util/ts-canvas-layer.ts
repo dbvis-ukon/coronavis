@@ -31,9 +31,12 @@ export class CanvasLayer extends Layer {
     private _delegate: any
     private _frame: any
 
+    private _options: InteractiveLayerOptions;
+
     // -- initialized is called on prototype
     constructor(options?: InteractiveLayerOptions) {
-        super(options)
+        super(options);
+        this._options = options;
         this._map = null
         this._canvas = null
         this._frame = null
@@ -62,6 +65,9 @@ export class CanvasLayer extends Layer {
     public onAdd(map: Map) {
         this._map = map
         this._canvas = DomUtil.create('canvas', 'leaflet-layer') as HTMLCanvasElement
+        if(this._options.interactive !== true) {
+            DomUtil.addClass(this._canvas, 'leaflet-non-interactive-layer');
+        }
 
         const size = this._map.getSize()
         this._canvas.width = size.x

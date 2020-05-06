@@ -395,7 +395,6 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       [this.getGlyphWidth() / 2, this.getGlyphHeight() / 2]
     ];
 
-    ('force layou update');
     this.forceLayout.update(glyphBoxes, this.data, this._map.getZoom());
   }
 
