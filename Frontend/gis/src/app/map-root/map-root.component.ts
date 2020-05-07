@@ -150,7 +150,15 @@ export class MapRootComponent implements OnInit {
     // will show the snack bar if true
     let restored = false;
 
-    if(paramMap.has(APP_CONFIG_URL_KEY)) {
+    const urlSegments = this.route.snapshot.url;
+    if(urlSegments && urlSegments[0] && urlSegments[0].path === 'lockdown') {
+      const lockdownMlo = this.configService.getLockDownMapOptions();
+
+      this.mapOptions = lockdownMlo;
+
+      this.mapOptions$.next(lockdownMlo);
+
+    } else if(paramMap.has(APP_CONFIG_URL_KEY)) {
       this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY)).then(urlMlo => {
         const mergedMlo = this.configService.overrideMapOptions(urlMlo);
 

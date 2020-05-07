@@ -83,6 +83,26 @@ export class ConfigService {
     return merge<MapOptions, RecursivePartial<MapOptions>, RecursivePartial<MapOptions>>(this.getDefaultMapOptions(), override, override2);
   }
 
+  getLockDownMapOptions(): MapOptions {
+    return this.overrideMapOptions({
+      bedGlyphOptions: {
+        enabled: false
+      },
+      bedBackgroundOptions: {
+        enabled: false
+      },
+      covidNumberCaseOptions: {
+        enabled: true,
+        aggregationLevel: AggregationLevel.county,
+        change: CovidNumberCaseChange.absolute,
+        date: 'now',
+        normalization: CovidNumberCaseNormalization.per100k,
+        timeWindow: CovidNumberCaseTimeWindow.sevenDays,
+        type: CovidNumberCaseType.cases
+      }
+    });
+  }
+
 
   getDefaultMapLocationSettings(): MapLocationSettings {
     return JSON.parse(JSON.stringify(this.defaultMapLocationSettings));
