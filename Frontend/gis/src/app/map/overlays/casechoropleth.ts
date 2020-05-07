@@ -68,7 +68,7 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
         const numbers = this.colorsService.getCaseNumbers(feature.properties, this.options);
 
         return {
-          fillColor: this.colorsService.getChoroplethCaseColor(scaleFn(numbers)),
+          fillColor: this.colorsService.getChoroplethCaseColor(this.options, scaleFn(numbers)),
           weight: 0.5,
           opacity: 1,
           color: 'gray',

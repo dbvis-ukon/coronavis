@@ -3,7 +3,7 @@ import { schemeBlues, schemeGreens } from 'd3';
 import { extent, max } from 'd3-array';
 import { scaleLinear, ScaleLinear, scalePow, ScalePower, scaleQuantize } from 'd3-scale';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
-import { CovidNumberCaseChange, CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
+import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from './case-util.service';
 
@@ -23,23 +23,28 @@ export class CaseChoroplethColormapService {
   private caseChoroplethColorMap = scaleQuantize<string>()
     .domain([-1, 1])
     .range([...schemeGreens[8].slice(0, 7).reverse(), '#fff', ...schemeBlues[8].slice(0, 7)]);
+
+  private lockDownColorMap = scaleQuantize<string>()
+    .domain([0, 1])
+    .range(['#fff5eb','#fee6ce','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#a63603','#7f2704', 'black']);
   
   
   
   constructor(private caseUtil: CaseUtilService) { }
 
-  getColorMap() {
-    return this.caseChoroplethColorMap;
+  private getColorMap(options: CovidNumberCaseOptions) {
+    return options.normalization === CovidNumberCaseNormalization.per100k ? this.lockDownColorMap : this.caseChoroplethColorMap;
   }
 
   getColorMapBins(
+    options: CovidNumberCaseOptions,
     scaleFn?: ScaleLinear<number, number> | ScalePower<number, number>,
     onlyFullNumbers: boolean = false,
     dataExtent: [number, number] = null
   ): ColorMapBin[] {
-    return this.caseChoroplethColorMap.range()
+    return this.getColorMap(options).range()
     .map(color => {
-      const ext = this.caseChoroplethColorMap.invertExtent(color);
+      const ext = this.getColorMap(options).invertExtent(color);
 
       const min = scaleFn ? scaleFn.invert(ext[0]) : ext[0];
       const max = scaleFn ? scaleFn.invert(ext[1]) : ext[1];
@@ -133,12 +138,12 @@ export class CaseChoroplethColormapService {
     dataPoint: Feature<Geometry, RKICaseDevelopmentProperties>, 
     options: CovidNumberCaseOptions
   ): string {
-    return this.getChoroplethCaseColor(scaleFn(this.caseUtil.getCaseNumbers(dataPoint.properties, options)));
+    return this.getChoroplethCaseColor(options, scaleFn(this.caseUtil.getCaseNumbers(dataPoint.properties, options)));
   }
 
 
-  getChoroplethCaseColor(normalizedDiff: number): string {
-    return this.caseChoroplethColorMap(normalizedDiff);
+  getChoroplethCaseColor(options: CovidNumberCaseOptions, normalizedDiff: number): string {
+    return this.getColorMap(options)(normalizedDiff);
   }
 
   public getDomainExtent(
@@ -152,6 +157,12 @@ export class CaseChoroplethColormapService {
       if(actualExtent) {
         return extent<number>(cases);
       }
+
+      if(options.normalization === CovidNumberCaseNormalization.per100k) {
+        console.log('returning lockdown colormap');
+        return [0, (50 / 100000)];
+      }
+
       return [0, max<number>(cases)];
     } else {
       const [minChange, maxChange] = extent(cases.filter(d => d < Infinity));
@@ -159,6 +170,7 @@ export class CaseChoroplethColormapService {
         return [minChange, maxChange];
       }
       const max = Math.max(Math.abs(minChange), Math.abs(maxChange));
+
       return [-max, max];
     }
   }

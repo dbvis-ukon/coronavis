@@ -112,7 +112,7 @@ export class LegendComponent implements OnInit {
     const fullNumbers = mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.absolut 
     && mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute;
 
-    caseBins = this.caseColormap.getColorMapBins(scale, fullNumbers, actualExtent)
+    caseBins = this.caseColormap.getColorMapBins(mo.covidNumberCaseOptions, scale, fullNumbers, actualExtent)
     .map(b => {
       if(mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k && mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute) {
         return {
