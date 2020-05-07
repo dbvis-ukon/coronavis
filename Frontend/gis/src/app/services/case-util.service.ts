@@ -121,7 +121,6 @@ export class CaseUtilService {
           .filter((_, i, n) => i >= (n.length - lastNItems))
           .map((d1, i) => {return {x: i, y: d1.y}});
 
-          console.log('filtered', myXY);
         return linearRegression(myXY);
       })
     )

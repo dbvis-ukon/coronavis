@@ -1,7 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from '../services/case-util.service';
@@ -55,8 +55,7 @@ export class CaseInfoComponent implements OnInit {
     // console.log('name', this.data.name, this.curTimedStatus, this.twentyFourHTimedStatus, this.seventyTwoHTimedStatus);
     this.rollingChart = this.caseUtil.extractXYForCase7DaysPer100k(this.data)
     .pipe(
-      map(d => this.vegaLinechartService.compileChart(d, {xAxisTitle: '', yAxisTitle: 'Cases per 100', width: 400, height: 100})),
-      tap(chart => console.log(JSON.stringify(chart)))
+      map(d => this.vegaLinechartService.compileChart(d, {xAxisTitle: '', yAxisTitle: 'New cases per 100k / 7days', width: 400, height: 150})),
     );
 
     this.trend = this.caseUtil.getTrendForCase7DaysPer100k(this.data, 4)

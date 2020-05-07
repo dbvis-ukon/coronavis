@@ -3,6 +3,7 @@ import L, { Bounds, DomUtil, Point } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage/public_api';
 import * as Quadtree from 'quadtree-lib';
 import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { ForceLayoutProperties, HasCentroid, HasName } from 'src/app/repositories/types/out/abstract-hospital-out';
 import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
 import { CanvasLayer, IViewInfo } from 'src/app/util/ts-canvas-layer';
@@ -54,6 +55,9 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
 
     this.forceLayout.getEvents()
+      .pipe(
+        filter(e => e.type === 'end')
+      )
       .subscribe(e => {
         this.data = e.data;
 
@@ -315,7 +319,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
   // returns height of this wrapped text
   protected drawText(text: string, pt: L.Point, yOffset: number, isHovered: boolean): Bounds {
-    this.ctx.save();
+    // this.ctx.save();
 
     const centerX = pt.x
     const belowGlyhY = pt.y;
@@ -323,15 +327,15 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
     const fontSizeAndHeight = Math.round(11 * this.currentScale);
 
     this.ctx.strokeStyle = 'white';
-    this.ctx.lineWidth = 1;
+    this.ctx.lineWidth = 2;
 
 
     this.ctx.font = `bold ${fontSizeAndHeight}px Roboto`;
     this.ctx.fillStyle = isHovered ? '#193e8a' : 'black';
-    this.ctx.shadowOffsetX = 1;
-    this.ctx.shadowOffsetY = 1;
-    this.ctx.shadowColor = "rgba(255,255,255,1)";
-    this.ctx.shadowBlur = 4;
+    // this.ctx.shadowOffsetX = 1;
+    // this.ctx.shadowOffsetY = 1;
+    // this.ctx.shadowColor = "rgba(255,255,255,1)";
+    // this.ctx.shadowBlur = 4;
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'top';
 
@@ -345,7 +349,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
     const maxWidth = wrappedText.map(m => m.width).reduce((agg, val) => Math.max(agg || 0, val));
 
-    this.ctx.restore();
+    // this.ctx.restore();
 
     return new Bounds(
       new Point(centerX - (maxWidth / 2), belowGlyhY), 

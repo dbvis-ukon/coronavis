@@ -98,11 +98,11 @@ export class ForceDirectedLayout<G extends Geometry, P extends ForceLayoutProper
       // .alpha(0.1)
       //  .velocityDecay(0.6)
         .restart()
-        .on('tick', () => this.obs$.next({
-          type: 'tick',
-          zoom: zoom,
-          data: data
-        }))
+        // .on('tick', () => this.obs$.next({
+        //   type: 'tick',
+        //   zoom: zoom,
+        //   data: data
+        // }))
         .on('end', () => this.forceComplete(zoom));
     }
   }
