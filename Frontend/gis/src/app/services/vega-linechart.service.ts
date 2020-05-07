@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { getMoment } from '../util/date-util';
 
 @Injectable({
   providedIn: 'root'
@@ -79,7 +80,8 @@ export class VegaLinechartService {
             "value": "firebrick"
           }
         }
-      }
+      },
+
     ],
     "width": 400,
     "height": 100
@@ -94,7 +96,11 @@ export class VegaLinechartService {
       xAxisTitle: string,
       yAxisTitle: string,
       width: number,
-      height: number
+      height: number,
+      regression?: {
+        from: string;
+        to: string;
+      }
     }
     ): any {
     if(!data) {
@@ -114,6 +120,24 @@ export class VegaLinechartService {
 
     spec.width = chartOptions.width;
     spec.height = chartOptions.height;
+
+    if(chartOptions.regression) {
+      const from = getMoment(chartOptions.regression.from).valueOf();
+      const to = getMoment(chartOptions.regression.to).valueOf();
+      spec.layer.push({
+        "mark": {"type": "line", "color": "black"},
+        "transform": [
+          {"filter": {"field": "x", "gte": ''+from}},
+          {"filter": {"field": "x", "lte": ''+to}},
+          {"regression": "y", "on": "x", "extent": [from, to]}
+          // {"regression": "y", "on": "x"}
+        ],
+        "encoding": {
+          "x": {"field": "x", "type": "temporal"},
+          "y": {"field": "y", "type": "quantitative"}
+        }
+      });
+    }
 
     return spec;
   }

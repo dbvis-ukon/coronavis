@@ -6,6 +6,7 @@ import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOpt
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from '../services/case-util.service';
 import { VegaLinechartService } from '../services/vega-linechart.service';
+import { getMoment } from '../util/date-util';
 
 @Component({
   selector: 'app-case-info',
@@ -52,13 +53,25 @@ export class CaseInfoComponent implements OnInit {
     [this.curTimedStatus, this.seventyTwoHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.seventyTwoHours);
     [this.curTimedStatus, this.sevenDaysTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.sevenDays);
 
+
+    const nDaysForTrend = 3;
+
     // console.log('name', this.data.name, this.curTimedStatus, this.twentyFourHTimedStatus, this.seventyTwoHTimedStatus);
     this.rollingChart = this.caseUtil.extractXYForCase7DaysPer100k(this.data)
     .pipe(
-      map(d => this.vegaLinechartService.compileChart(d, {xAxisTitle: '', yAxisTitle: 'New cases per 100k / 7days', width: 400, height: 150})),
+      map(d => this.vegaLinechartService.compileChart(d, {
+        xAxisTitle: '', 
+        yAxisTitle: 'New cases per 100k / 7days', 
+        width: 400, 
+        height: 150,
+        regression: {
+          to: getMoment(this.options.date).toISOString(),
+          from: getMoment(this.options.date).subtract(nDaysForTrend, 'days').toISOString()
+        }
+      })),
     );
 
-    this.trend = this.caseUtil.getTrendForCase7DaysPer100k(this.data, this.options.date, 3)
+    this.trend = this.caseUtil.getTrendForCase7DaysPer100k(this.data, this.options.date, nDaysForTrend)
     .pipe(
       map(d => {
         return { m: d.m, b: d.b, rotation: this.caseUtil.getRotationForTrend(d.m)};
