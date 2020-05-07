@@ -63,7 +63,7 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
 
     
 
-    return new Bounds(topLeftPt, new Point(topLeftPt.x + this.rectWidth, topLeftPt.y + this.rectHeight));
+    return new Bounds(topLeftPt, new Point(topLeftPt.x + this.getGlyphWidth(), topLeftPt.y + this.getGlyphHeight()));
   }
 
   protected drawLabel(glyphData: Feature < MultiPolygon, RKICaseDevelopmentProperties > ) {
