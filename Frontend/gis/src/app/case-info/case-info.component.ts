@@ -1,8 +1,12 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import moment from 'moment';
+import { Observable, of } from 'rxjs';
+import { filter, flatMap, map, toArray } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from '../services/case-util.service';
+import { VegaLinechartService } from '../services/vega-linechart.service';
 
 @Component({
   selector: 'app-case-info',
@@ -34,7 +38,13 @@ export class CaseInfoComponent implements OnInit {
 
   sevenDaysTimedStatus: RKICaseTimedStatus;
 
-  constructor(private numberPipe: DecimalPipe, private caseUtil: CaseUtilService) { }
+  rollingChart: Observable<any>;
+
+  constructor(
+    private numberPipe: DecimalPipe, 
+    private caseUtil: CaseUtilService,
+    private vegaLinechartService: VegaLinechartService
+  ) { }
 
   ngOnInit(): void {
     [this.curTimedStatus, this.twentyFourHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.twentyFourhours);
@@ -42,6 +52,18 @@ export class CaseInfoComponent implements OnInit {
     [this.curTimedStatus, this.sevenDaysTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.sevenDays);
 
     // console.log('name', this.data.name, this.curTimedStatus, this.twentyFourHTimedStatus, this.seventyTwoHTimedStatus);
+    this.rollingChart = of(this.data)
+    .pipe(
+      flatMap(d => d.developments),
+      filter((_, i) => i >= 7),
+      map(d => {
+        const t = this.caseUtil.getNowPrevTimedStatusTuple(this.data, moment(d.timestamp).format('YYYY-MM-DD'), CovidNumberCaseTimeWindow.sevenDays);
+        return {
+          x: d.timestamp, 
+          y: t[0].cases_per_100k - t[1].cases_per_100k};}),
+      toArray(),
+      map(d => this.vegaLinechartService.compileChart(d, {xAxisTitle: '', yAxisTitle: 'Cases per 100', width: 600, height: 100}))
+    );
   }
 
   public getCasesPer100kInhabitants(count: number, status: RKICaseTimedStatus, addPlus: boolean = false): string {

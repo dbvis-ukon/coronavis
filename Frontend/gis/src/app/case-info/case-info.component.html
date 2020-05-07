@@ -226,3 +226,7 @@
     </tr>
     </tbody>
 </table>
+
+<div *ngIf="rollingChart | async; let chart">
+    <app-vega [spec]="chart"></app-vega>
+</div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { schemeBlues, schemeGreens } from 'd3';
 import { extent, max } from 'd3-array';
-import { scaleLinear, ScaleLinear, scalePow, ScalePower, scaleQuantize } from 'd3-scale';
+import { scaleLinear, ScaleLinear, scalePow, ScalePower, scaleQuantize, scaleThreshold } from 'd3-scale';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
@@ -24,8 +24,8 @@ export class CaseChoroplethColormapService {
     .domain([-1, 1])
     .range([...schemeGreens[8].slice(0, 7).reverse(), '#fff', ...schemeBlues[8].slice(0, 7)]);
 
-  private lockDownColorMap = scaleQuantize<string>()
-    .domain([0, 1])
+  private lockDownColorMap = scaleThreshold<number, string>()
+    .domain([0/8, 1/8, 2/8, 3/8, 4/8, 5/8, 6/8, 7/8, 1-0.000000000000000001, 1])
     .range(['#fff5eb','#fee6ce','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#a63603','#7f2704', 'black']);
   
   
@@ -182,9 +182,18 @@ export class CaseChoroplethColormapService {
   public getScale(fc: FeatureCollection<Geometry, RKICaseDevelopmentProperties>, options: CovidNumberCaseOptions): ScalePower<number, number> | ScaleLinear<number, number> {
     if(options.change === CovidNumberCaseChange.absolute) {
 
+      if(options.normalization === CovidNumberCaseNormalization.per100k) {
+        return scaleLinear()
+          .domain(this.getDomainExtent(fc, options))
+          .range(this.getRangeExtent(options))
+          .clamp(true);
+      }
+
       return scalePow().exponent(0.33)
         .domain(this.getDomainExtent(fc, options))
         .range(this.getRangeExtent(options));
+
+      
         
     } else {
 
