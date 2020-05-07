@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { filter, flatMap, map, toArray } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
+import { getMoment } from '../util/date-util';
 import { linearRegression } from '../util/regression';
 
 @Injectable({
@@ -27,7 +28,7 @@ export class CaseUtilService {
   }
 
   public getTimedStatusWithOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): RKICaseTimedStatus | undefined {
-    return this.getTimedStatus(data, options.date === 'now' ? moment() : moment(options.date));
+    return this.getTimedStatus(data, getMoment(options.date));
   }
 
   public getNowPrevTimedStatusTupleWithOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): [RKICaseTimedStatus | undefined, RKICaseTimedStatus | undefined] {
@@ -35,7 +36,7 @@ export class CaseUtilService {
   }
 
   public getNowPrevTimedStatusTuple(data: RKICaseDevelopmentProperties, refDateStr: string, timeWindow: CovidNumberCaseTimeWindow): [RKICaseTimedStatus | undefined, RKICaseTimedStatus | undefined] {
-    const dateRef = refDateStr === 'now' ? moment() : moment(refDateStr);
+    const dateRef = getMoment(refDateStr);
     const currentTimedStatus = this.getTimedStatus(data, dateRef);
 
     let prevTimedStatus;
@@ -113,11 +114,14 @@ export class CaseUtilService {
     );
   }
 
-  public getTrendForCase7DaysPer100k(data: RKICaseDevelopmentProperties, lastNItems): Observable<{m: number, b: number}> {
+  public getTrendForCase7DaysPer100k(data: RKICaseDevelopmentProperties, date: string, lastNItems: number): Observable<{m: number, b: number}> {
+    const refDate = getMoment(date);
+
     return this.extractXYForCase7DaysPer100k(data)
     .pipe(
       map(d => {
         const myXY = d
+          .filter(d => getMoment(d.x).isSameOrBefore(refDate))
           .filter((_, i, n) => i >= (n.length - lastNItems))
           .map((d1, i) => {return {x: i, y: d1.y}});
 
