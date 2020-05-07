@@ -200,7 +200,9 @@ SELECT
                 'deaths',
                 c.deaths,
                 'death_rate',
-                c.death_rate
+                c.death_rate,
+                'cases7_per_100k',
+                c.cases7_per_100k
             )
             ORDER BY
                 c.timestamp
@@ -228,7 +230,9 @@ SELECT
             'deaths',
             c.deaths,
             'death_rate',
-            c.death_rate
+            c.death_rate,
+            'cases7_per_100k',
+            c.cases7_per_100k
         )
         ORDER BY
             c.timestamp
@@ -289,7 +293,8 @@ WITH rb_agg AS (
                 AVG(cases_per_population)                           as cases_per_population,
                 SUM(population)                                     as population,
                 SUM(deaths)                                         as deaths,
-                AVG(death_rate)                                     as death_rate
+                AVG(death_rate)                                     as death_rate,
+                AVG(cases7_per_100k)                                as cases7_per_100k
 
          FROM cases_per_county_and_day c
                   LEFT OUTER JOIN regierungsbezirke r ON c.ids LIKE (r.ids || '%')
@@ -324,7 +329,9 @@ SELECT rb_agg.ids,
                            'deaths',
                            rb_agg.deaths,
                            'death_rate',
-                           rb_agg.death_rate
+                           rb_agg.death_rate,
+                            'cases7_per_100k',
+                            rb_agg.cases7_per_100k
                        )
                    ORDER BY
                        rb_agg.timestamp
@@ -352,7 +359,9 @@ SELECT rb_agg.ids,
                            'deaths',
                            rb_agg.deaths,
                            'death_rate',
-                           rb_agg.death_rate
+                           rb_agg.death_rate,
+                            'cases7_per_100k',
+                            rb_agg.cases7_per_100k
                        )
                    ORDER BY
                        rb_agg.timestamp
@@ -409,7 +418,8 @@ WITH bl_agg AS (
                 AVG(cases_per_population)                           as cases_per_population,
                 SUM(population)                                     as population,
                 SUM(deaths)                                         as deaths,
-                AVG(death_rate)                                     as death_rate
+                AVG(death_rate)                                     as death_rate,
+                AVG(cases7_per_100k)                                as cases7_per_100k
 
          FROM cases_per_county_and_day c
                   LEFT OUTER JOIN bundeslaender b ON c.ids LIKE (b.ids || '%')
@@ -444,7 +454,9 @@ SELECT bl_agg.ids,
                            'deaths',
                            bl_agg.deaths,
                            'death_rate',
-                           bl_agg.death_rate
+                           bl_agg.death_rate,
+                            'cases7_per_100k',
+                            bl_agg.cases7_per_100k
                        )
                    ORDER BY
                        bl_agg.timestamp
@@ -472,7 +484,9 @@ SELECT bl_agg.ids,
                            'deaths',
                            bl_agg.deaths,
                            'death_rate',
-                           bl_agg.death_rate
+                           bl_agg.death_rate,
+                            'cases7_per_100k',
+                            bl_agg.cases7_per_100k
                        )
                    ORDER BY
                        bl_agg.timestamp
@@ -528,7 +542,8 @@ WITH bl_agg AS (
                 AVG(cases_per_population)                           as cases_per_population,
                 SUM(population)                                     as population,
                 SUM(deaths)                                         as deaths,
-                AVG(death_rate)                                     as death_rate
+                AVG(death_rate)                                     as death_rate,
+                AVG(cases7_per_100k)                                as cases7_per_100k
 
          FROM cases_per_county_and_day c
          CROSS JOIN germany g
@@ -563,7 +578,9 @@ SELECT bl_agg.ids,
                            'deaths',
                            bl_agg.deaths,
                            'death_rate',
-                           bl_agg.death_rate
+                           bl_agg.death_rate,
+                            'cases7_per_100k',
+                            bl_agg.cases7_per_100k
                        )
                    ORDER BY
                        bl_agg.timestamp
@@ -591,7 +608,9 @@ SELECT bl_agg.ids,
                            'deaths',
                            bl_agg.deaths,
                            'death_rate',
-                           bl_agg.death_rate
+                           bl_agg.death_rate,
+                            'cases7_per_100k',
+                            bl_agg.cases7_per_100k
                        )
                    ORDER BY
                        bl_agg.timestamp
