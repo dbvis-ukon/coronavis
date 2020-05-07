@@ -39,7 +39,7 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
     this.ctx.fillStyle = 'white';
     this.ctx.fillRect(topLeftPt.x, topLeftPt.y, this.getGlyphWidth(), this.getGlyphHeight());
 
-    this.caseUtil.getTrendForCase7DaysPer100k(glyphData.properties, 4)
+    this.caseUtil.getTrendForCase7DaysPer100k(glyphData.properties, 3)
     .pipe(
       map(t => this.caseUtil.getRotationForTrend(t.m))
     )

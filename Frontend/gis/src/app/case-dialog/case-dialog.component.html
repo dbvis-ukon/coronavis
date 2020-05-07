@@ -1,7 +1,7 @@
 <div mat-dialog-title>
   <div class="title-row">
     <div class="title-row-title">
-      <h3 class="name">{{ data.data.name }}</h3>
+      <h3 class="name">{{ data.data.description ? data.data.description + ' ' : '' }}{{ data.data.name }}</h3>
 
       <p class="numHospitals" *ngIf="this.currentTimedStatus">{{ this.currentTimedStatus.population | number }} <span i18n="case-tooltip|cases@@residents">Einwohner</span></p>
     </div>

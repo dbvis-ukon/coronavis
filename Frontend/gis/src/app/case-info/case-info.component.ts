@@ -58,7 +58,7 @@ export class CaseInfoComponent implements OnInit {
       map(d => this.vegaLinechartService.compileChart(d, {xAxisTitle: '', yAxisTitle: 'New cases per 100k / 7days', width: 400, height: 150})),
     );
 
-    this.trend = this.caseUtil.getTrendForCase7DaysPer100k(this.data, 4)
+    this.trend = this.caseUtil.getTrendForCase7DaysPer100k(this.data, 3)
     .pipe(
       map(d => {
         return { m: d.m, b: d.b, rotation: this.caseUtil.getRotationForTrend(d.m)};
