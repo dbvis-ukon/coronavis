@@ -18,7 +18,7 @@
   <div class="accordion-container">
   <mat-accordion class="accordion">
 
-    <mat-expansion-panel expanded="true">
+    <mat-expansion-panel [expanded]="mo.bedGlyphOptions.enabled || mo.bedBackgroundOptions.enabled">
       <mat-expansion-panel-header>
         <mat-panel-title class="flexPanelTitle">
             <mat-icon>{{ mo.bedGlyphOptions.enabled || mo.bedBackgroundOptions.enabled ? 'toggle_on' : 'toggle_off' }}</mat-icon> 
@@ -165,7 +165,7 @@
     </mat-expansion-panel>
 
 
-    <mat-expansion-panel>
+    <mat-expansion-panel [expanded]="mo.covidNumberCaseOptions.enabled">
       <mat-expansion-panel-header>
         <mat-panel-title class="flexPanelTitle">
           <mat-icon>{{ mo.covidNumberCaseOptions.enabled ? 'toggle_on' : 'toggle_off' }}</mat-icon> 
@@ -310,7 +310,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel [expanded]="mo.showOsmHospitals || mo.showOsmHeliports">
       <mat-expansion-panel-header>
         <mat-panel-title class="flexPanelTitle">
           <mat-icon>{{ mo.showOsmHeliports || mo.showOsmHospitals ? 'toggle_on' : 'toggle_off' }}</mat-icon> 
