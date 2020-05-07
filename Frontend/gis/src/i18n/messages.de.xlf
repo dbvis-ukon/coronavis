@@ -47,12 +47,21 @@
       <segment state="final">
         <source>letzte 72h</source>
       <target>letzte 72h</target></segment>
+    </unit><unit id="7d">
+      <notes>
+        <note category="description">7d</note>
+        <note category="meaning">case-tooltip</note>
+        <note category="location">src/app/case-info/case-info.component.html:15</note>
+      </notes>
+      <segment state="final">
+        <source>letzte 7t</source>
+      <target>letzte 7t</target></segment>
     </unit><unit id="sick">
       <notes>
         <note category="description">sick</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:19</note></notes>
+      <note category="location">src/app/case-info/case-info.component.html:20</note></notes>
       <segment state="final">
         <source>Erkrankte</source>
       <target>Erkrankte</target></segment>
@@ -61,7 +70,7 @@
         <note category="description">deaths</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:57</note></notes>
+      <note category="location">src/app/case-info/case-info.component.html:72</note></notes>
       <segment state="final">
         <source>Todesfälle</source>
       <target>Todesfälle</target></segment>
@@ -70,7 +79,7 @@
         <note category="description">sickScale</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:95</note></notes>
+      <note category="location">src/app/case-info/case-info.component.html:124</note></notes>
       <segment state="final">
         <source>Erkrankte je 100.000 Einwohner</source>
       <target>Erkrankte je 100.000 Einwohner</target></segment>
@@ -79,7 +88,7 @@
         <note category="description">deathScale</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:133</note></notes>
+      <note category="location">src/app/case-info/case-info.component.html:176</note></notes>
       <segment state="final">
         <source>Todesfälle je 100.000 Einwohner</source>
       <target>Todesfälle je 100.000 Einwohner</target></segment>
@@ -1114,30 +1123,41 @@
 
       <note category="location">src/app/infobox/infobox.component.html:235</note></notes>
       <segment state="final">
-        <source>letzte 24 Stunden</source>
-      <target>letzte 24 Stunden</target></segment>
+        <source>24 Std.
+              </source>
+      <target>24 Std.
+              </target></segment>
     </unit><unit id="infoboxTime72">
       <notes>
 
       <note category="location">src/app/infobox/infobox.component.html:237</note></notes>
       <segment state="final">
-        <source>letzte 72
-                Stunden
+        <source>72
+                Std.
               </source>
-      <target>letzte 72
-                Stunden
+      <target>72
+                Std.
+              </target></segment>
+    </unit><unit id="infoboxTime7Days">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:240,241</note>
+      </notes>
+      <segment state="final">
+        <source>7 Tage
+              </source>
+      <target>7 Tage
               </target></segment>
     </unit><unit id="infoboxCaseNum">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:246</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:248</note></notes>
       <segment state="final">
         <source>Fallzahlen</source>
       <target>Fallzahlen</target></segment>
     </unit><unit id="infoboxCasesAll">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:255</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:257</note></notes>
       <segment state="final">
         <source>Alle erfassten
                 Fälle
@@ -1148,42 +1168,42 @@
     </unit><unit id="infoboxCasesDiff">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:259</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:261</note></notes>
       <segment state="final">
         <source>Veränderung im gewählten Zeitraum</source>
       <target>Veränderung im gewählten Zeitraum</target></segment>
     </unit><unit id="infoboxType">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:268</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:270</note></notes>
       <segment state="final">
         <source>Art</source>
       <target>Art</target></segment>
     </unit><unit id="infoboxTypeSick">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:277</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:279</note></notes>
       <segment state="final">
         <source>Erkrankungen</source>
       <target>Erkrankungen</target></segment>
     </unit><unit id="infoboxTypeDeath">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:279</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:281</note></notes>
       <segment state="final">
         <source>Todesfälle</source>
       <target>Todesfälle</target></segment>
     </unit><unit id="infoboxNorm">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:287</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:289</note></notes>
       <segment state="final">
         <source>Normalisierung</source>
       <target>Normalisierung</target></segment>
     </unit><unit id="infoboxNornNone">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:296</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:298</note></notes>
       <segment state="final">
         <source>Keine
                 Normalisierung
@@ -1194,7 +1214,7 @@
     </unit><unit id="infoboxNornYes">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:300</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:302</note></notes>
       <segment state="final">
         <source>Je
                 100.000 Einwohner
@@ -1205,7 +1225,7 @@
     </unit><unit id="infoboxGeo">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:315</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:317</note></notes>
       <segment state="final">
         <source>
           Geographische Verortung
@@ -1216,7 +1236,7 @@
     </unit><unit id="infoboxGeoHospital">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:329</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:331</note></notes>
       <segment state="final">
         <source>Krankenhäuser
         </source>
@@ -1225,7 +1245,7 @@
     </unit><unit id="infoboxGeoHeli">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:337</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:339</note></notes>
       <segment state="final">
         <source>Hubschrauberlandeplätze
         </source>
@@ -1234,7 +1254,7 @@
     </unit><unit id="infoboxData">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:345</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:347</note></notes>
       <segment state="final">
         <source>
           Datenquellen
@@ -1245,7 +1265,7 @@
     </unit><unit id="infoboxDIVI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:353</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:355</note></notes>
       <segment state="final">
         <source>DIVI
             Intensivregister</source>
@@ -1254,21 +1274,21 @@
     </unit><unit id="infoboxRKI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:358</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:360</note></notes>
       <segment state="final">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institut</target></segment>
     </unit><unit id="infoboxRKICases">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:362</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:364</note></notes>
       <segment state="final">
         <source>• Covid-19 Fallzahlen</source>
       <target>• Covid-19 Fallzahlen</target></segment>
     </unit><unit id="infoboxDESTATIS">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:366</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:368</note></notes>
       <segment state="final">
         <source>Statistisches Bundesamt</source>
       <target>Statistisches Bundesamt</target></segment>
@@ -1310,14 +1330,14 @@
       <notes>
         
         
-      <note category="location">src/app/legend/legend.component.html:8</note><note category="location">src/app/legend/legend.component.html:50</note></notes>
+      <note category="location">src/app/legend/legend.component.html:7</note><note category="location">src/app/legend/legend.component.html:49</note></notes>
       <segment state="final">
         <source>Klicken um Legende ein-/auszuklappen</source>
       <target>Klicken um Legende ein-/auszuklappen</target></segment>
     </unit><unit id="legendDatasourceRki">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:40</note></notes>
+      <note category="location">src/app/legend/legend.component.html:39</note></notes>
       <segment state="final">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institut</pc></source>
       <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institut</pc></target></segment>
@@ -1359,7 +1379,7 @@
     </unit><unit id="legendDatasourceDivi">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:77</note></notes>
+      <note category="location">src/app/legend/legend.component.html:76</note></notes>
       <segment state="final">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></source>
       <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></target></segment>
