@@ -1,12 +1,21 @@
 import { Injectable } from '@angular/core';
+import { ScaleLinear, scaleLinear } from 'd3-scale';
 import moment, { Moment } from 'moment';
+import { Observable, of } from 'rxjs';
+import { filter, flatMap, map, toArray } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
+import { linearRegression } from '../util/regression';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CaseUtilService {
+
+  private rotationScale: ScaleLinear<number, number> = scaleLinear()
+  .domain([-5, 5])
+  .range([45, -45])
+  .clamp(true);
 
   constructor() { }
 
@@ -70,6 +79,10 @@ export class CaseUtilService {
           return undefined;
         }
         unnormalizedResult = now - prev;
+
+        if(currentTimedStatus.cases7_per_100k && options.timeWindow === CovidNumberCaseTimeWindow.sevenDays && options.normalization === CovidNumberCaseNormalization.per100k) {
+          unnormalizedResult = (currentTimedStatus.cases7_per_100k / 100000) * currentTimedStatus.population;
+        }
       }
     } else {
       if (options.timeWindow === CovidNumberCaseTimeWindow.all) {
@@ -84,6 +97,38 @@ export class CaseUtilService {
     return options.normalization === CovidNumberCaseNormalization.absolut ?
       unnormalizedResult :
       unnormalizedResult / currentTimedStatus.population;
+  }
+
+  public extractXYForCase7DaysPer100k(data: RKICaseDevelopmentProperties) {
+    return of(data)
+    .pipe(
+      flatMap(d => d.developments),
+      filter((_, i) => i >= 7),
+      map(d => {
+        const t = this.getNowPrevTimedStatusTuple(data, moment(d.timestamp).format('YYYY-MM-DD'), CovidNumberCaseTimeWindow.sevenDays);
+        return {
+          x: d.timestamp, 
+          y: t[0].cases7_per_100k || (t[0].cases_per_100k - t[1].cases_per_100k)};}),
+      toArray()
+    );
+  }
+
+  public getTrendForCase7DaysPer100k(data: RKICaseDevelopmentProperties, lastNItems): Observable<{m: number, b: number}> {
+    return this.extractXYForCase7DaysPer100k(data)
+    .pipe(
+      map(d => {
+        const myXY = d
+          .filter((_, i, n) => i >= (n.length - lastNItems))
+          .map((d1, i) => {return {x: i, y: d1.y}});
+
+          console.log('filtered', myXY);
+        return linearRegression(myXY);
+      })
+    )
+  }
+
+  public getRotationForTrend(m: number): number {
+    return this.rotationScale(m);
   }
 
   getTypeAccessorFnWithOptions(options: CovidNumberCaseOptions): (d: RKICaseTimedStatus) => number | undefined {

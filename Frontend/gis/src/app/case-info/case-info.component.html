@@ -161,7 +161,7 @@
             <div *ngIf="this.sevenDaysTimedStatus"
             [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.sevenDays, eChange.absolute)}"
             >
-                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.cases - this.sevenDaysTimedStatus.cases, this.curTimedStatus, true) }}
+                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.cases7_per_100k ? (curTimedStatus.cases7_per_100k / 100000) * curTimedStatus.population : (curTimedStatus.cases - this.sevenDaysTimedStatus.cases), this.curTimedStatus, true) }}
             </div>
         </td>
         <td>
@@ -227,6 +227,18 @@
     </tbody>
 </table>
 
-<div *ngIf="rollingChart | async; let chart">
-    <app-vega [spec]="chart"></app-vega>
+<div class="trend-wrapper">
+    <div *ngIf="rollingChart | async; let chart">
+        <app-vega [spec]="chart"></app-vega>
+    </div>
+    
+    <div class="trend-icon-wrapper" *ngIf="trend | async; let t">
+        <p i18n="@@caseInfoTrendLastThreeDays">Trend der letzten 3 Tage</p>
+
+        <mat-icon class="trend-icon" aria-hidden="false" aria-label="Example home icon" [ngStyle]="{'transform': 'rotate(' + t.rotation + 'deg)'}">trending_flat</mat-icon>
+
+        <p i18n="@@caseInfoTrendPerDay">{{ t.m | plusminus }} pro Tag</p>
+    </div>
 </div>
+
+

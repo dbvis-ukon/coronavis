@@ -1,8 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import moment from 'moment';
-import { Observable, of } from 'rxjs';
-import { filter, flatMap, map, toArray } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from '../services/case-util.service';
@@ -40,6 +39,8 @@ export class CaseInfoComponent implements OnInit {
 
   rollingChart: Observable<any>;
 
+  trend: Observable<{m: number, b: number, rotation: number}>;
+
   constructor(
     private numberPipe: DecimalPipe, 
     private caseUtil: CaseUtilService,
@@ -52,17 +53,17 @@ export class CaseInfoComponent implements OnInit {
     [this.curTimedStatus, this.sevenDaysTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.sevenDays);
 
     // console.log('name', this.data.name, this.curTimedStatus, this.twentyFourHTimedStatus, this.seventyTwoHTimedStatus);
-    this.rollingChart = of(this.data)
+    this.rollingChart = this.caseUtil.extractXYForCase7DaysPer100k(this.data)
     .pipe(
-      flatMap(d => d.developments),
-      filter((_, i) => i >= 7),
+      map(d => this.vegaLinechartService.compileChart(d, {xAxisTitle: '', yAxisTitle: 'Cases per 100', width: 400, height: 100})),
+      tap(chart => console.log(JSON.stringify(chart)))
+    );
+
+    this.trend = this.caseUtil.getTrendForCase7DaysPer100k(this.data, 4)
+    .pipe(
       map(d => {
-        const t = this.caseUtil.getNowPrevTimedStatusTuple(this.data, moment(d.timestamp).format('YYYY-MM-DD'), CovidNumberCaseTimeWindow.sevenDays);
-        return {
-          x: d.timestamp, 
-          y: t[0].cases_per_100k - t[1].cases_per_100k};}),
-      toArray(),
-      map(d => this.vegaLinechartService.compileChart(d, {xAxisTitle: '', yAxisTitle: 'Cases per 100', width: 600, height: 100}))
+        return { m: d.m, b: d.b, rotation: this.caseUtil.getRotationForTrend(d.m)};
+      })
     );
   }
 

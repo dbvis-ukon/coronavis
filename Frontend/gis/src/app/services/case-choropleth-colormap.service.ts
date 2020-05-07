@@ -159,7 +159,6 @@ export class CaseChoroplethColormapService {
       }
 
       if(options.normalization === CovidNumberCaseNormalization.per100k) {
-        console.log('returning lockdown colormap');
         return [0, (50 / 100000)];
       }
 

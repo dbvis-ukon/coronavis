@@ -309,7 +309,7 @@ export class LegendComponent implements OnInit {
 
       title += "Veränderung"
 
-      title += mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours ? " (24h)" : " (72h)";
+      title += '(' + mo.covidNumberCaseOptions.timeWindow + ')';
 
       title += " der ";
     }

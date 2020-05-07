@@ -92,6 +92,20 @@
       <segment state="final">
         <source>Todesfälle je 100.000 Einwohner</source>
       <target>Todesfälle je 100.000 Einwohner</target></segment>
+    </unit><unit id="caseInfoTrendLastThreeDays">
+      <notes>
+        <note category="location">src/app/case-info/case-info.component.html:236</note>
+      </notes>
+      <segment state="final">
+        <source>Trend der letzten 3 Tage</source>
+      <target>Trend der letzten 3 Tage</target></segment>
+    </unit><unit id="caseInfoTrendPerDay">
+      <notes>
+        <note category="location">src/app/case-info/case-info.component.html:240</note>
+      </notes>
+      <segment state="final">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> pro Tag</source>
+      <target><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> pro Tag</target></segment>
     </unit><unit id="button11">
       <notes>
         <note category="description"> help</note>
