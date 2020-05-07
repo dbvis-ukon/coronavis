@@ -40,6 +40,9 @@ export class CaseUtilService {
       case CovidNumberCaseTimeWindow.seventyTwoHours:
         prevTimedStatus = this.getTimedStatus(data, dateRef.subtract(3, 'days'));
         break;
+      case CovidNumberCaseTimeWindow.sevenDays:
+        prevTimedStatus = this.getTimedStatus(data, dateRef.subtract(7, 'days'));
+        break;
     }
 
     return [currentTimedStatus, prevTimedStatus];

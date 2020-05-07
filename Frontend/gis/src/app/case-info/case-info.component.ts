@@ -32,11 +32,14 @@ export class CaseInfoComponent implements OnInit {
 
   seventyTwoHTimedStatus: RKICaseTimedStatus;
 
+  sevenDaysTimedStatus: RKICaseTimedStatus;
+
   constructor(private numberPipe: DecimalPipe, private caseUtil: CaseUtilService) { }
 
   ngOnInit(): void {
     [this.curTimedStatus, this.twentyFourHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.twentyFourhours);
     [this.curTimedStatus, this.seventyTwoHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.seventyTwoHours);
+    [this.curTimedStatus, this.sevenDaysTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.sevenDays);
 
     // console.log('name', this.data.name, this.curTimedStatus, this.twentyFourHTimedStatus, this.seventyTwoHTimedStatus);
   }

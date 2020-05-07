@@ -12,6 +12,8 @@ export enum CovidNumberCaseChange {
 
     seventyTwoHours = '72h',
 
+    sevenDays = '7d',
+
     all = 'all',
   }
 
