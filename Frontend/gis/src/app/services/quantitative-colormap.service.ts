@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import * as d3 from 'd3';
+import { interpolateRgb, scaleOrdinal, scaleQuantize, scaleThreshold } from 'd3';
+import { scaleLinear } from 'd3-scale';
 import { BedType } from '../map/options/bed-type.enum';
 import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
 import { QuantitativeBedStatusSummary } from './types/bed-status-summary';
@@ -17,24 +18,24 @@ export class QuantitativeColormapService {
   public static bedStatusThresholdsColors = ['#c2cbd4', 'rgb(198,106,75)', 'rgb(230,181,72)', 'rgb(113,167,133)' ];
   public static bedStatusThresholds = [0, 5, 10];
 
-  public static BedStatusColor = d3.scaleLinear<string, string>()
+  public static BedStatusColor = scaleLinear<string, string>()
       .domain([0, 0.5, 1])
       .range(QuantitativeColormapService.bedStatusColors)
-      .interpolate(d3.interpolateRgb.gamma(2.2));
+      .interpolate(interpolateRgb.gamma(2.2));
 
 
-  private singleHospitalCM = d3.scaleOrdinal<string, string>()
+  private singleHospitalCM = scaleOrdinal<string, string>()
     .domain(QuantitativeColormapService.bedStati)
     .range([...QuantitativeColormapService.bedStatusColors, '#c2cbd4', '#bbb']);
 
-  private singleHospitalCMStates = d3.scaleThreshold<number, string>()
+  private singleHospitalCMStates = scaleThreshold<number, string>()
     .domain(QuantitativeColormapService.bedStatusThresholds)
     .range(QuantitativeColormapService.bedStatusThresholdsColors);
 
-  private continousColorMap = d3.scaleLinear<string, string>()
+  private continousColorMap = scaleLinear<string, string>()
     .domain([0, 0.5, 1])
     .range(QuantitativeColormapService.bedStatusColors)
-    .interpolate(d3.interpolateRgb.gamma(2.2));
+    .interpolate(interpolateRgb.gamma(2.2));
   getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
     return this.singleHospitalCM;
   }
@@ -73,7 +74,7 @@ export class QuantitativeColormapService {
     }
 
     const score = 1 - bedStatus.free / (bedStatus.full + bedStatus.free);
-    const normalizeValues = d3.scaleQuantize()
+    const normalizeValues = scaleQuantize()
       .domain([0, 1])
       .range([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]);
 
