@@ -2,7 +2,6 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Feature, MultiPolygon, Point } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
-import moment from 'moment';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { distinctUntilChanged, map, mergeMap, tap } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
@@ -28,6 +27,7 @@ import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TooltipService } from '../services/tooltip.service';
 import { TranslationService } from '../services/translation.service';
+import { getMoment } from '../util/date-util';
 
 interface GlyphEntity {
   name: string;
@@ -144,7 +144,7 @@ export class InfoboxComponent implements OnInit {
     .pipe(
       distinctUntilChanged(),
       tap(() => this.aggregateStatisticsLoading$.next(true)),
-      map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate()),
+      map(s => getMoment(s).endOf('day').toDate()),
       // tap(refDate => console.log('refdate', refDate)),
       mergeMap(refDate => {
         const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate);

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import moment from 'moment';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { concatMap, tap } from 'rxjs/operators';
@@ -7,7 +6,7 @@ import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitativ
 import { RKICaseDevelopmentRepository } from '../repositories/rki-case-development.repository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
-import { getStrDate } from '../util/date-util';
+import { getMoment, getStrDate } from '../util/date-util';
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +48,7 @@ export class CountryAggregatorService {
         if(!refDate) {
           refDate = new Date();
         }
-        const t = moment(refDate).format('YYYY-MM-DD');
+        const t = getMoment(refDate).format('YYYY-MM-DD');
         if(m.size === 0) {
           return this.fetchMap(cache, lastNumberOfDays)
           .pipe(
@@ -71,7 +70,7 @@ export class CountryAggregatorService {
         const map: Map<string, QualitativeTimedStatus> = new Map();
 
         feature.properties.developments.forEach(d => {
-          const t = moment(d.timestamp).format('YYYY-MM-DD');
+          const t = getMoment(d.timestamp).format('YYYY-MM-DD');
 
           map.set(t, d);
         })

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ScaleLinear, scaleLinear } from 'd3-scale';
-import moment, { Moment } from 'moment';
+import { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
 import { filter, flatMap, map, toArray } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
@@ -106,7 +106,7 @@ export class CaseUtilService {
       flatMap(d => d.developments),
       filter((_, i) => i >= 7),
       map(d => {
-        const t = this.getNowPrevTimedStatusTuple(data, moment(d.timestamp).format('YYYY-MM-DD'), CovidNumberCaseTimeWindow.sevenDays);
+        const t = this.getNowPrevTimedStatusTuple(data, getMoment(d.timestamp).format('YYYY-MM-DD'), CovidNumberCaseTimeWindow.sevenDays);
         return {
           x: d.timestamp, 
           y: t[0].cases7_per_100k || (t[0].cases_per_100k - t[1].cases_per_100k)};}),

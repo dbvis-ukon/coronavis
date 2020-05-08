@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment';
 
-export function getMoment(strDate: string): Moment {
+export function getMoment(strDate: string | Date): Moment {
   return strDate === 'now' ? moment() : moment(strDate);
 }
 

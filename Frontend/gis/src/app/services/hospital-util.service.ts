@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Feature, FeatureCollection, Geometry, MultiPolygon, Point } from 'geojson';
-import moment from 'moment';
 import { filter } from 'rxjs/operators';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { AbstractTimedStatus, QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -8,6 +7,7 @@ import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { getMoment } from '../util/date-util';
 
 @Injectable({
   providedIn: 'root'
@@ -84,17 +84,16 @@ export class HospitalUtilService {
     }
     
     if(beforeDate) {
-      const mDate = moment(beforeDate).startOf('day');
+      const mDate = getMoment(beforeDate).startOf('day');
 
       const filtered = []
       for(let i = entries.length - 1; i >= 0; i--) {
         const d = entries[i];
-        const t = moment(d.timestamp).startOf('day');
+        const t = getMoment(d.timestamp).startOf('day');
 
         // console.log(t.format('YYYY-MM-DD'), mDate.format('YYYY-MM-DD'), t.isSameOrBefore(mDate), t.isSameOrAfter(mDate))
 
         if(t.isSameOrBefore(mDate)) {
-          // console.log('add', moment(d.timestamp));
           filtered.push(d);
           break;
         }
