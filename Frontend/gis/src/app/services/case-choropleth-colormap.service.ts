@@ -3,7 +3,7 @@ import { schemeBlues, schemeGreens } from 'd3';
 import { extent, max } from 'd3-array';
 import { scaleLinear, ScaleLinear, scalePow, ScalePower, scaleQuantize, scaleThreshold } from 'd3-scale';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
-import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
+import { CovidNumberCaseChange, CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from './case-util.service';
 
@@ -158,7 +158,7 @@ export class CaseChoroplethColormapService {
         return extent<number>(cases);
       }
 
-      if(options.normalization === CovidNumberCaseNormalization.per100k) {
+      if(this.caseUtil.isLockdownMode(options)) {
         return [0, (50 / 100000)];
       }
 
