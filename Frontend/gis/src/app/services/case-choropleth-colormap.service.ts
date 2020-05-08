@@ -33,7 +33,7 @@ export class CaseChoroplethColormapService {
   constructor(private caseUtil: CaseUtilService) { }
 
   private getColorMap(options: CovidNumberCaseOptions) {
-    return options.normalization === CovidNumberCaseNormalization.per100k ? this.lockDownColorMap : this.caseChoroplethColorMap;
+    return this.caseUtil.isLockdownMode(options) ? this.lockDownColorMap : this.caseChoroplethColorMap;
   }
 
   getColorMapBins(
@@ -181,7 +181,7 @@ export class CaseChoroplethColormapService {
   public getScale(fc: FeatureCollection<Geometry, RKICaseDevelopmentProperties>, options: CovidNumberCaseOptions): ScalePower<number, number> | ScaleLinear<number, number> {
     if(options.change === CovidNumberCaseChange.absolute) {
 
-      if(options.normalization === CovidNumberCaseNormalization.per100k) {
+      if(this.caseUtil.isLockdownMode(options)) {
         return scaleLinear()
           .domain(this.getDomainExtent(fc, options))
           .range(this.getRangeExtent(options))

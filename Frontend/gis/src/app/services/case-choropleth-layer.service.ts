@@ -4,7 +4,7 @@ import { MultiPolygon } from 'geojson';
 import { LocalStorageService } from 'ngx-webstorage';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow } from '../map/options/covid-number-case-options';
+import { CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
 import { CaseTrendCanvasLayer } from '../map/overlays/case-trend-canvas.layer';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { LabelCanvasLayer } from '../map/overlays/label-canvas.layer';
@@ -38,7 +38,7 @@ export class CaseChoroplethLayerService {
         map(data => 
           {
             let lblLayer: LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions>;
-            if(options.timeWindow === CovidNumberCaseTimeWindow.sevenDays && options.normalization === CovidNumberCaseNormalization.per100k) {
+            if(this.caseUtil.isLockdownMode(options)) {
               lblLayer = new CaseTrendCanvasLayer(this.getKeyCovidNumberCaseOptions(options)+'_labels', data, options.aggregationLevel, options$, this.storage, this.caseUtil)
             } else {
               lblLayer = new LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions>(this.getKeyCovidNumberCaseOptions(options)+'_labels', data, options.aggregationLevel, options$, this.storage);

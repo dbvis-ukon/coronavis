@@ -20,6 +20,12 @@ export class CaseUtilService {
 
   constructor() { }
 
+  public isLockdownMode(options: CovidNumberCaseOptions) {
+    return options.normalization === CovidNumberCaseNormalization.per100k
+    && options.timeWindow === CovidNumberCaseTimeWindow.sevenDays
+    && options.type === CovidNumberCaseType.cases;
+  }
+
 
   public getTimedStatus(data: RKICaseDevelopmentProperties, date: Moment): RKICaseTimedStatus | undefined {
     const dateKey = date.format('YYYY-MM-DD');
