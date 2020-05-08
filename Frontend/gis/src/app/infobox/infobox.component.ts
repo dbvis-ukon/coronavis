@@ -266,6 +266,16 @@ export class InfoboxComponent implements OnInit {
   }
 
   emitMapOptions() {
+    if(this.mo.bedGlyphOptions.enabled) {
+      this.mo.bedBackgroundOptions.showLabels = false;
+      this.mo.covidNumberCaseOptions.showLabels = false;
+      this.mo.covidNumberCaseOptions.showTrendGlyphs = false;
+    } else {
+      this.mo.bedBackgroundOptions.showLabels = true;
+      this.mo.covidNumberCaseOptions.showLabels = true;
+      this.mo.covidNumberCaseOptions.showTrendGlyphs = true;
+    }
+
     this.updateHospitals();
     this.mapOptionsChange.emit({...this.mo});
   }

@@ -8,6 +8,8 @@ import { ForceLayoutProperties, HasCentroid, HasName } from 'src/app/repositorie
 import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
 import { CanvasLayer, IViewInfo } from 'src/app/util/ts-canvas-layer';
 import { AggregationLevel } from '../options/aggregation-level.enum';
+import { BedBackgroundOptions } from '../options/bed-background-options';
+import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
 import { GlyphLayer } from './GlyphLayer';
 
 interface MyQuadTreeItem < Payload > {
@@ -18,7 +20,7 @@ interface MyQuadTreeItem < Payload > {
   payload: Payload;
 }
 
-export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutProperties & HasName & HasCentroid, C> extends CanvasLayer implements GlyphLayer {
+export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutProperties & HasName & HasCentroid, C extends BedBackgroundOptions | CovidNumberCaseOptions> extends CanvasLayer implements GlyphLayer {
 
   protected quadtree: Quadtree < MyQuadTreeItem < Feature < G, P >>> ;
 
@@ -139,7 +141,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
   protected drawAdditionalFeatures(data: Feature<G, P>, pt: L.Point) {
     let bounds = new Bounds(pt, pt);
   
-    if(this.showText) {
+    if(this.options$.value.showLabels && this.showText) {
       const prefix = (data.properties as any).description;
       const b = this.drawText((prefix && prefix !== 'Landkreis' && prefix !== 'Kreis' ? prefix + ' ' : '') + data.properties.name, pt, 0, false);
 

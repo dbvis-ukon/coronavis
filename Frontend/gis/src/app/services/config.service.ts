@@ -36,7 +36,8 @@ export class ConfigService {
       date: 'now',
       bedType: BedType.icuLow,
       enabled: false,
-      aggregationLevel: AggregationLevel.county
+      aggregationLevel: AggregationLevel.county,
+      showLabels: false
     },
 
     covidNumberCaseOptions: {
@@ -47,7 +48,9 @@ export class ConfigService {
       timeWindow: CovidNumberCaseTimeWindow.all,
       type: CovidNumberCaseType.cases,
       enabled: false,
-      aggregationLevel: AggregationLevel.county
+      aggregationLevel: AggregationLevel.county,
+      showLabels: false,
+      showTrendGlyphs: false
     },
 
     showOsmHeliports: false,
@@ -90,7 +93,8 @@ export class ConfigService {
         enabled: false
       },
       bedBackgroundOptions: {
-        enabled: false
+        enabled: false,
+        showLabels: true
       },
       covidNumberCaseOptions: {
         enabled: true,
@@ -99,7 +103,9 @@ export class ConfigService {
         date: 'now',
         normalization: CovidNumberCaseNormalization.per100k,
         timeWindow: CovidNumberCaseTimeWindow.sevenDays,
-        type: CovidNumberCaseType.cases
+        type: CovidNumberCaseType.cases,
+        showLabels: true,
+        showTrendGlyphs: true
       }
     });
   }

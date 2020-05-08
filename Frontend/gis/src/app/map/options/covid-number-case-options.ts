@@ -54,4 +54,9 @@ export enum CovidNumberCaseChange {
 
     aggregationLevel?: AggregationLevel
 
+
+    showLabels: boolean;
+
+    showTrendGlyphs: boolean;
+
   }

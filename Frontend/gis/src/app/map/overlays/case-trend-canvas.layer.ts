@@ -91,7 +91,13 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
     const pt = this.getGlyphPixelPos(glyphData);
 
     // let bounds = new Bounds(pt, new Point(pt.x + this.getGlyphWidth(), pt.y));
-    let bounds = this.drawTrendGlyph(glyphData, pt);
+    let bounds 
+    if(this.options$.value.showTrendGlyphs) {
+      bounds = this.drawTrendGlyph(glyphData, pt);
+    } else {
+      bounds = new Bounds(pt, pt);
+    }
+    
 
     let boundsAdd = this.drawAdditionalFeatures(glyphData, new Point(pt.x, bounds.max.y + 3));
 
