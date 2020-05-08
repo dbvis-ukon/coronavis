@@ -1,13 +1,19 @@
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { Bounds, Point } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage';
-import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { RKICaseDevelopmentProperties } from 'src/app/repositories/types/in/quantitative-rki-case-development';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from 'src/app/services/case-util.service';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
 import { LabelCanvasLayer } from './label-canvas.layer';
+
+interface StatusWithCache extends RKICaseTimedStatus {
+  _regression?: {
+    rotation: number;
+  }
+}
 
 export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions> {
 
@@ -39,11 +45,26 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
     this.ctx.fillStyle = 'white';
     this.ctx.fillRect(topLeftPt.x, topLeftPt.y, this.getGlyphWidth(), this.getGlyphHeight());
 
-    this.caseUtil.getTrendForCase7DaysPer100k(glyphData.properties, this.options$.value.date, this.options$.value.daysForTrend)
-    .pipe(
-      map(t => this.caseUtil.getRotationForTrend(t.m))
-    )
-    .subscribe(rot => {
+    let status = this.caseUtil.getTimedStatusWithOptions(glyphData.properties, this.options$.value) as StatusWithCache;
+
+    let rot$: Observable<number>;
+    if(status?._regression?.rotation) {
+      rot$ = of(status._regression.rotation)
+    } else {
+      rot$ = this.caseUtil.getTrendForCase7DaysPer100k(glyphData.properties, this.options$.value.date, this.options$.value.daysForTrend)
+      .pipe(
+        map(t => this.caseUtil.getRotationForTrend(t.m)),
+        tap(r => {
+          if(status) {
+            status._regression = {
+              rotation: r
+            };
+          }
+        })
+      );
+    }
+        
+    rot$.subscribe(rot => {
       this.ctx.save();
 
       this.ctx.translate(pt.x, pt.y);
