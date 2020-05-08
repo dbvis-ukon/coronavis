@@ -29,7 +29,7 @@ services:
     working_dir: /app
     volumes:
       - ./Crawler:/app
-    command: ['sh', '-c', 'python crawler_rki_dashboard.py']
+    command: ['sh', '-c', 'python crawl_rki_cases.py']
 
 volumes: 
   gis-db:
