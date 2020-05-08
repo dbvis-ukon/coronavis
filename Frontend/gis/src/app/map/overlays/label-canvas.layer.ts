@@ -8,8 +8,6 @@ import { ForceLayoutProperties, HasCentroid, HasName } from 'src/app/repositorie
 import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
 import { CanvasLayer, IViewInfo } from 'src/app/util/ts-canvas-layer';
 import { AggregationLevel } from '../options/aggregation-level.enum';
-import { BedBackgroundOptions } from '../options/bed-background-options';
-import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
 import { GlyphLayer } from './GlyphLayer';
 
 interface MyQuadTreeItem < Payload > {
@@ -20,7 +18,7 @@ interface MyQuadTreeItem < Payload > {
   payload: Payload;
 }
 
-export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutProperties & HasName & HasCentroid> extends CanvasLayer implements GlyphLayer {
+export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutProperties & HasName & HasCentroid, C> extends CanvasLayer implements GlyphLayer {
 
   protected quadtree: Quadtree < MyQuadTreeItem < Feature < G, P >>> ;
 
@@ -43,7 +41,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
     name: string,
     protected data: FeatureCollection < G, P > ,
     protected granularity: AggregationLevel,
-    protected options$: BehaviorSubject < BedBackgroundOptions | CovidNumberCaseOptions > ,
+    protected options$: BehaviorSubject < C > ,
     protected storage: LocalStorageService
   ) {
     super({

@@ -9,7 +9,7 @@ import { AggregationLevel } from '../options/aggregation-level.enum';
 import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
 import { LabelCanvasLayer } from './label-canvas.layer';
 
-export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties> {
+export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions> {
 
   protected rectWidth = 12;
   protected rectHeight = 12;
@@ -39,7 +39,7 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
     this.ctx.fillStyle = 'white';
     this.ctx.fillRect(topLeftPt.x, topLeftPt.y, this.getGlyphWidth(), this.getGlyphHeight());
 
-    this.caseUtil.getTrendForCase7DaysPer100k(glyphData.properties, this.options$.value.date, 3)
+    this.caseUtil.getTrendForCase7DaysPer100k(glyphData.properties, this.options$.value.date, this.options$.value.daysForTrend)
     .pipe(
       map(t => this.caseUtil.getRotationForTrend(t.m))
     )

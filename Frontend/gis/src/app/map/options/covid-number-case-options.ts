@@ -39,6 +39,11 @@ export enum CovidNumberCaseChange {
 
     date: string;
 
+    /**
+     * The number of days used for the regression
+     */
+    daysForTrend: number;
+
     change: CovidNumberCaseChange;
 
     timeWindow: CovidNumberCaseTimeWindow;

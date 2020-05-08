@@ -54,8 +54,6 @@ export class CaseInfoComponent implements OnInit {
     [this.curTimedStatus, this.sevenDaysTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.sevenDays);
 
 
-    const nDaysForTrend = 3;
-
     // console.log('name', this.data.name, this.curTimedStatus, this.twentyFourHTimedStatus, this.seventyTwoHTimedStatus);
     this.rollingChart = this.caseUtil.extractXYForCase7DaysPer100k(this.data)
     .pipe(
@@ -66,12 +64,12 @@ export class CaseInfoComponent implements OnInit {
         height: 150,
         regression: {
           to: getMoment(this.options.date).toISOString(),
-          from: getMoment(this.options.date).subtract(nDaysForTrend, 'days').toISOString()
+          from: getMoment(this.options.date).subtract(this.options.daysForTrend, 'days').toISOString()
         }
       })),
     );
 
-    this.trend = this.caseUtil.getTrendForCase7DaysPer100k(this.data, this.options.date, nDaysForTrend)
+    this.trend = this.caseUtil.getTrendForCase7DaysPer100k(this.data, this.options.date, this.options.daysForTrend)
     .pipe(
       map(d => {
         return { m: d.m, b: d.b, rotation: this.caseUtil.getRotationForTrend(d.m)};

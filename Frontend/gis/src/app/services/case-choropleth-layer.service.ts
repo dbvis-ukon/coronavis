@@ -30,24 +30,24 @@ export class CaseChoroplethLayerService {
     private caseUtil: CaseUtilService
   ) {}
 
-  public getLayer(options$: BehaviorSubject<CovidNumberCaseOptions>): Observable < [CaseChoropleth, LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties> ]> {
+  public getLayer(options$: BehaviorSubject<CovidNumberCaseOptions>): Observable < [CaseChoropleth, LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions> ]> {
     const options = options$.value;
     this.loading$.next(true);
     return this.rkiCaseRepository.getCasesDevelopmentForAggLevel(options.aggregationLevel)
       .pipe(
         map(data => 
           {
-            let lblLayer: LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties>;
+            let lblLayer: LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions>;
             if(options.timeWindow === CovidNumberCaseTimeWindow.sevenDays && options.normalization === CovidNumberCaseNormalization.per100k) {
               lblLayer = new CaseTrendCanvasLayer(this.getKeyCovidNumberCaseOptions(options)+'_labels', data, options.aggregationLevel, options$, this.storage, this.caseUtil)
             } else {
-              lblLayer = new LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties>(this.getKeyCovidNumberCaseOptions(options)+'_labels', data, options.aggregationLevel, options$, this.storage);
+              lblLayer = new LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions>(this.getKeyCovidNumberCaseOptions(options)+'_labels', data, options.aggregationLevel, options$, this.storage);
             }
             
             return [
               new CaseChoropleth(this.getKeyCovidNumberCaseOptions(options), data, options, this.tooltipService, this.colormapService, this.matDialog),
               lblLayer
-            ] as [CaseChoropleth, LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties>]
+            ] as [CaseChoropleth, LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions>]
           }),
         tap(() => this.loading$.next(false))
       );

@@ -31,7 +31,7 @@ export class BedChoroplethLayerService {
     ) {
   }
 
-  public getQualitativeLayer(options$: BehaviorSubject<BedBackgroundOptions>): Observable<[BedStatusChoropleth<QualitativeTimedStatus>, LabelCanvasLayer<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>]> {
+  public getQualitativeLayer(options$: BehaviorSubject<BedBackgroundOptions>): Observable<[BedStatusChoropleth<QualitativeTimedStatus>, LabelCanvasLayer<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>, BedBackgroundOptions>]> {
     const option = options$.value;
     this.loading$.next(true);
     return this.qualitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel, new Date(), -1)
@@ -53,7 +53,7 @@ export class BedChoroplethLayerService {
             options$,
             this.storage
           )
-      ] as [BedStatusChoropleth<QualitativeTimedStatus>, LabelCanvasLayer<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>];
+      ] as [BedStatusChoropleth<QualitativeTimedStatus>, LabelCanvasLayer<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>, BedBackgroundOptions>];
       }),
       tap(() => this.loading$.next(false))
     );
