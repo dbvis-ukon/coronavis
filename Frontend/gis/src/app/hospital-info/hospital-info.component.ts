@@ -10,6 +10,7 @@ import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TranslationService } from '../services/translation.service';
 import { VegaBarchartService } from '../services/vega-barchart.service';
+import { getMoment } from '../util/date-util';
 
 @Component({
   selector: 'app-hospital-info',
@@ -116,9 +117,9 @@ export class HospitalInfoComponent implements OnInit {
       this.lastUpdate = this.isSingleHospital ? this.latestDevelopment.timestamp : this.latestDevelopment.last_update;
 
       const tenDaysAgo = moment().subtract(10, 'day');
-      this.firstTimestamp = moment.max(moment(this.data.developments[0].timestamp), tenDaysAgo).toDate();
+      this.firstTimestamp = moment.max(getMoment(this.data.developments[0].timestamp), tenDaysAgo).toDate();
 
-      this.warnOfOutdatedData = moment().subtract(1, 'day').isAfter(moment(this.lastUpdate));
+      this.warnOfOutdatedData = moment().subtract(1, 'day').isAfter(getMoment(this.lastUpdate));
     }
 
 
@@ -233,7 +234,7 @@ export class HospitalInfoComponent implements OnInit {
 
   private existsInDataValues(date, category, dataValues){
     for(let i = dataValues.length-1; i>=0; i--) {
-      if(moment(dataValues[i].Datum).isSame(date) && dataValues[i].Kategorie === category){
+      if(getMoment(dataValues[i].Datum).isSame(date) && dataValues[i].Kategorie === category){
         return true;
       }
     }
@@ -261,7 +262,7 @@ export class HospitalInfoComponent implements OnInit {
         let summedbedcounts = 0;
         const dataValues = [];
 
-        if (moment(this.firstTimestamp).isSameOrAfter(tenDaysAgo)) {
+        if (getMoment(this.firstTimestamp).isSameOrAfter(tenDaysAgo)) {
             dataValues.push(
               {
                 Kategorie: "Keine Information",
@@ -284,13 +285,13 @@ export class HospitalInfoComponent implements OnInit {
 
             sumOfOneSlice += v;
 
-            if(!this.existsInDataValues(moment.max(moment(d.timestamp), tenDaysAgo).toDate(), bedStatus, dataValues)) {
+            if(!this.existsInDataValues(moment.max(getMoment(d.timestamp), tenDaysAgo).toDate(), bedStatus, dataValues)) {
               dataValues.push(
                 {
                   Kategorie: bedStatus,
                   num: v,
                   color: this.getCapacityStateColor(bedStatus),
-                  Datum: moment.max(moment(d.timestamp), tenDaysAgo).toDate()
+                  Datum: moment.max(getMoment(d.timestamp), tenDaysAgo).toDate()
                 }
               );
               if (v > maxNum) {

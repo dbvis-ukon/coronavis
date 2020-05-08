@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { schemeBlues, schemeGreens } from 'd3';
 import { extent, max } from 'd3-array';
-import { scaleLinear, ScaleLinear, scalePow, ScalePower, scaleQuantize } from 'd3-scale';
+import { scaleLinear, ScaleLinear, scalePow, ScalePower, scaleQuantize, scaleThreshold } from 'd3-scale';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
-import { CovidNumberCaseChange, CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
+import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from './case-util.service';
 
@@ -23,23 +23,28 @@ export class CaseChoroplethColormapService {
   private caseChoroplethColorMap = scaleQuantize<string>()
     .domain([-1, 1])
     .range([...schemeGreens[8].slice(0, 7).reverse(), '#fff', ...schemeBlues[8].slice(0, 7)]);
+
+  private lockDownColorMap = scaleThreshold<number, string>()
+    .domain([0, 0/8 + 0.000000000000000001, 1/8, 2/8, 3/8, 4/8, 5/8, 6/8, 7/8, 1-0.000000000000000001, 1])
+    .range(['#ffffff', '#fff','#fee6ce','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#a63603','#7f2704', 'black']);
   
   
   
   constructor(private caseUtil: CaseUtilService) { }
 
-  getColorMap() {
-    return this.caseChoroplethColorMap;
+  private getColorMap(options: CovidNumberCaseOptions) {
+    return options.normalization === CovidNumberCaseNormalization.per100k ? this.lockDownColorMap : this.caseChoroplethColorMap;
   }
 
   getColorMapBins(
+    options: CovidNumberCaseOptions,
     scaleFn?: ScaleLinear<number, number> | ScalePower<number, number>,
     onlyFullNumbers: boolean = false,
     dataExtent: [number, number] = null
   ): ColorMapBin[] {
-    return this.caseChoroplethColorMap.range()
+    return this.getColorMap(options).range()
     .map(color => {
-      const ext = this.caseChoroplethColorMap.invertExtent(color);
+      const ext = this.getColorMap(options).invertExtent(color);
 
       const min = scaleFn ? scaleFn.invert(ext[0]) : ext[0];
       const max = scaleFn ? scaleFn.invert(ext[1]) : ext[1];
@@ -133,12 +138,12 @@ export class CaseChoroplethColormapService {
     dataPoint: Feature<Geometry, RKICaseDevelopmentProperties>, 
     options: CovidNumberCaseOptions
   ): string {
-    return this.getChoroplethCaseColor(scaleFn(this.caseUtil.getCaseNumbers(dataPoint.properties, options)));
+    return this.getChoroplethCaseColor(options, scaleFn(this.caseUtil.getCaseNumbers(dataPoint.properties, options)));
   }
 
 
-  getChoroplethCaseColor(normalizedDiff: number): string {
-    return this.caseChoroplethColorMap(normalizedDiff);
+  getChoroplethCaseColor(options: CovidNumberCaseOptions, normalizedDiff: number): string {
+    return this.getColorMap(options)(normalizedDiff);
   }
 
   public getDomainExtent(
@@ -152,6 +157,11 @@ export class CaseChoroplethColormapService {
       if(actualExtent) {
         return extent<number>(cases);
       }
+
+      if(options.normalization === CovidNumberCaseNormalization.per100k) {
+        return [0, (50 / 100000)];
+      }
+
       return [0, max<number>(cases)];
     } else {
       const [minChange, maxChange] = extent(cases.filter(d => d < Infinity));
@@ -159,6 +169,7 @@ export class CaseChoroplethColormapService {
         return [minChange, maxChange];
       }
       const max = Math.max(Math.abs(minChange), Math.abs(maxChange));
+
       return [-max, max];
     }
   }
@@ -170,9 +181,18 @@ export class CaseChoroplethColormapService {
   public getScale(fc: FeatureCollection<Geometry, RKICaseDevelopmentProperties>, options: CovidNumberCaseOptions): ScalePower<number, number> | ScaleLinear<number, number> {
     if(options.change === CovidNumberCaseChange.absolute) {
 
+      if(options.normalization === CovidNumberCaseNormalization.per100k) {
+        return scaleLinear()
+          .domain(this.getDomainExtent(fc, options))
+          .range(this.getRangeExtent(options))
+          .clamp(true);
+      }
+
       return scalePow().exponent(0.33)
         .domain(this.getDomainExtent(fc, options))
         .range(this.getRangeExtent(options));
+
+      
         
     } else {
 

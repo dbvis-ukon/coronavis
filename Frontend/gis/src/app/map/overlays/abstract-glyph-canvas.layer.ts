@@ -395,7 +395,6 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       [this.getGlyphWidth() / 2, this.getGlyphHeight() / 2]
     ];
 
-    ('force layou update');
     this.forceLayout.update(glyphBoxes, this.data, this._map.getZoom());
   }
 
@@ -499,15 +498,15 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     const fontSizeAndHeight = Math.round(11 * this.currentScale);
 
     this.ctx.strokeStyle = 'white';
-    this.ctx.lineWidth = 1;
+    this.ctx.lineWidth = 2;
 
 
     this.ctx.font = `bold ${fontSizeAndHeight}px Roboto`;
     this.ctx.fillStyle = isHovered ? '#193e8a' : 'black';
-    this.ctx.shadowOffsetX = 1;
-    this.ctx.shadowOffsetY = 1;
-    this.ctx.shadowColor = "rgba(255,255,255,1)";
-    this.ctx.shadowBlur = 4;
+    // this.ctx.shadowOffsetX = 1;
+    // this.ctx.shadowOffsetY = 1;
+    // this.ctx.shadowColor = "rgba(255,255,255,1)";
+    // this.ctx.shadowBlur = 4;
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'top';
 

@@ -2,14 +2,14 @@
 # coding: utf-8
 # author: Max Fischer
 
-import psycopg2 as pg
-import psycopg2.extras
-import psycopg2.extensions
 import datetime
+
+import psycopg2 as pg
+import psycopg2.extensions
+import psycopg2.extras
 import requests
 
 from db_config import SQLALCHEMY_DATABASE_URI
-
 
 print('Crawler for RKI detailed case data')
 
@@ -90,6 +90,8 @@ try:
         )
         conn.commit()
 
+        conn.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
+
         print('Success')
 
         if(conn):
@@ -111,8 +113,4 @@ except (Exception, pg.DatabaseError) as error:
         conn.close()   
 
     exit(1)   
-
-
-
-
 

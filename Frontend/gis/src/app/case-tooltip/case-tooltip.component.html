@@ -1,5 +1,5 @@
 <div #main class="main">
-  <h3>{{ this.data.name }}</h3>
+  <h3>{{ this.data.description ? this.data.description + ' ' : '' }}{{ this.data.name }}</h3>
   <span *ngIf="this.currentTimedStatus">{{ this.currentTimedStatus?.population | number }} <span i18n="case-tooltip|cases@@residents">Einwohner</span></span>
   <mat-divider></mat-divider>
 

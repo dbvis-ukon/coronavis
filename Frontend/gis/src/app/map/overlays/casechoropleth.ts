@@ -64,11 +64,10 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
     // create geojson layer (looks more complex than it is)
     const aggregationLayer = L.geoJSON(this.featureCollection, {
       style: (feature: Feature<Geometry, RKICaseDevelopmentProperties>) => {
-
         const numbers = this.colorsService.getCaseNumbers(feature.properties, this.options);
 
         return {
-          fillColor: this.colorsService.getChoroplethCaseColor(scaleFn(numbers)),
+          fillColor: this.colorsService.getChoroplethCaseColor(this.options, scaleFn(numbers)),
           weight: 0.5,
           opacity: 1,
           color: 'gray',
@@ -80,7 +79,6 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
         layer.on({
           // on mouseover update tooltip and highlight county
           click: (e) => {
-            console.log('click', e);
             this.tooltipService.close();
             this.matDialog.open(CaseDialogComponent, {
               data: {

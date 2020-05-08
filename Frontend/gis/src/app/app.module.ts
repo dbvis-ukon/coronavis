@@ -1,6 +1,6 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { APP_BASE_HREF, DatePipe, DecimalPipe, PlatformLocation, registerLocaleData } from '@angular/common';
+import { APP_BASE_HREF, PlatformLocation, registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import localeDe from '@angular/common/locales/de';
 import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
@@ -55,12 +55,11 @@ import { MapRootComponent } from './map-root/map-root.component';
 import { MapComponent } from './map/map.component';
 import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
-import { PlusminusPipe } from './plusminus.pipe';
 import { SentryErrorHandler } from './sentry-config';
 import { SupportedLocales } from './services/i18n.service';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
+import { SharedModule } from './shared/shared.module';
 import { TimesliderComponent } from './timeslider/timeslider.component';
-import { TranslatePipe } from './translate.pipe';
 import localeEn from './util/locales/en';
 import { VegaComponent } from './vega/vega.component';
 
@@ -136,12 +135,10 @@ const localeProvider = {
     HospitalInfoComponent,
     HospitalInfoDialogComponent,
     LegendComponent,
-    PlusminusPipe,
     AboutComponent,
     ImpressumComponent,
     VegaComponent,
     HelpDialogComponent,
-    TranslatePipe,
     OsmTooltipComponent,
     CaseInfoComponent,
     CaseDialogComponent,
@@ -157,6 +154,7 @@ const localeProvider = {
   ],
   imports: [
     BrowserModule,
+    SharedModule.forRoot(),
     NgxWebstorageModule.forRoot(),
     HttpClientModule,
     FormsModule,
@@ -199,10 +197,6 @@ const localeProvider = {
       useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
       deps: [PlatformLocation]
     },
-    PlusminusPipe, 
-    DecimalPipe, 
-    DatePipe,
-    TranslatePipe,
     { 
       provide: ErrorHandler, 
       useClass: SentryErrorHandler 

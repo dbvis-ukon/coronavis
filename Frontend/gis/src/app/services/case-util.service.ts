@@ -1,12 +1,22 @@
 import { Injectable } from '@angular/core';
-import moment, { Moment } from 'moment';
+import { ScaleLinear, scaleLinear } from 'd3-scale';
+import { Moment } from 'moment';
+import { Observable, of } from 'rxjs';
+import { filter, flatMap, map, toArray } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
+import { getMoment } from '../util/date-util';
+import { linearRegression } from '../util/regression';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CaseUtilService {
+
+  private rotationScale: ScaleLinear<number, number> = scaleLinear()
+  .domain([-5, 5])
+  .range([45, -45])
+  .clamp(true);
 
   constructor() { }
 
@@ -18,7 +28,7 @@ export class CaseUtilService {
   }
 
   public getTimedStatusWithOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): RKICaseTimedStatus | undefined {
-    return this.getTimedStatus(data, options.date === 'now' ? moment() : moment(options.date));
+    return this.getTimedStatus(data, getMoment(options.date));
   }
 
   public getNowPrevTimedStatusTupleWithOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): [RKICaseTimedStatus | undefined, RKICaseTimedStatus | undefined] {
@@ -26,7 +36,7 @@ export class CaseUtilService {
   }
 
   public getNowPrevTimedStatusTuple(data: RKICaseDevelopmentProperties, refDateStr: string, timeWindow: CovidNumberCaseTimeWindow): [RKICaseTimedStatus | undefined, RKICaseTimedStatus | undefined] {
-    const dateRef = refDateStr === 'now' ? moment() : moment(refDateStr);
+    const dateRef = getMoment(refDateStr);
     const currentTimedStatus = this.getTimedStatus(data, dateRef);
 
     let prevTimedStatus;
@@ -39,6 +49,9 @@ export class CaseUtilService {
         break;
       case CovidNumberCaseTimeWindow.seventyTwoHours:
         prevTimedStatus = this.getTimedStatus(data, dateRef.subtract(3, 'days'));
+        break;
+      case CovidNumberCaseTimeWindow.sevenDays:
+        prevTimedStatus = this.getTimedStatus(data, dateRef.subtract(7, 'days'));
         break;
     }
 
@@ -67,6 +80,10 @@ export class CaseUtilService {
           return undefined;
         }
         unnormalizedResult = now - prev;
+
+        if(currentTimedStatus.cases7_per_100k && options.timeWindow === CovidNumberCaseTimeWindow.sevenDays && options.normalization === CovidNumberCaseNormalization.per100k) {
+          unnormalizedResult = (currentTimedStatus.cases7_per_100k / 100000) * currentTimedStatus.population;
+        }
       }
     } else {
       if (options.timeWindow === CovidNumberCaseTimeWindow.all) {
@@ -81,6 +98,40 @@ export class CaseUtilService {
     return options.normalization === CovidNumberCaseNormalization.absolut ?
       unnormalizedResult :
       unnormalizedResult / currentTimedStatus.population;
+  }
+
+  public extractXYForCase7DaysPer100k(data: RKICaseDevelopmentProperties) {
+    return of(data)
+    .pipe(
+      flatMap(d => d.developments),
+      filter((_, i) => i >= 7),
+      map(d => {
+        const t = this.getNowPrevTimedStatusTuple(data, getMoment(d.timestamp).format('YYYY-MM-DD'), CovidNumberCaseTimeWindow.sevenDays);
+        return {
+          x: d.timestamp, 
+          y: t[0].cases7_per_100k || (t[0].cases_per_100k - t[1].cases_per_100k)};}),
+      toArray()
+    );
+  }
+
+  public getTrendForCase7DaysPer100k(data: RKICaseDevelopmentProperties, date: string, lastNItems: number): Observable<{m: number, b: number}> {
+    const refDate = getMoment(date);
+
+    return this.extractXYForCase7DaysPer100k(data)
+    .pipe(
+      map(d => {
+        const myXY = d
+          .filter(d => getMoment(d.x).isSameOrBefore(refDate))
+          .filter((_, i, n) => i >= (n.length - lastNItems))
+          .map((d1, i) => {return {x: i, y: d1.y}});
+
+        return linearRegression(myXY);
+      })
+    )
+  }
+
+  public getRotationForTrend(m: number): number {
+    return this.rotationScale(m);
   }
 
   getTypeAccessorFnWithOptions(options: CovidNumberCaseOptions): (d: RKICaseTimedStatus) => number | undefined {

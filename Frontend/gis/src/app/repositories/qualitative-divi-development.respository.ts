@@ -1,11 +1,11 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FeatureCollection, MultiPolygon, Point } from 'geojson';
-import moment from 'moment';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { HospitalUtilService } from '../services/hospital-util.service';
+import { getMoment } from '../util/date-util';
 import { CachedRepository } from './cached.repository';
 import { QualitativeAggregatedHospitalProperties, QualitativeSingleHospitalProperties, QualitativeTimedStatus } from './types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from './types/out/aggregated-hospital-out';
@@ -62,7 +62,7 @@ export class QualitativeDiviDevelopmentRepository {
       refDate = new Date();
     }
 
-    const actualRefDate = moment(refDate);
+    const actualRefDate = getMoment(refDate);
 
 
     params = params.append('refDate', actualRefDate.format('YYYY-MM-DD'));

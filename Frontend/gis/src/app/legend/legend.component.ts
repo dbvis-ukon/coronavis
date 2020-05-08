@@ -1,7 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import moment from 'moment';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -9,11 +8,11 @@ import { BedType } from '../map/options/bed-type.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { MapOptions } from '../map/options/map-options';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
-import { PlusminusPipe } from '../plusminus.pipe';
 import { CaseChoroplethColormapService, ColorMapBin } from '../services/case-choropleth-colormap.service';
 import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
+import { PlusminusPipe } from '../shared/plusminus.pipe';
 import { getMoment } from '../util/date-util';
 
 interface LegendColorMapBin extends ColorMapBin {
@@ -112,7 +111,7 @@ export class LegendComponent implements OnInit {
     const fullNumbers = mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.absolut 
     && mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute;
 
-    caseBins = this.caseColormap.getColorMapBins(scale, fullNumbers, actualExtent)
+    caseBins = this.caseColormap.getColorMapBins(mo.covidNumberCaseOptions, scale, fullNumbers, actualExtent)
     .map(b => {
       if(mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k && mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute) {
         return {
@@ -260,7 +259,7 @@ export class LegendComponent implements OnInit {
         title += "Change"
       }
 
-      title += mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours ? " (24h)" : " (72h)";
+      title += ' (' + mo.covidNumberCaseOptions.timeWindow + ')';
 
       title += " of ";
     }
@@ -309,7 +308,7 @@ export class LegendComponent implements OnInit {
 
       title += "Veränderung"
 
-      title += mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours ? " (24h)" : " (72h)";
+      title += ' (' + mo.covidNumberCaseOptions.timeWindow + ')';
 
       title += " der ";
     }
@@ -343,7 +342,7 @@ export class LegendComponent implements OnInit {
       title += " am "
     }
 
-    title += this.datePipe.transform(mo.covidNumberCaseOptions.date === 'now' ? moment().toDate() : moment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
+    title += this.datePipe.transform(getMoment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
 
     return title;
   }

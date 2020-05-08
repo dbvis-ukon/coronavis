@@ -12,6 +12,8 @@ export enum CovidNumberCaseChange {
 
     seventyTwoHours = '72h',
 
+    sevenDays = '7d',
+
     all = 'all',
   }
 
@@ -37,6 +39,11 @@ export enum CovidNumberCaseChange {
 
     date: string;
 
+    /**
+     * The number of days used for the regression
+     */
+    daysForTrend: number;
+
     change: CovidNumberCaseChange;
 
     timeWindow: CovidNumberCaseTimeWindow;
@@ -46,5 +53,10 @@ export enum CovidNumberCaseChange {
     normalization: CovidNumberCaseNormalization
 
     aggregationLevel?: AggregationLevel
+
+
+    showLabels: boolean;
+
+    showTrendGlyphs: boolean;
 
   }
