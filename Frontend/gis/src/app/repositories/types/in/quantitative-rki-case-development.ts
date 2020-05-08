@@ -30,8 +30,8 @@ export interface RKICaseTimedStatus {
   cases7_per_100k: number | null;
   death_rate: number;
   deaths: number; 
-  insert_date: string;
-  last_update: string;
+  // insert_date: string;
+  // last_update: string;
   population: number;
   timestamp: string;
 }
