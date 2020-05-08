@@ -138,28 +138,28 @@ export class VegaLinechartService {
         }
       });
 
-      spec.layer.push(
-        {
-          "transform": [
-            {"filter": {"field": "x", "gte": ''+from}},
-            {"filter": {"field": "x", "lte": ''+to}},
-            {
-              "regression": "y",
-              "on": "x",
-              "params": true,
-              "extent": [from, to]
-            },
-            {"calculate": "'R²: '+format(datum.rSquared, '.2f')", "as": "R2"}
-          ],
-          "mark": {
-            "type": "text",
-            "color": "firebrick",
-            "x": "width",
-            "align": "right",
-            "y": -5
-          },
-          "encoding": {"text": {"type": "nominal", "field": "R2"}}
-        });
+      // spec.layer.push(
+      //   {
+      //     "transform": [
+      //       {"filter": {"field": "x", "gte": ''+from}},
+      //       {"filter": {"field": "x", "lte": ''+to}},
+      //       {
+      //         "regression": "y",
+      //         "on": "x",
+      //         "params": true,
+      //         "extent": [from, to]
+      //       },
+      //       {"calculate": "'R²: '+format(datum.rSquared, '.2f')", "as": "R2"}
+      //     ],
+      //     "mark": {
+      //       "type": "text",
+      //       "color": "firebrick",
+      //       "x": "width",
+      //       "align": "right",
+      //       "y": -5
+      //     },
+      //     "encoding": {"text": {"type": "nominal", "field": "R2"}}
+      //   });
     }
 
     return spec;
