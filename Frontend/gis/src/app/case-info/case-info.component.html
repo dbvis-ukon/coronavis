@@ -233,7 +233,7 @@
     </div>
     
     <div class="trend-icon-wrapper" *ngIf="trend | async; let t">
-        <p i18n="@@caseInfoTrendLastThreeDays">Trend der letzten 3 Tage</p>
+        <p i18n="@@caseInfoTrendLastThreeDays">Trend der letzten {{ options.daysForTrend }} Tage</p>
 
         <mat-icon class="trend-icon" aria-hidden="false" aria-label="Example home icon" [ngStyle]="{'transform': 'rotate(' + t.rotation + 'deg)'}">trending_flat</mat-icon>
 

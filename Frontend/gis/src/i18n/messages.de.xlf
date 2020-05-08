@@ -97,8 +97,8 @@
         <note category="location">src/app/case-info/case-info.component.html:236</note>
       </notes>
       <segment state="final">
-        <source>Trend der letzten 3 Tage</source>
-      <target>Trend der letzten 3 Tage</target></segment>
+        <source>Trend der letzten <ph id="0" equiv="INTERPOLATION" disp="{{ options.daysForTrend }}"/> Tage</source>
+      <target>Trend der letzten <ph id="0" equiv="INTERPOLATION" disp="{{ options.daysForTrend }}"/> Tage</target></segment>
     </unit><unit id="caseInfoTrendPerDay">
       <notes>
         <note category="location">src/app/case-info/case-info.component.html:240</note>
