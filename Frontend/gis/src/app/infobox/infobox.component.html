@@ -15,6 +15,12 @@
 
 <mat-card *ngIf="mo.extendInfobox && !mo.hideInfobox">
 
+  <app-hospital-search 
+    [data]="searchData$" 
+    (selectedHospital)="searchSelected($event)" 
+    [reset]="resetHospitalSearch"
+  ></app-hospital-search>
+
   <div class="accordion-container">
   <mat-accordion class="accordion">
 
@@ -79,13 +85,6 @@
       </p>
 
       <!--<mat-divider></mat-divider>-->
-
-      <app-hospital-search 
-        *ngIf="mo.bedGlyphOptions.enabled"
-        [hospitals]="hospitals" 
-        (selectedHospital)="searchHospitalSelected($event)" 
-        [reset]="resetHospitalSearch"
-      ></app-hospital-search>
 
       <div *ngIf="mo.bedGlyphOptions.enabled">
         <div class="glyph-legend" *ngIf="combinedStats$ | async; let c">

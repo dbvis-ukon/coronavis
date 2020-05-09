@@ -11,9 +11,9 @@
                 <mat-icon>close</mat-icon>
               </button>
       <mat-autocomplete class="autocomplete" autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selected($event)">
-        <mat-option *ngFor="let h of filteredOptions | async" [value]="h.properties.name" class="option">
-          {{h.properties.name}}
-          <small>{{h.properties.address}}</small>
+        <mat-option *ngFor="let h of filteredOptions | async" [value]="h.name" class="option">
+          {{h.name}}
+          <small *ngIf="h.addition">{{h.addition}}</small>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
