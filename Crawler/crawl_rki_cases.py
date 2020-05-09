@@ -90,7 +90,7 @@ try:
         )
         conn.commit()
 
-        conn.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
+        cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
 
         print('Success')
 
@@ -113,4 +113,3 @@ except (Exception, pg.DatabaseError) as error:
         conn.close()   
 
     exit(1)   
-
