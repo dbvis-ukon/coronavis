@@ -3,7 +3,7 @@ import moment, { Moment } from 'moment';
 
 export function getMoment(strDate: string): Moment {
   let res: Moment;
-  if(strDate === 'now') {
+  if(!strDate || strDate === 'now') {
     res = moment.utc();
   } else if(strDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
     res = moment.utc(strDate, 'YYYY-MM-DD', true);
