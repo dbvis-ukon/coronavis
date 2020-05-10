@@ -24,7 +24,7 @@ import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TooltipService } from '../services/tooltip.service';
 import { TranslationService } from '../services/translation.service';
-import { getMoment } from '../util/date-util';
+import { getMoment, getStrDate } from '../util/date-util';
 
 interface GlyphEntity {
   name: string;
@@ -142,7 +142,7 @@ export class InfoboxComponent implements OnInit {
     .pipe(
       distinctUntilChanged(),
       tap(() => this.aggregateStatisticsLoading$.next(true)),
-      map(s => getMoment(s).endOf('day').toDate()),
+      map(s => getStrDate(getMoment(s).endOf('day'))),
       // tap(refDate => console.log('refdate', refDate)),
       mergeMap(refDate => {
         const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate);

@@ -11,7 +11,7 @@ import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitativ
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { ConfigService } from '../services/config.service';
-import { getMoment } from '../util/date-util';
+import { getMoment, getStrDate } from '../util/date-util';
 
 class TimeFormatter implements NouiFormatter {
   constructor(public startDay: Moment, private datePipe: DatePipe) {}
@@ -68,7 +68,7 @@ export class TimesliderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.diviRepo.getDiviDevelopmentCountries(new Date(), -1)
+    this.diviRepo.getDiviDevelopmentCountries('now', -1)
     .pipe(
       flatMap(d => d.features),
       map<Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, [Moment, Moment]>(d => [getMoment(d.properties.developments[0].timestamp), getMoment(d.properties.developments[d.properties.developments.length - 1].timestamp)]),
@@ -101,7 +101,7 @@ export class TimesliderComponent implements OnInit {
         }
 
         if(this._mo) {
-          this.currentTime = this.timeFormatter.from(getMoment(this._mo.bedGlyphOptions.date).format('YYYY-MM-DD'));
+          this.currentTime = this.timeFormatter.from(getStrDate(getMoment(this._mo.bedGlyphOptions.date)));
         }
 
         this.numTicks = this.timeExtent[1] - this.timeExtent[0];
@@ -176,8 +176,8 @@ export class TimesliderComponent implements OnInit {
     //   return;
     // }
 
-    let date = this.sliderValueToMoment(numDays).format('YYYY-MM-DD');
-    if(date === moment().format('YYYY-MM-DD')) {
+    let date = getStrDate(this.sliderValueToMoment(numDays));
+    if(date === getStrDate(moment())) {
       date = 'now';
     }
 
