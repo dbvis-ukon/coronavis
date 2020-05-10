@@ -21,7 +21,7 @@ class TimeFormatter implements NouiFormatter {
   };
 
   from(value: string): number {
-    return getMoment(value, true).diff(this.startDay, 'days');
+    return getMoment(value).diff(this.startDay, 'days');
   }
 }
 
@@ -71,7 +71,7 @@ export class TimesliderComponent implements OnInit {
     this.diviRepo.getDiviDevelopmentCountries('now', -1)
     .pipe(
       flatMap(d => d.features),
-      map<Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, [Moment, Moment]>(d => [getMoment(d.properties.developments[0].timestamp, true), getMoment(d.properties.developments[d.properties.developments.length - 1].timestamp, true)]),
+      map<Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, [Moment, Moment]>(d => [getMoment(d.properties.developments[0].timestamp), getMoment(d.properties.developments[d.properties.developments.length - 1].timestamp)]),
       reduce((acc, val) => {
         if(!acc[0] || acc[0] > val[0]) {
           acc[0] = val[0];
@@ -101,7 +101,7 @@ export class TimesliderComponent implements OnInit {
         }
 
         if(this._mo) {
-          this.currentTime = this.timeFormatter.from(getStrDate(getMoment(this._mo.bedGlyphOptions.date, true)));
+          this.currentTime = this.timeFormatter.from(getStrDate(getMoment(this._mo.bedGlyphOptions.date)));
         }
 
         this.numTicks = this.timeExtent[1] - this.timeExtent[0];
@@ -180,8 +180,6 @@ export class TimesliderComponent implements OnInit {
     if(date === getStrDate(moment())) {
       date = 'now';
     }
-
-    console.log('emit', date);
 
     this.mapOptionsChange.emit(this.configService.overrideMapOptions(this._mo, {
       bedGlyphOptions: {
