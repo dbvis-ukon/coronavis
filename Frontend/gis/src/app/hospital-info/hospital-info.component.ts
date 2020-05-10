@@ -233,9 +233,9 @@ export class HospitalInfoComponent implements OnInit {
     }
   }
 
-  private existsInDataValues(date, category, dataValues){
+  private existsInDataValues(date: Moment, category, dataValues){
     for(let i = dataValues.length-1; i>=0; i--) {
-      if(getMoment(dataValues[i].Datum).isSame(date) && dataValues[i].Kategorie === category){
+      if(moment(dataValues[i].Datum).isSame(date) && dataValues[i].Kategorie === category){
         return true;
       }
     }
@@ -286,7 +286,7 @@ export class HospitalInfoComponent implements OnInit {
 
             sumOfOneSlice += v;
 
-            if(!this.existsInDataValues(moment.max(getMoment(d.timestamp), tenDaysAgo).toDate(), bedStatus, dataValues)) {
+            if(!this.existsInDataValues(moment.max(getMoment(d.timestamp), tenDaysAgo), bedStatus, dataValues)) {
               dataValues.push(
                 {
                   Kategorie: bedStatus,
