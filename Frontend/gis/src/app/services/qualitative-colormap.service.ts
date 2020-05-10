@@ -5,7 +5,7 @@ import { BedType } from '../map/options/bed-type.enum';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
-import { getMoment } from '../util/date-util';
+import { getMoment, getStrDate } from '../util/date-util';
 import { HospitalUtilService } from './hospital-util.service';
 
 @Injectable({
@@ -104,8 +104,8 @@ export class QualitativeColormapService {
       if(date === null || date === 'now') {
         latest = t[t.length -1];
       } else {
-        const actualDate = getMoment(date).endOf('day').toDate();
-        const strDate = getMoment(date).format('YYYY-MM-DD');
+        const actualDate = getMoment(date).endOf('day');
+        const strDate = getStrDate(getMoment(date));
 
         if(p?.developmentDays) {
           const status = p?.developmentDays[strDate];

@@ -42,7 +42,7 @@ interface QualitativeHospitalDevelopmentExtension extends GeneralDevelopment {
 
 
 export interface AbstractTimedStatus {
-    timestamp: Date;
+    timestamp: string;
 }
 
 
@@ -53,7 +53,7 @@ export interface QualitativeTimedStatus extends AbstractTimedStatus {
      */
     numHospitals?: number;
 
-    last_update?: Date;
+    last_update?: string;
     
     icu_low_care: QualitativeAggregatedBedStateCounts;
 

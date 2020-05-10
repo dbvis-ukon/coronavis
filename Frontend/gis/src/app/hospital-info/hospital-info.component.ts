@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { of } from 'rxjs';
 import { flatMap, map, max, reduce } from 'rxjs/operators';
 import { BedType } from "../map/options/bed-type.enum";
@@ -85,7 +85,7 @@ export class HospitalInfoComponent implements OnInit {
 
   lastUpdate: Date;
 
-  firstTimestamp: Date;
+  firstTimestamp: Moment;
 
   warnOfOutdatedData: boolean;
 
@@ -114,12 +114,13 @@ export class HospitalInfoComponent implements OnInit {
       this.latestDevelopment = this.data.developments[this.data.developments.length - 1];
 
 
-      this.lastUpdate = this.isSingleHospital ? this.latestDevelopment.timestamp : this.latestDevelopment.last_update;
+      const lastUpdateM = this.isSingleHospital ? getMoment(this.latestDevelopment.timestamp) : getMoment(this.latestDevelopment.last_update);
+      this.lastUpdate = lastUpdateM.toDate();
 
       const tenDaysAgo = moment().subtract(10, 'day');
-      this.firstTimestamp = moment.max(getMoment(this.data.developments[0].timestamp), tenDaysAgo).toDate();
+      this.firstTimestamp = moment.max(getMoment(this.data.developments[0].timestamp), tenDaysAgo);
 
-      this.warnOfOutdatedData = moment().subtract(1, 'day').isAfter(getMoment(this.lastUpdate));
+      this.warnOfOutdatedData = moment().subtract(1, 'day').isAfter(lastUpdateM);
     }
 
 
@@ -262,7 +263,7 @@ export class HospitalInfoComponent implements OnInit {
         let summedbedcounts = 0;
         const dataValues = [];
 
-        if (getMoment(this.firstTimestamp).isSameOrAfter(tenDaysAgo)) {
+        if (this.firstTimestamp.isSameOrAfter(tenDaysAgo)) {
             dataValues.push(
               {
                 Kategorie: "Keine Information",

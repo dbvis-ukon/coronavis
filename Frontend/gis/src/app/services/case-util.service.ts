@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { filter, flatMap, map, toArray } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
-import { getMoment } from '../util/date-util';
+import { getMoment, getStrDate } from '../util/date-util';
 import { linearRegression } from '../util/regression';
 
 @Injectable({
@@ -28,7 +28,7 @@ export class CaseUtilService {
 
 
   public getTimedStatus(data: RKICaseDevelopmentProperties, date: Moment): RKICaseTimedStatus | undefined {
-    const dateKey = date.format('YYYY-MM-DD');
+    const dateKey = getStrDate(date);
 
     return data.developmentDays[dateKey];
   }
@@ -112,7 +112,7 @@ export class CaseUtilService {
       flatMap(d => d.developments),
       filter((_, i) => i >= 7),
       map(d => {
-        const t = this.getNowPrevTimedStatusTuple(data, getMoment(d.timestamp).format('YYYY-MM-DD'), CovidNumberCaseTimeWindow.sevenDays);
+        const t = this.getNowPrevTimedStatusTuple(data, getStrDate(getMoment(d.timestamp)), CovidNumberCaseTimeWindow.sevenDays);
         return {
           x: d.timestamp, 
           y: t[0].cases7_per_100k || (t[0].cases_per_100k - t[1].cases_per_100k)};}),

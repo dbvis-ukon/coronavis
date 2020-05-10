@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Feature, FeatureCollection, Geometry, MultiPolygon, Point } from 'geojson';
+import { Moment } from 'moment';
 import { filter } from 'rxjs/operators';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { AbstractTimedStatus, QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -16,7 +17,7 @@ export class HospitalUtilService {
 
   constructor() { }
 
-  public filterByDate(date: Date) {
+  public filterByDate(date: Moment) {
     return filter<Feature<Geometry, AbstractHospitalOut<AbstractTimedStatus>>>(h => this.getLatestTimedStatus(h.properties.developments, date) !== null);
   }
 
@@ -78,13 +79,13 @@ export class HospitalUtilService {
     ];
   }
 
-  public getLatestTimedStatus<T extends AbstractTimedStatus>(entries: Array<T>, beforeDate?: Date): T | null {
+  public getLatestTimedStatus<T extends AbstractTimedStatus>(entries: Array<T>, beforeDate?: Moment): T | null {
     if(!entries) {
       return null;
     }
     
     if(beforeDate) {
-      const mDate = getMoment(beforeDate).startOf('day');
+      const mDate = beforeDate.startOf('day');
 
       const filtered = []
       for(let i = entries.length - 1; i >= 0; i--) {
