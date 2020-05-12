@@ -3,6 +3,8 @@
 # author: Max Fischer
 
 import datetime
+import logging
+from datetime import date
 
 import psycopg2 as pg
 import psycopg2.extensions
@@ -11,7 +13,9 @@ import requests
 
 from db_config import SQLALCHEMY_DATABASE_URI
 
-print('Crawler for RKI detailed case data')
+logger = logging.getLogger(__name__)
+
+logger.info('Crawler for RKI detailed case data')
 
 
 def get_connection():
@@ -20,11 +24,20 @@ def get_connection():
     cur = conn.cursor()
     return conn, cur
 
+conn, cur = get_connection()
+
+cur.execute("select max(datenbestand)::date from cases")
+last_update = cur.fetchone()[0]
+
+if last_update is not None and last_update >= date.today():
+    logger.info('Data seems to be up to date (Database: %s, Today: %s). Won\'t fetch.', last_update, date.today())
+    exit(0)
+
 
 URL = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Meldedatum%20asc&resultOffset={}&resultRecordCount=2000&cacheHint=true"
 
 
-print('Fetch data')
+logger.debug('Fetch data')
 
 
 data = None
@@ -40,11 +53,11 @@ while has_data:
         if len(rj['features']) == 0:
             has_data = False
     offset += 2000
-    print(offset)
+    logger.debug('Offset: %s', offset)
 data = [d['attributes'] for d in data['features']]
 
 
-print('Parse data')
+logger.info('Parse data')
 
 
 entries = []
@@ -66,7 +79,7 @@ for el in data:
     entries.extend(entry)
 
 
-print('current cases', len(entries))
+logger.debug('current cases: %s', len(entries))
 
 
 aquery = 'INSERT INTO cases(datenbestand, idbundesland, bundesland, landkreis, idlandkreis, objectid, meldedatum, gender, agegroup, casetype) VALUES %s'
@@ -77,22 +90,28 @@ try:
     last_update = cur.fetchone()[0]
     current_update = entries[0]['datenbestand'].replace(tzinfo=datetime.timezone(datetime.timedelta(hours=+1)))
 
-    print("db data version:", last_update)
-    print("fetched data version:", current_update)
+    logger.info("db data version: %s", last_update)
+    logger.info("fetched data version: %s", current_update)
 
     if last_update is not None and abs((current_update - last_update).total_seconds()) <= 2*60*60:
-        print("No new data available (+/- 2h), skip update")
+        logger.info("No new data available (+/- 2h), skip update")
     else:
-        print('Insert new data into DB (takes 2-5 seconds)...')
+        logger.info('Insert new data into DB (takes 2-5 seconds)...')
 
         psycopg2.extras.execute_values (
             cur, aquery, entries, template='(%(datenbestand)s, %(idbundesland)s, %(bundesland)s, %(landkreis)s, %(idlandkreis)s, %(objectid)s, %(meldedatum)s, %(gender)s, %(agegroup)s, %(casetype)s)', page_size=500
         )
         conn.commit()
 
-        cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
+        logger.info('Data inserted.')
 
-        print('Success')
+        logger.info('Refreshing materialized view.')
+
+        cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
+        conn.commit()
+
+
+        logger.info('Success')
 
         if(conn):
             cur.close()
@@ -102,9 +121,9 @@ try:
 except (Exception, pg.DatabaseError) as error:
     conn, cur = get_connection()
 
-    print(error)
-    print("Error in transction - Reverting all other operations of a transction")
-    print("Most likely a simultanious update was applied faster.")
+    logger.error(error)
+    logger.error("Error in transction - Reverting all other operations of a transction")
+    logger.error("Most likely a simultanious update was applied faster.")
 
     conn.rollback()
 
