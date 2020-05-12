@@ -5,8 +5,8 @@ metadata:
   annotations:
     description: "RKI individual cases including statistical information per patient"
 spec:
-  # run at 9am (7 utc)
-  schedule: "0 7 * * *"
+  # run every hour (performs database check before actually fetching data from RKI)
+  schedule: "0 * * * *"
   jobTemplate:
     spec:
       backoffLimit: 2
