@@ -237,7 +237,7 @@
 
         <mat-icon class="trend-icon" aria-hidden="false" aria-label="Example home icon" [ngStyle]="{'transform': 'rotate(' + t.rotation + 'deg)'}">trending_flat</mat-icon>
 
-        <p i18n="@@caseInfoTrendPerDay">{{ t.m | plusminus }} pro Tag</p>
+        <p i18n="@@caseInfoTrendPerDay">{{ t.m | plusminus:'1.0-1' }} pro Tag</p>
     </div>
 </div>
 
