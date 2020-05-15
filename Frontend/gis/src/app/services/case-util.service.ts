@@ -87,7 +87,7 @@ export class CaseUtilService {
         }
         unnormalizedResult = now - prev;
 
-        if(currentTimedStatus.cases7_per_100k && options.timeWindow === CovidNumberCaseTimeWindow.sevenDays && options.normalization === CovidNumberCaseNormalization.per100k) {
+        if(this.isLockdownMode(options)) {
           unnormalizedResult = (currentTimedStatus.cases7_per_100k / 100000) * currentTimedStatus.population;
         }
       }
