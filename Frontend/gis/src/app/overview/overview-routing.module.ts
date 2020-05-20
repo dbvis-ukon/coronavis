@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MapRootComponent } from '../map-root/map-root.component';
 import { OverviewBedComponent } from './overview-bed/overview-bed.component';
 import { OverviewCaseComponent } from './overview-case/overview-case.component';
 import { OverviewIntroductionComponent } from './overview-introduction/overview-introduction.component';
@@ -21,6 +22,10 @@ const routes: Routes = [
             {
                 path: 'cases',
                 component: OverviewCaseComponent
+            },
+            {
+                path: 'map',
+                component: MapRootComponent
             }
         ]
     }

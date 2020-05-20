@@ -3,6 +3,7 @@
 #container {
   grid-gap: 5px 5px;
   height: 100vh;
+  position: relative;
 
   display: grid;
 
@@ -12,12 +13,16 @@
   grid-template-areas: "map"
 }
 
+.overview #container {
+  height: calc(~"100vh - 64px");
+}
+
 #map {
   grid-area: map;
 }
 
 .overlay-brand {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   z-index: 1001;
@@ -26,7 +31,7 @@
 }
 
 .infobox {
-  position: fixed;
+  position: absolute;
   top: 10px;
   left: 10px;
   z-index: 1003;
@@ -34,7 +39,7 @@
 
 
 .legend {
-  position: fixed;
+  position: absolute;
   bottom: 25px;
   right: 10px;
   z-index: 1002;
@@ -45,7 +50,7 @@
 }
 
 .timeslider {
-  position: fixed;
+  position: absolute;
   bottom: 25px;
   left: 50%;
   z-index: 1002;
@@ -66,6 +71,6 @@
 }
 
 .tracking-pxl {
-  position: fixed;
+  position: absolute;
   z-index: 0;
 }

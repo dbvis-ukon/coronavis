@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from '@angular/router';
@@ -23,7 +23,8 @@ import { safeDebounce } from '../util/safe-debounce';
 @Component({
   selector: 'app-map-root',
   templateUrl: './map-root.component.html',
-  styleUrls: ['./map-root.component.less']
+  styleUrls: ['./map-root.component.less'],
+  encapsulation: ViewEncapsulation.None
 })
 export class MapRootComponent implements OnInit {
 
