@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Feature, FeatureCollection, Geometry, MultiPolygon, Point } from 'geojson';
-import moment from 'moment';
+import { Moment } from 'moment';
 import { filter } from 'rxjs/operators';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { AbstractTimedStatus, QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -8,6 +8,7 @@ import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { getMoment } from '../util/date-util';
 
 @Injectable({
   providedIn: 'root'
@@ -16,20 +17,20 @@ export class HospitalUtilService {
 
   constructor() { }
 
-  public filterByDate(date: Date) {
+  public filterByDate(date: Moment) {
     return filter<Feature<Geometry, AbstractHospitalOut<AbstractTimedStatus>>>(h => this.getLatestTimedStatus(h.properties.developments, date) !== null);
   }
 
   public isSingleHospitalFeatureCollection(fc: FeatureCollection<Point, SingleHospitalOut<any>> | FeatureCollection<MultiPolygon, AggregatedHospitalOut<any>>): fc is FeatureCollection<Point, SingleHospitalOut<any>> {
-    return this.isSingleHospitalFeature(fc.features[0]);
+    return this.isSingleHospitalFeature(fc?.features[0]);
   }
 
   public isSingleHospitalFeature(hf: Feature<Point, SingleHospitalOut<any>> | Feature<MultiPolygon, AggregatedHospitalOut<any>>): hf is Feature<Point, SingleHospitalOut<any>> {
-    return this.isSingleHospital(hf.properties);
+    return this.isSingleHospital(hf?.properties);
   }
 
   public isSingleHospital(hospital: SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus>): hospital is SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus> {
-    return (hospital as SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus>).address !== undefined;
+    return hospital !== undefined && (hospital as SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus>).address !== undefined;
   }
 
   public getNumberOfHospitals(hospitalAgg: AggregatedHospitalOut<QualitativeTimedStatus>): number {
@@ -78,23 +79,22 @@ export class HospitalUtilService {
     ];
   }
 
-  public getLatestTimedStatus<T extends AbstractTimedStatus>(entries: Array<T>, beforeDate?: Date): T | null {
+  public getLatestTimedStatus<T extends AbstractTimedStatus>(entries: Array<T>, beforeDate?: Moment): T | null {
     if(!entries) {
       return null;
     }
     
     if(beforeDate) {
-      const mDate = moment(beforeDate).startOf('day');
+      const mDate = beforeDate.startOf('day');
 
       const filtered = []
       for(let i = entries.length - 1; i >= 0; i--) {
         const d = entries[i];
-        const t = moment(d.timestamp).startOf('day');
+        const t = getMoment(d.timestamp).startOf('day');
 
         // console.log(t.format('YYYY-MM-DD'), mDate.format('YYYY-MM-DD'), t.isSameOrBefore(mDate), t.isSameOrAfter(mDate))
 
         if(t.isSameOrBefore(mDate)) {
-          // console.log('add', moment(d.timestamp));
           filtered.push(d);
           break;
         }

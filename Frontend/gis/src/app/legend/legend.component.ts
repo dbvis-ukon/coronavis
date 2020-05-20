@@ -1,6 +1,6 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import moment from 'moment';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -61,12 +61,15 @@ export class LegendComponent implements OnInit {
     private plusMinusPipe: PlusminusPipe,
     private numberPipe: DecimalPipe,
     private i18n: I18nService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private breakpointObs: BreakpointObserver
   ) {
     
   }
 
   ngOnInit(): void {
+    this.legendBedsExtended = this.legendCasesExtended = !this.breakpointObs.isMatched('only screen and (max-width: 499px)')
+
     this.titleCases$ = this.mo$
     .pipe(
       // tap(m => console.log('new mo', m)),
@@ -108,7 +111,7 @@ export class LegendComponent implements OnInit {
     const fullNumbers = mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.absolut 
     && mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute;
 
-    caseBins = this.caseColormap.getColorMapBins(scale, fullNumbers, actualExtent)
+    caseBins = this.caseColormap.getColorMapBins(mo.covidNumberCaseOptions, scale, fullNumbers, actualExtent)
     .map(b => {
       if(mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k && mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute) {
         return {
@@ -256,7 +259,7 @@ export class LegendComponent implements OnInit {
         title += "Change"
       }
 
-      title += mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours ? " (24h)" : " (72h)";
+      title += ' (' + mo.covidNumberCaseOptions.timeWindow + ')';
 
       title += " of ";
     }
@@ -305,7 +308,7 @@ export class LegendComponent implements OnInit {
 
       title += "Veränderung"
 
-      title += mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.twentyFourhours ? " (24h)" : " (72h)";
+      title += ' (' + mo.covidNumberCaseOptions.timeWindow + ')';
 
       title += " der ";
     }
@@ -339,7 +342,7 @@ export class LegendComponent implements OnInit {
       title += " am "
     }
 
-    title += this.datePipe.transform(mo.covidNumberCaseOptions.date === 'now' ? moment().toDate() : moment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
+    title += this.datePipe.transform(getMoment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
 
     return title;
   }

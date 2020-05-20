@@ -19,6 +19,10 @@ const routes: Routes = [
     component: ImpressumComponent
   },
   {
+    path: 'lockdown',
+    component: MapRootComponent
+  },
+  {
     path: '',
     component: OverviewComponent,
   },

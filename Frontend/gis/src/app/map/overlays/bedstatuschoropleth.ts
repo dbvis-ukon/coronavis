@@ -25,7 +25,15 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
   }
 
   createOverlay() {
-    const onAction = (e: L.LeafletMouseEvent, feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>, aggregationLayer: any) => {
+    const onAction = (e: L.LeafletMouseEvent, feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>, aggregationLayer: any, layer) => {
+      const map = (layer as any)._map;
+
+      const touches = (e.originalEvent as any).touches;
+
+      if((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map || map.dragging.moving() || map._animatingZoom) {
+        return;
+      }
+
       const onCloseAction: () => void = () => {
         aggregationLayer.resetStyle(e.target);
       };
@@ -77,7 +85,7 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
               data: feature.properties
             });
           },
-          mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer),
+          mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer, layer),
           // on mouseover hide tooltip and reset county to normal sytle
           mouseout: () => {
             this.tooltipService.close();

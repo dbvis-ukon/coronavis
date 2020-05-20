@@ -36,17 +36,21 @@ export class ConfigService {
       date: 'now',
       bedType: BedType.icuLow,
       enabled: false,
-      aggregationLevel: AggregationLevel.county
+      aggregationLevel: AggregationLevel.county,
+      showLabels: false
     },
 
     covidNumberCaseOptions: {
       date: 'now',
+      daysForTrend: 7,
       change: CovidNumberCaseChange.absolute,
       normalization: CovidNumberCaseNormalization.absolut,
       timeWindow: CovidNumberCaseTimeWindow.all,
       type: CovidNumberCaseType.cases,
       enabled: false,
-      aggregationLevel: AggregationLevel.county
+      aggregationLevel: AggregationLevel.county,
+      showLabels: false,
+      showTrendGlyphs: false
     },
 
     showOsmHeliports: false,
@@ -81,6 +85,29 @@ export class ConfigService {
     }
 
     return merge<MapOptions, RecursivePartial<MapOptions>, RecursivePartial<MapOptions>>(this.getDefaultMapOptions(), override, override2);
+  }
+
+  getLockDownMapOptions(): MapOptions {
+    return this.overrideMapOptions({
+      bedGlyphOptions: {
+        enabled: false
+      },
+      bedBackgroundOptions: {
+        enabled: false,
+        showLabels: true
+      },
+      covidNumberCaseOptions: {
+        enabled: true,
+        aggregationLevel: AggregationLevel.county,
+        change: CovidNumberCaseChange.absolute,
+        date: 'now',
+        normalization: CovidNumberCaseNormalization.per100k,
+        timeWindow: CovidNumberCaseTimeWindow.sevenDays,
+        type: CovidNumberCaseType.cases,
+        showLabels: true,
+        showTrendGlyphs: true
+      }
+    });
   }
 
 

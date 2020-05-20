@@ -21,13 +21,13 @@
   <app-overlay-brand class="overlay-brand"></app-overlay-brand>
   <app-legend
     *ngIf="mapOptions$"
-    [ngClass]="{'legend': true, 'mobile': isMobile}"
+    class="legend"
     [mapOptions$]="mapOptions$"
     [choroplethLayer$]="currentCaseChoropleth$"
   ></app-legend>
 
 
-  <app-timeslider [ngClass]="{'timeslider': true, 'mobile': isMobile}"
+  <app-timeslider class="timeslider"
   [mapOptions]="mapOptions"
   (mapOptionsChange)="mapOptionsUpdated($event)"
   ></app-timeslider>

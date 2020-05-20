@@ -8,7 +8,7 @@ import time
 import traceback
 
 import pandas
-from geoalchemy2.shape import to_shape
+
 from sqlalchemy import func
 from sqlalchemy.sql import null
 
@@ -250,15 +250,17 @@ if __name__ == "__main__":
         
         for index, row in df_hospital_extended.iterrows():
             hospital = db.HospitalExtended(**row.to_dict())
-            logger.info(hospital)
-            db.sess.add(hospital)
+            if db.sess.query(db.HospitalExtended.id).filter_by(last_update=hospital.last_update).filter_by(hospital_id=hospital.hospital_id).limit(1).scalar() is None:
+                logger.info(hospital)
+                db.sess.add(hospital)
 
         db.sess.commit()
         
         for index, row in df_beds.iterrows():
             bed = db.Beds(**row.to_dict())
-            logger.info(bed)
-            db.sess.add(bed)
+            if db.sess.query(db.Beds.id).filter_by(last_update=bed.last_update).filter_by(hospital_id=bed.hospital_id).limit(1).scalar() is None:
+                logger.info(bed)
+                db.sess.add(bed)
 
         db.sess.commit()
         

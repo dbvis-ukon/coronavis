@@ -1,4 +1,3 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -51,9 +50,6 @@ export class MapRootComponent implements OnInit {
 
   flyTo: FlyTo = null;
 
-  isMobile = false;
-
-
   // constructor is here only used to inject services
   constructor(
     private configService: ConfigService,
@@ -64,13 +60,10 @@ export class MapRootComponent implements OnInit {
     private urlHandlerService: UrlHandlerService,
     private route: ActivatedRoute,
     private storage: LocalStorageService,
-    private breakpoint: BreakpointObserver
               ) {
   }
 
   ngOnInit(): void {
-    this.breakpoint.observe('(max-width: 500px)').subscribe(d => this.isMobile = d.matches);
-
     this.i18nService.initI18n();
 
 
@@ -157,7 +150,15 @@ export class MapRootComponent implements OnInit {
     // will show the snack bar if true
     let restored = false;
 
-    if(paramMap.has(APP_CONFIG_URL_KEY)) {
+    const urlSegments = this.route.snapshot.url;
+    if(urlSegments && urlSegments[0] && urlSegments[0].path === 'lockdown') {
+      const lockdownMlo = this.configService.getLockDownMapOptions();
+
+      this.mapOptions = lockdownMlo;
+
+      this.mapOptions$.next(lockdownMlo);
+
+    } else if(paramMap.has(APP_CONFIG_URL_KEY)) {
       this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY)).then(urlMlo => {
         const mergedMlo = this.configService.overrideMapOptions(urlMlo);
 

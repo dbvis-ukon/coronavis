@@ -13,12 +13,18 @@
   mode="vertical"
 ></app-button-panel>
 
-<mat-card *ngIf="mo.extendInfobox && !mo.hideInfobox" [ngClass]="{'mobile': (isMobile$ | async)?.matches === true}">
+<mat-card *ngIf="mo.extendInfobox && !mo.hideInfobox">
+
+  <app-hospital-search 
+    [data]="searchData$" 
+    (selectedHospital)="searchSelected($event)" 
+    [reset]="resetHospitalSearch"
+  ></app-hospital-search>
 
   <div class="accordion-container">
   <mat-accordion class="accordion">
 
-    <mat-expansion-panel expanded="true">
+    <mat-expansion-panel [expanded]="mo.bedGlyphOptions.enabled || mo.bedBackgroundOptions.enabled">
       <mat-expansion-panel-header>
         <mat-panel-title class="flexPanelTitle">
             <mat-icon>{{ mo.bedGlyphOptions.enabled || mo.bedBackgroundOptions.enabled ? 'toggle_on' : 'toggle_off' }}</mat-icon> 
@@ -79,13 +85,6 @@
       </p>
 
       <!--<mat-divider></mat-divider>-->
-
-      <app-hospital-search 
-        *ngIf="mo.bedGlyphOptions.enabled"
-        [hospitals]="hospitals" 
-        (selectedHospital)="searchHospitalSelected($event)" 
-        [reset]="resetHospitalSearch"
-      ></app-hospital-search>
 
       <div *ngIf="mo.bedGlyphOptions.enabled">
         <div class="glyph-legend" *ngIf="combinedStats$ | async; let c">
@@ -157,7 +156,7 @@
     </mat-expansion-panel>
 
 
-    <mat-expansion-panel>
+    <mat-expansion-panel [expanded]="mo.covidNumberCaseOptions.enabled">
       <mat-expansion-panel-header>
         <mat-panel-title class="flexPanelTitle">
           <mat-icon>{{ mo.covidNumberCaseOptions.enabled ? 'toggle_on' : 'toggle_off' }}</mat-icon> 
@@ -224,10 +223,12 @@
                 Daten
               </mat-button-toggle>
               <mat-button-toggle i18n="@@infoboxTime24" onerror=" "
-                                 [value]="eCovidNumberCaseTimeWindow.twentyFourhours">letzte 24 Stunden
+                                 [value]="eCovidNumberCaseTimeWindow.twentyFourhours">24 Std.
               </mat-button-toggle>
-              <mat-button-toggle i18n="@@infoboxTime72" [value]="eCovidNumberCaseTimeWindow.seventyTwoHours">letzte 72
-                Stunden
+              <mat-button-toggle i18n="@@infoboxTime72" [value]="eCovidNumberCaseTimeWindow.seventyTwoHours">72
+                Std.
+              </mat-button-toggle>
+              <mat-button-toggle i18n="@@infoboxTime7Days" [value]="eCovidNumberCaseTimeWindow.sevenDays">7 Tage
               </mat-button-toggle>
             </mat-button-toggle-group>
           </div>
@@ -300,7 +301,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel [expanded]="mo.showOsmHospitals || mo.showOsmHeliports">
       <mat-expansion-panel-header>
         <mat-panel-title class="flexPanelTitle">
           <mat-icon>{{ mo.showOsmHeliports || mo.showOsmHospitals ? 'toggle_on' : 'toggle_off' }}</mat-icon> 

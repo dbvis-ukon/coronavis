@@ -5,7 +5,7 @@ import L, { Bounds, DomUtil, LeafletMouseEvent, Point } from 'leaflet';
 import { LocalStorageService } from 'ngx-webstorage/public_api';
 import * as Quadtree from 'quadtree-lib';
 import { BehaviorSubject, NEVER, Observable, Subject, timer } from 'rxjs';
-import { distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
 import { GlyphTooltipComponent } from 'src/app/glyph-tooltip/glyph-tooltip.component';
 import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospital-info-dialog.component';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
@@ -395,7 +395,6 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       [this.getGlyphWidth() / 2, this.getGlyphHeight() / 2]
     ];
 
-    ('force layou update');
     this.forceLayout.update(glyphBoxes, this.data, this._map.getZoom());
   }
 
@@ -447,6 +446,17 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   protected onMouseMove(): Observable < GlyphEvent < G, T > | null > {
     return this.mouseMove$
       .pipe(
+        filter(e => {
+          const map = this._map as any;
+
+          const touches = (e.originalEvent as any).touches;
+    
+          if((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map || map.dragging.moving() || map._animatingZoom) {
+            return false;
+          }
+
+          return true;
+        }),
         map(e => {
           const item = this.findItem(e);
           if (!item) {
@@ -488,15 +498,15 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     const fontSizeAndHeight = Math.round(11 * this.currentScale);
 
     this.ctx.strokeStyle = 'white';
-    this.ctx.lineWidth = 1;
+    this.ctx.lineWidth = 2;
 
 
     this.ctx.font = `bold ${fontSizeAndHeight}px Roboto`;
     this.ctx.fillStyle = isHovered ? '#193e8a' : 'black';
-    this.ctx.shadowOffsetX = 1;
-    this.ctx.shadowOffsetY = 1;
-    this.ctx.shadowColor = "rgba(255,255,255,1)";
-    this.ctx.shadowBlur = 4;
+    // this.ctx.shadowOffsetX = 1;
+    // this.ctx.shadowOffsetY = 1;
+    // this.ctx.shadowColor = "rgba(255,255,255,1)";
+    // this.ctx.shadowBlur = 4;
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'top';
 

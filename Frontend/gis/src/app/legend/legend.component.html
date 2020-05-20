@@ -1,5 +1,4 @@
 
-
 <div class="legend bedlegend" *ngIf="(mo$ | async)?.bedBackgroundOptions.enabled === false && choroplethLayer$ | async">
   <h5 
   class="title"
@@ -29,10 +28,10 @@
     </div>
         
     <div *ngIf="!legendCasesExtended">
-      <div class="row" *ngIf="(caseBins$ | async)">
-        <div class="text" [innerHtml]="(caseBins$ | async)[0].minStr"></div>
-        <div *ngFor="let b of caseBins$ | async"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.minStr }} – {{ b.maxStr }}"></div>
-        <div class="text" [innerHtml]="(caseBins$ | async)[(caseBins$ | async).length - 1].maxStr"></div>
+      <div class="row" *ngIf="caseBins$ | async; let bins">
+        <div class="text" [innerHtml]="bins[0]?.minStr"></div>
+        <div *ngFor="let b of bins"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.minStr }} – {{ b.maxStr }}"></div>
+        <div class="text" [innerHtml]="bins[bins.length - 1]?.maxStr"></div>
       </div>
     </div>
 

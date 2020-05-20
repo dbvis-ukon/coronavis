@@ -1,12 +1,9 @@
-import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import { BreakpointObserver } from "@angular/cdk/layout";
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Feature, MultiPolygon, Point } from 'geojson';
-import { LatLngLiteral } from 'leaflet';
-import moment from 'moment';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
-import { distinctUntilChanged, map, mergeMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
+import { distinct, distinctUntilChanged, filter, flatMap, map, merge, mergeMap, tap, toArray } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
-import { HospitalSearchFeatureCollectionPermissible } from '../hospital-search/hospital-search.component';
+import { Searchable } from '../hospital-search/hospital-search.component';
 import { FlyTo } from '../map/events/fly-to';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
@@ -14,11 +11,10 @@ import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTim
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
+import { RKICaseDevelopmentRepository } from '../repositories/rki-case-development.repository';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
-import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
-import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
 import { CountryAggregatorService } from '../services/country-aggregator.service';
@@ -28,6 +24,7 @@ import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TooltipService } from '../services/tooltip.service';
 import { TranslationService } from '../services/translation.service';
+import { getMoment, getStrDate } from '../util/date-util';
 
 interface GlyphEntity {
   name: string;
@@ -105,7 +102,7 @@ export class InfoboxComponent implements OnInit {
   caseChoroplethLoading = false;
   osmLoading = false;
 
-  hospitals: HospitalSearchFeatureCollectionPermissible;
+  searchData$: Observable<Searchable[]>;
   resetHospitalSearch: number;
 
   private refDay$: BehaviorSubject<string> = new BehaviorSubject('now');
@@ -113,8 +110,6 @@ export class InfoboxComponent implements OnInit {
   combinedStats$: Observable<CombinedStatistics>;
 
   private aggregatedDiviStatistics: QualitativeTimedStatus;
-
-  isMobile$: Observable<BreakpointState>;
 
   constructor(
     public colormapService: QualitativeColormapService,
@@ -127,12 +122,11 @@ export class InfoboxComponent implements OnInit {
     public tooltipService: TooltipService,
     private translationService: TranslationService,
     private hospitalRepo: QualitativeDiviDevelopmentRepository,
-    private hospitalUtils: HospitalUtilService
+    private hospitalUtils: HospitalUtilService,
+    private caseRepo: RKICaseDevelopmentRepository
   ) { }
 
   ngOnInit(): void {
-    this.isMobile$ = this.breakPointObserver.observe('(max-width: 500px');
-
     //close info box if mobile
     const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
     if(isSmallScreen){
@@ -148,7 +142,7 @@ export class InfoboxComponent implements OnInit {
     .pipe(
       distinctUntilChanged(),
       tap(() => this.aggregateStatisticsLoading$.next(true)),
-      map(s => s === 'now' ? new Date() : moment(s).endOf('day').toDate()),
+      map(s => getStrDate(getMoment(s).endOf('day'))),
       // tap(refDate => console.log('refdate', refDate)),
       mergeMap(refDate => {
         const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate);
@@ -175,21 +169,135 @@ export class InfoboxComponent implements OnInit {
     );
 
 
-    this.updateHospitals();
+    this.updateSearch();
   }
 
-  updateHospitals() {
+  updateSearch() {
     this.resetHospitalSearch = Math.random();
-    if(this.mo.bedGlyphOptions.enabled === false) {
-      return;
+
+
+    this.hospitalSearchResult()
+    .pipe(
+      merge(
+        this.bedBackgroundSearchResult(),
+        this.caseSearchResult()
+      ),
+      filter(d => d?.name !== undefined),
+      distinct(d => d.name + '' + d.addition),
+      toArray(),
+    )
+    .subscribe(d => this.searchData$ = of(d));
+  }
+
+  private hospitalSearchResult(): Observable<Searchable> {
+    const zoom = this.getZoomForAggLevel(this._mo.bedGlyphOptions.aggregationLevel);
+
+    if(this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
+      return this.hospitalRepo
+      .getDiviDevelopmentSingleHospitals()
+      .pipe(
+        flatMap(d => d.features),
+        map(d => {
+          return {
+            name: d.properties.name,
+            addition: d.properties.address,
+            point: {
+              lat: d.geometry.coordinates[1],
+              lng: d.geometry.coordinates[0]
+            },
+            zoom: zoom
+          } as Searchable
+        }),
+      );
+    } else if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel !== AggregationLevel.none) {
+      return this.hospitalRepo
+      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel)
+      .pipe(
+        flatMap(d => d.features),
+        map(d => {
+          return {
+            name: d.properties.name,
+            point: {
+              lat: d.properties.centroid.coordinates[1],
+              lng: d.properties.centroid.coordinates[0]
+            },
+            zoom: zoom
+          } as Searchable
+        })
+      );
     }
     
-    if(this.mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
-      this.hospitalRepo.getDiviDevelopmentSingleHospitals()
-        .subscribe(d => this.hospitals = d);
-    } else {
-      this.hospitalRepo.getDiviDevelopmentForAggLevel(this.mo.bedGlyphOptions.aggregationLevel).subscribe(d => this.hospitals = d);
+    return of();
+  }
+
+  private bedBackgroundSearchResult(): Observable<Searchable> {
+    const zoom = this.getZoomForAggLevel(this._mo.bedBackgroundOptions.aggregationLevel);
+    if(this._mo.bedBackgroundOptions.enabled && this._mo.bedBackgroundOptions.aggregationLevel !== AggregationLevel.none) {
+      return this.hospitalRepo
+      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel)
+      .pipe(
+        flatMap(d => d.features),
+        map(d => {
+          return {
+            name: d.properties.name,
+            point: {
+              lat: d.properties.centroid.coordinates[1],
+              lng: d.properties.centroid.coordinates[0]
+            },
+            zoom: zoom
+          } as Searchable
+        })
+      );
     }
+
+    return of();
+  }
+
+  private caseSearchResult(): Observable<Searchable> {
+    const zoom = this.getZoomForAggLevel(this.mo.covidNumberCaseOptions.aggregationLevel);
+    if(this._mo.covidNumberCaseOptions.enabled) {
+      return this.caseRepo
+      .getCasesDevelopmentForAggLevel(this.mo.covidNumberCaseOptions.aggregationLevel)
+      .pipe(
+        flatMap(d => d.features),
+        map(d => {
+          return {
+            name: d.properties.name,
+            addition: d.properties.description,
+            point: {
+              lat: d.properties.centroid.coordinates[1],
+              lng: d.properties.centroid.coordinates[0]
+            },
+            zoom: zoom
+          } as Searchable
+        })
+      );
+    }
+
+    return of();
+  }
+
+  private getZoomForAggLevel(lvl: AggregationLevel): number {
+    let zoom;
+
+    switch(this.mo.bedGlyphOptions.aggregationLevel){
+      case AggregationLevel.county:
+        zoom = 11;
+        break;
+
+      case AggregationLevel.governmentDistrict:
+        zoom = 9;
+        break;
+
+      case AggregationLevel.state:
+        zoom = 8;
+        break;
+
+      default:
+        zoom = 12;
+    }
+
+    return zoom;
   }
 
   openBedTooltip(evt, glypLegendEntity: GlyphEntity) {
@@ -266,47 +374,28 @@ export class InfoboxComponent implements OnInit {
   }
 
   emitMapOptions() {
-    this.updateHospitals();
+    if(this.mo.bedGlyphOptions.enabled) {
+      this.mo.bedBackgroundOptions.showLabels = false;
+      this.mo.covidNumberCaseOptions.showLabels = false;
+      this.mo.covidNumberCaseOptions.showTrendGlyphs = false;
+    } else {
+      this.mo.bedBackgroundOptions.showLabels = true;
+      this.mo.covidNumberCaseOptions.showLabels = true;
+      this.mo.covidNumberCaseOptions.showTrendGlyphs = true;
+    }
+
+    this.updateSearch();
     this.mapOptionsChange.emit({...this.mo});
   }
 
-  searchHospitalSelected(h: Feature<Point, SingleHospitalOut<any>> | Feature<MultiPolygon, AggregatedHospitalOut<any>>) {
-    if(this.hospitalUtils.isSingleHospitalFeature(h)) {
-      this.flyTo.emit({
-        loc: {
-          lat: h.geometry.coordinates[1],
-          lng: h.geometry.coordinates[0]
-        },
-  
-        zoom: 12
-      });
-    } else {
-      const loc: LatLngLiteral = {
-        lat: h.properties.centroid.coordinates[1],
-        lng: h.properties.centroid.coordinates[0]
-      };
-
-      let zoom = 12;
-      switch(this.mo.bedGlyphOptions.aggregationLevel){
-        case AggregationLevel.county:
-          zoom = 11;
-          break;
-
-        case AggregationLevel.governmentDistrict:
-          zoom = 9;
-          break;
-
-        case AggregationLevel.state:
-          zoom = 8;
-          break;
-      }
-
-      this.flyTo.emit({
-        loc,
-        zoom
-      });
+  searchSelected(h: Searchable) {
+    if(!h) {
+      return;
     }
 
-    
+    this.flyTo.emit({
+      loc: h.point,
+      zoom: h.zoom
+    });    
   }
 }

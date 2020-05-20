@@ -21,12 +21,15 @@ services:
     command: sh -c "npm install && npm run start:docker"
 
   crawler:
-    image: python:3-slim
+    image: coronavis-crawler:latest
+    build: 
+      context: ./Crawler
+      dockerfile: Dockerfile
     env_file: .env
     working_dir: /app
     volumes:
       - ./Crawler:/app
-    command: ['sh', '-c', 'pip install -r requirements.txt && python crawler.py']
+    command: ['sh', '-c', 'python crawl_rki_cases.py']
 
 volumes: 
   gis-db:

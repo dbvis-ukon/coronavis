@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -41,7 +41,8 @@ import { WithLoadingPipe } from './with-loading.pipe';
     TranslatePipe,
     PlusminusPipe,
     WithLoadingPipe,
-    DatePipe
+    DatePipe,
+    DecimalPipe
   ]
 })
 export class SharedModule {

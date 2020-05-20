@@ -4,14 +4,14 @@ https://experience.arcgis.com/experience/478220a4c454480e823b17327b2bf1d4/page/p
 Landkreise
 https://experience.arcgis.com/experience/478220a4c454480e823b17327b2bf1d4/page/page_1/
 """
-import db
-
+import logging
 import time
-import pandas
 
+import pandas
 import requests
 
-import logging
+import db
+
 logger = logging.getLogger(__name__)
 
 
@@ -40,19 +40,21 @@ def full_fetch_lk(url):
             d['EWZ'],
             d['death_rate'],
             d['cases_per_100k'],
-            d['cases_per_population']
+            d['cases_per_population'],
+            d['cases7_per_100k']
         ]
         entries.append(entry)
     
     json_str = str(rj)
 
-    df = pandas.DataFrame(entries, columns=['name', 'desc', 'bl', 'county', 'cases', 'deaths', 'population', 'death_rate', 'cases_per_100k', 'cases_per_population'])
+    df = pandas.DataFrame(entries, columns=['name', 'desc', 'bl', 'county', 'cases', 'deaths', 'population', 'death_rate', 'cases_per_100k', 'cases_per_population', 'cases7_per_100k'])
     df['cases'] = df['cases'].astype('int')
     df['deaths'] = df['deaths'].astype('int')
     df['population'] = df['population'].astype('int')
     df['death_rate'] = df['death_rate'].astype('float')
     df['cases_per_100k'] = df['cases_per_100k'].astype('float')
     df['cases_per_population'] = df['cases_per_population'].astype('float')
+    df['cases7_per_100k'] = df['cases7_per_100k'].astype('float')
     
     return df, json_str
 
@@ -116,6 +118,3 @@ if __name__ == "__main__":
         
     except Exception as e:
         logger.error(e)
-    
-    
-    

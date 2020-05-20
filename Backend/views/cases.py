@@ -185,10 +185,6 @@ SELECT
             json_build_object(
                 'timestamp',
                 c.timestamp,
-                'last_update',
-                c.last_updated,
-                'insert_date',
-                c.inserted,
                 'cases',
                 c.cases,
                 'cases_per_population',
@@ -200,7 +196,9 @@ SELECT
                 'deaths',
                 c.deaths,
                 'death_rate',
-                c.death_rate
+                c.death_rate,
+                'cases7_per_100k',
+                c.cases7_per_100k
             )
             ORDER BY
                 c.timestamp
@@ -213,10 +211,6 @@ SELECT
         json_build_object(
             'timestamp',
             c.timestamp,
-            'last_update',
-            c.last_updated,
-            'insert_date',
-            c.inserted,
             'cases',
             c.cases,
             'cases_per_population',
@@ -228,7 +222,9 @@ SELECT
             'deaths',
             c.deaths,
             'death_rate',
-            c.death_rate
+            c.death_rate,
+            'cases7_per_100k',
+            c.cases7_per_100k
         )
         ORDER BY
             c.timestamp
@@ -280,8 +276,6 @@ WITH rb_agg AS (
          SELECT r.ids,
                 r.name,
                 c.timestamp,
-                MAX(c.last_updated)               AS last_update,
-                MAX(c.inserted)          AS last_insert_date,
                 string_agg(DISTINCT c.name, ',') AS landkreise,
                 r.geom,
                 SUM(cases)                                          as cases,
@@ -289,7 +283,8 @@ WITH rb_agg AS (
                 AVG(cases_per_population)                           as cases_per_population,
                 SUM(population)                                     as population,
                 SUM(deaths)                                         as deaths,
-                AVG(death_rate)                                     as death_rate
+                AVG(death_rate)                                     as death_rate,
+                AVG(cases7_per_100k)                                as cases7_per_100k
 
          FROM cases_per_county_and_day c
                   LEFT OUTER JOIN regierungsbezirke r ON c.ids LIKE (r.ids || '%')
@@ -309,10 +304,6 @@ SELECT rb_agg.ids,
                    json_build_object(
                            'timestamp',
                            rb_agg.timestamp,
-                           'last_update',
-                           rb_agg.last_update,
-                           'insert_date',
-                           rb_agg.last_insert_date,
                            'cases',
                            rb_agg.cases,
                            'cases_per_population',
@@ -324,7 +315,9 @@ SELECT rb_agg.ids,
                            'deaths',
                            rb_agg.deaths,
                            'death_rate',
-                           rb_agg.death_rate
+                           rb_agg.death_rate,
+                            'cases7_per_100k',
+                            rb_agg.cases7_per_100k
                        )
                    ORDER BY
                        rb_agg.timestamp
@@ -337,10 +330,6 @@ SELECT rb_agg.ids,
                    json_build_object(
                            'timestamp',
                            rb_agg.timestamp,
-                           'last_update',
-                           rb_agg.last_update,
-                           'insert_date',
-                           rb_agg.last_insert_date,
                            'cases',
                            rb_agg.cases,
                            'cases_per_population',
@@ -352,7 +341,9 @@ SELECT rb_agg.ids,
                            'deaths',
                            rb_agg.deaths,
                            'death_rate',
-                           rb_agg.death_rate
+                           rb_agg.death_rate,
+                            'cases7_per_100k',
+                            rb_agg.cases7_per_100k
                        )
                    ORDER BY
                        rb_agg.timestamp
@@ -400,8 +391,6 @@ WITH bl_agg AS (
          SELECT b.ids,
                 b.name,
                 c.timestamp,
-                MAX(c.last_updated)               AS last_update,
-                MAX(c.inserted)          AS last_insert_date,
                 string_agg(DISTINCT c.name, ',') AS landkreise,
                 b.geom,
                 SUM(cases)                                          as cases,
@@ -409,7 +398,8 @@ WITH bl_agg AS (
                 AVG(cases_per_population)                           as cases_per_population,
                 SUM(population)                                     as population,
                 SUM(deaths)                                         as deaths,
-                AVG(death_rate)                                     as death_rate
+                AVG(death_rate)                                     as death_rate,
+                AVG(cases7_per_100k)                                as cases7_per_100k
 
          FROM cases_per_county_and_day c
                   LEFT OUTER JOIN bundeslaender b ON c.ids LIKE (b.ids || '%')
@@ -429,10 +419,6 @@ SELECT bl_agg.ids,
                    json_build_object(
                            'timestamp',
                            bl_agg.timestamp,
-                           'last_update',
-                           bl_agg.last_update,
-                           'insert_date',
-                           bl_agg.last_insert_date,
                            'cases',
                            bl_agg.cases,
                            'cases_per_population',
@@ -444,7 +430,9 @@ SELECT bl_agg.ids,
                            'deaths',
                            bl_agg.deaths,
                            'death_rate',
-                           bl_agg.death_rate
+                           bl_agg.death_rate,
+                            'cases7_per_100k',
+                            bl_agg.cases7_per_100k
                        )
                    ORDER BY
                        bl_agg.timestamp
@@ -457,10 +445,6 @@ SELECT bl_agg.ids,
                    json_build_object(
                            'timestamp',
                            bl_agg.timestamp,
-                           'last_update',
-                           bl_agg.last_update,
-                           'insert_date',
-                           bl_agg.last_insert_date,
                            'cases',
                            bl_agg.cases,
                            'cases_per_population',
@@ -472,7 +456,9 @@ SELECT bl_agg.ids,
                            'deaths',
                            bl_agg.deaths,
                            'death_rate',
-                           bl_agg.death_rate
+                           bl_agg.death_rate,
+                            'cases7_per_100k',
+                            bl_agg.cases7_per_100k
                        )
                    ORDER BY
                        bl_agg.timestamp
@@ -519,8 +505,6 @@ WITH bl_agg AS (
          SELECT g.ids,
                 g.name,
                 c.timestamp,
-                MAX(c.last_updated)               AS last_update,
-                MAX(c.inserted)          AS last_insert_date,
                 string_agg(DISTINCT c.name, ',') AS landkreise,
                 g.geom,
                 SUM(cases)                                          as cases,
@@ -528,7 +512,8 @@ WITH bl_agg AS (
                 AVG(cases_per_population)                           as cases_per_population,
                 SUM(population)                                     as population,
                 SUM(deaths)                                         as deaths,
-                AVG(death_rate)                                     as death_rate
+                AVG(death_rate)                                     as death_rate,
+                AVG(cases7_per_100k)                                as cases7_per_100k
 
          FROM cases_per_county_and_day c
          CROSS JOIN germany g
@@ -548,10 +533,6 @@ SELECT bl_agg.ids,
                    json_build_object(
                            'timestamp',
                            bl_agg.timestamp,
-                           'last_update',
-                           bl_agg.last_update,
-                           'insert_date',
-                           bl_agg.last_insert_date,
                            'cases',
                            bl_agg.cases,
                            'cases_per_population',
@@ -563,7 +544,9 @@ SELECT bl_agg.ids,
                            'deaths',
                            bl_agg.deaths,
                            'death_rate',
-                           bl_agg.death_rate
+                           bl_agg.death_rate,
+                            'cases7_per_100k',
+                            bl_agg.cases7_per_100k
                        )
                    ORDER BY
                        bl_agg.timestamp
@@ -576,10 +559,6 @@ SELECT bl_agg.ids,
                    json_build_object(
                            'timestamp',
                            bl_agg.timestamp,
-                           'last_update',
-                           bl_agg.last_update,
-                           'insert_date',
-                           bl_agg.last_insert_date,
                            'cases',
                            bl_agg.cases,
                            'cases_per_population',
@@ -591,7 +570,9 @@ SELECT bl_agg.ids,
                            'deaths',
                            bl_agg.deaths,
                            'death_rate',
-                           bl_agg.death_rate
+                           bl_agg.death_rate,
+                            'cases7_per_100k',
+                            bl_agg.cases7_per_100k
                        )
                    ORDER BY
                        bl_agg.timestamp

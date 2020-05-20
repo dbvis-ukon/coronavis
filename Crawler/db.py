@@ -1,6 +1,5 @@
 import datetime
 
-import db_config
 import geojson
 from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
@@ -10,6 +9,8 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import (backref, deferred, relationship, scoped_session,
                             sessionmaker)
+
+import db_config
 
 Base = declarative_base()
 
@@ -137,7 +138,7 @@ class Beds(Base):
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        return '(' + self.name + ')'
+        return '<Beds %r>' % (self.name)
 
         
         
@@ -170,7 +171,7 @@ class HospitalExtended(Base):
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        return '<Hospital %r>' % (self.name)
+        return '<HospitalExtended %r>' % (self.name)
 
     def as_dict(self):
         return {
@@ -207,6 +208,7 @@ class CasesLK(Base):
     death_rate = Column(Float(), nullable=False)
     cases_per_100k = Column(Float(), nullable=False)
     cases_per_population = Column(Float(), nullable=False)
+    cases7_per_100k = Column(Float(), nullable=False)
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)

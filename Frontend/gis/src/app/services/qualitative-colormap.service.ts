@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import * as d3 from 'd3';
-import moment from 'moment';
+import { interpolateRgb, scaleOrdinal, scaleQuantize } from 'd3';
+import { scaleLinear } from 'd3-scale';
 import { BedType } from '../map/options/bed-type.enum';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
+import { getMoment, getStrDate } from '../util/date-util';
 import { HospitalUtilService } from './hospital-util.service';
 
 @Injectable({
@@ -19,13 +20,13 @@ export class QualitativeColormapService {
   public static bedStatusColors = ['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)'];
   public static bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar', 'Keine Information'];
 
-  public static BedStatusColor = d3.scaleLinear<string, string>()
+  public static BedStatusColor = scaleLinear<string, string>()
       .domain([0, 0.5, 1])
       .range(QualitativeColormapService.bedStatusColors)
-      .interpolate(d3.interpolateRgb.gamma(2.2));
+      .interpolate(interpolateRgb.gamma(2.2));
 
 
-  private singleHospitalCM = d3.scaleOrdinal<string, string>()
+  private singleHospitalCM = scaleOrdinal<string, string>()
     .domain(QualitativeColormapService.bedStati)
     .range([...QualitativeColormapService.bedStatusColors, "#c2cbd4", "#bbb"]);
 
@@ -78,10 +79,10 @@ export class QualitativeColormapService {
     return v === 0 && b === 0 && a === 0 && n == 0;
   }
 
-  private continousColorMap = d3.scaleLinear<string, string>()
+  private continousColorMap = scaleLinear<string, string>()
     .domain([0, 0.5, 1])
     .range(QualitativeColormapService.bedStatusColors)
-    .interpolate(d3.interpolateRgb.gamma(2.2));
+    .interpolate(interpolateRgb.gamma(2.2));
 
     public propertyAccessor(type: BedType) {
       switch (type) {
@@ -105,8 +106,8 @@ export class QualitativeColormapService {
       if(date === null || date === 'now') {
         latest = t[t.length -1];
       } else {
-        const actualDate = moment(date).endOf('day').toDate();
-        const strDate = moment(date).format('YYYY-MM-DD');
+        const actualDate = getMoment(date).endOf('day');
+        const strDate = getStrDate(getMoment(date));
 
         if(p?.developmentDays) {
           const status = p?.developmentDays[strDate];
@@ -134,7 +135,7 @@ export class QualitativeColormapService {
     const maxScore = this.getMaxScore(properties);
 
     const minMaxNormValues = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
-    const normalizeValues = d3.scaleQuantize()
+    const normalizeValues = scaleQuantize()
       .domain([minScore, maxScore])
       .range(minMaxNormValues);
 

@@ -23,9 +23,6 @@ export class ButtonPanelComponent implements OnInit {
   @Input()
   mode: 'vertical' | 'horizontal';
 
-
-
-
   constructor(
     private dialogService: MatDialog,
     public iconService: IconService
@@ -46,9 +43,6 @@ export class ButtonPanelComponent implements OnInit {
     window.open('https://video.coronavis.dbvis.de', '_blank');
     // location.href = 'https://video.coronavis.dbvis.de';
   }
-
-
-
 
   openHelp() {
     this.dialogService.open(HelpDialogComponent);
