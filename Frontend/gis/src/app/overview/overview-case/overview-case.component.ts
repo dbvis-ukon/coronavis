@@ -47,7 +47,7 @@ export class OverviewCaseComponent implements OnInit {
         this.gridNumCols = matched.matches ? 1 : 3;
       });
 
-    this.countryAggregatorService.rkiAggregationForCountry(new Date())
+    this.countryAggregatorService.rkiAggregationForCountry('now')
       .subscribe(r => {
         this.aggregatedRkiStatistics = r;
       })

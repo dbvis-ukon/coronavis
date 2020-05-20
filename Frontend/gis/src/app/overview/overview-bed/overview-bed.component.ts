@@ -61,7 +61,7 @@ export class OverviewBedComponent implements OnInit {
         this.gridNumCols = matched.matches ? 1 : 3;
       });
 
-      this.countryAggregatorService.diviAggregationForCountry(new Date())
+      this.countryAggregatorService.diviAggregationForCountry('now')
       .subscribe(r => {
         this.aggregatedDiviStatistics = r;
       });
