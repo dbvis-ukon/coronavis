@@ -24,8 +24,9 @@ const routes: Routes = [
                 component: OverviewCaseComponent
             },
             {
-                path: 'map',
-                component: MapRootComponent
+                path: 'map/:flavor',
+                component: MapRootComponent,
+                pathMatch: 'prefix'
             }
         ]
     }

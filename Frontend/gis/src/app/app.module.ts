@@ -41,10 +41,7 @@ import { CaseDialogComponent } from './case-dialog/case-dialog.component';
 import { CaseInfoComponent } from './case-info/case-info.component';
 import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
-import { HelpDialogBedsComponent } from './help-dialog-beds/help-dialog-beds.component';
-import { HelpDialogCasesComponent } from './help-dialog-cases/help-dialog-cases.component';
-import { HelpDialogTheprojectComponent } from './help-dialog-theproject/help-dialog-theproject.component';
-import { HelpDialogComponent } from './help-dialog/help-dialog.component';
+import { HelpModule } from './help/help.module';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
 import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
 import { HospitalSearchComponent } from './hospital-search/hospital-search.component';
@@ -139,7 +136,6 @@ const localeProvider = {
     AboutComponent,
     ImpressumComponent,
     VegaComponent,
-    HelpDialogComponent,
     OsmTooltipComponent,
     CaseInfoComponent,
     CaseDialogComponent,
@@ -149,9 +145,6 @@ const localeProvider = {
     BedTooltipComponent,
     HospitalSearchComponent,
     TimesliderComponent,
-    HelpDialogBedsComponent,
-    HelpDialogCasesComponent,
-    HelpDialogTheprojectComponent
   ],
   imports: [
     CommonModule,
@@ -192,6 +185,7 @@ const localeProvider = {
     MatAutocompleteModule,
     ReactiveFormsModule,
     NgxWebstorageModule.forRoot(),
+    HelpModule
   ],
   providers: [
     localeProvider, 

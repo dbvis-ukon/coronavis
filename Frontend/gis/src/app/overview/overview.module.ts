@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { HelpModule } from '../help/help.module';
 import { SharedModule } from '../shared/shared.module';
 import { D3ChoroplethMapComponent } from './d3-choropleth-map/d3-choropleth-map.component';
 import { OverviewBedComponent } from './overview-bed/overview-bed.component';
@@ -29,7 +30,8 @@ import { OverviewComponent } from './overview.component';
     MatToolbarModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    MatCardModule
+    MatCardModule,
+    HelpModule
   ],
   providers: [
   ],

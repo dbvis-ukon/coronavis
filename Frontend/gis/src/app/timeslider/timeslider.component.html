@@ -13,11 +13,13 @@
     ></nouislider>
 </div>
 
+<div class="button-container">
+    <button *ngIf="nouiConfig" class="play" mat-mini-fab aria-label="Play animation" (click)="modePlaying$.next(!modePlaying$.value)">
+        <mat-icon *ngIf="modePlaying$.value === false">play_arrow</mat-icon>
+        <mat-icon *ngIf="modePlaying$.value === true">pause</mat-icon>
+    </button>
+</div>
 
-<button *ngIf="nouiConfig" class="play" mat-mini-fab aria-label="Play animation" (click)="modePlaying$.next(!modePlaying$.value)">
-    <mat-icon *ngIf="modePlaying$.value === false">play_arrow</mat-icon>
-    <mat-icon *ngIf="modePlaying$.value === true">pause</mat-icon>
-</button>
 
 
 <!-- <mat-slider

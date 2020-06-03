@@ -8,7 +8,7 @@ import { BehaviorSubject, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { APP_CONFIG_KEY, APP_CONFIG_URL_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from "../../constants";
-import { HelpDialogComponent } from "../help-dialog/help-dialog.component";
+import { HelpDialogComponent } from "../help/help-dialog/help-dialog.component";
 import { FlyTo } from '../map/events/fly-to';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
@@ -152,13 +152,18 @@ export class MapRootComponent implements OnInit {
     let restored = false;
 
     const urlSegments = this.route.snapshot.url;
-    if(urlSegments && urlSegments[0] && urlSegments[0].path === 'lockdown') {
+    if((urlSegments && urlSegments[0] && urlSegments[0].path === 'lockdown') || paramMap && paramMap.get('flavor') === 'lockdown') {
       const lockdownMlo = this.configService.getLockDownMapOptions();
 
       this.mapOptions = lockdownMlo;
 
       this.mapOptions$.next(lockdownMlo);
+    } else if((urlSegments && urlSegments[0] && urlSegments[0].path === 'bedcapacities') || paramMap && paramMap.get('flavor') === 'bedcapacities') {
+      const capacityMlo = this.configService.getICUMapOptions();
 
+      this.mapOptions = capacityMlo;
+
+      this.mapOptions$.next(capacityMlo);
     } else if(paramMap.has(APP_CONFIG_URL_KEY)) {
       this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY)).then(urlMlo => {
         const mergedMlo = this.configService.overrideMapOptions(urlMlo);

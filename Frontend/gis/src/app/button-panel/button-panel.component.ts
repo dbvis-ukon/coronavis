@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
-import { HelpDialogComponent } from '../help-dialog/help-dialog.component';
+import { HelpDialogComponent } from '../help/help-dialog/help-dialog.component';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { IconService } from '../services/icon.service';
