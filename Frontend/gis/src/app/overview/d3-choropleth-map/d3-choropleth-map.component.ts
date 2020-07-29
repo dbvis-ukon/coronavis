@@ -8,18 +8,18 @@ import { QualitativeTimedStatus } from '../../repositories/types/in/qualitative-
 import { AggregatedHospitalOut } from '../../repositories/types/out/aggregated-hospital-out';
 import { ResizedEvent } from '../../shared/resized-event';
 
-export type D3ChoroplethMapPermissibleFeatureCollection = 
-  FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> | 
+export type D3ChoroplethMapPermissibleFeatureCollection =
+  FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> |
   FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>;
 
-export type D3ChoroplethMapPermissibleFeature = 
-  Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> | 
+export type D3ChoroplethMapPermissibleFeature =
+  Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> |
   Feature<MultiPolygon, RKICaseDevelopmentProperties>;
 
 export interface D3ChoroplethMapData {
   data: D3ChoroplethMapPermissibleFeatureCollection;
 
-  fillFn: (d: D3ChoroplethMapPermissibleFeature) => string
+  fillFn: (d: D3ChoroplethMapPermissibleFeature) => string;
 
   width: number;
 
@@ -58,7 +58,7 @@ export class D3ChoroplethMapComponent implements OnInit {
 
     timer(50)
       .subscribe(() => {
-        if(!this._data) {
+        if (!this._data) {
           return;
         }
 
@@ -89,7 +89,7 @@ export class D3ChoroplethMapComponent implements OnInit {
 
     timer(50)
       .subscribe(() => {
-        if(!this._data) {
+        if (!this._data) {
           return;
         }
 
@@ -103,11 +103,11 @@ export class D3ChoroplethMapComponent implements OnInit {
   }
 
   onResized(evt: ResizedEvent) {
-    if(!this._data) {
+    if (!this._data) {
       return;
     }
 
-    if(evt.newWidth === 0) {
+    if (evt.newWidth === 0) {
       return;
     }
 
@@ -118,9 +118,9 @@ export class D3ChoroplethMapComponent implements OnInit {
   }
 
 
-  
+
   private draw(): void {
-    if(!this._data) {
+    if (!this._data) {
       return;
     }
 
@@ -131,12 +131,12 @@ export class D3ChoroplethMapComponent implements OnInit {
       .attr('height', `${this._data.height}px`);
 
     const data = this._data.data.features;
-    
+
 
     const sel = this.svg.selectAll<SVGPathElement, D3ChoroplethMapPermissibleFeature>('path')
       .data<D3ChoroplethMapPermissibleFeature>(data);
 
-    sel  
+    sel
       .enter()
       .append('path')
       .merge(sel)
