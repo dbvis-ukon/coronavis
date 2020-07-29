@@ -9,7 +9,7 @@ spec:
   tls:
     - hosts: 
         - {{ .Values.url }}
-      {{- if eq .Values.environment "review" }}
+      {{- if eq .Values.environment "review-false" }}
       secretName: covis-wildcard
       {{- else }}
       secretName: {{ .Release.Name }}-tls
