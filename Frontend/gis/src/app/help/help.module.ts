@@ -6,6 +6,9 @@ import { HelpDialogBedsComponent } from './help-dialog-beds/help-dialog-beds.com
 import { HelpDialogCasesComponent } from './help-dialog-cases/help-dialog-cases.component';
 import { HelpDialogTheprojectComponent } from './help-dialog-theproject/help-dialog-theproject.component';
 import { HelpDialogComponent } from './help-dialog/help-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 
@@ -19,7 +22,10 @@ import { HelpDialogComponent } from './help-dialog/help-dialog.component';
   imports: [
     CommonModule,
     MatIconModule,
-    MatTabsModule
+    MatTabsModule,
+    MatButtonModule,
+    MatDialogModule,
+    FlexLayoutModule
   ],
   exports: [
     HelpDialogComponent,
