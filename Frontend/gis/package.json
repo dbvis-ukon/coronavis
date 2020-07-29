@@ -16,19 +16,19 @@
     "extract-i18n": "ng xi18n gis --format xlf2 --output-path src/i18n --i18n-locale de && ng run gis:xliffmerge",
     "start-en": "ng serve -c en",
     "start-de": "ng serve -c de",
-    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
+    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig ./tsconfig.app.json"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^10.0.6",
-    "@angular/cdk": "^9.2.1",
+    "@angular/cdk": "^10.1.1",
     "@angular/common": "~10.0.6",
     "@angular/compiler": "~10.0.6",
     "@angular/core": "~10.0.6",
-    "@angular/flex-layout": "^9.0.0-beta.29",
+    "@angular/flex-layout": "^10.0.0-beta.32",
     "@angular/forms": "~10.0.6",
     "@angular/localize": "^10.0.6",
-    "@angular/material": "^9.2.1",
+    "@angular/material": "^10.1.1",
     "@angular/platform-browser": "~10.0.6",
     "@angular/platform-browser-dynamic": "~10.0.6",
     "@angular/router": "^10.0.6",
