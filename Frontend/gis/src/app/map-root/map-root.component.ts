@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { FeatureCollection } from 'geojson';
 import { LocalStorageService } from 'ngx-webstorage';
 import { BehaviorSubject, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { APP_CONFIG_KEY, APP_CONFIG_URL_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from "../../constants";
-import { HelpDialogComponent } from "../help-dialog/help-dialog.component";
+import { APP_CONFIG_KEY, APP_CONFIG_URL_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from '../../constants';
+import { HelpDialogComponent } from '../help/help-dialog/help-dialog.component';
 import { FlyTo } from '../map/events/fly-to';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
@@ -23,15 +23,16 @@ import { safeDebounce } from '../util/safe-debounce';
 @Component({
   selector: 'app-map-root',
   templateUrl: './map-root.component.html',
-  styleUrls: ['./map-root.component.less']
+  styleUrls: ['./map-root.component.less'],
+  encapsulation: ViewEncapsulation.None
 })
 export class MapRootComponent implements OnInit {
 
   overlays: Array<Overlay<FeatureCollection>> = new Array<Overlay<FeatureCollection>>();
 
-  
 
-  
+
+
 
 
   mapOptions: MapOptions = null;
@@ -119,10 +120,10 @@ export class MapRootComponent implements OnInit {
 
   initTrackingPixel() {
     const trackingPixelSiteIDMapping = {
-      'production': 1,
-      'staging': 3,
-      'review': 4,
-      'development': 5
+      production: 1,
+      staging: 3,
+      review: 4,
+      development: 5
     };
 
     this.siteId = trackingPixelSiteIDMapping[environment.env];
@@ -139,11 +140,10 @@ export class MapRootComponent implements OnInit {
   }
 
   restoreSettingsFromLocalStorageOrUseDefault(paramMap = null) {
-    if(!paramMap) {
+    if (!paramMap) {
       // try from url params
       paramMap = this.route.snapshot.paramMap;
     }
-    
 
     const storedMapOptions = JSON.parse(this.storage.retrieve(APP_CONFIG_KEY)) as MapOptions;
 
@@ -151,14 +151,19 @@ export class MapRootComponent implements OnInit {
     let restored = false;
 
     const urlSegments = this.route.snapshot.url;
-    if(urlSegments && urlSegments[0] && urlSegments[0].path === 'lockdown') {
+    if ((urlSegments && urlSegments[0] && urlSegments[0].path === 'lockdown') || paramMap && paramMap.get('flavor') === 'lockdown') {
       const lockdownMlo = this.configService.getLockDownMapOptions();
 
       this.mapOptions = lockdownMlo;
 
       this.mapOptions$.next(lockdownMlo);
+    } else if ((urlSegments && urlSegments[0] && urlSegments[0].path === 'bedcapacities') || paramMap && paramMap.get('flavor') === 'bedcapacities') {
+      const capacityMlo = this.configService.getICUMapOptions();
 
-    } else if(paramMap.has(APP_CONFIG_URL_KEY)) {
+      this.mapOptions = capacityMlo;
+
+      this.mapOptions$.next(capacityMlo);
+    } else if (paramMap.has(APP_CONFIG_URL_KEY)) {
       this.urlHandlerService.convertUrlToMLO(paramMap.get(APP_CONFIG_URL_KEY)).then(urlMlo => {
         const mergedMlo = this.configService.overrideMapOptions(urlMlo);
 
@@ -169,7 +174,7 @@ export class MapRootComponent implements OnInit {
     } else if (storedMapOptions) {
       // merge with default as basis is necessary when new options are added in further releases
       this.mapOptions = this.configService.overrideMapOptions(
-        storedMapOptions, 
+        storedMapOptions,
         { hideInfobox: false, showHelpOnStart: true, bedGlyphOptions: {date: 'now'}, bedBackgroundOptions: {date: 'now'}, covidNumberCaseOptions: {date: 'now'} }
       );
       restored = true;
@@ -184,29 +189,28 @@ export class MapRootComponent implements OnInit {
 
     const storedMapLocationSettings = JSON.parse(this.storage.retrieve(MAP_LOCATION_SETTINGS_KEY)) as MapLocationSettings;
 
-    if(paramMap.has(MAP_LOCATION_SETTINGS_URL_KEY)) {
+    if (paramMap.has(MAP_LOCATION_SETTINGS_URL_KEY)) {
       this.urlHandlerService.convertUrlToMLS(paramMap.get(MAP_LOCATION_SETTINGS_URL_KEY)).then(urlMls => {
         const mergedMls = this.configService.overrideMapLocationSettings(urlMls);
 
         this.initialMapLocationSettings = mergedMls;
       });
-    } else if(storedMapLocationSettings) {
+    } else if (storedMapLocationSettings) {
       // this.mapLocationSettings$.next(storedMapLocationSettings);
       this.initialMapLocationSettings = this.configService.overrideMapLocationSettings(storedMapLocationSettings, {
         allowPanning: true,
         allowZooming: true
       });
-      restored = true;
     } else { // use default
       this.initialMapLocationSettings = this.configService.getDefaultMapLocationSettings();
     }
 
-    if(restored) {
-      let snackbar = this.snackbar.open(
-        this.translationService.translate("Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt"),
-        this.translationService.translate("Zurücksetzen"), 
+    if (restored) {
+      const snackbar = this.snackbar.open(
+        this.translationService.translate('Die Anwendungskonfiguration aus Ihrem letzten Besuch wurde wiederhergestellt'),
+        this.translationService.translate('Zurücksetzen'),
         {
-        politeness: "polite",
+        politeness: 'polite',
         duration: 5000,
         verticalPosition: 'top'
       });

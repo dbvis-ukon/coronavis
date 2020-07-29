@@ -91,7 +91,6 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": true,
-              "es5BrowserSupport": true,
               "buildOptimizer": true,
               "budgets": [
                 {

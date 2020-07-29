@@ -152,10 +152,6 @@ export class HospitalInfoComponent implements OnInit {
     return Object.keys(counts).find(s => s !== "") ?? "Keine Information";
   }
 
-  getGlyphColor(str: string) {
-    return this.colormapService.getSingleHospitalColormap()(str);
-  }
-
   private async prepareBarCharts() {
     const barChartSpecs = [];
 

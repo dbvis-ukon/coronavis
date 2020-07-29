@@ -110,6 +110,26 @@ export class ConfigService {
     });
   }
 
+  getICUMapOptions(): MapOptions {
+    return this.overrideMapOptions({
+      bedGlyphOptions: {
+        enabled: true,
+        aggregationLevel: AggregationLevel.none,
+        date: 'now',
+        forceDirectedOn: true,
+        showIcuLow: true,
+        showIcuHigh: true,
+        showEcmo: true
+      },
+      bedBackgroundOptions: {
+        enabled: false,
+      },
+      covidNumberCaseOptions: {
+        enabled: false
+      }
+    });
+  }
+
 
   getDefaultMapLocationSettings(): MapLocationSettings {
     return JSON.parse(JSON.stringify(this.defaultMapLocationSettings));

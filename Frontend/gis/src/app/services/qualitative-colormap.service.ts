@@ -29,6 +29,8 @@ export class QualitativeColormapService {
   private singleHospitalCM = scaleOrdinal<string, string>()
     .domain(QualitativeColormapService.bedStati)
     .range([...QualitativeColormapService.bedStatusColors, "#c2cbd4", "#bbb"]);
+
+  
   getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
     return this.singleHospitalCM;
   }

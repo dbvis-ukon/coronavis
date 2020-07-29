@@ -331,10 +331,6 @@ export class InfoboxComponent implements OnInit {
     this.emitMapOptions();
   }
 
-  getGlyphColor(str: string) {
-    return this.colormapService.getSingleHospitalColormap()(str);
-  }
-
   updateBedBackgroundBedType(state: BedType) {
     if(this.mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
       return;

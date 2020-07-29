@@ -1,0 +1,121 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  overflow: visible;
+  justify-content: space-between;
+  // flex-wrap: wrap-reverse;
+
+  &.mobile {
+    flex-direction: column-reverse;
+
+    .text {
+      width: auto;
+    }
+  }
+
+  .grid {
+    // position: absolute;
+    // display: block;
+    flex: 2 2 auto;
+    min-width: 300px;
+    // flex-basis: content;
+  }
+
+  .text {
+    flex: 1 1 auto;
+    width: min-content;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.mytile {
+  cursor: pointer;
+
+  .mapcontainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+
+    .loading {
+      align-self: center;
+      justify-self: center;
+    }
+
+    .map {
+      flex-grow: 1;
+      overflow: hidden;
+    }
+  }
+
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.language-switcher {
+  font-size: 11px;
+}
+
+.legend-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+
+  span {
+    margin-right: 10px;
+  }
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+h1.example-app-name {
+  margin-left: 8px;
+}
+
+.example-sidenav-container {
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+    causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+  flex: 1;
+}
+
+.nav-list {
+    .mat-list-item {
+        &.mat-primary {
+            color: #3f51b5;
+        }
+    }
+}
+
+.example-container {
+
+    .example-toolbar {
+        .snav-toggle {
+            display: none;
+        }
+    }
+
+    &.example-is-mobile {
+        .example-toolbar {
+            .snav-toggle {
+                display: inline-block;
+            }
+
+            .snav-desktop {
+                display: none;
+            }
+        }
+    }
+}

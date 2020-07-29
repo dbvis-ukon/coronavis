@@ -1,6 +1,6 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { APP_BASE_HREF, PlatformLocation, registerLocaleData } from '@angular/common';
+import { APP_BASE_HREF, CommonModule, PlatformLocation, registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import localeDe from '@angular/common/locales/de';
 import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
@@ -41,10 +41,7 @@ import { CaseDialogComponent } from './case-dialog/case-dialog.component';
 import { CaseInfoComponent } from './case-info/case-info.component';
 import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
-import { HelpDialogBedsComponent } from './help-dialog-beds/help-dialog-beds.component';
-import { HelpDialogCasesComponent } from './help-dialog-cases/help-dialog-cases.component';
-import { HelpDialogTheprojectComponent } from './help-dialog-theproject/help-dialog-theproject.component';
-import { HelpDialogComponent } from './help-dialog/help-dialog.component';
+import { HelpModule } from './help/help.module';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
 import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
 import { HospitalSearchComponent } from './hospital-search/hospital-search.component';
@@ -55,6 +52,7 @@ import { MapRootComponent } from './map-root/map-root.component';
 import { MapComponent } from './map/map.component';
 import { OsmTooltipComponent } from './osm-tooltip/osm-tooltip.component';
 import { OverlayBrandComponent } from './overlay-brand/overlay-brand.component';
+import { OverviewModule } from './overview/overview.module';
 import { SentryErrorHandler } from './sentry-config';
 import { SupportedLocales } from './services/i18n.service';
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
@@ -138,7 +136,6 @@ const localeProvider = {
     AboutComponent,
     ImpressumComponent,
     VegaComponent,
-    HelpDialogComponent,
     OsmTooltipComponent,
     CaseInfoComponent,
     CaseDialogComponent,
@@ -148,11 +145,10 @@ const localeProvider = {
     BedTooltipComponent,
     HospitalSearchComponent,
     TimesliderComponent,
-    HelpDialogBedsComponent,
-    HelpDialogCasesComponent,
-    HelpDialogTheprojectComponent
   ],
   imports: [
+    CommonModule,
+    SharedModule.forRoot(),
     BrowserModule,
     SharedModule.forRoot(),
     NgxWebstorageModule.forRoot(),
@@ -160,6 +156,8 @@ const localeProvider = {
     FormsModule,
     OverlayModule,
     BrowserAnimationsModule,
+    OverviewModule,
+    AppRoutingModule,
     MatButtonToggleModule,
     MatCardModule,
     MatSlideToggleModule,
@@ -175,11 +173,8 @@ const localeProvider = {
     MatDialogModule,
     MatProgressBarModule,
     MatSnackBarModule,
-    MatDialogModule,
     MatSelectModule,
-    MatSnackBarModule,
     MatStepperModule,
-    AppRoutingModule,
     MatInputModule,
     MatCheckboxModule,
     MatTabsModule,
@@ -188,7 +183,9 @@ const localeProvider = {
     NouisliderModule,
     MatSliderModule,
     MatAutocompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxWebstorageModule.forRoot(),
+    HelpModule
   ],
   providers: [
     localeProvider, 

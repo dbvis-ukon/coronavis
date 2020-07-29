@@ -4,10 +4,17 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    flex-wrap: nowrap;
     
     .slider-container {
         flex: 1 1 auto;
         padding-right: 20px;
+        min-height: 40px;
+
+        .nouitimeslider {
+            display: relative;
+            bottom: 0;
+        }
     }
 
     .play {

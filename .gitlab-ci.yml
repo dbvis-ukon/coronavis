@@ -611,14 +611,14 @@ deploy-frontend-production-new:
 #     ENV_TYPE: review
 #     RUN_ON_FB: "yes"
 
-deploy-crawler-staging:
-  extends: .deploy-crawler-new
-  before_script:
-    - export KUBECONFIG=$KUBECONFIG_STAGING
-  variables:
-    ENV_TYPE: staging
-    RUN_ON_MASTER: "yes"
-    K8_NAMESPACE: covid-19-vis-staging
+# deploy-crawler-staging:
+#   extends: .deploy-crawler-new
+#   before_script:
+#     - export KUBECONFIG=$KUBECONFIG_STAGING
+#   variables:
+#     ENV_TYPE: staging
+#     RUN_ON_MASTER: "yes"
+#     K8_NAMESPACE: covid-19-vis-staging
 
 deploy-crawler-production-new:
   extends: .deploy-crawler-new
