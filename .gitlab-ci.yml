@@ -1,5 +1,6 @@
 stages:
   - prepare
+  - test
   - build:frontend
   - build:docker
   - deploy
@@ -276,6 +277,20 @@ set up sentry release:
   <<: *rules-frontend
   interruptible: true
   allow_failure: true
+
+syntax-check-crawler-scripts:
+  stage: test
+  image: python:3.7-slim
+  script:
+    - source var.env
+    - cd Crawler
+    - python -m compileall
+  dependencies:
+    - export-environment
+  needs:
+    - export-environment
+  tags:
+    - docker
 
 ###########################################
 # BUILD
