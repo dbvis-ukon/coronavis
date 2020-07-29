@@ -12,6 +12,9 @@ import { OverviewCaseComponent } from './overview-case/overview-case.component';
 import { OverviewIntroductionComponent } from './overview-introduction/overview-introduction.component';
 import { OverviewRoutingModule } from './overview-routing.module';
 import { OverviewComponent } from './overview.component';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -31,7 +34,10 @@ import { OverviewComponent } from './overview.component';
     MatButtonModule,
     MatProgressSpinnerModule,
     MatCardModule,
-    HelpModule
+    HelpModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule
   ],
   providers: [
   ],

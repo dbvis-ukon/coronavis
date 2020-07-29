@@ -1,21 +1,57 @@
-<mat-toolbar>
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+  <mat-toolbar class="example-toolbar">
 
-    <a mat-button routerLink="/overview" routerLinkActive="mat-primary" [routerLinkActiveOptions]="{exact: true}" i18n="@@overviewIntroduction">Einführung</a>
+    <div class="snav-toggle">
+      <button mat-icon-button (click)="snav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    
+
+    <div class="snav-desktop">
+      <a mat-button routerLink="/overview" routerLinkActive="mat-primary" [routerLinkActiveOptions]="{exact: true}"
+      i18n="@@overviewIntroduction">Einführung</a>
 
     <!-- <a mat-button routerLink="/overview/beds" routerLinkActive="mat-primary">Beds</a>
 
-    <a mat-button routerLink="/overview/cases" routerLinkActive="mat-primary">Cases</a> -->
+  <a mat-button routerLink="/overview/cases" routerLinkActive="mat-primary">Cases</a> -->
 
-    <a mat-button routerLink="/overview/map/bedcapacities" routerLinkActive="mat-primary" i18n="@@overviewICUView">Intensivbetten-Kapazitäten Ansicht</a>
+    <a mat-button routerLink="/overview/map/bedcapacities" routerLinkActive="mat-primary"
+      i18n="@@overviewICUView">Intensivbetten-Kapazitäten Ansicht</a>
 
-    <a mat-button routerLink="/overview/map/lockdown" routerLinkActive="mat-primary" i18n="@@overviewLockdownView">Lockdown Ansicht</a>
+    <a mat-button routerLink="/overview/map/lockdown" routerLinkActive="mat-primary"
+      i18n="@@overviewLockdownView">Lockdown Ansicht</a>
+    </div>
+    
 
     <span class="spacer"></span>
 
     <app-language-switcher class="language-switcher"></app-language-switcher>
-</mat-toolbar>
+  </mat-toolbar>
 
-<div class="overview">
-    <router-outlet></router-outlet>
+  <mat-sidenav-container class="example-sidenav-container">
+    <mat-sidenav #snav mode="over">
+      <mat-nav-list class="nav-list">
+        <a mat-list-item (click)="snav.close()" routerLink="/overview" routerLinkActive="mat-primary" [routerLinkActiveOptions]="{exact: true}"
+        i18n="@@overviewIntroduction">Einführung</a>
+  
+      <!-- <a mat-button routerLink="/overview/beds" routerLinkActive="mat-primary">Beds</a>
+  
+    <a mat-button routerLink="/overview/cases" routerLinkActive="mat-primary">Cases</a> -->
+  
+      <a mat-list-item (click)="snav.close()" routerLink="/overview/map/bedcapacities" routerLinkActive="mat-primary"
+        i18n="@@overviewICUView">Intensivbetten-Kapazitäten Ansicht</a>
+  
+      <a mat-list-item (click)="snav.close()" routerLink="/overview/map/lockdown" routerLinkActive="mat-primary"
+        i18n="@@overviewLockdownView">Lockdown Ansicht</a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <div class="overview">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>
-
