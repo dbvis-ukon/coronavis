@@ -109,15 +109,15 @@ export class TimesliderComponent implements OnInit {
 
 
 
-      const source$ = interval(1000);
+    const source$ = interval(1000);
 
 
-      const ons$ = this.modePlaying$.pipe(filter(v=>!v));
-      const offs$ = this.modePlaying$.pipe(filter(v=>v));
+    const ons$ = this.modePlaying$.pipe(filter(v=>!v));
+    const offs$ = this.modePlaying$.pipe(filter(v=>v));
 
-      source$.pipe(
+    source$.pipe(
           takeUntil(ons$),
-          repeatWhen(()=>offs$)
+          repeatWhen(() => offs$)
         )
       .subscribe(d => {
         this.onTimer();
@@ -153,7 +153,7 @@ export class TimesliderComponent implements OnInit {
   onTimer() {
     let nextTime = this.currentTime + 1;
 
-    if(nextTime > this.timeExtent[1]) {
+    if (nextTime > this.timeExtent[1]) {
       nextTime = this.timeExtent[0];
     }
 
@@ -165,11 +165,14 @@ export class TimesliderComponent implements OnInit {
   pausableInterval(ms: number, pauser: Observable<boolean>) {
     let x = 0;
     const source = interval(ms);
-  
+
     return pauser.pipe(switchMap(paused => paused ? NEVER : source.pipe(map(() => x++))));
   }
 
   emit(numDays: number, changing: boolean) {
+    if (changing) {
+      return;
+    }
     // if(changing && (this._mo.bedGlyphOptions.enabled || this._mo.bedBackgroundOptions.enabled)
     //   && (this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none || this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.county)) {
     //   // do not update with single glyphs as it causes too much lag
@@ -177,19 +180,19 @@ export class TimesliderComponent implements OnInit {
     // }
 
     let date = getStrDate(this.sliderValueToMoment(numDays));
-    if(date === getStrDate(moment())) {
+    if (date === getStrDate(moment())) {
       date = 'now';
     }
 
     this.mapOptionsChange.emit(this.configService.overrideMapOptions(this._mo, {
       bedGlyphOptions: {
-        date: date
+        date
       },
       bedBackgroundOptions: {
-        date: date
+        date
       },
       covidNumberCaseOptions: {
-        date: date
+        date
       }
     }));
   }
