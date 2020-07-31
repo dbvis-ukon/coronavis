@@ -7,6 +7,7 @@ import { RKICaseDevelopmentRepository } from '../repositories/rki-case-developme
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
+import { CaseUtilService } from './case-util.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,18 +19,15 @@ export class CountryAggregatorService {
 
   constructor(
     private diviDevelopmentRepository: QualitativeDiviDevelopmentRepository,
-    private rkiCaseRepository: RKICaseDevelopmentRepository
+    private rkiCaseRepository: RKICaseDevelopmentRepository,
+    private caseUtilService: CaseUtilService
   ) {
   }
 
   public rkiAggregationForCountry(refDate: string): Observable<RKICaseTimedStatus | undefined> {
     return this.rkiCaseRepository.getCasesDevelopmentForCountries()
     .pipe(
-      map(fc => {
-        const strDate = getStrDate(getMoment(refDate));
-
-        return fc.features[0].properties.developmentDays[strDate];
-      })
+      map(fc => this.caseUtilService.getTimedStatus(fc.features[0].properties, getMoment(refDate)))
     )
   }
 

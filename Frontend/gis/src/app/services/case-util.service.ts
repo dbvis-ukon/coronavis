@@ -30,7 +30,14 @@ export class CaseUtilService {
   public getTimedStatus(data: RKICaseDevelopmentProperties, date: Moment): RKICaseTimedStatus | undefined {
     const dateKey = getStrDate(date);
 
-    return data.developmentDays[dateKey];
+    const timedStatus = data.developmentDays[dateKey];
+
+    if (timedStatus) {
+      return timedStatus;
+    }
+
+    // return last available data
+    return data.developments[data.developments.length - 1];
   }
 
   public getTimedStatusWithOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): RKICaseTimedStatus | undefined {

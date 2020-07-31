@@ -168,6 +168,12 @@
         <p class="stats" i18n="@@infoboxNumberOfCovidCases">{{ c.rki?.cases | number }} bundesweit gemeldete Covid-19 Fälle</p>
         <p class="stats" i18n="@@infoboxNumberOfCovidDeaths">{{ c.rki?.deaths | number }} bundesweit gemeldete Covid-19 Todesfälle</p>
         <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ c.rki?.timestamp | date:'full' }}</p>
+
+        <div class="data-warning" *ngIf="c.rkiOutdated">
+          <mat-icon color="warn">warning</mat-icon>
+  
+          <h5 i18n="@@tooltipHospitalOldData">Die Daten sind älter als 24 Stunden.</h5>
+        </div>
       </div>
       
 
