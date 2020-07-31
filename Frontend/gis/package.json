@@ -52,7 +52,7 @@
     "tslib": "^2.0.0",
     "vega": "^5.13.0",
     "vega-embed": "^6.10.0",
-    "vega-lite": "^4.14.0",
+    "vega-lite": "^4.14.1",
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
@@ -61,9 +61,9 @@
     "@angular/cli": "~10.0.4",
     "@angular/compiler-cli": "~10.0.7",
     "@angular/language-service": "~10.0.7",
-    "@babel/core": "^7.10.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
+    "@babel/core": "^7.11.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
     "@ngx-i18nsupport/ngx-i18nsupport": "^1.1.6",
     "@types/d3": "^5.7.2",
     "@types/geojson": "^7946.0.7",
@@ -88,6 +88,6 @@
     "ts-node": "~8.3.0",
     "tslint": "^6.1.2",
     "typescript": "~3.9.7",
-    "webpack": "^4.44.0"
+    "webpack": "^4.44.1"
   }
 }
