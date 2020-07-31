@@ -39,6 +39,8 @@ interface CombinedStatistics {
   diviUnfiltered: QualitativeTimedStatus;
   rki: RKICaseTimedStatus;
 
+  rkiOutdated: boolean;
+
   glyphData: GlyphEntity[];
 }
 
@@ -150,14 +152,17 @@ export class InfoboxComponent implements OnInit {
 
         const rki = this.countryAggregatorService.rkiAggregationForCountry(refDate);
 
-        return forkJoin([filtered, unfiltered, rki]);
+        return forkJoin([filtered, unfiltered, rki, of(refDate)]);
       }),
-      map(([diviFiltered, diviUnfiltered, rki]) => {
+      map(([diviFiltered, diviUnfiltered, rki, refDate]) => {
         this.aggregatedDiviStatistics = diviFiltered;
+
+        const rkiOutdated = getMoment(refDate).endOf('day').subtract(1, 'day').isAfter(getMoment(rki.timestamp));
         return {
           diviFiltered,
           diviUnfiltered,
           rki,
+          rkiOutdated,
           glyphData: [
             {name: 'ICU low', accessor: 'showIcuLow', accFunc: (d: QualitativeTimedStatus) => d.icu_low_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_low_care), description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
             {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (d: QualitativeTimedStatus) => d.icu_high_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_high_care), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
