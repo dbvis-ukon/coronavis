@@ -17,7 +17,7 @@
     </thead>
     <tbody>
     <tr>
-        <td i18n="case-tooltip|sick@@sick">Erkrankte</td>
+        <td i18n="case-tooltip|sick@@sick">Positiv Getestet</td>
         <td>
             <div
             [ngClass]="{'active': isActive(eType.cases, eNorm.absolut, eTime.all, eChange.absolute)}"
@@ -121,7 +121,7 @@
         </td>
     </tr>
     <tr>
-        <td i18n="case-tooltip|sickScale@@sickScale">Erkrankte je 100.000 Einwohner</td>
+        <td i18n="case-tooltip|sickScale@@sickScale">Positiv Getestet je 100.000 Einwohner</td>
         <td>
             <div 
             [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.all, eChange.absolute)}"

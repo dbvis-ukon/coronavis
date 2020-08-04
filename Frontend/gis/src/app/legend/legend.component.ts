@@ -37,7 +37,7 @@ export class LegendComponent implements OnInit {
 
   agg = AggregationLevel;
   bed = BedType;
-  
+
   legendCasesExtended = true;
   legendBedsExtended = true;
 
@@ -64,7 +64,7 @@ export class LegendComponent implements OnInit {
     private datePipe: DatePipe,
     private breakpointObs: BreakpointObserver
   ) {
-    
+
   }
 
   ngOnInit(): void {
@@ -108,7 +108,7 @@ export class LegendComponent implements OnInit {
 
     const actualExtent = this.caseColormap.getDomainExtent(data, mo.covidNumberCaseOptions, true);
 
-    const fullNumbers = mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.absolut 
+    const fullNumbers = mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.absolut
     && mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute;
 
     caseBins = this.caseColormap.getColorMapBins(mo.covidNumberCaseOptions, scale, fullNumbers, actualExtent)
@@ -121,7 +121,7 @@ export class LegendComponent implements OnInit {
         }
       }
 
-      // else 
+      // else
       return b;
     })
     .map(b => {
@@ -160,17 +160,17 @@ export class LegendComponent implements OnInit {
         case BedType.icuLow:
           title += ' ICU low';
           break;
-  
+
         case BedType.icuHigh:
           title += ' ICU high';
           break;
-  
+
         case BedType.ecmo:
           title += ' ECMO';
           break;
       }
     }
-    
+
 
     title += ' by ';
 
@@ -178,7 +178,7 @@ export class LegendComponent implements OnInit {
       case AggregationLevel.county:
         title += "counties";
         break;
-      
+
       case AggregationLevel.governmentDistrict:
         title += "districts";
         break;
@@ -186,7 +186,7 @@ export class LegendComponent implements OnInit {
       case AggregationLevel.state:
         title += "states";
         break;
-      
+
       case AggregationLevel.none:
         title += "facilities";
         break;
@@ -207,11 +207,11 @@ export class LegendComponent implements OnInit {
         case BedType.icuLow:
           title += ' ICU low';
           break;
-  
+
         case BedType.icuHigh:
           title += ' ICU high';
           break;
-  
+
         case BedType.ecmo:
           title += ' ECMO';
           break;
@@ -224,7 +224,7 @@ export class LegendComponent implements OnInit {
       case AggregationLevel.county:
         title += "Landkreise";
         break;
-      
+
       case AggregationLevel.governmentDistrict:
         title += "Regierungsbezirke";
         break;
@@ -277,7 +277,7 @@ export class LegendComponent implements OnInit {
       case AggregationLevel.county:
         title += "county";
         break;
-      
+
       case AggregationLevel.governmentDistrict:
         title += "district";
         break;
@@ -292,7 +292,7 @@ export class LegendComponent implements OnInit {
     } else {
       title += " on "
     }
-  
+
     title += this.datePipe.transform(getMoment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
 
     return title;
@@ -313,7 +313,7 @@ export class LegendComponent implements OnInit {
       title += " der ";
     }
 
-    title += mo.covidNumberCaseOptions.type === CovidNumberCaseType.cases ? "Covid-19 Erkrankungen" : "Covid-19 Todesfälle"
+    title += mo.covidNumberCaseOptions.type === CovidNumberCaseType.cases ? "Covid-19 Positiv Getestet" : "Covid-19 Todesfälle"
 
 
     if(mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k) {
@@ -326,20 +326,20 @@ export class LegendComponent implements OnInit {
       case AggregationLevel.county:
         title += "Landkreis";
         break;
-      
+
       case AggregationLevel.governmentDistrict:
-        title += "Regierungsbezirk";
+        title += 'Regierungsbezirk';
         break;
 
       case AggregationLevel.state:
-        title += "Bundesland";
+        title += 'Bundesland';
         break;
     }
 
     if(mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
-      title += " bis "
+      title += ' bis '
     } else {
-      title += " am "
+      title += ' am '
     }
 
     title += this.datePipe.transform(getMoment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
