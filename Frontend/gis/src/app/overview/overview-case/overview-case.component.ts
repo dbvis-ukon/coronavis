@@ -71,8 +71,8 @@ export class OverviewCaseComponent implements OnInit {
       }
     });
 
-    
-    
+
+
 
     const defaultCaseConf = this.configService.overrideMapOptions({
       bedBackgroundOptions: {
@@ -99,7 +99,7 @@ export class OverviewCaseComponent implements OnInit {
           }
         }),
 
-        desc: 'Erkrankungen gesamt'
+        desc: 'Positiv Getestet gesamt'
       },
 
       {
@@ -125,7 +125,7 @@ export class OverviewCaseComponent implements OnInit {
           }
         }),
 
-        desc: 'Erkrankungen letzte 24h'
+        desc: 'Positiv Getestet letzte 24h'
       },
 
       {
@@ -140,7 +140,7 @@ export class OverviewCaseComponent implements OnInit {
 
         desc: 'Todesfälle letzte 24h'
       },
-      
+
     ];
 
     const blobs: CovidDataBlob[] = [];
@@ -157,7 +157,7 @@ export class OverviewCaseComponent implements OnInit {
         blobs.push({
           mo: conf,
 
-          mls: mls,
+          mls,
 
           moUrl: await this.urlHandler.convertMLOToUrl(conf),
 
