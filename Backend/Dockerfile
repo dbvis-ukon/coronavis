@@ -22,4 +22,4 @@ ENV FLASK_ENV development
 ENV FLASK_APP server.py
 
 # start container
-CMD python -m flask run
+CMD gunicorn --config=gunicorn.conf.py server:app
