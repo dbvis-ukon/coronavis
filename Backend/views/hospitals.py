@@ -917,101 +917,36 @@ def get_categorical_hospital_development_per_land():
         Return all Hospitals
     """
     sql_stmt = text("""
-    -- get the first update per hospital
+-- get the first update per hospital
 WITH filled_hospital_timeseries AS (
-    SELECT * FROM filled_hospital_timeseries_with_fix f
+    SELECT
+    f.timestamp,
+        max(f.last_update) AS last_update,
+        count(f.name) AS numHospitals,
+        sum(icu_low_v) as icu_low_v,
+        sum(icu_low_b) as icu_low_b,
+        sum(icu_low_a) as icu_low_a,
+        sum(icu_low_nv) as icu_low_nv,
+        sum(icu_high_v) as icu_high_v,
+        sum(icu_high_b) as icu_high_b,
+        sum(icu_high_a) as icu_high_a,
+        sum(icu_high_nv) as icu_high_nv,
+        sum(ecmo_low_v) as ecmo_low_v,
+        sum(ecmo_low_b) as ecmo_low_b,
+        sum(ecmo_low_a) as ecmo_low_a,
+        sum(ecmo_low_nv) as ecmo_low_nv
+    FROM filled_hospital_timeseries_with_fix f
     WHERE f.timestamp::date <= :refDate ::date
-    AND f.timestamp - f.last_update <= (:maxDaysOld || ' days') ::interval
+    AND f.age <= (:maxDaysOld || ' days') ::interval
+    AND landkreis_id IS NOT NULL
+    GROUP BY f.timestamp
 ),
 places_per_bundesland_per_timestamp AS (
     SELECT
-        ger.ids,
-        ger.name,
-        ger.geom,
-        filled_hospital_timeseries.timestamp,
-        max(filled_hospital_timeseries.last_update) AS last_update,
-        count(filled_hospital_timeseries.name) AS numHospitals,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.icu_low_state = 'Verfügbar' THEN 1
-                ELSE 0
-            END
-        ) AS icu_low_v,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.icu_low_state = 'Begrenzt' THEN 1
-                ELSE 0
-            END
-        ) AS icu_low_b,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.icu_low_state = 'Ausgelastet' THEN 1
-                ELSE 0
-            END
-        ) AS icu_low_a,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.icu_low_state = 'Nicht verfügbar' THEN 1
-                ELSE 0
-            END
-        ) AS icu_low_nv,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.icu_high_state = 'Verfügbar' THEN 1
-                ELSE 0
-            END
-        ) AS icu_high_v,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.icu_high_state = 'Begrenzt' THEN 1
-                ELSE 0
-            END
-        ) AS icu_high_b,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.icu_high_state = 'Ausgelastet' THEN 1
-                ELSE 0
-            END
-        ) AS icu_high_a,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.icu_high_state = 'Nicht verfügbar' THEN 1
-                ELSE 0
-            END
-        ) AS icu_high_nv,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.ecmo_state = 'Verfügbar' THEN 1
-                ELSE 0
-            END
-        ) AS ecmo_low_v,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.ecmo_state = 'Begrenzt' THEN 1
-                ELSE 0
-            END
-        ) AS ecmo_low_b,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.ecmo_state = 'Ausgelastet' THEN 1
-                ELSE 0
-            END
-        ) AS ecmo_low_a,
-        sum(
-            CASE
-                WHEN filled_hospital_timeseries.ecmo_state = 'Nicht verfügbar' THEN 1
-                ELSE 0
-            END
-        ) AS ecmo_low_nv
+        *
     FROM
         germany ger
-        LEFT JOIN filled_hospital_timeseries ON ST_Contains(ger.geom, filled_hospital_timeseries.geom)
-    WHERE timestamp IS NOT NULL
-    GROUP BY
-        ger.ids,
-        ger.name,
-        ger.geom,
-        filled_hospital_timeseries.timestamp
+        CROSS JOIN filled_hospital_timeseries
 ) -- now for the final aggregation by landkreis
 SELECT
     places_per_bundesland_per_timestamp.ids AS id,
