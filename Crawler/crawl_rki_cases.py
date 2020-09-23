@@ -101,10 +101,10 @@ try:
     if last_update is not None and abs((current_update - last_update).total_seconds()) <= 2*60*60:
         logger.info("No new data available (+/- 2h), skip update")
         exit(0)
-    # elif len(entries) < (num_cases_in_db - 1000):
-    #     # when we have less entries fetched than we already have in the DB the RKI API probably did not return all cases
-    #     logger.error("RKI API data blob is incomplete. Will fail this job and try again at next crawl time.")
-    #     exit(2)
+    elif len(entries) < (num_cases_in_db - 1000):
+        # when we have less entries fetched than we already have in the DB the RKI API probably did not return all cases
+        logger.error("RKI API data blob is incomplete. Will fail this job and try again at next crawl time.")
+        exit(2)
     else:
         logger.info('Insert new data into DB (takes 2-5 seconds)...')
 
