@@ -8,7 +8,6 @@ import { AggregatedGlyphCanvasLayer } from '../map/overlays/aggregated-glyph-can
 import { LandkreiseHospitalsLayer } from '../map/overlays/landkreishospitals';
 import { SingleGlyphCanvasLayer } from '../map/overlays/single-glyph-canvas.layer';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
-import { GeojsonUtilService } from './geojson-util.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
 import { TooltipService } from './tooltip.service';
 
@@ -25,7 +24,6 @@ export class GlyphLayerService {
     private colormapService: QualitativeColormapService,
     private matDialog: MatDialog,
     private storage: LocalStorageService,
-    private geojsonUtil: GeojsonUtilService
   ) {}
 
   getSimpleGlyphLayer(options: BehaviorSubject<BedGlyphOptions>): Observable<SingleGlyphCanvasLayer[]> {
@@ -42,7 +40,7 @@ export class GlyphLayerService {
       //       filteredFeatures.push(f);
       //     }
       //   }
-        
+
       //   return {
       //     type: 'FeatureCollection',
       //     features: filteredFeatures
@@ -67,7 +65,7 @@ export class GlyphLayerService {
       //           lat: bbox.min.lat + (i * latStep),
       //           lng: bbox.min.lng + (j * lngStep),
       //         },
-  
+
       //         // calculation like this to prevent rounding erros
       //         max: {
       //           lat: bbox.max.lat - ((sqrtNum - i - 1) * latStep),
@@ -140,7 +138,7 @@ export class GlyphLayerService {
     .pipe(
       map(result => {
         const factory = new AggregatedGlyphCanvasLayer(
-          'ho_glyph_'+aggLevel,
+          'ho_glyph_' + aggLevel,
           result,
           aggLevel,
           this.tooltipService,
@@ -157,7 +155,7 @@ export class GlyphLayerService {
         return [factory, factoryBg];
       }),
       tap<[AggregatedGlyphCanvasLayer, LandkreiseHospitalsLayer]>(() => this.loading$.next(false))
-    )
+    );
   }
 
   // private mySingleAggregatedMapper(input: FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>): DiviHospital[] {

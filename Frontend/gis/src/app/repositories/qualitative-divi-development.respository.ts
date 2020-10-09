@@ -39,8 +39,8 @@ export class QualitativeDiviDevelopmentRepository {
   }
 
   public getDiviDevelopmentForAggLevel(aggregationLevel: AggregationLevel, refDate: string = 'now', dayThreshold: number = 5): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
-    switch(aggregationLevel) {
-        
+    switch (aggregationLevel) {
+
       case AggregationLevel.county:
         return this.getDiviDevelopmentCounties(refDate, dayThreshold);
 
@@ -50,15 +50,18 @@ export class QualitativeDiviDevelopmentRepository {
       case AggregationLevel.state:
         return this.getDiviDevelopmentStates(refDate, dayThreshold);
 
+      case AggregationLevel.country:
+        return this.getDiviDevelopmentCountries(refDate, dayThreshold);
+
       default:
-        throw 'No divi development endpoint for aggregation level: ' + aggregationLevel;  
+        throw new Error('No divi development endpoint for aggregation level: ' + aggregationLevel);
     }
   }
 
   private prepareParams(refDate: string = 'now', dayThreshold: number = 5): HttpParams {
     let params = new HttpParams();
 
-    if(!refDate) {
+    if (!refDate) {
       refDate = 'now';
     }
 
@@ -66,13 +69,13 @@ export class QualitativeDiviDevelopmentRepository {
 
 
     params = params.append('refDate', getStrDate(actualRefDate));
-    
-    if(!dayThreshold) {
+
+    if (!dayThreshold) {
       dayThreshold = 5;
     }
 
-    if(dayThreshold && dayThreshold >= 0) {
-      params = params.append('maxDaysOld', dayThreshold+'');
+    if (dayThreshold && dayThreshold >= 0) {
+      params = params.append('maxDaysOld', dayThreshold + '');
     }
 
     return params;

@@ -80,7 +80,7 @@ export class ConfigService {
   }
 
   overrideMapOptions(override: RecursivePartial<MapOptions>, override2: RecursivePartial<MapOptions> = null): MapOptions {
-    if(!override2) {
+    if (!override2) {
       return merge<MapOptions, RecursivePartial<MapOptions>>(this.getDefaultMapOptions(), override);
     }
 
@@ -136,7 +136,7 @@ export class ConfigService {
   }
 
   overrideMapLocationSettings(override: RecursivePartial<MapLocationSettings>, override2: RecursivePartial<MapLocationSettings> = null): MapLocationSettings {
-    if(!override2) {
+    if (!override2) {
       return merge<MapLocationSettings, RecursivePartial<MapLocationSettings>>(this.getDefaultMapLocationSettings(), override);
     }
 

@@ -2,5 +2,6 @@ export enum AggregationLevel {
     none = 'none',
     county = 'landkreise',
     governmentDistrict = 'regierungsbezirke',
-    state = 'bundeslaender'
+    state = 'bundeslaender',
+    country = 'laender'
 }

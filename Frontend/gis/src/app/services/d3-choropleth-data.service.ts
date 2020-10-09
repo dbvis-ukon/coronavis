@@ -27,7 +27,7 @@ export class D3ChoroplethDataService {
 
 
   public get(mo: MapOptions, mls: MapLocationSettings): Observable<D3ChoroplethMapData> {
-    if(mo.bedBackgroundOptions.enabled) {
+    if (mo.bedBackgroundOptions.enabled) {
       return this.bedRepo.getDiviDevelopmentForAggLevel(mo.bedBackgroundOptions.aggregationLevel)
       .pipe(
         map(d => {
@@ -39,11 +39,11 @@ export class D3ChoroplethDataService {
             height: 200,
 
             fillFn: (d1: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>) => this.bedColorMap.getLatestBedStatusColor(d1.properties, mo.bedBackgroundOptions.bedType)
-          }
+          };
         })
       );
-    } 
-    else if(mo.covidNumberCaseOptions.enabled) {
+    }
+    else if (mo.covidNumberCaseOptions.enabled) {
       return this.caseRepo.getCasesDevelopmentForAggLevel(mo.covidNumberCaseOptions.aggregationLevel)
       .pipe(
         map(d => {
@@ -56,8 +56,8 @@ export class D3ChoroplethDataService {
 
             height: 600,
 
-            fillFn: (d: Feature<MultiPolygon, RKICaseDevelopmentProperties>) => this.caseColorMap.getColor(scale, d, mo.covidNumberCaseOptions)
-          }
+            fillFn: (d1: Feature<MultiPolygon, RKICaseDevelopmentProperties>) => this.caseColorMap.getColor(scale, d1, mo.covidNumberCaseOptions)
+          };
         })
       );
     }

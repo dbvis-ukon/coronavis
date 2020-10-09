@@ -1,4 +1,4 @@
-import { AggregationLevel } from "./aggregation-level.enum";
+import { AggregationLevel } from './aggregation-level.enum';
 
 export enum CovidNumberCaseChange {
     absolute = 'abs',
@@ -6,7 +6,7 @@ export enum CovidNumberCaseChange {
     relative = 'rel'
   }
 
-  export enum CovidNumberCaseTimeWindow {
+export enum CovidNumberCaseTimeWindow {
 
     twentyFourhours = '24h',
 
@@ -17,7 +17,7 @@ export enum CovidNumberCaseChange {
     all = 'all',
   }
 
-  export enum CovidNumberCaseType {
+export enum CovidNumberCaseType {
 
     cases = 'cases',
 
@@ -25,7 +25,7 @@ export enum CovidNumberCaseChange {
 
   }
 
-  export enum CovidNumberCaseNormalization {
+export enum CovidNumberCaseNormalization {
 
     absolut = 'absolute',
 
@@ -33,7 +33,7 @@ export enum CovidNumberCaseChange {
 
   }
 
-  export interface CovidNumberCaseOptions {
+export interface CovidNumberCaseOptions {
 
     enabled?: boolean;
 
@@ -50,10 +50,9 @@ export enum CovidNumberCaseChange {
 
     type: CovidNumberCaseType;
 
-    normalization: CovidNumberCaseNormalization
+    normalization: CovidNumberCaseNormalization;
 
-    aggregationLevel?: AggregationLevel
-
+    aggregationLevel?: AggregationLevel;
 
     showLabels: boolean;
 

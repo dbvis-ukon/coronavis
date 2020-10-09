@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { concatMap, tap } from 'rxjs/operators';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { RKICaseDevelopmentRepository } from '../repositories/rki-case-development.repository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -25,10 +26,10 @@ export class CountryAggregatorService {
   }
 
   public rkiAggregationForCountry(refDate: string): Observable<RKICaseTimedStatus | undefined> {
-    return this.rkiCaseRepository.getCasesDevelopmentForCountries()
+    return this.rkiCaseRepository.getCasesDevelopmentForAggLevel(AggregationLevel.country)
     .pipe(
       map(fc => this.caseUtilService.getTimedStatus(fc.features[0].properties, getMoment(refDate)))
-    )
+    );
   }
 
   public diviAggregationForCountry(refDate: string): Observable<QualitativeTimedStatus> {
@@ -43,15 +44,15 @@ export class CountryAggregatorService {
     return of(cache)
     .pipe(
       concatMap(m => {
-        if(!refDate) {
+        if (!refDate) {
           refDate = 'now';
         }
         const t = getStrDate(getMoment(refDate));
-        if(m.size === 0) {
+        if (m.size === 0) {
           return this.fetchMap(cache, lastNumberOfDays)
           .pipe(
             map(fm => fm.get(t))
-          )
+          );
         }
 
         // else
@@ -71,12 +72,12 @@ export class CountryAggregatorService {
           const t = getStrDate(getMoment(d.timestamp));
 
           map.set(t, d);
-        })
+        });
 
         return map;
       }),
       tap(m => writeToCache = m),
-    )
+    );
   }
 
 }

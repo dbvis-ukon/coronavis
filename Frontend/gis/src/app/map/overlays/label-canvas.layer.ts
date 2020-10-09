@@ -24,13 +24,13 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
   protected quadtree: Quadtree < MyQuadTreeItem < Feature < G, P >>> ;
 
-  protected visible: boolean = true;
+  protected visible = true;
 
   protected forceLayout: ForceDirectedLayout < G, P > ;
 
   protected ctx: CanvasRenderingContext2D;
 
-  protected currentScale: number = 1;
+  protected currentScale = 1;
 
   protected viewInfo: IViewInfo;
 
@@ -82,7 +82,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
     this.updateCurrentScale();
 
-    const topLeft = this._map.containerPointToLayerPoint([0, 0])
+    const topLeft = this._map.containerPointToLayerPoint([0, 0]);
     DomUtil.setPosition(this._canvas, topLeft);
 
     this.ctx.translate(-topLeft.x, -topLeft.y);
@@ -91,7 +91,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
   }
 
   onLayerDidMount() {
-    if(this.initiallyMounted) {
+    if (this.initiallyMounted) {
       return;
     }
 
@@ -118,20 +118,20 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
     this.showText = true;
 
-    if(this.granularity === AggregationLevel.county) {
-      if(zoom <= 7) {
+    if (this.granularity === AggregationLevel.county) {
+      if (zoom <= 7) {
         this.showText = false;
       }
-      if(zoom < 8) {
+      if (zoom < 8) {
         scale = Math.pow(zoom / 8, 2);
       }
 
-      if(zoom > 10) {
+      if (zoom > 10) {
         scale = Math.pow(zoom / 10, 2);
       }
     } else if (this.granularity === AggregationLevel.governmentDistrict && zoom >= 7) {
       scale = Math.pow(zoom / 7, 2);
-    } else if (this.granularity === AggregationLevel.state) {
+    } else if (this.granularity === AggregationLevel.state || this.granularity === AggregationLevel.country) {
       scale = Math.pow(zoom / 5, 2);
     }
 
@@ -140,8 +140,8 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
   protected drawAdditionalFeatures(data: Feature<G, P>, pt: L.Point) {
     let bounds = new Bounds(pt, pt);
-  
-    if(this.options$.value.showLabels && this.showText) {
+
+    if (this.options$.value.showLabels && this.showText) {
       const prefix = (data.properties as any).description;
       const b = this.drawText((prefix && prefix !== 'Landkreis' && prefix !== 'Kreis' ? prefix + ' ' : '') + data.properties.name, pt, 0, false);
 
@@ -170,7 +170,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
   }
 
   setVisibility(v: boolean) {
-    if(this.visible === v) {
+    if (this.visible === v) {
       return;
     }
     this.visible = v;
@@ -197,7 +197,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
       return;
     }
 
-    const topLeft = this._map.containerPointToLayerPoint([0, 0])
+    const topLeft = this._map.containerPointToLayerPoint([0, 0]);
 
     // remove everything
     this.ctx.clearRect(topLeft.x, topLeft.y, this._canvas.width + Math.abs(topLeft.x), this._canvas.height + Math.abs(topLeft.y));
@@ -227,19 +227,19 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
     let bounds = new Bounds(pt, new Point(pt.x + this.getGlyphWidth(), pt.y));
 
-    let boundsAdd = this.drawAdditionalFeatures(glyphData, pt);
+    const boundsAdd = this.drawAdditionalFeatures(glyphData, pt);
 
     bounds = bounds
       .extend(boundsAdd.min)
       .extend(boundsAdd.max);
 
     this.quadtree.push({
-      x: bounds.min.x, //Mandatory
-      y: bounds.min.y, //Mandatory
-      width: bounds.getSize().x, //Optional, defaults to 1
-      height: bounds.getSize().y, //Optional, defaults to 1
+      x: bounds.min.x, // Mandatory
+      y: bounds.min.y, // Mandatory
+      width: bounds.getSize().x, // Optional, defaults to 1
+      height: bounds.getSize().y, // Optional, defaults to 1
       payload: glyphData
-    }) //Optional, defaults to false
+    }); // Optional, defaults to false
   }
 
   // @method bringToFront(): this
@@ -281,7 +281,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
     if (!this.visible) {
       return;
     }
-    
+
     const glyphBoxes = [
       [-this.getGlyphWidth() / 2, -this.getGlyphHeight() / 2],
       [this.getGlyphWidth() / 2, this.getGlyphHeight() / 2]
@@ -292,28 +292,28 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
   /**
    * Taken from: https://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
-   * @param text 
-   * @param maxWidth 
+   * @param text
+   * @param maxWidth
    */
   protected getWrappedText(text: string, maxWidth: number): {line: string; width: number}[] {
     const words = text.split(' ');
     let line = '';
 
-    const lines:  {line: string; width: number}[] = [];
+    const lines: {line: string; width: number}[] = [];
 
     let testWidth;
     for (let n = 0; n < words.length; n++) {
-      let testLine = line + words[n] + ' ';
-      let metrics = this.ctx.measureText(testLine);
+      const testLine = line + words[n] + ' ';
+      const metrics = this.ctx.measureText(testLine);
       testWidth = metrics.width;
       if (testWidth > maxWidth && n > 0) {
-        lines.push({line: line, width: this.ctx.measureText(line).width});
+        lines.push({line, width: this.ctx.measureText(line).width});
         line = words[n] + ' ';
       } else {
         line = testLine;
       }
     }
-    lines.push({line: line, width: this.ctx.measureText(line).width});
+    lines.push({line, width: this.ctx.measureText(line).width});
     return lines;
   }
 
@@ -321,7 +321,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
   protected drawText(text: string, pt: L.Point, yOffset: number, isHovered: boolean): Bounds {
     // this.ctx.save();
 
-    const centerX = pt.x
+    const centerX = pt.x;
     const belowGlyhY = pt.y;
 
     const fontSizeAndHeight = Math.round(11 * this.currentScale);
@@ -352,7 +352,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
     // this.ctx.restore();
 
     return new Bounds(
-      new Point(centerX - (maxWidth / 2), belowGlyhY), 
+      new Point(centerX - (maxWidth / 2), belowGlyhY),
       new Point(centerX + (maxWidth / 2), belowGlyhY + lineHeight * wrappedText.length)
     );
   }

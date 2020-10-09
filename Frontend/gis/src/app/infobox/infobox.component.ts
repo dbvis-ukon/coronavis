@@ -129,7 +129,7 @@ export class InfoboxComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    //close info box if mobile
+    // close info box if mobile
     const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
     if(isSmallScreen){
       this.mo.extendInfobox = false;
@@ -138,7 +138,7 @@ export class InfoboxComponent implements OnInit {
     this.glyphLayerService.loading$.subscribe(l => this.glyphLoading = l);
     this.bedChoroplethLayerService.loading$.subscribe(l => this.bedChoroplethLoading = l);
     this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
-    this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);  
+    this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);
 
     this.combinedStats$ = this.refDay$
     .pipe(
@@ -231,7 +231,7 @@ export class InfoboxComponent implements OnInit {
         })
       );
     }
-    
+
     return of();
   }
 
@@ -298,6 +298,10 @@ export class InfoboxComponent implements OnInit {
         zoom = 8;
         break;
 
+      case AggregationLevel.country:
+        zoom = 6;
+        break;
+
       default:
         zoom = 12;
     }
@@ -314,12 +318,12 @@ export class InfoboxComponent implements OnInit {
           originY: 'top',
         }
       ]);
-  
+
       t.data = this.aggregatedDiviStatistics;
       t.bedName = glypLegendEntity.name;
-  
+
       t.explanation = this.translationService.translate(glypLegendEntity.description);
-  
+
       t.accessorFunc = glypLegendEntity.accFunc;
   }
 
@@ -401,6 +405,6 @@ export class InfoboxComponent implements OnInit {
     this.flyTo.emit({
       loc: h.point,
       zoom: h.zoom
-    });    
+    });
   }
 }

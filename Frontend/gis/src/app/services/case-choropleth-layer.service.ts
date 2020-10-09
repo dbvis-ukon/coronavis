@@ -35,19 +35,19 @@ export class CaseChoroplethLayerService {
     this.loading$.next(true);
     return this.rkiCaseRepository.getCasesDevelopmentForAggLevel(options.aggregationLevel)
       .pipe(
-        map(data => 
+        map(data =>
           {
             let lblLayer: LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions>;
-            if(this.caseUtil.isLockdownMode(options)) {
-              lblLayer = new CaseTrendCanvasLayer(this.getKeyCovidNumberCaseOptions(options)+'_labels', data, options.aggregationLevel, options$, this.storage, this.caseUtil)
+            if (this.caseUtil.isLockdownMode(options)) {
+              lblLayer = new CaseTrendCanvasLayer(this.getKeyCovidNumberCaseOptions(options) + '_labels', data, options.aggregationLevel, options$, this.storage, this.caseUtil);
             } else {
-              lblLayer = new LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions>(this.getKeyCovidNumberCaseOptions(options)+'_labels', data, options.aggregationLevel, options$, this.storage);
+              lblLayer = new LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions>(this.getKeyCovidNumberCaseOptions(options) + '_labels', data, options.aggregationLevel, options$, this.storage);
             }
-            
+
             return [
               new CaseChoropleth(this.getKeyCovidNumberCaseOptions(options), data, options, this.tooltipService, this.colormapService, this.matDialog),
               lblLayer
-            ] as [CaseChoropleth, LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions>]
+            ] as [CaseChoropleth, LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions>];
           }),
         tap(() => this.loading$.next(false))
       );

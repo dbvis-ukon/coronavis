@@ -43,12 +43,12 @@ export class QuantitativeDiviDevelopmentRepository {
     return this.cachedRepository.get <FeatureCollection<Point, QuantitativeSingleHospitalProperties>> (`${environment.apiUrl}divi/development`)
     .pipe(
       map(this.mapQSH)
-    )
+    );
   }
 
-  public getDiviDevelopmentForAggLevel(aggregationLevel: AggregationLevel):  Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QuantitativeTimedStatus>>> {
-    switch(aggregationLevel) {
-        
+  public getDiviDevelopmentForAggLevel(aggregationLevel: AggregationLevel): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QuantitativeTimedStatus>>> {
+    switch (aggregationLevel) {
+
       case AggregationLevel.county:
         return this.getDiviDevelopmentCounties();
 
@@ -59,7 +59,7 @@ export class QuantitativeDiviDevelopmentRepository {
         return this.getDiviDevelopmentStates();
 
       default:
-        throw 'No divi development endpoint for aggregation level: ' + aggregationLevel;  
+        throw new Error('No divi development endpoint for aggregation level: ' + aggregationLevel);
     }
   }
 
@@ -76,7 +76,7 @@ export class QuantitativeDiviDevelopmentRepository {
           ...i,
           properties: newProperties
         };
-        
+
         return newI;
       })
     };
@@ -95,7 +95,7 @@ export class QuantitativeDiviDevelopmentRepository {
           ...i,
           properties: newProperties
         };
-        
+
         return newI;
       })
     };
@@ -103,8 +103,8 @@ export class QuantitativeDiviDevelopmentRepository {
 
   private map(input: QuantitativeHospitalsDevelopment): Array<QuantitativeTimedStatus> {
     const out: QuantitativeTimedStatus[] = [];
-    
-    for(let i = 0; i < input.covid19_aktuell.length; i++) {
+
+    for (let i = 0; i < input.covid19_aktuell.length; i++) {
 
       out.push({
         timestamp: input.covid19_aktuell[i].timestamp,
