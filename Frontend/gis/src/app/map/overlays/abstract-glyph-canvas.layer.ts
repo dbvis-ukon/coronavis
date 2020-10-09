@@ -445,11 +445,11 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     return this.mouseMove$
       .pipe(
         filter(e => {
-          const map = this._map as any;
+          const map1 = this._map as any;
 
           const touches = (e.originalEvent as any).touches;
 
-          if ((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map || map.dragging.moving() || map._animatingZoom) {
+          if ((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map1 || map1.dragging.moving() || map1._animatingZoom) {
             return false;
           }
 

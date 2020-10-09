@@ -44,7 +44,7 @@ export class CaseInfoComponent implements OnInit {
   trend: Observable<{m: number, b: number, rotation: number}>;
 
   constructor(
-    private numberPipe: DecimalPipe, 
+    private numberPipe: DecimalPipe,
     private caseUtil: CaseUtilService,
     private vegaLinechartService: VegaLinechartService
   ) { }
@@ -59,9 +59,9 @@ export class CaseInfoComponent implements OnInit {
     this.rollingChart = this.caseUtil.extractXYForCase7DaysPer100k(this.data)
     .pipe(
       map(d => this.vegaLinechartService.compileChart(d, {
-        xAxisTitle: '', 
-        yAxisTitle: 'New cases per 100k / 7days', 
-        width: 400, 
+        xAxisTitle: '',
+        yAxisTitle: 'New cases per 100k / 7days',
+        width: 400,
         height: 150,
         regression: {
           to: getMoment(this.options.date).toISOString(),
@@ -86,13 +86,13 @@ export class CaseInfoComponent implements OnInit {
 
   public getPercentageChange(curr: number, old: number): string {
     if (curr === old) {
-      return "0%";
+      return '0%';
     }
     const change = ((curr - old) / old) * 100;
     if (change === Infinity) {
-      return ("war 0");
+      return ('war 0');
     }
-    return `${change > 0 ? '+' : ''}${this.numberPipe.transform(change, '1.0-1')}%`
+    return `${change > 0 ? '+' : ''}${this.numberPipe.transform(change, '1.0-1')}%`;
   }
 
   isActive(eType: CovidNumberCaseType, eNorm: CovidNumberCaseNormalization, eTime: CovidNumberCaseTimeWindow, eChange: CovidNumberCaseChange) {

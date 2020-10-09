@@ -5,7 +5,7 @@ import { Feature, MultiPolygon } from 'geojson';
 import moment, { Moment } from 'moment';
 import { NouiFormatter } from 'ng2-nouislider';
 import { BehaviorSubject, interval, NEVER, Observable } from 'rxjs';
-import { filter, flatMap, map, reduce, repeatWhen, switchMap, takeUntil } from 'rxjs/operators';
+import { filter, mergeMap, map, reduce, repeatWhen, switchMap, takeUntil } from 'rxjs/operators';
 import { MapOptions } from '../map/options/map-options';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -70,7 +70,7 @@ export class TimesliderComponent implements OnInit {
   ngOnInit(): void {
     this.diviRepo.getDiviDevelopmentCountries('now', -1)
     .pipe(
-      flatMap(d => d.features),
+      mergeMap(d => d.features),
       map<Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, [Moment, Moment]>(d => [getMoment(d.properties.developments[0].timestamp), getMoment(d.properties.developments[d.properties.developments.length - 1].timestamp)]),
       reduce((acc, val) => {
         if (!acc[0] || acc[0] > val[0]) {

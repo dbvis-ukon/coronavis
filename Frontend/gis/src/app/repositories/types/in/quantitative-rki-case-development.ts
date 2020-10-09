@@ -24,12 +24,12 @@ export interface RKICaseDevelopmentProperties {
 
 
 export interface RKICaseTimedStatus {
-  cases: number; 
+  cases: number;
   cases_per_100k: number;
   cases_per_population: number;
   cases7_per_100k: number | null;
   death_rate: number;
-  deaths: number; 
+  deaths: number;
   // insert_date: string;
   // last_update: string;
   population: number;

@@ -1,3 +1,5 @@
+// tslint:disable:quotemark object-literal-key-quotes
+
 import { Injectable } from '@angular/core';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -11,7 +13,7 @@ export class VegaBarchartService {
   barChartTemplateSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "height": 100,
-    "width":60,
+    "width": 60,
     "description": "A simple bar chart with rounded corners at the end of the bar.",
     "data": {
       "values": [{
@@ -89,8 +91,8 @@ export class VegaBarchartService {
 
 
   compileChart(
-    data: QualitativeTimedStatus, 
-    acc: ((d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts) | string, 
+    data: QualitativeTimedStatus,
+    acc: ((d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts) | string,
     bedStati: string[] = null,
     chartOptions: {
       xAxisTitle: string,
@@ -98,7 +100,7 @@ export class VegaBarchartService {
       width: number
     }
     ): any {
-    if(!data) {
+    if (!data) {
       return null;
     }
 
@@ -111,7 +113,7 @@ export class VegaBarchartService {
     // fill the data object
     for (const bedStatus of bedStati) {
       let v = 0;
-      if(typeof acc === 'string') {
+      if (typeof acc === 'string') {
         v = data[acc][bedStatus] || 0;
       } else {
         v = acc(data)[bedStatus] || 0;

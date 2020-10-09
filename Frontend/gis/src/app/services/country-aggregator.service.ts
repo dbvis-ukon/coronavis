@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/internal/operators/map';
-import { concatMap, tap } from 'rxjs/operators';
+import { concatMap, map, tap } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { RKICaseDevelopmentRepository } from '../repositories/rki-case-development.repository';
@@ -66,15 +65,15 @@ export class CountryAggregatorService {
     .pipe(
       map(fc => fc.features[0]),
       map(feature => {
-        const map: Map<string, QualitativeTimedStatus> = new Map();
+        const map1: Map<string, QualitativeTimedStatus> = new Map();
 
         feature.properties.developments.forEach(d => {
           const t = getStrDate(getMoment(d.timestamp));
 
-          map.set(t, d);
+          map1.set(t, d);
         });
 
-        return map;
+        return map1;
       }),
       tap(m => writeToCache = m),
     );

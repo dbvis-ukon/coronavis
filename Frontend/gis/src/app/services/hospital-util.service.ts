@@ -35,26 +35,26 @@ export class HospitalUtilService {
 
   public getNumberOfHospitals(hospitalAgg: AggregatedHospitalOut<QualitativeTimedStatus>): number {
     const ld = this.getLatestTimedStatus(hospitalAgg.developments);
-    if(!ld) {
+    if (!ld) {
       return 0;
     }
-    
+
     let maxN = 0;
 
-    for(const bedAcc of this.getBedAccessorFunctions()) {
+    for (const bedAcc of this.getBedAccessorFunctions()) {
       let sum = 0;
 
       const bed = bedAcc(ld);
 
-      if(!bed) {
+      if (!bed) {
         continue;
       }
 
-      for(const bedStatusAcc of this.getBedStatusAccessorFunctions()) {
+      for (const bedStatusAcc of this.getBedStatusAccessorFunctions()) {
         sum += bedStatusAcc(bed) || 0;
       }
 
-      if(sum > maxN) {
+      if (sum > maxN) {
         maxN = sum;
       }
     }
@@ -75,32 +75,32 @@ export class HospitalUtilService {
       (d: QualitativeAggregatedBedStateCounts) => d.Verfügbar,
       (d: QualitativeAggregatedBedStateCounts) => d.Begrenzt,
       (d: QualitativeAggregatedBedStateCounts) => d.Ausgelastet,
-      (d: QualitativeAggregatedBedStateCounts) => d["Nicht verfügbar"]
+      (d: QualitativeAggregatedBedStateCounts) => d['Nicht verfügbar']
     ];
   }
 
   public getLatestTimedStatus<T extends AbstractTimedStatus>(entries: Array<T>, beforeDate?: Moment): T | null {
-    if(!entries) {
+    if (!entries) {
       return null;
     }
-    
-    if(beforeDate) {
+
+    if (beforeDate) {
       const mDate = beforeDate.startOf('day');
 
-      const filtered = []
-      for(let i = entries.length - 1; i >= 0; i--) {
+      const filtered = [];
+      for (let i = entries.length - 1; i >= 0; i--) {
         const d = entries[i];
         const t = getMoment(d.timestamp).startOf('day');
 
         // console.log(t.format('YYYY-MM-DD'), mDate.format('YYYY-MM-DD'), t.isSameOrBefore(mDate), t.isSameOrAfter(mDate))
 
-        if(t.isSameOrBefore(mDate)) {
+        if (t.isSameOrBefore(mDate)) {
           filtered.push(d);
           break;
         }
       }
 
-      if(filtered.length === 0) {
+      if (filtered.length === 0) {
         return null;
       }
 

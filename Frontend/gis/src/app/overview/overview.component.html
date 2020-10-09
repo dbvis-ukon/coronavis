@@ -1,4 +1,4 @@
-<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+<div class="example-container" [class.example-is-mobile]="(isMobile$ | async)">
   <mat-toolbar class="example-toolbar">
 
     <div class="snav-toggle">

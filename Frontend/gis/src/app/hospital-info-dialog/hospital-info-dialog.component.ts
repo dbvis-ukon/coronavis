@@ -24,7 +24,7 @@ export class HospitalInfoDialogComponent implements OnInit {
   ngOnInit(): void {
     this.isSingleHospital = this.hospitalUtilService.isSingleHospital(this.data);
 
-    if(!this.isSingleHospital) {
+    if (!this.isSingleHospital) {
       this.totalNumberOfHospitals = this.hospitalUtilService.getNumberOfHospitals(this.data as AggregatedHospitalOut<QualitativeTimedStatus>);
     }
   }

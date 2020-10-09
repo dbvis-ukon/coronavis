@@ -1,7 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
-import { distinct, distinctUntilChanged, filter, flatMap, map, merge, mergeMap, tap, toArray } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, merge, Observable, of } from 'rxjs';
+import { distinct, distinctUntilChanged, filter, map, mergeMap, tap, toArray } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
 import { Searchable } from '../hospital-search/hospital-search.component';
 import { FlyTo } from '../map/events/fly-to';
@@ -76,6 +76,7 @@ export class InfoboxComponent implements OnInit {
   @Output()
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
 
+  // tslint:disable-next-line:no-input-rename
   @Input('mapLocationSettings')
   mls: MapLocationSettings;
 
@@ -124,7 +125,6 @@ export class InfoboxComponent implements OnInit {
     public tooltipService: TooltipService,
     private translationService: TranslationService,
     private hospitalRepo: QualitativeDiviDevelopmentRepository,
-    private hospitalUtils: HospitalUtilService,
     private caseRepo: RKICaseDevelopmentRepository
   ) { }
 
@@ -180,13 +180,12 @@ export class InfoboxComponent implements OnInit {
   updateSearch() {
     this.resetHospitalSearch = Math.random();
 
-
-    this.hospitalSearchResult()
+    merge(
+      this.hospitalSearchResult(),
+      this.bedBackgroundSearchResult(),
+      this.caseSearchResult()
+    )
     .pipe(
-      merge(
-        this.bedBackgroundSearchResult(),
-        this.caseSearchResult()
-      ),
       filter(d => d?.name !== undefined),
       distinct(d => d.name + '' + d.addition),
       toArray(),
@@ -201,7 +200,7 @@ export class InfoboxComponent implements OnInit {
       return this.hospitalRepo
       .getDiviDevelopmentSingleHospitals()
       .pipe(
-        flatMap(d => d.features),
+        mergeMap(d => d.features),
         map(d => {
           return {
             name: d.properties.name,
@@ -218,7 +217,7 @@ export class InfoboxComponent implements OnInit {
       return this.hospitalRepo
       .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel)
       .pipe(
-        flatMap(d => d.features),
+        mergeMap(d => d.features),
         map(d => {
           return {
             name: d.properties.name,
@@ -241,7 +240,7 @@ export class InfoboxComponent implements OnInit {
       return this.hospitalRepo
       .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel)
       .pipe(
-        flatMap(d => d.features),
+        mergeMap(d => d.features),
         map(d => {
           return {
             name: d.properties.name,
@@ -264,7 +263,7 @@ export class InfoboxComponent implements OnInit {
       return this.caseRepo
       .getCasesDevelopmentForAggLevel(this.mo.covidNumberCaseOptions.aggregationLevel)
       .pipe(
-        flatMap(d => d.features),
+        mergeMap(d => d.features),
         map(d => {
           return {
             name: d.properties.name,

@@ -292,8 +292,6 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
   /**
    * Taken from: https://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
-   * @param text
-   * @param maxWidth
    */
   protected getWrappedText(text: string, maxWidth: number): {line: string; width: number}[] {
     const words = text.split(' ');

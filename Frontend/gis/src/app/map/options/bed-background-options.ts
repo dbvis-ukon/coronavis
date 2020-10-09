@@ -15,7 +15,7 @@ export interface BedBackgroundOptions {
      */
     date: string | 'now';
 
-    
+
     showLabels: boolean;
 
 }

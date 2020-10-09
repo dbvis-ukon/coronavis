@@ -30,7 +30,7 @@ export class AboutComponent implements OnInit {
 
     this.tileServerVersion$ = this.http.get(
       `${environment.tileServerUrl}version`, { responseType: 'text' }
-    )
+    );
 
   }
 

@@ -2,7 +2,7 @@ import { FeatureCollection, Point } from 'geojson';
 import * as L from 'leaflet';
 import { OSMHospitalProperties } from 'src/app/repositories/types/in/osm-hospitals';
 import { TooltipService } from 'src/app/services/tooltip.service';
-import { OsmTooltipComponent } from "../../osm-tooltip/osm-tooltip.component";
+import { OsmTooltipComponent } from '../../osm-tooltip/osm-tooltip.component';
 import { Overlay } from './overlay';
 
 
@@ -31,7 +31,7 @@ export class HospitalLayer extends Overlay < OSMHospitalProperties > {
       pointToLayer: (_, latlng) => {
         return L.marker(latlng, {
           icon: krankenhausIcon
-        }); //L.circleMarker(latlng, geojsonMarkerOptions);
+        }); // L.circleMarker(latlng, geojsonMarkerOptions);
       },
       onEachFeature: (feature, layer) => {
         layer.on({
@@ -58,7 +58,7 @@ export class HospitalLayer extends Overlay < OSMHospitalProperties > {
         }, onCloseAction);
 
       tooltipComponent.name = feature.properties.name;
-      tooltipComponent.type = "hospital";
+      tooltipComponent.type = 'hospital';
     };
     return hospitalLayer;
   }

@@ -1,3 +1,5 @@
+// tslint:disable
+
 import {quadtree} from 'd3-quadtree';
 
 

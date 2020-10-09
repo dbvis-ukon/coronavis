@@ -2,6 +2,4 @@ import { AbstractTimedStatus, AggregatedHospital } from '../in/qualitative-hospi
 import { AbstractHospitalOut } from './abstract-hospital-out';
 
 export interface AggregatedHospitalOut<T extends AbstractTimedStatus> extends AggregatedHospital, AbstractHospitalOut<T> {
-
-
 }

@@ -55,7 +55,7 @@
     </a>
 
     <a
-    *ngIf="!(iconService.twitterLoaded$ | async)"
+    *ngIf="(iconService.twitterLoaded$ | async) === false"
     mat-button
     href="https://twitter.com/intent/tweet?screen_name=dbvis&button_hashtag=coronavis&ref_src=twsrc%5Etfw"
     target="_blank"
@@ -79,7 +79,7 @@
     </a>
 
     <a
-    *ngIf="!(iconService.githubLoaded$ | async)"
+    *ngIf="(iconService.githubLoaded$ | async) === false"
     mat-button
     href="https://github.com/dbvis-ukon/coronavis"
     target="_blank"

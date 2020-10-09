@@ -1,7 +1,7 @@
-import { ErrorHandler, Injectable } from "@angular/core";
-import * as Sentry from "@sentry/browser";
+import { ErrorHandler, Injectable } from '@angular/core';
+import * as Sentry from '@sentry/browser';
 import { EventHint } from '@sentry/browser';
-import { environment } from "../environments/environment";
+import { environment } from '../environments/environment';
 
 
 Sentry.init({

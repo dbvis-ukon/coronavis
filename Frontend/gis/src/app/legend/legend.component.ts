@@ -29,6 +29,7 @@ interface LegendColorMapBin extends ColorMapBin {
 })
 export class LegendComponent implements OnInit {
 
+  // tslint:disable-next-line:no-input-rename
   @Input('mapOptions$')
   mo$: Observable<MapOptions>;
 
@@ -81,7 +82,7 @@ export class LegendComponent implements OnInit {
     this.titleBeds$ = this.mo$
     .pipe(map(mo => this.getTitleBeds(mo)));
 
-    this.caseBins$ = combineLatest(this.mo$, this.choroplethLayer$)
+    this.caseBins$ = combineLatest([this.mo$, this.choroplethLayer$])
     .pipe(
       // distinctUntilChanged(([a], [b]) => !isEqual(a?.covidNumberCaseOptions, b?.covidNumberCaseOptions)),
       map(([mo, c]) => this.updateCaseColors(mo, c))

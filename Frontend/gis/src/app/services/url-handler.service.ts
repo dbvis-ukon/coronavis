@@ -35,7 +35,7 @@ export class UrlHandlerService {
     return await this.urlToObj(urlParam) as MapOptions;
   }
 
-  public async convertMLSToUrl(mls: MapLocationSettings) : Promise<string> {
+  public async convertMLSToUrl(mls: MapLocationSettings): Promise<string> {
     return await this.objToUrl(mls);
   }
 

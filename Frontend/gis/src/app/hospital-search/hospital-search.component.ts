@@ -4,7 +4,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Feature, Point } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
 import { Observable, of } from 'rxjs';
-import { filter, flatMap, startWith, switchMap, take, toArray } from 'rxjs/operators';
+import { filter, mergeMap, startWith, switchMap, take, toArray } from 'rxjs/operators';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
 
 export interface Searchable {
@@ -12,7 +12,7 @@ export interface Searchable {
    * Name of hospital, county, etc
    */
   name: string;
-  
+
   /**
    * E.g., address or description
    */
@@ -36,13 +36,14 @@ export class HospitalSearchComponent implements OnInit {
   myControl = new FormControl();
 
 
+  // tslint:disable-next-line:no-input-rename
   @Input('data')
   data$: Observable<Searchable[]>;
 
   @Output()
   selectedHospital = new EventEmitter<Searchable>();
 
-  
+
   filteredOptions: Observable<Searchable[]>;
 
   private _t: number;
@@ -50,7 +51,7 @@ export class HospitalSearchComponent implements OnInit {
   @Input()
   set reset(t: number) {
     this._t = t;
-    
+
     this.myControl.setValue('');
   }
 
@@ -70,7 +71,7 @@ export class HospitalSearchComponent implements OnInit {
   }
 
   private _filter(value: string): Observable<Searchable[]> {
-    if(!this.data$) {
+    if (!this.data$) {
       return of([]);
     }
 
@@ -78,10 +79,10 @@ export class HospitalSearchComponent implements OnInit {
 
     return this.data$
     .pipe(
-      flatMap(d => d),
+      mergeMap(d => d),
       filter(d => d.name.toLowerCase().indexOf(filterValue) > -1 || d.addition?.toLowerCase().indexOf(filterValue) > -1),
       toArray()
-    )    
+    );
   }
 
 
@@ -90,12 +91,12 @@ export class HospitalSearchComponent implements OnInit {
 
     this.data$
     .pipe(
-      flatMap(d => d),
+      mergeMap(d => d),
       filter(d => d.name === name),
       take(1)
     )
     .subscribe(d => {
-      if(d) {
+      if (d) {
         this.selectedHospital.emit(d);
       }
     });

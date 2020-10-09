@@ -1,4 +1,4 @@
-import { animate, style, transition, trigger } from "@angular/animations";
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
@@ -32,7 +32,7 @@ export class CaseTooltipComponent implements OnInit {
 
   constructor(private caseUtil: CaseUtilService) {}
 
-  
+
 
   ngOnInit(): void {
     this.currentTimedStatus = this.caseUtil.getTimedStatusWithOptions(this.data, this.options);

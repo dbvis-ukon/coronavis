@@ -18,14 +18,14 @@ export class OSMLayerService {
     private tooltipService: TooltipService
   ) {}
 
-  
+
   getOSMHospitalLayer(): Observable<HospitalLayer> {
     this.loading$.next(true);
     return this.osmRespository.getOSMHospitals()
     .pipe(
       map(d => new HospitalLayer('OSM Hospitals', d, this.tooltipService)),
       tap(() => this.loading$.next(false))
-    )
+    );
   }
 
   getOSMHeliportLayer(): Observable<HelipadLayer> {
@@ -34,6 +34,6 @@ export class OSMLayerService {
     .pipe(
       map(d => new HelipadLayer('OSM Helipads', d, this.tooltipService)),
       tap(() => this.loading$.next(false))
-    )
+    );
   }
 }
