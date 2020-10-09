@@ -1,57 +1,59 @@
 import {quadtree} from 'd3-quadtree';
 
+
 export function rectCollide(bbox) {
-    function x(d) {
-      return d.x + d.vx;
-    }
 
-    function y(d) {
-      return d.y + d.vy;
-    }
+  function x(d) {
+    return d.x + d.vx;
+  }
 
-    function constant(x1) {
-      return () => x1;
-    }
+  function y(d) {
+    return d.y + d.vy;
+  }
 
-    let nodes;
-    let boundingBoxes;
-    let strength = 1;
-    let iterations = 1;
+  function constant(x) {
+    return function() {
+      return x;
+    };
+  }
 
-    if (typeof bbox !== 'function') {
-      bbox = constant(bbox === null ? [[0, 0], [1, 1]] : bbox);
-    }
+  let nodes,
+      boundingBoxes,
+      strength = 1,
+      iterations = 1;
 
-    class Force {
-      constructor() {
-        let i;
-        let tree;
-        let node;
-        let xi;
-        let yi;
-        let bbi;
-        let nx1;
-        let ny1;
-        let nx2;
-        let ny2;
+  if (typeof bbox !== 'function') {
+        bbox = constant(bbox === null ? [[0, 0], [1, 1]] : bbox);
+      }
+
+  function force() {
+        let i,
+            tree,
+            node,
+            xi,
+            yi,
+            bbi,
+            nx1,
+            ny1,
+            nx2,
+            ny2,
+            nodeI;
 
         const cornerNodes = [];
-        nodes.forEach((d, i1: number) => {
-          cornerNodes.push({node: d, vx: d.vx, vy: d.vy, x: d.x + (boundingBoxes[i1][1][0] + boundingBoxes[i1][0][0]) / 2, y: d.y + (boundingBoxes[i1][0][1] + boundingBoxes[i1][1][1]) / 2});
-          cornerNodes.push({node: d, vx: d.vx, vy: d.vy, x: d.x + boundingBoxes[i1][0][0], y: d.y + boundingBoxes[i1][0][1]});
-          cornerNodes.push({node: d, vx: d.vx, vy: d.vy, x: d.x + boundingBoxes[i1][0][0], y: d.y + boundingBoxes[i1][1][1]});
-          cornerNodes.push({node: d, vx: d.vx, vy: d.vy, x: d.x + boundingBoxes[i1][1][0], y: d.y + boundingBoxes[i1][0][1]});
-          cornerNodes.push({node: d, vx: d.vx, vy: d.vy, x: d.x + boundingBoxes[i1][1][0], y: d.y + boundingBoxes[i1][1][1]});
-        });
+        nodes.forEach(function(d, i) {
+              cornerNodes.push({node: d, vx: d.vx, vy: d.vy, x: d.x + (boundingBoxes[i][1][0] + boundingBoxes[i][0][0]) / 2, y: d.y + (boundingBoxes[i][0][1] + boundingBoxes[i][1][1]) / 2});
+              cornerNodes.push({node: d, vx: d.vx, vy: d.vy, x: d.x + boundingBoxes[i][0][0], y: d.y + boundingBoxes[i][0][1]});
+              cornerNodes.push({node: d, vx: d.vx, vy: d.vy, x: d.x + boundingBoxes[i][0][0], y: d.y + boundingBoxes[i][1][1]});
+              cornerNodes.push({node: d, vx: d.vx, vy: d.vy, x: d.x + boundingBoxes[i][1][0], y: d.y + boundingBoxes[i][0][1]});
+              cornerNodes.push({node: d, vx: d.vx, vy: d.vy, x: d.x + boundingBoxes[i][1][0], y: d.y + boundingBoxes[i][1][1]});
+            });
         const cn = cornerNodes.length;
-
-        let nodeI;
 
         for (let k = 0; k < iterations; ++k) {
           tree = quadtree(cornerNodes, x, y).visitAfter(prepareCorners);
 
           for (i = 0; i < cn; ++i) {
-            nodeI = Math.floor(i / 5);
+            nodeI = ~~(i / 5);
             node = nodes[nodeI];
             bbi = boundingBoxes[nodeI];
             xi = node.x + node.vx;
@@ -67,18 +69,18 @@ export function rectCollide(bbox) {
         function apply(quad, x0, y0, x1, y1) {
             const data = quad.data;
             if (data) {
-              const bWidth = bbLength(bbi, 0);
-              const bHeight = bbLength(bbi, 1);
+              const bWidth = bbLength(bbi, 0),
+              bHeight = bbLength(bbi, 1);
 
               if (data.node.index !== nodeI) {
                 const dataNode = data.node;
-                const bbj = boundingBoxes[dataNode.index];
-                const dnx1 = dataNode.x + dataNode.vx + bbj[0][0];
-                const dny1 = dataNode.y + dataNode.vy + bbj[0][1];
-                const dnx2 = dataNode.x + dataNode.vx + bbj[1][0];
-                const dny2 = dataNode.y + dataNode.vy + bbj[1][1];
-                const dWidth = bbLength(bbj, 0);
-                const dHeight = bbLength(bbj, 1);
+                const bbj = boundingBoxes[dataNode.index],
+                  dnx1 = dataNode.x + dataNode.vx + bbj[0][0],
+                  dny1 = dataNode.y + dataNode.vy + bbj[0][1],
+                  dnx2 = dataNode.x + dataNode.vx + bbj[1][0],
+                  dny2 = dataNode.y + dataNode.vy + bbj[1][1],
+                  dWidth = bbLength(bbj, 0),
+                  dHeight = bbLength(bbj, 1);
 
                 if (nx1 <= dnx2 && dnx1 <= nx2 && ny1 <= dny2 && dny1 <= ny2) {
 
@@ -111,66 +113,58 @@ export function rectCollide(bbox) {
                     dataNode.vy -= yDPush;
                   }
                 }
+
               }
               return;
             }
 
             return x0 > nx2 || x1 < nx1 || y0 > ny2 || y1 < ny1;
         }
+
       }
 
-      static iterations(_) {
-        return arguments.length ? (iterations = +_, Force) : iterations;
+  function prepareCorners(quad) {
+
+        if (quad.data) {
+          return quad.bb = boundingBoxes[quad.data.node.index];
+        }
+        quad.bb = [[0, 0], [0, 0]];
+        for (let i = 0; i < 4; ++i) {
+            if (quad[i] && quad[i].bb[0][0] < quad.bb[0][0]) {
+              quad.bb[0][0] = quad[i].bb[0][0];
+            }
+            if (quad[i] && quad[i].bb[0][1] < quad.bb[0][1]) {
+              quad.bb[0][1] = quad[i].bb[0][1];
+            }
+            if (quad[i] && quad[i].bb[1][0] > quad.bb[1][0]) {
+              quad.bb[1][0] = quad[i].bb[1][0];
+            }
+            if (quad[i] && quad[i].bb[1][1] > quad.bb[1][1]) {
+              quad.bb[1][1] = quad[i].bb[1][1];
+            }
+        }
       }
 
-      static strength(_) {
-        return arguments.length ? (strength = +_, Force) : strength;
+  function bbLength(bbox, heightWidth) {
+        return bbox[1][heightWidth] - bbox[0][heightWidth];
       }
 
-      static bbox(_) {
-        return arguments.length ? (bbox = typeof _ === 'function' ? _ : constant(+_), Force) : bbox;
-      }
-
-      static initialize(_) {
-        let i;
-        const n = (nodes = _).length;
-        boundingBoxes = new Array(n);
+  force.initialize = function(_) {
+        let i, n = (nodes = _).length; boundingBoxes = new Array(n);
         for (i = 0; i < n; ++i) { boundingBoxes[i] = bbox(nodes[i], i, nodes); }
-      }
-    }
+      };
 
-    function prepareCorners(quad) {
+  force.iterations = function(_) {
+        return arguments.length ? (iterations = +_, force) : iterations;
+      };
 
-      if (quad.data) {
-        return quad.bb = boundingBoxes[quad.data.node.index];
-      }
-      quad.bb = [[0, 0], [0, 0]];
-      for (let i = 0; i < 4; ++i) {
-          if (quad[i] && quad[i].bb[0][0] < quad.bb[0][0]) {
-            quad.bb[0][0] = quad[i].bb[0][0];
-          }
-          if (quad[i] && quad[i].bb[0][1] < quad.bb[0][1]) {
-            quad.bb[0][1] = quad[i].bb[0][1];
-          }
-          if (quad[i] && quad[i].bb[1][0] > quad.bb[1][0]) {
-            quad.bb[1][0] = quad[i].bb[1][0];
-          }
-          if (quad[i] && quad[i].bb[1][1] > quad.bb[1][1]) {
-            quad.bb[1][1] = quad[i].bb[1][1];
-          }
-      }
-    }
+  force.strength = function(_) {
+        return arguments.length ? (strength = +_, force) : strength;
+      };
 
-    function bbLength(bbox1, heightWidth) {
-      return bbox1[1][heightWidth] - bbox1[0][heightWidth];
-    }
+  force.bbox = function(_) {
+        return arguments.length ? (bbox = typeof _ === 'function' ? _ : constant(+_), force) : bbox;
+      };
 
-    // Force.initialize = _ => {
-    //   let i;
-    //   const n = (nodes = _).length;
-    //   boundingBoxes = new Array(n);
-    //   for (i = 0; i < n; ++i) { boundingBoxes[i] = bbox(nodes[i], i, nodes); }
-    // };
-
-    return Force;
-  }
+  return force;
+}
