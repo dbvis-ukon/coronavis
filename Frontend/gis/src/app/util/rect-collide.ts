@@ -9,8 +9,8 @@ export function rectCollide(bbox) {
       return d.y + d.vy;
     }
 
-    function constant(x) {
-      return () => x;
+    function constant(x1) {
+      return () => x1;
     }
 
     let nodes;
@@ -22,7 +22,7 @@ export function rectCollide(bbox) {
       bbox = constant(bbox === null ? [[0, 0], [1, 1]] : bbox);
     }
 
-    class force {
+    class Force {
       constructor() {
         let i;
         let tree;
@@ -45,11 +45,13 @@ export function rectCollide(bbox) {
         });
         const cn = cornerNodes.length;
 
+        let nodeI;
+
         for (let k = 0; k < iterations; ++k) {
           tree = quadtree(cornerNodes, x, y).visitAfter(prepareCorners);
 
           for (i = 0; i < cn; ++i) {
-            const nodeI = ~~(i / 5);
+            nodeI = Math.floor(i / 5);
             node = nodes[nodeI];
             bbi = boundingBoxes[nodeI];
             xi = node.x + node.vx;
@@ -118,15 +120,22 @@ export function rectCollide(bbox) {
       }
 
       static iterations(_) {
-        return arguments.length ? (iterations = +_, force) : iterations;
+        return arguments.length ? (iterations = +_, Force) : iterations;
       }
 
       static strength(_) {
-        return arguments.length ? (strength = +_, force) : strength;
+        return arguments.length ? (strength = +_, Force) : strength;
       }
 
       static bbox(_) {
-        return arguments.length ? (bbox = typeof _ === 'function' ? _ : constant(+_), force) : bbox;
+        return arguments.length ? (bbox = typeof _ === 'function' ? _ : constant(+_), Force) : bbox;
+      }
+
+      static initialize(_) {
+        let i;
+        const n = (nodes = _).length;
+        boundingBoxes = new Array(n);
+        for (i = 0; i < n; ++i) { boundingBoxes[i] = bbox(nodes[i], i, nodes); }
       }
     }
 
@@ -152,16 +161,16 @@ export function rectCollide(bbox) {
       }
     }
 
-    function bbLength(bbox, heightWidth) {
-      return bbox[1][heightWidth] - bbox[0][heightWidth];
+    function bbLength(bbox1, heightWidth) {
+      return bbox1[1][heightWidth] - bbox1[0][heightWidth];
     }
 
-    force.initialize = _ => {
-      let i;
-      const n = (nodes = _).length;
-      boundingBoxes = new Array(n);
-      for (i = 0; i < n; ++i) { boundingBoxes[i] = bbox(nodes[i], i, nodes); }
-    };
+    // Force.initialize = _ => {
+    //   let i;
+    //   const n = (nodes = _).length;
+    //   boundingBoxes = new Array(n);
+    //   for (i = 0; i < n; ++i) { boundingBoxes[i] = bbox(nodes[i], i, nodes); }
+    // };
 
-    return force;
+    return Force;
   }
