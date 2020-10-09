@@ -278,6 +278,20 @@ set up sentry release:
   interruptible: true
   allow_failure: true
 
+frontend-install-dependencies:
+  stage: prepare
+  image: node:latest
+  script:
+    - cd ./Frontend/gis
+    - npm ci --unsafe-perm
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - ./Frontend/gis/node_modules
+  needs: []
+  tags:
+    - docker
+
 syntax-check-crawler-scripts:
   stage: test
   image: python:3.7-slim
@@ -289,6 +303,19 @@ syntax-check-crawler-scripts:
     - export-environment
   needs:
     - export-environment
+  tags:
+    - docker
+
+frontend-lint:
+  stage: test
+  image: node:latest
+  script:
+    - cd ./Frontend/gis
+    - npm run-script lint
+  dependencies:
+    - frontend-install-dependencies
+  needs:
+    - frontend-install-dependencies
   tags:
     - docker
 
@@ -310,23 +337,17 @@ syntax-check-crawler-scripts:
     - export SENTRY_DSN
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
-    - npm install --unsafe-perm
     - npm run-script build:i18n:${LOCALE}
   artifacts:
     expire_in: 1 day
     paths:
       - ./Frontend/gis/dist
-  cache:
-    key: 
-      files:
-        - ./Frontend/gis/package.json
-        - ./Frontend/gis/package-lock.json
-    paths:
-      - ./Frontend/gis/node_modules
   dependencies:
     - export-environment
+    - frontend-install-dependencies
   needs:
     - export-environment
+    - frontend-install-dependencies
   tags:
     - docker
 
