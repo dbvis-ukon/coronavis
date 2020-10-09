@@ -61,12 +61,12 @@ export class OverviewBedComponent implements OnInit {
         this.gridNumCols = matched.matches ? 1 : 3;
       });
 
-      this.countryAggregatorService.diviAggregationForCountry('now')
+    this.countryAggregatorService.diviAggregationForCountry('now')
       .subscribe(r => {
         this.aggregatedDiviStatistics = r;
       });
 
-    
+
 
     this.initBlobs().then(blobs => this.dataBlobBeds = blobs);
   }
@@ -87,15 +87,15 @@ export class OverviewBedComponent implements OnInit {
 
     const blobs: BedDataBlob[] = [];
 
-    for(const bedType of this.bedTypes) {
-      for(const aggLevel of aggLevels) {
+    for (const bedType of this.bedTypes) {
+      for (const aggLevel of aggLevels) {
 
-        const mo = this.configService.overrideMapOptions({ 
+        const mo = this.configService.overrideMapOptions({
           bedGlyphOptions: {
             enabled: true,
             aggregationLevel: aggLevel
           },
-          bedBackgroundOptions: { 
+          bedBackgroundOptions: {
             enabled: true,
             aggregationLevel: aggLevel,
             bedType: bedType as BedType
@@ -108,9 +108,9 @@ export class OverviewBedComponent implements OnInit {
         const blob: BedDataBlob = {
             data: this.d3ChoroplethService.get(mo, mls),
 
-            mo: mo,
+            mo,
 
-            mls: mls,
+            mls,
 
             aggLevelFriendly: aggLevel,
 
@@ -120,7 +120,7 @@ export class OverviewBedComponent implements OnInit {
 
             mlsUrl: await this.urlHandler.convertMLSToUrl(mls)
           };
-        
+
         blobs.push(blob);
       }
     }

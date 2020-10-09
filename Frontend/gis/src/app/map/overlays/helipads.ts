@@ -2,7 +2,7 @@ import { FeatureCollection, Point } from 'geojson';
 import * as L from 'leaflet';
 import { OSMHelipadProperties } from 'src/app/repositories/types/in/osm-helipads';
 import { TooltipService } from 'src/app/services/tooltip.service';
-import { OsmTooltipComponent } from "../../osm-tooltip/osm-tooltip.component";
+import { OsmTooltipComponent } from '../../osm-tooltip/osm-tooltip.component';
 import { Overlay } from './overlay';
 
 
@@ -29,7 +29,7 @@ export class HelipadLayer extends Overlay < OSMHelipadProperties > {
       pointToLayer: (_, latlng) => {
         return L.marker(latlng, {
           icon: helipadIcon
-        }); //L.circleMarker(latlng, geojsonMarkerOptions);
+        }); // L.circleMarker(latlng, geojsonMarkerOptions);
       },
       onEachFeature: (feature, layer) => {
         layer.on({
@@ -56,7 +56,7 @@ export class HelipadLayer extends Overlay < OSMHelipadProperties > {
         }, onCloseAction);
 
       tooltipComponent.name = feature.properties.name;
-      tooltipComponent.type = "helipad";
+      tooltipComponent.type = 'helipad';
     };
 
     return helipadLayer;

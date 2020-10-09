@@ -55,14 +55,13 @@ export class QuantitativeColormapService {
   }
 
   getLatestBedStatusColor(t: Array<QuantitativeTimedStatus>, type: BedType) {
-    const latest = t[t.length -1];
-    const bedStatus =this.propertyAccessor(type)(latest);
+    const latest = t[t.length - 1];
+    const bedStatus = this.propertyAccessor(type)(latest);
     return this.getBedStatusColor(bedStatus);
   }
 
   /**
    * Calculates the ratio of available / occupied
-   * @param bedStatus
    */
   getBedStatusColor(bedStatus: QuantitativeBedStatusSummary) {
     if (bedStatus === null) {

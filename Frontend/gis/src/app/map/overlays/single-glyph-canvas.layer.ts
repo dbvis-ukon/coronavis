@@ -39,7 +39,7 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
   latAcc(d: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>): number {
     return d.geometry.coordinates[1];
   }
-  
+
   lngAcc(d: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>): number {
     return d.geometry.coordinates[0];
   }
@@ -47,7 +47,7 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
   protected drawAdditionalFeatures(data: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>, pt: L.Point, isHovered: boolean) {
     let bounds = new Bounds(pt, pt);
 
-    if(this.showNameHospitals) {
+    if (this.showNameHospitals) {
       const b = this.drawText(data.properties.name, pt, 0, isHovered);
       bounds = bounds
         .extend(b.min)
@@ -55,7 +55,7 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
     }
 
 
-    if(this.showCityHospitals) {
+    if (this.showCityHospitals) {
       const b2 = this.drawText(this.shorten_city_name(data.properties.address), pt, 0, isHovered);
       bounds = bounds
         .extend(b2.min)
@@ -71,11 +71,11 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
     // let scale = Math.pow(9 / (zoom), 2);
     let scale = 1;
 
-    if(zoom < 9) {
+    if (zoom < 9) {
       scale = Math.pow(zoom / 9, 3);
     }
 
-    if(zoom >= 10) {
+    if (zoom >= 10) {
       scale = Math.pow(zoom / 10, 2);
     }
 
@@ -88,7 +88,7 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
 
     // Resize glyph bounding boxes + show/hide labels
     if (zoom >= 12) {
-      this.showNameHospitals = true
+      this.showNameHospitals = true;
       // true, true
     } else if (zoom <= 11 && zoom >= 10) {
       this.showCityHospitals = true;

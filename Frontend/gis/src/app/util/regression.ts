@@ -3,7 +3,7 @@ export function linearRegression(data: {x: number, y: number}[]): {m: number, b:
     return {
       x: d1.x + c.x,
       y: d1.y + c.y
-    }
+    };
   },
   {x: 0, y: 0});
   const avgs = {x: sums.x / data.length, y: sums.y / data.length};

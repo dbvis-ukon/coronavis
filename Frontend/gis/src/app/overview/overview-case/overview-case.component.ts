@@ -50,7 +50,7 @@ export class OverviewCaseComponent implements OnInit {
     this.countryAggregatorService.rkiAggregationForCountry('now')
       .subscribe(r => {
         this.aggregatedRkiStatistics = r;
-      })
+      });
 
 
     this.initDataBlobs()
@@ -145,8 +145,8 @@ export class OverviewCaseComponent implements OnInit {
 
     const blobs: CovidDataBlob[] = [];
 
-    for(const caseConfig of caseConfigs) {
-      for(const aggLevel of aggLevels) {
+    for (const caseConfig of caseConfigs) {
+      for (const aggLevel of aggLevels) {
 
         const conf = this.configService.overrideMapOptions(caseConfig.conf, {
           covidNumberCaseOptions: {

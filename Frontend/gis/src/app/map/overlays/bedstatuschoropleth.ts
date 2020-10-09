@@ -6,17 +6,17 @@ import { HospitalInfoDialogComponent } from 'src/app/hospital-info-dialog/hospit
 import { AbstractTimedStatus, QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
 import { QualitativeColormapService } from 'src/app/services/qualitative-colormap.service';
-import { TooltipService } from "../../services/tooltip.service";
+import { TooltipService } from '../../services/tooltip.service';
 import { BedBackgroundOptions } from '../options/bed-background-options';
 import { Overlay } from './overlay';
 
 export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<AggregatedHospitalOut<T>> {
 
   constructor(
-    name: string, 
-    hospitals: FeatureCollection<MultiPolygon, AggregatedHospitalOut<T>>, 
+    name: string,
+    hospitals: FeatureCollection<MultiPolygon, AggregatedHospitalOut<T>>,
     private options: BedBackgroundOptions,
-    private colorsService: QualitativeColormapService, 
+    private colorsService: QualitativeColormapService,
     private tooltipService: TooltipService,
     private matDialog: MatDialog
     ) {
@@ -25,17 +25,17 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
   }
 
   createOverlay() {
-    const onAction = (e: L.LeafletMouseEvent, feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>, aggregationLayer: any, layer) => {
+    const onAction = (e: L.LeafletMouseEvent, feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>, aggregationLayer1: any, layer) => {
       const map = (layer as any)._map;
 
       const touches = (e.originalEvent as any).touches;
 
-      if((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map || map.dragging.moving() || map._animatingZoom) {
+      if ((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map || map.dragging.moving() || map._animatingZoom) {
         return;
       }
 
       const onCloseAction: () => void = () => {
-        aggregationLayer.resetStyle(e.target);
+        aggregationLayer1.resetStyle(e.target);
       };
 
       const tooltipComponent = this.tooltipService

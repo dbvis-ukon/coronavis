@@ -1,7 +1,9 @@
+// tslint:disable:quotemark object-literal-key-quotes
+
 import { Component, Input, OnInit } from '@angular/core';
 import moment, { Moment } from 'moment';
 import { of } from 'rxjs';
-import { flatMap, map, max, reduce } from 'rxjs/operators';
+import { mergeMap, map, max, reduce } from 'rxjs/operators';
 import { BedType } from "../map/options/bed-type.enum";
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
@@ -41,7 +43,7 @@ export class HospitalInfoComponent implements OnInit {
   get data(): SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus> {
     return this._data;
   }
- 
+
   glyphLegendColors = QualitativeColormapService.bedStati;
 
   temporalChartTemplateSpec = {
@@ -69,7 +71,7 @@ export class HospitalInfoComponent implements OnInit {
     }
   };
 
-  
+
 
   specs = [];
 
@@ -78,7 +80,7 @@ export class HospitalInfoComponent implements OnInit {
   bedAccessors = ['icu_low_care', 'icu_high_care', 'ecmo_state'];
   bedAccessorsMapping = {'icu_low_care': 'ICU - Low Care', 'icu_high_care': 'ICU - High Care', 'ecmo_state': 'ECMO'};
 
-  isSingleHospital: boolean = false;
+  isSingleHospital = false;
   singleHospital: SingleHospitalOut<QualitativeTimedStatus>;
 
   latestDevelopment: QualitativeTimedStatus;
@@ -89,14 +91,14 @@ export class HospitalInfoComponent implements OnInit {
 
   warnOfOutdatedData: boolean;
 
-  totalNumberOfHospitals: number = 0;
+  totalNumberOfHospitals = 0;
 
   now = new Date();
 
   constructor(private colormapService: QualitativeColormapService,
-    private translationService: TranslationService,
-    private vegaBarchartService: VegaBarchartService,
-    private i18nService: I18nService
+              private translationService: TranslationService,
+              private vegaBarchartService: VegaBarchartService,
+              private i18nService: I18nService
     ) {
   }
 
@@ -155,14 +157,14 @@ export class HospitalInfoComponent implements OnInit {
   private async prepareBarCharts() {
     const barChartSpecs = [];
 
-    if(!this.latestDevelopment) {
+    if (!this.latestDevelopment) {
       return;
     }
 
     const bedStati = this.glyphLegendColors;
 
-    
-    
+
+
 
     for (const bedAccessor of this.bedAccessors) {
 
@@ -170,7 +172,7 @@ export class HospitalInfoComponent implements OnInit {
         xAxisTitle: '',
         yAxisTitle: this.translationService.translate('Anzahl Krankenhäuser'),
         width: 55
-      })
+      });
 
 
       barChartSpecs.push({
@@ -181,8 +183,8 @@ export class HospitalInfoComponent implements OnInit {
 
     const maxNum = await of(barChartSpecs)
     .pipe(
-      flatMap(d => d),
-      flatMap(d => d.chart.data.values),
+      mergeMap(d => d),
+      mergeMap(d => d.chart.data.values),
       map((d: any) => d.num as number),
       max()
     ).toPromise();
@@ -191,7 +193,7 @@ export class HospitalInfoComponent implements OnInit {
 
     of(barChartSpecs[0])
     .pipe(
-      flatMap(d => d.chart.data.values),
+      mergeMap(d => d.chart.data.values),
       map((d: any) => d.num as number),
       reduce((acc, val) => acc + val)
     )
@@ -230,8 +232,8 @@ export class HospitalInfoComponent implements OnInit {
   }
 
   private existsInDataValues(date: Moment, category, dataValues){
-    for(let i = dataValues.length-1; i>=0; i--) {
-      if(moment(dataValues[i].Datum).isSame(date) && dataValues[i].Kategorie === category){
+    for (let i = dataValues.length - 1; i >= 0; i--) {
+      if (moment(dataValues[i].Datum).isSame(date) && dataValues[i].Kategorie === category){
         return true;
       }
     }
@@ -241,7 +243,7 @@ export class HospitalInfoComponent implements OnInit {
   private prepareTemporalCharts() {
     const bedStati = this.glyphLegendColors;
 
-    var colors = [];
+    const colors = [];
     for (const bedStatus of bedStati) {
       colors.push(this.getCapacityStateColor(bedStatus));
     }
@@ -271,7 +273,7 @@ export class HospitalInfoComponent implements OnInit {
         }
 
         let counter = 0;
-        for( const d of this.data.developments) {
+        for ( const d of this.data.developments) {
 
           let sumOfOneSlice = 0;
           // fill the data object
@@ -282,7 +284,7 @@ export class HospitalInfoComponent implements OnInit {
 
             sumOfOneSlice += v;
 
-            if(!this.existsInDataValues(moment.max(getMoment(d.timestamp), tenDaysAgo), bedStatus, dataValues)) {
+            if (!this.existsInDataValues(moment.max(getMoment(d.timestamp), tenDaysAgo), bedStatus, dataValues)) {
               dataValues.push(
                 {
                   Kategorie: bedStatus,
@@ -297,7 +299,7 @@ export class HospitalInfoComponent implements OnInit {
             }
 
             // add last data point once again
-            if(counter === this.data.developments.length-1){
+            if (counter === this.data.developments.length - 1){
               dataValues.push(
                 {
                   Kategorie: bedStatus,
@@ -322,14 +324,14 @@ export class HospitalInfoComponent implements OnInit {
         // inject data values
         spec.data.values = dataValues;
 
-        //if (this.isSingleHospital && (new Date(this.lastUpdate).getTime() - new Date(this.firstTimestamp).getTime() < 2 * 24 * 60 * 60 * 1000)) {
+        // if (this.isSingleHospital && (new Date(this.lastUpdate).getTime() - new Date(this.firstTimestamp).getTime() < 2 * 24 * 60 * 60 * 1000)) {
 
         //  spec.encoding.x.axis.labelExpr = "[timeFormat(datum.value, '%d.%m'), false ? ' ' : timeFormat(datum.value, '(%H:%M)')]";
         // }
 
         spec.encoding.y.scale = {
           domain: [0, maxNumSlices]
-        }
+        };
 
         if (!this.isSingleHospital) {
           spec.mark.interpolate = 'step-after';
@@ -347,7 +349,7 @@ export class HospitalInfoComponent implements OnInit {
         // also overwrite the title
         spec.encoding.x.title = '';
 
-        if(this.i18nService.getCurrentLocale() === SupportedLocales.DE_DE) {
+        if (this.i18nService.getCurrentLocale() === SupportedLocales.DE_DE) {
           spec.encoding.x.axis.format = '%d.%m';
         } else {
           spec.encoding.x.axis.format = '%m/%d';
@@ -357,7 +359,7 @@ export class HospitalInfoComponent implements OnInit {
           this.specs.push({
             title: this.bedAccessorsMapping[bedAccessor],
             chart: spec,
-            bedtype: bedAccessor == 'icu_low_care' ? this.eBedType.icuLow : (bedAccessor == 'icu_high_care' ? this.eBedType.icuHigh : this.eBedType.ecmo)   
+            bedtype: bedAccessor === 'icu_low_care' ? this.eBedType.icuLow : (bedAccessor === 'icu_high_care' ? this.eBedType.icuHigh : this.eBedType.ecmo)
           });
 
 
@@ -368,7 +370,7 @@ export class HospitalInfoComponent implements OnInit {
       this.specs.forEach(spec => {
         spec.chart.encoding.color.scale.domain = bedStati;
         spec.chart.encoding.color.scale.range = colors;
-        //spec.encoding.color.range = Math.min(maxNum+1, 5);
+        // spec.encoding.color.range = Math.min(maxNum+1, 5);
       });
     }
   }

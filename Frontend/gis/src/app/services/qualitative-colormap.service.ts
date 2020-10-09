@@ -28,14 +28,19 @@ export class QualitativeColormapService {
 
   private singleHospitalCM = scaleOrdinal<string, string>()
     .domain(QualitativeColormapService.bedStati)
-    .range([...QualitativeColormapService.bedStatusColors, "#c2cbd4", "#bbb"]);
+    .range([...QualitativeColormapService.bedStatusColors, '#c2cbd4', '#bbb']);
 
-  
+  private continousColorMap = scaleLinear<string, string>()
+    .domain([0, 0.5, 1])
+    .range(QualitativeColormapService.bedStatusColors)
+    .interpolate(interpolateRgb.gamma(2.2));
+
+
   getSingleHospitalColormap(): d3.ScaleOrdinal<string, string> {
     return this.singleHospitalCM;
   }
 
-  
+
 
   private getMinScore(d: QualitativeAggregatedBedStateCounts) {
     const v = d.Verfügbar || 0;
@@ -65,7 +70,7 @@ export class QualitativeColormapService {
     const v = d.Verfügbar || 0;
     const b = d.Begrenzt || 0;
     const a = d.Ausgelastet || 0;
-    const n = d["Nicht verfügbar"] || 0;
+    const n = d['Nicht verfügbar'] || 0;
 
     return v === 0 && b === 0 && a === 0 && n > 0;
   }
@@ -74,15 +79,10 @@ export class QualitativeColormapService {
     const v = d.Verfügbar || 0;
     const b = d.Begrenzt || 0;
     const a = d.Ausgelastet || 0;
-    const n = d["Nicht verfügbar"] || 0;
+    const n = d['Nicht verfügbar'] || 0;
 
-    return v === 0 && b === 0 && a === 0 && n == 0;
+    return v === 0 && b === 0 && a === 0 && n === 0;
   }
-
-  private continousColorMap = scaleLinear<string, string>()
-    .domain([0, 0.5, 1])
-    .range(QualitativeColormapService.bedStatusColors)
-    .interpolate(interpolateRgb.gamma(2.2));
 
     public propertyAccessor(type: BedType) {
       switch (type) {
@@ -94,24 +94,24 @@ export class QualitativeColormapService {
           return (a: QualitativeTimedStatus) => a.icu_low_care;
       }
     }
-  
+
     getLatestBedStatusColor(p: AbstractHospitalOut<QualitativeTimedStatus>, type: BedType, date: string = 'now') {
-      if(!p || !p.developments) {
+      if (!p || !p.developments) {
         return this.getBedStatusColor(null, this.propertyAccessor(type));
       }
 
       const t = p.developments;
 
       let latest: QualitativeTimedStatus;
-      if(date === null || date === 'now') {
-        latest = t[t.length -1];
+      if (date === null || date === 'now') {
+        latest = t[t.length - 1];
       } else {
         const actualDate = getMoment(date).endOf('day');
         const strDate = getStrDate(getMoment(date));
 
-        if(p?.developmentDays) {
+        if (p?.developmentDays) {
           const status = p?.developmentDays[strDate];
-          if(status) {
+          if (status) {
             return this.getBedStatusColor(status, this.propertyAccessor(type));
           }
         }
@@ -120,13 +120,13 @@ export class QualitativeColormapService {
 
         // console.log('need to use fallback method', strDate, latest, p);
       }
-  
+
       return this.getBedStatusColor(latest, this.propertyAccessor(type));
     }
 
   getBedStatusColor(latest: QualitativeTimedStatus, f: (d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts): string {
-    if(!latest) {
-      return this.singleHospitalCM("Keine Information");
+    if (!latest) {
+      return this.singleHospitalCM('Keine Information');
     }
     const properties = f(latest);
 
@@ -140,10 +140,10 @@ export class QualitativeColormapService {
       .range(minMaxNormValues);
 
     if (this.noInformation(properties)) {
-      return this.singleHospitalCM("Keine Information");
+      return this.singleHospitalCM('Keine Information');
     }
     if (this.notAvailable(properties)) {
-      return this.singleHospitalCM("Nicht verfügbar");
+      return this.singleHospitalCM('Nicht verfügbar');
     }
     return this.continousColorMap(normalizeValues(score));
   }

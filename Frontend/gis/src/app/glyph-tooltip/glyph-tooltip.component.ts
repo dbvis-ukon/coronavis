@@ -40,10 +40,10 @@ export class GlyphTooltipComponent implements OnInit {
   ngOnInit(): void {
     this.isSingleHospital = this.hospitalUtilService.isSingleHospital(this.tooltipData);
 
-    if(!this.isSingleHospital) {
+    if (!this.isSingleHospital) {
       this.totalNumberOfHospitals = this.hospitalUtilService.getNumberOfHospitals(this.tooltipData as AggregatedHospitalOut<QualitativeTimedStatus>);
     }
-    
+
   }
 
 }

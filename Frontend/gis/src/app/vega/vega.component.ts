@@ -41,23 +41,23 @@ export class VegaComponent implements AfterViewInit {
     let formatLocale;
 
     let timeFormatLocale;
-    if(this.i18nService.getCurrentLocale() === SupportedLocales.DE_DE) {
+    if (this.i18nService.getCurrentLocale() === SupportedLocales.DE_DE) {
       formatLocale = {
-        "decimal": ",",
-        "thousands": ".",
-        "grouping": [3],
-        "currency": ["", "\u00a0€"]
+        decimal: ',',
+        thousands: '.',
+        grouping: [3],
+        currency: ['', '\u00a0€']
       };
 
       timeFormatLocale = {
-        "dateTime": "%A, der %e. %B %Y, %X",
-        "date": "%d.%m.%Y",
-        "time": "%H:%M:%S",
-        "periods": ["AM", "PM"],
-        "days": ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
-        "shortDays": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-        "months": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
-        "shortMonths": ["Jan", "Feb", "Mrz", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
+        dateTime: '%A, der %e. %B %Y, %X',
+        date: '%d.%m.%Y',
+        time: '%H:%M:%S',
+        periods: ['AM', 'PM'],
+        days: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+        shortDays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+        months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+        shortMonths: ['Jan', 'Feb', 'Mrz', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
       };
     }
 
@@ -65,21 +65,21 @@ export class VegaComponent implements AfterViewInit {
 
     else { // default english
       formatLocale = {
-        "decimal": ".",
-        "thousands": ",",
-        "grouping": [3],
-        "currency": ["$", ""]
+        decimal: '.',
+        thousands: ',',
+        grouping: [3],
+        currency: ['$', '']
       };
 
       timeFormatLocale = {
-        "dateTime": "%x, %X",
-        "date": "%-m/%-d/%Y",
-        "time": "%-I:%M:%S %p",
-        "periods": ["AM", "PM"],
-        "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        "shortDays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-        "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-        "shortMonths": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        dateTime: '%x, %X',
+        date: '%-m/%-d/%Y',
+        time: '%-I:%M:%S %p',
+        periods: ['AM', 'PM'],
+        days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        shortDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       };
     }
 
@@ -87,15 +87,15 @@ export class VegaComponent implements AfterViewInit {
 
     // empty content
     const node = this.chartRef.nativeElement;
-    
 
-    if(!node ) {
+
+    if (!node ) {
       return;
     }
 
     node.innerHTML = '';
 
-    if(!this._spec) {
+    if (!this._spec) {
       return;
     }
 

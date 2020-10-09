@@ -2,10 +2,10 @@ import { Point } from 'geojson';
 import { AbstractTimedStatus } from '../in/qualitative-hospitals-development';
 
 export interface ForceLayoutProperties {
-    x?:number;
-    y?:number;
-    _x?:number;
-    _y?:number;
+    x?: number;
+    y?: number;
+    _x?: number;
+    _y?: number;
 }
 
 export interface HasName {

@@ -15,15 +15,15 @@ export class TouchHack {
    * @param target the target document
    * @param toRegister the touch events to register touches (e.g., touchstart, touchend)
    * @param toHandle the mouse events to be handeled (e.g., mouseover, mousemove)
-   * @param keep_ms how long to keep the touch events (ms).
+   * @param keepMs how long to keep the touch events (ms).
    * @param kill Kill the mouse event if followed by a touch event.
    * @param epsDistance The maximum distance between a finger and the mouse cursor.
    */
   constructor(
-    private readonly target: Document, 
-    toRegister = ['touchstart', 'touchmove', 'touchend'], 
+    private readonly target: Document,
+    toRegister = ['touchstart', 'touchmove', 'touchend'],
     toHandle = ['mouseover', 'mouseenter', 'click', 'mousemove'],
-    private readonly keep_ms = 1000,
+    private readonly keepMs = 1000,
     private readonly kill = false,
     private readonly epsDistance = 5
     ) {
@@ -47,19 +47,19 @@ export class TouchHack {
   private registerTouch(e: TouchEvent) {
     const touches = e.touches || e.changedTouches;
     // console.log('registerTouch', touch, e);
-    if(!touches) {
+    if (!touches) {
       return;
     }
-    
-    for(let i = 0; i < touches.length; i++) {
+
+    for (let i = 0; i < touches.length; i++) {
       const touch = touches.item(i);
       const point = {
         x: touch.pageX,
         y: touch.pageY
-      }
+      };
       this._touchpoints.push(point);
 
-      timer(this.keep_ms)
+      timer(this.keepMs)
         .subscribe(() => this._touchpoints.splice(this._touchpoints.indexOf(point), 1));
     }
   }
@@ -71,18 +71,18 @@ export class TouchHack {
    */
   private handleMouseEvent(e: MouseEvent) {
     for (const i in this._touchpoints) {
-      //check if mouseevent's position is (almost) identical to any previously registered touch events' positions
+      // check if mouseevent's position is (almost) identical to any previously registered touch events' positions
       if (Math.abs(this._touchpoints[i].x - e.pageX) < this.epsDistance && Math.abs(this._touchpoints[i].y - e.pageY) < this.epsDistance) {
-        //set flag on event
-        (e as any).triggeredByTouch = true
-        //if wanted, kill the event
+        // set flag on event
+        (e as any).triggeredByTouch = true;
+        // if wanted, kill the event
         if (this.kill) {
-          e.returnValue = false
-          e.cancelBubble = true
-          e.preventDefault()
-          e.stopPropagation()
+          e.returnValue = false;
+          e.cancelBubble = true;
+          e.preventDefault();
+          e.stopPropagation();
         }
-        return
+        return;
       }
     }
   }

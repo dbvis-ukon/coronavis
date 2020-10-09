@@ -7,29 +7,29 @@
   originally created and motivated by L.CanvasOverlay  available here: https://gist.github.com/Sumbera/11114288
 */
 
-import { Bounds, Browser, DomUtil, InteractiveLayerOptions, LatLng, LatLngBounds, Layer, LeafletEventHandlerFn, LeafletMouseEvent, Map as LMap, Point, ResizeEvent, Util, ZoomAnimEvent } from 'leaflet'
+import { Bounds, Browser, DomUtil, InteractiveLayerOptions, LatLng, LatLngBounds, Layer, LeafletEventHandlerFn, LeafletMouseEvent, Map as LMap, Point, ResizeEvent, Util, ZoomAnimEvent } from 'leaflet';
 
 // tslint:disable:interface-name
 interface Map extends LMap {
-    _latLngBoundsToNewLayerBounds(ll: LatLngBounds, z: number, c: LatLng): Bounds
+    _latLngBoundsToNewLayerBounds(ll: LatLngBounds, z: number, c: LatLng): Bounds;
 }
 
 export interface IViewInfo {
-    bounds: LatLngBounds
-    canvas: HTMLCanvasElement
-    center: LatLng
-    corner: { x: number, y: number }
-    layer: CanvasLayer
-    size: Point
-    zoom: number
+    bounds: LatLngBounds;
+    canvas: HTMLCanvasElement;
+    center: LatLng;
+    corner: { x: number, y: number };
+    layer: CanvasLayer;
+    size: Point;
+    zoom: number;
 }
 
 export class CanvasLayer extends Layer {
-    protected _canvas: HTMLCanvasElement
-    protected _map: Map
+    protected _canvas: HTMLCanvasElement;
+    protected _map: Map;
 
-    private _delegate: any
-    private _frame: any
+    private _delegate: any;
+    private _frame: any;
 
     private _options: InteractiveLayerOptions;
 
@@ -37,13 +37,13 @@ export class CanvasLayer extends Layer {
     constructor(options?: InteractiveLayerOptions) {
         super(options);
         this._options = options;
-        this._map = null
-        this._canvas = null
-        this._frame = null
-        this._delegate = null
+        this._map = null;
+        this._canvas = null;
+        this._frame = null;
+        this._delegate = null;
     }
 
-    public get map(): Map { return this._map }
+    public get map(): Map { return this._map; }
 
     // -------------------------------------------------------------
     public getEvents() {
@@ -54,79 +54,79 @@ export class CanvasLayer extends Layer {
             mouseup: () => DomUtil.removeClass(this._canvas, 'mousedown'),
             click: this._onClick,
             mousemove: this._onMouseMove
-        }
+        };
         if (this._map.options.zoomAnimation && Browser.any3d) {
-            events.zoomanim = this._animateZoom
+            events.zoomanim = this._animateZoom;
         }
 
-        return events
+        return events;
     }
     // -------------------------------------------------------------
     public onAdd(map: Map) {
-        this._map = map
-        this._canvas = DomUtil.create('canvas', 'leaflet-layer') as HTMLCanvasElement
-        if(this._options.interactive !== true) {
+        this._map = map;
+        this._canvas = DomUtil.create('canvas', 'leaflet-layer') as HTMLCanvasElement;
+        if (this._options.interactive !== true) {
             DomUtil.addClass(this._canvas, 'leaflet-non-interactive-layer');
         }
 
-        const size = this._map.getSize()
-        this._canvas.width = size.x
-        this._canvas.height = size.y
+        const size = this._map.getSize();
+        this._canvas.width = size.x;
+        this._canvas.height = size.y;
 
-        const animated = this._map.options.zoomAnimation && Browser.any3d
-        DomUtil.addClass(this._canvas, 'leaflet-zoom-' + (animated ? 'animated' : 'hide'))
+        const animated = this._map.options.zoomAnimation && Browser.any3d;
+        DomUtil.addClass(this._canvas, 'leaflet-zoom-' + (animated ? 'animated' : 'hide'));
 
-        map.getPanes().overlayPane.appendChild(this._canvas)
+        map.getPanes().overlayPane.appendChild(this._canvas);
 
-        const del = this._delegate || this
-        if (del.onLayerDidMount) { del.onLayerDidMount() } // -- callback
+        const del = this._delegate || this;
+        if (del.onLayerDidMount) { del.onLayerDidMount(); } // -- callback
 
-        this.needRedraw()
-        return this
+        this.needRedraw();
+        return this;
     }
 
     // -------------------------------------------------------------
     public onRemove(map: Map) {
-        const del = this._delegate || this
-        if (del.onLayerWillUnmount) { del.onLayerWillUnmount() } // -- callback
+        const del = this._delegate || this;
+        if (del.onLayerWillUnmount) { del.onLayerWillUnmount(); } // -- callback
 
-        map.getPanes().overlayPane.removeChild(this._canvas)
+        map.getPanes().overlayPane.removeChild(this._canvas);
 
-        this._canvas = null
-        return this
+        this._canvas = null;
+        return this;
     }
 
     // -------------------------------------------------------------
     public needRedraw() {
         if (!this._frame) {
-            this._frame = Util.requestAnimFrame(this.drawLayer, this)
+            this._frame = Util.requestAnimFrame(this.drawLayer, this);
         }
-        return this
+        return this;
     }
 
     // -------------------------------------------------------------
     public delegate(del: any) {
-        this._delegate = del
-        return this
+        this._delegate = del;
+        return this;
     }
 
     // -------------------------------------------------------------
     private _onLayerDidResize(resizeEvent: ResizeEvent) {
-        this._canvas.width = resizeEvent.newSize.x
-        this._canvas.height = resizeEvent.newSize.y
+        this._canvas.width = resizeEvent.newSize.x;
+        this._canvas.height = resizeEvent.newSize.y;
     }
 
     // -------------------------------------------------------------
     private _onLayerDidMove() {
-        const topLeft = this._map.containerPointToLayerPoint([0, 0])
-        DomUtil.setPosition(this._canvas, topLeft)
+        const topLeft = this._map.containerPointToLayerPoint([0, 0]);
+        DomUtil.setPosition(this._canvas, topLeft);
         this.drawLayer();
     }
 
-    //-------------------------------------------------------------
+    // -------------------------------------------------------------
     private _onClick(e: LeafletMouseEvent) {
         const evented = this as any;
-    	if (evented._events.click) {
+        if (evented._events.click) {
             evented._events.click[0].fn(e);
         }
     }
@@ -146,23 +146,23 @@ export class CanvasLayer extends Layer {
         return {
             x: latlon.lng * 6378137 * Math.PI / 180,
             y: Math.log(Math.tan((90 + latlon.lat) * Math.PI / 360)) * 6378137
-        }
+        };
     }
 
     // ------------------------------------------------------------------------------
     private drawLayer() {
-        if(!this._map || !this._canvas) {
+        if (!this._map || !this._canvas) {
             return;
         }
         // -- todo make the viewInfo properties  flat objects.
-        const _size = this._map.getSize()
-        this._canvas.width = _size.x
-        this._canvas.height = _size.y
-        const _bounds = this._map.getBounds()
-        const _zoom = this._map.getZoom()
+        const _size = this._map.getSize();
+        this._canvas.width = _size.x;
+        this._canvas.height = _size.y;
+        const _bounds = this._map.getBounds();
+        const _zoom = this._map.getZoom();
 
-        const _center = this.LatLonToMercator(this._map.getCenter())
-        const _corner = this.LatLonToMercator(this._map.containerPointToLatLng(this._map.getSize()))
+        const _center = this.LatLonToMercator(this._map.getCenter());
+        const _corner = this.LatLonToMercator(this._map.containerPointToLatLng(this._map.getSize()));
 
         const opts = {
             bounds: _bounds,
@@ -174,17 +174,17 @@ export class CanvasLayer extends Layer {
             zoom: _zoom
         };
 
-        const del = this._delegate || this
+        const del = this._delegate || this;
         if (del.onDrawLayer) {
-            del.onDrawLayer(opts)
+            del.onDrawLayer(opts);
         }
-        this._frame = null
+        this._frame = null;
     }
 
     // ------------------------------------------------------------------------------
     private _animateZoom(e: ZoomAnimEvent) {
-        const scale = e.target.getZoomScale(e.zoom, e.target.getZoom())
-        const offset = this._map._latLngBoundsToNewLayerBounds(this._map.getBounds(), e.zoom, e.center).min
-        DomUtil.setTransform(this._canvas, offset, scale)
+        const scale = e.target.getZoomScale(e.zoom, e.target.getZoom());
+        const offset = this._map._latLngBoundsToNewLayerBounds(this._map.getBounds(), e.zoom, e.center).min;
+        DomUtil.setTransform(this._canvas, offset, scale);
     }
 }

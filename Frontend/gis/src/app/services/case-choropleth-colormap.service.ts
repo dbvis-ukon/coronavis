@@ -25,11 +25,11 @@ export class CaseChoroplethColormapService {
     .range([...schemeGreens[8].slice(0, 7).reverse(), '#fff', ...schemeBlues[8].slice(0, 7)]);
 
   private lockDownColorMap = scaleThreshold<number, string>()
-    .domain([0, 0/8 + 0.000000000000000001, 1/8, 2/8, 3/8, 4/8, 5/8, 6/8, 7/8, 1-0.000000000000000001, 1])
-    .range(['#ffffff', '#fff','#fee6ce','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#a63603','#7f2704', 'black']);
-  
-  
-  
+    .domain([0, 0 / 8 + 0.000000000000000001, 1 / 8, 2 / 8, 3 / 8, 4 / 8, 5 / 8, 6 / 8, 7 / 8, 1 - 0.000000000000000001, 1])
+    .range(['#ffffff', '#fff', '#fee6ce', '#fdd0a2', '#fdae6b', '#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704', 'black']);
+
+
+
   constructor(private caseUtil: CaseUtilService) { }
 
   private getColorMap(options: CovidNumberCaseOptions) {
@@ -47,17 +47,17 @@ export class CaseChoroplethColormapService {
       const ext = this.getColorMap(options).invertExtent(color);
 
       const min = scaleFn ? scaleFn.invert(ext[0]) : ext[0];
-      const max = scaleFn ? scaleFn.invert(ext[1]) : ext[1];
+      const max1 = scaleFn ? scaleFn.invert(ext[1]) : ext[1];
 
       return {
-        color: color,
-        min: min,
-        max: max
+        color,
+        min,
+        max: max1
       } as ColorMapBin;
     })
     // filter out all bins not in the extent
     .filter(b => {
-      if(!dataExtent) {
+      if (!dataExtent) {
         return true;
       }
 
@@ -65,35 +65,35 @@ export class CaseChoroplethColormapService {
     })
     // clamp the bins to the actual numbers
     .map((b, i, arr) => {
-      if(!dataExtent) {
+      if (!dataExtent) {
         return b;
       }
 
-      if(i === 0) {
+      if (i === 0) {
         return {
           color: b.color,
 
           min: dataExtent[0],
 
           max: b.max
-        } as ColorMapBin
+        } as ColorMapBin;
       }
 
-      if(i === (arr.length - 1)) {
+      if (i === (arr.length - 1)) {
         return {
           color: b.color,
 
           min: b.min,
 
           max: dataExtent[1]
-        } as ColorMapBin
+        } as ColorMapBin;
       }
 
       return b;
     })
     // filter out bins that do not capture a full number
     .filter(b => {
-      if(!onlyFullNumbers) {
+      if (!onlyFullNumbers) {
         return true;
       }
 
@@ -104,38 +104,38 @@ export class CaseChoroplethColormapService {
     })
     // round bin limits to full numbers
     .map((b, i, arr) => {
-      if(!onlyFullNumbers) {
+      if (!onlyFullNumbers) {
         return b;
       }
 
-      const max = i > 0 && i < arr.length-1 ? Math.round(b.max) - 1 : Math.round(b.max);
+      const max1 = i > 0 && i < arr.length - 1 ? Math.round(b.max) - 1 : Math.round(b.max);
 
       return {
         color: b.color,
         min: Math.round(b.min),
-        max: max
+        max: max1
       } as ColorMapBin;
     })
     // filter out double bins
     .filter((b, i, arr) => {
-      if(i === 0) {
+      if (i === 0) {
         return true;
       }
 
-      const last = arr[i-1];
+      const last = arr[i - 1];
 
-      if(onlyFullNumbers && last.max === b.min) {
+      if (onlyFullNumbers && last.max === b.min) {
         return false;
       }
 
       return true;
-    })
+    });
   }
 
 
   getColor(
-    scaleFn: ScalePower<number, number> | ScaleLinear<number, number>, 
-    dataPoint: Feature<Geometry, RKICaseDevelopmentProperties>, 
+    scaleFn: ScalePower<number, number> | ScaleLinear<number, number>,
+    dataPoint: Feature<Geometry, RKICaseDevelopmentProperties>,
     options: CovidNumberCaseOptions
   ): string {
     return this.getChoroplethCaseColor(options, scaleFn(this.caseUtil.getCaseNumbers(dataPoint.properties, options)));
@@ -147,30 +147,30 @@ export class CaseChoroplethColormapService {
   }
 
   public getDomainExtent(
-    fc: FeatureCollection<Geometry, RKICaseDevelopmentProperties>, 
+    fc: FeatureCollection<Geometry, RKICaseDevelopmentProperties>,
     options: CovidNumberCaseOptions,
     actualExtent: boolean = false
   ): [number, number] {
     const cases: number[] = fc.features.map(d => this.caseUtil.getCaseNumbers(d.properties, options));
 
-    if(options.change === CovidNumberCaseChange.absolute) {
-      if(actualExtent) {
+    if (options.change === CovidNumberCaseChange.absolute) {
+      if (actualExtent) {
         return extent<number>(cases);
       }
 
-      if(this.caseUtil.isLockdownMode(options)) {
+      if (this.caseUtil.isLockdownMode(options)) {
         return [0, (50 / 100000)];
       }
 
       return [0, max<number>(cases)];
     } else {
       const [minChange, maxChange] = extent(cases.filter(d => d < Infinity));
-      if(actualExtent) {
+      if (actualExtent) {
         return [minChange, maxChange];
       }
-      const max = Math.max(Math.abs(minChange), Math.abs(maxChange));
+      const max1 = Math.max(Math.abs(minChange), Math.abs(maxChange));
 
-      return [-max, max];
+      return [-max, max1];
     }
   }
 
@@ -179,9 +179,9 @@ export class CaseChoroplethColormapService {
   }
 
   public getScale(fc: FeatureCollection<Geometry, RKICaseDevelopmentProperties>, options: CovidNumberCaseOptions): ScalePower<number, number> | ScaleLinear<number, number> {
-    if(options.change === CovidNumberCaseChange.absolute) {
+    if (options.change === CovidNumberCaseChange.absolute) {
 
-      if(this.caseUtil.isLockdownMode(options)) {
+      if (this.caseUtil.isLockdownMode(options)) {
         return scaleLinear()
           .domain(this.getDomainExtent(fc, options))
           .range(this.getRangeExtent(options))
@@ -192,8 +192,8 @@ export class CaseChoroplethColormapService {
         .domain(this.getDomainExtent(fc, options))
         .range(this.getRangeExtent(options));
 
-      
-        
+
+
     } else {
 
       return scaleLinear()
@@ -203,11 +203,11 @@ export class CaseChoroplethColormapService {
     }
   }
 
-  
+
   public getCaseNumbers(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions) {
     return this.caseUtil.getCaseNumbers(data, options);
   }
 
-  
+
 
 }

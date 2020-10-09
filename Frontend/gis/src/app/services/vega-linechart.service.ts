@@ -1,3 +1,5 @@
+// tslint:disable:quotemark object-literal-key-quotes
+
 import { Injectable } from '@angular/core';
 import { getMoment } from '../util/date-util';
 
@@ -91,7 +93,7 @@ export class VegaLinechartService {
 
 
   compileChart(
-    data: {x: string, y: number}[], 
+    data: {x: string, y: number}[],
     chartOptions: {
       xAxisTitle: string,
       yAxisTitle: string,
@@ -103,7 +105,7 @@ export class VegaLinechartService {
       }
     }
     ): any {
-    if(!data) {
+    if (!data) {
       return null;
     }
 
@@ -121,14 +123,14 @@ export class VegaLinechartService {
     spec.width = chartOptions.width;
     spec.height = chartOptions.height;
 
-    if(chartOptions.regression) {
+    if (chartOptions.regression) {
       const from = getMoment(chartOptions.regression.from).valueOf();
       const to = getMoment(chartOptions.regression.to).valueOf();
       spec.layer.push({
         "mark": {"type": "line", "color": "black"},
         "transform": [
-          {"filter": {"field": "x", "gte": ''+from}},
-          {"filter": {"field": "x", "lte": ''+to}},
+          {"filter": {"field": "x", "gte": '' + from}},
+          {"filter": {"field": "x", "lte": '' + to}},
           {"regression": "y", "on": "x", "extent": [from, to]}
           // {"regression": "y", "on": "x"}
         ],

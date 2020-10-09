@@ -4,8 +4,8 @@ import * as L from 'leaflet';
 import { CaseDialogComponent } from 'src/app/case-dialog/case-dialog.component';
 import { RKICaseDevelopmentProperties } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { CaseChoroplethColormapService } from 'src/app/services/case-choropleth-colormap.service';
-import { CaseTooltipComponent } from "../../case-tooltip/case-tooltip.component";
-import { TooltipService } from "../../services/tooltip.service";
+import { CaseTooltipComponent } from '../../case-tooltip/case-tooltip.component';
+import { TooltipService } from '../../services/tooltip.service';
 import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
 import { Overlay } from './overlay';
 
@@ -22,20 +22,20 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
   }
 
   createOverlay() {
-    const onAction = (e: L.LeafletMouseEvent, 
-    feature: Feature<Geometry, RKICaseDevelopmentProperties>, 
-    aggregationLayer: L.GeoJSON<RKICaseDevelopmentProperties>,
-    layer: L.Layer) => {
+    const onAction = (e: L.LeafletMouseEvent,
+                      feature: Feature<Geometry, RKICaseDevelopmentProperties>,
+                      aggregationLayer1: L.GeoJSON<RKICaseDevelopmentProperties>,
+                      layer: L.Layer) => {
       const map = (layer as any)._map;
 
       const touches = (e.originalEvent as any).touches;
 
-      if((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map || map.dragging.moving() || map._animatingZoom) {
+      if ((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map || map.dragging.moving() || map._animatingZoom) {
         return;
       }
-      
+
       const onCloseAction: () => void = () => {
-        aggregationLayer.resetStyle(e.target);
+        aggregationLayer1.resetStyle(e.target);
       };
 
       const tooltipComponent = this.tooltipService
@@ -85,7 +85,7 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
                 data: feature.properties,
                 options: this.options
               }
-            })
+            });
           },
           mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer, layer),
           // on mouseover hide tooltip and reset county to normal sytle

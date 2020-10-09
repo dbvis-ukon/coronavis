@@ -39,7 +39,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
   protected quadtree: Quadtree < MyQuadTreeItem < Feature < G, T >>> ;
 
-  protected visible: boolean = false;
+  protected visible = false;
 
   protected forceLayout: ForceDirectedLayout < G, T > ;
 
@@ -57,7 +57,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
   protected ctx: CanvasRenderingContext2D;
 
-  protected currentScale: number = 1;
+  protected currentScale = 1;
 
   protected viewInfo: IViewInfo;
 
@@ -190,7 +190,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
     this.updateCurrentScale();
 
-    const topLeft = this._map.containerPointToLayerPoint([0, 0])
+    const topLeft = this._map.containerPointToLayerPoint([0, 0]);
     DomUtil.setPosition(this._canvas, topLeft);
 
     this.ctx.translate(-topLeft.x, -topLeft.y);
@@ -199,7 +199,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   }
 
   onLayerDidMount() {
-    if(this.initiallyMounted) {
+    if (this.initiallyMounted) {
       return;
     }
 
@@ -239,7 +239,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   }
 
   setVisibility(v: boolean) {
-    if(this.visible === v) {
+    if (this.visible === v) {
       return;
     }
     this.visible = v;
@@ -266,7 +266,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       return;
     }
 
-    const topLeft = this._map.containerPointToLayerPoint([0, 0])
+    const topLeft = this._map.containerPointToLayerPoint([0, 0]);
 
     // remove everything
     this.ctx.clearRect(topLeft.x, topLeft.y, this._canvas.width + Math.abs(topLeft.x), this._canvas.height + Math.abs(topLeft.y));
@@ -290,7 +290,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     }
 
     // draw hovered glyph again so it's on top
-    if(this.currentlyHoveredGlyph) {
+    if (this.currentlyHoveredGlyph) {
       this.drawGlyph(this.currentlyHoveredGlyph);
     }
   }
@@ -302,19 +302,19 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
     let bounds = this.drawGlyphRects(glyphData, pt, isCurrentlyHovered);
 
-    let boundsAdd = this.drawAdditionalFeatures(glyphData, pt, isCurrentlyHovered);
+    const boundsAdd = this.drawAdditionalFeatures(glyphData, pt, isCurrentlyHovered);
 
     bounds = bounds
       .extend(boundsAdd.min)
       .extend(boundsAdd.max);
 
     this.quadtree.push({
-      x: bounds.min.x, //Mandatory
-      y: bounds.min.y, //Mandatory
-      width: bounds.getSize().x, //Optional, defaults to 1
-      height: bounds.getSize().y, //Optional, defaults to 1
+      x: bounds.min.x, // Mandatory
+      y: bounds.min.y, // Mandatory
+      width: bounds.getSize().x, // Optional, defaults to 1
+      height: bounds.getSize().y, // Optional, defaults to 1
       payload: glyphData
-    }) //Optional, defaults to false
+    }); // Optional, defaults to false
   }
 
   protected drawGlyphRects(glyphData: Feature < G, T > , pt: Point, isHovered: boolean): Bounds {
@@ -400,28 +400,26 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
   /**
    * Taken from: https://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
-   * @param text 
-   * @param maxWidth 
    */
   protected getWrappedText(text: string, maxWidth: number): {line: string; width: number}[] {
     const words = text.split(' ');
     let line = '';
 
-    const lines:  {line: string; width: number}[] = [];
+    const lines: {line: string; width: number}[] = [];
 
     let testWidth;
     for (let n = 0; n < words.length; n++) {
-      let testLine = line + words[n] + ' ';
-      let metrics = this.ctx.measureText(testLine);
+      const testLine = line + words[n] + ' ';
+      const metrics = this.ctx.measureText(testLine);
       testWidth = metrics.width;
       if (testWidth > maxWidth && n > 0) {
-        lines.push({line: line, width: this.ctx.measureText(line).width});
+        lines.push({line, width: this.ctx.measureText(line).width});
         line = words[n] + ' ';
       } else {
         line = testLine;
       }
     }
-    lines.push({line: line, width: this.ctx.measureText(line).width});
+    lines.push({line, width: this.ctx.measureText(line).width});
     return lines;
   }
 
@@ -447,11 +445,11 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     return this.mouseMove$
       .pipe(
         filter(e => {
-          const map = this._map as any;
+          const map1 = this._map as any;
 
           const touches = (e.originalEvent as any).touches;
-    
-          if((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map || map.dragging.moving() || map._animatingZoom) {
+
+          if ((e.originalEvent as any).triggeredByTouch || touches?.lenght > 1 || !map1 || map1.dragging.moving() || map1._animatingZoom) {
             return false;
           }
 
@@ -460,7 +458,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
         map(e => {
           const item = this.findItem(e);
           if (!item) {
-            return null
+            return null;
           }
           return {
             mouse: e,
@@ -469,7 +467,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
         }),
         distinctUntilChanged((x, y) => x?.item === y?.item),
         tap(d => this.currentlyHoveredGlyph = d?.item)
-      )
+      );
   }
 
   protected onClick(): Observable < GlyphEvent < G, T > | null > {
@@ -478,14 +476,14 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
         map(e => {
           const item = this.findItem(e);
           if (!item) {
-            return null
+            return null;
           }
           return {
             mouse: e,
             item
           };
         }),
-      )
+      );
   }
 
   // returns height of this wrapped text
@@ -523,7 +521,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     this.ctx.restore();
 
     return new Bounds(
-      new Point(centerX - (maxWidth / 2), belowGlyhY), 
+      new Point(centerX - (maxWidth / 2), belowGlyhY),
       new Point(centerX + (maxWidth / 2), belowGlyhY + lineHeight * wrappedText.length)
     );
   }

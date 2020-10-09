@@ -1,4 +1,4 @@
-import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
@@ -30,5 +30,5 @@ export class HelpDialogComponent implements OnInit {
   close(): void {
     this.dialogRef.close();
   }
-  
+
 }

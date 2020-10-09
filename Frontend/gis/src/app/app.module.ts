@@ -23,14 +23,14 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
-import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { MatStepperModule } from "@angular/material/stepper";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NouisliderModule } from "ng2-nouislider";
+import { NouisliderModule } from 'ng2-nouislider';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { AboutComponent } from './about/about.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -84,11 +84,11 @@ const localeProvider = {
     // }
 
     // get form base url e.g. /en/ /de/
-    if(locale === null) {
+    if (locale === null) {
       const strippedBase = s.getBaseHrefFromDOM().replace(/\//g, '');
-      if(strippedBase.length === 2) {
-        for(const l of Object.values(SupportedLocales)) {
-          if(l.startsWith(strippedBase)) {
+      if (strippedBase.length === 2) {
+        for (const l of Object.values(SupportedLocales)) {
+          if (l.startsWith(strippedBase)) {
             locale = l;
             break;
           }
@@ -97,10 +97,10 @@ const localeProvider = {
     }
 
     // get from browser settings
-    if(locale === null) {
+    if (locale === null) {
       const navL = navigator.language.slice(0, 2);
-      for(const l of Object.values(SupportedLocales)) {
-        if(l.slice(0, 2) === navL) {
+      for (const l of Object.values(SupportedLocales)) {
+        if (l.slice(0, 2) === navL) {
           locale = l;
           break;
         }
@@ -108,14 +108,14 @@ const localeProvider = {
     }
 
     // if it still null use en-US as default
-    if(locale === null) {
+    if (locale === null) {
       locale = SupportedLocales.EN_US;
     }
 
     return locale;
   },
   deps: [PlatformLocation]
-}
+};
 
 
 @NgModule({
@@ -188,15 +188,15 @@ const localeProvider = {
     HelpModule
   ],
   providers: [
-    localeProvider, 
+    localeProvider,
     {
       provide: APP_BASE_HREF,
       useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
       deps: [PlatformLocation]
     },
-    { 
-      provide: ErrorHandler, 
-      useClass: SentryErrorHandler 
+    {
+      provide: ErrorHandler,
+      useClass: SentryErrorHandler
     }
   ],
   bootstrap: [AppComponent]

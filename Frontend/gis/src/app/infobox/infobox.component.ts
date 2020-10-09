@@ -1,7 +1,7 @@
-import { BreakpointObserver } from "@angular/cdk/layout";
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
-import { distinct, distinctUntilChanged, filter, flatMap, map, merge, mergeMap, tap, toArray } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, merge, Observable, of } from 'rxjs';
+import { distinct, distinctUntilChanged, filter, map, mergeMap, tap, toArray } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
 import { Searchable } from '../hospital-search/hospital-search.component';
 import { FlyTo } from '../map/events/fly-to';
@@ -29,7 +29,7 @@ import { getMoment, getStrDate } from '../util/date-util';
 interface GlyphEntity {
   name: string;
   accessor: string;
-  accFunc: (d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts
+  accFunc: (d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts;
   color: string;
   description: string;
 }
@@ -61,7 +61,7 @@ export class InfoboxComponent implements OnInit {
   set mo(mo: MapOptions) {
     this._mo = mo;
 
-    if(!mo) {
+    if (!mo) {
       return;
     }
 
@@ -76,6 +76,7 @@ export class InfoboxComponent implements OnInit {
   @Output()
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
 
+  // tslint:disable-next-line:no-input-rename
   @Input('mapLocationSettings')
   mls: MapLocationSettings;
 
@@ -83,7 +84,7 @@ export class InfoboxComponent implements OnInit {
   flyTo = new EventEmitter<FlyTo>();
 
   aggregateStatisticsLoading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  
+
   // ENUM MAPPING
   // because in HTML, this stuff cannot be accessed
   eCovidNumberCaseTimeWindow = CovidNumberCaseTimeWindow;
@@ -124,21 +125,20 @@ export class InfoboxComponent implements OnInit {
     public tooltipService: TooltipService,
     private translationService: TranslationService,
     private hospitalRepo: QualitativeDiviDevelopmentRepository,
-    private hospitalUtils: HospitalUtilService,
     private caseRepo: RKICaseDevelopmentRepository
   ) { }
 
   ngOnInit(): void {
-    //close info box if mobile
+    // close info box if mobile
     const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
-    if(isSmallScreen){
+    if (isSmallScreen){
       this.mo.extendInfobox = false;
     }
 
     this.glyphLayerService.loading$.subscribe(l => this.glyphLoading = l);
     this.bedChoroplethLayerService.loading$.subscribe(l => this.bedChoroplethLoading = l);
     this.caseChoroplethLayerService.loading$.subscribe(l => this.caseChoroplethLoading = l);
-    this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);  
+    this.osmLayerService.loading$.subscribe(l => this.osmLoading = l);
 
     this.combinedStats$ = this.refDay$
     .pipe(
@@ -168,7 +168,7 @@ export class InfoboxComponent implements OnInit {
             {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (d: QualitativeTimedStatus) => d.icu_high_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_high_care), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
             {name: 'ECMO', accessor: 'showEcmo', accFunc: (d: QualitativeTimedStatus) => d.ecmo_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.ecmo_state), description: 'ECMO = Zusätzlich ECMO'}
           ]
-        } as CombinedStatistics
+        } as CombinedStatistics;
       }),
       tap(() => this.aggregateStatisticsLoading$.next(false))
     );
@@ -180,13 +180,12 @@ export class InfoboxComponent implements OnInit {
   updateSearch() {
     this.resetHospitalSearch = Math.random();
 
-
-    this.hospitalSearchResult()
+    merge(
+      this.hospitalSearchResult(),
+      this.bedBackgroundSearchResult(),
+      this.caseSearchResult()
+    )
     .pipe(
-      merge(
-        this.bedBackgroundSearchResult(),
-        this.caseSearchResult()
-      ),
       filter(d => d?.name !== undefined),
       distinct(d => d.name + '' + d.addition),
       toArray(),
@@ -197,11 +196,11 @@ export class InfoboxComponent implements OnInit {
   private hospitalSearchResult(): Observable<Searchable> {
     const zoom = this.getZoomForAggLevel(this._mo.bedGlyphOptions.aggregationLevel);
 
-    if(this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
+    if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
       return this.hospitalRepo
       .getDiviDevelopmentSingleHospitals()
       .pipe(
-        flatMap(d => d.features),
+        mergeMap(d => d.features),
         map(d => {
           return {
             name: d.properties.name,
@@ -210,15 +209,15 @@ export class InfoboxComponent implements OnInit {
               lat: d.geometry.coordinates[1],
               lng: d.geometry.coordinates[0]
             },
-            zoom: zoom
-          } as Searchable
+            zoom
+          } as Searchable;
         }),
       );
     } else if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel !== AggregationLevel.none) {
       return this.hospitalRepo
       .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel)
       .pipe(
-        flatMap(d => d.features),
+        mergeMap(d => d.features),
         map(d => {
           return {
             name: d.properties.name,
@@ -226,22 +225,22 @@ export class InfoboxComponent implements OnInit {
               lat: d.properties.centroid.coordinates[1],
               lng: d.properties.centroid.coordinates[0]
             },
-            zoom: zoom
-          } as Searchable
+            zoom
+          } as Searchable;
         })
       );
     }
-    
+
     return of();
   }
 
   private bedBackgroundSearchResult(): Observable<Searchable> {
     const zoom = this.getZoomForAggLevel(this._mo.bedBackgroundOptions.aggregationLevel);
-    if(this._mo.bedBackgroundOptions.enabled && this._mo.bedBackgroundOptions.aggregationLevel !== AggregationLevel.none) {
+    if (this._mo.bedBackgroundOptions.enabled && this._mo.bedBackgroundOptions.aggregationLevel !== AggregationLevel.none) {
       return this.hospitalRepo
       .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel)
       .pipe(
-        flatMap(d => d.features),
+        mergeMap(d => d.features),
         map(d => {
           return {
             name: d.properties.name,
@@ -249,8 +248,8 @@ export class InfoboxComponent implements OnInit {
               lat: d.properties.centroid.coordinates[1],
               lng: d.properties.centroid.coordinates[0]
             },
-            zoom: zoom
-          } as Searchable
+            zoom
+          } as Searchable;
         })
       );
     }
@@ -260,11 +259,11 @@ export class InfoboxComponent implements OnInit {
 
   private caseSearchResult(): Observable<Searchable> {
     const zoom = this.getZoomForAggLevel(this.mo.covidNumberCaseOptions.aggregationLevel);
-    if(this._mo.covidNumberCaseOptions.enabled) {
+    if (this._mo.covidNumberCaseOptions.enabled) {
       return this.caseRepo
       .getCasesDevelopmentForAggLevel(this.mo.covidNumberCaseOptions.aggregationLevel)
       .pipe(
-        flatMap(d => d.features),
+        mergeMap(d => d.features),
         map(d => {
           return {
             name: d.properties.name,
@@ -273,8 +272,8 @@ export class InfoboxComponent implements OnInit {
               lat: d.properties.centroid.coordinates[1],
               lng: d.properties.centroid.coordinates[0]
             },
-            zoom: zoom
-          } as Searchable
+            zoom
+          } as Searchable;
         })
       );
     }
@@ -285,7 +284,7 @@ export class InfoboxComponent implements OnInit {
   private getZoomForAggLevel(lvl: AggregationLevel): number {
     let zoom;
 
-    switch(this.mo.bedGlyphOptions.aggregationLevel){
+    switch (this.mo.bedGlyphOptions.aggregationLevel){
       case AggregationLevel.county:
         zoom = 11;
         break;
@@ -296,6 +295,10 @@ export class InfoboxComponent implements OnInit {
 
       case AggregationLevel.state:
         zoom = 8;
+        break;
+
+      case AggregationLevel.country:
+        zoom = 6;
         break;
 
       default:
@@ -314,18 +317,18 @@ export class InfoboxComponent implements OnInit {
           originY: 'top',
         }
       ]);
-  
+
       t.data = this.aggregatedDiviStatistics;
       t.bedName = glypLegendEntity.name;
-  
+
       t.explanation = this.translationService.translate(glypLegendEntity.description);
-  
+
       t.accessorFunc = glypLegendEntity.accFunc;
   }
 
   emitCaseChoroplethOptions() {
 
-    if(this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
+    if (this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
       this.mo.covidNumberCaseOptions.normalization = CovidNumberCaseNormalization.absolut;
 
       if (this.mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
@@ -337,7 +340,7 @@ export class InfoboxComponent implements OnInit {
   }
 
   updateBedBackgroundBedType(state: BedType) {
-    if(this.mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
+    if (this.mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
       return;
     }
 
@@ -349,7 +352,7 @@ export class InfoboxComponent implements OnInit {
   updateBedGlyphAggregationLevel(lvl: AggregationLevel) {
     this.mo.bedGlyphOptions.aggregationLevel = lvl;
 
-    if(lvl === AggregationLevel.none) {
+    if (lvl === AggregationLevel.none) {
       this.mo.bedBackgroundOptions.enabled = false;
     } else {
       this.mo.bedBackgroundOptions.aggregationLevel = lvl;
@@ -361,25 +364,25 @@ export class InfoboxComponent implements OnInit {
   updateCovidNumberCaseOptionsEnabled(enabled: boolean) {
     this.mo.covidNumberCaseOptions.enabled = enabled;
 
-    if(enabled) {
+    if (enabled) {
       this.mo.bedBackgroundOptions.enabled = false;
     }
 
-    this.emitMapOptions()
+    this.emitMapOptions();
   }
 
   updateBedBackgroundOptionsEnabled(enabled: boolean) {
     this.mo.bedBackgroundOptions.enabled = enabled;
 
-    if(enabled) {
+    if (enabled) {
       this.mo.covidNumberCaseOptions.enabled = false;
     }
 
-    this.emitMapOptions()
+    this.emitMapOptions();
   }
 
   emitMapOptions() {
-    if(this.mo.bedGlyphOptions.enabled) {
+    if (this.mo.bedGlyphOptions.enabled) {
       this.mo.bedBackgroundOptions.showLabels = false;
       this.mo.covidNumberCaseOptions.showLabels = false;
       this.mo.covidNumberCaseOptions.showTrendGlyphs = false;
@@ -394,13 +397,13 @@ export class InfoboxComponent implements OnInit {
   }
 
   searchSelected(h: Searchable) {
-    if(!h) {
+    if (!h) {
       return;
     }
 
     this.flyTo.emit({
       loc: h.point,
       zoom: h.zoom
-    });    
+    });
   }
 }

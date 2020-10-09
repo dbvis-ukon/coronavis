@@ -1,4 +1,4 @@
-import { animate, style, transition, trigger } from "@angular/animations";
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 
 
@@ -25,7 +25,7 @@ export class OsmTooltipComponent implements OnInit {
   public type: string;
 
   constructor() { }
-  
+
 
   ngOnInit(): void {
 
@@ -36,7 +36,7 @@ export class OsmTooltipComponent implements OnInit {
   }
 
   getOsmObjectType(){
-    return this.type === "helipad" ? "Helikopterlandeplatz" : "Krankenhaus";
+    return this.type === 'helipad' ? 'Helikopterlandeplatz' : 'Krankenhaus';
   }
 
 }

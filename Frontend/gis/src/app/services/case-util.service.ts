@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ScaleLinear, scaleLinear } from 'd3-scale';
 import { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
-import { filter, flatMap, map, toArray } from 'rxjs/operators';
+import { filter, map, mergeMap, toArray } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
@@ -72,11 +72,11 @@ export class CaseUtilService {
   }
 
   public getCaseNumbers(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): number {
-    let typeAccessor = this.getTypeAccessorFnWithOptions(options);
+    const typeAccessor = this.getTypeAccessorFnWithOptions(options);
 
     const [currentTimedStatus, prevTimedStatus] = this.getNowPrevTimedStatusTupleWithOptions(data, options);
 
-    if(!currentTimedStatus) {
+    if (!currentTimedStatus) {
       return undefined;
     }
 
@@ -89,20 +89,20 @@ export class CaseUtilService {
       if (options.timeWindow === CovidNumberCaseTimeWindow.all) {
         unnormalizedResult = now;
       } else {
-        if(!prevTimedStatus) {
+        if (!prevTimedStatus) {
           return undefined;
         }
         unnormalizedResult = now - prev;
 
-        if(this.isLockdownMode(options)) {
+        if (this.isLockdownMode(options)) {
           unnormalizedResult = (currentTimedStatus.cases7_per_100k / 100000) * currentTimedStatus.population;
         }
       }
     } else {
       if (options.timeWindow === CovidNumberCaseTimeWindow.all) {
-        throw "Unsupported configuration -- cannot show percentage change for single value";
+        throw new Error('Unsupported configuration -- cannot show percentage change for single value');
       }
-      if(!prevTimedStatus) {
+      if (!prevTimedStatus) {
         return undefined;
       }
       unnormalizedResult = ((now - prev) / prev) * 100 || 0;
@@ -116,13 +116,13 @@ export class CaseUtilService {
   public extractXYForCase7DaysPer100k(data: RKICaseDevelopmentProperties) {
     return of(data)
     .pipe(
-      flatMap(d => d.developments),
+      mergeMap(d1 => d1.developments),
       filter((_, i) => i >= 7),
       map(d => {
         const t = this.getNowPrevTimedStatusTuple(data, getStrDate(getMoment(d.timestamp)), CovidNumberCaseTimeWindow.sevenDays);
         return {
-          x: d.timestamp, 
-          y: t[0].cases7_per_100k || (t[0].cases_per_100k - t[1].cases_per_100k)};}),
+          x: d.timestamp,
+          y: t[0].cases7_per_100k || (t[0].cases_per_100k - t[1].cases_per_100k)}; }),
       toArray()
     );
   }
@@ -134,13 +134,13 @@ export class CaseUtilService {
     .pipe(
       map(d => {
         const myXY = d
-          .filter(d => getMoment(d.x).isSameOrBefore(refDate))
+          .filter(d1 => getMoment(d1.x).isSameOrBefore(refDate))
           .filter((_, i, n) => i >= (n.length - lastNItems))
-          .map((d1, i) => {return {x: i, y: d1.y}});
+          .map((d1, i) => ({x: i, y: d1.y}));
 
         return linearRegression(myXY);
       })
-    )
+    );
   }
 
   public getRotationForTrend(m: number): number {

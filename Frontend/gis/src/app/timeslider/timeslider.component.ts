@@ -5,7 +5,7 @@ import { Feature, MultiPolygon } from 'geojson';
 import moment, { Moment } from 'moment';
 import { NouiFormatter } from 'ng2-nouislider';
 import { BehaviorSubject, interval, NEVER, Observable } from 'rxjs';
-import { filter, flatMap, map, reduce, repeatWhen, switchMap, takeUntil } from 'rxjs/operators';
+import { filter, mergeMap, map, reduce, repeatWhen, switchMap, takeUntil } from 'rxjs/operators';
 import { MapOptions } from '../map/options/map-options';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -18,7 +18,7 @@ class TimeFormatter implements NouiFormatter {
 
   to(value: number): string {
     return this.datePipe.transform(this.startDay.clone().add(value, 'days').toDate(), 'shortDate');
-  };
+  }
 
   from(value: string): number {
     return getMoment(value).diff(this.startDay, 'days');
@@ -38,7 +38,7 @@ export class TimesliderComponent implements OnInit {
 
   numTicks = 10;
 
-  currentTime: number = 0;
+  currentTime = 0;
 
   timeExtent: [number, number] = [0, 10];
 
@@ -70,14 +70,14 @@ export class TimesliderComponent implements OnInit {
   ngOnInit(): void {
     this.diviRepo.getDiviDevelopmentCountries('now', -1)
     .pipe(
-      flatMap(d => d.features),
+      mergeMap(d => d.features),
       map<Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, [Moment, Moment]>(d => [getMoment(d.properties.developments[0].timestamp), getMoment(d.properties.developments[d.properties.developments.length - 1].timestamp)]),
       reduce((acc, val) => {
-        if(!acc[0] || acc[0] > val[0]) {
+        if (!acc[0] || acc[0] > val[0]) {
           acc[0] = val[0];
         }
 
-        if(!acc[1] || acc[1] < val[1]) {
+        if (!acc[1] || acc[1] < val[1]) {
           acc[1] = val[1];
         }
 
@@ -94,13 +94,13 @@ export class TimesliderComponent implements OnInit {
         this.nouiConfig = {
           tooltips: this.timeFormatter,
           range: {
-            'min': this.timeExtent[0],
-            'max': this.timeExtent[1]
+            min: this.timeExtent[0],
+            max: this.timeExtent[1]
           },
           step: 1
-        }
+        };
 
-        if(this._mo) {
+        if (this._mo) {
           this.currentTime = this.timeFormatter.from(getStrDate(getMoment(this._mo.bedGlyphOptions.date)));
         }
 
@@ -112,8 +112,8 @@ export class TimesliderComponent implements OnInit {
     const source$ = interval(1000);
 
 
-    const ons$ = this.modePlaying$.pipe(filter(v=>!v));
-    const offs$ = this.modePlaying$.pipe(filter(v=>v));
+    const ons$ = this.modePlaying$.pipe(filter(v => !v));
+    const offs$ = this.modePlaying$.pipe(filter(v => v));
 
     source$.pipe(
           takeUntil(ons$),

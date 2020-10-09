@@ -29,7 +29,7 @@ export class LanguageSwitcherComponent implements OnInit {
   changeLocale(evt) {
     this.i18nService.updateLocale(evt.value);
 
-    const url = evt.value.slice(0,2);
+    const url = evt.value.slice(0, 2);
 
     location.href = `/${url}${this.router.url}`;
   }

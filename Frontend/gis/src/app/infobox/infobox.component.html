@@ -56,6 +56,9 @@
         [value]="mo.bedGlyphOptions.aggregationLevel"
         (change)="updateBedGlyphAggregationLevel($event.value)"
       >
+        <mat-button-toggle [value]="eAggregationLevels.country" i18n="@@infoboxCountries" i18n-matTooltip="@@CountryTP"
+                           matTooltip="Deutschland">Deutschland
+        </mat-button-toggle>
         <mat-button-toggle [value]="eAggregationLevels.state" i18n="@@infoboxStates" i18n-matTooltip="@@StatesTP"
                            matTooltip="Bundesländer">Länder
         </mat-button-toggle>
@@ -198,6 +201,9 @@
               [value]="mo.covidNumberCaseOptions.aggregationLevel"
               (change)="mo.covidNumberCaseOptions.aggregationLevel = $event.value; emitMapOptions()"
             >
+              <mat-button-toggle [value]="eAggregationLevels.country" i18n="@@infoboxCountries" i18n-matTooltip="@@CountryTP"
+                                 matTooltip="Deutschland">Deutschland
+              </mat-button-toggle>
               <mat-button-toggle [value]="eAggregationLevels.state" i18n="@@infoboxStates" i18n-matTooltip="@@StatesTP"
                                  matTooltip="Bundesländer">Länder
               </mat-button-toggle>

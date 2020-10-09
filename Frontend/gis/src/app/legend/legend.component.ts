@@ -29,6 +29,7 @@ interface LegendColorMapBin extends ColorMapBin {
 })
 export class LegendComponent implements OnInit {
 
+  // tslint:disable-next-line:no-input-rename
   @Input('mapOptions$')
   mo$: Observable<MapOptions>;
 
@@ -43,9 +44,9 @@ export class LegendComponent implements OnInit {
 
   bedStatusColors = QuantitativeColormapService.bedStati;
   bedStatusIcons = {
-    'Verfügbar': 'V',
-    'Begrenzt': 'B',
-    'Ausgelastet': 'A',
+    Verfügbar: 'V',
+    Begrenzt: 'B',
+    Ausgelastet: 'A',
     'Nicht verfügbar': '–',
     'Keine Information': '?'
   };
@@ -68,7 +69,7 @@ export class LegendComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.legendBedsExtended = this.legendCasesExtended = !this.breakpointObs.isMatched('only screen and (max-width: 499px)')
+    this.legendBedsExtended = this.legendCasesExtended = !this.breakpointObs.isMatched('only screen and (max-width: 499px)');
 
     this.titleCases$ = this.mo$
     .pipe(
@@ -81,7 +82,7 @@ export class LegendComponent implements OnInit {
     this.titleBeds$ = this.mo$
     .pipe(map(mo => this.getTitleBeds(mo)));
 
-    this.caseBins$ = combineLatest(this.mo$, this.choroplethLayer$)
+    this.caseBins$ = combineLatest([this.mo$, this.choroplethLayer$])
     .pipe(
       // distinctUntilChanged(([a], [b]) => !isEqual(a?.covidNumberCaseOptions, b?.covidNumberCaseOptions)),
       map(([mo, c]) => this.updateCaseColors(mo, c))
@@ -95,7 +96,7 @@ export class LegendComponent implements OnInit {
   updateCaseColors(mo: MapOptions, choropleth: CaseChoropleth): LegendColorMapBin[] {
     let caseBins = [];
 
-    if(!choropleth || !mo) {
+    if (!choropleth || !mo) {
       return null;
     }
 
@@ -113,12 +114,12 @@ export class LegendComponent implements OnInit {
 
     caseBins = this.caseColormap.getColorMapBins(mo.covidNumberCaseOptions, scale, fullNumbers, actualExtent)
     .map(b => {
-      if(mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k && mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute) {
+      if (mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k && mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute) {
         return {
           color: b.color,
           min: b.min * 100000,
           max: b.max * 100000
-        }
+        };
       }
 
       // else
@@ -129,18 +130,18 @@ export class LegendComponent implements OnInit {
         ...b,
         minStr: this.getBinStr(b.min, mo),
         maxStr: this.getBinStr(b.max, mo)
-      }
+      };
     });
 
     return caseBins;
   }
 
   private getBinStr(v: number, mo: MapOptions): string {
-    if(mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
+    if (mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
       return `${v > 0 ? '+' : ''}${this.numberPipe.transform(v, '1.0-1')} %`;
     }
 
-    if(mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {
+    if (mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {
       return this.plusMinusPipe.transform(v, '1.0-2');
     }
 
@@ -153,10 +154,10 @@ export class LegendComponent implements OnInit {
   }
 
   private getTitleBedsEn(mo: MapOptions): string {
-    let title = 'Bed Capacity'
+    let title = 'Bed Capacity';
 
-    if(mo.bedBackgroundOptions.enabled) {
-      switch(mo.bedBackgroundOptions.bedType) {
+    if (mo.bedBackgroundOptions.enabled) {
+      switch (mo.bedBackgroundOptions.bedType) {
         case BedType.icuLow:
           title += ' ICU low';
           break;
@@ -174,21 +175,25 @@ export class LegendComponent implements OnInit {
 
     title += ' by ';
 
-    switch(mo.bedGlyphOptions.aggregationLevel) {
+    switch (mo.bedGlyphOptions.aggregationLevel) {
       case AggregationLevel.county:
-        title += "counties";
+        title += 'counties';
         break;
 
       case AggregationLevel.governmentDistrict:
-        title += "districts";
+        title += 'districts';
         break;
 
       case AggregationLevel.state:
-        title += "states";
+        title += 'states';
+        break;
+
+      case AggregationLevel.country:
+        title += 'Germany';
         break;
 
       case AggregationLevel.none:
-        title += "facilities";
+        title += 'facilities';
         break;
     }
 
@@ -200,10 +205,10 @@ export class LegendComponent implements OnInit {
   }
 
   private getTitleBedsDe(mo: MapOptions): string {
-    let title = 'Bettenauslastung'
+    let title = 'Bettenauslastung';
 
-    if(mo.bedBackgroundOptions.enabled) {
-      switch(mo.bedBackgroundOptions.bedType) {
+    if (mo.bedBackgroundOptions.enabled) {
+      switch (mo.bedBackgroundOptions.bedType) {
         case BedType.icuLow:
           title += ' ICU low';
           break;
@@ -220,21 +225,25 @@ export class LegendComponent implements OnInit {
 
     title += ' für ';
 
-    switch(mo.bedGlyphOptions.aggregationLevel) {
+    switch (mo.bedGlyphOptions.aggregationLevel) {
       case AggregationLevel.county:
-        title += "Landkreise";
+        title += 'Landkreise';
         break;
 
       case AggregationLevel.governmentDistrict:
-        title += "Regierungsbezirke";
+        title += 'Regierungsbezirke';
         break;
 
       case AggregationLevel.state:
-        title += "Bundesländer";
+        title += 'Bundesländer';
+        break;
+
+      case AggregationLevel.country:
+        title += 'Deutschland';
         break;
 
       case AggregationLevel.none:
-        title += "Einrichtungen";
+        title += 'Einrichtungen';
         break;
     }
 
@@ -252,45 +261,49 @@ export class LegendComponent implements OnInit {
   private getTitleCasesEn(mo: MapOptions) {
     let title = '';
 
-    if(mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {
-      if(mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
-        title += "Percentage change";
+    if (mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {
+      if (mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
+        title += 'Percentage change';
       } else {
-        title += "Change"
+        title += 'Change';
       }
 
       title += ' (' + mo.covidNumberCaseOptions.timeWindow + ')';
 
-      title += " of ";
+      title += ' of ';
     }
 
-    title += mo.covidNumberCaseOptions.type === CovidNumberCaseType.cases ? "Covid-19 afflictions" : "Covid-19 deaths"
+    title += mo.covidNumberCaseOptions.type === CovidNumberCaseType.cases ? 'Covid-19 afflictions' : 'Covid-19 deaths';
 
 
-    if(mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k) {
+    if (mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k) {
       title += ` per ${this.numberPipe.transform(100000)} residents`;
     }
 
-    title += " per "
+    title += ' per ';
 
-    switch(mo.covidNumberCaseOptions.aggregationLevel) {
+    switch (mo.covidNumberCaseOptions.aggregationLevel) {
       case AggregationLevel.county:
-        title += "county";
+        title += 'county';
         break;
 
       case AggregationLevel.governmentDistrict:
-        title += "district";
+        title += 'district';
         break;
 
       case AggregationLevel.state:
-        title += "state";
+        title += 'state';
+        break;
+
+      case AggregationLevel.country:
+        title += 'Germany';
         break;
     }
 
-    if(mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
-      title += " until "
+    if (mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
+      title += ' until ';
     } else {
-      title += " on "
+      title += ' on ';
     }
 
     title += this.datePipe.transform(getMoment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
@@ -301,30 +314,30 @@ export class LegendComponent implements OnInit {
   private getTitleCasesDe(mo: MapOptions) {
     let title = '';
 
-    if(mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {
-      if(mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
-        title += "Prozentuale ";
+    if (mo.covidNumberCaseOptions.timeWindow !== CovidNumberCaseTimeWindow.all) {
+      if (mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
+        title += 'Prozentuale ';
       }
 
-      title += "Veränderung"
+      title += 'Veränderung';
 
       title += ' (' + mo.covidNumberCaseOptions.timeWindow + ')';
 
-      title += " der ";
+      title += ' der ';
     }
 
-    title += mo.covidNumberCaseOptions.type === CovidNumberCaseType.cases ? "Covid-19 Positiv Getestet" : "Covid-19 Todesfälle"
+    title += mo.covidNumberCaseOptions.type === CovidNumberCaseType.cases ? 'Covid-19 Positiv Getestet' : 'Covid-19 Todesfälle';
 
 
-    if(mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k) {
+    if (mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k) {
       title += ` je ${this.numberPipe.transform(100000)} Einwohner`;
     }
 
-    title += " pro "
+    title += ' pro ';
 
-    switch(mo.covidNumberCaseOptions.aggregationLevel) {
+    switch (mo.covidNumberCaseOptions.aggregationLevel) {
       case AggregationLevel.county:
-        title += "Landkreis";
+        title += 'Landkreis';
         break;
 
       case AggregationLevel.governmentDistrict:
@@ -334,12 +347,16 @@ export class LegendComponent implements OnInit {
       case AggregationLevel.state:
         title += 'Bundesland';
         break;
+
+      case AggregationLevel.country:
+        title += 'Deutschland';
+        break;
     }
 
-    if(mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
-      title += ' bis '
+    if (mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
+      title += ' bis ';
     } else {
-      title += ' am '
+      title += ' am ';
     }
 
     title += this.datePipe.transform(getMoment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');

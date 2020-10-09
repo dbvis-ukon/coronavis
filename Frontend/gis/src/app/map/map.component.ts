@@ -81,7 +81,7 @@ export class MapComponent implements OnInit {
   set flyTo(t: FlyTo) {
     this._flyTo = t;
 
-    if(this.mymap && t) {
+    if (this.mymap && t) {
       this.mymap.flyTo(t.loc, t.zoom);
     }
   }
@@ -102,7 +102,7 @@ export class MapComponent implements OnInit {
 
   private osmHeliportsLayer: L.GeoJSON<any>;
 
-  private covidNumberCaseOptionsKeyToLayer = new Map<String, L.LayerGroup>();
+  private covidNumberCaseOptionsKeyToLayer = new Map<string, L.LayerGroup>();
 
   private _lastBedCoroplethLayer: L.LayerGroup | null;
 
@@ -147,13 +147,13 @@ export class MapComponent implements OnInit {
     let mapLocationSettings = JSON.parse(JSON.stringify(this._mapLocationSettings));
 
     if (!mapLocationSettings) {
-      
+
       mapLocationSettings = {
         center: defaultView,
         zoom: defaultZoom,
         allowPanning: true,
         allowZooming: true
-      }
+      };
 
     }
 
@@ -177,16 +177,16 @@ export class MapComponent implements OnInit {
       this.emitMapLocationSettings();
 
       // diable double click on highest zoom level
-      if(this.mymap.getZoom() >= this.mymap.getMaxZoom()) {
+      if (this.mymap.getZoom() >= this.mymap.getMaxZoom()) {
         this.mymap.doubleClickZoom.disable();
-      } else if(this._mapLocationSettings.allowZooming) {
+      } else if (this._mapLocationSettings.allowZooming) {
         this.mymap.doubleClickZoom.enable();
       }
     });
 
-    
+
     this.updateMapLocation(mapLocationSettings);
-    
+
 
     this.updateMap(this._mapOptions);
   }
@@ -209,19 +209,19 @@ export class MapComponent implements OnInit {
 
     this.mymap.setView(mapLoc.center, mapLoc.zoom);
 
-    if(mapLoc.allowZooming) {
+    if (mapLoc.allowZooming) {
       this.mymap.addControl(this.zoomControl);
     } else {
       this.mymap.removeControl(this.zoomControl);
     }
 
-    if(mapLoc.allowPanning === false) {
+    if (mapLoc.allowPanning === false) {
       this.mymap.dragging.disable();
     } else {
       this.mymap.dragging.enable();
     }
 
-    if(mapLoc.allowZooming === false) {
+    if (mapLoc.allowZooming === false) {
       this.mymap.touchZoom.disable();
       this.mymap.doubleClickZoom.disable();
       this.mymap.scrollWheelZoom.disable();
@@ -237,23 +237,23 @@ export class MapComponent implements OnInit {
       return;
     }
 
-    if(this.glyphLayerSubscription) {
+    if (this.glyphLayerSubscription) {
       this.glyphLayerSubscription.unsubscribe();
       this.glyphLayerService.loading$.next(false);
     }
-    if(this.bedChoroplethSubscription) {
+    if (this.bedChoroplethSubscription) {
       this.bedChoroplethSubscription.unsubscribe();
       this.bedChoroplethLayerService.loading$.next(false);
     }
-    if(this.caseChoroplethSubscription) {
+    if (this.caseChoroplethSubscription) {
       this.caseChoroplethSubscription.unsubscribe();
       this.caseChoroplehtLayerService.loading$.next(false);
     }
-    if(this.osmHospitalLayerSubscription) {
+    if (this.osmHospitalLayerSubscription) {
       this.osmHospitalLayerSubscription.unsubscribe();
       this.osmLayerService.loading$.next(false);
     }
-    if(this.osmHelipadLayerSubscription) {
+    if (this.osmHelipadLayerSubscription) {
       this.osmHelipadLayerSubscription.unsubscribe();
       this.osmLayerService.loading$.next(false);
     }
@@ -288,7 +288,7 @@ export class MapComponent implements OnInit {
       .subscribe(l => {
         this.osmHospitalsLayer = l.createOverlay();
         this.mymap.addLayer(this.osmHospitalsLayer);
-      })
+      });
     } else if (!mo.showOsmHospitals && this.osmHospitalsLayer) {
       this.mymap.removeLayer(this.osmHospitalsLayer);
       this.osmHospitalsLayer = null;
@@ -302,7 +302,7 @@ export class MapComponent implements OnInit {
       .subscribe(l => {
         this.osmHeliportsLayer = l.createOverlay();
         this.mymap.addLayer(this.osmHeliportsLayer);
-      })
+      });
     } else if (!mo.showOsmHeliports && this.osmHeliportsLayer) {
       this.mymap.removeLayer(this.osmHeliportsLayer);
       this.osmHeliportsLayer = null;
@@ -319,13 +319,13 @@ export class MapComponent implements OnInit {
   }
 
   private updateGlyphMapLayers(o: BedGlyphOptions) {
-    if(o.enabled === false) {
+    if (o.enabled === false) {
       this.removeGlyphMapLayers();
       return;
     }
 
     // internal caching for the glyph positions due to slow force layout:
-    if(this.aggregationLevelToGlyphMap.has(`${o.aggregationLevel}-${o.forceDirectedOn}`)) {
+    if (this.aggregationLevelToGlyphMap.has(`${o.aggregationLevel}-${o.forceDirectedOn}`)) {
 
       this.showGlyphLayer(this.aggregationLevelToGlyphMap.get(`${o.aggregationLevel}-${o.forceDirectedOn}`));
 
@@ -333,17 +333,17 @@ export class MapComponent implements OnInit {
       // dynamically create the map and load data from api
 
       let obs: Observable<L.LayerGroup>;
-      if(o.aggregationLevel === AggregationLevel.none) {
+      if (o.aggregationLevel === AggregationLevel.none) {
         obs = this.glyphLayerService.getSimpleGlyphLayer(this.bedGlyphOptions$)
         .pipe(
           map(glyphFactories => {
 
             const layerGroup = L.layerGroup([]);
 
-            for(const glyphLayer of glyphFactories) {
+            for (const glyphLayer of glyphFactories) {
 
               layerGroup.addLayer(glyphLayer);
-            } 
+            }
 
             this.layerToFactoryMap.set(layerGroup, glyphFactories);
 
@@ -380,7 +380,7 @@ export class MapComponent implements OnInit {
   private showGlyphLayer(l: L.LayerGroup) {
     // if the layer is already there we don't need to remove it and add it again
     // this is the case when only the date changes with the time slider
-    if(this.mymap.hasLayer(l)) {
+    if (this.mymap.hasLayer(l)) {
       return;
     }
 
@@ -403,7 +403,7 @@ export class MapComponent implements OnInit {
     } else {
 
       // simple glyph layers with four quadrants
-      for(const svgLayer of l.getLayers()) {
+      for (const svgLayer of l.getLayers()) {
         (svgLayer as SVGOverlay).bringToFront();
       }
     }
@@ -446,7 +446,7 @@ export class MapComponent implements OnInit {
 
       background.bringToBack();
 
-      for(const glyphLayer of this.aggregationLevelToGlyphMap.values()) {
+      for (const glyphLayer of this.aggregationLevelToGlyphMap.values()) {
         this.bringGlyphLayersToFront(glyphLayer);
       }
     });
@@ -460,17 +460,17 @@ export class MapComponent implements OnInit {
   }
 
   private updateBedBackgroundLayer(o: BedBackgroundOptions) {
-    if(o.enabled === false) {
+    if (o.enabled === false) {
       this.removeBedChoroplethLayers();
       return;
     }
 
-    if(o.aggregationLevel === AggregationLevel.none) {
+    if (o.aggregationLevel === AggregationLevel.none) {
       this.removeBedChoroplethLayers();
-      throw 'AggregationLevel must not be none on bed background layer';
+      throw new Error('AggregationLevel must not be none on bed background layer');
     }
 
-    if(o.enabled) {
+    if (o.enabled) {
 
       this.bedChoroplethSubscription = this.bedChoroplethLayerService.getQualitativeLayer(this.bedBackgroundOptions$)
       .pipe(

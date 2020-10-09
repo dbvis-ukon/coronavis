@@ -14,9 +14,11 @@ import { ShareDialogComponent } from '../share-dialog/share-dialog.component';
 })
 export class ButtonPanelComponent implements OnInit {
 
+  // tslint:disable-next-line:no-input-rename
   @Input('mapOptions')
   mo: MapOptions;
 
+  // tslint:disable-next-line:no-input-rename
   @Input('mapLocationSettings')
   mls: MapLocationSettings;
 
@@ -35,8 +37,8 @@ export class ButtonPanelComponent implements OnInit {
 
   openAbout() {
     this.dialogService.open(AboutComponent, {
-		  panelClass: 'popup-panel-white-glass-background'
-	  });
+      panelClass: 'popup-panel-white-glass-background'
+    });
   }
 
   openVideo() {

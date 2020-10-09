@@ -82,32 +82,37 @@ export class TranslationService {
       'en-US': 'Imprint'
     },
     {
-      'aggLevel': AggregationLevel.county,
+      aggLevel: AggregationLevel.county,
       'de-DE': 'Landkreise',
       'en-US': 'Counties'
     },
     {
-      'aggLevel': AggregationLevel.governmentDistrict,
+      aggLevel: AggregationLevel.governmentDistrict,
       'de-DE': 'Regierungsbezirke',
       'en-US': 'Districts'
     },
     {
-      'aggLevel': AggregationLevel.state,
+      aggLevel: AggregationLevel.state,
       'de-DE': 'Bundesländer',
       'en-US': 'States'
     },
     {
-      'bedType': BedType.icuLow,
+      aggLevel: AggregationLevel.country,
+      'de-DE': 'Deutschland',
+      'en-US': 'Germany'
+    },
+    {
+      bedType: BedType.icuLow,
       'de-DE': 'ICU low',
       'en-US': 'ICU low'
     },
     {
-      'bedType': BedType.icuHigh,
+      bedType: BedType.icuHigh,
       'de-DE': 'ICU high',
       'en-US': 'ICU high'
     },
     {
-      'bedType': BedType.ecmo,
+      bedType: BedType.ecmo,
       'de-DE': 'ECMO',
       'en-US': 'ECMO'
     },
@@ -121,10 +126,10 @@ export class TranslationService {
   public translate(input: string): string {
     const l = this.i18nService.getCurrentLocale();
 
-    for(const t of this.TRANSLATIONS) {
+    for (const t of this.TRANSLATIONS) {
 
-      for(const v of Object.values(t)) {
-        if(v === input.trim()) {
+      for (const v of Object.values(t)) {
+        if (v === input.trim()) {
 
           return t[l];
         }

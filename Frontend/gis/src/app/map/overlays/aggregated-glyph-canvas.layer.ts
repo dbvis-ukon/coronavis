@@ -13,7 +13,7 @@ import { AbstractGlyphCanvasLayer } from './abstract-glyph-canvas.layer';
 
 export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> {
 
-  protected showText: boolean = true;
+  protected showText = true;
 
   constructor(
     name: string,
@@ -31,15 +31,15 @@ export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPo
   latAcc(d: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>): number {
     return d.properties.centroid.coordinates[1];
   }
-  
+
   lngAcc(d: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>): number {
     return d.properties.centroid.coordinates[0];
   }
 
   protected drawAdditionalFeatures(data: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, pt: L.Point, isHovered: boolean) {
     let bounds = new Bounds(pt, pt);
-    
-    if(this.showText) {
+
+    if (this.showText) {
       const b = this.drawText(data.properties.name, pt, 0, isHovered);
 
       bounds = bounds
@@ -64,20 +64,20 @@ export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPo
 
     this.showText = true;
 
-    if(this.granularity === AggregationLevel.county) {
-      if(zoom <= 7) {
+    if (this.granularity === AggregationLevel.county) {
+      if (zoom <= 7) {
         this.showText = false;
       }
-      if(zoom < 8) {
+      if (zoom < 8) {
         scale = Math.pow(zoom / 8, 2);
       }
 
-      if(zoom > 10) {
+      if (zoom > 10) {
         scale = Math.pow(zoom / 10, 2);
       }
     } else if (this.granularity === AggregationLevel.governmentDistrict && zoom >= 7) {
       scale = Math.pow(zoom / 7, 2);
-    } else if (this.granularity === AggregationLevel.state) {
+    } else if (this.granularity === AggregationLevel.state || this.granularity === AggregationLevel.country) {
       scale = Math.pow(zoom / 5, 2);
     }
 

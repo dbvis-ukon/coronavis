@@ -22,7 +22,7 @@ export class IconService {
   }
 
   private registerIcons() {
-    
+
     this.getSvg(`assets/twitter.svg`)
     .subscribe(svg => {
       this.iconRegistry.addSvgIconLiteral('twitter', svg);
@@ -40,7 +40,7 @@ export class IconService {
   private getSvg(url: string): Observable<SafeHtml> {
     const headers = new HttpHeaders();
     headers.set('Accept', 'image/svg+xml');
-    
+
     return this.http.get(`${url}`, { headers, responseType: 'text'})
     .pipe(
       retry(1),
@@ -58,6 +58,6 @@ export class IconService {
         // return throw(errorMessage);
       }),
       map(d => this.sanitizer.bypassSecurityTrustHtml(d))
-    )
+    );
   }
 }
