@@ -2,11 +2,8 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: pvc-covid19vis-crawler-risklayer-lk
-  labels:
-    {{- include "dbvis.labels" . | nindent 4 }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+  annotations:
+    description: "PVC to store the risklayer excel sheets"
 spec:
   storageClassName: gluster-heketi
   accessModes:
