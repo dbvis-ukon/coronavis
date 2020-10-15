@@ -42,7 +42,7 @@ class CaseDevelopments:
         agg.proportion_covid_beds,
         'proportion_covid_ventilated',
         agg.proportion_covid_ventilated
-    )
+    )::jsonb
     """
 
     __aggCols = """
@@ -85,8 +85,8 @@ class CaseDevelopments:
                 agg.ids,
                 agg.name,
                 agg."desc" AS description,
-                st_asgeojson(agg.geom) :: json AS geom,
-                st_asgeojson(st_centroid(agg.geom)):: json AS centroid,
+                st_asgeojson(agg.geom) :: jsonb AS geom,
+                st_asgeojson(st_centroid(agg.geom)):: jsonb AS centroid,
                 -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
                 CASE
                     WHEN min(agg.timestamp) IS NULL THEN NULL
@@ -94,7 +94,7 @@ class CaseDevelopments:
                         {buildObj}
                         ORDER BY
                             agg.timestamp
-                    )
+                    )::jsonb
                 END AS development,
                 CASE
                 WHEN min(agg.timestamp) IS NULL THEN NULL
@@ -103,7 +103,7 @@ class CaseDevelopments:
                     {buildObj}
                     ORDER BY
                         agg.timestamp
-                )
+                )::jsonb
             END AS developmentDays
             FROM
                 {dataTable} agg
@@ -190,8 +190,8 @@ class CaseDevelopments:
         SELECT agg.ids,
             agg.name,
             '' as description,
-            st_asgeojson(agg.geom) :: json             AS geom,
-            st_asgeojson(st_centroid(agg.geom)):: json AS centroid,
+            st_asgeojson(agg.geom) :: jsonb             AS geom,
+            st_asgeojson(st_centroid(agg.geom)):: jsonb AS centroid,
             -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
             CASE
                 WHEN min(agg.timestamp) IS NULL THEN NULL
@@ -199,7 +199,7 @@ class CaseDevelopments:
                         {development_json_build_obj}
                         ORDER BY
                             agg.timestamp
-                    )
+                    )::jsonb
                 END                                       AS development,
             CASE
                 WHEN min(agg.timestamp) IS NULL THEN NULL
@@ -208,7 +208,7 @@ class CaseDevelopments:
                         {development_json_build_obj}
                         ORDER BY
                             agg.timestamp
-                    )
+                    )::jsonb
                 END                                       AS developmentDays
         FROM agg
         GROUP BY agg.ids,
