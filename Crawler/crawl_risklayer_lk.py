@@ -123,6 +123,10 @@ try:
         conn.commit()
         logger.info('Data inserted.')
 
+        cur.execute("INSERT INTO risklayer_prognosis (datenbestand, prognosis) VALUES(%s, %s)", (current_update, prognosis_today))
+        conn.commit()
+        logger.info('Prognosis data inserted.')
+
         logger.info('Refreshing materialized view, @TODO Wolfgang and add indices')
         #cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
         conn.commit()
