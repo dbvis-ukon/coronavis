@@ -5,6 +5,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     {{- include "nginx.annotations" . | nindent 4 }}
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '180s'
 spec:
   tls:
     - hosts: 
