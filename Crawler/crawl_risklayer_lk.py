@@ -127,8 +127,8 @@ try:
         conn.commit()
         logger.info('Prognosis data inserted.')
 
-        logger.info('Refreshing materialized view, @TODO Wolfgang and add indices')
-        #cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
+        logger.info('Refreshing materialized view')
+        cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day_risklayer')
         conn.commit()
 
 
