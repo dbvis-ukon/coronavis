@@ -75,3 +75,28 @@ def get_state(idState):
 @timer
 def get_country(idCountry):
     return cd.getCountry(request.args.get('from'), request.args.get('to'), idCountry)
+
+
+@routes.route('/prognosis', methods=['GET'])
+@cache.cached()
+def get_prognosis():
+    """
+        Returns the prognosis of Risklayer
+    """
+
+    sql_stmt = '''
+        SELECT * 
+        FROM risklayer_prognosis
+        WHERE datenbestand = (
+            SELECT MAX(datenbestand) FROM risklayer_prognosis
+        )
+    '''
+    res = db.engine.execute(sql_stmt).fetchone()
+
+    ret = {
+        "timestamp": res[0],
+        "prognosis": res[1]
+    }
+
+
+    return jsonify(ret), 200
