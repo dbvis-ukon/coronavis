@@ -203,7 +203,7 @@ class CaseDevelopments:
         WITH agg AS (
             SELECT {development_select_cols}
             FROM {dataTable} c
-            LEFT OUTER JOIN {aggTable} r ON c.ids LIKE (r.ids || '%')
+            LEFT OUTER JOIN {aggTable} r ON (c.ids LIKE (r.ids || '%') OR r.ids = 'de')
             GROUP BY r.ids,
                     r.name,
                     r.geom,
