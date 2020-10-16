@@ -50,13 +50,13 @@ class CaseDevelopments:
     """
 
     __aggCols = """
-        r.ids,
-        r.name,
-        c.timestamp,
-        MAX(c.last_updated),
-        MAX(c.inserted),
-        string_agg(DISTINCT c.name, ',') AS landkreise,
-        r.geom,
+        r.ids                                               as ids,
+        r.name                                              as name,
+        c.timestamp                                         as timestamp,
+        MAX(c.last_updated)                                 as last_updated,
+        MAX(c.inserted)                                     as inserted,
+        string_agg(DISTINCT c.name, ',')                    as landkreise,
+        r.geom                                              as geom,
         SUM(cases)                                          as cases,
         SUM(cases_per_100k)                                 as cases_per_100k,
         AVG(cases_per_population)                           as cases_per_population,
