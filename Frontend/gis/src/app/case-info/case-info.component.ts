@@ -1,8 +1,9 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from '../services/case-util.service';
 import { VegaLinechartService } from '../services/vega-linechart.service';
@@ -14,7 +15,7 @@ import { getMoment } from '../util/date-util';
   styleUrls: ['./case-info.component.less'],
   providers: [DecimalPipe]
 })
-export class CaseInfoComponent implements OnInit {
+export class CaseInfoComponent implements OnInit, AfterViewInit {
 
   @Input()
   public data: RKICaseDevelopmentProperties;
@@ -46,36 +47,50 @@ export class CaseInfoComponent implements OnInit {
   constructor(
     private numberPipe: DecimalPipe,
     private caseUtil: CaseUtilService,
-    private vegaLinechartService: VegaLinechartService
+    private vegaLinechartService: VegaLinechartService,
+    private caseRepo: CaseDevelopmentRepository
   ) { }
+
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.rollingChart = this.caseRepo.getCasesDevelopmentForAggLevelSingle(
+        this.options.dataSource,
+        this.options.aggregationLevel,
+        this.data.id
+      )
+      .pipe(
+        map(d => d.properties),
+        mergeMap(d => this.caseUtil.extractXYForCase7DaysPer100k(d)),
+        map(d => this.vegaLinechartService.compileChart(d.splice(7), {
+          xAxisTitle: '',
+          yAxisTitle: 'New cases per 100k / 7days',
+          width: 400,
+          height: 150,
+          regression: {
+            to: getMoment(this.options.date).toISOString(),
+            from: getMoment(this.options.date).subtract(this.options.daysForTrend, 'days').toISOString()
+          }
+        }))
+      );
+    });
+
+
+    setTimeout(() => {
+      this.trend = this.caseUtil.getTrendForCase7DaysPer100k(this.data, this.options.date, this.options.daysForTrend)
+      .pipe(
+        map(d => {
+          return { m: d.m, b: d.b, rotation: this.caseUtil.getRotationForTrend(d.m)};
+        })
+      );
+    });
+  }
+
 
   ngOnInit(): void {
     [this.curTimedStatus, this.twentyFourHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.twentyFourhours);
     [this.curTimedStatus, this.seventyTwoHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.seventyTwoHours);
     [this.curTimedStatus, this.sevenDaysTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.sevenDays);
-
-
-    // console.log('name', this.data.name, this.curTimedStatus, this.twentyFourHTimedStatus, this.seventyTwoHTimedStatus);
-    this.rollingChart = this.caseUtil.extractXYForCase7DaysPer100k(this.data)
-    .pipe(
-      map(d => this.vegaLinechartService.compileChart(d, {
-        xAxisTitle: '',
-        yAxisTitle: 'New cases per 100k / 7days',
-        width: 400,
-        height: 150,
-        regression: {
-          to: getMoment(this.options.date).toISOString(),
-          from: getMoment(this.options.date).subtract(this.options.daysForTrend, 'days').toISOString()
-        }
-      })),
-    );
-
-    this.trend = this.caseUtil.getTrendForCase7DaysPer100k(this.data, this.options.date, this.options.daysForTrend)
-    .pipe(
-      map(d => {
-        return { m: d.m, b: d.b, rotation: this.caseUtil.getRotationForTrend(d.m)};
-      })
-    );
   }
 
   public getCasesPer100kInhabitants(count: number, status: RKICaseTimedStatus, addPlus: boolean = false): string {

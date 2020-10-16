@@ -117,7 +117,7 @@ export class CaseUtilService {
     return of(data)
     .pipe(
       mergeMap(d1 => d1.developments),
-      filter((_, i) => i >= data.developments.length - 7),
+      // filter((_, i) => i >= data.developments.length - 7),
       map(d => {
         const t = this.getNowPrevTimedStatusTuple(data, getStrDate(getMoment(d.timestamp)), CovidNumberCaseTimeWindow.sevenDays);
         return {

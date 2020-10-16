@@ -1,6 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FeatureCollection, MultiPolygon } from 'geojson';
+import { exception } from 'console';
+import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -20,6 +21,35 @@ export class CaseDevelopmentRepository {
     return this
       .cachedRepository
       .get<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggLevel}`, this.prepareParams(from, to));
+  }
+
+  getCasesDevelopmentForAggLevelSingle(dataSource: 'rki' | 'risklayer', aggLevel: AggregationLevel, id: string): Observable<Feature<MultiPolygon, RKICaseDevelopmentProperties>> {
+    const endpoint = dataSource === 'rki' ? 'cases' : 'cases-risklayer';
+    let aggEndpoint = '';
+    switch (aggLevel) {
+      case AggregationLevel.county:
+        aggEndpoint = 'landkreis';
+        break;
+
+      case AggregationLevel.governmentDistrict:
+        aggEndpoint = 'regierungsbezirk';
+        break;
+
+      case AggregationLevel.state:
+        aggEndpoint = 'bundesland';
+        break;
+
+      case AggregationLevel.country:
+        aggEndpoint = 'land';
+        break;
+
+      default:
+        throw new Error('Aggregation level ' + aggLevel + ' unknown');
+    }
+
+    return this
+      .cachedRepository
+      .get<Feature<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggEndpoint}/${id}`);
   }
 
   private prepareParams(from: string, to: string): HttpParams {

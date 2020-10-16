@@ -228,9 +228,14 @@
 </table>
 
 <div class="trend-wrapper">
-    <div *ngIf="rollingChart | async; let chart">
+    <div *ngIf="rollingChart | async; let chart; else elseBlock">
         <app-vega [spec]="chart"></app-vega>
     </div>
+
+    <ng-template #elseBlock>
+        <mat-spinner></mat-spinner>
+    </ng-template>
+    
     
     <div class="trend-icon-wrapper" *ngIf="trend | async; let t">
         <p i18n="@@caseInfoTrendLastThreeDays">Trend der letzten {{ options.daysForTrend }} Tage</p>
