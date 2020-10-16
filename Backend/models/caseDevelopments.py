@@ -1,6 +1,6 @@
 from sqlalchemy import text
 from db import db
-from flask import jsonify
+from flask import jsonify, current_app
 
 class CaseDevelopments:
 
@@ -74,83 +74,63 @@ class CaseDevelopments:
     def __init__(self, dataTable):
         self.dataTable = dataTable
 
+
+    def getCounty(self, fromTime, toTime, idCounty):
+        """
+            Return the development of covid cases and deaths for one county
+        """
+        return self.__resSingle(self.__getCounties(fromTime, toTime, idCounty))
+   
+    def getByCounties(self, fromTime, toTime):
+        """
+            Return the development of covid cases and deaths by counties
+        """
+        return self.__resCollection(self.__getCounties(fromTime, toTime, None))
+
+
+    def getDistrict(self, fromTime, toTime, idDistrict):
+        """
+            Return the development of covid cases and deaths for one district
+        """
+        return self.__resSingle(self.__aggQuery('regierungsbezirke', fromTime, toTime, idDistrict))
+
+    def getByDistricts(self, fromTime, toTime):
+        """
+            Return the development of covid cases and deaths by districts
+        """
+        return self.__resCollection(self.__aggQuery('regierungsbezirke', fromTime, toTime, None))
+
+
+    def getState(self, fromTime, toTime, idState):
+        """
+            Return the development of covid cases and deaths for one state
+        """
+        return self.__resSingle(self.__aggQuery('bundeslaender', fromTime, toTime, idState))
+
+    def getByStates(self, fromTime, toTime):
+        """
+            Return the development of covid cases and deaths by states
+        """
+        return self.__resCollection(self.__aggQuery('bundeslaender', fromTime, toTime, None))
+
+
+    def getCountry(self, fromTime, toTime, idCountry):
+        """
+            Return the development of covid cases and deaths for one country
+        """
+        return self.__resSingle(self.__aggQuery('germany', fromTime, toTime, idCountry))
     
-    def getByCounties(self):
+    def getByCountries(self, fromTime, toTime):
         """
-            Return the development of covid cases and deaths
-            by counties
+            Return the development of covid cases and deaths by countries
         """
-        sql_stmt = text("""
-            SELECT
-                agg.ids,
-                agg.name,
-                agg."desc" AS description,
-                st_asgeojson(agg.geom) :: jsonb AS geom,
-                st_asgeojson(st_centroid(agg.geom)):: jsonb AS centroid,
-                -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
-                CASE
-                    WHEN min(agg.timestamp) IS NULL THEN NULL
-                    ELSE json_agg(
-                        {buildObj}
-                        ORDER BY
-                            agg.timestamp
-                    )::jsonb
-                END AS development,
-                CASE
-                WHEN min(agg.timestamp) IS NULL THEN NULL
-                ELSE json_object_agg(
-                    agg.timestamp::date,
-                    {buildObj}
-                    ORDER BY
-                        agg.timestamp
-                )::jsonb
-            END AS developmentDays
-            FROM
-                {dataTable} agg
-            GROUP BY
-                agg.ids,
-                agg.name,
-                agg."desc",
-                agg.geom
-        """.format(buildObj=self.__buildObj, dataTable = self.dataTable))
-
-        return self.__res(sql_stmt)
-
-
-    def getByDistricts(self):
-        """
-            Return the development of covid cases and deaths
-            by districts
-        """
-        sql_stmt = text(self.__aggQuery('regierungsbezirke'))
-
-        return self.__res(sql_stmt)
-
-
-    def getByStates(self):
-        """
-            Return the development of covid cases and deaths
-            by states
-        """
-        sql_stmt = text(self.__aggQuery('bundeslaender'))
-
-        return self.__res(sql_stmt)
-
-    
-    def getByCountries(self):
-        """
-            Return the development of covid cases and deaths
-            by countries
-        """
-        sql_stmt = text(self.__aggQuery('germany'))
-
-        return self.__res(sql_stmt)
+        return self.__resCollection(self.__aggQuery('germany', fromTime, toTime, None))
 
 
 
 
 
-    def __res(self, sql_stmt):
+    def __resCollection(self, sql_stmt):
         sql_result = db.engine.execute(sql_stmt).fetchall()
 
         features = []
@@ -173,11 +153,47 @@ class CaseDevelopments:
 
         return jsonify(featurecollection), 200
 
+    def __resSingle(self, sql_stmt):
+        r = db.engine.execute(sql_stmt).fetchone()
+
+        if r is None:
+            return jsonify({'error': 'not found'}), 404
+
+        feature = {
+            "type": 'Feature',
+            "geometry": r[3],
+            "properties": {
+                "id": r[0],
+                "name": r[1],
+                "description": r[2],
+                "centroid": r[4],
+                "developments": r[5],
+                "developmentDays": r[6]
+            }
+        }
+
+
+        return jsonify(feature), 200
+
 
     
 
-    def __aggQuery(self, aggTable):
-        return """
+    def __aggQuery(self, aggTable, fromTime, toTime, idObj):
+
+        sqlFromTime = ""
+        sqlToTime = ""
+        sqlIdObj = ""
+
+        if fromTime:
+            sqlFromTime = f"AND agg.timestamp >= '{fromTime}'"
+
+        if toTime:
+            sqlToTime = f"AND agg.timestamp <= '{toTime}'"
+
+        if idObj:
+            sqlIdObj = f"AND agg.ids = '{idObj}'"
+
+        return text("""
         WITH agg AS (
             SELECT {development_select_cols}
             FROM {dataTable} c
@@ -211,7 +227,73 @@ class CaseDevelopments:
                     )::jsonb
                 END                                       AS developmentDays
         FROM agg
+        WHERE 1 = 1
+            {sqlFromTime}
+            {sqlToTime}
+            {sqlIdObj}
         GROUP BY agg.ids,
                 agg.name,
                 agg.geom
-        """.format(aggTable=aggTable, development_select_cols=self.__aggCols, development_json_build_obj=self.__buildObj, dataTable=self.dataTable)
+        """.format(aggTable=aggTable, development_select_cols=self.__aggCols, development_json_build_obj=self.__buildObj, dataTable=self.dataTable, sqlFromTime = sqlFromTime, sqlToTime = sqlToTime, sqlIdObj = sqlIdObj))
+
+
+    def __getCounties(self, fromTime, toTime, idCounty):
+        """
+            Return the development of covid cases and deaths
+            by counties
+        """
+
+        sqlFromTime = ""
+        sqlToTime = ""
+        sqlIdCounty = ""
+
+        if fromTime:
+            sqlFromTime = f"AND agg.timestamp >= '{fromTime}'"
+
+        if toTime:
+            sqlToTime = f"AND agg.timestamp <= '{toTime}'"
+
+        if idCounty:
+            sqlIdCounty = f"AND agg.ids = '{idCounty}'"
+
+        sql_stmt = text("""
+            SELECT
+                agg.ids,
+                agg.name,
+                agg."desc" AS description,
+                st_asgeojson(agg.geom) :: jsonb AS geom,
+                st_asgeojson(st_centroid(agg.geom)):: jsonb AS centroid,
+                -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
+                CASE
+                    WHEN min(agg.timestamp) IS NULL THEN NULL
+                    ELSE json_agg(
+                        {buildObj}
+                        ORDER BY
+                            agg.timestamp
+                    )::jsonb
+                END AS development,
+                CASE
+                WHEN min(agg.timestamp) IS NULL THEN NULL
+                ELSE json_object_agg(
+                    agg.timestamp::date,
+                    {buildObj}
+                    ORDER BY
+                        agg.timestamp
+                )::jsonb
+            END AS developmentDays
+            FROM
+                {dataTable} agg
+            WHERE 1 = 1
+                {sqlFromTime}
+                {sqlToTime}
+                {sqlIdCounty}
+            GROUP BY
+                agg.ids,
+                agg.name,
+                agg."desc",
+                agg.geom
+        """.format(buildObj=self.__buildObj, dataTable = self.dataTable, sqlFromTime = sqlFromTime, sqlToTime = sqlToTime, sqlIdCounty = sqlIdCounty))
+
+        # current_app.logger.debug(f'Counties: {sql_stmt}')
+
+        return sql_stmt
