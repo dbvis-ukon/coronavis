@@ -9,6 +9,7 @@ import { HelpDialogComponent } from './help-dialog/help-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { HelpDialogLiveViewComponent } from './help-dialog-live-view/help-dialog-live-view.component';
 
 
 
@@ -17,7 +18,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     HelpDialogComponent,
     HelpDialogBedsComponent,
     HelpDialogCasesComponent,
-    HelpDialogTheprojectComponent
+    HelpDialogTheprojectComponent,
+    HelpDialogLiveViewComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +33,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     HelpDialogComponent,
     HelpDialogBedsComponent,
     HelpDialogCasesComponent,
-    HelpDialogTheprojectComponent
+    HelpDialogTheprojectComponent,
+    HelpDialogLiveViewComponent
   ]
 })
 export class HelpModule { }
