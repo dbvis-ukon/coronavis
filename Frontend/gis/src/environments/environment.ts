@@ -4,8 +4,9 @@
 
 export const environment = {
 
-  apiUrl: 'https://staging.api.coronavis.dbvis.de/',
+  // apiUrl: 'https://staging.api.coronavis.dbvis.de/',
   // apiUrl: 'http://localhost:5000/',
+  apiUrl: 'https://330-create-risklayer-endpoints.api.coronavis.dbvis.de/',
 
   tileServerUrl: 'https://staging.tiles.coronavis.dbvis.de/',
 

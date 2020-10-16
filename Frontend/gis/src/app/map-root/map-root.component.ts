@@ -152,7 +152,10 @@ export class MapRootComponent implements OnInit {
 
     const urlSegments = this.route.snapshot.url;
     if ((urlSegments && urlSegments[0] && urlSegments[0].path === 'lockdown') || paramMap && paramMap.get('flavor') === 'lockdown') {
-      const lockdownMlo = this.configService.getLockDownMapOptions();
+
+      const live = ((urlSegments && urlSegments[1] && urlSegments[1].path === 'live') || paramMap && paramMap.get('live') === 'live');
+
+      const lockdownMlo = this.configService.getLockDownMapOptions(live);
 
       this.mapOptions = lockdownMlo;
 

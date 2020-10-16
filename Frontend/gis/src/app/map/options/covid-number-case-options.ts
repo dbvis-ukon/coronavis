@@ -39,6 +39,8 @@ export interface CovidNumberCaseOptions {
 
     date: string;
 
+    dataSource: 'rki' | 'risklayer';
+
     /**
      * The number of days used for the regression
      */

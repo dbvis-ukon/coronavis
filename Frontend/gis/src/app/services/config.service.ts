@@ -42,6 +42,7 @@ export class ConfigService {
 
     covidNumberCaseOptions: {
       date: 'now',
+      dataSource: 'rki',
       daysForTrend: 7,
       change: CovidNumberCaseChange.absolute,
       normalization: CovidNumberCaseNormalization.absolut,
@@ -87,7 +88,7 @@ export class ConfigService {
     return merge<MapOptions, RecursivePartial<MapOptions>, RecursivePartial<MapOptions>>(this.getDefaultMapOptions(), override, override2);
   }
 
-  getLockDownMapOptions(): MapOptions {
+  getLockDownMapOptions(live: boolean): MapOptions {
     return this.overrideMapOptions({
       bedGlyphOptions: {
         enabled: false
@@ -98,6 +99,7 @@ export class ConfigService {
       },
       covidNumberCaseOptions: {
         enabled: true,
+        dataSource: (live ? 'risklayer' : 'rki'),
         aggregationLevel: AggregationLevel.county,
         change: CovidNumberCaseChange.absolute,
         date: 'now',
