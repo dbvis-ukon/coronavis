@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { exception } from 'console';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -8,6 +7,7 @@ import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { getMoment, getStrDate } from '../util/date-util';
 import { CachedRepository } from './cached.repository';
 import { RKICaseDevelopmentProperties } from './types/in/quantitative-rki-case-development';
+import { RisklayerPrognosis } from './types/in/risklayer-prognosis';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +50,12 @@ export class CaseDevelopmentRepository {
     return this
       .cachedRepository
       .get<Feature<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggEndpoint}/${id}`);
+  }
+
+  getRisklayerPrognosis(): Observable<RisklayerPrognosis> {
+    return this
+      .cachedRepository
+      .get<RisklayerPrognosis>(`${environment.apiUrl}cases-risklayer/prognosis`);
   }
 
   private prepareParams(from: string, to: string): HttpParams {
