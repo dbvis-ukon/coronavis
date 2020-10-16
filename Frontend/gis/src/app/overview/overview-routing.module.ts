@@ -27,6 +27,11 @@ const routes: Routes = [
                 path: 'map/:flavor',
                 component: MapRootComponent,
                 pathMatch: 'prefix'
+            },
+            {
+                path: 'map/:flavor/:live',
+                component: MapRootComponent,
+                pathMatch: 'prefix'
             }
         ]
     }

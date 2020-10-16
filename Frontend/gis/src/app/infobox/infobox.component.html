@@ -167,6 +167,25 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
+      <div class="toggleGroup">
+        <h5 i18n="@@infoboxDataSource">Daten Quelle</h5>
+
+        <mat-button-toggle-group
+          class="btngrp"
+          name="fontStyle"
+          aria-label="Font Style"
+          [value]="mo.covidNumberCaseOptions.dataSource"
+          (change)="mo.covidNumberCaseOptions.dataSource = $event.value; emitMapOptions()"
+        >
+          <mat-button-toggle [value]="'rki'" i18n="@@infoboxDataSourceRKI" i18n-matTooltip="@@tooltipDataSourceRKI"
+                             matTooltip="Robert Koch Institut">Offizielle Daten
+          </mat-button-toggle>
+          <mat-button-toggle [value]="'risklayer'" i18n="@@infoboxDataSourceRisklayer" i18n-matTooltip="@@tooltipDataSourceRisklayer"
+                             matTooltip="Live-Ansicht Risklayer Daten">Live Daten
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
       <div *ngIf="(combinedStats$ | async); let c">
         <p class="stats" i18n="@@infoboxNumberOfCovidCases">{{ c.rki?.cases | number }} bundesweit gemeldete Covid-19 Fälle</p>
         <p class="stats" i18n="@@infoboxNumberOfCovidDeaths">{{ c.rki?.deaths | number }} bundesweit gemeldete Covid-19 Todesfälle</p>

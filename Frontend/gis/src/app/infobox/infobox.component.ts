@@ -10,8 +10,8 @@ import { BedType } from '../map/options/bed-type.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
+import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
-import { RKICaseDevelopmentRepository } from '../repositories/rki-case-development.repository';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
@@ -125,7 +125,7 @@ export class InfoboxComponent implements OnInit {
     public tooltipService: TooltipService,
     private translationService: TranslationService,
     private hospitalRepo: QualitativeDiviDevelopmentRepository,
-    private caseRepo: RKICaseDevelopmentRepository
+    private caseRepo: CaseDevelopmentRepository
   ) { }
 
   ngOnInit(): void {
@@ -150,7 +150,7 @@ export class InfoboxComponent implements OnInit {
         const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate);
         const unfiltered = this.countryAggregatorService.diviAggregationForCountryUnfiltered(refDate);
 
-        const rki = this.countryAggregatorService.rkiAggregationForCountry(refDate);
+        const rki = this.countryAggregatorService.rkiAggregationForCountry(this._mo.covidNumberCaseOptions.dataSource, refDate);
 
         return forkJoin([filtered, unfiltered, rki, of(refDate)]);
       }),
@@ -261,7 +261,7 @@ export class InfoboxComponent implements OnInit {
     const zoom = this.getZoomForAggLevel(this.mo.covidNumberCaseOptions.aggregationLevel);
     if (this._mo.covidNumberCaseOptions.enabled) {
       return this.caseRepo
-      .getCasesDevelopmentForAggLevel(this.mo.covidNumberCaseOptions.aggregationLevel)
+      .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this.mo.covidNumberCaseOptions.aggregationLevel)
       .pipe(
         mergeMap(d => d.features),
         map(d => {

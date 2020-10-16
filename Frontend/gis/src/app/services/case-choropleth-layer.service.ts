@@ -8,11 +8,11 @@ import { CovidNumberCaseOptions } from '../map/options/covid-number-case-options
 import { CaseTrendCanvasLayer } from '../map/overlays/case-trend-canvas.layer';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { LabelCanvasLayer } from '../map/overlays/label-canvas.layer';
-import { RKICaseDevelopmentRepository } from '../repositories/rki-case-development.repository';
 import { RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
 import { CaseChoroplethColormapService } from './case-choropleth-colormap.service';
 import { CaseUtilService } from './case-util.service';
 import { TooltipService } from './tooltip.service';
+import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class CaseChoroplethLayerService {
   public loading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
-    private rkiCaseRepository: RKICaseDevelopmentRepository,
+    private caseRepository: CaseDevelopmentRepository,
     private tooltipService: TooltipService,
     private colormapService: CaseChoroplethColormapService,
     private matDialog: MatDialog,
@@ -33,7 +33,7 @@ export class CaseChoroplethLayerService {
   public getLayer(options$: BehaviorSubject<CovidNumberCaseOptions>): Observable < [CaseChoropleth, LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions> ]> {
     const options = options$.value;
     this.loading$.next(true);
-    return this.rkiCaseRepository.getCasesDevelopmentForAggLevel(options.aggregationLevel)
+    return this.caseRepository.getCasesDevelopmentForAggLevel(options.dataSource, options.aggregationLevel)
       .pipe(
         map(data =>
           {

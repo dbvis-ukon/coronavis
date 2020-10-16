@@ -9,11 +9,12 @@ import { RKICaseDevelopmentProperties } from './types/in/quantitative-rki-case-d
 @Injectable({
   providedIn: 'root'
 })
-export class RKICaseDevelopmentRepository {
+export class CaseDevelopmentRepository {
 
   constructor(private cachedRepository: CachedRepository) {}
 
-  getCasesDevelopmentForAggLevel(aggLevel: AggregationLevel): Observable<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>> {
-    return this.cachedRepository.get<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}cases/development/${aggLevel}`);
+  getCasesDevelopmentForAggLevel(dataSource: 'rki' | 'risklayer', aggLevel: AggregationLevel): Observable<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>> {
+    const endpoint = dataSource === 'rki' ? 'cases' : 'cases-risklayer';
+    return this.cachedRepository.get<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggLevel}`);
   }
 }
