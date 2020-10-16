@@ -43,6 +43,9 @@ interface CombinedStatistics {
   rkiOutdated: boolean;
 
   glyphData: GlyphEntity[];
+
+  casesCountiesAvailable?: number;
+  casesCountiesTotal?: number;
 }
 
 @Component({
@@ -154,13 +157,25 @@ export class InfoboxComponent implements OnInit {
 
         const rki = this.countryAggregatorService.rkiAggregationForCountry(this._mo.covidNumberCaseOptions.dataSource, refDate);
 
-        return forkJoin([filtered, unfiltered, rki, of(refDate)]);
+        const aggLevelData = this.caseRepo.getCasesDevelopmentForAggLevel(
+          this._mo.covidNumberCaseOptions.dataSource,
+          this._mo.covidNumberCaseOptions.aggregationLevel,
+          getStrDate(getMoment(refDate)),
+          getStrDate(getMoment(refDate).add(1, 'day')));
+
+        return forkJoin([filtered, unfiltered, rki, aggLevelData, of(refDate)]);
       }),
-      map(([diviFiltered, diviUnfiltered, rki, refDate]) => {
+      map(([diviFiltered, diviUnfiltered, rki, aggLevelData, refDate]) => {
         this.aggregatedDiviStatistics = diviFiltered;
 
         const rkiOutdated = getMoment(refDate).endOf('day').subtract(1, 'day').isAfter(getMoment(rki.timestamp));
-        return {
+
+        const availableCounties = aggLevelData.features
+          .map(d => d.properties.developments[d.properties.developments.length - 1])
+          .filter(d => d.last_updated)
+          .length;
+
+        const combinedStats = {
           diviFiltered,
           diviUnfiltered,
           rki,
@@ -169,8 +184,13 @@ export class InfoboxComponent implements OnInit {
             {name: 'ICU low', accessor: 'showIcuLow', accFunc: (d: QualitativeTimedStatus) => d.icu_low_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_low_care), description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
             {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (d: QualitativeTimedStatus) => d.icu_high_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_high_care), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
             {name: 'ECMO', accessor: 'showEcmo', accFunc: (d: QualitativeTimedStatus) => d.ecmo_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.ecmo_state), description: 'ECMO = Zusätzlich ECMO'}
-          ]
+          ],
+          casesCountiesAvailable: availableCounties,
+          casesCountiesTotal: aggLevelData.features.length
         } as CombinedStatistics;
+
+
+        return combinedStats;
       }),
       tap(() => this.aggregateStatisticsLoading$.next(false))
     );
