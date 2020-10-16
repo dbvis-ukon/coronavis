@@ -227,7 +227,7 @@
               name="fontStyle"
               aria-label="Font Style"
               [value]="mo.covidNumberCaseOptions.dataSource"
-              (change)="mo.covidNumberCaseOptions.dataSource = $event.value; emitMapOptions()"
+              (change)="mo.covidNumberCaseOptions.dataSource = $event.value; emitMapOptions(); updateStatistics()"
             >
               <mat-button-toggle [value]="'rki'" i18n="@@infoboxDataSourceRKI" i18n-matTooltip="@@tooltipDataSourceRKI"
                                  matTooltip="Robert Koch Institut">Offizielle Daten
