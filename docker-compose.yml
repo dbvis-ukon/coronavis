@@ -10,6 +10,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./Backend/:/var/opt/gis/:z
+    command: gunicorn --config=gunicorn.conf.py --reload server:app
 
   gis-frontend:
     image: node:latest

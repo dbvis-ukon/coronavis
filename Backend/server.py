@@ -9,7 +9,7 @@ from flask_cors import CORS
 
 from cache import cache
 from db import db
-from views import cases, divi, health, hospitals, osm, version
+from views import cases, divi, health, hospitals, osm, version, cases_risklayer
 
 # add sentry integration
 
@@ -68,6 +68,7 @@ app.register_blueprint(hospitals.routes)
 app.register_blueprint(osm.routes)
 app.register_blueprint(version.routes)
 app.register_blueprint(divi.routes)
+app.register_blueprint(cases_risklayer.routes)
 
 # add cors and compress
 CORS(app)
