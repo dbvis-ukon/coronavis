@@ -204,22 +204,22 @@ def get_county(idCounty):
     return cd.getCounty(request.args.get('from'), request.args.get('to'), idCounty)
 
 
-@routes.route('/development/regierungsbezirk/<id>', methods=['GET'])
+@routes.route('/development/regierungsbezirk/<idDistrict>', methods=['GET'])
 @cache.cached(key_prefix = make_cache_key)
 @timer
-def get_district():
-    return cd.getDistrict(request.args.get('from'), request.args.get('to'), request.view_args['id'])
+def get_district(idDistrict):
+    return cd.getDistrict(request.args.get('from'), request.args.get('to'), idDistrict)
 
 
-@routes.route('/development/bundesland/<id>', methods=['GET'])
+@routes.route('/development/bundesland/<idState>', methods=['GET'])
 @cache.cached(key_prefix = make_cache_key)
 @timer
-def get_state():
-    return cd.getState(request.args.get('from'), request.args.get('to'), request.view_args['id'])
+def get_state(idState):
+    return cd.getState(request.args.get('from'), request.args.get('to'), idState)
 
 
-@routes.route('/development/land/<id>', methods=['GET'])
+@routes.route('/development/land/<idCountry>', methods=['GET'])
 @cache.cached(key_prefix = make_cache_key)
 @timer
-def get_country():
-    return cd.getCountry(request.args.get('from'), request.args.get('to'), request.view_args['id'])
+def get_country(idCountry):
+    return cd.getCountry(request.args.get('from'), request.args.get('to'), idCountry)
