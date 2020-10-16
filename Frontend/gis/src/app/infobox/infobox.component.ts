@@ -17,6 +17,7 @@ import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hos
 import { RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
+import { CaseUtilService } from '../services/case-util.service';
 import { CountryAggregatorService } from '../services/country-aggregator.service';
 import { GlyphLayerService } from '../services/glyph-layer.service';
 import { HospitalUtilService } from '../services/hospital-util.service';
@@ -125,7 +126,8 @@ export class InfoboxComponent implements OnInit {
     public tooltipService: TooltipService,
     private translationService: TranslationService,
     private hospitalRepo: QualitativeDiviDevelopmentRepository,
-    private caseRepo: CaseDevelopmentRepository
+    private caseRepo: CaseDevelopmentRepository,
+    private caseUtil: CaseUtilService
   ) { }
 
   ngOnInit(): void {
@@ -260,8 +262,10 @@ export class InfoboxComponent implements OnInit {
   private caseSearchResult(): Observable<Searchable> {
     const zoom = this.getZoomForAggLevel(this.mo.covidNumberCaseOptions.aggregationLevel);
     if (this._mo.covidNumberCaseOptions.enabled) {
+      const [from, to] = this.caseUtil.getFromToTupleFromOptions(this._mo.covidNumberCaseOptions);
+
       return this.caseRepo
-      .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this.mo.covidNumberCaseOptions.aggregationLevel)
+      .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this.mo.covidNumberCaseOptions.aggregationLevel, from, to)
       .pipe(
         mergeMap(d => d.features),
         map(d => {

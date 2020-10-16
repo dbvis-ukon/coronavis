@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ScaleLinear, scaleLinear } from 'd3-scale';
 import { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
-import { filter, map, mergeMap, toArray } from 'rxjs/operators';
+import { filter, map, mergeMap, tap, toArray } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
@@ -117,11 +117,11 @@ export class CaseUtilService {
     return of(data)
     .pipe(
       mergeMap(d1 => d1.developments),
-      filter((_, i) => i >= 7),
+      filter((_, i) => i >= data.developments.length - 7),
       map(d => {
         const t = this.getNowPrevTimedStatusTuple(data, getStrDate(getMoment(d.timestamp)), CovidNumberCaseTimeWindow.sevenDays);
         return {
-          x: d.timestamp,
+          x: getStrDate(getMoment(d.timestamp)),
           y: t[0].cases7_per_100k || (t[0].cases_per_100k - t[1].cases_per_100k)}; }),
       toArray()
     );
@@ -145,6 +145,14 @@ export class CaseUtilService {
 
   public getRotationForTrend(m: number): number {
     return this.rotationScale(m);
+  }
+
+  public getFromToTupleFromOptions(mo: CovidNumberCaseOptions): [string, string] {
+    const to = getStrDate(getMoment(mo.date).add(1, 'day'));
+
+    const from = getStrDate(getMoment(to).subtract(mo.daysForTrend + 1, 'days'));
+
+    return [from, to];
   }
 
   getTypeAccessorFnWithOptions(options: CovidNumberCaseOptions): (d: RKICaseTimedStatus) => number | undefined {

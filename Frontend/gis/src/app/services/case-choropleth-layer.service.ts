@@ -13,6 +13,7 @@ import { CaseChoroplethColormapService } from './case-choropleth-colormap.servic
 import { CaseUtilService } from './case-util.service';
 import { TooltipService } from './tooltip.service';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
+import { getMoment, getStrDate } from '../util/date-util';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,10 @@ export class CaseChoroplethLayerService {
   public getLayer(options$: BehaviorSubject<CovidNumberCaseOptions>): Observable < [CaseChoropleth, LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions> ]> {
     const options = options$.value;
     this.loading$.next(true);
-    return this.caseRepository.getCasesDevelopmentForAggLevel(options.dataSource, options.aggregationLevel)
+
+    const [from, to] = this.caseUtil.getFromToTupleFromOptions(options);
+
+    return this.caseRepository.getCasesDevelopmentForAggLevel(options.dataSource, options.aggregationLevel, from, to)
       .pipe(
         map(data =>
           {
