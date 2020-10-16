@@ -153,9 +153,14 @@ export class MapRootComponent implements OnInit {
     const urlSegments = this.route.snapshot.url;
     if ((urlSegments && urlSegments[0] && urlSegments[0].path === 'lockdown') || paramMap && paramMap.get('flavor') === 'lockdown') {
 
-      const live = ((urlSegments && urlSegments[1] && urlSegments[1].path === 'live') || paramMap && paramMap.get('live') === 'live');
+      const lockdownMlo = this.configService.getLockDownMapOptions(false);
 
-      const lockdownMlo = this.configService.getLockDownMapOptions(live);
+      this.mapOptions = lockdownMlo;
+
+      this.mapOptions$.next(lockdownMlo);
+    } else if ((urlSegments && urlSegments[0] && urlSegments[0].path === 'lockdown-live') || paramMap && paramMap.get('flavor') === 'lockdown-live') {
+
+      const lockdownMlo = this.configService.getLockDownMapOptions(true);
 
       this.mapOptions = lockdownMlo;
 
