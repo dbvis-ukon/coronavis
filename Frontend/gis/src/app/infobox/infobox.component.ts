@@ -155,8 +155,7 @@ export class InfoboxComponent implements OnInit {
 
         this.emitMapOptions();
 
-        this.combinedStats$ = of(this._mo.covidNumberCaseOptions.date)
-          .pipe(this.combinedStatsOperator());
+        this.updateStatistics();
 
       }, 30000);
     }, null, true, 'UTC');
@@ -214,6 +213,11 @@ export class InfoboxComponent implements OnInit {
       toArray(),
     )
     .subscribe(d => this.searchData$ = of(d));
+  }
+
+  updateStatistics() {
+    this.combinedStats$ = of(this._mo.covidNumberCaseOptions.date)
+      .pipe(this.combinedStatsOperator());
   }
 
   private hospitalSearchResult(): Observable<Searchable> {
