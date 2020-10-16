@@ -129,8 +129,8 @@ export class VegaLinechartService {
       spec.layer.push({
         "mark": {"type": "line", "color": "black"},
         "transform": [
-          {"filter": {"field": "x", "gte": '' + from}},
-          {"filter": {"field": "x", "lte": '' + to}},
+          {"filter": "datum.x >= " + from},
+          {"filter": "datum.x <= " + to},
           {"regression": "y", "on": "x", "extent": [from, to]}
           // {"regression": "y", "on": "x"}
         ],
