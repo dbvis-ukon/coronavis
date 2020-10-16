@@ -3,37 +3,50 @@
 # author: Max Fischer
 
 import os
+import sys
 import datetime
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 import psycopg2 as pg
 import psycopg2.extensions
 import psycopg2.extras
 import requests
+import numpy as np
+import pandas as pd
 
-#from db_config import SQLALCHEMY_DATABASE_URI
-import sys
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+from db_config import SQLALCHEMY_DATABASE_URI
+#logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 logger = logging.getLogger(__name__)
 logger.info('Crawler for Risklayer spreadsheet and case data')
-logger.info('UNDER DEVELOPMENT')
 
+#
+# Parameters
+#
+DB_TABLE = 'cases_lk_risklayer'
+DB_TABLE_CURRENT = 'cases_lk_risklayer_current'
+QUERY = f'INSERT INTO {DB_TABLE}(datenbestand, ags, cases, deaths, updated_today) VALUES %s'
 URL = "https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/export?format=xlsx"
 STORAGE_PATH = "/var/risklayer_spreadsheets/"
 NUM_RETRIES = 5
 WAIT_MS_RETRY = 5000
 
+#
+# DB help
+#
 def get_connection():
     conn = pg.connect(SQLALCHEMY_DATABASE_URI)
     conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
     cur = conn.cursor()
     return conn, cur
-
-logger.debug('Fetch risklayer spreadsheet')
-
+#
+# Fetching data
+#
+current_update = datetime.now(timezone.utc)
+logger.debug(f'Fetch risklayer spreadsheet at {current_update.strftime("%Y-%m-%dT%H:%M:%S.%f%Z")}')
 current_try = 1
+filepath = ''
 while current_try <= NUM_RETRIES:
     try:
         r = requests.get(URL, allow_redirects=True)
@@ -42,7 +55,7 @@ while current_try <= NUM_RETRIES:
         if not os.path.isdir(STORAGE_PATH):
             logger.error(f"Storage path {STORAGE_PATH} does not appear to be a valid directory")
             exit(1)
-        filepath = STORAGE_PATH + datetime.today().strftime("%Y-%m-%dT%H-%M-%S") + '.xlsx'
+        filepath = STORAGE_PATH + current_update.strftime("%Y-%m-%dT%H-%M-%S") + '.xlsx'
         with open(filepath, 'wb') as f:
             f.write(r.content)
             logger.info(f'Download succeeded.')
@@ -54,53 +67,76 @@ if current_try > NUM_RETRIES:
     logger.error(f"Number of retries ({NUM_RETRIES}) has been excideed.")
     exit(1)
 
-logger.info('Parse data, TODO')
 
+#
+# parsing
+#
+logger.info('Parse data')
+data = pd.read_excel(filepath, sheet_name=None, header=None, na_filter=False)
 
-#aquery = 'INSERT INTO cases(datenbestand, idbundesland, bundesland, landkreis, idlandkreis, objectid, meldedatum, gender, agegroup, casetype) VALUES %s'
+prognosis_today = data['Statistik Überblick'].iloc[17,6]
+df = data['Kreise'].iloc[3:,[1,2,10,13,8]]
+df[1] = df[1].astype(str)
+df[1] = df[1].apply(lambda x: x.zfill(5))
+df[8] = df[8].apply(lambda x: x != '' )
+db_array = df.to_numpy()
+
+# reformat
+entries = []
+updated_today_count = 0
+for row in db_array:
+    entry = {
+        'datenbestand': current_update,
+        'ags': row[0],
+        'cases': row[2],
+        'deaths': row[3],
+        'updated_today': row[4]
+    }
+    if (row[4]):
+        updated_today_count += 1
+    entries.append(entry)
+
 try:  
-    #conn, cur = get_connection()
+    conn, cur = get_connection()
 
-    #cur.execute("Select Max(datenbestand) from cases")
-    #last_update = cur.fetchone()[0]
+    cur.execute(f"Select Max(datenbestand) from {DB_TABLE_CURRENT}")
+    last_update = cur.fetchone()[0]
+    
+    cur.execute(f"SELECT COUNT(*) FROM {DB_TABLE_CURRENT} WHERE updated_today = True")
+    num_cases_updated_today = cur.fetchone()[0]
 
-    #cur.execute("SELECT COUNT(*) FROM cases WHERE datenbestand = (SELECT MAX(datenbestand) FROM cases)")
-    #num_cases_in_db = cur.fetchone()[0]
+    logger.info(f"db data version: {last_update}")
+    logger.info(f"fetched data version: {current_update}")
+    logger.info(f"Number of LK publications for today in DB: {num_cases_updated_today}")
+    logger.info(f"Number of LK publications for today in this update: {updated_today_count} (change: {updated_today_count-num_cases_updated_today})")
+    logger.info(f"Prognosis number of cases for today: {prognosis_today}")
 
-    #current_update = entries[0]['datenbestand'].replace(tzinfo=datetime.timezone(datetime.timedelta(hours=+1)))
+    if last_update is not None and abs((current_update - last_update).total_seconds()) <= 5*60:
+        logger.info("Apply throttling (+/- 5min) and skip update")
+        exit(0)
+    else:
+        logger.info('Insert new data into DB (takes 2-5 seconds)...')
 
-    #logger.info("db data version: %s", last_update)
-    #logger.info("fetched data version: %s", current_update)
-    #logger.info("Num cases in DB %s, num cases fetched %2", num_cases_in_db, len(entries))
+        psycopg2.extras.execute_values (
+            cur, QUERY, entries, template='(%(datenbestand)s, %(ags)s, %(cases)s, %(deaths)s, %(updated_today)s)', page_size=500
+        )
+        conn.commit()
+        logger.info('Data inserted.')
 
-    #if last_update is not None and abs((current_update - last_update).total_seconds()) <= 2*60*60:
-    #    logger.info("No new data available (+/- 2h), skip update")
-    #    exit(0)
-    #elif len(entries) < (num_cases_in_db - 1000):
-    #    # when we have less entries fetched than we already have in the DB the RKI API probably did not return all cases
-    #    logger.error("RKI API data blob is incomplete. Will fail this job and try again at next crawl time.")
-    #    exit(2)
-    #else:
-    #    logger.info('Insert new data into DB (takes 2-5 seconds)...')
+        cur.execute("INSERT INTO risklayer_prognosis (datenbestand, prognosis) VALUES(%s, %s)", (current_update, prognosis_today))
+        conn.commit()
+        logger.info('Prognosis data inserted.')
 
-    #    psycopg2.extras.execute_values (
-    #        cur, aquery, entries, template='(%(datenbestand)s, %(idbundesland)s, %(bundesland)s, %(landkreis)s, %(idlandkreis)s, %(objectid)s, %(meldedatum)s, %(gender)s, %(agegroup)s, %(casetype)s)', page_size=500
-    #    )
-    #    conn.commit()
-
-    #    logger.info('Data inserted.')
-
-    #    logger.info('Refreshing materialized view.')
-
-    #    cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
-    #    conn.commit()
+        logger.info('Refreshing materialized view')
+        cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day_risklayer')
+        conn.commit()
 
 
-    #    logger.info('Success')
+        logger.info('Success')
 
-    #    if(conn):
-    #        cur.close()
-    #        conn.close()
+        if(conn):
+            cur.close()
+            conn.close()
 
         exit(0)    
 except (Exception, pg.DatabaseError) as error:
