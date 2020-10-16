@@ -1,7 +1,9 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BehaviorSubject, forkJoin, merge, Observable, of } from 'rxjs';
-import { distinct, distinctUntilChanged, filter, map, mergeMap, tap, toArray } from 'rxjs/operators';
+import { CronJob } from 'cron';
+import moment from 'moment';
+import { BehaviorSubject, forkJoin, interval, merge, Observable, of } from 'rxjs';
+import { distinct, distinctUntilChanged, filter, map, mergeMap, tap, timeout, toArray } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
 import { Searchable } from '../hospital-search/hospital-search.component';
 import { FlyTo } from '../map/events/fly-to';
@@ -10,6 +12,7 @@ import { BedType } from '../map/options/bed-type.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
+import { CachedRepository } from '../repositories/cached.repository';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
@@ -20,7 +23,6 @@ import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.se
 import { CaseUtilService } from '../services/case-util.service';
 import { CountryAggregatorService } from '../services/country-aggregator.service';
 import { GlyphLayerService } from '../services/glyph-layer.service';
-import { HospitalUtilService } from '../services/hospital-util.service';
 import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TooltipService } from '../services/tooltip.service';
@@ -46,6 +48,8 @@ interface CombinedStatistics {
 
   casesCountiesAvailable?: number;
   casesCountiesTotal?: number;
+
+  risklayerPrognosis?: number;
 }
 
 @Component({
@@ -118,6 +122,9 @@ export class InfoboxComponent implements OnInit {
 
   private aggregatedDiviStatistics: QualitativeTimedStatus;
 
+  nextLiveUpdatePercentage: number;
+  nextLiveUpdate: string;
+
   constructor(
     public colormapService: QualitativeColormapService,
     private osmLayerService: OSMLayerService,
@@ -130,10 +137,48 @@ export class InfoboxComponent implements OnInit {
     private translationService: TranslationService,
     private hospitalRepo: QualitativeDiviDevelopmentRepository,
     private caseRepo: CaseDevelopmentRepository,
-    private caseUtil: CaseUtilService
+    private caseUtil: CaseUtilService,
+    private cache: CachedRepository
   ) { }
 
   ngOnInit(): void {
+    const cron = new CronJob('0,30 5-21 * * *', () => {
+
+      if (this._mo.covidNumberCaseOptions.dataSource !== 'risklayer') {
+        return;
+      }
+
+      console.log('updating using cron');
+
+      setTimeout(() => {
+        this.cache.empty();
+
+        this.emitMapOptions();
+
+        this.combinedStats$ = of(this._mo.covidNumberCaseOptions.date)
+          .pipe(this.combinedStatsOperator());
+
+      }, 30000);
+    }, null, true, 'UTC');
+
+    const initTime = getMoment('now');
+
+    interval(5000)
+      .subscribe(() => {
+        const lastRun = cron.lastDate() ? moment.utc(cron.lastDate()) : initTime;
+
+        const diffNext = cron.nextDate().diff(getMoment('now').utc()) + 30000;
+
+        const diffTotal = cron.nextDate().diff(initTime);
+
+        this.nextLiveUpdate = moment.duration(diffNext).humanize();
+
+        this.nextLiveUpdatePercentage = ((diffNext / diffTotal)) * 100;
+
+        // console.log('diff', cron.nextDate().format(), cron.lastDate(), diffNext, diffTotal, this.nextLiveUpdatePercentage);
+      });
+
+
     // close info box if mobile
     const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
     if (isSmallScreen){
@@ -148,51 +193,7 @@ export class InfoboxComponent implements OnInit {
     this.combinedStats$ = this.refDay$
     .pipe(
       distinctUntilChanged(),
-      tap(() => this.aggregateStatisticsLoading$.next(true)),
-      map(s => getStrDate(getMoment(s).endOf('day'))),
-      // tap(refDate => console.log('refdate', refDate)),
-      mergeMap(refDate => {
-        const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate);
-        const unfiltered = this.countryAggregatorService.diviAggregationForCountryUnfiltered(refDate);
-
-        const rki = this.countryAggregatorService.rkiAggregationForCountry(this._mo.covidNumberCaseOptions.dataSource, refDate);
-
-        const aggLevelData = this.caseRepo.getCasesDevelopmentForAggLevel(
-          this._mo.covidNumberCaseOptions.dataSource,
-          this._mo.covidNumberCaseOptions.aggregationLevel,
-          getStrDate(getMoment(refDate)),
-          getStrDate(getMoment(refDate).add(1, 'day')));
-
-        return forkJoin([filtered, unfiltered, rki, aggLevelData, of(refDate)]);
-      }),
-      map(([diviFiltered, diviUnfiltered, rki, aggLevelData, refDate]) => {
-        this.aggregatedDiviStatistics = diviFiltered;
-
-        const rkiOutdated = getMoment(refDate).endOf('day').subtract(1, 'day').isAfter(getMoment(rki.timestamp));
-
-        const availableCounties = aggLevelData.features
-          .map(d => d.properties.developments[d.properties.developments.length - 1])
-          .filter(d => d.last_updated)
-          .length;
-
-        const combinedStats = {
-          diviFiltered,
-          diviUnfiltered,
-          rki,
-          rkiOutdated,
-          glyphData: [
-            {name: 'ICU low', accessor: 'showIcuLow', accFunc: (d: QualitativeTimedStatus) => d.icu_low_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_low_care), description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
-            {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (d: QualitativeTimedStatus) => d.icu_high_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_high_care), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
-            {name: 'ECMO', accessor: 'showEcmo', accFunc: (d: QualitativeTimedStatus) => d.ecmo_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.ecmo_state), description: 'ECMO = Zusätzlich ECMO'}
-          ],
-          casesCountiesAvailable: availableCounties,
-          casesCountiesTotal: aggLevelData.features.length
-        } as CombinedStatistics;
-
-
-        return combinedStats;
-      }),
-      tap(() => this.aggregateStatisticsLoading$.next(false))
+      this.combinedStatsOperator()
     );
 
 
@@ -429,5 +430,58 @@ export class InfoboxComponent implements OnInit {
       loc: h.point,
       zoom: h.zoom
     });
+  }
+
+  private combinedStatsOperator() {
+    return (input$: Observable<string>) => input$.pipe(
+      tap(() => this.aggregateStatisticsLoading$.next(true)),
+      map(s => getStrDate(getMoment(s).endOf('day'))),
+      // tap(refDate => console.log('refdate', refDate)),
+      mergeMap(refDate => {
+        const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate);
+        const unfiltered = this.countryAggregatorService.diviAggregationForCountryUnfiltered(refDate);
+
+        const rki = this.countryAggregatorService.rkiAggregationForCountry(this._mo.covidNumberCaseOptions.dataSource, refDate);
+
+        const aggLevelData = this.caseRepo.getCasesDevelopmentForAggLevel(
+          this._mo.covidNumberCaseOptions.dataSource,
+          this._mo.covidNumberCaseOptions.aggregationLevel,
+          getStrDate(getMoment(refDate)),
+          getStrDate(getMoment(refDate).add(1, 'day')));
+
+        const prognosis = this.caseRepo.getRisklayerPrognosis();
+
+        return forkJoin([filtered, unfiltered, rki, aggLevelData, prognosis, of(refDate)]);
+      }),
+      map(([diviFiltered, diviUnfiltered, rki, aggLevelData, prognosis, refDate]) => {
+        this.aggregatedDiviStatistics = diviFiltered;
+
+        const rkiOutdated = getMoment(refDate).endOf('day').subtract(1, 'day').isAfter(getMoment(rki.timestamp));
+
+        const availableCounties = aggLevelData.features
+          .map(d => d.properties.developments[d.properties.developments.length - 1])
+          .filter(d => d.last_updated)
+          .length;
+
+        const combinedStats = {
+          diviFiltered,
+          diviUnfiltered,
+          rki,
+          rkiOutdated,
+          glyphData: [
+            {name: 'ICU low', accessor: 'showIcuLow', accFunc: (d: QualitativeTimedStatus) => d.icu_low_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_low_care), description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+            {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (d: QualitativeTimedStatus) => d.icu_high_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_high_care), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
+            {name: 'ECMO', accessor: 'showEcmo', accFunc: (d: QualitativeTimedStatus) => d.ecmo_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.ecmo_state), description: 'ECMO = Zusätzlich ECMO'}
+          ],
+          casesCountiesAvailable: availableCounties,
+          casesCountiesTotal: aggLevelData.features.length,
+          risklayerPrognosis: Math.round(prognosis.prognosis)
+        } as CombinedStatistics;
+
+
+        return combinedStats;
+      }),
+      tap(() => this.aggregateStatisticsLoading$.next(false))
+    );
   }
 }

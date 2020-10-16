@@ -169,6 +169,16 @@
 
       <div *ngIf="(combinedStats$ | async); let c">
         <p class="stats" i18n="@@infoboxNumberOfCovidCases">{{ c.rki?.cases | number }} bundesweit gemeldete Covid-19 Fälle</p>
+
+        <p class="stats" *ngIf="mo.covidNumberCaseOptions.dataSource === 'risklayer'" i18n="@@infoboxPrognosis">
+          Hochrechnung: {{ c.risklayerPrognosis | number }} neue Covid-19 Fälle heute
+          <mat-icon
+            style="vertical-align: middle;"
+            i18n-matTooltip="@@tooltipRisklayerPrognosis"
+            matTooltip="Diese Hochrechnung basiert auf den bereits eingegangen sowie vorläufigen Meldungen der Landkreise bzw. Gesundheitsämter."
+          >help</mat-icon>
+        </p>
+
         <p class="stats" i18n="@@infoboxNumberOfCovidDeaths">{{ c.rki?.deaths | number }} bundesweit gemeldete Covid-19 Todesfälle</p>
 
         <p class="stats" *ngIf="mo.covidNumberCaseOptions.dataSource === 'risklayer' && mo.covidNumberCaseOptions.aggregationLevel === eAggregationLevels.county" i18n="@@infoboxCountiesAvailable">
@@ -176,11 +186,19 @@
           <mat-icon
             style="vertical-align: middle;"
             i18n-matTooltip="@@tooltipNumberOfCounties"
-            matTooltip="Die Daten werden von Freiwilligen in einem öffentlich zugänglichen Tabelle gesammelt (crowdsourcing) sobald die Landkreise bzw. Gesundheitsämter die Daten veröffentlichen. Für Landkreise bei denen noch keine aktuellen Daten vorliegen werden die Daten vom vorherigen Tag verwendet."
+            matTooltip="Die Daten werden von Freiwilligen in einer öffentlich zugänglichen Tabelle gesammelt (crowdsourcing) sobald die Landkreise bzw. Gesundheitsämter die Daten veröffentlichen. Für Landkreise bei denen noch keine aktuellen Daten vorliegen werden die Daten vom vorherigen Tag verwendet."
           >help</mat-icon>
         </p>
 
-        <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ c.rki?.timestamp | date:'full' }}</p>
+        <p class="stats" i18n="@@infoboxLastUpdate">
+          <span>Letzter Stand: {{ c.rki?.timestamp | date:'full' }}</span>
+        </p>
+
+        <p class="stats flex" *ngIf="mo.covidNumberCaseOptions.dataSource === 'risklayer'">
+          <span>Nächste Aktualisierung: </span>
+          <mat-spinner diameter="20" strokeWidth="3" mode="determinate" [value]="nextLiveUpdatePercentage" class="small"></mat-spinner>
+          {{ nextLiveUpdate }}
+        </p>
 
         <div class="data-warning" *ngIf="c.rkiOutdated">
           <mat-icon color="warn">warning</mat-icon>
