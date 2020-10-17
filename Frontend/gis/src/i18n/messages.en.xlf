@@ -1229,10 +1229,8 @@
       <note category="location">src/app/infobox/infobox.component.html:185</note></notes>
       <segment state="initial">
         <source>Daten von <ph id="0" equiv="INTERPOLATION" disp="{{ c.casesCountiesAvailable }}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="{{ c.casesCountiesTotal }}"/> Landkreisen verfügbar</source>
-      <target>
-          Data of <ph id="0" equiv="INTERPOLATION" disp="{{ c.casesCountiesAvailable }}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="{{ c.casesCountiesTotal }}"/> counties available
-          <pc id="2" equivStart="START_TAG_MAT-ICON" equivEnd="CLOSE_TAG_MAT-ICON" type="other" dispStart="&lt;mat-icon>" dispEnd="&lt;/mat-icon>">help</pc>
-        </target></segment>
+        <target>Data of <ph id="0" equiv="INTERPOLATION" disp="{{ c.casesCountiesAvailable }}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="{{ c.casesCountiesTotal }}"/> counties available</target>
+      </segment>
     </unit><unit id="tooltipNumberOfCounties">
       <notes>
         <note category="location">src/app/infobox/infobox.component.html:189</note>
