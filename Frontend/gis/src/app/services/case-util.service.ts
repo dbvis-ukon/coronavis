@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ScaleLinear, scaleLinear } from 'd3-scale';
+import { FeatureCollection, Geometry } from 'geojson';
 import { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
-import { filter, map, mergeMap, tap, toArray } from 'rxjs/operators';
+import { map, mergeMap, toArray } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
@@ -69,6 +70,10 @@ export class CaseUtilService {
     }
 
     return [currentTimedStatus, prevTimedStatus];
+  }
+
+  public getCaseNumbersArray(fc: FeatureCollection<Geometry, RKICaseDevelopmentProperties>, options: CovidNumberCaseOptions): number[] {
+    return fc.features.map(d => this.getCaseNumbers(d.properties, options));
   }
 
   public getCaseNumbers(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): number {

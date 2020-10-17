@@ -25,8 +25,34 @@ export class CaseChoroplethColormapService {
     .range([...schemeGreens[8].slice(0, 7).reverse(), '#fff', ...schemeBlues[8].slice(0, 7)]);
 
   private lockDownColorMap = scaleThreshold<number, string>()
-    .domain([0, 0 / 8 + 0.000000000000000001, 1 / 8, 2 / 8, 3 / 8, 4 / 8, 5 / 8, 6 / 8, 7 / 8, 1 - 0.000000000000000001, 1])
-    .range(['#ffffff', '#fff', '#fee6ce', '#fdd0a2', '#fdae6b', '#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704', 'black']);
+    .domain([
+      0,
+      0 + 0.000000000000000001,
+      8.75 / 100000,
+      17.5 / 100000,
+      26.25 / 100000,
+      35 / 100000,
+      40 / 100000,
+      45 / 100000,
+      50 / 100000,
+      100 / 100000,
+      150 / 100000,
+      200 / 100000
+    ])
+    .range([
+      '#ffffff', // < 0 mostly unused
+      '#fefefe', // < ~0
+      '#fee6ce', // < 8.75
+      '#fdd0a2', // < 17.5
+      '#fdae6b', // < 26.25
+      '#ff9c54', // < 35
+      '#d94801', // < 40
+      '#a63603', // < 45
+      '#7f2706', // < 50
+      '#4a4a4a', // < 100
+      '#363636', // < 150
+      '#000000'  // < 200
+    ]);
 
 
 
@@ -157,7 +183,7 @@ export class CaseChoroplethColormapService {
     options: CovidNumberCaseOptions,
     actualExtent: boolean = false
   ): [number, number] {
-    const cases: number[] = fc.features.map(d => this.caseUtil.getCaseNumbers(d.properties, options));
+    const cases: number[] = this.caseUtil.getCaseNumbersArray(fc, options);
 
     if (options.change === CovidNumberCaseChange.absolute) {
       if (actualExtent) {
@@ -165,7 +191,7 @@ export class CaseChoroplethColormapService {
       }
 
       if (this.caseUtil.isLockdownMode(options)) {
-        return [0, (50 / 100000)];
+        return [0, 200 / 100000];
       }
 
       return [0, max<number>(cases)];
@@ -180,7 +206,10 @@ export class CaseChoroplethColormapService {
     }
   }
 
-  public getRangeExtent(options: CovidNumberCaseOptions): [number, number] {
+  private getRangeExtent(options: CovidNumberCaseOptions): [number, number] {
+    if (this.caseUtil.isLockdownMode(options)) {
+      return [0, 200 / 100000];
+    }
     return options.change === CovidNumberCaseChange.absolute ? [0, 1] : [-1, 1];
   }
 
