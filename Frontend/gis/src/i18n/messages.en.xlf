@@ -1517,8 +1517,8 @@
       <target>Lockdown View</target></segment>
     </unit><unit id="overviewLockdownViewLive">
       <notes>
-        <note category="location">src/app/overview/overview.component.html:27</note>
-      </notes>
+        
+      <note category="location">src/app/overview/overview.component.html:27</note><note category="location">src/app/overview/overview.component.html:53</note></notes>
       <segment state="initial">
         <source>LIVE Lockdown Ansicht</source>
       <target>LIVE Lockdown View</target></segment>
