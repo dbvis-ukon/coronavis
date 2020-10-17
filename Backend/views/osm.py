@@ -15,16 +15,11 @@ def get_osm_hospitals():
         Return all Hospitals
     """
     sql_stmt = '''
-select osm_id, name, st_asgeojson(way) as geom 
-from planet_osm_point 
-where amenity = 'hospital' and tags -> 'emergency' = 'yes' 
-
-union 
-
-select osm_id, name, st_asgeojson(st_centroid(way)) as geom 
-from planet_osm_polygon 
-where amenity = 'hospital' and tags -> 'emergency' = 'yes' 
-
+        SELECT
+            objectid AS osm_id,
+            name,
+            st_asgeojson(wkb_geometry) AS geom
+        FROM hospitals_max;
     '''
     sql_result = db.engine.execute(sql_stmt).fetchall()
 
@@ -59,30 +54,28 @@ def get_osm_nearby_helipads():
         Return all Hospitals
     """
     sql_stmt = '''
-with helipads as ( 	
-	SELECT osm_id, name, way as geom
-	FROM planet_osm_point
-	WHERE aeroway = 'helipad' 	
-	UNION
-	SELECT osm_id, name, st_centroid(way) as geom
-	FROM planet_osm_polygon 
-	WHERE aeroway = 'helipad' 
-), krankenhaus as ( 
-	SELECT osm_id, name, way as geom  	
-	FROM planet_osm_point   	
-	WHERE amenity = 'hospital' and tags -> 'emergency' = 'yes'  
-	UNION
-	SELECT osm_id, name, st_centroid(way) as geom  
-	FROM planet_osm_polygon   	
-	WHERE amenity = 'hospital' and tags -> 'emergency' = 'yes'  
-)
-SELECT b.osm_id, b.name, st_asgeojson(b.geom), st_distance(krankenhaus.geom::geography, b.geom::geography) as distance_to_hospital 
-FROM krankenhaus JOIN LATERAL (   
-    SELECT *
-    FROM helipads
-    ORDER BY krankenhaus.geom <-> helipads.geom LIMIT 1 
-) AS b ON true 
-WHERE st_distance(krankenhaus.geom::geography, b.geom::geography) < 1000
+        with helipads as (
+            SELECT osm_id, name, way as geom
+            FROM planet_osm_point
+            WHERE aeroway = 'helipad'
+            UNION
+            SELECT osm_id, name, st_centroid(way) as geom
+            FROM planet_osm_polygon
+            WHERE aeroway = 'helipad'
+        ), krankenhaus as (
+            SELECT
+            objectid AS osm_id,
+            name,
+            wkb_geometry AS geom
+        FROM hospitals_max
+        )
+        SELECT b.osm_id, b.name, st_asgeojson(b.geom), st_distance(krankenhaus.geom::geography, b.geom::geography) as distance_to_hospital
+        FROM krankenhaus JOIN LATERAL (
+            SELECT *
+            FROM helipads
+            ORDER BY krankenhaus.geom <-> helipads.geom LIMIT 1
+        ) AS b ON true
+        WHERE st_distance(krankenhaus.geom::geography, b.geom::geography) < 1000
     '''
     sql_result = db.engine.execute(sql_stmt).fetchall()
 
