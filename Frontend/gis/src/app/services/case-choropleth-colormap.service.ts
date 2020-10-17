@@ -175,6 +175,11 @@ export class CaseChoroplethColormapService {
 
 
     const nmbr = this.caseUtil.getCaseNumbers(dataPoint.properties, options);
+
+    if (options._binHovered && (options._binHovered[0] > nmbr || options._binHovered[1] <= nmbr)) {
+      return '#a6a6a6';
+    }
+
     return this.getColorMap(options)(scaleFn(nmbr));
   }
 

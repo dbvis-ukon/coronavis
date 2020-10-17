@@ -148,8 +148,6 @@ export class InfoboxComponent implements OnInit {
         return;
       }
 
-      console.log('updating using cron');
-
       setTimeout(() => {
         this.cache.empty();
 

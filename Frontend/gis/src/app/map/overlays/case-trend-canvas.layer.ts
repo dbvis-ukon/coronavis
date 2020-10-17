@@ -96,6 +96,11 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
       }
     }
 
+    const nmbr = this.caseUtil.getCaseNumbers(glyphData.properties, opt);
+    if (opt._binHovered && (opt._binHovered[0] > nmbr || opt._binHovered[1] <= nmbr)) {
+      return;
+    }
+
     const pt = this.getGlyphPixelPos(glyphData);
 
     // let bounds = new Bounds(pt, new Point(pt.x + this.getGlyphWidth(), pt.y));

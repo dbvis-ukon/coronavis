@@ -112,7 +112,11 @@ export class MapRootComponent implements OnInit {
     this.mapLocationSettings$.next(newSettings);
   }
 
-  mapOptionsUpdated(newOptions: MapOptions) {
+  mapOptionsUpdated(newOptions: MapOptions, keepInteractions = false) {
+    if (!keepInteractions) {
+      newOptions.covidNumberCaseOptions._binHovered = null;
+    }
+
     this.mapOptions = newOptions;
 
     this.mapOptions$.next(newOptions);

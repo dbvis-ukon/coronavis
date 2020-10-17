@@ -67,4 +67,7 @@ export interface CovidNumberCaseOptions {
      */
     showOnlyAvailableCounties: boolean;
 
+
+    _binHovered?: [number, number];
+
   }

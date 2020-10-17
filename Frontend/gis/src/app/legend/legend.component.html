@@ -10,7 +10,7 @@
     <div *ngIf="legendCasesExtended">
     <table>
 
-      <tr *ngFor="let b of caseBins$ | async">
+      <tr *ngFor="let b of caseBins$ | async" (mouseenter)="hoverBin(b)" (mouseout)="hoverBin()" class="bin">
 
         <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
 

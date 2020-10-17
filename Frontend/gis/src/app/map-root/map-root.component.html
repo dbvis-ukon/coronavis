@@ -23,6 +23,7 @@
     *ngIf="mapOptions$"
     class="legend"
     [mapOptions$]="mapOptions$"
+    (mapOptionsChange)="mapOptionsUpdated($event, true)"
     [choroplethLayer$]="currentCaseChoropleth$"
   ></app-legend>
 

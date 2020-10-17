@@ -1,7 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
@@ -19,6 +19,9 @@ interface LegendColorMapBin extends ColorMapBin {
   minStr: string;
 
   maxStr: string;
+
+  originalMin?: number;
+  originalMax?: number;
 }
 
 @Component({
@@ -27,7 +30,7 @@ interface LegendColorMapBin extends ColorMapBin {
   styleUrls: ['./legend.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LegendComponent implements OnInit {
+export class LegendComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-input-rename
   @Input('mapOptions$')
@@ -35,6 +38,9 @@ export class LegendComponent implements OnInit {
 
   @Input()
   choroplethLayer$: Observable<CaseChoropleth>;
+
+  @Output()
+  mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
 
   agg = AggregationLevel;
   bed = BedType;
@@ -56,6 +62,9 @@ export class LegendComponent implements OnInit {
   titleBeds$: Observable<string>;
   titleCases$: Observable<string>;
 
+  optionsSubscription: Subscription;
+  currentOptions: MapOptions;
+
   constructor(
     private bedColormap: QualitativeColormapService,
     private caseColormap: CaseChoroplethColormapService,
@@ -67,9 +76,16 @@ export class LegendComponent implements OnInit {
   ) {
 
   }
+  ngOnDestroy(): void {
+    if (this.optionsSubscription) {
+      this.optionsSubscription.unsubscribe();
+    }
+  }
 
   ngOnInit(): void {
     this.legendBedsExtended = this.legendCasesExtended = !this.breakpointObs.isMatched('only screen and (max-width: 499px)');
+
+    this.optionsSubscription = this.mo$.subscribe(c => this.currentOptions = c);
 
     this.titleCases$ = this.mo$
     .pipe(
@@ -117,6 +133,8 @@ export class LegendComponent implements OnInit {
       if (mo.covidNumberCaseOptions.normalization === CovidNumberCaseNormalization.per100k && mo.covidNumberCaseOptions.change === CovidNumberCaseChange.absolute) {
         return {
           color: b.color,
+          originalMin: b.min,
+          originalMax: b.max,
           min: b.min * 100000,
           max: b.max * 100000
         };
@@ -134,6 +152,23 @@ export class LegendComponent implements OnInit {
     });
 
     return caseBins;
+  }
+
+  hoverBin(bin?: LegendColorMapBin | null) {
+    if (!this.currentOptions) {
+      return;
+    }
+
+    const b: [number, number] = bin ? [bin.originalMin || bin.min, bin.originalMax || bin.max] : null;
+
+
+    if ((!this.currentOptions.covidNumberCaseOptions._binHovered && !b) || (b && this.currentOptions.covidNumberCaseOptions._binHovered && this.currentOptions.covidNumberCaseOptions._binHovered[0] === b[0] && this.currentOptions.covidNumberCaseOptions._binHovered[1] === b[1])) {
+      return;
+    }
+
+    this.currentOptions.covidNumberCaseOptions._binHovered = b;
+
+    this.mapOptionsChange.emit({... this.currentOptions});
   }
 
   private getBinStr(v: number, mo: MapOptions): string {
