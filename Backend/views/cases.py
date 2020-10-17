@@ -1,9 +1,9 @@
 import json
 
-from flask import Blueprint, Response, jsonify
+from flask import Blueprint, Response, jsonify, request
 from sqlalchemy import text
 
-from cache import cache
+from cache import cache, make_cache_key
 from db import db
 from models.cases import (
     CasesPerBundesland3DaysBefore, CasesPerBundeslandToday,
@@ -12,6 +12,8 @@ from models.cases import (
     CasesPerRegierungsbezirk3DaysBefore, CasesPerRegierungsbezirkToday,
     CasesPerRegierungsbezirkYesterday)
 from views.helpers import __as_feature_collection
+from models.caseDevelopments import CaseDevelopments
+from timer import timer
 
 routes = Blueprint('cases', __name__, url_prefix='/cases')
 
@@ -164,444 +166,60 @@ def get_cases_by_bundeslaender_3daysbefore():
     return jsonify(__as_feature_collection(hospitalsAggregated)), 200
 
 
+cd = CaseDevelopments('cases_per_county_and_day')
+
+
 @routes.route('/development/landkreise', methods=['GET'])
-@cache.cached()
+@cache.cached(key_prefix = make_cache_key)
+@timer
 def get_cases_development_by_counties():
-    """
-        Return the development of covid cases and deaths
-        by counties
-    """
-    sql_stmt = text("""
-SELECT
-    c.ids,
-    c.name,
-    c."desc" AS description,
-    st_asgeojson(c.geom) :: json AS geom,
-    st_asgeojson(st_centroid(c.geom)):: json AS centroid,
-    -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
-    CASE
-        WHEN min(c.timestamp) IS NULL THEN NULL
-        ELSE json_agg(
-            json_build_object(
-                'timestamp',
-                c.timestamp,
-                'cases',
-                c.cases,
-                'cases_per_population',
-                c.cases_per_population,
-                'cases_per_100k',
-                c.cases_per_100k,
-                'population',
-                c.population,
-                'deaths',
-                c.deaths,
-                'death_rate',
-                c.death_rate,
-                'cases7_per_100k',
-                c.cases7_per_100k
-            )
-            ORDER BY
-                c.timestamp
-        )
-    END AS development,
-    CASE
-    WHEN min(c.timestamp) IS NULL THEN NULL
-    ELSE json_object_agg(
-        c.timestamp::date,
-        json_build_object(
-            'timestamp',
-            c.timestamp,
-            'cases',
-            c.cases,
-            'cases_per_population',
-            c.cases_per_population,
-            'cases_per_100k',
-            c.cases_per_100k,
-            'population',
-            c.population,
-            'deaths',
-            c.deaths,
-            'death_rate',
-            c.death_rate,
-            'cases7_per_100k',
-            c.cases7_per_100k
-        )
-        ORDER BY
-            c.timestamp
-    )
-END AS developmentDays
-FROM
-    cases_per_county_and_day c
-GROUP BY
-    c.ids,
-    c.name,
-    c."desc",
-    c.geom
-    """)
-
-    sql_result = db.engine.execute(sql_stmt).fetchall()
-
-    features = []
-    for r in sql_result:
-        feature = {
-            "type": 'Feature',
-            "geometry": r[3],
-            "properties": {
-                "id": r[0],
-                "name": r[1],
-                "description": r[2],
-                "centroid": r[4],
-                "developments": r[5],
-                "developmentDays": r[6]
-            }
-        }
-
-        features.append(feature)
-
-    featurecollection = {"type": "FeatureCollection", "features": features}
-
-    return jsonify(featurecollection), 200
-
+    return cd.getByCounties(request.args.get('from'), request.args.get('to'))
 
 
 @routes.route('/development/regierungsbezirke', methods=['GET'])
-@cache.cached()
+@cache.cached(key_prefix = make_cache_key)
+@timer
 def get_cases_development_by_districts():
-    """
-        Return the development of covid cases and deaths
-        by districts
-    """
-    sql_stmt = text("""
-WITH rb_agg AS (
-         SELECT r.ids,
-                r.name,
-                c.timestamp,
-                string_agg(DISTINCT c.name, ',') AS landkreise,
-                r.geom,
-                SUM(cases)                                          as cases,
-                SUM(cases_per_100k)                                 as cases_per_100k,
-                AVG(cases_per_population)                           as cases_per_population,
-                SUM(population)                                     as population,
-                SUM(deaths)                                         as deaths,
-                AVG(death_rate)                                     as death_rate,
-                AVG(cases7_per_100k)                                as cases7_per_100k
-
-         FROM cases_per_county_and_day c
-                  LEFT OUTER JOIN regierungsbezirke r ON c.ids LIKE (r.ids || '%')
-         GROUP BY r.ids,
-                  r.name,
-                  r.geom,
-                  c.timestamp
-     )
-SELECT rb_agg.ids,
-       rb_agg.name,
-       st_asgeojson(rb_agg.geom) :: json             AS geom,
-       st_asgeojson(st_centroid(rb_agg.geom)):: json AS centroid,
-       -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
-       CASE
-           WHEN min(rb_agg.timestamp) IS NULL THEN NULL
-           ELSE json_agg(
-                   json_build_object(
-                           'timestamp',
-                           rb_agg.timestamp,
-                           'cases',
-                           rb_agg.cases,
-                           'cases_per_population',
-                           rb_agg.cases_per_population,
-                           'cases_per_100k',
-                           rb_agg.cases_per_100k,
-                           'population',
-                           rb_agg.population,
-                           'deaths',
-                           rb_agg.deaths,
-                           'death_rate',
-                           rb_agg.death_rate,
-                            'cases7_per_100k',
-                            rb_agg.cases7_per_100k
-                       )
-                   ORDER BY
-                       rb_agg.timestamp
-               )
-           END                                       AS development,
-       CASE
-           WHEN min(rb_agg.timestamp) IS NULL THEN NULL
-           ELSE json_object_agg(
-                   rb_agg.timestamp::date,
-                   json_build_object(
-                           'timestamp',
-                           rb_agg.timestamp,
-                           'cases',
-                           rb_agg.cases,
-                           'cases_per_population',
-                           rb_agg.cases_per_population,
-                           'cases_per_100k',
-                           rb_agg.cases_per_100k,
-                           'population',
-                           rb_agg.population,
-                           'deaths',
-                           rb_agg.deaths,
-                           'death_rate',
-                           rb_agg.death_rate,
-                            'cases7_per_100k',
-                            rb_agg.cases7_per_100k
-                       )
-                   ORDER BY
-                       rb_agg.timestamp
-               )
-           END                                       AS developmentDays
-FROM rb_agg
-GROUP BY rb_agg.ids,
-         rb_agg.name,
-         rb_agg.geom
-    """)
-
-    sql_result = db.engine.execute(sql_stmt).fetchall()
-
-    features = []
-    for r in sql_result:
-        feature = {
-            "type": 'Feature',
-            "geometry": r[2],
-            "properties": {
-                "id": r[0],
-                "name": r[1],
-                "centroid": r[3],
-                "developments": r[4],
-                "developmentDays": r[5]
-            }
-        }
-
-        features.append(feature)
-
-    featurecollection = {"type": "FeatureCollection", "features": features}
-
-    return jsonify(featurecollection), 200
-
+    return cd.getByDistricts(request.args.get('from'), request.args.get('to'))
 
 
 @routes.route('/development/bundeslaender', methods=['GET'])
-@cache.cached()
+@cache.cached(key_prefix = make_cache_key)
+@timer
 def get_cases_development_by_states():
-    """
-        Return the development of covid cases and deaths
-        by states
-    """
-    sql_stmt = text("""
-WITH bl_agg AS (
-         SELECT b.ids,
-                b.name,
-                c.timestamp,
-                string_agg(DISTINCT c.name, ',') AS landkreise,
-                b.geom,
-                SUM(cases)                                          as cases,
-                SUM(cases_per_100k)                                 as cases_per_100k,
-                AVG(cases_per_population)                           as cases_per_population,
-                SUM(population)                                     as population,
-                SUM(deaths)                                         as deaths,
-                AVG(death_rate)                                     as death_rate,
-                AVG(cases7_per_100k)                                as cases7_per_100k
-
-         FROM cases_per_county_and_day c
-                  LEFT OUTER JOIN bundeslaender b ON c.ids LIKE (b.ids || '%')
-         GROUP BY b.ids,
-                  b.name,
-                  b.geom,
-                  c.timestamp
-     )
-SELECT bl_agg.ids,
-       bl_agg.name,
-       st_asgeojson(bl_agg.geom) :: json             AS geom,
-       st_asgeojson(st_centroid(bl_agg.geom)):: json AS centroid,
-       -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
-       CASE
-           WHEN min(bl_agg.timestamp) IS NULL THEN NULL
-           ELSE json_agg(
-                   json_build_object(
-                           'timestamp',
-                           bl_agg.timestamp,
-                           'cases',
-                           bl_agg.cases,
-                           'cases_per_population',
-                           bl_agg.cases_per_population,
-                           'cases_per_100k',
-                           bl_agg.cases_per_100k,
-                           'population',
-                           bl_agg.population,
-                           'deaths',
-                           bl_agg.deaths,
-                           'death_rate',
-                           bl_agg.death_rate,
-                            'cases7_per_100k',
-                            bl_agg.cases7_per_100k
-                       )
-                   ORDER BY
-                       bl_agg.timestamp
-               )
-           END                                       AS development,
-       CASE
-           WHEN min(bl_agg.timestamp) IS NULL THEN NULL
-           ELSE json_object_agg(
-                   bl_agg.timestamp::date,
-                   json_build_object(
-                           'timestamp',
-                           bl_agg.timestamp,
-                           'cases',
-                           bl_agg.cases,
-                           'cases_per_population',
-                           bl_agg.cases_per_population,
-                           'cases_per_100k',
-                           bl_agg.cases_per_100k,
-                           'population',
-                           bl_agg.population,
-                           'deaths',
-                           bl_agg.deaths,
-                           'death_rate',
-                           bl_agg.death_rate,
-                            'cases7_per_100k',
-                            bl_agg.cases7_per_100k
-                       )
-                   ORDER BY
-                       bl_agg.timestamp
-               )
-           END                                       AS developmentDays
-FROM bl_agg
-GROUP BY bl_agg.ids,
-         bl_agg.name,
-         bl_agg.geom
-    """)
-
-    sql_result = db.engine.execute(sql_stmt).fetchall()
-
-    features = []
-    for r in sql_result:
-        feature = {
-            "type": 'Feature',
-            "geometry": r[2],
-            "properties": {
-                "id": r[0],
-                "name": r[1],
-                "centroid": r[3],
-                "developments": r[4],
-                "developmentDays": r[5]
-            }
-        }
-
-        features.append(feature)
-
-    featurecollection = {"type": "FeatureCollection", "features": features}
-
-    return jsonify(featurecollection), 200
+    return cd.getByStates(request.args.get('from'), request.args.get('to'))
 
 
 @routes.route('/development/laender', methods=['GET'])
-@cache.cached()
+@cache.cached(key_prefix = make_cache_key)
+@timer
 def get_cases_development_by_countries():
-    """
-        Return the development of covid cases and deaths
-        by countries
-    """
-    sql_stmt = text("""
-WITH bl_agg AS (
-         SELECT g.ids,
-                g.name,
-                c.timestamp,
-                string_agg(DISTINCT c.name, ',') AS landkreise,
-                g.geom,
-                SUM(cases)                                          as cases,
-                SUM(cases_per_100k)                                 as cases_per_100k,
-                AVG(cases_per_population)                           as cases_per_population,
-                SUM(population)                                     as population,
-                SUM(deaths)                                         as deaths,
-                AVG(death_rate)                                     as death_rate,
-                AVG(cases7_per_100k)                                as cases7_per_100k
+    return cd.getByCountries(request.args.get('from'), request.args.get('to'))
 
-         FROM cases_per_county_and_day c
-         CROSS JOIN germany g
-         GROUP BY g.ids,
-                  g.name,
-                  g.geom,
-                  c.timestamp
-     )
-SELECT bl_agg.ids,
-       bl_agg.name,
-       st_asgeojson(bl_agg.geom) :: json             AS geom,
-       st_asgeojson(st_centroid(bl_agg.geom)):: json AS centroid,
-       -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
-       CASE
-           WHEN min(bl_agg.timestamp) IS NULL THEN NULL
-           ELSE json_agg(
-                   json_build_object(
-                           'timestamp',
-                           bl_agg.timestamp,
-                           'cases',
-                           bl_agg.cases,
-                           'cases_per_population',
-                           bl_agg.cases_per_population,
-                           'cases_per_100k',
-                           bl_agg.cases_per_100k,
-                           'population',
-                           bl_agg.population,
-                           'deaths',
-                           bl_agg.deaths,
-                           'death_rate',
-                           bl_agg.death_rate,
-                            'cases7_per_100k',
-                            bl_agg.cases7_per_100k
-                       )
-                   ORDER BY
-                       bl_agg.timestamp
-               )
-           END                                       AS development,
-       CASE
-           WHEN min(bl_agg.timestamp) IS NULL THEN NULL
-           ELSE json_object_agg(
-                   bl_agg.timestamp::date,
-                   json_build_object(
-                           'timestamp',
-                           bl_agg.timestamp,
-                           'cases',
-                           bl_agg.cases,
-                           'cases_per_population',
-                           bl_agg.cases_per_population,
-                           'cases_per_100k',
-                           bl_agg.cases_per_100k,
-                           'population',
-                           bl_agg.population,
-                           'deaths',
-                           bl_agg.deaths,
-                           'death_rate',
-                           bl_agg.death_rate,
-                            'cases7_per_100k',
-                            bl_agg.cases7_per_100k
-                       )
-                   ORDER BY
-                       bl_agg.timestamp
-               )
-           END                                       AS developmentDays
-FROM bl_agg
-GROUP BY bl_agg.ids,
-         bl_agg.name,
-         bl_agg.geom
-    """)
 
-    sql_result = db.engine.execute(sql_stmt).fetchall()
+@routes.route('/development/landkreis/<idCounty>', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_county(idCounty):
+    return cd.getCounty(request.args.get('from'), request.args.get('to'), idCounty)
 
-    features = []
-    for r in sql_result:
-        feature = {
-            "type": 'Feature',
-            "geometry": r[2],
-            "properties": {
-                "id": r[0],
-                "name": r[1],
-                "centroid": r[3],
-                "developments": r[4],
-                "developmentDays": r[5]
-            }
-        }
 
-        features.append(feature)
+@routes.route('/development/regierungsbezirk/<idDistrict>', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_district(idDistrict):
+    return cd.getDistrict(request.args.get('from'), request.args.get('to'), idDistrict)
 
-    featurecollection = {"type": "FeatureCollection", "features": features}
 
-    return jsonify(featurecollection), 200
+@routes.route('/development/bundesland/<idState>', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_state(idState):
+    return cd.getState(request.args.get('from'), request.args.get('to'), idState)
+
+
+@routes.route('/development/land/<idCountry>', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_country(idCountry):
+    return cd.getCountry(request.args.get('from'), request.args.get('to'), idCountry)
