@@ -1257,6 +1257,13 @@
       <segment state="final">
         <source>Die Daten werden von Freiwilligen in einer öffentlich zugänglichen Tabelle gesammelt (crowdsourcing) sobald die Landkreise bzw. Gesundheitsämter die Daten veröffentlichen. Falls noch keine aktuellen Daten vorliegen werden die Daten vom vorherigen Tag verwendet.</source>
       <target>Die Daten werden von Freiwilligen in einer öffentlich zugänglichen Tabelle gesammelt (crowdsourcing) sobald die Landkreise bzw. Gesundheitsämter die Daten veröffentlichen. Falls noch keine aktuellen Daten vorliegen werden die Daten vom vorherigen Tag verwendet.</target></segment>
+    </unit><unit id="infoboxNextUpdate">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:198</note>
+      </notes>
+      <segment state="final">
+        <source>Nächste Aktualisierung: </source>
+      <target>Nächste Aktualisierung: </target></segment>
     </unit><unit id="infoboxCaseViewShow">
       <notes>
 

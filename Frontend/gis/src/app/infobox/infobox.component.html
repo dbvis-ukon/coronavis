@@ -195,7 +195,7 @@
         </p>
 
         <p class="stats flex" *ngIf="mo.covidNumberCaseOptions.dataSource === 'risklayer'">
-          <span>Nächste Aktualisierung: </span>
+          <span i18n="@@infoboxNextUpdate">Nächste Aktualisierung: </span>
           <mat-spinner diameter="20" strokeWidth="3" mode="determinate" [value]="nextLiveUpdatePercentage" class="small"></mat-spinner>
           {{ nextLiveUpdate }}
         </p>

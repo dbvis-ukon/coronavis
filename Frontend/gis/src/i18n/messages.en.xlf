@@ -651,8 +651,7 @@
       <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> am
       <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">KIT</pc> und durch die
       <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer-CEDIM-Tagesspiegel
-      SARS-CoV-2 Crowdsourcing Contributors</pc> ermöglicht.
-      
+        SARS-CoV-2 Crowdsourcing Contributors</pc> ermöglicht.
     </source>
       <target>
       The Live View is maintained and enabled by <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and the
@@ -1244,6 +1243,13 @@
       <segment state="initial">
         <source>Die Daten werden von Freiwilligen in einer öffentlich zugänglichen Tabelle gesammelt (crowdsourcing) sobald die Landkreise bzw. Gesundheitsämter die Daten veröffentlichen. Falls noch keine aktuellen Daten vorliegen werden die Daten vom vorherigen Tag verwendet.</source>
       <target>The data is collected by volunteers in a publicly accessible table (crowdsourcing) as soon as the districts or health authorities publish the data. If no current data is available, the data from the previous day is used.</target></segment>
+    </unit><unit id="infoboxNextUpdate">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:198</note>
+      </notes>
+      <segment state="initial">
+        <source>Nächste Aktualisierung: </source>
+      <target>Next Update: </target></segment>
     </unit><unit id="infoboxCaseViewShow">
       <notes>
 
