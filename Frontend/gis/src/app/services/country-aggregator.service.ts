@@ -25,7 +25,7 @@ export class CountryAggregatorService {
   }
 
   public rkiAggregationForCountry(dataSource: 'rki' | 'risklayer', refDate: string): Observable<RKICaseTimedStatus | undefined> {
-    const from = getStrDate(getMoment(refDate));
+    const from = getStrDate(getMoment(refDate).subtract(1, 'day'));
     const to = getStrDate(getMoment(refDate).add(1, 'day'));
 
     return this.caseRepository.getCasesDevelopmentForAggLevel(dataSource, AggregationLevel.country, from, to)
