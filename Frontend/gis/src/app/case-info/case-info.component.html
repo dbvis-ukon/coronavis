@@ -4,15 +4,15 @@
     <thead>
     <tr>
         <th></th>
-        <th i18n="case-tooltip|cases@@cases">Fälle Total</th>
-        <th colspan="6" i18n="case-tooltip|changes@@changes">Veränderung</th>
+        <th i18n="case-tooltip|cases@@cases" colspan="2">Fälle Total</th>
+        <th colspan="9" i18n="case-tooltip|changes@@changes">Veränderung</th>
     </tr>
     <tr>
         <th></th>
-        <th>{{ this.curTimedStatus.last_updated || this.curTimedStatus.timestamp | date:"d.M.y HH:mm" }}</th>
-        <th colspan="2" i18n="case-tooltip|24h@@24h">letzte 24h</th>
-        <th colspan="2" i18n="case-tooltip|72h@@72h">letzte 72h</th>
-        <th colspan="2" i18n="case-tooltip|7d@@7d">letzte 7t</th>
+        <th colspan="2">{{ this.curTimedStatus.last_updated || this.curTimedStatus.timestamp | date:"d.M.y HH:mm" }}</th>
+        <th colspan="3" i18n="case-tooltip|24h@@24h" *ngIf="!tooltip">letzte 24h</th>
+        <th colspan="3" i18n="case-tooltip|72h@@72h" *ngIf="!tooltip">letzte 72h</th>
+        <th colspan="3" i18n="case-tooltip|7d@@7d">letzte 7t</th>
     </tr>
     </thead>
     <tbody>
@@ -25,28 +25,55 @@
                 {{ this.curTimedStatus.cases | number }}
             </div>
         </td>
+
         <td>
+            <div 
+            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.all, eChange.absolute)}"
+            >
+                ({{ this.getCasesPer100kInhabitants(this.curTimedStatus.cases, this.curTimedStatus) }}/100k)
+            </div>
+        </td>
+
+        <td *ngIf="!tooltip">
             <div *ngIf="this.twentyFourHTimedStatus"
             [ngClass]="{'active': isActive(eType.cases, eNorm.absolut, eTime.twentyFourhours, eChange.absolute)}"
             >
                 {{ this.curTimedStatus.cases - this.twentyFourHTimedStatus.cases | plusminus }}
             </div>
         </td>
-        <td>
+
+        <td *ngIf="!tooltip">
+            <div *ngIf="this.twentyFourHTimedStatus"
+            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.twentyFourhours, eChange.absolute)}"
+            >
+                ({{ this.getCasesPer100kInhabitants(this.curTimedStatus.cases - this.twentyFourHTimedStatus.cases, this.curTimedStatus, true) }}/100k)
+            </div>
+        </td>
+
+        <td *ngIf="!tooltip">
             <div *ngIf="this.twentyFourHTimedStatus"
             [ngClass]="{'active': isActive(eType.cases, eNorm.absolut, eTime.twentyFourhours, eChange.relative)}"
             >
                 ({{ this.getPercentageChange(this.curTimedStatus.cases, this.twentyFourHTimedStatus.cases)}})
             </div>
         </td>
-        <td>
+        <td *ngIf="!tooltip">
             <div *ngIf="this.seventyTwoHTimedStatus"
             [ngClass]="{'active': isActive(eType.cases, eNorm.absolut, eTime.seventyTwoHours, eChange.absolute)}"
             >
                 {{ this.curTimedStatus.cases - this.seventyTwoHTimedStatus.cases | plusminus }}
             </div>
         </td>
-        <td>
+
+        <td *ngIf="!tooltip">
+            <div *ngIf="this.seventyTwoHTimedStatus"
+            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.seventyTwoHours, eChange.absolute)}"
+            >
+                ({{ this.getCasesPer100kInhabitants(this.curTimedStatus.cases - this.seventyTwoHTimedStatus.cases, this.curTimedStatus, true) }}/100k)
+            </div>
+        </td>
+
+        <td *ngIf="!tooltip">
             <div *ngIf="this.seventyTwoHTimedStatus"
             [ngClass]="{'active': isActive(eType.cases, eNorm.absolut, eTime.seventyTwoHours, eChange.relative)}"
             >
@@ -60,6 +87,15 @@
                 {{ this.curTimedStatus.cases - this.sevenDaysTimedStatus.cases | plusminus }}
             </div>
         </td>
+
+        <td>
+            <div *ngIf="this.sevenDaysTimedStatus"
+            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.sevenDays, eChange.absolute)}"
+            >
+                ({{ this.getCasesPer100kInhabitants(this.curTimedStatus.cases7_per_100k ? (curTimedStatus.cases7_per_100k / 100000) * curTimedStatus.population : (curTimedStatus.cases - this.sevenDaysTimedStatus.cases), this.curTimedStatus, true) }}/100k)
+            </div>
+        </td>
+
         <td>
             <div *ngIf="this.sevenDaysTimedStatus"
             [ngClass]="{'active': isActive(eType.cases, eNorm.absolut, eTime.sevenDays, eChange.relative)}"
@@ -77,28 +113,55 @@
                 {{ this.curTimedStatus.deaths | number }}
             </div>
         </td>
+
         <td>
+            <div
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.all, eChange.absolute)}"
+            >
+                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.deaths, this.curTimedStatus) }}
+            </div>
+        </td>
+
+        <td *ngIf="!tooltip">
             <div *ngIf="this.twentyFourHTimedStatus"
             [ngClass]="{'active': isActive(eType.deaths, eNorm.absolut, eTime.twentyFourhours, eChange.absolute)}"
             >
                 {{ this.curTimedStatus.deaths - this.twentyFourHTimedStatus.deaths | plusminus }}
             </div>
         </td>
-        <td>
+
+        <td *ngIf="!tooltip">
+            <div *ngIf="this.twentyFourHTimedStatus"
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.twentyFourhours, eChange.absolute)}"
+            >
+                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.deaths - this.twentyFourHTimedStatus.deaths, this.curTimedStatus, true) }}
+            </div>
+        </td>
+
+        <td *ngIf="!tooltip">
             <div *ngIf="this.twentyFourHTimedStatus"
             [ngClass]="{'active': isActive(eType.deaths, eNorm.absolut, eTime.twentyFourhours, eChange.relative)}"
             >
                 ({{ this.getPercentageChange(this.curTimedStatus.deaths, this.twentyFourHTimedStatus.deaths)}})
             </div>
         </td>
-        <td>
+        <td *ngIf="!tooltip">
             <div *ngIf="this.seventyTwoHTimedStatus"
             [ngClass]="{'active': isActive(eType.deaths, eNorm.absolut, eTime.seventyTwoHours, eChange.absolute)}"
             >
                 {{ this.curTimedStatus.deaths - this.seventyTwoHTimedStatus.deaths | plusminus }}
             </div>
         </td>
-        <td>
+
+        <td *ngIf="!tooltip">
+            <div *ngIf="this.seventyTwoHTimedStatus"
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.seventyTwoHours, eChange.absolute)}"
+            >
+                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.deaths - this.seventyTwoHTimedStatus.deaths, this.curTimedStatus, true) }}
+            </div>
+        </td>
+
+        <td *ngIf="!tooltip">
             <div *ngIf="this.seventyTwoHTimedStatus"
             [ngClass]="{'active': isActive(eType.deaths, eNorm.absolut, eTime.seventyTwoHours, eChange.relative)}"
             >
@@ -112,6 +175,15 @@
                 {{ this.curTimedStatus.deaths - this.sevenDaysTimedStatus.deaths | plusminus }}
             </div>
         </td>
+
+        <td>
+            <div *ngIf="this.sevenDaysTimedStatus"
+            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.sevenDays, eChange.absolute)}"
+            >
+                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.deaths - this.sevenDaysTimedStatus.deaths, this.curTimedStatus, true) }}
+            </div>
+        </td>
+
         <td>
             <div *ngIf="this.sevenDaysTimedStatus"
             [ngClass]="{'active': isActive(eType.deaths, eNorm.absolut, eTime.sevenDays, eChange.relative)}"
@@ -120,114 +192,16 @@
             </div>
         </td>
     </tr>
-    <tr>
-        <td i18n="case-tooltip|sickScale@@sickScale">Positiv Getestet je 100.000 Einwohner</td>
-        <td>
-            <div 
-            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.all, eChange.absolute)}"
-            >
-                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.cases, this.curTimedStatus) }}
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.twentyFourHTimedStatus"
-            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.twentyFourhours, eChange.absolute)}"
-            >
-                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.cases - this.twentyFourHTimedStatus.cases, this.curTimedStatus, true) }}
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.twentyFourHTimedStatus"
-            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.twentyFourhours, eChange.relative)}"
-            >
-                ({{ this.getPercentageChange(this.curTimedStatus.cases, this.twentyFourHTimedStatus.cases)}})
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.seventyTwoHTimedStatus"
-            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.seventyTwoHours, eChange.absolute)}"
-            >
-                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.cases - this.seventyTwoHTimedStatus.cases, this.curTimedStatus, true) }}
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.seventyTwoHTimedStatus"
-            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.seventyTwoHours, eChange.relative)}"
-            >
-                ({{ this.getPercentageChange(this.curTimedStatus.cases, this.seventyTwoHTimedStatus.cases)}})
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.sevenDaysTimedStatus"
-            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.sevenDays, eChange.absolute)}"
-            >
-                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.cases7_per_100k ? (curTimedStatus.cases7_per_100k / 100000) * curTimedStatus.population : (curTimedStatus.cases - this.sevenDaysTimedStatus.cases), this.curTimedStatus, true) }}
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.sevenDaysTimedStatus"
-            [ngClass]="{'active': isActive(eType.cases, eNorm.per100k, eTime.sevenDays, eChange.relative)}"
-            >
-                ({{ this.getPercentageChange(this.curTimedStatus.cases, this.sevenDaysTimedStatus.cases)}})
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td i18n="case-tooltip|deathScale@@deathScale">Todesfälle je 100.000 Einwohner</td>
-        <td>
-            <div
-            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.all, eChange.absolute)}"
-            >
-                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.deaths, this.curTimedStatus) }}
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.twentyFourHTimedStatus"
-            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.twentyFourhours, eChange.absolute)}"
-            >
-                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.deaths - this.twentyFourHTimedStatus.deaths, this.curTimedStatus, true) }}
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.twentyFourHTimedStatus"
-            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.twentyFourhours, eChange.relative)}"
-            >
-                ({{ this.getPercentageChange(this.curTimedStatus.deaths, this.twentyFourHTimedStatus.deaths)}})
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.seventyTwoHTimedStatus"
-            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.seventyTwoHours, eChange.absolute)}"
-            >
-                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.deaths - this.seventyTwoHTimedStatus.deaths, this.curTimedStatus, true) }}
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.seventyTwoHTimedStatus"
-            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.seventyTwoHours, eChange.relative)}"
-            >
-                ({{ this.getPercentageChange(this.curTimedStatus.deaths, this.seventyTwoHTimedStatus.deaths)}})
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.sevenDaysTimedStatus"
-            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.sevenDays, eChange.absolute)}"
-            >
-                {{ this.getCasesPer100kInhabitants(this.curTimedStatus.deaths - this.sevenDaysTimedStatus.deaths, this.curTimedStatus, true) }}
-            </div>
-        </td>
-        <td>
-            <div *ngIf="this.sevenDaysTimedStatus"
-            [ngClass]="{'active': isActive(eType.deaths, eNorm.per100k, eTime.sevenDays, eChange.relative)}"
-            >
-                ({{ this.getPercentageChange(this.curTimedStatus.deaths, this.sevenDaysTimedStatus.deaths)}})
-            </div>
-        </td>
-    </tr>
+    
+    
     </tbody>
 </table>
 
-<div class="trend-wrapper">
+<h5 class="moreinfo" *ngIf="tooltip" i18n="@@clickForMoreInformation">
+    Klicken Sie um mehr Informationen zu erhalten.
+</h5>
+
+<div class="trend-wrapper" *ngIf="!tooltip">
     <div *ngIf="rollingChart | async; let chart; else elseBlock">
         <app-vega [spec]="chart"></app-vega>
     </div>

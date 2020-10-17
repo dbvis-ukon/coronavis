@@ -1,7 +1,7 @@
 <div #main class="main">
-  <h3>{{ this.data.description ? this.data.description + ' ' : '' }}{{ this.data.name }}</h3>
-  <span *ngIf="this.currentTimedStatus">{{ this.currentTimedStatus?.population | number }} <span i18n="case-tooltip|cases@@residents">Einwohner</span></span>
+  <h3 style="margin-bottom: 5px;">{{ this.data.description ? this.data.description + ' ' : '' }}{{ this.data.name }}</h3>
+  <span *ngIf="this.currentTimedStatus" style="font-size:11px;">{{ this.currentTimedStatus?.population | number }} <span i18n="case-tooltip|cases@@residents">Einwohner</span></span>
   <mat-divider></mat-divider>
 
-  <app-case-info [data]="data" [options]="options"></app-case-info>
+  <app-case-info [data]="data" [options]="options" [tooltip]="true"></app-case-info>
 </div>

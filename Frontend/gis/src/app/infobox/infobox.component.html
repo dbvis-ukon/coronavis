@@ -182,7 +182,7 @@
         <p class="stats" i18n="@@infoboxNumberOfCovidDeaths">{{ c.rki?.deaths | number }} bundesweit gemeldete Covid-19 Todesfälle</p>
 
         <p class="stats" *ngIf="mo.covidNumberCaseOptions.dataSource === 'risklayer' && mo.covidNumberCaseOptions.aggregationLevel === eAggregationLevels.county">
-          <span i18n="@@infoboxCountiesAvailable">Daten von {{ c.casesCountiesAvailable }}/{{ c.casesCountiesTotal }} Landkreisen verfügbar</span>
+          <span i18n="@@infoboxCountiesAvailable">Daten von {{ c.casesCountiesAvailable }}/{{ c.casesCountiesTotal }} Landkreisen verfügbar </span>
           <mat-icon
             style="vertical-align: middle;"
             i18n-matTooltip="@@tooltipNumberOfCounties"

@@ -23,6 +23,9 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
   @Input()
   public options: CovidNumberCaseOptions;
 
+  @Input()
+  public tooltip: boolean;
+
 
   eChange = CovidNumberCaseChange;
 
@@ -53,6 +56,10 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit(): void {
+    if (this.tooltip) {
+      return;
+    }
+
     setTimeout(() => {
       this.rollingChart = this.caseRepo.getCasesDevelopmentForAggLevelSingle(
         this.options.dataSource,

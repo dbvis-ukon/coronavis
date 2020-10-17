@@ -70,39 +70,32 @@
         <note category="description">deaths</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:72</note></notes>
+      <note category="location">src/app/case-info/case-info.component.html:108</note></notes>
       <segment state="final">
         <source>Todesfälle</source>
       <target>Todesfälle</target></segment>
-    </unit><unit id="sickScale">
+    </unit><unit id="clickForMoreInformation">
       <notes>
-        <note category="description">sickScale</note>
-        <note category="meaning">case-tooltip</note>
-        
-      <note category="location">src/app/case-info/case-info.component.html:124</note></notes>
+        <note category="location">src/app/case-info/case-info.component.html:200,202</note>
+      </notes>
       <segment state="final">
-        <source>Positiv Getestet je 100.000 Einwohner</source>
-      <target>Positiv Getestet je 100.000 Einwohner</target></segment>
-    </unit><unit id="deathScale">
-      <notes>
-        <note category="description">deathScale</note>
-        <note category="meaning">case-tooltip</note>
-        
-      <note category="location">src/app/case-info/case-info.component.html:176</note></notes>
-      <segment state="final">
-        <source>Todesfälle je 100.000 Einwohner</source>
-      <target>Todesfälle je 100.000 Einwohner</target></segment>
+        <source>
+    Klicken Sie um mehr Informationen zu erhalten.
+</source>
+      <target>
+    Klicken Sie um mehr Informationen zu erhalten.
+</target></segment>
     </unit><unit id="caseInfoTrendLastThreeDays">
       <notes>
         
-      <note category="location">src/app/case-info/case-info.component.html:241</note></notes>
+      <note category="location">src/app/case-info/case-info.component.html:215</note></notes>
       <segment state="final">
         <source>Trend der letzten <ph id="0" equiv="INTERPOLATION" disp="{{ options.daysForTrend }}"/> Tage</source>
       <target>Trend der letzten <ph id="0" equiv="INTERPOLATION" disp="{{ options.daysForTrend }}"/> Tage</target></segment>
     </unit><unit id="caseInfoTrendPerDay">
       <notes>
         
-      <note category="location">src/app/case-info/case-info.component.html:245</note></notes>
+      <note category="location">src/app/case-info/case-info.component.html:219</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> pro Tag</source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> pro Tag</target></segment>
