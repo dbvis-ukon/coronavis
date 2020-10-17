@@ -10,7 +10,7 @@
     <div *ngIf="legendCasesExtended">
     <table>
 
-      <tr *ngFor="let b of caseBins$ | async">
+      <tr *ngFor="let b of caseBins$ | async" [ngClass]="{'selected': isBinSelected(b)}" (mouseenter)="hoverBin(b)" (mouseout)="hoverBin()" (click)="selectBin(b)" class="bin">
 
         <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
 
@@ -25,6 +25,9 @@
         </td>
       </tr>
     </table>
+
+    <p i18n="@@clearSelection" class="clear-selection" *ngIf="currentOptions?.covidNumberCaseOptions?._binSelection?.length > 0" (click)="clearSelection()">Selektion aufheben</p>
+
     </div>
         
     <div *ngIf="!legendCasesExtended">
@@ -36,7 +39,15 @@
     </div>
 
     <div>
-      <h5 class="source" i18n="@@legendDatasourceRki">Datenquelle: <a href="https://rki.de">Robert Koch Institut</a></h5>
+      <h5 *ngIf="(mo$ | async)?.covidNumberCaseOptions.dataSource === 'rki'; else elseBlockDatSource" class="source" i18n="@@legendDatasourceRki">Datenquelle: <a href="https://rki.de">Robert Koch Institut</a></h5>
+      <ng-template #elseBlockDatSource>
+        <h5 class="source" i18n="@@legendDatasourceRisklayer">Datenquelle: 
+          <a href="http://risklayer.com/">Risklayer GmbH</a> and 
+          <a href="https://www.cedim.kit.edu/" matTooltip="Center for Disaster Management and Risk Reduction Technology">CEDIM</a> at 
+          <a href="https://www.kit.edu/" matTooltip="Karlsruhe Institute of Technology">KIT</a> and the 
+          <a href="https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</a>
+        </h5>
+      </ng-template>
     </div>
 </div>
 

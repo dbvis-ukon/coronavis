@@ -12,6 +12,10 @@ export class CachedRepository {
 
   constructor(private http: HttpClient) {}
 
+  empty() {
+    this.cache.clear();
+  }
+
   get<T>(url: string, params?: HttpParams): Observable<T> {
 
     const key = url + '?' + (params?.toString() || '');

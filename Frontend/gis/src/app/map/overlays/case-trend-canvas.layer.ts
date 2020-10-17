@@ -88,6 +88,23 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
   }
 
   protected drawLabel(glyphData: Feature < MultiPolygon, RKICaseDevelopmentProperties > ) {
+    const opt = this.options$.value;
+    if (this.caseUtil.isLockdownMode(opt) && opt.dataSource === 'risklayer' && opt.showOnlyAvailableCounties === true ) {
+      const status = this.caseUtil.getTimedStatusWithOptions(glyphData.properties, this.options$.value) as StatusWithCache;
+      if (!status.last_updated) {
+        return;
+      }
+    }
+
+    const nmbr = this.caseUtil.getCaseNumbers(glyphData.properties, opt);
+    if (opt._binHovered && (opt._binHovered[0] > nmbr || opt._binHovered[1] <= nmbr)) {
+      return;
+    }
+
+    if (opt._binSelection && opt._binSelection.findIndex(d => d[0] <= nmbr && d[1] > nmbr) === -1) {
+      return;
+    }
+
     const pt = this.getGlyphPixelPos(glyphData);
 
     // let bounds = new Bounds(pt, new Point(pt.x + this.getGlyphWidth(), pt.y));

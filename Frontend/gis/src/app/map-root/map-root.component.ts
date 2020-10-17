@@ -112,7 +112,12 @@ export class MapRootComponent implements OnInit {
     this.mapLocationSettings$.next(newSettings);
   }
 
-  mapOptionsUpdated(newOptions: MapOptions) {
+  mapOptionsUpdated(newOptions: MapOptions, keepInteractions = false) {
+    if (!keepInteractions) {
+      newOptions.covidNumberCaseOptions._binHovered = null;
+      newOptions.covidNumberCaseOptions._binSelection = null;
+    }
+
     this.mapOptions = newOptions;
 
     this.mapOptions$.next(newOptions);
@@ -152,7 +157,15 @@ export class MapRootComponent implements OnInit {
 
     const urlSegments = this.route.snapshot.url;
     if ((urlSegments && urlSegments[0] && urlSegments[0].path === 'lockdown') || paramMap && paramMap.get('flavor') === 'lockdown') {
-      const lockdownMlo = this.configService.getLockDownMapOptions();
+
+      const lockdownMlo = this.configService.getLockDownMapOptions(false);
+
+      this.mapOptions = lockdownMlo;
+
+      this.mapOptions$.next(lockdownMlo);
+    } else if ((urlSegments && urlSegments[0] && urlSegments[0].path === 'lockdown-live') || paramMap && paramMap.get('flavor') === 'lockdown-live') {
+
+      const lockdownMlo = this.configService.getLockDownMapOptions(true);
 
       this.mapOptions = lockdownMlo;
 

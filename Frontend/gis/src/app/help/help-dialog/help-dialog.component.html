@@ -8,6 +8,7 @@
 <span class="hidden-placeholder" i18n='@@helpProjektLabel1' #label1>{isSmallScreen, select, true {Projekt} false {Das Projekt}}</span>
 <span class="hidden-placeholder" i18n='@@helpProjektLabel2' #label2>{isSmallScreen, select, true {Betten} false {Darstellung der Bettenkapazitäten}}</span>
 <span class="hidden-placeholder" i18n='@@helpProjektLabel3' #label3>{isSmallScreen, select, true {Fälle} false {Darstellung der Fallzahlen}}</span>
+<span class="hidden-placeholder" i18n='@@helpProjektLabel4' #label4>Live Ansicht</span>
 
 <div mat-dialog-content>
   <mat-tab-group #tabGroup >
@@ -30,6 +31,14 @@
       <app-help-dialog-cases></app-help-dialog-cases>
       <div fxLayout="row" fxLayout.xs="column"> 
         <button mat-button mat-stroked-button  (click)="tabGroup.selectedIndex=1" i18n="help| help@@button31">Zurück</button>
+        <button mat-button mat-raised-button color="primary" (click)="tabGroup.selectedIndex=3"  i18n="help| help@@buttonLiveView">{{ (isSmallScreen$ | async).matches ? 'Weiter' : 'Weiter zur Live Ansicht' }}</button>
+        <button mat-button mat-stroked-button (click)="close()"  i18n="help| help@@button32">Fenster schließen</button> 
+      </div>
+    </mat-tab>
+    <mat-tab [label]="label4.textContent">
+      <app-help-dialog-live-view></app-help-dialog-live-view>
+      <div fxLayout="row" fxLayout.xs="column"> 
+        <button mat-button mat-stroked-button  (click)="tabGroup.selectedIndex=2" i18n="help| help@@button31">Zurück</button>
         <button mat-button mat-raised-button color="primary" (click)="close()"  i18n="help| help@@button32">Fenster schließen</button> 
       </div>
     </mat-tab>

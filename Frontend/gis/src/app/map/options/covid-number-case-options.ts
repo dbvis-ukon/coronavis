@@ -39,6 +39,8 @@ export interface CovidNumberCaseOptions {
 
     date: string;
 
+    dataSource: 'rki' | 'risklayer';
+
     /**
      * The number of days used for the regression
      */
@@ -57,5 +59,17 @@ export interface CovidNumberCaseOptions {
     showLabels: boolean;
 
     showTrendGlyphs: boolean;
+
+    /**
+     * In the risk layer data there is data which has last_updated = null meaning
+     * that has not been updated today. This flag allows the user to only see the
+     * available counties. By default the numbers of yesterday are being shown.
+     */
+    showOnlyAvailableCounties: boolean;
+
+
+    _binHovered?: [number, number];
+
+    _binSelection?: [number, number][];
 
   }

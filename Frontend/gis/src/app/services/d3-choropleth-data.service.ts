@@ -5,12 +5,13 @@ import { map } from 'rxjs/operators';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { D3ChoroplethMapData } from '../overview/d3-choropleth-map/d3-choropleth-map.component';
+import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
-import { RKICaseDevelopmentRepository } from '../repositories/rki-case-development.repository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { CaseChoroplethColormapService } from './case-choropleth-colormap.service';
+import { CaseUtilService } from './case-util.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
 
 @Injectable({
@@ -20,9 +21,10 @@ export class D3ChoroplethDataService {
 
   constructor(
     private bedRepo: QualitativeDiviDevelopmentRepository,
-    private caseRepo: RKICaseDevelopmentRepository,
+    private caseRepo: CaseDevelopmentRepository,
     private bedColorMap: QualitativeColormapService,
-    private caseColorMap: CaseChoroplethColormapService
+    private caseColorMap: CaseChoroplethColormapService,
+    private caseUtil: CaseUtilService
   ) { }
 
 
@@ -44,7 +46,9 @@ export class D3ChoroplethDataService {
       );
     }
     else if (mo.covidNumberCaseOptions.enabled) {
-      return this.caseRepo.getCasesDevelopmentForAggLevel(mo.covidNumberCaseOptions.aggregationLevel)
+      const [from, to] = this.caseUtil.getFromToTupleFromOptions(mo.covidNumberCaseOptions);
+
+      return this.caseRepo.getCasesDevelopmentForAggLevel(mo.covidNumberCaseOptions.dataSource, mo.covidNumberCaseOptions.aggregationLevel, from, to)
       .pipe(
         map(d => {
           const scale = this.caseColorMap.getScale(d, mo.covidNumberCaseOptions);

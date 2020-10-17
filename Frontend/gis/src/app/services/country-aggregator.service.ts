@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
-import { RKICaseDevelopmentRepository } from '../repositories/rki-case-development.repository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
@@ -19,13 +19,16 @@ export class CountryAggregatorService {
 
   constructor(
     private diviDevelopmentRepository: QualitativeDiviDevelopmentRepository,
-    private rkiCaseRepository: RKICaseDevelopmentRepository,
+    private caseRepository: CaseDevelopmentRepository,
     private caseUtilService: CaseUtilService
   ) {
   }
 
-  public rkiAggregationForCountry(refDate: string): Observable<RKICaseTimedStatus | undefined> {
-    return this.rkiCaseRepository.getCasesDevelopmentForAggLevel(AggregationLevel.country)
+  public rkiAggregationForCountry(dataSource: 'rki' | 'risklayer', refDate: string): Observable<RKICaseTimedStatus | undefined> {
+    const from = getStrDate(getMoment(refDate).subtract(1, 'day'));
+    const to = getStrDate(getMoment(refDate).add(1, 'day'));
+
+    return this.caseRepository.getCasesDevelopmentForAggLevel(dataSource, AggregationLevel.country, from, to)
     .pipe(
       map(fc => this.caseUtilService.getTimedStatus(fc.features[0].properties, getMoment(refDate)))
     );
