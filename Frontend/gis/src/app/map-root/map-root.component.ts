@@ -115,6 +115,7 @@ export class MapRootComponent implements OnInit {
   mapOptionsUpdated(newOptions: MapOptions, keepInteractions = false) {
     if (!keepInteractions) {
       newOptions.covidNumberCaseOptions._binHovered = null;
+      newOptions.covidNumberCaseOptions._binSelection = null;
     }
 
     this.mapOptions = newOptions;

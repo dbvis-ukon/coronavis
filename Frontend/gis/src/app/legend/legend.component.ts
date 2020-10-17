@@ -159,7 +159,7 @@ export class LegendComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const b: [number, number] = bin ? [bin.originalMin || bin.min, bin.originalMax || bin.max] : null;
+    const b = this.getBinTuple(bin);
 
 
     if ((!this.currentOptions.covidNumberCaseOptions._binHovered && !b) || (b && this.currentOptions.covidNumberCaseOptions._binHovered && this.currentOptions.covidNumberCaseOptions._binHovered[0] === b[0] && this.currentOptions.covidNumberCaseOptions._binHovered[1] === b[1])) {
@@ -169,6 +169,54 @@ export class LegendComponent implements OnInit, OnDestroy {
     this.currentOptions.covidNumberCaseOptions._binHovered = b;
 
     this.mapOptionsChange.emit({... this.currentOptions});
+  }
+
+  selectBin(bin: LegendColorMapBin) {
+    if (!this.currentOptions) {
+      return;
+    }
+
+    const b = this.getBinTuple(bin);
+
+    const idx = this.getSelectionIdx(bin);
+
+    if (idx > -1) {
+      this.currentOptions.covidNumberCaseOptions._binSelection.splice(idx, 1);
+    } else {
+      if (!this.currentOptions.covidNumberCaseOptions._binSelection) {
+        this.currentOptions.covidNumberCaseOptions._binSelection = [];
+      }
+
+      this.currentOptions.covidNumberCaseOptions._binSelection.push(b);
+    }
+
+    this.currentOptions.covidNumberCaseOptions._binHovered = null;
+
+    this.mapOptionsChange.emit({... this.currentOptions});
+  }
+
+  getSelectionIdx(bin: LegendColorMapBin): number {
+    if (!this.currentOptions?.covidNumberCaseOptions?._binSelection) {
+      return -1;
+    }
+
+    const b = this.getBinTuple(bin);
+
+    return this.currentOptions.covidNumberCaseOptions._binSelection.findIndex(d => b[0] === d[0] && b[1] === d[1]);
+  }
+
+  isBinSelected(bin: LegendColorMapBin): boolean {
+    return this.getSelectionIdx(bin) > -1;
+  }
+
+  clearSelection() {
+    this.currentOptions.covidNumberCaseOptions._binSelection = null;
+
+    this.mapOptionsChange.emit({... this.currentOptions});
+  }
+
+  private getBinTuple(bin: LegendColorMapBin): [number, number] | null {
+    return bin ? [bin.originalMin || bin.min, bin.originalMax || bin.max] : null;
   }
 
   private getBinStr(v: number, mo: MapOptions): string {

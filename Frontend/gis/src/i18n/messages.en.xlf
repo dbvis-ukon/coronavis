@@ -1549,21 +1549,28 @@
       <notes>
         
         
-      <note category="location">src/app/legend/legend.component.html:7</note><note category="location">src/app/legend/legend.component.html:57</note></notes>
+      <note category="location">src/app/legend/legend.component.html:7</note><note category="location">src/app/legend/legend.component.html:60</note></notes>
       <segment state="initial">
         <source>Klicken um Legende ein-/auszuklappen</source>
       <target>Click to toggle legend</target></segment>
+    </unit><unit id="clearSelection">
+      <notes>
+        <note category="location">src/app/legend/legend.component.html:29</note>
+      </notes>
+      <segment state="initial">
+        <source>Selektion aufheben</source>
+      <target>Clear selection</target></segment>
     </unit><unit id="legendDatasourceRki">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:39</note></notes>
+      <note category="location">src/app/legend/legend.component.html:42</note></notes>
       <segment state="initial">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institut</pc></source>
       <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institute</pc></target></segment>
     </unit><unit id="legendDatasourceRisklayer">
       <notes>
-        <note category="location">src/app/legend/legend.component.html:41,46</note>
-      </notes>
+        
+      <note category="location">src/app/legend/legend.component.html:44</note></notes>
       <segment state="initial">
         <source>Datenquelle: 
           <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
@@ -1616,7 +1623,7 @@
     </unit><unit id="legendDatasourceDivi">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:84</note></notes>
+      <note category="location">src/app/legend/legend.component.html:87</note></notes>
       <segment state="initial">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></source>
       <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI ICU Registry</pc></target></segment>

@@ -10,7 +10,7 @@
     <div *ngIf="legendCasesExtended">
     <table>
 
-      <tr *ngFor="let b of caseBins$ | async" (mouseenter)="hoverBin(b)" (mouseout)="hoverBin()" class="bin">
+      <tr *ngFor="let b of caseBins$ | async" [ngClass]="{'selected': isBinSelected(b)}" (mouseenter)="hoverBin(b)" (mouseout)="hoverBin()" (click)="selectBin(b)" class="bin">
 
         <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
 
@@ -25,6 +25,9 @@
         </td>
       </tr>
     </table>
+
+    <p i18n="@@clearSelection" class="clear-selection" *ngIf="currentOptions?.covidNumberCaseOptions?._binSelection?.length > 0" (click)="clearSelection()">Selektion aufheben</p>
+
     </div>
         
     <div *ngIf="!legendCasesExtended">

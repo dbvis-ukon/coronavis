@@ -180,6 +180,10 @@ export class CaseChoroplethColormapService {
       return '#a6a6a6';
     }
 
+    if (options._binSelection && options._binSelection.findIndex(d => d[0] <= nmbr && d[1] > nmbr) === -1) {
+      return '#a6a6a6';
+    }
+
     return this.getColorMap(options)(scaleFn(nmbr));
   }
 

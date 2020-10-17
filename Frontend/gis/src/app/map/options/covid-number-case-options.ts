@@ -70,4 +70,6 @@ export interface CovidNumberCaseOptions {
 
     _binHovered?: [number, number];
 
+    _binSelection?: [number, number][];
+
   }
