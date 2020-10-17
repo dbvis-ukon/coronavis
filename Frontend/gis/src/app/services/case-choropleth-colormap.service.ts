@@ -138,12 +138,18 @@ export class CaseChoroplethColormapService {
     dataPoint: Feature<Geometry, RKICaseDevelopmentProperties>,
     options: CovidNumberCaseOptions
   ): string {
-    return this.getChoroplethCaseColor(options, scaleFn(this.caseUtil.getCaseNumbers(dataPoint.properties, options)));
-  }
 
 
-  getChoroplethCaseColor(options: CovidNumberCaseOptions, normalizedDiff: number): string {
-    return this.getColorMap(options)(normalizedDiff);
+    if (this.caseUtil.isLockdownMode(options) && options.dataSource === 'risklayer' && options.showOnlyAvailableCounties === true) {
+      const status = this.caseUtil.getTimedStatusWithOptions(dataPoint.properties, options);
+      if (!status.last_updated) {
+        return '#a6a6a6';
+      }
+    }
+
+
+    const nmbr = this.caseUtil.getCaseNumbers(dataPoint.properties, options);
+    return this.getColorMap(options)(scaleFn(nmbr));
   }
 
   public getDomainExtent(

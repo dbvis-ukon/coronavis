@@ -4,6 +4,7 @@ import * as L from 'leaflet';
 import { CaseDialogComponent } from 'src/app/case-dialog/case-dialog.component';
 import { RKICaseDevelopmentProperties } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { CaseChoroplethColormapService } from 'src/app/services/case-choropleth-colormap.service';
+import { CaseUtilService } from 'src/app/services/case-util.service';
 import { CaseTooltipComponent } from '../../case-tooltip/case-tooltip.component';
 import { TooltipService } from '../../services/tooltip.service';
 import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
@@ -64,10 +65,10 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
     // create geojson layer (looks more complex than it is)
     const aggregationLayer = L.geoJSON(this.featureCollection, {
       style: (feature: Feature<Geometry, RKICaseDevelopmentProperties>) => {
-        const numbers = this.colorsService.getCaseNumbers(feature.properties, this.options);
+        // const numbers = this.colorsService.getCaseNumbers(feature.properties, this.options);
 
         return {
-          fillColor: this.colorsService.getChoroplethCaseColor(this.options, scaleFn(numbers)),
+          fillColor: this.colorsService.getColor(scaleFn, feature, this.options),
           weight: 0.5,
           opacity: 1,
           color: 'gray',

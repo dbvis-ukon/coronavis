@@ -1032,7 +1032,7 @@
     </unit><unit id="infoboxLastUpdate">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:41</note><note category="location">src/app/infobox/infobox.component.html:193</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:29</note><note category="location">src/app/overview/overview-case/overview-case.component.html:29</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:41</note><note category="location">src/app/infobox/infobox.component.html:196</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:29</note><note category="location">src/app/overview/overview-case/overview-case.component.html:29</note></notes>
       <segment state="final">
         <source>Letzter Stand: <ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.timestamp | date:'full' }}"/></source>
       <target>Letzter Stand: <ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.timestamp | date:'full' }}"/></target></segment>
@@ -1047,7 +1047,7 @@
       <notes>
         
         
-      <note category="location">src/app/infobox/infobox.component.html:60</note><note category="location">src/app/infobox/infobox.component.html:252</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:60</note><note category="location">src/app/infobox/infobox.component.html:255</note></notes>
       <segment state="final">
         <source>Deutschland
         </source>
@@ -1057,14 +1057,14 @@
       <notes>
         
         
-      <note category="location">src/app/infobox/infobox.component.html:60</note><note category="location">src/app/infobox/infobox.component.html:252</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:60</note><note category="location">src/app/infobox/infobox.component.html:255</note></notes>
       <segment state="final">
         <source>Deutschland</source>
       <target>Deutschland</target></segment>
     </unit><unit id="infoboxStates">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:63</note><note category="location">src/app/infobox/infobox.component.html:255</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:63</note><note category="location">src/app/infobox/infobox.component.html:258</note></notes>
       <segment state="final">
         <source>Länder</source>
       <target>Länder</target></segment>
@@ -1072,14 +1072,14 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:63</note><note category="location">src/app/infobox/infobox.component.html:255</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:63</note><note category="location">src/app/infobox/infobox.component.html:258</note></notes>
       <segment state="final">
         <source>Bundesländer</source>
       <target>Bundesländer</target></segment>
     </unit><unit id="infoboxRegions">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:66</note><note category="location">src/app/infobox/infobox.component.html:258</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:66</note><note category="location">src/app/infobox/infobox.component.html:261</note></notes>
       <segment state="final">
         <source>Bezirke</source>
       <target>Bezirke</target></segment>
@@ -1087,14 +1087,14 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:66</note><note category="location">src/app/infobox/infobox.component.html:258</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:66</note><note category="location">src/app/infobox/infobox.component.html:261</note></notes>
       <segment state="final">
         <source>Regierungsbezirke</source>
       <target>Regierungsbezirke</target></segment>
     </unit><unit id="infoboxCounties">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:69</note><note category="location">src/app/infobox/infobox.component.html:261</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:69</note><note category="location">src/app/infobox/infobox.component.html:264</note></notes>
       <segment state="final">
         <source>Kreise</source>
       <target>Kreise</target></segment>
@@ -1102,7 +1102,7 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:69</note><note category="location">src/app/infobox/infobox.component.html:261</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:69</note><note category="location">src/app/infobox/infobox.component.html:264</note></notes>
       <segment state="final">
         <source>Landkreise</source>
       <target>Landkreise</target></segment>
@@ -1228,8 +1228,8 @@
         <note category="location">src/app/infobox/infobox.component.html:178</note>
       </notes>
       <segment state="final">
-        <source>Diese Hochrechnung basiert auf den bereits eingegangen sowie vorläufigen Meldungen der Landkreise bzw. Gesundheitsämter.</source>
-      <target>Diese Hochrechnung basiert auf den bereits eingegangen sowie vorläufigen Meldungen der Landkreise bzw. Gesundheitsämter.</target></segment>
+        <source>Diese Hochrechnung basiert auf den bereits eingegangen sowie vorläufigen Meldungen der Landkreise bzw. Gesundheitsämter. Je höher die Zahl der Landkreise mit verfügbaren Daten, desto höher ist die Genauigkeit der Hochrechnung.</source>
+      <target>Diese Hochrechnung basiert auf den bereits eingegangen sowie vorläufigen Meldungen der Landkreise bzw. Gesundheitsämter. Je höher die Zahl der Landkreise mit verfügbaren Daten, desto höher ist die Genauigkeit der Hochrechnung.</target></segment>
     </unit><unit id="infoboxNumberOfCovidDeaths">
       <notes>
         
@@ -1239,17 +1239,11 @@
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> bundesweit gemeldete Covid-19 Todesfälle</target></segment>
     </unit><unit id="infoboxCountiesAvailable">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:184,191</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:185</note></notes>
       <segment state="final">
-        <source>
-          Daten von <ph id="0" equiv="INTERPOLATION" disp="{{ c.casesCountiesAvailable }}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="{{ c.casesCountiesTotal }}"/> Landkreisen verfügbar
-          <pc id="2" equivStart="START_TAG_MAT-ICON" equivEnd="CLOSE_TAG_MAT-ICON" type="other" dispStart="&lt;mat-icon>" dispEnd="&lt;/mat-icon>">help</pc>
-        </source>
-      <target>
-          Daten von <ph id="0" equiv="INTERPOLATION" disp="{{ c.casesCountiesAvailable }}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="{{ c.casesCountiesTotal }}"/> Landkreisen verfügbar
-          <pc id="2" equivStart="START_TAG_MAT-ICON" equivEnd="CLOSE_TAG_MAT-ICON" type="other" dispStart="&lt;mat-icon>" dispEnd="&lt;/mat-icon>">help</pc>
-        </target></segment>
+        <source>Daten von <ph id="0" equiv="INTERPOLATION" disp="{{ c.casesCountiesAvailable }}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="{{ c.casesCountiesTotal }}"/> Landkreisen verfügbar</source>
+      <target>Daten von <ph id="0" equiv="INTERPOLATION" disp="{{ c.casesCountiesAvailable }}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="{{ c.casesCountiesTotal }}"/> Landkreisen verfügbar</target></segment>
     </unit><unit id="tooltipNumberOfCounties">
       <notes>
         <note category="location">src/app/infobox/infobox.component.html:189</note>
@@ -1257,17 +1251,28 @@
       <segment state="final">
         <source>Die Daten werden von Freiwilligen in einer öffentlich zugänglichen Tabelle gesammelt (crowdsourcing) sobald die Landkreise bzw. Gesundheitsämter die Daten veröffentlichen. Falls noch keine aktuellen Daten vorliegen werden die Daten vom vorherigen Tag verwendet.</source>
       <target>Die Daten werden von Freiwilligen in einer öffentlich zugänglichen Tabelle gesammelt (crowdsourcing) sobald die Landkreise bzw. Gesundheitsämter die Daten veröffentlichen. Falls noch keine aktuellen Daten vorliegen werden die Daten vom vorherigen Tag verwendet.</target></segment>
+    </unit><unit id="infoboxShowOnlyAvailableCounties">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:191,193</note>
+      </notes>
+      <segment state="final">
+        <source>
+            nur Landkreise mit aktuellen Daten anzeigen
+          </source>
+      <target>
+            nur Landkreise mit aktuellen Daten anzeigen
+          </target></segment>
     </unit><unit id="infoboxNextUpdate">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:198</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:201</note></notes>
       <segment state="final">
         <source>Nächste Aktualisierung: </source>
       <target>Nächste Aktualisierung: </target></segment>
     </unit><unit id="infoboxCaseViewShow">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:216</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:219</note></notes>
       <segment state="final">
         <source>Covid-19 Fallansicht anzeigen / ausblenden
         </source>
@@ -1275,15 +1280,15 @@
         </target></segment>
     </unit><unit id="infoboxDataSource">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:223</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:226</note></notes>
       <segment state="final">
         <source>Daten Quelle</source>
       <target>Daten Quelle</target></segment>
     </unit><unit id="infoboxDataSourceRKI">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:233,234</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:236</note></notes>
       <segment state="final">
         <source>Offizielle Daten
               </source>
@@ -1291,15 +1296,15 @@
               </target></segment>
     </unit><unit id="tooltipDataSourceRKI">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:233</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:236</note></notes>
       <segment state="final">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institut</target></segment>
     </unit><unit id="infoboxDataSourceRisklayer">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:236,237</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:239</note></notes>
       <segment state="final">
         <source>Live Daten
               </source>
@@ -1307,29 +1312,29 @@
               </target></segment>
     </unit><unit id="tooltipDataSourceRisklayer">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:236</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:239</note></notes>
       <segment state="final">
         <source>Live-Ansicht Risklayer Daten</source>
       <target>Live-Ansicht Risklayer Daten</target></segment>
     </unit><unit id="infoboxAggregation">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:242</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:245</note></notes>
       <segment state="final">
         <source>Aggregation</source>
       <target>Aggregation</target></segment>
     </unit><unit id="infoboxTime">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:271</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:274</note></notes>
       <segment state="final">
         <source>Zeitraum</source>
       <target>Zeitraum</target></segment>
     </unit><unit id="infoboxTimeAll">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:281</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:284</note></notes>
       <segment state="final">
         <source>Alle
                 Daten
@@ -1340,7 +1345,7 @@
     </unit><unit id="infoboxTime24">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:285</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:288</note></notes>
       <segment state="final">
         <source>24 Std.
               </source>
@@ -1349,7 +1354,7 @@
     </unit><unit id="infoboxTime72">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:287</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:290</note></notes>
       <segment state="final">
         <source>72
                 Std.
@@ -1360,7 +1365,7 @@
     </unit><unit id="infoboxTime7Days">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:290</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:293</note></notes>
       <segment state="final">
         <source>7 Tage
               </source>
@@ -1369,14 +1374,14 @@
     </unit><unit id="infoboxCaseNum">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:298</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:301</note></notes>
       <segment state="final">
         <source>Fallzahlen</source>
       <target>Fallzahlen</target></segment>
     </unit><unit id="infoboxCasesAll">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:307</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:310</note></notes>
       <segment state="final">
         <source>Alle erfassten
                 Fälle
@@ -1387,21 +1392,21 @@
     </unit><unit id="infoboxCasesDiff">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:311</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:314</note></notes>
       <segment state="final">
         <source>Veränderung im gewählten Zeitraum</source>
       <target>Veränderung im gewählten Zeitraum</target></segment>
     </unit><unit id="infoboxType">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:320</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:323</note></notes>
       <segment state="final">
         <source>Art</source>
       <target>Art</target></segment>
     </unit><unit id="infoboxTypeSick">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:329</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:332</note></notes>
       <segment state="final">
         <source>Positiv Getestet
               </source>
@@ -1410,21 +1415,21 @@
     </unit><unit id="infoboxTypeDeath">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:331</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:334</note></notes>
       <segment state="final">
         <source>Todesfälle</source>
       <target>Todesfälle</target></segment>
     </unit><unit id="infoboxNorm">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:339</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:342</note></notes>
       <segment state="final">
         <source>Normalisierung</source>
       <target>Normalisierung</target></segment>
     </unit><unit id="infoboxNornNone">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:348</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:351</note></notes>
       <segment state="final">
         <source>Keine
                 Normalisierung
@@ -1435,7 +1440,7 @@
     </unit><unit id="infoboxNornYes">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:352</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:355</note></notes>
       <segment state="final">
         <source>Je
                 100.000 Einwohner
@@ -1446,7 +1451,7 @@
     </unit><unit id="infoboxGeo">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:367</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:370</note></notes>
       <segment state="final">
         <source>
           Geographische Verortung
@@ -1457,7 +1462,7 @@
     </unit><unit id="infoboxGeoHospital">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:381</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:384</note></notes>
       <segment state="final">
         <source>Krankenhäuser
         </source>
@@ -1466,7 +1471,7 @@
     </unit><unit id="infoboxGeoHeli">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:389</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:392</note></notes>
       <segment state="final">
         <source>Hubschrauberlandeplätze
         </source>
@@ -1475,7 +1480,7 @@
     </unit><unit id="infoboxData">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:397</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:400</note></notes>
       <segment state="final">
         <source>
           Datenquellen
@@ -1486,7 +1491,7 @@
     </unit><unit id="infoboxDIVI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:405</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:38</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:408</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:38</note></notes>
       <segment state="final">
         <source>DIVI
             Intensivregister</source>
@@ -1495,21 +1500,21 @@
     </unit><unit id="infoboxRKI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:410</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:413</note></notes>
       <segment state="final">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institut</target></segment>
     </unit><unit id="infoboxRKICases">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:414</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:417</note></notes>
       <segment state="final">
         <source>• Covid-19 Fallzahlen</source>
       <target>• Covid-19 Fallzahlen</target></segment>
     </unit><unit id="infoboxDESTATIS">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:432</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:435</note></notes>
       <segment state="final">
         <source>Statistisches Bundesamt</source>
       <target>Statistisches Bundesamt</target></segment>
@@ -1624,7 +1629,7 @@
     </unit><unit id="tooltipHospitalOldData">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:206</note><note category="location">src/app/hospital-info/hospital-info.component.html:14</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:209</note><note category="location">src/app/hospital-info/hospital-info.component.html:14</note></notes>
       <segment state="final">
         <source>Die Daten sind älter als 24 Stunden.</source>
       <target>Die Daten sind älter als 24 Stunden.</target></segment>

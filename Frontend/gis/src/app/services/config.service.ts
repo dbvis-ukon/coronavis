@@ -51,7 +51,8 @@ export class ConfigService {
       enabled: false,
       aggregationLevel: AggregationLevel.county,
       showLabels: false,
-      showTrendGlyphs: false
+      showTrendGlyphs: false,
+      showOnlyAvailableCounties: false
     },
 
     showOsmHeliports: false,

@@ -60,4 +60,11 @@ export interface CovidNumberCaseOptions {
 
     showTrendGlyphs: boolean;
 
+    /**
+     * In the risk layer data there is data which has last_updated = null meaning
+     * that has not been updated today. This flag allows the user to only see the
+     * available counties. By default the numbers of yesterday are being shown.
+     */
+    showOnlyAvailableCounties: boolean;
+
   }
