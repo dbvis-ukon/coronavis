@@ -2,9 +2,11 @@
   <div>
 
     <div class="content">
-      <div *ngIf="!data.developments" i18n="@@countyDataNotFound" class="noData">Es stehen keine Daten zur Verfügung.</div>
+      <div *ngIf="!data.developments" i18n="@@countyDataNotFound" class="noData">Es stehen keine Daten zur Verfügung.
+      </div>
 
-      <h5 *ngIf="latestDevelopment"><span i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </span> <span>{{ lastUpdate | date:'medium' }}</span></h5>
+      <h5 *ngIf="latestDevelopment"><span i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </span>
+        <span>{{ lastUpdate | date:'medium' }}</span></h5>
 
 
 
@@ -15,17 +17,24 @@
       </div>
 
 
-      <div class="barchartcontainer" *ngIf="isSingleHospital === false">
+      <div *ngIf="isSingleHospital === false">
 
-        <div *ngFor="let s of barChartSpecs">
-          <h5 class="chart-title">{{ s.title }}</h5>
-          <app-vega [spec]="s.chart"></app-vega>
+        <div class= "barchartcontainer" *ngIf="barChartSpecs$ | async as bcs; else waitBlock3">
+          <div *ngFor="let s of bcs">
+            <h5 class="chart-title">{{ s.title }}</h5>
+            <app-vega [spec]="s.chart"></app-vega>
+          </div>
         </div>
+        
 
+        <ng-template #waitBlock3>
+          <div class="wait-spinner-container">
+            <mat-spinner class="wait-spinner" diameter="40"></mat-spinner>
+          </div>
+        </ng-template>
       </div>
 
-
-    <!-- <table *ngIf="isSingleHospital">
+      <!-- <table *ngIf="isSingleHospital">
         <tbody>
         <tr>
           <td><strong>ICU - Low Care:</strong> </td>
@@ -40,14 +49,14 @@
           <td [ngStyle]="{'background-color': getStatusColorFor(eBedType.ecmo) }">{{ getStatusDescriptionFor(eBedType.ecmo) | translate}}</td>
         </tr>
         </tbody> -->
-        <!--  <tbody>-->
-        <!--    <tr>-->
-        <!--      <th></th>-->
-        <!--      <th>ICU - Low Care:</th>-->
-        <!--      <th>ICU - High Care:</th>-->
-        <!--      <th>ECMO:</th>-->
-        <!--    </tr>-->
-        <!-- <tr>
+      <!--  <tbody>-->
+      <!--    <tr>-->
+      <!--      <th></th>-->
+      <!--      <th>ICU - Low Care:</th>-->
+      <!--      <th>ICU - High Care:</th>-->
+      <!--      <th>ECMO:</th>-->
+      <!--    </tr>-->
+      <!-- <tr>
           <th>(belegt / gesamt)</th>
           <th [ngStyle]="{'background-color': getCapacityStateColor(latestDevelopment.icu_low_care) }">{{ getLatest(data.icu_low_care_belegt) }} / {{ getLatest(data.icu_low_care_belegt)    + getLatest(data.icu_low_care_frei)  }} <mat-icon> {{ getTrendIcon(data.icu_low_care_einschaetzung) }} </mat-icon> </th>
           <th [ngStyle]="{'background-color': getCapacityStateColor(latestDevelopment.icu_high_care) }">{{ getLatest(data.icu_high_care_belegt) }} / {{ getLatest(data.icu_high_care_belegt) + getLatest(data.icu_high_care_frei) }} <mat-icon> {{ getTrendIcon(data.icu_high_care_einschaetzung) }} </mat-icon> </th>
@@ -59,7 +68,7 @@
           <td>{{ (getLatest(data.icu_high_care_belegt) / (getLatest(data.icu_high_care_belegt) + getLatest(data.icu_high_care_frei))) * 100 | number : '1.1-1'}}%</td>
           <td>{{ (getLatest(data.icu_ecmo_care_belegt) / (getLatest(data.icu_ecmo_care_belegt) + getLatest(data.icu_ecmo_care_frei))) * 100 | number : '1.1-1'}}%</td>
         </tr> -->
-        <!-- <tr>
+      <!-- <tr>
           <td># Verfügbar</td>
           <td>{{ getLatest(data.icu_low_care_frei) }}</td>
           <td>{{ getLatest(data.icu_high_care_frei) }}</td>
@@ -71,13 +80,13 @@
           <td>{{ getLatest(data.icu_high_care_belegt) }}</td>
           <td>{{ getLatest(data.icu_ecmo_care_belegt) }}</td>
         </tr> -->
-        <!-- <tr>
+      <!-- <tr>
           <td>+ Erwartet</td>
           <td>{{ getLatest(data.icu_low_care_einschaetzung) }}</td>
           <td>{{ getLatest(data.icu_high_care_einschaetzung) }}</td>
           <td>{{ getLatest(data.icu_ecmo_care_einschaetzung) }}</td>
         </tr> -->
-        <!--  </tbody>-->
+      <!--  </tbody>-->
 
       <!--</table> -->
 
@@ -88,43 +97,68 @@
 
   <div *ngIf="isSingleHospital">
 
-    <div class="chart-wrapper developmentstatuslabels" fxLayout="row"> 
-      <div style="width:200px; margin-left: 10px;" fxBox><span i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung:</span> <!--({{ firstTimestamp | date:'mediumDate'}} - {{ now | date:'mediumDate' }})--> </div>
-      <div style="margin-left: 5px;" fxBox i18n="@@tooltipHospitalTemporalDevelopmentLastUpdate" >Stand seit <br> {{ lastUpdate | date:'shortDate' }}  </div>
+    <div class="chart-wrapper developmentstatuslabels" fxLayout="row">
+      <div style="width:200px; margin-left: 10px;" fxBox><span i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche
+          Entwicklung:</span>
+        <!--({{ firstTimestamp | date:'mediumDate'}} - {{ now | date:'mediumDate' }})-->
+      </div>
+      <div style="margin-left: 5px;" fxBox i18n="@@tooltipHospitalTemporalDevelopmentLastUpdate">Stand seit <br>
+        {{ lastUpdate | date:'shortDate' }} </div>
     </div>
     <mat-divider></mat-divider>
-    <div *ngFor="let s of specs; let i = index" >
-      <div fxLayout="column">
-        <div fxBox>
-          <h5 class="chart-title"> {{s.title}} </h5>
-        </div>
-        <div fxBox class="chart-wrapper" fxLayout="row"> 
+    <div *ngIf="tempChartSpecs$ | async as specs; else waitBlock2">
+      <div *ngFor="let s of specs; let i = index">
+        <div fxLayout="column">
           <div fxBox>
-            <app-vega [spec]="s.chart"></app-vega>
+            <h5 class="chart-title"> {{s.title}} </h5>
           </div>
-          <div class="single-hospital-current-status" fxBox>
-            <div [ngStyle]="{'background-color': getStatusColorFor(s.bedtype) }">
-              <p>
-                {{ getStatusDescriptionFor(s.bedtype) | translate }} 
-              </p>
+          <div fxBox class="chart-wrapper" fxLayout="row">
+            <div fxBox>
+              <app-vega [spec]="s.chart"></app-vega>
+            </div>
+            <div class="single-hospital-current-status" fxBox>
+              <div [ngStyle]="{'background-color': getStatusColorFor(s.bedtype) }">
+                <p>
+                  {{ getStatusDescriptionFor(s.bedtype) | translate }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
+        <mat-divider></mat-divider>
       </div>
-      <mat-divider></mat-divider>
     </div>
+
+
+    <ng-template #waitBlock2>
+      <div class="wait-spinner-container">
+        <mat-spinner class="wait-spinner" diameter="40"></mat-spinner>
+      </div>
+
+    </ng-template>
   </div>
 
 
 
   <div *ngIf="isSingleHospital === false">
-    <h4><span i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung:</span> <!--({{ firstTimestamp | date:'mediumDate'}} - {{ now | date:'mediumDate' }})--></h4>
-    <div *ngFor="let s of specs; let i = index">
-      <div class="chart-wrapper">
-        <h5 class="chart-title"> {{s.title}} </h5>
-        <app-vega [spec]="s.chart"></app-vega>
+    <h4><span i18n="@@tooltipHospitalTemporalDevelopment">Zeitliche Entwicklung:</span>
+      <!--({{ firstTimestamp | date:'mediumDate'}} - {{ now | date:'mediumDate' }})-->
+    </h4>
+    <div *ngIf="tempChartSpecs$ | async as specs; else waitBlock1">
+      <div *ngFor="let s of specs; let i = index">
+        <div class="chart-wrapper">
+          <h5 class="chart-title"> {{s.title}} </h5>
+          <app-vega [spec]="s.chart"></app-vega>
+        </div>
       </div>
     </div>
+    <ng-template #waitBlock1>
+      <div class="wait-spinner-container">
+        <mat-spinner class="wait-spinner" diameter="40"></mat-spinner>
+      </div>
+    </ng-template>
+
+
   </div>
 
 
@@ -134,7 +168,7 @@
     <p *ngIf="singleHospital.address !== ''" style="margin-top: 10px;">
       <strong i18n="@@tooltipHospitalAddress">Adresse: </strong> {{ singleHospital.address }}
     </p>
-    <p *ngIf="contactMsg !== ''" >
+    <p *ngIf="contactMsg !== ''">
       <strong i18n="@@tooltipHospitalContact">Kontakt: </strong>
       <a *ngIf="url" href="{{ contact }}">{{ contactMsg }}</a>
       <span *ngIf="!url">{{ contactMsg }}</span>

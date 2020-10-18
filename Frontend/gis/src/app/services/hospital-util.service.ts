@@ -45,32 +45,7 @@ export class HospitalUtilService {
   }
 
   public getNumberOfHospitals(hospitalAgg: AggregatedHospitalOut<QualitativeTimedStatus>): number {
-    const ld = this.getLatestTimedStatus(hospitalAgg.developments);
-    if (!ld) {
-      return 0;
-    }
-
-    let maxN = 0;
-
-    for (const bedAcc of this.getBedAccessorFunctions()) {
-      let sum = 0;
-
-      const bed = bedAcc(ld);
-
-      if (!bed) {
-        continue;
-      }
-
-      for (const bedStatusAcc of this.getBedStatusAccessorFunctions()) {
-        sum += bedStatusAcc(bed) || 0;
-      }
-
-      if (sum > maxN) {
-        maxN = sum;
-      }
-    }
-
-    return maxN;
+    return hospitalAgg?.developments[hospitalAgg.developments.length - 1].num_hospitals;
   }
 
   public getBedAccessorFunctions(): ((d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts)[] {

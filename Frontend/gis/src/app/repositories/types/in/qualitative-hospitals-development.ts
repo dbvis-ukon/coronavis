@@ -13,11 +13,13 @@ export type QuantitativeAggregatedHospitalProperties = AggregatedHospital & Quan
 
 
 export interface AggregatedHospital {
+    id: string;
     name: string;
     centroid: Point;
 }
 
 export interface SingleHospital {
+    id: string;
     name: string;
 
     gemeindeschluessel: number;
@@ -25,7 +27,6 @@ export interface SingleHospital {
     bundeslandschluessel: string;
     plz: string;
     webaddresse: string;
-    id: string;
     address: string;
     state: string;
     contact: string;

@@ -274,7 +274,7 @@ class IcuDevelopments:
                 agg.geom
         """.format(aggTable=aggTable, aggCols=self.__aggCols, buildObj=self.__buildObj, sqlFromTime = sqlFromTime, sqlToTime = sqlToTime, sqlMaxDaysOld = sqlMaxDaysOld, sqlIdObj = sqlIdObj))
 
-        current_app.logger.debug(stmnt)
+        # current_app.logger.debug(stmnt)
 
         return stmnt
 
@@ -300,7 +300,7 @@ class IcuDevelopments:
             sqlMaxDaysOld = "AND agg.age <= (:maxDaysOld || ' days') ::interval"
 
         if idHospital:
-            sqlIdCounty = "AND agg.id = :idObj"
+            sqlIdCounty = "AND agg.hospital_id = :idObj"
 
         sql_stmt = text("""
             SELECT

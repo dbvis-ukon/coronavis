@@ -45,6 +45,7 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
         }, onCloseAction);
 
       tooltipComponent.tooltipData = feature.properties;
+      tooltipComponent.options = this.options;
 
       // tooltipComponent.name = feature.properties.name;
       // tooltipComponent.combined = feature.properties.combined;
@@ -82,7 +83,10 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
           click: () => {
             this.tooltipService.close();
             this.matDialog.open(HospitalInfoDialogComponent, {
-              data: feature.properties
+              data: {
+                data: feature.properties,
+                options: this.options,
+              }
             });
           },
           mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer, layer),

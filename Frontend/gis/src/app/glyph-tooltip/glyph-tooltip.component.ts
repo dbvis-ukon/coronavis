@@ -1,5 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
+import { BedBackgroundOptions } from '../map/options/bed-background-options';
+import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
@@ -27,6 +29,9 @@ export class GlyphTooltipComponent implements OnInit {
 
   @Input()
   tooltipData: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
+
+  @Input()
+  options: BedGlyphOptions | BedBackgroundOptions;
 
   isSingleHospital = false;
 

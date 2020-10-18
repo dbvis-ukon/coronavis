@@ -2,17 +2,21 @@
 
 import { Component, Input, OnInit } from '@angular/core';
 import moment, { Moment } from 'moment';
-import { of } from 'rxjs';
-import { mergeMap, map, max, reduce } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { mergeMap, map, max, reduce, tap } from 'rxjs/operators';
+import { BedBackgroundOptions } from '../map/options/bed-background-options';
+import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { BedType } from "../map/options/bed-type.enum";
+import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { HospitalUtilService } from '../services/hospital-util.service';
 import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TranslationService } from '../services/translation.service';
 import { VegaBarchartService } from '../services/vega-barchart.service';
-import { getMoment } from '../util/date-util';
+import { getMoment, getStrDate } from '../util/date-util';
 
 @Component({
   selector: 'app-hospital-info',
@@ -33,6 +37,19 @@ export class HospitalInfoComponent implements OnInit {
 
   private _data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
 
+  private _options: BedGlyphOptions | BedBackgroundOptions;
+
+  @Input()
+  set options(o: BedGlyphOptions | BedBackgroundOptions) {
+    this._options = o;
+
+    this.updateData();
+  }
+
+  get options(): BedGlyphOptions | BedBackgroundOptions {
+    return this._options;
+  }
+
   @Input()
   set data(d: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>) {
     this._data = d;
@@ -43,6 +60,8 @@ export class HospitalInfoComponent implements OnInit {
   get data(): SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus> {
     return this._data;
   }
+
+  private fullData: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>;
 
   glyphLegendColors = QualitativeColormapService.bedStati;
 
@@ -73,9 +92,9 @@ export class HospitalInfoComponent implements OnInit {
 
 
 
-  specs = [];
+  tempChartSpecs$: Observable<any[]>;
 
-  barChartSpecs = [];
+  barChartSpecs$: Observable<any[]>;
 
   bedAccessors = ['icu_low_state', 'icu_high_state', 'ecmo_state'];
   bedAccessorsMapping = {'icu_low_state': 'ICU - Low Care', 'icu_high_state': 'ICU - High Care', 'ecmo_state': 'ECMO'};
@@ -98,7 +117,9 @@ export class HospitalInfoComponent implements OnInit {
   constructor(private colormapService: QualitativeColormapService,
               private translationService: TranslationService,
               private vegaBarchartService: VegaBarchartService,
-              private i18nService: I18nService
+              private i18nService: I18nService,
+              private diviRepo: QualitativeDiviDevelopmentRepository,
+              private hospitalUtil: HospitalUtilService
     ) {
   }
 
@@ -106,32 +127,48 @@ export class HospitalInfoComponent implements OnInit {
     this.updateData();
   }
 
-  private updateData() {
-    if ((this.data as SingleHospitalOut<QualitativeTimedStatus>).address) {
-      this.isSingleHospital = true;
-      this.singleHospital = this.data as SingleHospitalOut<QualitativeTimedStatus>;
+  private async updateData() {
+    if (!this.data || !this.options) {
+      return;
     }
 
-    if (this.data.developments) {
-      this.latestDevelopment = this.data.developments[this.data.developments.length - 1];
+    // tslint:disable-next-line:prefer-const
+    let [from, to] = this.hospitalUtil.getFromToTupleFromOptions(this.options);
+
+    from = getStrDate(getMoment(to).subtract(11, 'days'));
+
+    if (this.hospitalUtil.isSingleHospital(this.data)) {
+      this.isSingleHospital = true;
+
+      this.fullData = (await this.diviRepo.getDiviDevelopmentSingleHospital(this.data.id, from, to).toPromise()).properties;
+
+      this.singleHospital = this.fullData as SingleHospitalOut<QualitativeTimedStatus>;
+    } else {
+      this.fullData = (await this.diviRepo.getDiviDevelopmentForAggLevelSingle(this.options.aggregationLevel, this.data.id, from, to).toPromise()).properties;
+    }
+
+    if (this.fullData.developments) {
+      this.latestDevelopment = this.fullData.developments[this.fullData.developments.length - 1];
+      this.totalNumberOfHospitals = this.latestDevelopment.num_hospitals;
 
 
       const lastUpdateM = this.isSingleHospital ? getMoment(this.latestDevelopment.timestamp) : getMoment(this.latestDevelopment.last_updated);
       this.lastUpdate = lastUpdateM.toDate();
 
       const tenDaysAgo = moment().subtract(10, 'day');
-      this.firstTimestamp = moment.max(getMoment(this.data.developments[0].timestamp), tenDaysAgo);
+      this.firstTimestamp = moment.max(getMoment(this.fullData.developments[0].timestamp), tenDaysAgo);
 
       this.warnOfOutdatedData = moment().subtract(1, 'day').isAfter(lastUpdateM);
     }
 
+    this.tempChartSpecs$ = this.getTemporalCharts();
 
-    this.prepareAddressAndContactInformation();
 
-    this.prepareBarCharts()
-    .then(v => this.barChartSpecs = v);
-
-    this.prepareTemporalCharts();
+    if (this.isSingleHospital) {
+      this.prepareAddressAndContactInformation();
+    } else {
+      this.barChartSpecs$ = this.getBarChartSpecs();
+    }
   }
 
   // getTrendIcon(entries: TimestampedValue[]): string {
@@ -154,7 +191,7 @@ export class HospitalInfoComponent implements OnInit {
     return Object.keys(counts).find(s => s !== "") ?? "Keine Information";
   }
 
-  private async prepareBarCharts() {
+  private getBarChartSpecs(): Observable<any[]> {
     const barChartSpecs = [];
 
     if (!this.latestDevelopment) {
@@ -181,31 +218,20 @@ export class HospitalInfoComponent implements OnInit {
       });
     }
 
-    const maxNum = await of(barChartSpecs)
+    return of(barChartSpecs)
     .pipe(
       mergeMap(d => d),
       mergeMap(d => d.chart.data.values),
       map((d: any) => d.num as number),
-      max()
-    ).toPromise();
-
-
-
-    of(barChartSpecs[0])
-    .pipe(
-      mergeMap(d => d.chart.data.values),
-      map((d: any) => d.num as number),
-      reduce((acc, val) => acc + val)
-    )
-    .subscribe(v => this.totalNumberOfHospitals = v);
-
-    // set the max value
-    barChartSpecs.forEach(spec => {
-      spec.chart.encoding.y.scale.domain = [0, maxNum + 1];
-      spec.chart.encoding.y.axis.tickCount = Math.min(maxNum + 1, 5);
-    });
-
-    return barChartSpecs;
+      max(),
+      map(maxNum => {
+        barChartSpecs.forEach(spec => {
+          spec.chart.encoding.y.scale.domain = [0, maxNum + 1];
+          spec.chart.encoding.y.axis.tickCount = Math.min(maxNum + 1, 5);
+        });
+        return barChartSpecs;
+      })
+    );
   }
 
   private prepareAddressAndContactInformation() {
@@ -240,138 +266,147 @@ export class HospitalInfoComponent implements OnInit {
     return false;
   }
 
-  private prepareTemporalCharts() {
-    const bedStati = this.glyphLegendColors;
+  private getTemporalCharts(): Observable<any[]> {
+    return of(true)
+    .pipe(
+      map(() => {
+        const bedStati = this.glyphLegendColors;
 
-    const colors = [];
-    for (const bedStatus of bedStati) {
-      colors.push(this.getCapacityStateColor(bedStatus));
-    }
-
-    this.specs = [];
-    let maxNum = 0;
-
-    let maxNumSlices = 0;
-
-
-    if (this.data.developments) {
-      const tenDaysAgo = moment().subtract(10, 'day');
-      // const data = this.data.developments.filter(d => tenDaysAgo.isBefore(moment(d.timestamp)));
-      for (const bedAccessor of this.bedAccessors) {
-        let summedbedcounts = 0;
-        const dataValues = [];
-
-        if (this.firstTimestamp.isSameOrAfter(tenDaysAgo)) {
-            dataValues.push(
-              {
-                Kategorie: "Keine Information",
-                num: this.totalNumberOfHospitals,
-                color: this.getCapacityStateColor("Keine Information"),
-                Datum: tenDaysAgo
-              }
-            );
+        const colors = [];
+        for (const bedStatus of bedStati) {
+          colors.push(this.getCapacityStateColor(bedStatus));
         }
 
-        let counter = 0;
-        for ( const d of this.data.developments) {
 
-          let sumOfOneSlice = 0;
-          // fill the data object
-          for (const bedStatus of bedStati) {
-            const v = d[bedAccessor][bedStatus] || 0;
+        const specs = [];
+        let maxNum = 0;
 
-            summedbedcounts++;
+        let maxNumSlices = 0;
 
-            sumOfOneSlice += v;
+        if (!this.fullData.developments) {
+          return null;
+        }
 
-            if (!this.existsInDataValues(moment.max(getMoment(d.timestamp), tenDaysAgo), bedStatus, dataValues)) {
+        const tenDaysAgo = moment().subtract(10, 'day');
+        // const data = this.fullData.developments.filter(d => tenDaysAgo.isBefore(moment(d.timestamp)));
+        for (const bedAccessor of this.bedAccessors) {
+          let summedbedcounts = 0;
+          const dataValues = [];
+
+          if (this.firstTimestamp.isSameOrAfter(tenDaysAgo)) {
               dataValues.push(
                 {
-                  Kategorie: bedStatus,
-                  num: v,
-                  color: this.getCapacityStateColor(bedStatus),
-                  Datum: moment.max(getMoment(d.timestamp), tenDaysAgo).toDate()
+                  Kategorie: "Keine Information",
+                  num: this.totalNumberOfHospitals,
+                  color: this.getCapacityStateColor("Keine Information"),
+                  Datum: tenDaysAgo
                 }
               );
-              if (v > maxNum) {
-                maxNum = v;
+          }
+
+          let counter = 0;
+          for ( const d of this.fullData.developments) {
+
+            let sumOfOneSlice = 0;
+            // fill the data object
+            for (const bedStatus of bedStati) {
+              const v = d[bedAccessor][bedStatus] || 0;
+
+              summedbedcounts++;
+
+              sumOfOneSlice += v;
+
+              if (!this.existsInDataValues(moment.max(getMoment(d.timestamp), tenDaysAgo), bedStatus, dataValues)) {
+                dataValues.push(
+                  {
+                    Kategorie: bedStatus,
+                    num: v,
+                    color: this.getCapacityStateColor(bedStatus),
+                    Datum: moment.max(getMoment(d.timestamp), tenDaysAgo).toDate()
+                  }
+                );
+                if (v > maxNum) {
+                  maxNum = v;
+                }
+              }
+
+              // add last data point once again
+              if (counter === this.fullData.developments.length - 1){
+                dataValues.push(
+                  {
+                    Kategorie: bedStatus,
+                    num: v,
+                    color: this.getCapacityStateColor(bedStatus),
+                    Datum: moment()
+                  }
+                );
               }
             }
 
-            // add last data point once again
-            if (counter === this.data.developments.length - 1){
-              dataValues.push(
-                {
-                  Kategorie: bedStatus,
-                  num: v,
-                  color: this.getCapacityStateColor(bedStatus),
-                  Datum: moment()
-                }
-              );
+            if (sumOfOneSlice > maxNumSlices) {
+              maxNumSlices = sumOfOneSlice;
             }
+
+            counter++;
           }
 
-          if (sumOfOneSlice > maxNumSlices) {
-            maxNumSlices = sumOfOneSlice;
+          // hack deep clone spec
+          const spec = JSON.parse(JSON.stringify(this.temporalChartTemplateSpec));
+
+          // inject data values
+          spec.data.values = dataValues;
+
+          // if (this.isSingleHospital && (new Date(this.lastUpdate).getTime() - new Date(this.firstTimestamp).getTime() < 2 * 24 * 60 * 60 * 1000)) {
+
+          //  spec.encoding.x.axis.labelExpr = "[timeFormat(datum.value, '%d.%m'), false ? ' ' : timeFormat(datum.value, '(%H:%M)')]";
+          // }
+
+          spec.encoding.y.scale = {
+            domain: [0, maxNumSlices]
+          };
+
+          if (!this.isSingleHospital) {
+            spec.mark.interpolate = 'step-after';
+            spec.encoding.y.axis.title = this.translationService.translate('Anzahl KH');
+            spec.encoding.x.axis.tickCount = 5;
+            // spec.width = 370;
+          } else {
+            // is single hospital
+            spec.encoding.y.axis = false;
+
+            spec.height = spec.height * 0.3;
+            spec.width  = 200;
           }
 
-          counter++;
-        }
+          // also overwrite the title
+          spec.encoding.x.title = '';
 
-        // hack deep clone spec
-        const spec = JSON.parse(JSON.stringify(this.temporalChartTemplateSpec));
+          if (this.i18nService.getCurrentLocale() === SupportedLocales.DE_DE) {
+            spec.encoding.x.axis.format = '%d.%m';
+          } else {
+            spec.encoding.x.axis.format = '%m/%d';
+          }
 
-        // inject data values
-        spec.data.values = dataValues;
+          if (summedbedcounts > 0) {
+            specs.push({
+              title: this.bedAccessorsMapping[bedAccessor],
+              chart: spec,
+              bedtype: bedAccessor === 'icu_low_state' ? this.eBedType.icuLow : (bedAccessor === 'icu_high_state' ? this.eBedType.icuHigh : this.eBedType.ecmo)
+            });
 
-        // if (this.isSingleHospital && (new Date(this.lastUpdate).getTime() - new Date(this.firstTimestamp).getTime() < 2 * 24 * 60 * 60 * 1000)) {
 
-        //  spec.encoding.x.axis.labelExpr = "[timeFormat(datum.value, '%d.%m'), false ? ' ' : timeFormat(datum.value, '(%H:%M)')]";
-        // }
+          }
 
-        spec.encoding.y.scale = {
-          domain: [0, maxNumSlices]
-        };
-
-        if (!this.isSingleHospital) {
-          spec.mark.interpolate = 'step-after';
-          spec.encoding.y.axis.title = this.translationService.translate('Anzahl KH');
-          spec.encoding.x.axis.tickCount = 5;
-          // spec.width = 370;
-        } else {
-          // is single hospital
-          spec.encoding.y.axis = false;
-
-          spec.height = spec.height * 0.3;
-          spec.width  = 200;
-        }
-
-        // also overwrite the title
-        spec.encoding.x.title = '';
-
-        if (this.i18nService.getCurrentLocale() === SupportedLocales.DE_DE) {
-          spec.encoding.x.axis.format = '%d.%m';
-        } else {
-          spec.encoding.x.axis.format = '%m/%d';
-        }
-
-        if (summedbedcounts > 0) {
-          this.specs.push({
-            title: this.bedAccessorsMapping[bedAccessor],
-            chart: spec,
-            bedtype: bedAccessor === 'icu_low_state' ? this.eBedType.icuLow : (bedAccessor === 'icu_high_state' ? this.eBedType.icuHigh : this.eBedType.ecmo)
+          // set the max value
+          specs.forEach(s => {
+            s.chart.encoding.color.scale.domain = bedStati;
+            s.chart.encoding.color.scale.range = colors;
+            // spec.encoding.color.range = Math.min(maxNum+1, 5);
           });
 
-
         }
-      }
 
-      // set the max value
-      this.specs.forEach(spec => {
-        spec.chart.encoding.color.scale.domain = bedStati;
-        spec.chart.encoding.color.scale.range = colors;
-        // spec.encoding.color.range = Math.min(maxNum+1, 5);
-      });
-    }
+        return specs;
+      }));
   }
 }

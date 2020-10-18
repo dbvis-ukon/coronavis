@@ -8,6 +8,7 @@ import { getMoment, getStrDate } from '../util/date-util';
 import { CachedRepository } from './cached.repository';
 import { RKICaseDevelopmentProperties } from './types/in/quantitative-rki-case-development';
 import { RisklayerPrognosis } from './types/in/risklayer-prognosis';
+import {aggLevelToEndpointSingle} from '../util/aggregation-level';
 
 @Injectable({
   providedIn: 'root'
@@ -25,27 +26,7 @@ export class CaseDevelopmentRepository {
 
   getCasesDevelopmentForAggLevelSingle(dataSource: 'rki' | 'risklayer', aggLevel: AggregationLevel, id: string): Observable<Feature<MultiPolygon, RKICaseDevelopmentProperties>> {
     const endpoint = dataSource === 'rki' ? 'cases' : 'cases-risklayer';
-    let aggEndpoint = '';
-    switch (aggLevel) {
-      case AggregationLevel.county:
-        aggEndpoint = 'landkreis';
-        break;
-
-      case AggregationLevel.governmentDistrict:
-        aggEndpoint = 'regierungsbezirk';
-        break;
-
-      case AggregationLevel.state:
-        aggEndpoint = 'bundesland';
-        break;
-
-      case AggregationLevel.country:
-        aggEndpoint = 'land';
-        break;
-
-      default:
-        throw new Error('Aggregation level ' + aggLevel + ' unknown');
-    }
+    const aggEndpoint = aggLevelToEndpointSingle(aggLevel);
 
     return this
       .cachedRepository
