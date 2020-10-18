@@ -52,7 +52,7 @@ export interface QualitativeTimedStatus extends AbstractTimedStatus {
 
     inserted: string;
 
-    last_update?: string;
+    last_updated: string;
 
     num_hospitals: number;
 

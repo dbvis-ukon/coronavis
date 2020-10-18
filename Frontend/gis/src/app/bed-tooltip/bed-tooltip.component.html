@@ -9,9 +9,9 @@
   
     <mat-divider></mat-divider>
 
-    <h4 *ngIf="!data?.last_update" i18n="@@bedTooltipNoData">Es stehen momentan keine Bettenkapazitätsdaten für diesen Zeitpunkt zur Verfügung.</h4>
+    <h4 *ngIf="!data?.last_updated" i18n="@@bedTooltipNoData">Es stehen momentan keine Bettenkapazitätsdaten für diesen Zeitpunkt zur Verfügung.</h4>
 
-    <h4 *ngIf="data?.last_update"><span i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </span> <span>{{ data?.last_update | date:'medium' }}</span></h4>
+    <h4 *ngIf="data?.last_updated"><span i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </span> <span>{{ data?.last_updated | date:'medium' }}</span></h4>
 
     <div class="chartcontainer">
 

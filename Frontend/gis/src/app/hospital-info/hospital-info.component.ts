@@ -116,7 +116,7 @@ export class HospitalInfoComponent implements OnInit {
       this.latestDevelopment = this.data.developments[this.data.developments.length - 1];
 
 
-      const lastUpdateM = this.isSingleHospital ? getMoment(this.latestDevelopment.timestamp) : getMoment(this.latestDevelopment.last_update);
+      const lastUpdateM = this.isSingleHospital ? getMoment(this.latestDevelopment.timestamp) : getMoment(this.latestDevelopment.last_updated);
       this.lastUpdate = lastUpdateM.toDate();
 
       const tenDaysAgo = moment().subtract(10, 'day');
