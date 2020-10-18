@@ -101,7 +101,9 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
     [this.curTimedStatus, this.seventyTwoHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.seventyTwoHours);
     [this.curTimedStatus, this.sevenDaysTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.sevenDays);
 
-    this.lastUpdated = this.data.developments.slice().reverse().find(d => d.inserted).inserted;
+    const slice = this.data.developments.slice().reverse().find(d => d.inserted);
+
+    this.lastUpdated = slice ? slice.inserted : (this.curTimedStatus.last_updated || this.curTimedStatus.timestamp);
   }
 
   public getCasesPer100kInhabitants(count: number, status: RKICaseTimedStatus, addPlus: boolean = false): string {
