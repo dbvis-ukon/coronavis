@@ -334,7 +334,7 @@ export class MapComponent implements OnInit {
 
       let obs: Observable<L.LayerGroup>;
       if (o.aggregationLevel === AggregationLevel.none) {
-        obs = this.glyphLayerService.getSimpleGlyphLayer(this.bedGlyphOptions$)
+        obs = this.glyphLayerService.getSimpleGlyphLayer(o, this.bedGlyphOptions$)
         .pipe(
           map(glyphFactories => {
 

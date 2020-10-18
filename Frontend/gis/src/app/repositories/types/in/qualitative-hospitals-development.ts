@@ -48,16 +48,17 @@ export interface AbstractTimedStatus {
 
 export interface QualitativeTimedStatus extends AbstractTimedStatus {
 
-    /**
-     * Only available in an aggregation
-     */
-    numHospitals?: number;
+    timestamp: string;
+
+    inserted: string;
 
     last_update?: string;
 
-    icu_low_care: QualitativeAggregatedBedStateCounts;
+    num_hospitals: number;
 
-    icu_high_care: QualitativeAggregatedBedStateCounts;
+    icu_low_state: QualitativeAggregatedBedStateCounts;
+
+    icu_high_state: QualitativeAggregatedBedStateCounts;
 
     ecmo_state: QualitativeAggregatedBedStateCounts;
 }

@@ -64,7 +64,7 @@ export class CountryAggregatorService {
   }
 
   private fetchMap(writeToCache: Map<string, QualitativeTimedStatus>, lastNumberOfDays: number): Observable<Map<string, QualitativeTimedStatus>> {
-    return this.diviDevelopmentRepository.getDiviDevelopmentCountries('now', lastNumberOfDays)
+    return this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(AggregationLevel.country, getStrDate(getMoment('now').subtract(2, 'days')), 'now', lastNumberOfDays)
     .pipe(
       map(fc => fc.features[0]),
       map(feature => {

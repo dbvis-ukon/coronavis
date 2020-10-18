@@ -18,57 +18,26 @@ export class QualitativeDiviDevelopmentRepository {
 
   constructor(private cachedRepository: CachedRepository, private hospitalUtil: HospitalUtilService) {}
 
-  private getDiviDevelopmentCounties(refDate: string = 'now', dayThreshold: number = 5): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
-    return this.cachedRepository.get <FeatureCollection<MultiPolygon, QualitativeAggregatedHospitalProperties>> (`${environment.apiUrl}hospitals/development/landkreise`, this.prepareParams(refDate, dayThreshold));
+  public getDiviDevelopmentSingleHospitals(from: string, to: string, dayThreshold: number = 5): Observable <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> {
+    return this.cachedRepository.get <FeatureCollection<Point, QualitativeSingleHospitalProperties>> (`${environment.apiUrl}hospitals/development2`, this.prepareParams(from, to, dayThreshold));
   }
 
-  private getDiviDevelopmentGovernmentDistricts(refDate: string = 'now', dayThreshold: number = 5): Observable < FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>> > {
-    return this.cachedRepository.get <FeatureCollection<MultiPolygon, QualitativeAggregatedHospitalProperties>> (`${environment.apiUrl}hospitals/development/regierungsbezirke`, this.prepareParams(refDate, dayThreshold));
+  public getDiviDevelopmentForAggLevel(aggregationLevel: AggregationLevel, from: string, to: string, dayThreshold: number = 5): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
+    return this.cachedRepository.get <FeatureCollection<MultiPolygon, QualitativeAggregatedHospitalProperties>> (`${environment.apiUrl}hospitals/development2/${aggregationLevel}`, this.prepareParams(from, to, dayThreshold));
   }
 
-  private getDiviDevelopmentStates(refDate: string = 'now', dayThreshold: number = 5): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
-    return this.cachedRepository.get <FeatureCollection<MultiPolygon, QualitativeAggregatedHospitalProperties>> (`${environment.apiUrl}hospitals/development/bundeslaender`, this.prepareParams(refDate, dayThreshold));
-  }
-
-  public getDiviDevelopmentCountries(refDate: string = 'now', dayThreshold: number = 5): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
-    return this.cachedRepository.get <FeatureCollection<MultiPolygon, QualitativeAggregatedHospitalProperties>> (`${environment.apiUrl}hospitals/development/laender`, this.prepareParams(refDate, dayThreshold));
-  }
-
-  public getDiviDevelopmentSingleHospitals(refDate: string = 'now', dayThreshold: number = 5): Observable <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> {
-    return this.cachedRepository.get <FeatureCollection<Point, QualitativeSingleHospitalProperties>> (`${environment.apiUrl}hospitals/development`, this.prepareParams(refDate, dayThreshold));
-  }
-
-  public getDiviDevelopmentForAggLevel(aggregationLevel: AggregationLevel, refDate: string = 'now', dayThreshold: number = 5): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
-    switch (aggregationLevel) {
-
-      case AggregationLevel.county:
-        return this.getDiviDevelopmentCounties(refDate, dayThreshold);
-
-      case AggregationLevel.governmentDistrict:
-        return this.getDiviDevelopmentGovernmentDistricts(refDate, dayThreshold);
-
-      case AggregationLevel.state:
-        return this.getDiviDevelopmentStates(refDate, dayThreshold);
-
-      case AggregationLevel.country:
-        return this.getDiviDevelopmentCountries(refDate, dayThreshold);
-
-      default:
-        throw new Error('No divi development endpoint for aggregation level: ' + aggregationLevel);
-    }
-  }
-
-  private prepareParams(refDate: string = 'now', dayThreshold: number = 5): HttpParams {
+  private prepareParams(from: string, to: string, dayThreshold: number = 5): HttpParams {
     let params = new HttpParams();
 
-    if (!refDate) {
-      refDate = 'now';
+    if (!to) {
+      to = 'now';
     }
 
-    const actualRefDate = getMoment(refDate);
+    const fromDate = getMoment(from);
+    const toDate = getMoment(to);
 
-
-    params = params.append('refDate', getStrDate(actualRefDate));
+    params = params.append('from', getStrDate(fromDate));
+    params = params.append('to', getStrDate(toDate));
 
     if (!dayThreshold) {
       dayThreshold = 5;

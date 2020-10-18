@@ -89,9 +89,9 @@ export class QualitativeColormapService {
         case BedType.ecmo:
           return (a: QualitativeTimedStatus) => a.ecmo_state;
         case BedType.icuHigh:
-          return (a: QualitativeTimedStatus) => a.icu_high_care;
+          return (a: QualitativeTimedStatus) => a.icu_high_state;
         case BedType.icuLow:
-          return (a: QualitativeTimedStatus) => a.icu_low_care;
+          return (a: QualitativeTimedStatus) => a.icu_low_state;
       }
     }
 

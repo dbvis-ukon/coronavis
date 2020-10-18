@@ -77,8 +77,8 @@ export class HospitalInfoComponent implements OnInit {
 
   barChartSpecs = [];
 
-  bedAccessors = ['icu_low_care', 'icu_high_care', 'ecmo_state'];
-  bedAccessorsMapping = {'icu_low_care': 'ICU - Low Care', 'icu_high_care': 'ICU - High Care', 'ecmo_state': 'ECMO'};
+  bedAccessors = ['icu_low_state', 'icu_high_state', 'ecmo_state'];
+  bedAccessorsMapping = {'icu_low_state': 'ICU - Low Care', 'icu_high_state': 'ICU - High Care', 'ecmo_state': 'ECMO'};
 
   isSingleHospital = false;
   singleHospital: SingleHospitalOut<QualitativeTimedStatus>;
@@ -359,7 +359,7 @@ export class HospitalInfoComponent implements OnInit {
           this.specs.push({
             title: this.bedAccessorsMapping[bedAccessor],
             chart: spec,
-            bedtype: bedAccessor === 'icu_low_care' ? this.eBedType.icuLow : (bedAccessor === 'icu_high_care' ? this.eBedType.icuHigh : this.eBedType.ecmo)
+            bedtype: bedAccessor === 'icu_low_state' ? this.eBedType.icuLow : (bedAccessor === 'icu_high_state' ? this.eBedType.icuHigh : this.eBedType.ecmo)
           });
 
 

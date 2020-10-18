@@ -3,9 +3,9 @@
 import logging
 import os
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_compress import Compress
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 from cache import cache
 from db import db
@@ -63,6 +63,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONNECTION_STRING
 db.init_app(app)
 cache.init_app(app)
 
+@cross_origin()
 @app.errorhandler(HTTPException)
 def handle_http_exception(e):
     """Return JSON instead of HTML for HTTP errors."""
@@ -78,14 +79,21 @@ def handle_http_exception(e):
     return response
 
 
-# @app.errorhandler(Exception)
-# def handle_exception(e):
-#     # pass through HTTP errors
-#     if isinstance(e, HTTPException):
-#         return e
+@cross_origin()
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # pass through HTTP errors
+    if isinstance(e, HTTPException):
+        return e
 
-#     # now you're handling non-HTTP exceptions only
-#     return render_template("500_generic.html", e=e), 500
+    app.logger.error(e)
+
+    # now you're handling non-HTTP exceptions only
+    return jsonify({
+        "code": 500,
+        "name": "Internal Server Error",
+        "description": str(e.message) if hasattr(e, 'message') else str(e).partition('\n')[0]
+    }), 500
 
 # register blueprints
 app.register_blueprint(cases.routes)

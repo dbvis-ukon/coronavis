@@ -12,6 +12,7 @@ import { LabelCanvasLayer } from '../map/overlays/label-canvas.layer';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
+import { HospitalUtilService } from './hospital-util.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
 import { TooltipService } from './tooltip.service';
 
@@ -28,13 +29,15 @@ export class BedChoroplethLayerService {
     private tooltipService: TooltipService,
     private matDialog: MatDialog,
     private storage: LocalStorageService,
+    private hospitalUtil: HospitalUtilService
     ) {
   }
 
   public getQualitativeLayer(options$: BehaviorSubject<BedBackgroundOptions>): Observable<[BedStatusChoropleth<QualitativeTimedStatus>, LabelCanvasLayer<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>, BedBackgroundOptions>]> {
     const option = options$.value;
+    const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(option);
     this.loading$.next(true);
-    return this.qualitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel, 'now', -1)
+    return this.qualitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel, from, to)
     .pipe(
       map(data => {
         return [

@@ -1,17 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
-import { Feature, MultiPolygon } from 'geojson';
 import moment, { Moment } from 'moment';
 import { NouiFormatter } from 'ng2-nouislider';
 import { BehaviorSubject, interval, NEVER, Observable } from 'rxjs';
-import { filter, mergeMap, map, reduce, repeatWhen, switchMap, takeUntil } from 'rxjs/operators';
+import { filter, map, reduce, repeatWhen, switchMap, takeUntil } from 'rxjs/operators';
 import { MapOptions } from '../map/options/map-options';
-import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
-import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
-import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { ConfigService } from '../services/config.service';
 import { getMoment, getStrDate } from '../util/date-util';
+import { ExtentRepository } from '../repositories/extent.repository';
 
 class TimeFormatter implements NouiFormatter {
   constructor(public startDay: Moment, private datePipe: DatePipe) {}
@@ -62,16 +59,15 @@ export class TimesliderComponent implements OnInit {
   stepSize = 1;
 
   constructor(
-    private diviRepo: QualitativeDiviDevelopmentRepository,
+    private extentRepo: ExtentRepository,
     private configService: ConfigService,
     private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
-    this.diviRepo.getDiviDevelopmentCountries('now', -1)
+    this.extentRepo.getExtent()
     .pipe(
-      mergeMap(d => d.features),
-      map<Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>, [Moment, Moment]>(d => [getMoment(d.properties.developments[0].timestamp), getMoment(d.properties.developments[d.properties.developments.length - 1].timestamp)]),
+      map<[string, string], [Moment, Moment]>(d => [getMoment(d[0]), getMoment(d[1])]),
       reduce((acc, val) => {
         if (!acc[0] || acc[0] > val[0]) {
           acc[0] = val[0];

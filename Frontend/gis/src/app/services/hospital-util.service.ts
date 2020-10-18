@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Feature, FeatureCollection, Geometry, MultiPolygon, Point } from 'geojson';
 import { Moment } from 'moment';
 import { filter } from 'rxjs/operators';
+import { BedBackgroundOptions } from '../map/options/bed-background-options';
+import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { AbstractTimedStatus, QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
-import { getMoment } from '../util/date-util';
+import { getMoment, getStrDate } from '../util/date-util';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +33,15 @@ export class HospitalUtilService {
 
   public isSingleHospital(hospital: SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus>): hospital is SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus> {
     return hospital !== undefined && (hospital as SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus>).address !== undefined;
+  }
+
+  public getFromToTupleFromOptions(mo: BedGlyphOptions | BedBackgroundOptions): [string, string] {
+    const to = getStrDate(getMoment(mo.date).add(1, 'day'));
+
+    const from = getStrDate(getMoment(mo.date));
+
+
+    return [from, to];
   }
 
   public getNumberOfHospitals(hospitalAgg: AggregatedHospitalOut<QualitativeTimedStatus>): number {
@@ -64,8 +75,8 @@ export class HospitalUtilService {
 
   public getBedAccessorFunctions(): ((d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts)[] {
     return [
-      (d: QualitativeTimedStatus) => d.icu_low_care,
-      (d: QualitativeTimedStatus) => d.icu_high_care,
+      (d: QualitativeTimedStatus) => d.icu_low_state,
+      (d: QualitativeTimedStatus) => d.icu_high_state,
       (d: QualitativeTimedStatus) => d.ecmo_state,
     ];
   }

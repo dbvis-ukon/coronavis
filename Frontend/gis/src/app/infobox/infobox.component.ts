@@ -23,6 +23,7 @@ import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.se
 import { CaseUtilService } from '../services/case-util.service';
 import { CountryAggregatorService } from '../services/country-aggregator.service';
 import { GlyphLayerService } from '../services/glyph-layer.service';
+import { HospitalUtilService } from '../services/hospital-util.service';
 import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TooltipService } from '../services/tooltip.service';
@@ -138,7 +139,8 @@ export class InfoboxComponent implements OnInit {
     private hospitalRepo: QualitativeDiviDevelopmentRepository,
     private caseRepo: CaseDevelopmentRepository,
     private caseUtil: CaseUtilService,
-    private cache: CachedRepository
+    private cache: CachedRepository,
+    private hospitalUtil: HospitalUtilService
   ) { }
 
   ngOnInit(): void {
@@ -221,9 +223,11 @@ export class InfoboxComponent implements OnInit {
   private hospitalSearchResult(): Observable<Searchable> {
     const zoom = this.getZoomForAggLevel(this._mo.bedGlyphOptions.aggregationLevel);
 
+    const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(this._mo.bedGlyphOptions);
+
     if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
       return this.hospitalRepo
-      .getDiviDevelopmentSingleHospitals()
+      .getDiviDevelopmentSingleHospitals(from, to)
       .pipe(
         mergeMap(d => d.features),
         map(d => {
@@ -240,7 +244,7 @@ export class InfoboxComponent implements OnInit {
       );
     } else if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel !== AggregationLevel.none) {
       return this.hospitalRepo
-      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel)
+      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to)
       .pipe(
         mergeMap(d => d.features),
         map(d => {
@@ -262,8 +266,9 @@ export class InfoboxComponent implements OnInit {
   private bedBackgroundSearchResult(): Observable<Searchable> {
     const zoom = this.getZoomForAggLevel(this._mo.bedBackgroundOptions.aggregationLevel);
     if (this._mo.bedBackgroundOptions.enabled && this._mo.bedBackgroundOptions.aggregationLevel !== AggregationLevel.none) {
+      const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(this._mo.bedBackgroundOptions);
       return this.hospitalRepo
-      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel)
+      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to)
       .pipe(
         mergeMap(d => d.features),
         map(d => {
@@ -471,8 +476,8 @@ export class InfoboxComponent implements OnInit {
           rki,
           rkiOutdated,
           glyphData: [
-            {name: 'ICU low', accessor: 'showIcuLow', accFunc: (d: QualitativeTimedStatus) => d.icu_low_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_low_care), description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
-            {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (d: QualitativeTimedStatus) => d.icu_high_care, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_high_care), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
+            {name: 'ICU low', accessor: 'showIcuLow', accFunc: (d: QualitativeTimedStatus) => d.icu_low_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_low_state), description: 'ICU low care = Monitoring, nicht-invasive Beatmung (NIV), keine Organersatztherapie'},
+            {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (d: QualitativeTimedStatus) => d.icu_high_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_high_state), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
             {name: 'ECMO', accessor: 'showEcmo', accFunc: (d: QualitativeTimedStatus) => d.ecmo_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.ecmo_state), description: 'ECMO = Zusätzlich ECMO'}
           ],
           casesCountiesAvailable: availableCounties,

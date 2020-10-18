@@ -12,6 +12,7 @@ import { RKICaseDevelopmentProperties } from '../repositories/types/in/quantitat
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { CaseChoroplethColormapService } from './case-choropleth-colormap.service';
 import { CaseUtilService } from './case-util.service';
+import { HospitalUtilService } from './hospital-util.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
 
 @Injectable({
@@ -24,13 +25,16 @@ export class D3ChoroplethDataService {
     private caseRepo: CaseDevelopmentRepository,
     private bedColorMap: QualitativeColormapService,
     private caseColorMap: CaseChoroplethColormapService,
-    private caseUtil: CaseUtilService
+    private caseUtil: CaseUtilService,
+    private hospitalUtil: HospitalUtilService
   ) { }
 
 
   public get(mo: MapOptions, mls: MapLocationSettings): Observable<D3ChoroplethMapData> {
     if (mo.bedBackgroundOptions.enabled) {
-      return this.bedRepo.getDiviDevelopmentForAggLevel(mo.bedBackgroundOptions.aggregationLevel)
+      const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(mo.bedGlyphOptions);
+
+      return this.bedRepo.getDiviDevelopmentForAggLevel(mo.bedBackgroundOptions.aggregationLevel, from, to)
       .pipe(
         map(d => {
           return {

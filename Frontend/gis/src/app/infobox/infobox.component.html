@@ -36,8 +36,8 @@
 
       <div *ngIf="combinedStats$ | async as c">
         <div *ngIf="c.diviFiltered !== undefined && c.diviUnfiltered !== undefined; else noDiviData">
-          <p class="stats with-addon" i18n="@@infoboxNumberOfHospitals">{{ c.diviUnfiltered.numHospitals | number }} bundesweit gemeldete Einrichtungen</p>
-          <p class="stats"><small i18n="@@infoboxNumberOfHospitalsAddon">(davon {{ (c.diviUnfiltered.numHospitals - c.diviFiltered.numHospitals) | number }} ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</small></p>
+          <p class="stats with-addon" i18n="@@infoboxNumberOfHospitals">{{ c.diviUnfiltered.num_hospitals | number }} bundesweit gemeldete Einrichtungen</p>
+          <p class="stats"><small i18n="@@infoboxNumberOfHospitalsAddon">(davon {{ (c.diviUnfiltered.num_hospitals - c.diviFiltered.num_hospitals) | number }} ausgeblendet, da die letzte Datenaktualisierung älter als 5 Tage ist)</small></p>
           <p class="stats" i18n="@@infoboxLastUpdate">Letzter Stand: {{ c.diviFiltered.last_update | date:'full' }}</p>
         </div>
         <ng-template #noDiviData>
