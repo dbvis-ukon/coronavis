@@ -190,6 +190,10 @@ export class LegendComponent implements OnInit, OnDestroy {
       this.currentOptions.covidNumberCaseOptions._binSelection.push(b);
     }
 
+    if (this.currentOptions.covidNumberCaseOptions._binSelection.length === 0) {
+      this.currentOptions.covidNumberCaseOptions._binSelection = null;
+    }
+
     this.currentOptions.covidNumberCaseOptions._binHovered = null;
 
     this.mapOptionsChange.emit({... this.currentOptions});
