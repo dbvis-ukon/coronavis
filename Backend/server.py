@@ -3,13 +3,15 @@
 import logging
 import os
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_compress import Compress
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 from cache import cache
 from db import db
-from views import cases, divi, health, hospitals, osm, version, cases_risklayer
+from views import cases, divi, health, hospitals, osm, version, cases_risklayer, extent
+from werkzeug.exceptions import HTTPException
+import json
 
 # add sentry integration
 
@@ -61,6 +63,38 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONNECTION_STRING
 db.init_app(app)
 cache.init_app(app)
 
+@cross_origin()
+@app.errorhandler(HTTPException)
+def handle_http_exception(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    # start with the correct headers and status code from the error
+    response = e.get_response()
+    # replace the body with JSON
+    response.data = json.dumps({
+        "code": e.code,
+        "name": e.name,
+        "description": e.description,
+    })
+    response.content_type = "application/json"
+    return response
+
+
+@cross_origin()
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # pass through HTTP errors
+    if isinstance(e, HTTPException):
+        return e
+
+    app.logger.error(e)
+
+    # now you're handling non-HTTP exceptions only
+    return jsonify({
+        "code": 500,
+        "name": "Internal Server Error",
+        "description": str(e.message) if hasattr(e, 'message') else str(e).partition('\n')[0]
+    }), 500
+
 # register blueprints
 app.register_blueprint(cases.routes)
 app.register_blueprint(health.routes)
@@ -69,6 +103,7 @@ app.register_blueprint(osm.routes)
 app.register_blueprint(version.routes)
 app.register_blueprint(divi.routes)
 app.register_blueprint(cases_risklayer.routes)
+app.register_blueprint(extent.routes)
 
 # add cors and compress
 CORS(app)

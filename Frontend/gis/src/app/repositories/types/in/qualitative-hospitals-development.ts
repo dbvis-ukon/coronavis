@@ -13,11 +13,13 @@ export type QuantitativeAggregatedHospitalProperties = AggregatedHospital & Quan
 
 
 export interface AggregatedHospital {
+    id: string;
     name: string;
     centroid: Point;
 }
 
 export interface SingleHospital {
+    id: string;
     name: string;
 
     gemeindeschluessel: number;
@@ -25,7 +27,6 @@ export interface SingleHospital {
     bundeslandschluessel: string;
     plz: string;
     webaddresse: string;
-    id: string;
     address: string;
     state: string;
     contact: string;
@@ -48,16 +49,17 @@ export interface AbstractTimedStatus {
 
 export interface QualitativeTimedStatus extends AbstractTimedStatus {
 
-    /**
-     * Only available in an aggregation
-     */
-    numHospitals?: number;
+    timestamp: string;
 
-    last_update?: string;
+    inserted: string;
 
-    icu_low_care: QualitativeAggregatedBedStateCounts;
+    last_updated: string;
 
-    icu_high_care: QualitativeAggregatedBedStateCounts;
+    num_hospitals: number;
+
+    icu_low_state: QualitativeAggregatedBedStateCounts;
+
+    icu_high_state: QualitativeAggregatedBedStateCounts;
 
     ecmo_state: QualitativeAggregatedBedStateCounts;
 }

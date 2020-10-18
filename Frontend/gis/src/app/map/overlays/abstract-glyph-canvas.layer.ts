@@ -146,6 +146,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
           y: e.mouse.originalEvent.clientY + 5
         });
         t.tooltipData = e.item.properties;
+        t.options = this.currentOptions;
 
 
         this.drawGlyphs();
@@ -160,7 +161,10 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
         }
 
         this.dialog.open(HospitalInfoDialogComponent, {
-          data: e.item.properties
+          data: {
+            data: e.item.properties,
+            options: this.currentOptions
+          }
         });
       });
 

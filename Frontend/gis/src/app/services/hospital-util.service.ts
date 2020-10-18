@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Feature, FeatureCollection, Geometry, MultiPolygon, Point } from 'geojson';
 import { Moment } from 'moment';
 import { filter } from 'rxjs/operators';
+import { BedBackgroundOptions } from '../map/options/bed-background-options';
+import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
 import { AbstractTimedStatus, QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital-out';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
-import { getMoment } from '../util/date-util';
+import { getMoment, getStrDate } from '../util/date-util';
 
 @Injectable({
   providedIn: 'root'
@@ -33,39 +35,23 @@ export class HospitalUtilService {
     return hospital !== undefined && (hospital as SingleHospitalOut<QualitativeTimedStatus | QuantitativeTimedStatus>).address !== undefined;
   }
 
+  public getFromToTupleFromOptions(mo: BedGlyphOptions | BedBackgroundOptions): [string, string] {
+    const to = getStrDate(getMoment(mo.date).add(1, 'day'));
+
+    const from = getStrDate(getMoment(mo.date));
+
+
+    return [from, to];
+  }
+
   public getNumberOfHospitals(hospitalAgg: AggregatedHospitalOut<QualitativeTimedStatus>): number {
-    const ld = this.getLatestTimedStatus(hospitalAgg.developments);
-    if (!ld) {
-      return 0;
-    }
-
-    let maxN = 0;
-
-    for (const bedAcc of this.getBedAccessorFunctions()) {
-      let sum = 0;
-
-      const bed = bedAcc(ld);
-
-      if (!bed) {
-        continue;
-      }
-
-      for (const bedStatusAcc of this.getBedStatusAccessorFunctions()) {
-        sum += bedStatusAcc(bed) || 0;
-      }
-
-      if (sum > maxN) {
-        maxN = sum;
-      }
-    }
-
-    return maxN;
+    return hospitalAgg?.developments[hospitalAgg.developments.length - 1].num_hospitals;
   }
 
   public getBedAccessorFunctions(): ((d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts)[] {
     return [
-      (d: QualitativeTimedStatus) => d.icu_low_care,
-      (d: QualitativeTimedStatus) => d.icu_high_care,
+      (d: QualitativeTimedStatus) => d.icu_low_state,
+      (d: QualitativeTimedStatus) => d.icu_high_state,
       (d: QualitativeTimedStatus) => d.ecmo_state,
     ];
   }
