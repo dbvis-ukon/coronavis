@@ -10,7 +10,7 @@
     <div *ngIf="legendCasesExtended">
     <table>
 
-      <tr *ngFor="let b of caseBins$ | async" [ngClass]="{'selected': isBinSelected(b)}" (mouseenter)="hoverBin(b)" (mouseout)="hoverBin()" (click)="selectBin(b)" class="bin">
+      <tr *ngFor="let b of caseBins$ | async" [ngClass]="{'selected': isBinSelected(b), 'hovered': isBinHovered(b)}" (mouseenter)="hoverBin(b)" (mouseout)="hoverBin()" (click)="selectBin(b)" class="bin">
 
         <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
 
@@ -22,6 +22,14 @@
 
         <td class="upper" *ngIf="b.min !== b.max">
           {{ b.maxStr }}
+        </td>
+      </tr>
+
+      <tr *ngIf="(mo$ | async)?.covidNumberCaseOptions.showOnlyAvailableCounties">
+        <td><div class="rect" [ngStyle]="{ 'background-color': caseColormap.getUnavailableColor() }"></div></td>
+
+        <td colspan="3" class="lower" i18n="@@legendNotAvailable">
+          nicht verfügbar
         </td>
       </tr>
     </table>

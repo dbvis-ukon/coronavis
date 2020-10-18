@@ -67,7 +67,7 @@ export class LegendComponent implements OnInit, OnDestroy {
 
   constructor(
     private bedColormap: QualitativeColormapService,
-    private caseColormap: CaseChoroplethColormapService,
+    public caseColormap: CaseChoroplethColormapService,
     private plusMinusPipe: PlusminusPipe,
     private numberPipe: DecimalPipe,
     private i18n: I18nService,
@@ -171,6 +171,18 @@ export class LegendComponent implements OnInit, OnDestroy {
     this.mapOptionsChange.emit({... this.currentOptions});
   }
 
+  isBinHovered(bin: LegendColorMapBin): boolean {
+    if (!this.currentOptions) {
+      return false;
+    }
+
+    const b = this.getBinTuple(bin);
+
+    const c = this.currentOptions.covidNumberCaseOptions._binHovered;
+
+    return c && c[0] === b[0] && c[1] === b[1];
+  }
+
   selectBin(bin: LegendColorMapBin) {
     if (!this.currentOptions) {
       return;
@@ -188,6 +200,10 @@ export class LegendComponent implements OnInit, OnDestroy {
       }
 
       this.currentOptions.covidNumberCaseOptions._binSelection.push(b);
+    }
+
+    if (this.currentOptions.covidNumberCaseOptions._binSelection.length === 0) {
+      this.currentOptions.covidNumberCaseOptions._binSelection = null;
     }
 
     this.currentOptions.covidNumberCaseOptions._binHovered = null;

@@ -20,6 +20,8 @@ export interface ColorMapBin {
 })
 export class CaseChoroplethColormapService {
 
+  private unavailableColor = '#70929c';
+
   private caseChoroplethColorMap = scaleQuantize<string>()
     .domain([-1, 1])
     .range([...schemeGreens[8].slice(0, 7).reverse(), '#fff', ...schemeBlues[8].slice(0, 7)]);
@@ -60,6 +62,10 @@ export class CaseChoroplethColormapService {
 
   private getColorMap(options: CovidNumberCaseOptions) {
     return this.caseUtil.isLockdownMode(options) ? this.lockDownColorMap : this.caseChoroplethColorMap;
+  }
+
+  getUnavailableColor(): string {
+    return this.unavailableColor;
   }
 
   getColorMapBins(
@@ -169,19 +175,14 @@ export class CaseChoroplethColormapService {
     if (this.caseUtil.isLockdownMode(options) && options.dataSource === 'risklayer' && options.showOnlyAvailableCounties === true) {
       const status = this.caseUtil.getTimedStatusWithOptions(dataPoint.properties, options);
       if (!status.last_updated) {
-        return '#a6a6a6';
+        return this.unavailableColor;
       }
     }
 
 
     const nmbr = this.caseUtil.getCaseNumbers(dataPoint.properties, options);
-
-    if (options._binHovered && (options._binHovered[0] > nmbr || options._binHovered[1] <= nmbr)) {
-      return '#a6a6a6';
-    }
-
-    if (options._binSelection && options._binSelection.findIndex(d => d[0] <= nmbr && d[1] > nmbr) === -1) {
-      return '#a6a6a6';
+    if (!this.caseUtil.isHoveredOrSelectedBin(options, nmbr)) {
+      return this.unavailableColor;
     }
 
     return this.getColorMap(options)(scaleFn(nmbr));

@@ -3,7 +3,7 @@ import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild, View
 import * as L from 'leaflet';
 import { SVGOverlay } from 'leaflet';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
@@ -185,6 +185,8 @@ export class MapComponent implements OnInit {
     });
 
 
+    this.onChangeCaseChoropletOptions();
+
     this.updateMapLocation(mapLocationSettings);
 
 
@@ -275,7 +277,6 @@ export class MapComponent implements OnInit {
     const covidNumberCaseOptions = JSON.stringify(mo.covidNumberCaseOptions);
     if (this.previousOptions.get(MapOptionKeys.covidNumberCaseOptions) !== covidNumberCaseOptions) {
       this.caseChoroplethOptions$.next(mo.covidNumberCaseOptions);
-      this.updateCaseChoroplethLayers(mo.covidNumberCaseOptions);
     }
     this.previousOptions.set(MapOptionKeys.covidNumberCaseOptions, covidNumberCaseOptions);
 
@@ -416,25 +417,42 @@ export class MapComponent implements OnInit {
     });
   }
 
-  private updateCaseChoroplethLayers(opt: CovidNumberCaseOptions) {
-    if (!opt || !opt.enabled) {
-      this.caseChoroplethLayerChange.emit(null);
-      this.removeCaseChoroplethLayers();
-      return;
-    }
-
-    const key = this.caseChoroplehtLayerService.getKeyCovidNumberCaseOptions(opt);
-
-    this.caseChoroplethSubscription = this.caseChoroplehtLayerService.getLayer(this.caseChoroplethOptions$)
+  private onChangeCaseChoropletOptions() {
+    this.caseChoroplethOptions$
     .pipe(
-      switchMap(l => of(l))
-    )
-    .subscribe(([factory, labels]) => {
+      filter(opt => {
+        if (!opt || !opt.enabled) {
+          this.caseChoroplethLayerChange.emit(null);
+          this.removeCaseChoroplethLayers();
+          return false;
+        }
+
+        return true;
+      }),
+      switchMap(opt => {
+        const c = this.caseChoroplehtLayerService.getLayer(this.caseChoroplethOptions$)
+        .pipe(
+          map(d => {
+            return {
+              opt,
+              data: d
+            };
+          })
+        );
+        return c;
+      })
+    ).subscribe(d => {
+      const opt = d.opt;
+      const factory = d.data[0];
+      const labels = d.data[1];
+
       const background = factory.createOverlay();
 
       const l = L.layerGroup([background, labels]);
 
       this.removeCaseChoroplethLayers();
+
+      const key = this.caseChoroplehtLayerService.getKeyCovidNumberCaseOptions(opt);
 
       this.covidNumberCaseOptionsKeyToLayer.set(key, l);
 
