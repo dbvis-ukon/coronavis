@@ -103,7 +103,7 @@ class IcuDevelopments:
         """
         return self.__resSingle(self.__aggQuery('regierungsbezirke', fromTime, toTime, maxDaysOld, idDistrict), fromTime, toTime, maxDaysOld, idDistrict, self.__getFeatureAgg)
 
-    def getByDistricts(self, fromTime, maxDaysOld, toTime):
+    def getByDistricts(self, fromTime, toTime, maxDaysOld):
         """
             Return the development of icu capacities by districts
         """
