@@ -4,12 +4,14 @@ import json
 from flask import Blueprint, jsonify, request
 from sqlalchemy import text
 
-from cache import cache
+from cache import cache, make_cache_key
 from db import db
 from models.hospital import (Hospital, HospitalsPerBundesland,
                              HospitalsPerLandkreis,
                              HospitalsPerRegierungsbezirk)
 from views.helpers import __as_feature_collection
+from models.icuDevelopments import IcuDevelopments
+from timer import timer
 
 routes = Blueprint('hospitals', __name__, url_prefix='/hospitals')
 
@@ -54,6 +56,73 @@ def get_hospitals_by_bundeslander():
 
     hospitalsAggregated = db.session.query(HospitalsPerBundesland).all()
     return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+
+
+icu = IcuDevelopments()
+
+@routes.route('/development2/<idHospital>', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_hospital(idHospital):
+    return icu.getHospital(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), idHospital)
+
+@routes.route('/development2', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_hospitals2():
+    return icu.getHospitals(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
+
+@routes.route('/development2/landkreis/<idCounty>', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_county(idCounty):
+    return icu.getCounty(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), idCounty)
+
+@routes.route('/development2/landkreise', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_counties():
+    return icu.getByCounties(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
+
+
+@routes.route('/development2/regierungsbezirk/<idDistrict>', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_district(idDistrict):
+    return icu.getDistrict(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), idDistrict)
+
+@routes.route('/development2/regierungsbezirke', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_districts():
+    return icu.getByDistricts(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
+
+
+@routes.route('/development2/bundesland/<idState>', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_state(idState):
+    return icu.getState(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), idState)
+
+@routes.route('/development2/bundeslaender', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_states():
+    return icu.getByStates(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
+
+
+@routes.route('/development2/land/<idCountry>', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_country(idCountry):
+    return icu.getCountry(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), idCountry)
+
+@routes.route('/development2/laender', methods=['GET'])
+@cache.cached(key_prefix = make_cache_key)
+@timer
+def get_countries():
+    return icu.getByCountries(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
+
 
 
 @routes.route('/development', methods=['GET'])
