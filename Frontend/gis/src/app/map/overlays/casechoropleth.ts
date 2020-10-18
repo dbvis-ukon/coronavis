@@ -17,7 +17,8 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
     private options: CovidNumberCaseOptions,
     private tooltipService: TooltipService,
     private colorsService: CaseChoroplethColormapService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private caseUtil: CaseUtilService
   ) {
     super(name, hospitals);
   }
@@ -67,13 +68,15 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
       style: (feature: Feature<Geometry, RKICaseDevelopmentProperties>) => {
         // const numbers = this.colorsService.getCaseNumbers(feature.properties, this.options);
 
+        const fillOp = this.caseUtil.isHoveredOrSelectedBin(this.options, this.caseUtil.getCaseNumbers(feature.properties, this.options)) ? 1 : 0.65;
+
         return {
           fillColor: this.colorsService.getColor(scaleFn, feature, this.options),
           weight: 0.5,
           opacity: 1,
           color: 'gray',
           // dashArray: '3',
-          fillOpacity: 1
+          fillOpacity: fillOp
         };
       },
       onEachFeature: (feature, layer) => {
