@@ -9,7 +9,7 @@ from flask_cors import CORS
 
 from cache import cache
 from db import db
-from views import cases, divi, health, hospitals, osm, version, cases_risklayer
+from views import cases, divi, health, hospitals, osm, version, cases_risklayer, extent
 from werkzeug.exceptions import HTTPException
 import json
 
@@ -95,6 +95,7 @@ app.register_blueprint(osm.routes)
 app.register_blueprint(version.routes)
 app.register_blueprint(divi.routes)
 app.register_blueprint(cases_risklayer.routes)
+app.register_blueprint(extent.routes)
 
 # add cors and compress
 CORS(app)
