@@ -20,20 +20,20 @@ export class QualitativeDiviDevelopmentRepository {
   constructor(private cachedRepository: CachedRepository, private hospitalUtil: HospitalUtilService) {}
 
   public getDiviDevelopmentSingleHospitals(from: string, to: string, dayThreshold: number = 5): Observable <FeatureCollection<Point, SingleHospitalOut<QualitativeTimedStatus>>> {
-    return this.cachedRepository.get <FeatureCollection<Point, QualitativeSingleHospitalProperties>> (`${environment.apiUrl}hospitals/development2`, this.prepareParams(from, to, dayThreshold));
+    return this.cachedRepository.get <FeatureCollection<Point, QualitativeSingleHospitalProperties>> (`${environment.apiUrl}hospitals/development`, this.prepareParams(from, to, dayThreshold));
   }
 
   public getDiviDevelopmentForAggLevel(aggregationLevel: AggregationLevel, from: string, to: string, dayThreshold: number = 5): Observable <FeatureCollection<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
-    return this.cachedRepository.get <FeatureCollection<MultiPolygon, QualitativeAggregatedHospitalProperties>> (`${environment.apiUrl}hospitals/development2/${aggregationLevel}`, this.prepareParams(from, to, dayThreshold));
+    return this.cachedRepository.get <FeatureCollection<MultiPolygon, QualitativeAggregatedHospitalProperties>> (`${environment.apiUrl}hospitals/development/${aggregationLevel}`, this.prepareParams(from, to, dayThreshold));
   }
 
   public getDiviDevelopmentSingleHospital(id: string, from: string, to: string, dayThreshold: number = 5): Observable <Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>> {
-    return this.cachedRepository.get <Feature<Point, QualitativeSingleHospitalProperties>> (`${environment.apiUrl}hospitals/development2/${id}`, this.prepareParams(from, to, dayThreshold));
+    return this.cachedRepository.get <Feature<Point, QualitativeSingleHospitalProperties>> (`${environment.apiUrl}hospitals/development/${id}`, this.prepareParams(from, to, dayThreshold));
   }
 
   public getDiviDevelopmentForAggLevelSingle(aggregationLevel: AggregationLevel, id: string, from: string, to: string, dayThreshold: number = 5): Observable <Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
     const ep = aggLevelToEndpointSingle(aggregationLevel);
-    return this.cachedRepository.get <Feature<MultiPolygon, QualitativeAggregatedHospitalProperties>> (`${environment.apiUrl}hospitals/development2/${ep}/${id}`, this.prepareParams(from, to, dayThreshold));
+    return this.cachedRepository.get <Feature<MultiPolygon, QualitativeAggregatedHospitalProperties>> (`${environment.apiUrl}hospitals/development/${ep}/${id}`, this.prepareParams(from, to, dayThreshold));
   }
 
   private prepareParams(from: string, to: string, dayThreshold: number = 5): HttpParams {
