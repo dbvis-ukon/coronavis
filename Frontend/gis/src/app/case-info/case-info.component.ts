@@ -47,6 +47,8 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
 
   trend: Observable<{m: number, b: number, rotation: number}>;
 
+  lastUpdated: string;
+
   constructor(
     private numberPipe: DecimalPipe,
     private caseUtil: CaseUtilService,
@@ -98,6 +100,8 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
     [this.curTimedStatus, this.twentyFourHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.twentyFourhours);
     [this.curTimedStatus, this.seventyTwoHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.seventyTwoHours);
     [this.curTimedStatus, this.sevenDaysTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.sevenDays);
+
+    this.lastUpdated = this.data.developments.slice().reverse().find(d => d.inserted).inserted;
   }
 
   public getCasesPer100kInhabitants(count: number, status: RKICaseTimedStatus, addPlus: boolean = false): string {

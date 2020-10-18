@@ -9,7 +9,7 @@
     </tr>
     <tr>
         <th></th>
-        <th colspan="2">{{ this.curTimedStatus.last_updated || this.curTimedStatus.timestamp | date:"d.M.y HH:mm" }}</th>
+        <th colspan="2">{{ lastUpdated | date:'short' }}</th>
         <th colspan="3" i18n="case-tooltip|24h@@24h" *ngIf="!tooltip">letzte 24h</th>
         <th colspan="3" i18n="case-tooltip|72h@@72h" *ngIf="!tooltip">letzte 72h</th>
         <th colspan="3" i18n="case-tooltip|7d@@7d">letzte 7t</th>
