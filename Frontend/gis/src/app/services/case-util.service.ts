@@ -160,6 +160,18 @@ export class CaseUtilService {
     return [from, to];
   }
 
+  public isHoverBin(opt: CovidNumberCaseOptions, nmbr: number): boolean {
+    return opt._binHovered && (opt._binHovered[0] <= nmbr && opt._binHovered[1] > nmbr);
+  }
+
+  public isSelectedBin(opt: CovidNumberCaseOptions, nmbr: number): boolean {
+    return opt._binSelection && opt._binSelection.findIndex(d => d[0] <= nmbr && d[1] > nmbr) > -1;
+  }
+
+  public isHoveredOrSelectedBin(opt: CovidNumberCaseOptions, nmbr: number): boolean {
+    return (!opt._binHovered && !opt._binSelection) || this.isHoverBin(opt, nmbr) || this.isSelectedBin(opt, nmbr);
+  }
+
   getTypeAccessorFnWithOptions(options: CovidNumberCaseOptions): (d: RKICaseTimedStatus) => number | undefined {
     return this.getTypeAccessorFn(options.type);
   }

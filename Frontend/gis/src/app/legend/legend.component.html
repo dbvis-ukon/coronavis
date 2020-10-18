@@ -10,7 +10,7 @@
     <div *ngIf="legendCasesExtended">
     <table>
 
-      <tr *ngFor="let b of caseBins$ | async" [ngClass]="{'selected': isBinSelected(b)}" (mouseenter)="hoverBin(b)" (mouseout)="hoverBin()" (click)="selectBin(b)" class="bin">
+      <tr *ngFor="let b of caseBins$ | async" [ngClass]="{'selected': isBinSelected(b), 'hovered': isBinHovered(b)}" (mouseenter)="hoverBin(b)" (mouseout)="hoverBin()" (click)="selectBin(b)" class="bin">
 
         <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
 

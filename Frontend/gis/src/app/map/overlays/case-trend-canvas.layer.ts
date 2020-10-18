@@ -97,11 +97,7 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
     }
 
     const nmbr = this.caseUtil.getCaseNumbers(glyphData.properties, opt);
-    if (opt._binHovered && (opt._binHovered[0] > nmbr || opt._binHovered[1] <= nmbr)) {
-      return;
-    }
-
-    if (opt._binSelection && opt._binSelection.findIndex(d => d[0] <= nmbr && d[1] > nmbr) === -1) {
+    if (!this.caseUtil.isHoveredOrSelectedBin(opt, nmbr)) {
       return;
     }
 
