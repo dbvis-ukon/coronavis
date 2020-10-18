@@ -24,6 +24,14 @@
           {{ b.maxStr }}
         </td>
       </tr>
+
+      <tr *ngIf="(mo$ | async)?.covidNumberCaseOptions.showOnlyAvailableCounties">
+        <td><div class="rect" [ngStyle]="{ 'background-color': caseColormap.getUnavailableColor() }"></div></td>
+
+        <td colspan="3" class="lower" i18n="@@legendNotAvailable">
+          nicht verfügbar
+        </td>
+      </tr>
     </table>
 
     <p i18n="@@clearSelection" class="clear-selection" *ngIf="currentOptions?.covidNumberCaseOptions?._binSelection?.length > 0" (click)="clearSelection()">Selektion aufheben</p>

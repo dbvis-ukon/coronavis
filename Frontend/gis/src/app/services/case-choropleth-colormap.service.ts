@@ -20,7 +20,7 @@ export interface ColorMapBin {
 })
 export class CaseChoroplethColormapService {
 
-  private unavailableColor = '#a6a6a6';
+  private unavailableColor = '#70929c';
 
   private caseChoroplethColorMap = scaleQuantize<string>()
     .domain([-1, 1])

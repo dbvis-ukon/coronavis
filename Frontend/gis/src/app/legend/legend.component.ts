@@ -67,7 +67,7 @@ export class LegendComponent implements OnInit, OnDestroy {
 
   constructor(
     private bedColormap: QualitativeColormapService,
-    private caseColormap: CaseChoroplethColormapService,
+    public caseColormap: CaseChoroplethColormapService,
     private plusMinusPipe: PlusminusPipe,
     private numberPipe: DecimalPipe,
     private i18n: I18nService,
