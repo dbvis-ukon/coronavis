@@ -30,7 +30,12 @@ export class CountryAggregatorService {
 
     return this.caseRepository.getCasesDevelopmentForAggLevel(dataSource, AggregationLevel.country, from, to)
     .pipe(
-      map(fc => this.caseUtilService.getTimedStatus(fc.features[0].properties, getMoment(refDate)))
+      map(fc => {
+        if (fc.features.length === 0 || !fc.features[0]?.properties) {
+          return undefined;
+        }
+        return this.caseUtilService.getTimedStatus(fc.features[0].properties, getMoment(refDate));
+      })
     );
   }
 
