@@ -9,3 +9,11 @@ Project: covid-19-vis-backend
 Branch: master
 
 urlProtocol: https
+
+cpu:
+  req: 500m
+  limit: 1000m
+
+mem:
+  req: 1Gi
+  limit: 2Gi

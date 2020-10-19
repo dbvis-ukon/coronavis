@@ -77,10 +77,10 @@ spec:
             successThreshold: 1
           resources:
             requests:
-              cpu: "4000m"
-              memory: "500Mi"
+              cpu: {{ .Values.cpu.req }}
+              memory: {{ .Values.mem.req }}
             limits:
-              cpu: "6000m"
-              memory: "3000Mi"
+              cpu: {{ .Values.cpu.limit }}
+              memory: {{ .Values.mem.limit }}
       imagePullSecrets:
           - name: regcred-server
