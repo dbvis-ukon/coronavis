@@ -165,7 +165,7 @@
   <div *ngIf="mode === 'dialog' && isSingleHospital">
     <!--h3>{{ data.Name }}</h3>
     <mat-divider></mat-divider-->
-    <p *ngIf="singleHospital.address !== ''" style="margin-top: 10px;">
+    <p *ngIf="singleHospital?.address && singleHospital.address !== ''" style="margin-top: 10px;">
       <strong i18n="@@tooltipHospitalAddress">Adresse: </strong> {{ singleHospital.address }}
     </p>
     <p *ngIf="contactMsg !== ''">
