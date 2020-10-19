@@ -164,17 +164,21 @@ export class InfoboxComponent implements OnInit {
 
     interval(5000)
       .subscribe(() => {
-        const lastRun = cron.lastDate() ? moment.utc(cron.lastDate()) : initTime;
+        let nextDate = getMoment('now').add(30, 'minutes');
 
-        const diffNext = cron.nextDate().diff(getMoment('now').utc()) + 30000;
+        try {
+          nextDate = cron.nextDate();
+        } catch (e) {
+          console.warn('Could not determine next cron. Fall back to now + 30 min.');
+        }
 
-        const diffTotal = cron.nextDate().diff(initTime);
+        const diffNext = nextDate.diff(getMoment('now').utc()) + 30000;
+
+        const diffTotal = nextDate.diff(initTime);
 
         this.nextLiveUpdate = moment.duration(diffNext).humanize();
 
         this.nextLiveUpdatePercentage = ((diffNext / diffTotal)) * 100;
-
-        // console.log('diff', cron.nextDate().format(), cron.lastDate(), diffNext, diffTotal, this.nextLiveUpdatePercentage);
       });
 
 
