@@ -59,6 +59,10 @@ export class VegaLinechartService {
         "encoding": {"y": {"datum": 50}, "color": {"value": "firebrick"}}
       },
       {
+        "mark": "rule",
+        "encoding": {"y": {"datum": 35}, "color": {"value": "orange"}}
+      },
+      {
         "mark": {"type": "line"},
         "encoding": {
           "x": {"field": "x", "type": "temporal", "title": ""},
@@ -76,14 +80,13 @@ export class VegaLinechartService {
           },
           "y": {"field": "y", "type": "quantitative", "title": "Cases per 100"},
           "color": {
-            "condition": {
-              "test": "datum.y < 50"
-            },
-            "value": "firebrick"
+            "condition": [
+              {"test": "datum.y >= 50", "value": "firebrick"},
+              {"test": "datum.y >= 35 && datum.y < 50", "value": "orange"}
+            ]
           }
         }
-      },
-
+      }
     ],
     "width": 400,
     "height": 100
@@ -115,10 +118,10 @@ export class VegaLinechartService {
     spec.data.values = data;
 
     // also overwrite the title
-    spec.layer[1].encoding.x.title = chartOptions.xAxisTitle || '';
+    spec.layer[2].encoding.x.title = chartOptions.xAxisTitle || '';
 
-    spec.layer[1].encoding.y.title = chartOptions.yAxisTitle || '';
     spec.layer[2].encoding.y.title = chartOptions.yAxisTitle || '';
+    spec.layer[3].encoding.y.title = chartOptions.yAxisTitle || '';
 
     spec.width = chartOptions.width;
     spec.height = chartOptions.height;

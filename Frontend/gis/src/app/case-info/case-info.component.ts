@@ -74,7 +74,7 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
         map(d => this.vegaLinechartService.compileChart(d.splice(7), {
           xAxisTitle: '',
           yAxisTitle: 'New cases per 100k / 7days',
-          width: 400,
+          width: 600,
           height: 150,
           regression: {
             to: getMoment(this.options.date).toISOString(),
