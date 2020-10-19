@@ -130,6 +130,10 @@ export class QualitativeColormapService {
     }
     const properties = f(latest);
 
+    if (!properties) {
+      return this.singleHospitalCM('Keine Information');
+    }
+
     const score = this.getScore(properties);
     const minScore = this.getMinScore(properties);
     const maxScore = this.getMaxScore(properties);
