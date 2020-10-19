@@ -1,97 +1,99 @@
 
-<div class="legend bedlegend" *ngIf="(mo$ | async)?.bedBackgroundOptions.enabled === false && choroplethLayer$ | async">
-  <h5 
-  class="title"
-  (click)="legendCasesExtended = !legendCasesExtended" 
-  i18n-matTooltip="@@legendToggleTooltip" 
-  matTooltip="Klicken um Legende ein-/auszuklappen"
-  matTooltipPosition="above"
-  >{{ titleCases$ | async }}</h5>
-    <div *ngIf="legendCasesExtended">
-    <table>
-
-      <tr *ngFor="let b of caseBins$ | async" [ngClass]="{'selected': isBinSelected(b), 'hovered': isBinHovered(b)}" (mouseenter)="hoverBin(b)" (mouseout)="hoverBin()" (click)="selectBin(b)" class="bin">
-
-        <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
-
-        <td class="lower">
-          {{ b.minStr }}
-        </td>
-
-        <td class="dash" *ngIf="b.min !== b.max">–</td>
-
-        <td class="upper" *ngIf="b.min !== b.max">
-          {{ b.maxStr }}
-        </td>
-      </tr>
-
-      <tr *ngIf="(mo$ | async)?.covidNumberCaseOptions.showOnlyAvailableCounties">
-        <td><div class="rect" [ngStyle]="{ 'background-color': caseColormap.getUnavailableColor() }"></div></td>
-
-        <td colspan="3" class="lower" i18n="@@legendNotAvailable">
-          nicht verfügbar
-        </td>
-      </tr>
-    </table>
-
-    <p i18n="@@clearSelection" class="clear-selection" *ngIf="currentOptions?.covidNumberCaseOptions?._binSelection?.length > 0" (click)="clearSelection()">Selektion aufheben</p>
-
-    </div>
-        
-    <div *ngIf="!legendCasesExtended">
-      <div class="row" *ngIf="caseBins$ | async; let bins">
-        <div class="text" [innerHtml]="bins[0]?.minStr"></div>
-        <div *ngFor="let b of bins"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.minStr }} – {{ b.maxStr }}"></div>
-        <div class="text" [innerHtml]="bins[bins.length - 1]?.maxStr"></div>
+<div class="legend-wrapper">
+  <div class="legend-inner bedlegend" *ngIf="(mo$ | async)?.bedBackgroundOptions.enabled === false && choroplethLayer$ | async">
+    <h5 
+    class="title"
+    (click)="legendCasesExtended = !legendCasesExtended" 
+    i18n-matTooltip="@@legendToggleTooltip" 
+    matTooltip="Klicken um Legende ein-/auszuklappen"
+    matTooltipPosition="above"
+    >{{ titleCases$ | async }}</h5>
+      <div *ngIf="legendCasesExtended">
+      <table>
+  
+        <tr *ngFor="let b of caseBins$ | async" [ngClass]="{'selected': isBinSelected(b), 'hovered': isBinHovered(b)}" (mouseenter)="hoverBin(b)" (mouseout)="hoverBin()" (click)="selectBin(b)" class="bin">
+  
+          <td><div class="rect" [ngStyle]="{ 'background-color': b.color }"></div></td>
+  
+          <td class="lower">
+            {{ b.minStr }}
+          </td>
+  
+          <td class="dash" *ngIf="b.min !== b.max">–</td>
+  
+          <td class="upper" *ngIf="b.min !== b.max">
+            {{ b.maxStr }}
+          </td>
+        </tr>
+  
+        <tr *ngIf="(mo$ | async)?.covidNumberCaseOptions.showOnlyAvailableCounties">
+          <td><div class="rect" [ngStyle]="{ 'background-color': caseColormap.getUnavailableColor() }"></div></td>
+  
+          <td colspan="3" class="lower" i18n="@@legendNotAvailable">
+            nicht verfügbar
+          </td>
+        </tr>
+      </table>
+  
+      <p i18n="@@clearSelection" class="clear-selection" *ngIf="currentOptions?.covidNumberCaseOptions?._binSelection?.length > 0" (click)="clearSelection()">Selektion aufheben</p>
+  
       </div>
-    </div>
-
-    <div>
-      <h5 *ngIf="(mo$ | async)?.covidNumberCaseOptions.dataSource === 'rki'; else elseBlockDatSource" class="source" i18n="@@legendDatasourceRki">Datenquelle: <a href="https://rki.de">Robert Koch Institut</a></h5>
-      <ng-template #elseBlockDatSource>
-        <h5 class="source" i18n="@@legendDatasourceRisklayer">Datenquelle: 
-          <a href="http://risklayer.com/">Risklayer GmbH</a> and 
-          <a href="https://www.cedim.kit.edu/" matTooltip="Center for Disaster Management and Risk Reduction Technology">CEDIM</a> at 
-          <a href="https://www.kit.edu/" matTooltip="Karlsruhe Institute of Technology">KIT</a> and the 
-          <a href="https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</a>
-        </h5>
-      </ng-template>
-    </div>
-</div>
-
-
-<div class="legend bedlegend" *ngIf="(mo$ | async)?.bedBackgroundOptions.enabled === true || (mo$ | async)?.bedGlyphOptions.enabled === true" >
-  <h5
-  class="title" 
-  (click)="legendBedsExtended = !legendBedsExtended" 
-  i18n-matTooltip="@@legendToggleTooltip" 
-  matTooltip="Klicken um Legende ein-/auszuklappen"
-  matTooltipPosition="above"
-  >{{ titleBeds$ | async }}</h5>
-
-  <div *ngIf="legendBedsExtended">
-  <table>
-    <tr *ngFor="let b of bedStatusColors">
-      <td><div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div></td>
-
-      <td class="text">{{ b | translate }}</td>
-    </tr>
-  </table>
+          
+      <div *ngIf="!legendCasesExtended">
+        <div class="row" *ngIf="caseBins$ | async; let bins">
+          <div class="text" [innerHtml]="bins[0]?.minStr"></div>
+          <div *ngFor="let b of bins"  class="rect" [ngStyle]="{ 'background-color': b.color }" matTooltip="{{ b.minStr }} – {{ b.maxStr }}"></div>
+          <div class="text" [innerHtml]="bins[bins.length - 1]?.maxStr"></div>
+        </div>
+      </div>
+  
+      <div>
+        <h5 *ngIf="(mo$ | async)?.covidNumberCaseOptions.dataSource === 'rki'; else elseBlockDatSource" class="source" i18n="@@legendDatasourceRki">Datenquelle: <a href="https://rki.de">Robert Koch Institut</a></h5>
+        <ng-template #elseBlockDatSource>
+          <h5 class="source" i18n="@@legendDatasourceRisklayer">Datenquelle: 
+            <a href="http://risklayer.com/">Risklayer GmbH</a> and 
+            <a href="https://www.cedim.kit.edu/" matTooltip="Center for Disaster Management and Risk Reduction Technology">CEDIM</a> at 
+            <a href="https://www.kit.edu/" matTooltip="Karlsruhe Institute of Technology">KIT</a> and the 
+            <a href="https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</a>
+          </h5>
+        </ng-template>
+      </div>
   </div>
   
-  <div *ngIf="!legendBedsExtended">
-    <div class="row">
-      <div class="beside" *ngFor="let b of bedStatusColors;" matTooltip="{{ b | translate }}">
-
-        <div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div>
-
-        <div class="text">{{ bedStatusIcons[b] | translate }}</div>
-
+  
+  <div class="legend-inner bedlegend" *ngIf="(mo$ | async)?.bedBackgroundOptions.enabled === true || (mo$ | async)?.bedGlyphOptions.enabled === true" >
+    <h5
+    class="title" 
+    (click)="legendBedsExtended = !legendBedsExtended" 
+    i18n-matTooltip="@@legendToggleTooltip" 
+    matTooltip="Klicken um Legende ein-/auszuklappen"
+    matTooltipPosition="above"
+    >{{ titleBeds$ | async }}</h5>
+  
+    <div *ngIf="legendBedsExtended">
+    <table>
+      <tr *ngFor="let b of bedStatusColors">
+        <td><div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div></td>
+  
+        <td class="text">{{ b | translate }}</td>
+      </tr>
+    </table>
+    </div>
+    
+    <div *ngIf="!legendBedsExtended">
+      <div class="row">
+        <div class="beside" *ngFor="let b of bedStatusColors;" matTooltip="{{ b | translate }}">
+  
+          <div class="rect" [ngStyle]="{ 'background-color': getBedColor(b) }"></div>
+  
+          <div class="text">{{ bedStatusIcons[b] | translate }}</div>
+  
+        </div>
       </div>
     </div>
-  </div>
-
-  <div>
-    <h5 class="source" i18n="@@legendDatasourceDivi">Datenquelle: <a href="https://intensivregister.de">DIVI Intensivregister</a></h5>
+  
+    <div>
+      <h5 class="source" i18n="@@legendDatasourceDivi">Datenquelle: <a href="https://intensivregister.de">DIVI Intensivregister</a></h5>
+    </div>
   </div>
 </div>
