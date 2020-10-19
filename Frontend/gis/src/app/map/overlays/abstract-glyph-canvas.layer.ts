@@ -373,7 +373,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
   }
 
   protected calculateOverlapFree() {
-    if (!this.data || !this._map) {
+    if (!this.data || !this._map || !this.currentOptions) {
       return;
     }
 
@@ -411,7 +411,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
 
     const lines: {line: string; width: number}[] = [];
 
-    let testWidth;
+    let testWidth: number;
     for (let n = 0; n < words.length; n++) {
       const testLine = line + words[n] + ' ';
       const metrics = this.ctx.measureText(testLine);
