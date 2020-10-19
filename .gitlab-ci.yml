@@ -392,8 +392,8 @@ frontend-code-quality:
   script:
     - source var.env
     - cd ./Frontend
-    - export FRONTEND_URL_BACKEND
-    - export FRONTEND_URL_TILES
+    - export FRONTEND_URL_BACKEND=${URL_BACKEND}
+    - export FRONTEND_URL_TILES=${URL_TILES}
     - export URL_PROTOCOL
     - export VERSION
     - export ENV_TYPE
@@ -536,8 +536,14 @@ dockerize-tiles:
     - CHART_NAME=$(echo ${CI_ENVIRONMENT_NAME} | tr / - | cut -c -53 | sed -E 's#-+$##')
     # DEBUG
     - echo ${CHART_NAME}
+    # delete old var.env file to not run into limit issues
+    - rm var.env
+    - echo "ENV_TYPE=${ENV_TYPE}" >> var.env
+    - echo "URL_PROTOCOL=${URL_PROTOCOL}" >> var.env
+    - echo "VERSION=${VERSION}" >> var.env
     # write the url into the var.env file for the dynamic env url generation
     - echo "URL=${URL}" >> var.env
+    - cat var.env
     # use chart name and the folder by uppercasing the first character of the app name; result: Backend
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} --set environment=${ENV_TYPE} --set replicaCount=${REPLICA_COUNT} --set cpu.req=${CPU_REQ} --set cpu.limit=${CPU_LIMIT} --set mem.req=${MEM_REQ} --set mem.limit=${MEM_LIMIT} ${CHART_NAME} ./k8/${APP}-new
     - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} --set environment=${ENV_TYPE} --set replicaCount=${REPLICA_COUNT} --set cpu.req=${CPU_REQ} --set cpu.limit=${CPU_LIMIT} --set mem.req=${MEM_REQ} --set mem.limit=${MEM_LIMIT} ${CHART_NAME} ./k8/${APP}-new
