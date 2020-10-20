@@ -119,7 +119,7 @@
             <div class="single-hospital-current-status" fxBox>
               <div [ngStyle]="{'background-color': getStatusColorFor(s.bedtype) }">
                 <p>
-                  {{ getStatusDescriptionFor(s.bedtype) | translate }}
+                  {{ s.bedStatusDesc | translate }}
                 </p>
               </div>
             </div>
