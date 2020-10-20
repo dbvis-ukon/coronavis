@@ -3,7 +3,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import moment, { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
-import { mergeMap, map, max, reduce, tap } from 'rxjs/operators';
+import { mergeMap, map, max } from 'rxjs/operators';
 import { BedBackgroundOptions } from '../map/options/bed-background-options';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { BedType } from "../map/options/bed-type.enum";
@@ -128,6 +128,8 @@ export class HospitalInfoComponent implements OnInit {
   }
 
   private async updateData() {
+    this.tempChartSpecs$ = undefined;
+    this.barChartSpecs$ = undefined;
     if (!this.data || !this.options) {
       return;
     }
@@ -188,7 +190,7 @@ export class HospitalInfoComponent implements OnInit {
     const latest = this.singleHospital.developments[this.singleHospital.developments.length - 1];
     const counts = this.colormapService.propertyAccessor(bedStatus)(latest);
 
-    return Object.keys(counts).find(s => s !== "") ?? "Keine Information";
+    return Object.keys(counts).find(key => key !== '' && counts[key] > 0) ?? "Keine Information";
   }
 
   private getBarChartSpecs(): Observable<any[]> {
@@ -388,10 +390,12 @@ export class HospitalInfoComponent implements OnInit {
           }
 
           if (summedbedcounts > 0) {
+            const bedType = bedAccessor === 'icu_low_state' ? this.eBedType.icuLow : (bedAccessor === 'icu_high_state' ? this.eBedType.icuHigh : this.eBedType.ecmo);
             specs.push({
               title: this.bedAccessorsMapping[bedAccessor],
               chart: spec,
-              bedtype: bedAccessor === 'icu_low_state' ? this.eBedType.icuLow : (bedAccessor === 'icu_high_state' ? this.eBedType.icuHigh : this.eBedType.ecmo)
+              bedtype: bedType,
+              bedStatusDesc: this.getStatusDescriptionFor(bedType)
             });
 
 
