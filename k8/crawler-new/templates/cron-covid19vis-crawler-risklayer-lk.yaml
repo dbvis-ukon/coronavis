@@ -23,7 +23,7 @@ spec:
   schedule: "0,30 5-21 * * *"
   jobTemplate:
     spec:
-      backoffLimit: 2
+      backoffLimit: 3
       template:
         spec:
           containers:
