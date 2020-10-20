@@ -7,6 +7,7 @@ import sys
 import datetime
 import logging
 from datetime import datetime, timezone
+from time import sleep
 
 import psycopg2 as pg
 import psycopg2.extensions
@@ -31,6 +32,7 @@ URL = "https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26g
 STORAGE_PATH = "/var/risklayer_spreadsheets/"
 NUM_RETRIES = 5
 WAIT_MS_RETRY = 5000
+BACKOFF_BASE_TIME = 10 # sec
 
 #
 # DB help
@@ -43,10 +45,12 @@ def get_connection():
 #
 # Fetching data
 #
+data = None
 current_update = datetime.now(timezone.utc)
 logger.debug(f'Fetch risklayer spreadsheet at {current_update.strftime("%Y-%m-%dT%H:%M:%S.%f%Z")}')
 current_try = 1
 filepath = ''
+delay_s = BACKOFF_BASE_TIME
 while current_try <= NUM_RETRIES:
     try:
         r = requests.get(URL, allow_redirects=True)
@@ -59,21 +63,30 @@ while current_try <= NUM_RETRIES:
         with open(filepath, 'wb') as f:
             f.write(r.content)
             logger.info(f'Download succeeded.')
-            break
+            try:
+                #
+                # parsing
+                #
+                logger.info('Parse data')
+                data = pd.read_excel(filepath, sheet_name=None, header=None, na_filter=False)
+                break
+            except:
+                logger.warning(f'Failed parsing spreadsheet {current_try}/{NUM_RETRIES}, dowloading again...')
+                logger.info(f'Removing file from archive...')
+                os.remove(filepath)
+                logger.info(f'Backoff delay for {delay_s} sec...')
+                sleep(delay_s)
     except:
-        logger.info(f'Failed download spreadsheet try {current_try}/{NUM_RETRIES}, retrying...')
+        logger.warning(f'Failed download spreadsheet try {current_try}/{NUM_RETRIES}, retrying...')
+    finally:
         current_try += 1
-if current_try > NUM_RETRIES:
-    logger.error(f"Number of retries ({NUM_RETRIES}) has been excideed.")
+        delay_s = 2 * delay_s
+if current_try > NUM_RETRIES or data is None:
+    logger.error(f"Number of retries ({NUM_RETRIES}) has been exceeded.")
     exit(1)
 
 
-#
-# parsing
-#
-logger.info('Parse data')
-data = pd.read_excel(filepath, sheet_name=None, header=None, na_filter=False)
-
+logger.info('Extract data')
 prognosis_today = data['Statistik Überblick'].iloc[17,6]
 df = data['Kreise'].iloc[3:,[1,2,10,13,8]]
 df[1] = df[1].astype(str)
