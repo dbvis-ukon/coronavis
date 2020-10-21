@@ -183,11 +183,11 @@ export class HospitalInfoComponent implements OnInit {
   }
 
   getStatusColorFor(bedStatus: BedType) {
-    return this.colormapService.getLatestBedStatusColor(this.singleHospital, bedStatus);
+    return this.colormapService.getLatestBedStatusColor(this.fullData, bedStatus);
   }
 
   getStatusDescriptionFor(bedStatus: BedType) {
-    const latest = this.singleHospital.developments[this.singleHospital.developments.length - 1];
+    const latest = this.fullData.developments[this.fullData.developments.length - 1];
     const counts = this.colormapService.propertyAccessor(bedStatus)(latest);
 
     return Object.keys(counts).find(key => key !== '' && counts[key] > 0) ?? "Keine Information";
