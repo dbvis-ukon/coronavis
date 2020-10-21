@@ -97,7 +97,7 @@ db_array = df.to_numpy()
 # reformat
 entries = []
 updated_today_count = 0
-time_23_59 = time(23, 59)
+time_23_59 = time(21, 59)
 date_arr = [ {'datenbestand':  current_update, 'row_id_cases': 4, 'row_id_deaths': 2},
              {'datenbestand':  datetime.combine(current_update.date() - timedelta(days=1), time_23_59).replace(tzinfo=timezone.utc), 'row_id_cases': 5, 'row_id_deaths': 10},
              {'datenbestand':  datetime.combine(current_update.date() - timedelta(days=2), time_23_59).replace(tzinfo=timezone.utc), 'row_id_cases': 6, 'row_id_deaths': 11},
