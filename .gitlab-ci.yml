@@ -3,6 +3,7 @@ stages:
   - test
   - build:frontend
   - build:docker
+  - test:containers
   - deploy
 
 variables:
@@ -295,7 +296,7 @@ set up sentry release:
 
 frontend-install-dependencies:
   stage: prepare
-  image: node:latest
+  image: node:14
   script:
     - cd ./Frontend/gis
     - npm ci --unsafe-perm
@@ -323,7 +324,7 @@ syntax-check-crawler-scripts:
 
 frontend-lint:
   stage: test
-  image: node:latest
+  image: node:14
   script:
     - cd ./Frontend/gis
     - npm run-script lint
@@ -388,7 +389,7 @@ frontend-code-quality:
 
 .build-frontend: &build-frontend
   stage: build:frontend
-  image: node:latest
+  image: node:14
   script:
     - source var.env
     - cd ./Frontend
@@ -441,7 +442,8 @@ build-frontend-en:
     # generate imagename using a lowercased foldername == app
     - IMGNAME=$(echo "${FOLDER}" | tr '[:upper:]' '[:lower:]')
     - IMG="${CI_REGISTRY_IMAGE}/${IMGNAME}:${VERSION}"
-    - docker build --build-arg VERSION=${VERSION} -t "$IMG" .
+    - IMG2="${CI_REGISTRY_IMAGE}/${IMGNAME}:${CI_COMMIT_SHORT_SHA}"
+    - docker build --build-arg VERSION=${VERSION} -t "$IMG" -t "$IMG2" .
     - docker push "$IMG"
   tags:
     - docker-build
@@ -511,6 +513,37 @@ dockerize-tiles:
     - export-environment
 
 ###########################################
+# TEST CONTAINERS
+###########################################
+
+test-backend:
+  stage: test:containers
+  image:
+    name: $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA
+    entrypoint: ['']
+  script:
+    - source var.env
+    - export $(grep -v '^#' var.env | xargs -d '\n')
+    - cd ${FOLDER}
+    - python -m unittest
+  <<: *rules-backend
+  variables:
+    ENVIRONMENT: testing
+    FOLDER: Backend
+    # we build and deploy always to keep backend and frontend in sync
+    RUN_ALWAYS: "yes"
+    RUN_ON_FB: "yes"
+    RUN_ON_MASTER: "yes"
+    RUN_ON_TAG: "yes"
+  needs:
+    - export-environment
+    - dockerize-backend
+  dependencies:
+    - export-environment
+  tags:
+    - docker
+
+###########################################
 # DEPLOY NEW CLUSTER
 ###########################################
 
@@ -573,6 +606,7 @@ dockerize-tiles:
     reports:
       dotenv: var.env
   needs:
+    - test-backend
     - dockerize-backend
     - export-environment
   dependencies:
