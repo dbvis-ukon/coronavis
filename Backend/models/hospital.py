@@ -1,8 +1,5 @@
-import geojson
-from geoalchemy2 import Geometry
-from geoalchemy2.shape import to_shape
-from collections import Counter
 import json
+from collections import Counter
 
 from db import db
 
@@ -63,7 +60,7 @@ class HospitalsAggregated(db.Model):
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        return '<Hospital in %r>' % (self.name)
+        return '<Hospital in %r>' % self.name
 
     def as_dict(self):
         result = {'geometry': json.loads(self.outline), 'properties': {
