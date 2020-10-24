@@ -1,9 +1,3 @@
-import json
-import unittest
-
-from db import db
-from server import app
-
 from tests.base_case import BaseCase
 
 

@@ -10,7 +10,7 @@ __pycache__/
 # Pycharm and Idea Project Folders
 .idea
 env/
-
+venv/
 # Logs
 logs
 *.log

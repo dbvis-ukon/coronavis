@@ -1,9 +1,10 @@
+from flask import jsonify
 from sqlalchemy import text
+
 from db import db
-from flask import jsonify, current_app
+
 
 class IcuDevelopments:
-
     __buildObj = """
     json_build_object(
         'timestamp',
@@ -76,65 +77,74 @@ class IcuDevelopments:
         """
             Return the development of one hospital
         """
-        return self.__resSingle(self.__getHospitals(fromTime, toTime, maxDaysOld, idHospital), fromTime, toTime, maxDaysOld, idHospital, self.__getFeatureHospital)
+        return self.__resSingle(self.__getHospitals(fromTime, toTime, maxDaysOld, idHospital), fromTime, toTime,
+                                maxDaysOld, idHospital, self.__getFeatureHospital)
 
     def getHospitals(self, fromTime, toTime, maxDaysOld):
         """
             Return the development of all hospital
         """
-        return self.__resCollection(self.__getHospitals(fromTime, toTime, maxDaysOld, None), fromTime, toTime, maxDaysOld, self.__getFeatureHospital)
+        return self.__resCollection(self.__getHospitals(fromTime, toTime, maxDaysOld, None), fromTime, toTime,
+                                    maxDaysOld, self.__getFeatureHospital)
 
     def getCounty(self, fromTime, toTime, maxDaysOld, idCounty):
         """
             Return the development of icu capacities for one county
         """
-        return self.__resSingle(self.__aggQuery('landkreise_extended', fromTime, toTime, maxDaysOld, idCounty), fromTime, toTime, maxDaysOld, idCounty, self.__getFeatureAgg)
-   
+        return self.__resSingle(self.__aggQuery('landkreise_extended', fromTime, toTime, maxDaysOld, idCounty),
+                                fromTime, toTime, maxDaysOld, idCounty, self.__getFeatureAgg)
+
     def getByCounties(self, fromTime, toTime, maxDaysOld):
         """
             Return the development of icu capacities by counties
         """
-        return self.__resCollection(self.__aggQuery('landkreise_extended', fromTime, toTime, maxDaysOld, None), fromTime, toTime, maxDaysOld, self.__getFeatureAgg)
-
+        return self.__resCollection(self.__aggQuery('landkreise_extended', fromTime, toTime, maxDaysOld, None),
+                                    fromTime, toTime, maxDaysOld, self.__getFeatureAgg)
 
     def getDistrict(self, fromTime, toTime, maxDaysOld, idDistrict):
         """
             Return the development of icu capacities for one district
         """
-        return self.__resSingle(self.__aggQuery('regierungsbezirke', fromTime, toTime, maxDaysOld, idDistrict), fromTime, toTime, maxDaysOld, idDistrict, self.__getFeatureAgg)
+        return self.__resSingle(self.__aggQuery('regierungsbezirke', fromTime, toTime, maxDaysOld, idDistrict),
+                                fromTime, toTime, maxDaysOld, idDistrict, self.__getFeatureAgg)
 
     def getByDistricts(self, fromTime, toTime, maxDaysOld):
         """
             Return the development of icu capacities by districts
         """
-        return self.__resCollection(self.__aggQuery('regierungsbezirke', fromTime, toTime, maxDaysOld, None), fromTime, toTime, maxDaysOld, self.__getFeatureAgg)
-
+        return self.__resCollection(self.__aggQuery('regierungsbezirke', fromTime, toTime, maxDaysOld, None), fromTime,
+                                    toTime, maxDaysOld, self.__getFeatureAgg)
 
     def getState(self, fromTime, toTime, maxDaysOld, idState):
         """
             Return the development of icu capacities for one state
         """
-        return self.__resSingle(self.__aggQuery('bundeslaender', fromTime, toTime, maxDaysOld, idState), fromTime, toTime, maxDaysOld, idState, self.__getFeatureAgg)
+        return self.__resSingle(self.__aggQuery('bundeslaender', fromTime, toTime, maxDaysOld, idState), fromTime,
+                                toTime, maxDaysOld, idState, self.__getFeatureAgg)
 
     def getByStates(self, fromTime, toTime, maxDaysOld):
         """
             Return the development of icu capacities by states
         """
-        return self.__resCollection(self.__aggQuery('bundeslaender', fromTime, toTime, maxDaysOld, None), fromTime, toTime, maxDaysOld, self.__getFeatureAgg)
+        return self.__resCollection(self.__aggQuery('bundeslaender', fromTime, toTime, maxDaysOld, None), fromTime,
+                                    toTime, maxDaysOld, self.__getFeatureAgg)
 
     def getCountry(self, fromTime, toTime, maxDaysOld, idCountry):
         """
             Return the development of icu capacities for one country
         """
-        return self.__resSingle(self.__aggQuery('germany', fromTime, toTime, maxDaysOld, idCountry), fromTime, toTime, maxDaysOld, idCountry, self.__getFeatureAgg)
-    
+        return self.__resSingle(self.__aggQuery('germany', fromTime, toTime, maxDaysOld, idCountry), fromTime, toTime,
+                                maxDaysOld, idCountry, self.__getFeatureAgg)
+
     def getByCountries(self, fromTime, toTime, maxDaysOld):
         """
             Return the development of icu capacities by countries
         """
-        return self.__resCollection(self.__aggQuery('germany', fromTime, toTime, maxDaysOld, None), fromTime, toTime, maxDaysOld, self.__getFeatureAgg)
+        return self.__resCollection(self.__aggQuery('germany', fromTime, toTime, maxDaysOld, None), fromTime, toTime,
+                                    maxDaysOld, self.__getFeatureAgg)
 
-    def __getFeatureHospital(self, r):
+    @staticmethod
+    def __getFeatureHospital(r):
         # agg.id,
         # agg.name,
         # agg.address,
@@ -163,10 +173,9 @@ class IcuDevelopments:
             }
         }
 
-
-
-    def __resCollection(self, sql_stmt, fromTime, toTime, maxDaysOld, cb):
-        sql_result = db.engine.execute(sql_stmt, fromTime = fromTime, toTime = toTime, maxDaysOld = maxDaysOld).fetchall()
+    @staticmethod
+    def __resCollection(sql_stmt, fromTime, toTime, maxDaysOld, cb):
+        sql_result = db.engine.execute(sql_stmt, fromTime=fromTime, toTime=toTime, maxDaysOld=maxDaysOld).fetchall()
 
         features = []
         for r in sql_result:
@@ -177,20 +186,20 @@ class IcuDevelopments:
 
         return jsonify(featurecollection), 200
 
-    def __resSingle(self, sql_stmt, fromTime, toTime, maxDaysOld, idHospital, cb):
-        r = db.engine.execute(sql_stmt, fromTime = fromTime, toTime = toTime, maxDaysOld = maxDaysOld, idObj = idHospital).fetchone()
+    @staticmethod
+    def __resSingle(sql_stmt, fromTime, toTime, maxDaysOld, idHospital, cb):
+        r = db.engine.execute(sql_stmt, fromTime=fromTime, toTime=toTime, maxDaysOld=maxDaysOld,
+                              idObj=idHospital).fetchone()
 
         if r is None:
             return jsonify({'error': 'not found'}), 404
 
         feature = cb(r)
 
-
         return jsonify(feature), 200
 
-
-
-    def __getFeatureAgg(self, r):
+    @staticmethod
+    def __getFeatureAgg(r):
         # agg.ids,
         #     agg.name,
         #     st_asgeojson(agg.geom) :: jsonb             AS geom,
@@ -208,8 +217,6 @@ class IcuDevelopments:
                 "developmentDays": r[5]
             }
         }
-
-    
 
     def __aggQuery(self, aggTable, fromTime, toTime, maxDaysOld, idObj):
 
@@ -272,12 +279,12 @@ class IcuDevelopments:
         GROUP BY agg.ids,
                 agg.name,
                 agg.geom
-        """.format(aggTable=aggTable, aggCols=self.__aggCols, buildObj=self.__buildObj, sqlFromTime = sqlFromTime, sqlToTime = sqlToTime, sqlMaxDaysOld = sqlMaxDaysOld, sqlIdObj = sqlIdObj))
+        """.format(aggTable=aggTable, aggCols=self.__aggCols, buildObj=self.__buildObj, sqlFromTime=sqlFromTime,
+                   sqlToTime=sqlToTime, sqlMaxDaysOld=sqlMaxDaysOld, sqlIdObj=sqlIdObj))
 
         # current_app.logger.debug(stmnt)
 
         return stmnt
-
 
     def __getHospitals(self, fromTime, toTime, maxDaysOld, idHospital):
         """
@@ -343,7 +350,8 @@ class IcuDevelopments:
                 agg.contact,
                 agg.geom,
                 agg.helipad_nearby
-        """.format(buildObj = self.__buildObj, sqlFromTime = sqlFromTime, sqlToTime = sqlToTime, sqlMaxDaysOld = sqlMaxDaysOld, sqlIdCounty = sqlIdCounty))
+        """.format(buildObj=self.__buildObj, sqlFromTime=sqlFromTime, sqlToTime=sqlToTime, sqlMaxDaysOld=sqlMaxDaysOld,
+                   sqlIdCounty=sqlIdCounty))
 
         # current_app.logger.debug(f'Counties: {sql_stmt}')
 

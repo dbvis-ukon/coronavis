@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import json
-import logging
 import os
 
 from flask import Flask, jsonify
@@ -15,8 +14,6 @@ from views import (cases, cases_risklayer, divi, extent, health, hospitals,
                    osm, version)
 
 # add sentry integration
-
-
 
 
 # Create Flask application
@@ -34,11 +31,10 @@ if os.environ.get('SENTRY_DSN') is not None:
     sentry_sdk.init(
         environment=ENVIRONMENT,
         release=VERSION,
-        dsn=SENTRY_DSN, 
+        dsn=SENTRY_DSN,
         integrations=[FlaskIntegration(), SqlalchemyIntegration()])
 else:
     app.logger.warning('No SENTRY_DSN environment variable set, will not report errors to sentry.io')
-
 
 try:
     DB_HOST = os.environ.get('DB_HOST')
@@ -53,16 +49,17 @@ try:
         # why? i don't know but its necessary
         DB_PASS = DB_PASS.replace('\n', '').replace('\r', '')
         DB_CONNECTION_STRING = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    
+
 except KeyError as e:
     app.logger.warning('One or multiple necessary environment variables not set, using config.py file as backup')
-    #DB_CONNECTION_STRING = config.SQLALCHEMY_DATABASE_URI
+    # DB_CONNECTION_STRING = config.SQLALCHEMY_DATABASE_URI
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONNECTION_STRING
 
 db.init_app(app)
 cache.init_app(app)
+
 
 @cross_origin()
 @app.errorhandler(HTTPException)
@@ -95,6 +92,7 @@ def handle_exception(e):
         "name": "Internal Server Error",
         "description": str(e.message) if hasattr(e, 'message') else str(e).partition('\n')[0]
     }), 500
+
 
 # register blueprints
 app.register_blueprint(cases.routes)

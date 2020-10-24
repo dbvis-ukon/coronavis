@@ -21,7 +21,7 @@ class CasesAggregated(db.Model):
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        return '<Hospital in %r>' % (self.name)
+        return '<Hospital in %r>' % self.name
 
     def as_dict(self):
         result = {'geometry': json.loads(self.outline), 'properties': {

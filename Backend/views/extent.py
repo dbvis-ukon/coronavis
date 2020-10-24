@@ -1,11 +1,11 @@
 from flask import Blueprint, jsonify
 
-from cache import cache, make_cache_key
+from cache import cache
 from db import db
 from timer import timer
 
-
 routes = Blueprint('extent', __name__, url_prefix='/extent')
+
 
 @routes.route('/', methods=['GET'])
 @cache.cached()

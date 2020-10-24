@@ -1,9 +1,10 @@
+from flask import jsonify
 from sqlalchemy import text
+
 from db import db
-from flask import jsonify, current_app
+
 
 class CaseDevelopments:
-
     __buildObj = """
     json_build_object(
         'timestamp',
@@ -76,23 +77,20 @@ class CaseDevelopments:
         AVG(proportion_covid_ventilated)                                    as proportion_covid_ventilated
     """
 
-
     def __init__(self, dataTable):
         self.dataTable = dataTable
-
 
     def getCounty(self, fromTime, toTime, idCounty):
         """
             Return the development of covid cases and deaths for one county
         """
         return self.__resSingle(self.__getCounties(fromTime, toTime, idCounty))
-   
+
     def getByCounties(self, fromTime, toTime):
         """
             Return the development of covid cases and deaths by counties
         """
         return self.__resCollection(self.__getCounties(fromTime, toTime, None))
-
 
     def getDistrict(self, fromTime, toTime, idDistrict):
         """
@@ -106,7 +104,6 @@ class CaseDevelopments:
         """
         return self.__resCollection(self.__aggQuery('regierungsbezirke', fromTime, toTime, None))
 
-
     def getState(self, fromTime, toTime, idState):
         """
             Return the development of covid cases and deaths for one state
@@ -119,24 +116,20 @@ class CaseDevelopments:
         """
         return self.__resCollection(self.__aggQuery('bundeslaender', fromTime, toTime, None))
 
-
     def getCountry(self, fromTime, toTime, idCountry):
         """
             Return the development of covid cases and deaths for one country
         """
         return self.__resSingle(self.__aggQuery('germany', fromTime, toTime, idCountry))
-    
+
     def getByCountries(self, fromTime, toTime):
         """
             Return the development of covid cases and deaths by countries
         """
         return self.__resCollection(self.__aggQuery('germany', fromTime, toTime, None))
 
-
-
-
-
-    def __resCollection(self, sql_stmt):
+    @staticmethod
+    def __resCollection(sql_stmt):
         sql_result = db.engine.execute(sql_stmt).fetchall()
 
         features = []
@@ -159,7 +152,8 @@ class CaseDevelopments:
 
         return jsonify(featurecollection), 200
 
-    def __resSingle(self, sql_stmt):
+    @staticmethod
+    def __resSingle(sql_stmt):
         r = db.engine.execute(sql_stmt).fetchone()
 
         if r is None:
@@ -178,11 +172,7 @@ class CaseDevelopments:
             }
         }
 
-
         return jsonify(feature), 200
-
-
-    
 
     def __aggQuery(self, aggTable, fromTime, toTime, idObj):
 
@@ -240,8 +230,9 @@ class CaseDevelopments:
         GROUP BY agg.ids,
                 agg.name,
                 agg.geom
-        """.format(aggTable=aggTable, development_select_cols=self.__aggCols, development_json_build_obj=self.__buildObj, dataTable=self.dataTable, sqlFromTime = sqlFromTime, sqlToTime = sqlToTime, sqlIdObj = sqlIdObj))
-
+        """.format(aggTable=aggTable, development_select_cols=self.__aggCols,
+                   development_json_build_obj=self.__buildObj, dataTable=self.dataTable, sqlFromTime=sqlFromTime,
+                   sqlToTime=sqlToTime, sqlIdObj=sqlIdObj))
 
     def __getCounties(self, fromTime, toTime, idCounty):
         """
@@ -298,7 +289,8 @@ class CaseDevelopments:
                 agg.name,
                 agg."desc",
                 agg.geom
-        """.format(buildObj=self.__buildObj, dataTable = self.dataTable, sqlFromTime = sqlFromTime, sqlToTime = sqlToTime, sqlIdCounty = sqlIdCounty))
+        """.format(buildObj=self.__buildObj, dataTable=self.dataTable, sqlFromTime=sqlFromTime, sqlToTime=sqlToTime,
+                   sqlIdCounty=sqlIdCounty))
 
         # current_app.logger.debug(f'Counties: {sql_stmt}')
 
