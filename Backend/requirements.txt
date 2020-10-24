@@ -9,5 +9,5 @@ geojson==2.5.0
 GeoAlchemy2==0.8.4
 gunicorn==20.0.4
 Werkzeug==0.16.0
-sentry-sdk==0.14.3
+sentry-sdk==0.19.1
 psycopg2-binary==2.8.3
