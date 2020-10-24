@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import json
 import logging
 import os
 
 from flask import Flask, jsonify
 from flask_compress import Compress
 from flask_cors import CORS, cross_origin
+from werkzeug.exceptions import HTTPException
 
 from cache import cache
 from db import db
-from views import cases, divi, health, hospitals, osm, version, cases_risklayer, extent
-from werkzeug.exceptions import HTTPException
-import json
+from views import (cases, cases_risklayer, divi, extent, health, hospitals,
+                   osm, version)
 
 # add sentry integration
 
