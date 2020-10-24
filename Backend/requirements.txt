@@ -7,7 +7,7 @@ colorama==0.4.1
 Flask-Caching==1.9.0
 Flask-Compress==1.7.0
 Flask-Cors==3.0.8
-Flask-SQLAlchemy==2.4.1
+Flask-SQLAlchemy==2.4.4
 GeoAlchemy2==0.7.0
 geographiclib==1.50
 geojson==2.5.0
