@@ -76,7 +76,7 @@
     "@types/mapbox-gl-leaflet": "0.0.1",
     "@types/node": "^14.0.0",
     "@types/topojson": "^3.2.2",
-    "are-you-es5": "^1.4.0",
+    "are-you-es5": "^2.0.0",
     "babel-loader": "^8.1.0",
     "codelyzer": "^6.0.1",
     "jasmine-core": "~3.6.0",
