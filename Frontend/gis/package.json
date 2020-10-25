@@ -74,7 +74,7 @@
     "@types/leaflet": "^1.5.19",
     "@types/lodash-es": "^4.17.3",
     "@types/mapbox-gl-leaflet": "0.0.1",
-    "@types/node": "^12.12.67",
+    "@types/node": "^14.0.0",
     "@types/topojson": "^3.2.2",
     "are-you-es5": "^1.4.0",
     "babel-loader": "^8.1.0",
