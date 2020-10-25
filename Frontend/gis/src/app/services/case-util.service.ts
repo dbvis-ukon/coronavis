@@ -27,6 +27,23 @@ export class CaseUtilService {
     && options.type === CovidNumberCaseType.cases;
   }
 
+  public findHighestIdxWhereLastUpdatedIsNotNull(data: RKICaseDevelopmentProperties): number {
+    for (let i = data.developments.length - 1; i >= 0; i--) {
+      if (data.developments[i].last_updated) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+  public getTimedStatusByIdx(data: RKICaseDevelopmentProperties, idx: number): RKICaseTimedStatus | undefined {
+    if (idx < 0 && idx >= data.developments.length) {
+      return undefined;
+    }
+
+    return data?.developments[idx];
+  }
 
   public getTimedStatus(data: RKICaseDevelopmentProperties, date: Moment): RKICaseTimedStatus | undefined {
     const dateKey = getStrDate(date);
