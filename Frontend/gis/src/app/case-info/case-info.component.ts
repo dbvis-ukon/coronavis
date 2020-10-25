@@ -97,9 +97,13 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    [this.curTimedStatus, this.twentyFourHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.twentyFourhours);
-    [this.curTimedStatus, this.seventyTwoHTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.seventyTwoHours);
-    [this.curTimedStatus, this.sevenDaysTimedStatus] = this.caseUtil.getNowPrevTimedStatusTuple(this.data, this.options.date, CovidNumberCaseTimeWindow.sevenDays);
+    const refIdx = this.caseUtil.findHighestIdxWhereLastUpdatedIsNotNull(this.data);
+
+    this.curTimedStatus = this.caseUtil.getTimedStatusByIdx(this.data, refIdx);
+    this.twentyFourHTimedStatus = this.caseUtil.getTimedStatusByIdx(this.data, refIdx - 1);
+    this.seventyTwoHTimedStatus = this.caseUtil.getTimedStatusByIdx(this.data, refIdx - 3);
+    this.sevenDaysTimedStatus = this.caseUtil.getTimedStatusByIdx(this.data, refIdx - 7);
+    
 
     const slice = this.data.developments.slice().reverse().find(d => d.inserted);
 
