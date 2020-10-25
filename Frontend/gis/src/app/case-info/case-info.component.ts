@@ -103,7 +103,7 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
     this.twentyFourHTimedStatus = this.caseUtil.getTimedStatusByIdx(this.data, refIdx - 1);
     this.seventyTwoHTimedStatus = this.caseUtil.getTimedStatusByIdx(this.data, refIdx - 3);
     this.sevenDaysTimedStatus = this.caseUtil.getTimedStatusByIdx(this.data, refIdx - 7);
-    
+
 
     const slice = this.data.developments.slice().reverse().find(d => d.inserted);
 

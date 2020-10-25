@@ -28,11 +28,9 @@ export class CaseUtilService {
   }
 
   public findHighestIdxWhereLastUpdatedIsNotNull(data: RKICaseDevelopmentProperties): number {
-    let i = data.developments.length - 1;
-
-    for(let i = data.developments.length - 1; i >= 0; i--) {
+    for (let i = data.developments.length - 1; i >= 0; i--) {
       if (data.developments[i].last_updated) {
-        return i
+        return i;
       }
     }
 
