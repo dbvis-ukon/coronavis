@@ -86,16 +86,16 @@ variables:
   # run if files changed
   # and if it should run on a feature branch or it should run on master
   - changes:
-      - Crawler/**/*
-      - k8/Crawler/**/*
-      - k8/crawler-new/**/*
+      - "Crawler/**/*"
+      - "k8/Crawler/**/*"
+      - "k8/crawler-new/**/*"
       - .gitlab-ci.yml
     if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: on_success
   - changes:
-      - Crawler/**/*
-      - k8/Crawler/**/*
-      - k8/crawler-new/**/*
+      - "Crawler/**/*"
+      - "k8/Crawler/**/*"
+      - "k8/crawler-new/**/*"
       - .gitlab-ci.yml
     if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: on_success
@@ -118,19 +118,19 @@ variables:
   # and if it should run on a feature branch or it should run on master
   - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     changes:
-    - Tiles/**/*
-    - k8/tiles-new/**/*
+    - "Tiles/**/*"
+    - "k8/tiles-new/**/*"
     when: manual
   - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     changes:
-      - Tiles/**/*
-      - k8/tiles-new/**/*
+      - "Tiles/**/*"
+      - "k8/tiles-new/**/*"
     when: manual
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
     changes:
-     - Tiles/**/*
-     - k8/tiles-new/**/*
+     - "Tiles/**/*"
+     - "k8/tiles-new/**/*"
     when: manual
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
