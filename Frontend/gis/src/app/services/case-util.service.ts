@@ -172,7 +172,7 @@ export class CaseUtilService {
   public getFromToTupleFromOptions(mo: CovidNumberCaseOptions): [string, string] {
     const to = getStrDate(getMoment(mo.date).add(1, 'day'));
 
-    const from = getStrDate(getMoment(to).subtract(mo.daysForTrend + 1, 'days'));
+    const from = getStrDate(getMoment(to).subtract(mo.daysForTrend + 2, 'days'));
 
     return [from, to];
   }
