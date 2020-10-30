@@ -1,0 +1,81 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-covid19vis-crawler-divi-private
+  annotations:
+    description: "PVC to store the divi private json data"
+spec:
+  storageClassName: gluster-heketi
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cron-covid19vis-crawler-divi-private
+  annotations:
+    description: "Divi priavte json download and data extraction"
+spec:
+  # run every hour 
+  schedule: "0 5-21 * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          containers:
+          - name: covid19vis-crawler-divi-private
+            image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
+            imagePullPolicy: Always
+            command: ['python']
+            args: ['crawl_divi_private.py']
+            env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_PORT
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_PASS
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_NAME
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: sentry
+                  key: SENTRY_DSN
+            - name: VERSION
+              value: {{ .Values.sha | quote }}
+            - name: ENVIRONMENT
+              value: {{ .Values.environment | quote }}
+            volumeMounts:                                  
+            - mountPath: "/var/divi_private"  
+              name: vol-divi-private-archive 
+          volumes:
+          - name: vol-divi-private-archive
+            persistentVolumeClaim:
+              claimName: pvc-covid19vis-crawler-divi-private    # this must match the name of your PVC
+          nodeSelector:                                         # this block is important because only worker 1-3 are part of the GlusterFS cluster
+            storagenode: glusterfs 
+          restartPolicy: Never
+          imagePullSecrets:
+            - name: regcred-server
