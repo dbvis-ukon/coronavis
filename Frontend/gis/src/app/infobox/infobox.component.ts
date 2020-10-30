@@ -3,9 +3,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CronJob } from 'cron';
 import moment from 'moment';
 import { BehaviorSubject, forkJoin, interval, merge, Observable, of } from 'rxjs';
-import { distinct, distinctUntilChanged, filter, map, mergeMap, tap, timeout, toArray } from 'rxjs/operators';
+import { distinct, distinctUntilChanged, filter, map, mergeMap, tap, toArray } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
-import { Searchable } from '../hospital-search/hospital-search.component';
 import { FlyTo } from '../map/events/fly-to';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
@@ -28,6 +27,7 @@ import { OSMLayerService } from '../services/osm-layer.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TooltipService } from '../services/tooltip.service';
 import { TranslationService } from '../services/translation.service';
+import { Searchable } from '../shared/hospital-search/hospital-search.component';
 import { getMoment, getStrDate } from '../util/date-util';
 
 interface GlyphEntity {
