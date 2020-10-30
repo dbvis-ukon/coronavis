@@ -2,16 +2,23 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+# noinspection PyUnresolvedReferences
+import bcrypt
+
+import loadenv
 
 from flask import Flask, jsonify
 from flask_compress import Compress
 from flask_cors import CORS, cross_origin
+from flask_marshmallow import Marshmallow
 from werkzeug.exceptions import HTTPException
+from flask_mail import Mail
 
 from cache import cache
 from db import db
+from services.hash_service import create_hash, check_hash
 from views import (cases, cases_risklayer, divi, extent, health, hospitals,
-                   osm, version)
+                   osm, version, email_subs, counties)
 
 # add sentry integration
 
@@ -52,10 +59,20 @@ try:
 
 except KeyError as e:
     app.logger.warning('One or multiple necessary environment variables not set, using config.py file as backup')
+    exit(1)
     # DB_CONNECTION_STRING = config.SQLALCHEMY_DATABASE_URI
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONNECTION_STRING
+app.config['SQLALCHEMY_ECHO'] = os.getenv('DEBUG') == 'true'
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS').lower() == 'true'
+app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL').lower() == 'true'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEBUG'] = True
 
 db.init_app(app)
 cache.init_app(app)
@@ -93,7 +110,6 @@ def handle_exception(e):
         "description": str(e.message) if hasattr(e, 'message') else str(e).partition('\n')[0]
     }), 500
 
-
 # register blueprints
 app.register_blueprint(cases.routes)
 app.register_blueprint(health.routes)
@@ -103,10 +119,14 @@ app.register_blueprint(version.routes)
 app.register_blueprint(divi.routes)
 app.register_blueprint(cases_risklayer.routes)
 app.register_blueprint(extent.routes)
+app.register_blueprint(email_subs.routes)
+app.register_blueprint(counties.routes)
 
 # add cors and compress
 CORS(app)
 Compress(app)
+mail = Mail(app)
+ma = Marshmallow(app)
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

@@ -1,0 +1,158 @@
+<style type="text/css">
+    table {
+        border-spacing: 0;
+        margin-top: 10px;
+        font-size: 13px;
+    }
+
+    th {
+      text-align: center;
+      margin: 0;
+      padding: 6px;
+    }
+
+    td {
+      text-align: right;
+      margin: 0;
+      padding: 6px;
+    }
+
+    td:first-child {
+      text-align: left;
+    }
+
+    .active {
+        font-weight: bold;
+    }
+</style>
+
+<p>
+    <a href="https://coronavis.dbvis.de">Aktuelle Visualisierungen auf CoronaVis</a>
+</p>
+
+<h3>{{ county_desc }} {{ county_name }}</h3>
+
+<p>{{ county_population }} Einwohner</p>
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th colspan="2">Fälle Total</th>
+            <th colspan="9">Veränderung</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th colspan="2">{{ county_last_updated }}</th>
+            <th colspan="3">letzte 24 Std</th>
+            <th colspan="3">letzte 72 Std</th>
+            <th colspan="3">letzte 7 Tage</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Positiv Getestet</td>
+            <td>{{ county_cases_total }}</td>
+            <td>{{ county_cases_total_100k }}/100k</td>
+
+            <td>{{ county_cases_24 }}</td>
+            <td>{{ county_cases_24_100k }}/100k</td>
+            <td>{{ county_cases_24_prc }}%</td>
+
+
+            <td>{{ county_cases_72 }}</td>
+            <td>{{ county_cases_72_100k }}/100k</td>
+            <td>{{ county_cases_72_prc }}%</td>
+
+            <td>{{ county_cases_7 }}</td>
+            <td class="active">{{ county_cases_7_100k }}/100k</td>
+            <td>{{ county_cases_7_prc }}%</td>
+        </tr>
+
+        <tr>
+            <td>Todesfälle</td>
+            <td>{{ county_deaths_total }}</td>
+            <td>{{ county_deaths_total_100k }}</td>
+
+            <td>{{ county_deaths_24 }}</td>
+            <td>{{ county_deaths_24_100k }}/100k</td>
+            <td>{{ county_deaths_24_prc }}%</td>
+
+            <td>{{ county_deaths_72 }}</td>
+            <td>{{ county_deaths_72_100k }}/100k</td>
+            <td>{{ county_deaths_72_prc }}%</td>
+
+            <td>{{ county_deaths_7 }}</td>
+            <td>{{ county_deaths_7_100k }}/100k</td>
+            <td>{{ county_deaths_7_prc }}%</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>0 neue positiv Getestete kann ebenfalls bedeuten, dass der Landkreis seit dem letzten Update keine Daten bereitgestellt hat.</p>
+
+
+<h3>Deutschland</h3>
+
+<p>{{ country_population }} Einwohner</p>
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th colspan="2">Fälle Total</th>
+            <th colspan="9">Veränderung</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th colspan="2">{{ country_last_updated }}</th>
+            <th colspan="3">letzte 24 Std</th>
+            <th colspan="3">letzte 72 Std</th>
+            <th colspan="3">letzte 7 Tage</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Positiv Getestet</td>
+            <td>{{ country_cases_total }}</td>
+            <td>{{ country_cases_total_100k }}/100k</td>
+
+            <td>{{ country_cases_24 }}</td>
+            <td>{{ country_cases_24_100k }}/100k</td>
+            <td>{{ country_cases_24_prc }}%</td>
+
+            <td>{{ country_cases_72 }}</td>
+            <td>{{ country_cases_72_100k }}/100k</td>
+            <td>{{ country_cases_72_prc }}%</td>
+
+            <td>{{ country_cases_7 }}</td>
+            <td class="active">{{ country_cases_7_100k }}/100k</td>
+            <td>{{ country_cases_7_prc }}%</td>
+        </tr>
+
+        <tr>
+            <td>Todesfälle</td>
+            <td>{{ country_deaths_total }}</td>
+            <td>{{ country_deaths_total_100k }}/100k</td>
+
+            <td>{{ country_deaths_24 }}</td>
+            <td>{{ country_deaths_24_100k }}/100k</td>
+            <td>{{ country_deaths_24_prc }}%</td>
+
+            <td>{{ country_deaths_72 }}</td>
+            <td>{{ country_deaths_72_100k }}/100k</td>
+            <td>{{ country_deaths_72_prc }}%</td>
+
+            <td>{{ country_deaths_7 }}</td>
+            <td>{{ country_deaths_7_100k }}/100k</td>
+            <td>{{ country_deaths_7_prc }}%</td>
+
+        </tr>
+    </tbody>
+</table>
+
+<p>Alle Angaben ohne Gewähr.</p>
+
+<p>
+    <a href="https://coronavis.dbvis.de/overview/notification/{{ sub_id }}/{{ token }}">Email Benachrichtigungen bearbeiten oder abbestellen</a>
+</p>

@@ -172,7 +172,7 @@ class CaseDevelopments:
             }
         }
 
-        return jsonify(feature), 200
+        return feature
 
     def __aggQuery(self, aggTable, fromTime, toTime, idObj):
 
