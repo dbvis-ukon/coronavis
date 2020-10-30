@@ -23,7 +23,8 @@ def subscribe_new():
         new_sub = EmailSub(
             email=request.json['email'],
             email_hash=request.json['email'],
-            lang=request.json['lang']
+            lang=request.json['lang'],
+            last_email_sent=datetime.now()
         )
         new_sub.update_token()
         db.session.add(new_sub)
@@ -40,7 +41,16 @@ def subscribe_new():
             db.session.add(c)
 
         db.session.commit()
-        return email_subs_schema.dump(new_sub)
+
+        new_sub.send_email(
+            subject='[CoronaVis] Verifiziere deine E-Mail-Adresse',
+            sender='coronavis@dbvis.inf.uni-konstanz.de',
+            template='mail/email_verification',
+            id=new_sub.id,
+            token=new_sub.token
+        )
+
+        return email_subs_schema.dump(new_sub), 204
     except IntegrityError as e:
         print(e)
         assert isinstance(e.orig, UniqueViolation)  # proves the original exception

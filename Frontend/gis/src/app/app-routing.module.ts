@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { GdprComponent } from './gdpr/gdpr.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { MapRootComponent } from './map-root/map-root.component';
 import { OverviewComponent } from './overview/overview.component';
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'imprint',
     component: ImpressumComponent
+  },
+  {
+    path: 'gdpr',
+    component: GdprComponent
   },
   {
     path: 'lockdown',

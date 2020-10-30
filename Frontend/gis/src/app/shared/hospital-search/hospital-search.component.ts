@@ -5,7 +5,7 @@ import { Feature, Point } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
 import { Observable, of } from 'rxjs';
 import { filter, mergeMap, startWith, switchMap, take, toArray } from 'rxjs/operators';
-import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
+import { SingleHospitalOut } from 'src/app/repositories/types/out/single-hospital-out';
 
 export interface Searchable {
   /**
@@ -21,9 +21,9 @@ export interface Searchable {
   /**
    * The geo point
    */
-  point: LatLngLiteral;
+  point?: LatLngLiteral;
 
-  zoom: number;
+  zoom?: number;
 }
 
 @Component({
