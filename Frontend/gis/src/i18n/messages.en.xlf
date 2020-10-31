@@ -1783,7 +1783,7 @@
       <note category="location">src/app/overview/subscription/subscription.component.html:36</note></notes>
       <segment state="initial">
         <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Kreis auswählen</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/>(mit der Enter-Taste bestätigen)</source>
-      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Select county</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/>(mit der Enter-Taste bestätigen)</target></segment>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Select county</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/>(press Enter-key to add)</target></segment>
     </unit><unit id="subSelectedCounties">
       <notes>
         
