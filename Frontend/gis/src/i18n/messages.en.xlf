@@ -1698,7 +1698,7 @@
       </notes>
       <segment state="initial">
         <source>E-Mail-Benachrichtigungen</source>
-      <target>EMail-Notifications</target></segment>
+      <target>Email-Notifications</target></segment>
     </unit><unit id="subHowWork">
       <notes>
         <note category="location">src/app/overview/subscription/subscription.component.html:5</note>
@@ -1747,7 +1747,7 @@
       <note category="location">src/app/overview/subscription/subscription.component.html:24</note></notes>
       <segment state="initial">
         <source>E-Mail</source>
-      <target>EMail</target></segment>
+      <target>Email</target></segment>
     </unit><unit id="subMakeNewHint">
       <notes>
         
