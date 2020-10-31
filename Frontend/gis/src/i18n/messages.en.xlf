@@ -1529,7 +1529,7 @@
       </notes>
       <segment state="initial">
         <source>E-Mail-Benachrichtigung</source>
-      <target>E-Mail-Benachrichtigung</target></segment>
+      <target>Email Notification</target></segment>
     </unit><unit id="3102430522812415895">
       <notes>
         <note category="description"> hospitals@reported</note>
