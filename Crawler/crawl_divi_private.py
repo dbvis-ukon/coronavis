@@ -18,8 +18,8 @@ logger.info('Crawler for divi private data')
 
 STORAGE_PATH = "/var/divi_private/"
 
-#USERNAME = os.environ.get('DIVI_USERNAME').replace('\n', '')
-#PASSWORD = os.environ.get('DIVI_PASSWORD').replace('\n', '')
+USERNAME = os.environ.get('DIVI_USERNAME').replace('\n', '')
+PASSWORD = os.environ.get('DIVI_PASSWORD').replace('\n', '')
 
 URL_LOGIN = "https://auth.intensivregister.de/auth/realms/intensivregister/protocol/openid-connect/auth?client_id=intensivregister-frontend&redirect_uri=https%3A%2F%2Fwww.intensivregister.de%2F%23%2Findex&response_mode=fragment&response_type=code&scope=openid"
 URL_AUTH = "" # will be provided dynamically below

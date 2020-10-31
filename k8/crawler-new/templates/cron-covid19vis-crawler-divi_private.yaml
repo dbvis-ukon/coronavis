@@ -63,6 +63,16 @@ spec:
                 secretKeyRef:
                   name: sentry
                   key: SENTRY_DSN
+            - name: DIVI_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: divi-credentials
+                  key: DIVI_USERNAME
+            - name: DIVI_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: divi-credentials
+                  key: DIVI_PASSWORD
             - name: VERSION
               value: {{ .Values.sha | quote }}
             - name: ENVIRONMENT
