@@ -3,7 +3,7 @@
     <h1>E-Mail-Benachrichtigungen</h1>
 
     <p><strong>Wie funktioniert es?</strong></p>
-    <p>Freiwillige (Crowdsurcer) sammeln laufend die Daten der Landkreise, sobald diese auf den entsprechenden Webseiten veröffentlicht werden. Wir erhalten diese Daten und können Dir, sobald ein Update für einen Landkreis vorliegt, eine Email zusenden mit den neuesten Daten des Landkreises. Du bekommst dann pro ausgewähltem Landkreis und pro Tag eine Nachricht von uns. Du kannst diesen Service jederzeit abbestellen mit einem Link der mit jeder Nachricht verschickt wird.</p>
+    <p>Freiwillige (Crowdsourcer) sammeln laufend die Daten der Kreise, sobald diese auf den entsprechenden Webseiten veröffentlicht werden. Wir erhalten diese Daten und können Dir, sobald ein Update für einen Kreis vorliegt, eine E-Mail zusenden mit den neuesten Daten des Kreises. Du bekommst dann pro ausgewähltem Kreis und pro Tag eine Nachricht von uns. Du kannst diesen Service jederzeit abbestellen mit einem Link der mit jeder Nachricht verschickt wird.</p>
 
     <h4 *ngIf="success" style="color:green;">{{ success }}</h4>
 
@@ -16,14 +16,14 @@
 
     <form *ngIf="!error" class="example-form" [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
       <mat-form-field class="example-full-width">
-        <mat-label>Email</mat-label>
+        <mat-label>E-Mail</mat-label>
         <input matInput [errorStateMatcher]="matcher" placeholder="Ex. pat@example.com" formControlName="email">
         <mat-hint *ngIf="subId > 0">Falls du deine E-Mail-Adresse ändern möchtest bestelle bitte eine neue Benachrichtigung.</mat-hint>
         <mat-error i18n="@@subEmailCorrectError" *ngIf="checkoutForm.get('email').hasError('email') && !checkoutForm.get('email').hasError('required')">
-          Bitte gib eine korrekte Email-Adresse an.
+          Bitte gib eine korrekte E-Mail-Adresse an.
         </mat-error>
         <mat-error *ngIf="checkoutForm.get('email').hasError('required')" i18n="@@subEmailRequiredError">
-          Eine Email-Adresse ist notwendig.
+          Eine E-Mail-Adresse ist notwendig.
         </mat-error>
       </mat-form-field>
 
@@ -66,13 +66,16 @@
       <div>
         <p><strong>Terms and Conditions</strong></p>
 
-        <mat-checkbox class="example-margin" formControlName="terms">Ich willige ein, dass meine Email-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die Email-Adresse wird nicht an Dritte weiter gegeben. Unsere <a>Datenschutzrichtlinien</a> sind hier einzusehen.</mat-checkbox>
+        <mat-checkbox class="example-margin my-checkbox" formControlName="terms">Ich willige ein, dass meine E-Mail-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die E-Mail-Adresse wird nicht an Dritte weiter gegeben. <a routerLink="/overview/gdpr">Unsere Datenschutzrichtlinien sind hier einzusehen.</a></mat-checkbox>
 
-        <mat-checkbox class="example-margin" formControlName="terms2">Mir ist bewusst, dass CoronaVis keine Gewähr auf die Korrektheit der Zahlen geben kann.</mat-checkbox>
+        <mat-checkbox class="example-margin my-checkbox" formControlName="terms2">Mir ist bewusst, dass CoronaVis keine Gewähr auf die Korrektheit der Zahlen geben kann.</mat-checkbox>
       </div>
-      
-      <button mat-raised-button color="primary" type="submit" [disabled]="!checkoutForm.valid || counties.controls.length === 0">Speichern</button> 
-      <button (click)="unsubscribe()" mat-raised-button color="warn" [disabled]="!checkoutForm.valid || counties.controls.length === 0">E-Mail-Benachrichtungen abbestellen</button>
+
+      <div class="buttons">
+        <button *ngIf="!(subId > 0)" mat-raised-button color="primary" type="submit" [disabled]="!checkoutForm.valid || counties.controls.length === 0">E-Mail-Benachrichtungen bestellen</button> 
+        <button *ngIf="subId > 0" mat-raised-button color="primary" type="submit" [disabled]="!checkoutForm.valid || counties.controls.length === 0">E-Mail-Benachrichtungen ändern</button> 
+        <button *ngIf="subId > 0" (click)="unsubscribe()" mat-raised-button color="warn" [disabled]="!checkoutForm.valid || counties.controls.length === 0">E-Mail-Benachrichtungen abbestellen</button>
+      </div>
     </form>
   </mat-card>
 </div>

@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { CountyRepository } from 'src/app/repositories/county.repository';
@@ -48,7 +48,8 @@ export class SubscriptionComponent implements OnInit {
     private emailRepo: EmailSubscriptionRepository,
     private formBuilder: FormBuilder,
     private countyRepo: CountyRepository,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.selectedCounty = this.formBuilder.control('');
 
@@ -73,6 +74,12 @@ export class SubscriptionComponent implements OnInit {
         ags: d1.ags,
       } as Searchable;
     })));
+
+    this.route.queryParams.subscribe(p => {
+      if (p.success) {
+        this.success = 'Du hast deine E-Mail-Benachrichtigungen erfolgreich abbestellt';
+      }
+    });
 
     this.route.paramMap.pipe(
       switchMap(params => {
@@ -174,7 +181,9 @@ export class SubscriptionComponent implements OnInit {
   unsubscribe() {
     this.emailRepo.unsubscribe(this.subId, this.subToken)
     .subscribe(
-      () => this.success = 'Du hast deine E-Mail-Benachrichtigungen erfolgreich abbestellt',
+      () => {
+        this.router.navigate(['/overview/subscription'], { queryParams: {success: true}});
+      },
       (err: HttpErrorResponse) => this.error = `Etwas hat nicht funktioniert. ${err?.error?.name}: ${err?.error?.description}`
     );
   }

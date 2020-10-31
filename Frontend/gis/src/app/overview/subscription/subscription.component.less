@@ -17,5 +17,21 @@
 }
 
 .example-full-width {
-  width: 500px;
+  width: 100%;
+  max-width: 500px;
+  margin: 5px;
+}
+
+:host .my-checkbox ::ng-deep .mat-checkbox-layout {
+  white-space: normal;
+}
+
+.buttons {
+  display: flex;
+  margin-top: 10px;
+  margin-left: 5px;
+
+  button {
+    margin-right: 5px;
+  }
 }

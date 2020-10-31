@@ -87,7 +87,7 @@ def update(id, token):
 
     for cjson in counties:
         c = SubscribedCounties()
-        c.sub_id = cjson['sub_id']
+        c.sub_id = id
         c.ags = cjson['ags']
         db.session.add(c)
 

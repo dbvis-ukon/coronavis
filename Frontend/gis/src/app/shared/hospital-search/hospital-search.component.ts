@@ -92,7 +92,7 @@ export class HospitalSearchComponent implements OnInit {
     this.data$
     .pipe(
       mergeMap(d => d),
-      filter(d => d.name === name),
+      filter(d => (d.name + ':' + d.addition) === name),
       take(1)
     )
     .subscribe(d => {

@@ -11,7 +11,7 @@
                 <mat-icon>close</mat-icon>
               </button>
       <mat-autocomplete class="autocomplete" autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selected($event)">
-        <mat-option *ngFor="let h of filteredOptions | async" [value]="h.name" class="option">
+        <mat-option *ngFor="let h of filteredOptions | async" [value]="h.name + ':' + h.addition" class="option">
           {{h.name}}
           <small *ngIf="h.addition">{{h.addition}}</small>
         </mat-option>
