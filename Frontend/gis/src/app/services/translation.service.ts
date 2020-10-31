@@ -82,6 +82,10 @@ export class TranslationService {
       'en-US': 'Imprint'
     },
     {
+      'de-DE': 'Datenschutzerklärung',
+      'en-US': 'Data-Privacy'
+    },
+    {
       aggLevel: AggregationLevel.county,
       'de-DE': 'Landkreise',
       'en-US': 'Counties'

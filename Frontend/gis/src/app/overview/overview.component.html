@@ -25,6 +25,9 @@
 
       <a mat-button routerLink="/overview/map/lockdown-live" routerLinkActive="mat-primary" 
         i18n="@@overviewLockdownViewLive">LIVE Lockdown Ansicht</a>
+
+      <a mat-button routerLink="/overview/subscription" routerLinkActive="mat-primary" 
+        i18n="@@overviewSubscription">E-Mail-Benachrichtigung</a>
     </div>
 
 
@@ -51,6 +54,9 @@
 
         <a mat-list-item (click)="snav.close()" routerLink="/overview/map/lockdown-live" routerLinkActive="mat-primary" 
           i18n="@@overviewLockdownViewLive">LIVE Lockdown Ansicht</a>
+
+        <a mat-list-item (click)="snav.close()" routerLink="/overview/subscription" routerLinkActive="mat-primary" 
+          i18n="@@overviewSubscription">E-Mail-Benachrichtigung</a>
       </mat-nav-list>
     </mat-sidenav>
 

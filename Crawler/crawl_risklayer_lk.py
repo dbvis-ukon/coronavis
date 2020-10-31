@@ -3,9 +3,8 @@
 # author: Max Fischer
 
 import os
-import sys
-import datetime
 import logging
+import loadenv
 from datetime import datetime, timezone, timedelta, time
 from time import sleep
 
@@ -13,7 +12,6 @@ import psycopg2 as pg
 import psycopg2.extensions
 import psycopg2.extras
 import requests
-import numpy as np
 import pandas as pd
 
 from db_config import SQLALCHEMY_DATABASE_URI
@@ -161,6 +159,14 @@ try:
         cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW cases_per_county_and_day_risklayer;')
         conn.commit()
 
+
+        logger.info('Send notification emails')
+
+        notification_result = requests.post('https://api.coronavis.dbvis.de/sub/send-notifications',
+                                            headers = {'X-API-KEY': os.getenv('API_KEY')})
+        # notification_result = requests.post('http://localhost:5000/sub/send-notifications',
+        #                                     headers={'X-API-KEY': os.getenv('API_KEY')})
+        logger.info(notification_result.text)
 
         logger.info('Success')
 

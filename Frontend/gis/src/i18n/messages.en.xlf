@@ -1497,31 +1497,39 @@
     </unit><unit id="overviewIntroduction">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:14</note><note category="location">src/app/overview/overview.component.html:40</note></notes>
+      <note category="location">src/app/overview/overview.component.html:14</note><note category="location">src/app/overview/overview.component.html:43</note></notes>
       <segment state="initial">
         <source>Einführung</source>
       <target>Introduction</target></segment>
     </unit><unit id="overviewICUView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:21</note><note category="location">src/app/overview/overview.component.html:47</note></notes>
+      <note category="location">src/app/overview/overview.component.html:21</note><note category="location">src/app/overview/overview.component.html:50</note></notes>
       <segment state="initial">
         <source>Intensivbetten-Kapazitäten Ansicht</source>
       <target>ICU Bed Capacities View</target></segment>
     </unit><unit id="overviewLockdownView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:24</note><note category="location">src/app/overview/overview.component.html:50</note></notes>
+      <note category="location">src/app/overview/overview.component.html:24</note><note category="location">src/app/overview/overview.component.html:53</note></notes>
       <segment state="initial">
         <source>Lockdown Ansicht</source>
       <target>Lockdown View</target></segment>
     </unit><unit id="overviewLockdownViewLive">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:27</note><note category="location">src/app/overview/overview.component.html:53</note></notes>
+      <note category="location">src/app/overview/overview.component.html:27</note><note category="location">src/app/overview/overview.component.html:56</note></notes>
       <segment state="initial">
         <source>LIVE Lockdown Ansicht</source>
       <target>LIVE Lockdown View</target></segment>
+    </unit><unit id="overviewSubscription">
+      <notes>
+        <note category="location">src/app/overview/overview.component.html:30</note>
+        <note category="location">src/app/overview/overview.component.html:59</note>
+      </notes>
+      <segment state="initial">
+        <source>E-Mail-Benachrichtigung</source>
+      <target>Email Notification</target></segment>
     </unit><unit id="3102430522812415895">
       <notes>
         <note category="description"> hospitals@reported</note>
@@ -1549,14 +1557,14 @@
       <notes>
         
         
-      <note category="location">src/app/legend/legend.component.html:7</note><note category="location">src/app/legend/legend.component.html:68</note></notes>
+      <note category="location">src/app/legend/legend.component.html:8</note><note category="location">src/app/legend/legend.component.html:69</note></notes>
       <segment state="initial">
         <source>Klicken um Legende ein-/auszuklappen</source>
       <target>Click to toggle legend</target></segment>
     </unit><unit id="legendNotAvailable">
       <notes>
-        <note category="location">src/app/legend/legend.component.html:31,33</note>
-      </notes>
+        
+      <note category="location">src/app/legend/legend.component.html:32</note></notes>
       <segment state="initial">
         <source>
           nicht verfügbar
@@ -1567,28 +1575,28 @@
     </unit><unit id="clearSelection">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:37</note></notes>
+      <note category="location">src/app/legend/legend.component.html:38</note></notes>
       <segment state="initial">
         <source>Selektion aufheben</source>
       <target>Clear selection</target></segment>
     </unit><unit id="legendDatasourceRki">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:50</note></notes>
+      <note category="location">src/app/legend/legend.component.html:51</note></notes>
       <segment state="initial">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institut</pc></source>
       <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institute</pc></target></segment>
     </unit><unit id="legendDatasourceRisklayer">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:52</note></notes>
+      <note category="location">src/app/legend/legend.component.html:53</note></notes>
       <segment state="initial">
         <source>Datenquelle: 
-          <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
-          <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> at 
-          <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">KIT</pc> and the 
-          <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc>
-        </source>
+            <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
+            <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> at 
+            <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">KIT</pc> and the 
+            <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc>
+          </source>
       <target>Data Source: 
           <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
           <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> at 
@@ -1636,7 +1644,7 @@
     </unit><unit id="legendDatasourceDivi">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:95</note></notes>
+      <note category="location">src/app/legend/legend.component.html:96</note></notes>
       <segment state="initial">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></source>
       <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI ICU Registry</pc></target></segment>
@@ -1684,6 +1692,175 @@
       <segment state="initial">
         <source>Source Code auf GitHub</source>
       <target>Find the source code on github</target></segment>
+    </unit><unit id="subEmailSubscription">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:3</note>
+      </notes>
+      <segment state="initial">
+        <source>E-Mail-Benachrichtigungen</source>
+      <target>EMail-Notifications</target></segment>
+    </unit><unit id="subHowWork">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:5</note>
+      </notes>
+      <segment state="initial">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Wie funktioniert es?</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">How does it work?</pc></target></segment>
+    </unit><unit id="subIntro">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:6</note>
+      </notes>
+      <segment state="initial">
+        <source>Freiwillige (Crowdsourcer) sammeln laufend die Daten der Kreise, sobald diese auf den entsprechenden Webseiten veröffentlicht werden. Wir erhalten diese Daten und können Dir, sobald ein Update für einen Kreis vorliegt, eine E-Mail zusenden mit den neuesten Daten des Kreises. Du bekommst dann pro ausgewähltem Kreis und pro Tag eine Nachricht von uns. Du kannst diesen Service jederzeit abbestellen mit einem Link der mit jeder Nachricht verschickt wird.</source>
+      <target>Volunteers (crowdsourcers) continuously collect the data of the counties as soon as they are published on the corresponding websites. We receive these data and can send you an email with the latest data of the county as soon as an update for a county is available. You will then receive one message from us per selected county and per day. You can unsubscribe from this service at any time with a link that is sent with every message.</target></segment>
+    </unit><unit id="subSubSuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:8</note>
+      </notes>
+      <segment state="initial">
+        <source>Bitte prüfe Dein Postfach um deine E-Mail-Adresse zu verifizieren.</source>
+      <target>Please check your mailbox to verify your email address.</target></segment>
+    </unit><unit id="subUnsubSuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:9</note>
+      </notes>
+      <segment state="initial">
+        <source>Du hast deine E-Mail-Benachrichtigungen erfolgreich abbestellt.</source>
+      <target>You have successfully unsubscribed your email notifications.</target></segment>
+    </unit><unit id="subVerifySuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:10</note>
+      </notes>
+      <segment state="initial">
+        <source>Deine E-Mail-Adresse wurde erfolgreich verifiziert.</source>
+      <target>Your email address has been successfully verified.</target></segment>
+    </unit><unit id="subUpdateSuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:11</note>
+      </notes>
+      <segment state="initial">
+        <source>Benachrichtigungs-Einstellungen wurden erfolgreich aktualisiert.</source>
+      <target>Notification settings were successfully updated.</target></segment>
+    </unit><unit id="subEmail">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:24</note></notes>
+      <segment state="initial">
+        <source>E-Mail</source>
+      <target>EMail</target></segment>
+    </unit><unit id="subMakeNewHint">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:26</note></notes>
+      <segment state="initial">
+        <source>Falls du deine E-Mail-Adresse ändern möchtest bestelle bitte eine neue Benachrichtigung.</source>
+      <target>If you want to change your email address, please order a new notification.</target></segment>
+    </unit><unit id="subEmailCorrectError">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:27</note></notes>
+      <segment state="initial">
+        <source>
+          Bitte gib eine korrekte E-Mail-Adresse an.
+        </source>
+      <target>
+          Please enter a correct email address.
+        </target></segment>
+    </unit><unit id="subEmailRequiredError">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:30</note></notes>
+      <segment state="initial">
+        <source>
+          Eine E-Mail-Adresse ist notwendig.
+        </source>
+      <target>
+          An email address is required.
+        </target></segment>
+    </unit><unit id="subSelectCounty">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:36</note></notes>
+      <segment state="initial">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Kreis auswählen</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/>(mit der Enter-Taste bestätigen)</source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Select county</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/>(press Enter-key to add)</target></segment>
+    </unit><unit id="subSelectedCounties">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:45</note></notes>
+      <segment state="initial">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Ausgewählte Kreise</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Selected counties</pc></target></segment>
+    </unit><unit id="subNoCountiesSelectedError">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:47</note></notes>
+      <segment state="initial">
+        <source>Es muss mindestens ein Kreis ausgewählt werden.</source>
+      <target>At least one county must be selected.</target></segment>
+    </unit><unit id="subLanguage">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:61</note></notes>
+      <segment state="initial">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Sprache</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Language</pc></target></segment>
+    </unit><unit id="subLangGerman">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:66</note></notes>
+      <segment state="initial">
+        <source>Deutsch</source>
+      <target>German</target></segment>
+    </unit><unit id="subLangEnglish">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:67</note></notes>
+      <segment state="initial">
+        <source>Englisch (we are working on it)</source>
+      <target>English (we are working on it)</target></segment>
+    </unit><unit id="subTermsAndConditions">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:72</note></notes>
+      <segment state="initial">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Nutzungsbedingungen</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Terms and Conditions</pc></target></segment>
+    </unit><unit id="subTerms1">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:75</note></notes>
+      <segment state="initial">
+        <source>Ich willige ein, dass meine E-Mail-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die E-Mail-Adresse wird nicht an Dritte weiter gegeben. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Unsere Datenschutzrichtlinien sind hier einzusehen.</pc></source>
+      <target>I agree that my email address is stored in encrypted form for the purpose of notification. The email address will not be passed on to third parties. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Our privacy policy can be viewed here.</pc></target></segment>
+    </unit><unit id="subTerms2">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:77</note></notes>
+      <segment state="initial">
+        <source>Mir ist bewusst, dass CoronaVis keine Gewähr auf die Korrektheit der Zahlen geben kann.</source>
+      <target>I am aware that CoronaVis cannot guarantee the correctness of the numbers.</target></segment>
+    </unit><unit id="subBtnSubscribe">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:82</note></notes>
+      <segment state="initial">
+        <source>E-Mail-Benachrichtungen bestellen</source>
+      <target>Subscribe</target></segment>
+    </unit><unit id="subBtnChange">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:83</note></notes>
+      <segment state="initial">
+        <source>E-Mail-Benachrichtungen ändern</source>
+      <target>Change subscription</target></segment>
+    </unit><unit id="subBtnUnsubscribe">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:84</note></notes>
+      <segment state="initial">
+        <source>E-Mail-Benachrichtungen abbestellen</source>
+      <target>Unsubscribe</target></segment>
     </unit>
   </file>
 </xliff>
