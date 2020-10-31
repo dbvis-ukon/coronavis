@@ -101,7 +101,7 @@ def handle_http_exception(ex):
 @app.errorhandler(Exception)
 def handle_exception(ex):
     # pass through HTTP errors
-    if isinstance(e, HTTPException):
+    if isinstance(ex, HTTPException):
         return ex
 
     app.logger.error(ex)

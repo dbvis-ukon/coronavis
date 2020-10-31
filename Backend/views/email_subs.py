@@ -2,6 +2,9 @@ import os
 from datetime import datetime, timedelta
 
 from flask import Blueprint, request
+
+from services.hash_service import create_hash
+
 routes = Blueprint('email-subs', __name__, url_prefix='/sub')
 
 from sqlalchemy.exc import IntegrityError
@@ -9,8 +12,9 @@ from werkzeug.exceptions import BadRequest, Forbidden
 
 from db import db
 from models.caseDevelopments import CaseDevelopments
-from models.email_subs import EmailSub, email_subs_schema, SubscribedCounties
+from models.email_subs import EmailSub, EmailSubsSchema, email_subs_schema, SubscribedCounties
 from services.crypt_service import decrypt_message
+# noinspection PyUnresolvedReferences
 from psycopg2.errors import UniqueViolation
 
 
@@ -19,6 +23,7 @@ def subscribe_new():
     """
         Add a new subscription
     """
+    schema = EmailSubsSchema(exclude=['id', 'token'])
     try:
         new_sub = EmailSub(
             email=request.json['email'],
@@ -50,13 +55,23 @@ def subscribe_new():
             token=new_sub.token
         )
 
-        return email_subs_schema.dump(new_sub), 204
-    except IntegrityError as e:
-        print(e)
-        assert isinstance(e.orig, UniqueViolation)  # proves the original exception
-        b = BadRequest()
-        b.description = 'This email address is already subscribed.'
-        raise b from e
+        return schema.dump(new_sub), 201
+    except IntegrityError as ex:
+        print(ex)
+        assert isinstance(ex.orig, UniqueViolation)  # proves the original exception
+        db.session.rollback()
+        sub = db.session.query(EmailSub).filter(EmailSub.verified == False, EmailSub.email_hash == request.json['email']).first()
+        # resend verification
+        if sub is not None:
+            sub.send_email(
+                subject='[CoronaVis] Verifiziere deine E-Mail-Adresse',
+                sender='coronavis@dbvis.inf.uni-konstanz.de',
+                template='mail/email_verification',
+                id=sub.id,
+                token=sub.token
+            )
+
+        return schema.dump(new_sub), 201
 
 
 @routes.route('/<id>/<token>', methods=['GET'])
@@ -109,6 +124,10 @@ def send_notifications():
         f = Forbidden()
         f.description = 'Invalid API key'
         raise f
+
+    __delete_unverified_emails()
+
+    __rotate_tokens()
 
     c = CaseDevelopments('cases_per_county_and_day_risklayer')
     sevendaysago = (datetime.now() - timedelta(days=8)).strftime('%Y-%m-%d')
@@ -213,10 +232,6 @@ def send_notifications():
         db.session.commit()
         num_emails += 1
 
-
-
-    # __rotate_tokens()
-
     return f'emails sent {num_emails}', 200
 
 
@@ -237,10 +252,17 @@ def __get_and_verify(id, token) -> EmailSub:
 
 
 def __rotate_tokens():
-    since = datetime.now() - timedelta(hours=24)
+    since = datetime.now() - timedelta(hours=72)
     subs = db.session.query(EmailSub).filter(EmailSub.token_updated < since).all()
 
     for s in subs:
         s.update_token()
+
+    db.session.commit()
+
+
+def __delete_unverified_emails():
+    since = datetime.now() - timedelta(hours=1)
+    db.session.query(EmailSub).filter(EmailSub.last_email_sent < since, EmailSub.verified == False).delete()
 
     db.session.commit()
