@@ -2,21 +2,18 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+
 # noinspection PyUnresolvedReferences
 import bcrypt
-
-import loadenv
-
 from flask import Flask, jsonify
 from flask_compress import Compress
 from flask_cors import CORS, cross_origin
+from flask_mail import Mail
 from flask_marshmallow import Marshmallow
 from werkzeug.exceptions import HTTPException
-from flask_mail import Mail
 
 from cache import cache
 from db import db
-from services.hash_service import create_hash, check_hash
 from views import (cases, cases_risklayer, divi, extent, health, hospitals,
                    osm, version, email_subs, counties)
 
@@ -63,6 +60,7 @@ except KeyError as e:
     # DB_CONNECTION_STRING = config.SQLALCHEMY_DATABASE_URI
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# noinspection PyUnboundLocalVariable
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONNECTION_STRING
 app.config['SQLALCHEMY_ECHO'] = os.getenv('DEBUG') == 'true'
 app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
@@ -76,19 +74,24 @@ app.config['MAIL_DEBUG'] = True
 
 db.init_app(app)
 cache.init_app(app)
+# add cors and compress
+CORS(app)
+Compress(app)
+mail = Mail(app)
+ma = Marshmallow(app)
 
 
 @cross_origin()
 @app.errorhandler(HTTPException)
-def handle_http_exception(e):
+def handle_http_exception(ex):
     """Return JSON instead of HTML for HTTP errors."""
     # start with the correct headers and status code from the error
-    response = e.get_response()
+    response = ex.get_response()
     # replace the body with JSON
     response.data = json.dumps({
-        "code": e.code,
-        "name": e.name,
-        "description": e.description,
+        "code": ex.code,
+        "name": ex.name,
+        "description": ex.description,
     })
     response.content_type = "application/json"
     return response
@@ -96,19 +99,20 @@ def handle_http_exception(e):
 
 @cross_origin()
 @app.errorhandler(Exception)
-def handle_exception(e):
+def handle_exception(ex):
     # pass through HTTP errors
     if isinstance(e, HTTPException):
-        return e
+        return ex
 
-    app.logger.error(e)
+    app.logger.error(ex)
 
     # now you're handling non-HTTP exceptions only
     return jsonify({
         "code": 500,
         "name": "Internal Server Error",
-        "description": str(e.message) if hasattr(e, 'message') else str(e).partition('\n')[0]
+        "description": str(ex.message) if hasattr(ex, 'message') else str(ex).partition('\n')[0]
     }), 500
+
 
 # register blueprints
 app.register_blueprint(cases.routes)
@@ -121,12 +125,6 @@ app.register_blueprint(cases_risklayer.routes)
 app.register_blueprint(extent.routes)
 app.register_blueprint(email_subs.routes)
 app.register_blueprint(counties.routes)
-
-# add cors and compress
-CORS(app)
-Compress(app)
-mail = Mail(app)
-ma = Marshmallow(app)
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

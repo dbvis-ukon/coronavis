@@ -1,15 +1,15 @@
 from datetime import datetime
 
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from marshmallow_sqlalchemy.fields import Nested, Related
+from marshmallow_sqlalchemy.fields import Nested
 from sqlalchemy import types
 
 from db import db
+from models.counties import CountySchema
 from services.crypt_service import decrypt_message, encrypt_message
 from services.hash_service import create_hash, check_hash
 from services.mail_service import send_email
 from services.token_service import get_token
-from models.counties import County, CountySchema
 
 
 class EncryptedColumn(types.TypeDecorator):
@@ -72,10 +72,12 @@ class SubscribedCounties(db.Model):
     # county = db.relationship('County', backref=db.backref("email_subs_counties", uselist=False))
     county = db.relationship('County', uselist=False, lazy=True)
 
+
 class SubscribedCountiesSchema(SQLAlchemyAutoSchema):
     class Meta:
         fields = ("sub_id", "ags", "county")
         model = SubscribedCounties
+
     county = Nested(CountySchema, many=False)
 
 
@@ -83,10 +85,8 @@ class EmailSubsSchema(SQLAlchemyAutoSchema):
     class Meta:
         fields = ("id", "email", "token", "lang", "token_updated", "last_email_sent", "counties")
         model = EmailSub
+
     counties = Nested(SubscribedCountiesSchema, many=True)
-
-
-
 
 
 email_subs_schema = EmailSubsSchema()
