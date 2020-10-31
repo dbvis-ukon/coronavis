@@ -205,7 +205,7 @@ export-environment:
     - echo $CI_COMMIT_BRANCH
     - echo $CI_COMMIT_REF_NAME
     # set the version either as a tag (v0.0.1) or as a commit sha (74bac331)
-    - if [[ ${CI_COMMIT_TAG} =~ ^v[0-9].[0-9].[0-9] ]]; then VERSION=${CI_COMMIT_TAG}; else VERSION=${CI_COMMIT_SHORT_SHA}; fi
+    - if [[ ${CI_COMMIT_TAG} =~ ^v[0-9]+.[0-9]+.[0-9]+ ]]; then VERSION=${CI_COMMIT_TAG}; else VERSION=${CI_COMMIT_SHORT_SHA}; fi
     # the current URL suffix
     #- URL_SUFFIX="covis.dbvis.de" # defined in the variables section
     # this shortens the slug to 30 characters and removes all trailing dashes
@@ -230,7 +230,7 @@ export-environment:
     # if master => "staging."
     # if fb => "staging."
     # Determine what ENV_TYPE it is (production, staging or review)
-    - if [[ "${CI_COMMIT_TAG}" =~ ^v[0-9].[0-9].[0-9] ]]; then ENV_TYPE="production"; fi
+    - if [[ "${CI_COMMIT_TAG}" =~ ^v[0-9]+.[0-9]+.[0-9]+ ]]; then ENV_TYPE="production"; fi
     - if [ "${CI_COMMIT_BRANCH}" == "${STAGING_BRANCH}" ]; then ENV_TYPE="staging"; fi
 
     # Determine URL, ReplicaCount, and ReleaseName based on ENV_TYPE
