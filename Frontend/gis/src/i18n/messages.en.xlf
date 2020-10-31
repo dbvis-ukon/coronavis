@@ -1713,24 +1713,52 @@
       <segment state="initial">
         <source>Freiwillige (Crowdsourcer) sammeln laufend die Daten der Kreise, sobald diese auf den entsprechenden Webseiten veröffentlicht werden. Wir erhalten diese Daten und können Dir, sobald ein Update für einen Kreis vorliegt, eine E-Mail zusenden mit den neuesten Daten des Kreises. Du bekommst dann pro ausgewähltem Kreis und pro Tag eine Nachricht von uns. Du kannst diesen Service jederzeit abbestellen mit einem Link der mit jeder Nachricht verschickt wird.</source>
       <target>Volunteers (crowdsourcers) continuously collect the data of the counties as soon as they are published on the corresponding websites. We receive these data and can send you an email with the latest data of the county as soon as an update for a county is available. You will then receive one message from us per selected county and per day. You can unsubscribe from this service at any time with a link that is sent with every message.</target></segment>
+    </unit><unit id="subSubSuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:8</note>
+      </notes>
+      <segment state="initial">
+        <source>Bitte prüfe Dein Postfach um deine E-Mail-Adresse zu verifizieren.</source>
+      <target>Please check your mailbox to verify your email address.</target></segment>
+    </unit><unit id="subUnsubSuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:9</note>
+      </notes>
+      <segment state="initial">
+        <source>Du hast deine E-Mail-Benachrichtigungen erfolgreich abbestellt.</source>
+      <target>You have successfully unsubscribed your email notifications.</target></segment>
+    </unit><unit id="subVerifySuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:10</note>
+      </notes>
+      <segment state="initial">
+        <source>Deine E-Mail-Adresse wurde erfolgreich verifiziert.</source>
+      <target>Your email address has been successfully verified.</target></segment>
+    </unit><unit id="subUpdateSuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:11</note>
+      </notes>
+      <segment state="initial">
+        <source>Benachrichtigungs-Einstellungen wurden erfolgreich aktualisiert.</source>
+      <target>Notification settings were successfully updated.</target></segment>
     </unit><unit id="subEmail">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:19</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:24</note></notes>
       <segment state="initial">
         <source>E-Mail</source>
       <target>EMail</target></segment>
     </unit><unit id="subMakeNewHint">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:21</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:26</note></notes>
       <segment state="initial">
         <source>Falls du deine E-Mail-Adresse ändern möchtest bestelle bitte eine neue Benachrichtigung.</source>
       <target>If you want to change your email address, please order a new notification.</target></segment>
     </unit><unit id="subEmailCorrectError">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:22,24</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:27</note></notes>
       <segment state="initial">
         <source>
           Bitte gib eine korrekte E-Mail-Adresse an.
@@ -1740,8 +1768,8 @@
         </target></segment>
     </unit><unit id="subEmailRequiredError">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:25,27</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:30</note></notes>
       <segment state="initial">
         <source>
           Eine E-Mail-Adresse ist notwendig.
@@ -1751,85 +1779,85 @@
         </target></segment>
     </unit><unit id="subSelectCounty">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:31</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:36</note></notes>
       <segment state="initial">
         <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Kreis auswählen</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/>(mit der Enter-Taste bestätigen)</source>
       <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Select county</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/>(mit der Enter-Taste bestätigen)</target></segment>
     </unit><unit id="subSelectedCounties">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:40</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:45</note></notes>
       <segment state="initial">
         <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Ausgewählte Kreise</pc></source>
       <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Selected counties</pc></target></segment>
     </unit><unit id="subNoCountiesSelectedError">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:42</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:47</note></notes>
       <segment state="initial">
         <source>Es muss mindestens ein Kreis ausgewählt werden.</source>
       <target>At least one county must be selected.</target></segment>
     </unit><unit id="subLanguage">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:56</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:61</note></notes>
       <segment state="initial">
         <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Sprache</pc></source>
       <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Language</pc></target></segment>
     </unit><unit id="subLangGerman">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:61</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:66</note></notes>
       <segment state="initial">
         <source>Deutsch</source>
       <target>German</target></segment>
     </unit><unit id="subLangEnglish">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:62</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:67</note></notes>
       <segment state="initial">
         <source>Englisch (we are working on it)</source>
       <target>English (we are working on it)</target></segment>
     </unit><unit id="subTermsAndConditions">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:67</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:72</note></notes>
       <segment state="initial">
         <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Nutzungsbedingungen</pc></source>
       <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Terms and Conditions</pc></target></segment>
     </unit><unit id="subTerms1">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:70</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:75</note></notes>
       <segment state="initial">
         <source>Ich willige ein, dass meine E-Mail-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die E-Mail-Adresse wird nicht an Dritte weiter gegeben. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Unsere Datenschutzrichtlinien sind hier einzusehen.</pc></source>
       <target>I agree that my email address is stored in encrypted form for the purpose of notification. The email address will not be passed on to third parties. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Our privacy policy can be viewed here.</pc></target></segment>
     </unit><unit id="subTerms2">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:72</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:77</note></notes>
       <segment state="initial">
         <source>Mir ist bewusst, dass CoronaVis keine Gewähr auf die Korrektheit der Zahlen geben kann.</source>
       <target>I am aware that CoronaVis cannot guarantee the correctness of the numbers.</target></segment>
     </unit><unit id="subBtnSubscribe">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:77</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:82</note></notes>
       <segment state="initial">
         <source>E-Mail-Benachrichtungen bestellen</source>
       <target>Subscribe</target></segment>
     </unit><unit id="subBtnChange">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:78</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:83</note></notes>
       <segment state="initial">
         <source>E-Mail-Benachrichtungen ändern</source>
       <target>Change subscription</target></segment>
     </unit><unit id="subBtnUnsubscribe">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:79</note>
-      </notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:84</note></notes>
       <segment state="initial">
         <source>E-Mail-Benachrichtungen abbestellen</source>
       <target>Unsubscribe</target></segment>

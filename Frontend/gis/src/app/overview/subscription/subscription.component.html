@@ -5,6 +5,11 @@
     <p i18n="@@subHowWork"><strong>Wie funktioniert es?</strong></p>
     <p i18n="@@subIntro">Freiwillige (Crowdsourcer) sammeln laufend die Daten der Kreise, sobald diese auf den entsprechenden Webseiten veröffentlicht werden. Wir erhalten diese Daten und können Dir, sobald ein Update für einen Kreis vorliegt, eine E-Mail zusenden mit den neuesten Daten des Kreises. Du bekommst dann pro ausgewähltem Kreis und pro Tag eine Nachricht von uns. Du kannst diesen Service jederzeit abbestellen mit einem Link der mit jeder Nachricht verschickt wird.</p>
 
+    <span class="hidden-placeholder" i18n='@@subSubSuccess' #lsuccess>Bitte prüfe Dein Postfach um deine E-Mail-Adresse zu verifizieren.</span>
+    <span class="hidden-placeholder" i18n='@@subUnsubSuccess' #lunsubsuccess>Du hast deine E-Mail-Benachrichtigungen erfolgreich abbestellt.</span>
+    <span class="hidden-placeholder" i18n='@@subVerifySuccess' #lsubverifysuccess>Deine E-Mail-Adresse wurde erfolgreich verifiziert.</span>
+    <span class="hidden-placeholder" i18n='@@subUpdateSuccess' #lsubupdatesuccess>Benachrichtigungs-Einstellungen wurden erfolgreich aktualisiert.</span>
+
     <h4 *ngIf="success" style="color:green;">{{ success }}</h4>
 
     <h4>  

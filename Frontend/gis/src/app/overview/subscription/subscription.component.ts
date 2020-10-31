@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -25,6 +25,18 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./subscription.component.less']
 })
 export class SubscriptionComponent implements OnInit {
+
+  @ViewChild('lsuccess', { static: true })
+  lsuccess: ElementRef<HTMLSpanElement>;
+
+  @ViewChild('lunsubsuccess', { static: true })
+  lunsubsuccess: ElementRef<HTMLSpanElement>;
+
+  @ViewChild('lsubverifysuccess', { static: true })
+  lsubverifysuccess: ElementRef<HTMLSpanElement>;
+
+  @ViewChild('lsubupdatesuccess', { static: true })
+  lsubupdatesuccess: ElementRef<HTMLSpanElement>;
 
   matcher = new MyErrorStateMatcher();
 
@@ -77,7 +89,7 @@ export class SubscriptionComponent implements OnInit {
 
     this.route.queryParams.subscribe(p => {
       if (p.success) {
-        this.success = 'Du hast deine E-Mail-Benachrichtigungen erfolgreich abbestellt';
+        this.success = this.lunsubsuccess.nativeElement.textContent;
       }
     });
 
@@ -124,8 +136,8 @@ export class SubscriptionComponent implements OnInit {
         customerData.verified = true;
         this.emailRepo.update(this.subId, this.subToken, customerData)
         .subscribe(
-          () => this.success = 'Deine E-Mail-Adresse wurde erfolgreich verifiziert.',
-          (err: HttpErrorResponse) => this.error = `Etwas hat nicht funktioniert. ${err?.error?.name}: ${err?.error?.description}`
+          () => this.success = this.lsubverifysuccess.nativeElement.textContent,
+          (err: HttpErrorResponse) => this.error = `${err?.error?.name}: ${err?.error?.description}`
         );
       }
 
@@ -143,14 +155,14 @@ export class SubscriptionComponent implements OnInit {
       customerData.verified = true;
       this.emailRepo.update(this.subId, this.subToken, customerData)
       .subscribe(
-        () => this.success = 'Benachrichtigungs-Einstellungen wurden erfolgreich aktualisiert',
-        (err: HttpErrorResponse) => this.error = `Etwas hat nicht funktioniert. ${err?.error?.name}: ${err?.error?.description}`
+        () => this.success = this.lsubupdatesuccess.nativeElement.textContent,
+        (err: HttpErrorResponse) => this.error = `${err?.error?.name}: ${err?.error?.description}`
       );
     } else {
       this.emailRepo.subscribe(customerData)
       .subscribe(
-        () => this.success = 'Bitte prüfe Dein Postfach um deine E-Mail-Adresse zu verifizieren.',
-        (err: HttpErrorResponse) => this.error = `Etwas hat nicht funktioniert. ${err?.error?.name}: ${err?.error?.description}`
+        () => this.success = this.lsuccess.nativeElement.textContent,
+        (err: HttpErrorResponse) => this.error = `${err?.error?.name}: ${err?.error?.description}`
       );
     }
   }
@@ -184,7 +196,7 @@ export class SubscriptionComponent implements OnInit {
       () => {
         this.router.navigate(['/overview/subscription'], { queryParams: {success: true}});
       },
-      (err: HttpErrorResponse) => this.error = `Etwas hat nicht funktioniert. ${err?.error?.name}: ${err?.error?.description}`
+      (err: HttpErrorResponse) => this.error = `${err?.error?.name}: ${err?.error?.description}`
     );
   }
 
