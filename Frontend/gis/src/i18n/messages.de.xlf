@@ -1523,31 +1523,39 @@
     </unit><unit id="overviewIntroduction">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:14</note><note category="location">src/app/overview/overview.component.html:40</note></notes>
+      <note category="location">src/app/overview/overview.component.html:14</note><note category="location">src/app/overview/overview.component.html:43</note></notes>
       <segment state="final">
         <source>Einführung</source>
       <target>Einführung</target></segment>
     </unit><unit id="overviewICUView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:21</note><note category="location">src/app/overview/overview.component.html:47</note></notes>
+      <note category="location">src/app/overview/overview.component.html:21</note><note category="location">src/app/overview/overview.component.html:50</note></notes>
       <segment state="final">
         <source>Intensivbetten-Kapazitäten Ansicht</source>
       <target>Intensivbetten-Kapazitäten Ansicht</target></segment>
     </unit><unit id="overviewLockdownView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:24</note><note category="location">src/app/overview/overview.component.html:50</note></notes>
+      <note category="location">src/app/overview/overview.component.html:24</note><note category="location">src/app/overview/overview.component.html:53</note></notes>
       <segment state="final">
         <source>Lockdown Ansicht</source>
       <target>Lockdown Ansicht</target></segment>
     </unit><unit id="overviewLockdownViewLive">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:27</note><note category="location">src/app/overview/overview.component.html:53</note></notes>
+      <note category="location">src/app/overview/overview.component.html:27</note><note category="location">src/app/overview/overview.component.html:56</note></notes>
       <segment state="final">
         <source>LIVE Lockdown Ansicht</source>
       <target>LIVE Lockdown Ansicht</target></segment>
+    </unit><unit id="overviewSubscription">
+      <notes>
+        <note category="location">src/app/overview/overview.component.html:30</note>
+        <note category="location">src/app/overview/overview.component.html:59</note>
+      </notes>
+      <segment state="final">
+        <source>E-Mail-Benachrichtigung</source>
+      <target>E-Mail-Benachrichtigung</target></segment>
     </unit><unit id="3102430522812415895">
       <notes>
         <note category="description"> hospitals@reported</note>
@@ -1577,14 +1585,14 @@
       <notes>
         
         
-      <note category="location">src/app/legend/legend.component.html:7</note><note category="location">src/app/legend/legend.component.html:68</note></notes>
+      <note category="location">src/app/legend/legend.component.html:8</note><note category="location">src/app/legend/legend.component.html:69</note></notes>
       <segment state="final">
         <source>Klicken um Legende ein-/auszuklappen</source>
       <target>Klicken um Legende ein-/auszuklappen</target></segment>
     </unit><unit id="legendNotAvailable">
       <notes>
-        <note category="location">src/app/legend/legend.component.html:31,33</note>
-      </notes>
+        
+      <note category="location">src/app/legend/legend.component.html:32</note></notes>
       <segment state="final">
         <source>
           nicht verfügbar
@@ -1595,34 +1603,34 @@
     </unit><unit id="clearSelection">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:37</note></notes>
+      <note category="location">src/app/legend/legend.component.html:38</note></notes>
       <segment state="final">
         <source>Selektion aufheben</source>
       <target>Selektion aufheben</target></segment>
     </unit><unit id="legendDatasourceRki">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:50</note></notes>
+      <note category="location">src/app/legend/legend.component.html:51</note></notes>
       <segment state="final">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institut</pc></source>
       <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institut</pc></target></segment>
     </unit><unit id="legendDatasourceRisklayer">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:52</note></notes>
+      <note category="location">src/app/legend/legend.component.html:53</note></notes>
       <segment state="final">
         <source>Datenquelle: 
-          <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
-          <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> at 
-          <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">KIT</pc> and the 
-          <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc>
-        </source>
+            <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
+            <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> at 
+            <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">KIT</pc> and the 
+            <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc>
+          </source>
       <target>Datenquelle: 
-          <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
-          <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> at 
-          <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">KIT</pc> and the 
-          <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc>
-        </target></segment>
+            <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
+            <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> at 
+            <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">KIT</pc> and the 
+            <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc>
+          </target></segment>
     </unit><unit id="tooltipHospitalLastUpdate">
       <notes>
 
@@ -1665,7 +1673,7 @@
     </unit><unit id="legendDatasourceDivi">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:95</note></notes>
+      <note category="location">src/app/legend/legend.component.html:96</note></notes>
       <segment state="final">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></source>
       <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></target></segment>
@@ -1713,6 +1721,147 @@
       <segment state="final">
         <source>Source Code auf GitHub</source>
       <target>Source Code auf GitHub</target></segment>
+    </unit><unit id="subEmailSubscription">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:3</note>
+      </notes>
+      <segment state="final">
+        <source>E-Mail-Benachrichtigungen</source>
+      <target>E-Mail-Benachrichtigungen</target></segment>
+    </unit><unit id="subHowWork">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:5</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Wie funktioniert es?</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Wie funktioniert es?</pc></target></segment>
+    </unit><unit id="subIntro">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:6</note>
+      </notes>
+      <segment state="final">
+        <source>Freiwillige (Crowdsourcer) sammeln laufend die Daten der Kreise, sobald diese auf den entsprechenden Webseiten veröffentlicht werden. Wir erhalten diese Daten und können Dir, sobald ein Update für einen Kreis vorliegt, eine E-Mail zusenden mit den neuesten Daten des Kreises. Du bekommst dann pro ausgewähltem Kreis und pro Tag eine Nachricht von uns. Du kannst diesen Service jederzeit abbestellen mit einem Link der mit jeder Nachricht verschickt wird.</source>
+      <target>Freiwillige (Crowdsourcer) sammeln laufend die Daten der Kreise, sobald diese auf den entsprechenden Webseiten veröffentlicht werden. Wir erhalten diese Daten und können Dir, sobald ein Update für einen Kreis vorliegt, eine E-Mail zusenden mit den neuesten Daten des Kreises. Du bekommst dann pro ausgewähltem Kreis und pro Tag eine Nachricht von uns. Du kannst diesen Service jederzeit abbestellen mit einem Link der mit jeder Nachricht verschickt wird.</target></segment>
+    </unit><unit id="subEmail">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:19</note>
+      </notes>
+      <segment state="final">
+        <source>E-Mail</source>
+      <target>E-Mail</target></segment>
+    </unit><unit id="subMakeNewHint">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:21</note>
+      </notes>
+      <segment state="final">
+        <source>Falls du deine E-Mail-Adresse ändern möchtest bestelle bitte eine neue Benachrichtigung.</source>
+      <target>Falls du deine E-Mail-Adresse ändern möchtest bestelle bitte eine neue Benachrichtigung.</target></segment>
+    </unit><unit id="subEmailCorrectError">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:22,24</note>
+      </notes>
+      <segment state="final">
+        <source>
+          Bitte gib eine korrekte E-Mail-Adresse an.
+        </source>
+      <target>
+          Bitte gib eine korrekte E-Mail-Adresse an.
+        </target></segment>
+    </unit><unit id="subEmailRequiredError">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:25,27</note>
+      </notes>
+      <segment state="final">
+        <source>
+          Eine E-Mail-Adresse ist notwendig.
+        </source>
+      <target>
+          Eine E-Mail-Adresse ist notwendig.
+        </target></segment>
+    </unit><unit id="subSelectCounty">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:31</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Kreis auswählen</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/>(mit der Enter-Taste bestätigen)</source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Kreis auswählen</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/>(mit der Enter-Taste bestätigen)</target></segment>
+    </unit><unit id="subSelectedCounties">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:40</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Ausgewählte Kreise</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Ausgewählte Kreise</pc></target></segment>
+    </unit><unit id="subNoCountiesSelectedError">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:42</note>
+      </notes>
+      <segment state="final">
+        <source>Es muss mindestens ein Kreis ausgewählt werden.</source>
+      <target>Es muss mindestens ein Kreis ausgewählt werden.</target></segment>
+    </unit><unit id="subLanguage">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:56</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Sprache</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Sprache</pc></target></segment>
+    </unit><unit id="subLangGerman">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:61</note>
+      </notes>
+      <segment state="final">
+        <source>Deutsch</source>
+      <target>Deutsch</target></segment>
+    </unit><unit id="subLangEnglish">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:62</note>
+      </notes>
+      <segment state="final">
+        <source>Englisch (we are working on it)</source>
+      <target>Englisch (we are working on it)</target></segment>
+    </unit><unit id="subTermsAndConditions">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:67</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Nutzungsbedingungen</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Nutzungsbedingungen</pc></target></segment>
+    </unit><unit id="subTerms1">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:70</note>
+      </notes>
+      <segment state="final">
+        <source>Ich willige ein, dass meine E-Mail-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die E-Mail-Adresse wird nicht an Dritte weiter gegeben. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Unsere Datenschutzrichtlinien sind hier einzusehen.</pc></source>
+      <target>Ich willige ein, dass meine E-Mail-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die E-Mail-Adresse wird nicht an Dritte weiter gegeben. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Unsere Datenschutzrichtlinien sind hier einzusehen.</pc></target></segment>
+    </unit><unit id="subTerms2">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:72</note>
+      </notes>
+      <segment state="final">
+        <source>Mir ist bewusst, dass CoronaVis keine Gewähr auf die Korrektheit der Zahlen geben kann.</source>
+      <target>Mir ist bewusst, dass CoronaVis keine Gewähr auf die Korrektheit der Zahlen geben kann.</target></segment>
+    </unit><unit id="subBtnSubscribe">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:77</note>
+      </notes>
+      <segment state="final">
+        <source>E-Mail-Benachrichtungen bestellen</source>
+      <target>E-Mail-Benachrichtungen bestellen</target></segment>
+    </unit><unit id="subBtnChange">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:78</note>
+      </notes>
+      <segment state="final">
+        <source>E-Mail-Benachrichtungen ändern</source>
+      <target>E-Mail-Benachrichtungen ändern</target></segment>
+    </unit><unit id="subBtnUnsubscribe">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:79</note>
+      </notes>
+      <segment state="final">
+        <source>E-Mail-Benachrichtungen abbestellen</source>
+      <target>E-Mail-Benachrichtungen abbestellen</target></segment>
     </unit>
   </file>
 </xliff>
