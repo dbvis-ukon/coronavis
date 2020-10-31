@@ -63,6 +63,11 @@ spec:
                 secretKeyRef:
                   name: sentry
                   key: SENTRY_DSN
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: API_KEY
             - name: VERSION
               value: {{ .Values.sha | quote }}
             - name: ENVIRONMENT

@@ -54,6 +54,56 @@ spec:
                 secretKeyRef:
                   name: sentry
                   key: SENTRY_DSN
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: APP_KEY
+            - name: APP_HASH_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: APP_HASH_SALT
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: API_KEY
+            - name: MAIL_SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: MAIL_SERVER
+            - name: MAIL_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: MAIL_PORT
+            - name: MAIL_USE_TLS
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: MAIL_USE_TLS
+            - name: MAIL_USE_SSL
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: MAIL_USE_SSL
+            - name: MAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: MAIL_USERNAME
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: MAIL_PASSWORD
+            - name: MAIL_DEFAULT_SENDER
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: MAIL_DEFAULT_SENDER
             - name: VERSION
               value: {{ .Values.sha | quote }}
             - name: ENVIRONMENT
