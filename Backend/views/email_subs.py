@@ -60,7 +60,9 @@ def subscribe_new():
         print(ex)
         assert isinstance(ex.orig, UniqueViolation)  # proves the original exception
         db.session.rollback()
-        sub = db.session.query(EmailSub).filter(EmailSub.verified == False, EmailSub.email_hash == request.json['email']).first()
+        sub = db.session.query(EmailSub)\
+            .filter(EmailSub.verified == False, EmailSub.email_hash == request.json['email'])\
+            .first()
         # resend verification
         if sub is not None:
             sub.send_email(
@@ -71,7 +73,7 @@ def subscribe_new():
                 token=sub.token
             )
 
-        return schema.dump(new_sub), 201
+        return schema.dump(sub), 201
 
 
 @routes.route('/<id>/<token>', methods=['GET'])
@@ -140,12 +142,13 @@ def send_notifications():
     de_7d = de_developments[-8]
 
     sql_result = db.engine.execute('''
-    SELECT id, email, token, lang, ags
+    SELECT id, email, token, lang, c.ags, MAX(c.updated_at)
     FROM email_subs e
     JOIN email_subs_counties esc on e.id = esc.sub_id
-    JOIN cases_per_county_and_day_risklayer c ON esc.ags = c.ids
-    WHERE c.inserted > e.last_email_sent AND e.verified = true
-    GROUP BY id, email, token, lang, ags
+    JOIN cases_lk_risklayer c ON esc.ags = c.ags
+    WHERE c.updated_today = true AND c.date = now()::date
+    AND c.updated_at > e.last_email_sent AND e.verified = true
+    GROUP BY id, email, token, lang, c.ags
     ''')
 
     num_emails = 0
@@ -173,7 +176,7 @@ def send_notifications():
             county_desc=desc,
             county_name=name,
             county_population=round(lk_today['population']),
-            county_last_updated=lk_today['inserted'],
+            county_last_updated=lk_today['last_updated'],
             county_cases_total=lk_today['cases'],
             county_cases_total_100k=round((lk_today['cases'] / lk_today['population']) * 100000, 2),
             county_cases_24=__diff_str(lk_today['cases'] - lk_24h['cases']),
