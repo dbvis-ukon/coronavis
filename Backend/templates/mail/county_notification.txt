@@ -46,4 +46,4 @@ Todesfälle: {{ country_deaths_7 }} / {{ country_deaths_7_100k }}/100k / {{ coun
 
 Alle Angaben ohne Gewähr.
 
-Benachrichtigung ändern oder abbstellen: https://coronavis.dbvis.de/overview/notification/{{ sub_id }}/{{ token }}
+Benachrichtigung ändern oder abbstellen: https://coronavis.dbvis.de/overview/subscription/{{ sub_id }}/{{ token }}
