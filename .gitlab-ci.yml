@@ -85,18 +85,18 @@ variables:
     when: on_success
   # run if files changed
   # and if it should run on a feature branch or it should run on master
-  - changes:
-      - "Crawler/**/*"
-      - "k8/Crawler/**/*"
-      - "k8/crawler-new/**/*"
-      - .gitlab-ci.yml
+  # - changes:
+  #     - Crawler/**/*
+  #     - k8/Crawler/**/*
+  #     - k8/crawler-new/**/*
+  #     - .gitlab-ci.yml
     if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: on_success
-  - changes:
-      - "Crawler/**/*"
-      - "k8/Crawler/**/*"
-      - "k8/crawler-new/**/*"
-      - .gitlab-ci.yml
+  # - changes:
+  #     - Crawler/**/*
+  #     - k8/Crawler/**/*
+  #     - k8/crawler-new/**/*
+  #     - .gitlab-ci.yml
     if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: on_success
   # run if tagged
