@@ -180,11 +180,11 @@ try:
 
         logger.info('Send notification emails')
 
-        # notification_result = requests.post('https://api.coronavis.dbvis.de/sub/send-notifications',
-        #                                     headers={'X-API-KEY': os.getenv('API_KEY')})
+        notification_result = requests.post('https://api.coronavis.dbvis.de/sub/send-notifications',
+                                            headers={'X-API-KEY': os.getenv('API_KEY')})
         # notification_result = requests.post('http://localhost:5000/sub/send-notifications',
         #                                     headers={'X-API-KEY': os.getenv('API_KEY')})
-        # logger.info(notification_result.text)
+        logger.info(notification_result.text)
 
         logger.info('Success')
 
