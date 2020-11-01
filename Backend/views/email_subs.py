@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from flask import Blueprint, request
 
@@ -29,7 +29,7 @@ def subscribe_new():
             email=request.json['email'],
             email_hash=request.json['email'],
             lang=request.json['lang'],
-            last_email_sent=datetime.now()
+            last_email_sent=datetime.now(timezone.utc)
         )
         new_sub.update_token()
         db.session.add(new_sub)
@@ -132,8 +132,8 @@ def send_notifications():
     __rotate_tokens()
 
     c = CaseDevelopments('cases_per_county_and_day_risklayer')
-    sevendaysago = (datetime.now() - timedelta(days=8)).strftime('%Y-%m-%d')
-    tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
+    sevendaysago = (datetime.now(timezone.utc) - timedelta(days=8)).strftime('%Y-%m-%d')
+    tomorrow = (datetime.now(timezone.utc) + timedelta(days=1)).strftime('%Y-%m-%d')
     de = c.getCountry(fromTime=sevendaysago, toTime=tomorrow, idCountry='de')
     de_developments = de['properties']['developments']
     de_today = de_developments[-1]
@@ -265,7 +265,7 @@ def __get_and_verify(id, token) -> EmailSub:
 
 
 def __rotate_tokens():
-    since = datetime.now() - timedelta(hours=72)
+    since = datetime.now(timezone.utc) - timedelta(hours=72)
     subs = db.session.query(EmailSub).filter(EmailSub.token_updated < since).all()
 
     for s in subs:
@@ -275,7 +275,7 @@ def __rotate_tokens():
 
 
 def __delete_unverified_emails():
-    since = datetime.now() - timedelta(hours=1)
+    since = datetime.now(timezone.utc) - timedelta(hours=1)
     db.session.query(EmailSub).filter(EmailSub.last_email_sent < since, EmailSub.verified == False).delete()
 
     db.session.commit()
