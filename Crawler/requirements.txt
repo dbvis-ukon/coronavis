@@ -1,5 +1,5 @@
 pandas==1.1.4
-numpy==1.19.3
+numpy==1.19.4
 urllib3==1.25.11
 xlrd==1.2.0
 requests==2.24.0
