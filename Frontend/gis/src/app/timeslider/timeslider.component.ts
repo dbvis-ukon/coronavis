@@ -175,6 +175,9 @@ export class TimesliderComponent implements OnInit {
     //   return;
     // }
 
+    // workaround to get to the correct date
+    numDays++;
+
     let date = getStrDate(this.sliderValueToMoment(numDays));
     if (date === getStrDate(moment())) {
       date = 'now';
