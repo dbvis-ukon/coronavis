@@ -394,7 +394,7 @@ frontend-code-quality:
     - source var.env
     - cd ./Frontend
     - export FRONTEND_URL_BACKEND=${URL_BACKEND}
-    - export FRONTEND_URL_TILES=${URL_TILES}
+    - export FRONTEND_URL_TILES=${FRONTEND_URL_TILES}
     - export URL_PROTOCOL
     - export VERSION
     - export ENV_TYPE
