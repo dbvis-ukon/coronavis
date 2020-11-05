@@ -266,7 +266,7 @@ json_files = glob.glob(STORAGE_PATH + "*.json")
 
 for j in json_files:
     print(j)
-    with open(STORAGE_PATH + j) as file_content:
+    with open(j) as file_content:
         data = json.load(file_content)
         insert_data(data)
 
