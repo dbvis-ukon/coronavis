@@ -36,6 +36,7 @@
       <p i18n="@@subSelectCounty"><strong>Kreis auswählen</strong><br>(mit der Enter-Taste bestätigen)</p>
 
       <app-hospital-search 
+        class="search"
         [data]="counties$" 
         (selectedHospital)="addCounty($event)" 
         [reset]="resetSearch"

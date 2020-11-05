@@ -326,16 +326,10 @@ export class MapComponent implements OnInit {
       return;
     }
 
-    // internal caching for the glyph positions due to slow force layout:
-    if (this.aggregationLevelToGlyphMap.has(`${o.aggregationLevel}-${o.forceDirectedOn}`)) {
+    this.removeGlyphMapLayers();
 
-      this.showGlyphLayer(this.aggregationLevelToGlyphMap.get(`${o.aggregationLevel}-${o.forceDirectedOn}`));
-
-    } else {
-      // dynamically create the map and load data from api
-
-      let obs: Observable<L.LayerGroup>;
-      if (o.aggregationLevel === AggregationLevel.none) {
+    let obs: Observable<L.LayerGroup>;
+    if (o.aggregationLevel === AggregationLevel.none) {
         obs = this.glyphLayerService.getSimpleGlyphLayer(o, this.bedGlyphOptions$)
         .pipe(
           map(glyphFactories => {
@@ -367,7 +361,7 @@ export class MapComponent implements OnInit {
         }));
       }
 
-      this.glyphLayerSubscription = obs
+    this.glyphLayerSubscription = obs
       .pipe(
         switchMap(l => of(l))
       )
@@ -376,7 +370,6 @@ export class MapComponent implements OnInit {
 
         this.showGlyphLayer(layerGroup);
       });
-    }
   }
 
   private showGlyphLayer(l: L.LayerGroup) {
