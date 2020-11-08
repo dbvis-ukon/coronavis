@@ -261,14 +261,14 @@ def insert_data(data):
 
 
 # read in all json files that we currently have (this can be removed in the next update):
-# TODO: After data has been inserted, this code can be removed, also remove PVC and storing data locally.
-json_files = glob.glob(STORAGE_PATH + "*.json")
-
-for j in json_files:
-    print(j)
-    with open(j) as file_content:
-        data = json.load(file_content)
-        insert_data(data)
+# : After data has been inserted, this code can be removed, also remove PVC and storing data locally.
+# json_files = glob.glob(STORAGE_PATH + "*.json")
+#
+# for j in json_files:
+#     print(j)
+#     with open(j) as file_content:
+#         data = json.load(file_content)
+#         insert_data(data)
 
 # load the newest data into the DB to overwrite the latest data
 insert_data(data)
