@@ -194,7 +194,7 @@ def insert_data(data):
     conn.commit()
 
     query_krankenhaus_meldungen = f'INSERT INTO divi_meldungen ' \
-                                  f'(meldezeitpunkt, kh_id, bettenmeldungecmo, bettenmeldunglowcare, ' \
+                                  f'(private, meldezeitpunkt, kh_id, bettenmeldungecmo, bettenmeldunglowcare, ' \
                                   f'bettenmeldunghighcare, faellecovidaktuell, faellecovidaktuellbeatmet, ' \
                                   f'faellecovidgenesen, faellecovidverstorben, betriebssituation, ' \
                                   f'betriebseinschraenkungpersonal, betriebseinschraenkungraum, ' \
@@ -245,7 +245,7 @@ def insert_data(data):
         cur,
         query_krankenhaus_meldungen,
         entries_meldunden,
-        template='(%(meldezeitpunkt)s, %(id)s, %(bettenmeldungECMO)s, %(bettenmeldungLowCare)s, '
+        template='(true, %(meldezeitpunkt)s, %(id)s, %(bettenmeldungECMO)s, %(bettenmeldungLowCare)s, '
                  '%(bettenmeldungHighCare)s, %(faelleCovidAktuell)s, %(faelleCovidAktuellBeatmet)s, '
                  '%(faelleCovidGenesen)s, %(faelleCovidVerstorben)s, %(betriebssituation)s, '
                  '%(betriebseinschraenkungPersonal)s, %(betriebseinschraenkungRaum)s, '
