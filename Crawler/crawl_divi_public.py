@@ -75,10 +75,11 @@ def get_connection():
     return conn, cur
 
 
+conn, cur = get_connection()
+
+
 # noinspection PyShadowingNames
 def insert_data(data):
-    conn, cur = get_connection()
-
     query_krankenhaus_standorte = f'INSERT INTO divi_krankenhaus_standorte ' \
                                   f'(id, bezeichnung, strasse, hausnummer, plz, ort, bundesland, iknummer, ' \
                                   f'position) ' \
@@ -91,7 +92,7 @@ def insert_data(data):
                                   f'ort = EXCLUDED.ort, ' \
                                   f'bundesland = EXCLUDED.bundesland, ' \
                                   f'iknummer = EXCLUDED.iknummer, ' \
-                                  f'position = EXCLUDED.position;' \
+                                  f'position = EXCLUDED.position;'
 
     entries_kh_standorte = []
 
@@ -149,5 +150,11 @@ def insert_data(data):
 
 # load the newest data into the DB to overwrite the latest data
 insert_data(data)
+
+logger.info('Refreshing materialized view')
+cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW filled_hospital_timeseries_with_fix;')
+conn.commit()
+
+logger.info('Done. Exiting...')
 
 exit(0)
