@@ -194,7 +194,7 @@ def insert_data(data):
     conn.commit()
 
     query_krankenhaus_meldungen = f'INSERT INTO divi_meldungen ' \
-                                  f'(meldezeitpunkt, kh_id, bettenmeldungecmo, bettenmeldunglowcare, ' \
+                                  f'(private, meldezeitpunkt, kh_id, bettenmeldungecmo, bettenmeldunglowcare, ' \
                                   f'bettenmeldunghighcare, faellecovidaktuell, faellecovidaktuellbeatmet, ' \
                                   f'faellecovidgenesen, faellecovidverstorben, betriebssituation, ' \
                                   f'betriebseinschraenkungpersonal, betriebseinschraenkungraum, ' \
@@ -245,7 +245,7 @@ def insert_data(data):
         cur,
         query_krankenhaus_meldungen,
         entries_meldunden,
-        template='(%(meldezeitpunkt)s, %(id)s, %(bettenmeldungECMO)s, %(bettenmeldungLowCare)s, '
+        template='(true, %(meldezeitpunkt)s, %(id)s, %(bettenmeldungECMO)s, %(bettenmeldungLowCare)s, '
                  '%(bettenmeldungHighCare)s, %(faelleCovidAktuell)s, %(faelleCovidAktuellBeatmet)s, '
                  '%(faelleCovidGenesen)s, %(faelleCovidVerstorben)s, %(betriebssituation)s, '
                  '%(betriebseinschraenkungPersonal)s, %(betriebseinschraenkungRaum)s, '
@@ -261,14 +261,14 @@ def insert_data(data):
 
 
 # read in all json files that we currently have (this can be removed in the next update):
-# TODO: After data has been inserted, this code can be removed, also remove PVC and storing data locally.
-json_files = glob.glob(STORAGE_PATH + "*.json")
-
-for j in json_files:
-    print(j)
-    with open(j) as file_content:
-        data = json.load(file_content)
-        insert_data(data)
+# : After data has been inserted, this code can be removed, also remove PVC and storing data locally.
+# json_files = glob.glob(STORAGE_PATH + "*.json")
+#
+# for j in json_files:
+#     print(j)
+#     with open(j) as file_content:
+#         data = json.load(file_content)
+#         insert_data(data)
 
 # load the newest data into the DB to overwrite the latest data
 insert_data(data)
