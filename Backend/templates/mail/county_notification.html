@@ -1,6 +1,7 @@
 <style type="text/css">
     table {
         border-spacing: 0;
+        border-collapse: collapse;
         margin-top: 10px;
     }
 
@@ -10,10 +11,29 @@
       padding: 6px;
     }
 
+    tr th:not(:nth-child(1)) {
+      border: 1px solid black;
+    }
+
     td {
       text-align: right;
       margin: 0;
       padding: 6px;
+    }
+
+    tr td:nth-child(2),
+    tr td:nth-child(4),
+    tr td:nth-child(7),
+    tr td:nth-child(10){
+      border-left: 1px solid dimgray;
+    }
+
+    tr td:nth-child(12) {
+      border-right: 1px solid dimgray;
+    }
+
+    tr:last-child td:not(:nth-child(1)) {
+      border-bottom: 1px solid dimgray;
     }
 
     td:first-child {
@@ -30,6 +50,10 @@
 </p>
 
 <h3>{{ county_desc }} {{ county_name }}</h3>
+
+{% if second_email == True %}
+<p>Seit unserer ersten Mail heute gab es weitere Updates in diesem Landkreis:</p>
+{% endif %}
 
 <p>{{ county_population }} Einwohner</p>
 
@@ -88,12 +112,20 @@
     </tbody>
 </table>
 
+{% if county_cases_24 == 0 %}
 <p>0 neue positiv Getestete kann ebenfalls bedeuten, dass der Landkreis seit dem letzten Update keine Daten bereitgestellt hat.</p>
-
+{% endif %}
 
 <h3>Deutschland</h3>
 
 <p>{{ country_population }} Einwohner</p>
+
+<p>Daten von {{ num_counties_reported }} / {{ num_counties_total }} verfügbar.</p>
+
+<p>Hochrechnung neue positiv Getestete heute: {{ prognosis }}
+<br>
+    Je mehr Landkreise Daten gemeldet haben desto sicherer ist die Hochrechnung.
+</p>
 
 <table>
     <thead>
