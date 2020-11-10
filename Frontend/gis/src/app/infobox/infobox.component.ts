@@ -454,25 +454,14 @@ export class InfoboxComponent implements OnInit {
 
         const rki = this.countryAggregatorService.rkiAggregationForCountry(this._mo.covidNumberCaseOptions.dataSource, refDate);
 
-        const aggLevelData = this.caseRepo.getCasesDevelopmentForAggLevel(
-          this._mo.covidNumberCaseOptions.dataSource,
-          this._mo.covidNumberCaseOptions.aggregationLevel,
-          getStrDate(getMoment(refDate)),
-          getStrDate(getMoment(refDate).add(1, 'day')));
-
         const prognosis = this.caseRepo.getRisklayerPrognosis();
 
-        return forkJoin([filtered, unfiltered, rki, aggLevelData, prognosis, of(refDate)]);
+        return forkJoin([filtered, unfiltered, rki, prognosis, of(refDate)]);
       }),
-      map(([diviFiltered, diviUnfiltered, rki, aggLevelData, prognosis, refDate]) => {
+      map(([diviFiltered, diviUnfiltered, rki, prognosis, refDate]) => {
         this.aggregatedDiviStatistics = diviFiltered;
 
         const rkiOutdated = getMoment(refDate).endOf('day').subtract(1, 'day').isAfter(getMoment(rki.timestamp));
-
-        const availableCounties = aggLevelData.features
-          .map(d => d.properties.developments[d.properties.developments.length - 1])
-          .filter(d => d.last_updated)
-          .length;
 
         const combinedStats = {
           diviFiltered,
@@ -484,8 +473,8 @@ export class InfoboxComponent implements OnInit {
             {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (d: QualitativeTimedStatus) => d.icu_high_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_high_state), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
             {name: 'ECMO', accessor: 'showEcmo', accFunc: (d: QualitativeTimedStatus) => d.ecmo_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.ecmo_state), description: 'ECMO = Zusätzlich ECMO'}
           ],
-          casesCountiesAvailable: availableCounties,
-          casesCountiesTotal: aggLevelData.features.length,
+          casesCountiesAvailable: rki.num_counties_reported,
+          casesCountiesTotal: rki.num_counties_total,
           risklayerPrognosis: Math.round(prognosis.prognosis)
         } as CombinedStatistics;
 
