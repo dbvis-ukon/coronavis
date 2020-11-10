@@ -33,7 +33,7 @@ Deutschland
 
 {{ country_population }} Einwohner
 
-Daten von {{ num_counties_reported }} / {{ num_counties_total }} verfügbar.
+Daten von {{ num_counties_reported }} / {{ num_counties_total }} Landkreisen verfügbar.
 
 Hochrechnung neue positiv Getestete heute: {{ prognosis }}
 Je mehr Landkreise Daten gemeldet haben desto sicherer ist die Hochrechnung.
