@@ -44,4 +44,7 @@ export interface RKICaseTimedStatus {
 
   population: number;
   timestamp: string;
+
+  num_counties_reported: number;
+  num_counties_total: number;
 }

@@ -46,7 +46,11 @@ class CaseDevelopments:
         'proportion_covid_beds',
         agg.proportion_covid_beds,
         'proportion_covid_ventilated',
-        agg.proportion_covid_ventilated
+        agg.proportion_covid_ventilated,
+        'num_counties_reported',
+        agg.num_counties_reported,
+        'num_counties_total',
+        agg.num_counties_total
     )::jsonb
     """
 
@@ -74,7 +78,9 @@ class CaseDevelopments:
         SUM(num_reporting_areas)                                            as num_reporting_areas,
         AVG(proportion_beds_free)                                           as proportion_beds_free,
         AVG(proportion_covid_beds)                                          as proportion_covid_beds,
-        AVG(proportion_covid_ventilated)                                    as proportion_covid_ventilated
+        AVG(proportion_covid_ventilated)                                    as proportion_covid_ventilated,
+        SUM((CASE WHEN c.last_updated IS NULL THEN 0 ELSE 1 END))           as num_counties_reported,
+        COUNT(*)                                                            as num_counties_total
     """
 
     def __init__(self, dataTable):
@@ -279,7 +285,10 @@ class CaseDevelopments:
                 )::jsonb
             END AS developmentDays
             FROM
-                {dataTable} agg
+                (
+                    SELECT *, 1 as num_counties_reported, 1 as num_counties_total
+                    FROM {dataTable}
+                ) agg
             WHERE 1 = 1
                 {sqlFromTime}
                 {sqlToTime}
