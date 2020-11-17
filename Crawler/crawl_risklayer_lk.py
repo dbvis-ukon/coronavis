@@ -144,7 +144,10 @@ for row in db_array:
         }
         if (history['datenbestand'] == current_update) and row[4]:
             updated_today_count += 1
-        entries.append(entry)
+        if entry['cases'].strip() != '' and entry['deaths'].strip() != '':
+            entries.append(entry)
+        else:
+            logger.warning(f"Could not parse cases or deaths of {entry} correctly. Will omit this entry.")
 
 try:
     conn, cur = get_connection()
