@@ -144,7 +144,7 @@ for row in db_array:
         }
         if (history['datenbestand'] == current_update) and row[4]:
             updated_today_count += 1
-        if entry['cases'].strip() != '' and entry['deaths'].strip() != '':
+        if isinstance(entry['cases'], int) and isinstance(entry['deaths'], int):
             entries.append(entry)
         else:
             logger.warning(f"Could not parse cases or deaths of {entry} correctly. Will omit this entry.")
