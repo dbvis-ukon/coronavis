@@ -22,6 +22,16 @@ export interface RKICaseDevelopmentProperties {
 }
 
 
+export interface RKIAgeGroups {
+  A00_A04: number;
+  A05_A14: number;
+  A15_A34: number;
+  A35_A59: number;
+  A60_A79: number;
+  A80plus: number;
+  Aunknown?: number;
+}
+
 
 export interface RKICaseTimedStatus {
   cases: number;
@@ -47,4 +57,8 @@ export interface RKICaseTimedStatus {
 
   num_counties_reported: number;
   num_counties_total: number;
+
+  cases_by_agegroup?: RKIAgeGroups;
+  deaths_by_agegroup?: RKIAgeGroups;
+  population_by_agegroup?: RKIAgeGroups;
 }

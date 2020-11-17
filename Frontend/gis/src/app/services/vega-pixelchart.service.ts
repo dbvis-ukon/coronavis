@@ -1,0 +1,112 @@
+// tslint:disable:quotemark object-literal-key-quotes
+
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class VegaPixelchartService {
+
+  template = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "height": 100,
+    "width": 60,
+    "description": "A simple bar chart with rounded corners at the end of the bar.",
+    "data": {
+      "values": [{
+          "cat": "Verfügbar",
+          "num": 6,
+          "color": "red"
+        },
+        {
+          "cat": "Begrenzt",
+          "num": 3,
+          "color": "green"
+        },
+        {
+          "cat": "Ausgelastet",
+          "num": 1,
+          "color": "blue"
+        },
+        {
+          "cat": "Nicht verfügbar",
+          "num": 0,
+          "color": "yellow"
+        }
+      ]
+    },
+    "config": {
+        "view": {
+            "strokeWidth": 0,
+            "step": 18
+        },
+        "axis": {
+            "domain": false
+        }
+    },
+  "mark": {
+    "type": "rect",
+    "tooltip": true
+  },
+  "encoding": {
+      "x": {
+          "field": "x",
+          "timeUnit": "yearmonthdate",
+          "type": "temporal",
+          "title": "Day",
+          "axis": {
+              "labelAngle": 45,
+          }
+      },
+      "y": {
+          "field": "y",
+          "type": "ordinal",
+          "title": "Month"
+      },
+      "color": {
+          "field": "val",
+          "type": "quantitative",
+          "legend": {
+              "title": null
+          },
+          "scale": {
+            "type": "linear"
+          }
+      }
+    }
+  };
+
+  constructor(
+  ) {}
+
+
+  compileChart(
+    data: {x: string, y: string, val: number}[],
+    chartOptions: {
+      xAxisTitle: string,
+      yAxisTitle: string,
+      width: number,
+      scaleType: string
+    }
+    ): any {
+    if (!data) {
+      return null;
+    }
+
+    const spec = JSON.parse(JSON.stringify(this.template));
+
+    // inject data values
+    spec.data.values = data;
+
+    // also overwrite the title
+    spec.encoding.x.title = chartOptions.xAxisTitle || '';
+
+    spec.encoding.y.title = chartOptions.yAxisTitle || '';
+
+    spec.encoding.color.scale.type = chartOptions.scaleType || 'linear';
+
+    spec.width = chartOptions.width;
+
+    return spec;
+  }
+}
