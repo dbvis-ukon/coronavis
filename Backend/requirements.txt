@@ -15,5 +15,5 @@ Werkzeug==1.0.1
 sentry-sdk==0.19.3
 psycopg2-binary==2.8.6
 python-dotenv==0.15.0
-marshmallow-sqlalchemy==0.24.0
+marshmallow-sqlalchemy==0.24.1
 bcrypt==3.2.0
