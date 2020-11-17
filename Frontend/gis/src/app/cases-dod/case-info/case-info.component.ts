@@ -2,12 +2,12 @@ import { DecimalPipe } from '@angular/common';
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
-import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
-import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
-import { CaseUtilService } from '../services/case-util.service';
-import { VegaLinechartService } from '../services/vega-linechart.service';
-import { getMoment } from '../util/date-util';
+import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../../map/options/covid-number-case-options';
+import { CaseDevelopmentRepository } from '../../repositories/case-development.repository';
+import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../../repositories/types/in/quantitative-rki-case-development';
+import { CaseUtilService } from '../../services/case-util.service';
+import { VegaLinechartService } from '../../services/vega-linechart.service';
+import { getMoment } from '../../util/date-util';
 
 @Component({
   selector: 'app-case-info',

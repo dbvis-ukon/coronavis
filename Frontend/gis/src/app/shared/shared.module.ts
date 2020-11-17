@@ -15,6 +15,7 @@ import { PlusminusPipe } from './plusminus.pipe';
 import { ResizedDirective } from './resize.directive';
 import { TranslatePipe } from './translate.pipe';
 import { WithLoadingPipe } from './with-loading.pipe';
+import { VegaComponent } from './vega/vega.component';
 
 
 
@@ -26,7 +27,8 @@ import { WithLoadingPipe } from './with-loading.pipe';
     LanguageSwitcherComponent,
     WithLoadingPipe,
     BedInlineLegendComponent,
-    HospitalSearchComponent
+    HospitalSearchComponent,
+    VegaComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +51,8 @@ import { WithLoadingPipe } from './with-loading.pipe';
     LanguageSwitcherComponent,
     WithLoadingPipe,
     BedInlineLegendComponent,
-    HospitalSearchComponent
+    HospitalSearchComponent,
+    VegaComponent
   ],
   providers: [
     TranslatePipe,

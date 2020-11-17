@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { default as embed, VisualizationSpec } from 'vega-embed';
-import { I18nService, SupportedLocales } from '../services/i18n.service';
+import { I18nService, SupportedLocales } from '../../services/i18n.service';
 
 @Component({
   selector: 'app-vega',
