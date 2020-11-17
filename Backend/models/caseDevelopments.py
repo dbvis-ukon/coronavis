@@ -119,7 +119,7 @@ class CaseDevelopments:
                     agg."c_A35-A59",
                     'A60_A79',
                     agg."c_A60-A79",
-                    'A80+',
+                    'A80plus',
                     agg."c_A80+",
                     'Aunknown',
                     agg."c_Aunbekannt"
@@ -136,7 +136,7 @@ class CaseDevelopments:
                     agg."d_A35-A59",
                     'A60_A79',
                     agg."d_A60-A79",
-                    'A80+',
+                    'A80plus',
                     agg."d_A80+",
                     'Aunknown',
                     agg."d_Aunbekannt"
@@ -153,7 +153,7 @@ class CaseDevelopments:
                     agg."p_A35-A59",
                     'A60_A79',
                     agg."p_A60-A79",
-                    'A80+',
+                    'A80plus',
                     agg."p_A80+"
                 )::jsonb
             """

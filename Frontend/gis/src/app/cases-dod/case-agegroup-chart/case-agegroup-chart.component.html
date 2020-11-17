@@ -1,0 +1,50 @@
+<mat-form-field appearance="fill">
+  <mat-label>Skalierung</mat-label>
+  <mat-select [(ngModel)]="scaleType" (selectionChange)="updateChart()">
+    <mat-option *ngFor="let scaleType of scaleTypes" [value]="scaleType">
+      {{scaleType}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div class="toggleGroup">
+    <h5 i18n="@@infoboxType">Art</h5>
+  <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="_options.type"
+    (change)="_options.type = $event.value; updateChart()">
+    <mat-button-toggle i18n="@@infoboxTypeSick" [value]="eCovidNumberCaseType.cases">Positiv Getestet
+    </mat-button-toggle>
+    <mat-button-toggle i18n="@@infoboxTypeDeath" [value]="eCovidNumberCaseType.deaths">Todesfälle
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<div class="toggleGroup">
+  <h5 i18n="@@infoboxNorm">Normalisierung</h5>
+
+  <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="_options.normalization"
+    (change)="_options.normalization = $event.value; updateChart()">
+    <mat-button-toggle i18n="@@infoboxNornNone" [value]="eCovidNumberCaseNormalization.absolut">Keine
+      Normalisierung
+    </mat-button-toggle>
+    <mat-button-toggle i18n="@@infoboxNornYes" [value]="eCovidNumberCaseNormalization.per100k">Je
+      100.000 Einwohner
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<div class="toggleGroup">
+  <h5 i18n="@@infoboxTime">Zeitraum</h5>
+
+  <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="_options.timeWindow"
+    (change)="_options.timeWindow = $event.value; updateChart()">
+    <mat-button-toggle i18n="@@infoboxTime24" onerror=" " [value]="eCovidNumberCaseTimeWindow.twentyFourhours">24 Std.
+    </mat-button-toggle>
+    <mat-button-toggle i18n="@@infoboxTime72" [value]="eCovidNumberCaseTimeWindow.seventyTwoHours">72
+      Std.
+    </mat-button-toggle>
+    <mat-button-toggle i18n="@@infoboxTime7Days" [value]="eCovidNumberCaseTimeWindow.sevenDays">7 Tage
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<app-vega [spec]="spec"></app-vega>
