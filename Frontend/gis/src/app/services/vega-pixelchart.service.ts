@@ -86,7 +86,8 @@ export class VegaPixelchartService {
       xAxisTitle: string,
       yAxisTitle: string,
       width: number,
-      scaleType: string
+      scaleType: string,
+      timeAgg: string
     }
     ): any {
     if (!data) {
@@ -104,6 +105,8 @@ export class VegaPixelchartService {
     spec.encoding.y.title = chartOptions.yAxisTitle || '';
 
     spec.encoding.color.scale.type = chartOptions.scaleType || 'linear';
+
+    spec.encoding.x.timeUnit = chartOptions.timeAgg || 'yearmonthdate';
 
     spec.width = chartOptions.width;
 

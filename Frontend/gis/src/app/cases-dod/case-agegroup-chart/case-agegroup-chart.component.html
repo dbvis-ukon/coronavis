@@ -7,6 +7,15 @@
   </mat-select>
 </mat-form-field>
 
+<mat-form-field appearance="fill">
+    <mat-label>Aggregation - Zeit</mat-label>
+    <mat-select [(ngModel)]="timeAgg" (selectionChange)="updateChart()">
+      <mat-option *ngFor="let timeAgg of timeAggs" [value]="timeAgg">
+        {{timeAgg}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
 <div class="toggleGroup">
     <h5 i18n="@@infoboxType">Art</h5>
   <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="_options.type"

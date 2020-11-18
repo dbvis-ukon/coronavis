@@ -41,6 +41,9 @@ export class CaseAgegroupChartComponent implements OnInit {
 
   spec: any;
 
+  timeAggs = ['yearmonthdate', 'week'];
+  timeAgg = 'yearmonthdate';
+
   scaleTypes = ['linear', 'sqrt', 'symlog'];
   scaleType = 'linear';
 
@@ -135,8 +138,9 @@ export class CaseAgegroupChartComponent implements OnInit {
       xAxisTitle: 'Datum',
       yAxisTitle: 'Altersgruppe',
       width: 600,
-      scaleType: this.scaleType}
-    );
+      scaleType: this.scaleType,
+      timeAgg: this.timeAgg
+    });
 
     console.log('chart', JSON.stringify(this.spec));
   }
