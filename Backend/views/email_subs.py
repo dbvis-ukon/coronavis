@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from flask import Blueprint, request
 
@@ -16,6 +16,7 @@ from models.email_subs import EmailSub, EmailSubsSchema, email_subs_schema, Subs
 from services.crypt_service import decrypt_message
 # noinspection PyUnresolvedReferences
 from psycopg2.errors import UniqueViolation
+from models.risklayer_prognosis import RisklayerPrognosis
 
 
 @routes.route('/', methods=['POST'])
@@ -29,7 +30,7 @@ def subscribe_new():
             email=request.json['email'],
             email_hash=request.json['email'],
             lang=request.json['lang'],
-            last_email_sent=datetime.now()
+            last_email_sent=datetime.now(timezone.utc)
         )
         new_sub.update_token()
         db.session.add(new_sub)
@@ -60,8 +61,8 @@ def subscribe_new():
         print(ex)
         assert isinstance(ex.orig, UniqueViolation)  # proves the original exception
         db.session.rollback()
-        sub = db.session.query(EmailSub)\
-            .filter(EmailSub.verified == False, EmailSub.email_hash == request.json['email'])\
+        sub = db.session.query(EmailSub) \
+            .filter(EmailSub.verified == False, EmailSub.email_hash == request.json['email']) \
             .first()
         # resend verification
         if sub is not None:
@@ -132,8 +133,8 @@ def send_notifications():
     __rotate_tokens()
 
     c = CaseDevelopments('cases_per_county_and_day_risklayer')
-    sevendaysago = (datetime.now() - timedelta(days=8)).strftime('%Y-%m-%d')
-    tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
+    sevendaysago = (datetime.now(timezone.utc) - timedelta(days=8)).strftime('%Y-%m-%d')
+    tomorrow = (datetime.now(timezone.utc) + timedelta(days=1)).strftime('%Y-%m-%d')
     de = c.getCountry(fromTime=sevendaysago, toTime=tomorrow, idCountry='de')
     de_developments = de['properties']['developments']
     de_today = de_developments[-1]
@@ -141,14 +142,17 @@ def send_notifications():
     de_72h = de_developments[-4]
     de_7d = de_developments[-8]
 
+    prognosis = RisklayerPrognosis.query.order_by(RisklayerPrognosis.datenbestand.desc()).limit(1)[0]
+
     sql_result = db.engine.execute('''
-    SELECT id, email, token, lang, c.ags, MAX(c.updated_at)
+    SELECT id, email, token, lang, c.ags, MAX(c.updated_at), 
+    (CASE WHEN c.updated_at::date = e.last_email_sent::date THEN true ELSE false END) AS second_email
     FROM email_subs e
     JOIN email_subs_counties esc on e.id = esc.sub_id
     JOIN cases_lk_risklayer c ON esc.ags = c.ags
     WHERE c.updated_today = true AND c.date = now()::date
     AND c.updated_at > e.last_email_sent AND e.verified = true
-    GROUP BY id, email, token, lang, c.ags
+    GROUP BY id, email, token, lang, c.ags, c.updated_at::date, e.last_email_sent::date
     ''')
 
     num_emails = 0
@@ -172,62 +176,66 @@ def send_notifications():
             template='mail/county_notification',
             sub_id=row['id'],
             token=decrypt_message(row['token'].tobytes()),
+            second_email=row['second_email'],
 
             county_desc=desc,
             county_name=name,
             county_population=round(lk_today['population']),
             county_last_updated=lk_today['last_updated'],
             county_cases_total=lk_today['cases'],
-            county_cases_total_100k=round((lk_today['cases'] / lk_today['population']) * 100000, 2),
+            county_cases_total_100k=round(__100k_change(lk_today['cases'], 0, lk_today['population']), 2),
             county_cases_24=__diff_str(lk_today['cases'] - lk_24h['cases']),
-            county_cases_24_prc=__diff_str(((lk_today['cases'] - lk_24h['cases']) / lk_24h['cases']) * 100),
-            county_cases_24_100k=__diff_str(((lk_today['cases'] - lk_24h['cases']) / lk_24h['population']) * 100000),
+            county_cases_24_prc=__diff_str(__prc_change(lk_today['cases'], lk_24h['cases'])),
+            county_cases_24_100k=__diff_str(__100k_change(lk_today['cases'], lk_24h['cases'], lk_today['population'])),
             county_cases_72=__diff_str(lk_today['cases'] - lk_72h['cases']),
-            county_cases_72_prc=__diff_str(((lk_today['cases'] - lk_72h['cases']) / lk_72h['cases']) * 100),
-            county_cases_72_100k=__diff_str(((lk_today['cases'] - lk_72h['cases']) / lk_72h['population']) * 100000),
+            county_cases_72_prc=__diff_str(__prc_change(lk_today['cases'], lk_72h['cases'])),
+            county_cases_72_100k=__diff_str(__100k_change(lk_today['cases'], lk_72h['cases'], lk_today['population'])),
             county_cases_7=__diff_str(lk_today['cases'] - lk_7d['cases']),
-            county_cases_7_prc=__diff_str(((lk_today['cases'] - lk_7d['cases']) / lk_7d['cases']) * 100),
-            county_cases_7_100k=__diff_str(((lk_today['cases'] - lk_7d['cases']) / lk_7d['population']) * 100000),
+            county_cases_7_prc=__diff_str(__prc_change(lk_today['cases'], lk_7d['cases'])),
+            county_cases_7_100k=__diff_str(__100k_change(lk_today['cases'], lk_7d['cases'], lk_today['population'])),
             county_deaths_total=lk_today['deaths'],
-            county_deaths_total_100k=round((lk_today['deaths'] / lk_today['population']) * 100000, 2),
+            county_deaths_total_100k=round(__100k_change(lk_today['deaths'], 0, lk_today['population']), 2),
             county_deaths_24=__diff_str(lk_today['deaths'] - lk_24h['deaths']),
-            county_deaths_24_prc=__diff_str(((lk_today['deaths'] - lk_24h['deaths']) / lk_24h['deaths']) * 100),
+            county_deaths_24_prc=__diff_str(__prc_change(lk_today['deaths'], lk_24h['deaths'])),
             county_deaths_24_100k=__diff_str(
-                ((lk_today['deaths'] - lk_24h['deaths']) / lk_24h['population']) * 100000),
+                __100k_change(lk_today['deaths'], lk_24h['deaths'], lk_today['population'])),
             county_deaths_72=__diff_str(lk_today['deaths'] - lk_72h['deaths']),
-            county_deaths_72_prc=__diff_str(((lk_today['deaths'] - lk_72h['deaths']) / lk_72h['deaths']) * 100),
+            county_deaths_72_prc=__diff_str(__prc_change(lk_today['deaths'], lk_72h['deaths'])),
             county_deaths_72_100k=__diff_str(
-                ((lk_today['deaths'] - lk_72h['deaths']) / lk_72h['population']) * 100000),
+                __100k_change(lk_today['deaths'], lk_72h['deaths'], lk_today['population'])),
             county_deaths_7=__diff_str(lk_today['deaths'] - lk_7d['deaths']),
-            county_deaths_7_prc=__diff_str(((lk_today['deaths'] - lk_7d['deaths']) / lk_7d['deaths']) * 100),
-            county_deaths_7_100k=__diff_str(((lk_today['deaths'] - lk_7d['deaths']) / lk_7d['population']) * 100000),
+            county_deaths_7_prc=__diff_str(__prc_change(lk_today['deaths'], lk_7d['deaths'])),
+            county_deaths_7_100k=__diff_str(__100k_change(lk_today['deaths'], lk_7d['deaths'], lk_today['population'])),
 
+            num_counties_reported=de_today['num_counties_reported'],
+            num_counties_total=de_today['num_counties_total'],
+            prognosis=round(prognosis.prognosis),
             country_population=round(de_today['population']),
             country_last_updated=de_today['last_updated'],
             country_cases_total=de_today['cases'],
-            country_cases_total_100k=round((de_today['cases'] / de_today['population']) * 100000, 2),
+            country_cases_total_100k=round(__100k_change(de_today['cases'], 0, de_today['population']), 2),
             country_cases_24=__diff_str(de_today['cases'] - de_24h['cases']),
-            country_cases_24_prc=__diff_str(((de_today['cases'] - de_24h['cases']) / de_24h['cases']) * 100),
-            country_cases_24_100k=__diff_str(((de_today['cases'] - de_24h['cases']) / de_24h['population']) * 100000),
+            country_cases_24_prc=__diff_str(__prc_change(de_today['cases'], de_24h['cases'])),
+            country_cases_24_100k=__diff_str(__100k_change(de_today['cases'], de_24h['cases'], de_today['population'])),
             country_cases_72=__diff_str(de_today['cases'] - de_72h['cases']),
-            country_cases_72_prc=__diff_str(((de_today['cases'] - de_72h['cases']) / de_72h['cases']) * 100),
-            country_cases_72_100k=__diff_str(((de_today['cases'] - de_72h['cases']) / de_72h['population']) * 100000),
+            country_cases_72_prc=__diff_str(__prc_change(de_today['cases'], de_72h['cases'])),
+            country_cases_72_100k=__diff_str(__100k_change(de_today['cases'], de_72h['cases'], de_today['population'])),
             country_cases_7=__diff_str(de_today['cases'] - de_7d['cases']),
-            country_cases_7_prc=__diff_str(((de_today['cases'] - de_7d['cases']) / de_7d['cases']) * 100),
-            country_cases_7_100k=__diff_str(((de_today['cases'] - de_7d['cases']) / de_7d['population']) * 100000),
+            country_cases_7_prc=__diff_str(__prc_change(de_today['cases'], de_7d['cases'])),
+            country_cases_7_100k=__diff_str(__100k_change(de_today['cases'], de_7d['cases'], de_today['population'])),
             country_deaths_total=de_today['deaths'],
-            country_deaths_total_100k=round((de_today['deaths'] / de_today['population']) * 100000, 2),
+            country_deaths_total_100k=round(__100k_change(de_today['deaths'], 0, de_today['population']), 2),
             country_deaths_24=__diff_str(de_today['deaths'] - de_24h['deaths']),
-            country_deaths_24_prc=__diff_str(((de_today['deaths'] - de_24h['deaths']) / de_24h['deaths']) * 100),
+            country_deaths_24_prc=__diff_str(__prc_change(de_today['deaths'], de_24h['deaths'])),
             country_deaths_24_100k=__diff_str(
-                ((de_today['deaths'] - de_24h['deaths']) / de_24h['population']) * 100000),
+                __100k_change(de_today['deaths'], de_24h['deaths'], de_today['population'])),
             country_deaths_72=__diff_str(de_today['deaths'] - de_72h['deaths']),
-            country_deaths_72_prc=__diff_str(((de_today['deaths'] - de_72h['deaths']) / de_72h['deaths']) * 100),
+            country_deaths_72_prc=__diff_str(__prc_change(de_today['deaths'], de_72h['deaths'])),
             country_deaths_72_100k=__diff_str(
-                ((de_today['deaths'] - de_72h['deaths']) / de_72h['population']) * 100000),
+                __100k_change(de_today['deaths'], de_72h['deaths'], de_today['population'])),
             country_deaths_7=__diff_str(de_today['deaths'] - de_7d['deaths']),
-            country_deaths_7_prc=__diff_str(((de_today['deaths'] - de_7d['deaths']) / de_7d['deaths']) * 100),
-            country_deaths_7_100k=__diff_str(((de_today['deaths'] - de_7d['deaths']) / de_7d['population']) * 100000)
+            country_deaths_7_prc=__diff_str(__prc_change(de_today['deaths'], de_7d['deaths'])),
+            country_deaths_7_100k=__diff_str(__100k_change(de_today['deaths'], de_7d['deaths'], de_today['population']))
 
         )
 
@@ -236,6 +244,16 @@ def send_notifications():
         num_emails += 1
 
     return f'emails sent {num_emails}', 200
+
+
+def __prc_change(new, old) -> float:
+    if old == 0:
+        return 0
+    return ((new - old) / old) * 100
+
+
+def __100k_change(new, old, pop) -> float:
+    return ((new - old) / pop) * 100000
 
 
 def __diff_str(val) -> str:
@@ -255,7 +273,7 @@ def __get_and_verify(id, token) -> EmailSub:
 
 
 def __rotate_tokens():
-    since = datetime.now() - timedelta(hours=72)
+    since = datetime.now(timezone.utc) - timedelta(hours=72)
     subs = db.session.query(EmailSub).filter(EmailSub.token_updated < since).all()
 
     for s in subs:
@@ -265,7 +283,7 @@ def __rotate_tokens():
 
 
 def __delete_unverified_emails():
-    since = datetime.now() - timedelta(hours=1)
+    since = datetime.now(timezone.utc) - timedelta(hours=1)
     db.session.query(EmailSub).filter(EmailSub.last_email_sent < since, EmailSub.verified == False).delete()
 
     db.session.commit()

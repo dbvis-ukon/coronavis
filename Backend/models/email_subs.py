@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from marshmallow_sqlalchemy.fields import Nested
@@ -57,11 +57,11 @@ class EmailSub(db.Model):
 
     def update_token(self):
         self.token = get_token(10)
-        self.token_updated = datetime.now()
+        self.token_updated = datetime.now(timezone.utc)
 
     def send_email(self, subject, sender, template, **kwargs):
         send_email(subject, sender, [self.email], template, **kwargs)
-        self.last_email_sent = datetime.now()
+        self.last_email_sent = datetime.now(timezone.utc)
 
 
 class SubscribedCounties(db.Model):

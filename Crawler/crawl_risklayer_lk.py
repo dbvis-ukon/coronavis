@@ -26,7 +26,13 @@ logger.info('Crawler for Risklayer spreadsheet and case data')
 #
 DB_TABLE = 'cases_lk_risklayer'
 DB_TABLE_CURRENT = 'cases_lk_risklayer_current'
-QUERY = f'INSERT INTO {DB_TABLE} ("date", datenbestand, ags, cases, deaths, updated_today) VALUES %s ON CONFLICT ON CONSTRAINT no_crawl_duplicates DO UPDATE SET cases = EXCLUDED.cases, deaths = case when EXCLUDED.deaths IS NOT NULL then EXCLUDED.deaths else {DB_TABLE}.deaths end;'
+QUERY = f'INSERT INTO {DB_TABLE} ("date", datenbestand, ags, cases, deaths, updated_today) ' \
+        f'VALUES %s ON CONFLICT ON CONSTRAINT no_crawl_duplicates DO ' \
+        f'UPDATE SET ' \
+        f'datenbestand = EXCLUDED.datenbestand, ' \
+        f'cases = EXCLUDED.cases, ' \
+        f'deaths = case when EXCLUDED.deaths IS NOT NULL then EXCLUDED.deaths else {DB_TABLE}.deaths end, ' \
+        f'updated_today = EXCLUDED.updated_today;'
 URL = "https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/export?format=xlsx"
 STORAGE_PATH = "/var/risklayer_spreadsheets/"
 NUM_RETRIES = 5
@@ -138,7 +144,10 @@ for row in db_array:
         }
         if (history['datenbestand'] == current_update) and row[4]:
             updated_today_count += 1
-        entries.append(entry)
+        if (isinstance(entry['cases'], int) or entry['cases'] == None) and (isinstance(entry['deaths'], int) or entry['deaths'] == None):
+            entries.append(entry)
+        else:
+            logger.warning(f"Could not parse cases or deaths of {entry} correctly. Will omit this entry.")
 
 try:
     conn, cur = get_connection()

@@ -1,4 +1,7 @@
-<div *ngFor="let t of glyphLegendColors" class="glyph-tile">
-  <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
-  <div class="text">{{ t | translate }}</div>
+<div class="outer">
+  <div *ngFor="let t of glyphLegendColors" class="glyph-tile">
+    <div class="circle" [ngStyle]="{'background-color': getGlyphColor(t)}"></div>
+    <div class="text">{{ t | translate }}</div>
+  </div>
 </div>
+<mat-hint class="addition" i18n="@@legendDiviAddition">Persönliche Verfügbarkeits-Einschätzung der Krankenhäuser (inklusive Personalsituation)</mat-hint>

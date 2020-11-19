@@ -1494,6 +1494,14 @@
       <segment state="initial">
         <source>Sprache</source>
       <target>Language</target></segment>
+    </unit><unit id="legendDiviAddition">
+      <notes>
+        <note category="location">src/app/shared/bed-inline-legend/bed-inline-legend.component.html:5</note>
+        <note category="location">src/app/legend/legend.component.html:96</note>
+      </notes>
+      <segment state="initial">
+        <source>Persönliche Verfügbarkeits-Einschätzung der Krankenhäuser (inklusive Personalsituation)</source>
+      <target>Personal availability assessment of hospitals (including personnel situation)</target></segment>
     </unit><unit id="overviewIntroduction">
       <notes>
         
@@ -1644,7 +1652,7 @@
     </unit><unit id="legendDatasourceDivi">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:96</note></notes>
+      <note category="location">src/app/legend/legend.component.html:100</note></notes>
       <segment state="initial">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></source>
       <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI ICU Registry</pc></target></segment>
