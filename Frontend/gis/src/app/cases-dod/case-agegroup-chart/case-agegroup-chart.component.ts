@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from 'src/app/repositories/case-development.repository';
@@ -11,6 +11,15 @@ import { VegaPixelchartService } from '../../services/vega-pixelchart.service';
   styleUrls: ['./case-agegroup-chart.component.less']
 })
 export class CaseAgegroupChartComponent implements OnInit {
+
+  @ViewChild('i18nAltersgruppe', {static: true})
+  i18nAltersgruppe: ElementRef<HTMLSpanElement>;
+
+  @ViewChild('i18nDatum', {static: true})
+  i18nDatum: ElementRef<HTMLSpanElement>;
+
+  @ViewChild('i18nWoche', {static: true})
+  i18nWoche: ElementRef<HTMLSpanElement>;
 
   _data: RKICaseDevelopmentProperties;
 
@@ -135,17 +144,17 @@ export class CaseAgegroupChartComponent implements OnInit {
       }
     }
 
-    console.log(data);
+    const yAxis = this.i18nAltersgruppe.nativeElement.textContent;
+
+    const xAxis = this.timeAgg === 'week' ? this.i18nWoche.nativeElement.textContent : this.i18nDatum.nativeElement.textContent;
 
     this.spec = this.vegaPixelchartService.compileChart(data, {
-      xAxisTitle: 'Datum',
-      yAxisTitle: 'Altersgruppe',
+      xAxisTitle: xAxis,
+      yAxisTitle: yAxis,
       width: 600,
       scaleType: this.scaleType,
       timeAgg: this.timeAgg
     });
-
-    console.log('chart', JSON.stringify(this.spec));
   }
 
 }

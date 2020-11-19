@@ -155,6 +155,27 @@
       <segment state="initial">
         <source>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</source>
       <target>A non-linear scaling emphasizes low values better.</target></segment>
+    </unit><unit id="caseDodYAxisAltersgruppe">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:65</note>
+      </notes>
+      <segment state="initial">
+        <source>Altersgruppe</source>
+      <target>Age Group</target></segment>
+    </unit><unit id="caseDodXAxisDatum">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:66</note>
+      </notes>
+      <segment state="initial">
+        <source>Datum</source>
+      <target>Date</target></segment>
+    </unit><unit id="caseDodXAxisWoche">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:67</note>
+      </notes>
+      <segment state="initial">
+        <source>Woche</source>
+      <target>Week</target></segment>
     </unit><unit id="button11">
       <notes>
         <note category="description"> help</note>
