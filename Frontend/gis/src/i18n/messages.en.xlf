@@ -176,6 +176,20 @@
       <segment state="initial">
         <source>Woche</source>
       <target>Week</target></segment>
+    </unit><unit id="caseDodDataSourceRKI">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:74</note>
+      </notes>
+      <segment state="initial">
+        <source>Datenquelle der Inzidenzen nach Altersgruppe: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Instistut</pc></source>
+      <target>Data source of the incidences by age groupe: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Instistute</pc></target></segment>
+    </unit><unit id="caseDodDataSourceZensus">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:75</note>
+      </notes>
+      <segment state="initial">
+        <source>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Zensus 2011</pc></source>
+      <target>Data source of the population data: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">German Census 2011</pc></target></segment>
     </unit><unit id="button11">
       <notes>
         <note category="description"> help</note>
