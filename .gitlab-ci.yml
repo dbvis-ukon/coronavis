@@ -485,7 +485,7 @@ dockerize-frontend:
 dockerize-crawler:
   variables:
     FOLDER: Crawler
-    RUN_ALWAYS: "no"
+    RUN_ALWAYS: "yes"
     # Yes? In case the build image fails this could help with MR?
     RUN_ON_FB: "yes"
     RUN_ON_MASTER: "yes"
