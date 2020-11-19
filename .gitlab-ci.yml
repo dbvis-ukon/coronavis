@@ -90,14 +90,14 @@ variables:
   #     - k8/Crawler/**/*
   #     - k8/crawler-new/**/*
   #     - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+  - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: on_success
   # - changes:
   #     - Crawler/**/*
   #     - k8/Crawler/**/*
   #     - k8/crawler-new/**/*
   #     - .gitlab-ci.yml
-    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+  - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: on_success
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -118,19 +118,19 @@ variables:
   # and if it should run on a feature branch or it should run on master
   - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     changes:
-    - Tiles/**/*
-    - k8/tiles-new/**/*
+    - "Tiles/**/*"
+    - "k8/tiles-new/**/*"
     when: manual
   - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     changes:
-      - Tiles/**/*
-      - k8/tiles-new/**/*
+      - "Tiles/**/*"
+      - "k8/tiles-new/**/*"
     when: manual
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
     changes:
-     - Tiles/**/*
-     - k8/tiles-new/**/*
+     - "Tiles/**/*"
+     - "k8/tiles-new/**/*"
     when: manual
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
@@ -485,7 +485,7 @@ dockerize-frontend:
 dockerize-crawler:
   variables:
     FOLDER: Crawler
-    RUN_ALWAYS: "no"
+    RUN_ALWAYS: "yes"
     # Yes? In case the build image fails this could help with MR?
     RUN_ON_FB: "yes"
     RUN_ON_MASTER: "yes"
