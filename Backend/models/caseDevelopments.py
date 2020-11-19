@@ -5,84 +5,6 @@ from db import db
 
 
 class CaseDevelopments:
-    __buildObj = """
-    json_build_object(
-        'timestamp',
-        agg.timestamp,
-        'inserted',
-        agg.inserted,
-        'last_updated',
-        agg.last_updated,
-        'cases',
-        agg.cases,
-        'cases_per_population',
-        agg.cases_per_population,
-        'cases_per_100k',
-        agg.cases_per_100k,
-        'population',
-        agg.population,
-        'deaths',
-        agg.deaths,
-        'death_rate',
-        agg.death_rate,
-        'cases7_per_100k',
-        agg.cases7_per_100k,
-        'beds_total',
-        agg.beds_total,
-        'beds_occupied',
-        agg.beds_occupied,
-        'beds_free',
-        agg.beds_free,
-        'cases_covid',
-        agg.cases_covid,
-        'cases_covid_ventilated',
-        agg.cases_covid_ventilated,
-        'num_locations',
-        agg.num_locations,
-        'num_reporting_areas',
-        agg.num_reporting_areas,
-        'proportion_beds_free',
-        agg.proportion_beds_free,
-        'proportion_covid_beds',
-        agg.proportion_covid_beds,
-        'proportion_covid_ventilated',
-        agg.proportion_covid_ventilated,
-        'num_counties_reported',
-        agg.num_counties_reported,
-        'num_counties_total',
-        agg.num_counties_total
-    )::jsonb
-    """
-
-    __aggCols = """
-        r.ids                                                               as ids,
-        r.name                                                              as name,
-        c.timestamp                                                         as timestamp,
-        MAX(c.last_updated)                                                 as last_updated,
-        MAX(c.inserted)                                                     as inserted,
-        string_agg(DISTINCT c.name, ',')                                    as landkreise,
-        r.geom                                                              as geom,
-        SUM(cases)                                                          as cases,
-        SUM(cases_per_100k)                                                 as cases_per_100k,
-        AVG(cases_per_population)                                           as cases_per_population,
-        SUM(population)                                                     as population,
-        SUM(deaths)                                                         as deaths,
-        AVG(death_rate)                                                     as death_rate,
-        (SUM(cases - cases7_days_ago) / SUM(population)) * 100000           as cases7_per_100k,
-        SUM(beds_total)                                                     as beds_total,
-        SUM(beds_occupied)                                                  as beds_occupied,
-        SUM(beds_free)                                                      as beds_free,
-        SUM(cases_covid)                                                    as cases_covid,
-        SUM(cases_covid_ventilated)                                         as cases_covid_ventilated,
-        SUM(num_locations)                                                  as num_locations,
-        SUM(num_reporting_areas)                                            as num_reporting_areas,
-        AVG(proportion_beds_free)                                           as proportion_beds_free,
-        AVG(proportion_covid_beds)                                          as proportion_covid_beds,
-        AVG(proportion_covid_ventilated)                                    as proportion_covid_ventilated,
-        SUM((CASE WHEN c.last_updated IS NULL THEN 0 ELSE 1 END))           as num_counties_reported,
-        COUNT(*)                                                            as num_counties_total
-    """
-
     def __init__(self, dataTable):
         self.dataTable = dataTable
 
@@ -180,6 +102,170 @@ class CaseDevelopments:
 
         return feature
 
+    def __buildObj(self):
+        ageStuff = ""
+        if self.dataTable == 'cases_per_county_and_day':
+            ageStuff = """
+                ,
+                'cases_by_agegroup',
+                json_build_object(
+                    'A00_A04',
+                    agg."c_A00-A04",
+                    'A05_A14',
+                    agg."c_A05-A14",
+                    'A15_A34',
+                    agg."c_A15-A34",
+                    'A35_A59',
+                    agg."c_A35-A59",
+                    'A60_A79',
+                    agg."c_A60-A79",
+                    'A80plus',
+                    agg."c_A80+",
+                    'Aunknown',
+                    agg."c_Aunbekannt"
+                )::jsonb,
+                'deaths_by_agegroup',
+                json_build_object(
+                    'A00_A04',
+                    agg."d_A00-A04",
+                    'A05_A14',
+                    agg."d_A05-A14",
+                    'A15_A34',
+                    agg."d_A15-A34",
+                    'A35_A59',
+                    agg."d_A35-A59",
+                    'A60_A79',
+                    agg."d_A60-A79",
+                    'A80plus',
+                    agg."d_A80+",
+                    'Aunknown',
+                    agg."d_Aunbekannt"
+                )::jsonb,
+                'population_by_agegroup',
+                json_build_object(
+                    'A00_A04',
+                    agg."p_A00-A04",
+                    'A05_A14',
+                    agg."p_A05-A14",
+                    'A15_A34',
+                    agg."p_A15-A34",
+                    'A35_A59',
+                    agg."p_A35-A59",
+                    'A60_A79',
+                    agg."p_A60-A79",
+                    'A80plus',
+                    agg."p_A80+"
+                )::jsonb
+            """
+
+        ret = f"""
+            json_build_object(
+                'timestamp',
+                agg.timestamp,
+                'inserted',
+                agg.inserted,
+                'last_updated',
+                agg.last_updated,
+                'cases',
+                agg.cases,
+                'cases_per_population',
+                agg.cases_per_population,
+                'cases_per_100k',
+                agg.cases_per_100k,
+                'population',
+                agg.population,
+                'deaths',
+                agg.deaths,
+                'death_rate',
+                agg.death_rate,
+                'cases7_per_100k',
+                agg.cases7_per_100k,
+                'beds_total',
+                agg.beds_total,
+                'beds_occupied',
+                agg.beds_occupied,
+                'beds_free',
+                agg.beds_free,
+                'cases_covid',
+                agg.cases_covid,
+                'cases_covid_ventilated',
+                agg.cases_covid_ventilated,
+                'num_locations',
+                agg.num_locations,
+                'num_reporting_areas',
+                agg.num_reporting_areas,
+                'proportion_beds_free',
+                agg.proportion_beds_free,
+                'proportion_covid_beds',
+                agg.proportion_covid_beds,
+                'proportion_covid_ventilated',
+                agg.proportion_covid_ventilated,
+                'num_counties_reported',
+                agg.num_counties_reported,
+                'num_counties_total',
+                agg.num_counties_total
+                {ageStuff}   
+            )::jsonb
+            """
+        return ret
+
+    def __aggCols(self):
+        ageStuff = ""
+        if self.dataTable == 'cases_per_county_and_day':
+            ageStuff = """
+                ,
+                SUM(c."c_A00-A04")                                            as "c_A00-A04",
+                SUM(c."c_A05-A14")                                            as "c_A05-A14",
+                SUM(c."c_A15-A34")                                            as "c_A15-A34",
+                SUM(c."c_A35-A59")                                            as "c_A35-A59",
+                SUM(c."c_A60-A79")                                            as "c_A60-A79",
+                SUM(c."c_A80+")                                               as "c_A80+",
+                SUM(c."c_Aunbekannt")                                         as "c_Aunbekannt",
+                SUM(c."d_A00-A04")                                            as "d_A00-A04",
+                SUM(c."d_A05-A14")                                            as "d_A05-A14",
+                SUM(c."d_A15-A34")                                            as "d_A15-A34",
+                SUM(c."d_A35-A59")                                            as "d_A35-A59",
+                SUM(c."d_A60-A79")                                            as "d_A60-A79",
+                SUM(c."d_A80+")                                               as "d_A80+",
+                SUM(c."d_Aunbekannt")                                         as "d_Aunbekannt",
+                SUM(c."p_A00-A04")                                            as "p_A00-A04",
+                SUM(c."p_A05-A14")                                            as "p_A05-A14",
+                SUM(c."p_A15-A34")                                            as "p_A15-A34",
+                SUM(c."p_A35-A59")                                            as "p_A35-A59",
+                SUM(c."p_A60-A79")                                            as "p_A60-A79",
+                SUM(c."p_A80+")                                               as "p_A80+"
+            """
+        ret = f"""
+            r.ids                                                               as ids,
+            r.name                                                              as name,
+            c.timestamp                                                         as timestamp,
+            MAX(c.last_updated)                                                 as last_updated,
+            MAX(c.inserted)                                                     as inserted,
+            string_agg(DISTINCT c.name, ',')                                    as landkreise,
+            r.geom                                                              as geom,
+            SUM(cases)                                                          as cases,
+            SUM(cases_per_100k)                                                 as cases_per_100k,
+            AVG(cases_per_population)                                           as cases_per_population,
+            SUM(population)                                                     as population,
+            SUM(deaths)                                                         as deaths,
+            AVG(death_rate)                                                     as death_rate,
+            (SUM(cases - cases7_days_ago) / SUM(population)) * 100000           as cases7_per_100k,
+            SUM(beds_total)                                                     as beds_total,
+            SUM(beds_occupied)                                                  as beds_occupied,
+            SUM(beds_free)                                                      as beds_free,
+            SUM(cases_covid)                                                    as cases_covid,
+            SUM(cases_covid_ventilated)                                         as cases_covid_ventilated,
+            SUM(num_locations)                                                  as num_locations,
+            SUM(num_reporting_areas)                                            as num_reporting_areas,
+            AVG(proportion_beds_free)                                           as proportion_beds_free,
+            AVG(proportion_covid_beds)                                          as proportion_covid_beds,
+            AVG(proportion_covid_ventilated)                                    as proportion_covid_ventilated,
+            SUM((CASE WHEN c.last_updated IS NULL THEN 0 ELSE 1 END))           as num_counties_reported,
+            COUNT(*)                                                            as num_counties_total
+            {ageStuff}
+        """
+        return ret
+
     def __aggQuery(self, aggTable, fromTime, toTime, idObj):
 
         sqlFromTime = ""
@@ -236,8 +322,8 @@ class CaseDevelopments:
         GROUP BY agg.ids,
                 agg.name,
                 agg.geom
-        """.format(aggTable=aggTable, development_select_cols=self.__aggCols,
-                   development_json_build_obj=self.__buildObj, dataTable=self.dataTable, sqlFromTime=sqlFromTime,
+        """.format(aggTable=aggTable, development_select_cols=self.__aggCols(),
+                   development_json_build_obj=self.__buildObj(), dataTable=self.dataTable, sqlFromTime=sqlFromTime,
                    sqlToTime=sqlToTime, sqlIdObj=sqlIdObj))
 
     def __getCounties(self, fromTime, toTime, idCounty):
@@ -298,7 +384,7 @@ class CaseDevelopments:
                 agg.name,
                 agg."desc",
                 agg.geom
-        """.format(buildObj=self.__buildObj, dataTable=self.dataTable, sqlFromTime=sqlFromTime, sqlToTime=sqlToTime,
+        """.format(buildObj=self.__buildObj(), dataTable=self.dataTable, sqlFromTime=sqlFromTime, sqlToTime=sqlToTime,
                    sqlIdCounty=sqlIdCounty))
 
         # current_app.logger.debug(f'Counties: {sql_stmt}')
