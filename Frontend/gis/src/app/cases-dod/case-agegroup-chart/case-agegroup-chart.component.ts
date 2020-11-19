@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { exception } from 'console';
 import { map } from 'rxjs/operators';
-import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
+import { CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from 'src/app/repositories/case-development.repository';
 import { RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { VegaPixelchartService } from '../../services/vega-pixelchart.service';
@@ -21,7 +20,7 @@ export class CaseAgegroupChartComponent implements OnInit {
   public set data(d: RKICaseDevelopmentProperties) {
     this._data = d;
 
-    this.updateChart();
+    this.updateChart(true);
   }
 
   public get data(): RKICaseDevelopmentProperties {
@@ -32,7 +31,7 @@ export class CaseAgegroupChartComponent implements OnInit {
   public set options(o: CovidNumberCaseOptions) {
     this._options = JSON.parse(JSON.stringify(o));
 
-    this.updateChart();
+    this.updateChart(true);
   }
 
   public get options(): CovidNumberCaseOptions {
@@ -60,8 +59,7 @@ export class CaseAgegroupChartComponent implements OnInit {
     this.updateChart();
   }
 
-  updateChart(): void {
-    console.log(this._data, this._options);
+  updateChart(autoConfig = false): void {
     if (!this._data?.id || !this._options) {
       return;
     }
@@ -74,22 +72,27 @@ export class CaseAgegroupChartComponent implements OnInit {
     .pipe(
       map(d => d.properties)
     )
-    .subscribe(fullData => this.compileChart(fullData));
+    .subscribe(fullData => this.compileChart(fullData, autoConfig));
   }
 
-  private compileChart(fullData: RKICaseDevelopmentProperties) {
+  private compileChart(fullData: RKICaseDevelopmentProperties, autoConfig: boolean) {
     let idxDiff = 1;
     switch (this._options.timeWindow) {
       case CovidNumberCaseTimeWindow.twentyFourhours:
         idxDiff = 1;
+        this.timeAgg = 'yearmonthdate';
         break;
 
       case CovidNumberCaseTimeWindow.seventyTwoHours:
         idxDiff = 3;
+        this.timeAgg = 'yearmonthdate';
         break;
 
       case CovidNumberCaseTimeWindow.sevenDays:
         idxDiff = 7;
+        if (autoConfig) {
+          this.timeAgg = 'week';
+        }
         break;
 
       default:
