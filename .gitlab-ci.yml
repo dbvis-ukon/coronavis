@@ -90,14 +90,14 @@ variables:
   #     - k8/Crawler/**/*
   #     - k8/crawler-new/**/*
   #     - .gitlab-ci.yml
-    if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
+  - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     when: on_success
   # - changes:
   #     - Crawler/**/*
   #     - k8/Crawler/**/*
   #     - k8/crawler-new/**/*
   #     - .gitlab-ci.yml
-    if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+  - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: on_success
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -310,7 +310,7 @@ frontend-install-dependencies:
 
 syntax-check-crawler-scripts:
   stage: test
-  image: python:3.9-slim
+  image: python:3.7-slim
   script:
     - source var.env
     - cd Crawler
@@ -485,7 +485,7 @@ dockerize-frontend:
 dockerize-crawler:
   variables:
     FOLDER: Crawler
-    RUN_ALWAYS: "no"
+    RUN_ALWAYS: "yes"
     # Yes? In case the build image fails this could help with MR?
     RUN_ON_FB: "yes"
     RUN_ON_MASTER: "yes"
