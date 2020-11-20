@@ -22,7 +22,7 @@ export class OverviewComponent implements OnInit {
     public urlHandler: UrlHandlerService,
     private breakpointObserver: BreakpointObserver
   ) {
-    this.isMobile$ = this.breakpointObserver.observe('(max-width: 600px)')
+    this.isMobile$ = this.breakpointObserver.observe('(max-width: 1150px)')
     .pipe(
       map(d => d.matches)
     );
