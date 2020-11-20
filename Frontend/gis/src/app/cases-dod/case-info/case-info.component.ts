@@ -97,7 +97,7 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    const refIdx = this.caseUtil.findHighestIdxWhereLastUpdatedIsNotNull(this.data);
+    const refIdx = this.caseUtil.findHighestIdxWhereInsertedIsNotNull(this.data);
 
     this.curTimedStatus = this.caseUtil.getTimedStatusByIdx(this.data, refIdx);
     this.twentyFourHTimedStatus = this.caseUtil.getTimedStatusByIdx(this.data, refIdx - 1);
