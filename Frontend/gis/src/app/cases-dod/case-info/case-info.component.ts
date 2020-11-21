@@ -97,7 +97,14 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    const refIdx = this.caseUtil.findHighestIdxWhereInsertedIsNotNull(this.data);
+    let refIdx = this.caseUtil.findHighestIdxWhereInsertedIsNotNull(this.data);
+
+    // this may happen if the entity does not report any data
+    // all development entries will have inserted === null
+    // we fallback and take the last development
+    if (refIdx === -1) {
+      refIdx = this.data.developments.length - 1;
+    }
 
     this.curTimedStatus = this.caseUtil.getTimedStatusByIdx(this.data, refIdx);
     this.twentyFourHTimedStatus = this.caseUtil.getTimedStatusByIdx(this.data, refIdx - 1);
