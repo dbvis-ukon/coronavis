@@ -95,7 +95,7 @@ if current_try > NUM_RETRIES or data is None:
 
 logger.info('Extract data')
 prognosis_today = data['Statistik Überblick'].iloc[17, 6]
-df = data['Kreise'].iloc[3:, [1, 2, 13, 8, 10, 25, 26, 27, 28, 29, 41, 42, 30, 31, 32, 33, 34, 35, 36, 37]]
+df = data['Kreise Alt'].iloc[3:, [1, 2, 13, 8, 10, 25, 26, 27, 28, 29, 41, 42, 30, 31, 32, 33, 34, 35, 36, 37]]
 df[1] = df[1].astype(str)
 df[1] = df[1].apply(lambda x: x.zfill(5))
 df[8] = df[8].apply(lambda x: x != '')
