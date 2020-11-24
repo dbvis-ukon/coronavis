@@ -1,4 +1,4 @@
-# CoronaVis
+![image](./Frontend/gis/src/assets/coronavislogo300.png)
 
 This is a volunteer project by members of the [Data Analysis and Visualization Group](http://vis.uni.kn) and the [Visual Computing Group](https://www.cgmi.uni-konstanz.de/en/) at the [University of Konstanz](http://uni.kn).
 

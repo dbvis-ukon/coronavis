@@ -3,7 +3,7 @@ import { ScaleLinear, scaleLinear } from 'd3-scale';
 import { FeatureCollection, Geometry } from 'geojson';
 import { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
-import { map, mergeMap, toArray } from 'rxjs/operators';
+import { filter, map, mergeMap, toArray } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
@@ -27,9 +27,9 @@ export class CaseUtilService {
     && options.type === CovidNumberCaseType.cases;
   }
 
-  public findHighestIdxWhereLastUpdatedIsNotNull(data: RKICaseDevelopmentProperties): number {
+  public findHighestIdxWhereInsertedIsNotNull(data: RKICaseDevelopmentProperties): number {
     for (let i = data.developments.length - 1; i >= 0; i--) {
-      if (data.developments[i].last_updated) {
+      if (data.developments[i].inserted) {
         return i;
       }
     }
@@ -68,7 +68,12 @@ export class CaseUtilService {
 
   public getNowPrevTimedStatusTuple(data: RKICaseDevelopmentProperties, refDateStr: string, timeWindow: CovidNumberCaseTimeWindow): [RKICaseTimedStatus | undefined, RKICaseTimedStatus | undefined] {
     const dateRef = getMoment(refDateStr);
-    const currentTimedStatus = this.getTimedStatus(data, dateRef);
+    let currentTimedStatus = this.getTimedStatus(data, dateRef);
+
+    if (currentTimedStatus.inserted === undefined || currentTimedStatus.inserted === null) {
+      const idx = this.findHighestIdxWhereInsertedIsNotNull(data);
+      currentTimedStatus = this.getTimedStatusByIdx(data, idx);
+    }
 
     let prevTimedStatus;
     switch (timeWindow) {
@@ -140,11 +145,15 @@ export class CaseUtilService {
     .pipe(
       mergeMap(d1 => d1.developments),
       // filter((_, i) => i >= data.developments.length - 7),
+      filter(d => d.inserted !== null && d.inserted !== undefined),
       map(d => {
-        const t = this.getNowPrevTimedStatusTuple(data, getStrDate(getMoment(d.timestamp)), CovidNumberCaseTimeWindow.sevenDays);
+        let t = null;
+        if (!d.cases7_per_100k) {
+          t = this.getNowPrevTimedStatusTuple(data, getStrDate(getMoment(d.timestamp)), CovidNumberCaseTimeWindow.sevenDays);
+        }
         return {
           x: getStrDate(getMoment(d.timestamp)),
-          y: t[0].cases7_per_100k || (t[0].cases_per_100k - t[1].cases_per_100k)}; }),
+          y: d.cases7_per_100k || (t[0].cases_per_100k - t[1].cases_per_100k)}; }),
       toArray()
     );
   }

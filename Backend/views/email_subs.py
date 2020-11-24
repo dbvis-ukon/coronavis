@@ -16,6 +16,7 @@ from models.email_subs import EmailSub, EmailSubsSchema, email_subs_schema, Subs
 from services.crypt_service import decrypt_message
 # noinspection PyUnresolvedReferences
 from psycopg2.errors import UniqueViolation
+from models.risklayer_prognosis import RisklayerPrognosis
 
 
 @routes.route('/', methods=['POST'])
@@ -141,14 +142,17 @@ def send_notifications():
     de_72h = de_developments[-4]
     de_7d = de_developments[-8]
 
+    prognosis = RisklayerPrognosis.query.order_by(RisklayerPrognosis.datenbestand.desc()).limit(1)[0]
+
     sql_result = db.engine.execute('''
-    SELECT id, email, token, lang, c.ags, MAX(c.updated_at)
+    SELECT id, email, token, lang, c.ags, MAX(c.updated_at), 
+    (CASE WHEN c.updated_at::date = e.last_email_sent::date THEN true ELSE false END) AS second_email
     FROM email_subs e
     JOIN email_subs_counties esc on e.id = esc.sub_id
     JOIN cases_lk_risklayer c ON esc.ags = c.ags
     WHERE c.updated_today = true AND c.date = now()::date
     AND c.updated_at > e.last_email_sent AND e.verified = true
-    GROUP BY id, email, token, lang, c.ags
+    GROUP BY id, email, token, lang, c.ags, c.updated_at::date, e.last_email_sent::date
     ''')
 
     num_emails = 0
@@ -172,6 +176,7 @@ def send_notifications():
             template='mail/county_notification',
             sub_id=row['id'],
             token=decrypt_message(row['token'].tobytes()),
+            second_email=row['second_email'],
 
             county_desc=desc,
             county_name=name,
@@ -202,6 +207,9 @@ def send_notifications():
             county_deaths_7_prc=__diff_str(__prc_change(lk_today['deaths'], lk_7d['deaths'])),
             county_deaths_7_100k=__diff_str(__100k_change(lk_today['deaths'], lk_7d['deaths'], lk_today['population'])),
 
+            num_counties_reported=de_today['num_counties_reported'],
+            num_counties_total=de_today['num_counties_total'],
+            prognosis=round(prognosis.prognosis),
             country_population=round(de_today['population']),
             country_last_updated=de_today['last_updated'],
             country_cases_total=de_today['cases'],

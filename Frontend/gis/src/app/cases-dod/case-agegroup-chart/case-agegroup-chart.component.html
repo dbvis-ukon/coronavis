@@ -1,0 +1,75 @@
+<div class="settings">
+  <div class="toggleGroup">
+    <h5 i18n="@@infoboxType">Art</h5>
+    <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="_options.type"
+      (change)="_options.type = $event.value; updateChart()">
+      <mat-button-toggle i18n="@@infoboxTypeSick" [value]="eCovidNumberCaseType.cases">Positiv Getestet
+      </mat-button-toggle>
+      <mat-button-toggle i18n="@@infoboxTypeDeath" [value]="eCovidNumberCaseType.deaths">Todesfälle
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+
+  <div class="toggleGroup">
+    <h5 i18n="@@infoboxNorm">Normalisierung</h5>
+
+    <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="_options.normalization"
+      (change)="_options.normalization = $event.value; updateChart()">
+      <mat-button-toggle i18n="@@infoboxNornNone" [value]="eCovidNumberCaseNormalization.absolut">Keine
+        Normalisierung
+      </mat-button-toggle>
+      <mat-button-toggle i18n="@@infoboxNornYes" [value]="eCovidNumberCaseNormalization.per100k">Je
+        100.000 Einwohner
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="toggleGroup">
+    <h5 i18n="@@infoboxTime">Zeitraum</h5>
+
+    <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="_options.timeWindow"
+      (change)="_options.timeWindow = $event.value; updateChart(true)">
+      <mat-button-toggle i18n="@@infoboxTime24" onerror=" " [value]="eCovidNumberCaseTimeWindow.twentyFourhours">24 Std.
+      </mat-button-toggle>
+      <mat-button-toggle i18n="@@infoboxTime72" [value]="eCovidNumberCaseTimeWindow.seventyTwoHours">72
+        Std.
+      </mat-button-toggle>
+      <mat-button-toggle i18n="@@infoboxTime7Days" [value]="eCovidNumberCaseTimeWindow.sevenDays">7 Tage
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="toggleGroup">
+    <h5 i18n="@@caseDodGranularity">Granularität (Zeit)</h5>
+    <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="timeAgg"
+      (change)="timeAgg = $event.value; updateChart()">
+      <mat-button-toggle i18n="@@caseDodGranularityDaily" value="yearmonthdate">Täglich</mat-button-toggle>
+      <mat-button-toggle i18n="@@caseDodGranularityWeekly" value="week" [disabled]="_options.timeWindow !== eCovidNumberCaseTimeWindow.sevenDays">Wöchentlich</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="toggleGroup">
+    <h5 i18n="@@csaeDodScaling">Skalierung</h5>
+    <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="scaleType"
+      (change)="scaleType = $event.value; updateChart()">
+      <mat-button-toggle i18n="@@caseDodScalingLinear" value="linear">Linear</mat-button-toggle>
+      <mat-button-toggle i18n="@@caseDodScalingSqrt" value="sqrt">Quadratwurzel</mat-button-toggle>
+      <mat-button-toggle i18n="@@caseDodScalingLog" value="symlog">Logarithmisch</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <p class="hint" i18n="@@caseDodScalingHint">Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</p>
+  </div>
+</div>
+
+<span class="hidden" #i18nAltersgruppe i18n="@@caseDodYAxisAltersgruppe">Altersgruppe</span>
+<span class="hidden" #i18nDatum i18n="@@caseDodXAxisDatum">Datum</span>
+<span class="hidden" #i18nWoche i18n="@@caseDodXAxisWoche">Woche</span>
+
+
+
+<app-vega [spec]="spec"></app-vega>
+
+
+<p class="datasource" i18n="@@caseDodDataSourceRKI">Datenquelle der Inzidenzen nach Altersgruppe: <a href="https://rki.de/">Robert Koch Instistut</a></p>
+<p class="datasource" i18n="@@caseDodDataSourceZensus">Datenquelle der Populationsdaten: <a href="https://www.zensus2011.de/DE/Home/home_node.html">Zensus 2011</a></p>
