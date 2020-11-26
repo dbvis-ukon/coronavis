@@ -21,5 +21,7 @@ ENV FLASK_RUN_HOST 0.0.0.0
 ENV FLASK_ENV development
 ENV FLASK_APP server.py
 
+RUN chmod +x migrate-and-start.sh
+
 # start container
-CMD gunicorn --config=gunicorn.conf.py server:app
+CMD ./migrate-and-start.sh
