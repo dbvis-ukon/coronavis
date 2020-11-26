@@ -10,7 +10,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./Backend/:/var/opt/gis/:z
-    command: gunicorn --config=gunicorn.conf.py --reload server:app
+    # command: gunicorn --config=gunicorn.conf.py --reload server:app
 
   gis-frontend:
     image: node:latest
@@ -31,6 +31,17 @@ services:
     volumes:
       - ./Crawler:/app
     command: ['sh', '-c', 'python crawl_rki_cases.py']
+
+  db:
+    image: coronavis/db:latest
+    build:
+      context: ./Database
+      dockerfile: Dockerfile
+    env_file: .env
+    ports:
+      - 5432:5432
+    volumes:
+      - gis-db:/bitnami/postgresql
 
 volumes: 
   gis-db:
