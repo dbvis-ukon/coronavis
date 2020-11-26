@@ -3,6 +3,7 @@
 # author: Max Fischer
 
 import os
+import sys
 import logging
 import loadenv
 from datetime import datetime, timezone, timedelta, time
@@ -16,7 +17,7 @@ import pandas as pd
 
 from db_config import SQLALCHEMY_DATABASE_URI
 
-# logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+#logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 logger = logging.getLogger(__name__)
 logger.info('Crawler for Risklayer spreadsheet and case data')
@@ -95,7 +96,8 @@ if current_try > NUM_RETRIES or data is None:
 
 logger.info('Extract data')
 prognosis_today = data['Statistik Überblick'].iloc[16, 6]
-df = data['Kreise Alt'].iloc[3:, [1, 2, 13, 8, 10, 25, 26, 27, 28, 29, 41, 42, 30, 31, 32, 33, 34, 35, 36, 37]]
+#df = data['Kreise Alt'].iloc[3:, [1, 2, 13, 8, 10, 25, 26, 27, 28, 29, 41, 42, 30, 31, 32, 33, 34, 35, 36, 37]]
+df = data['Kreise'].iloc[3:, [1, 2, 13, 8, 10]]
 df[1] = df[1].astype(str)
 df[1] = df[1].apply(lambda x: x.zfill(5))
 df[8] = df[8].apply(lambda x: x != '')
@@ -106,32 +108,33 @@ entries = []
 updated_today_count = 0
 time_23_59 = time(21, 59)
 date_arr = [{'datenbestand': current_update, 'row_id_cases': 4, 'row_id_deaths': 2},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=1), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 5, 'row_id_deaths': 10},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=2), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 6, 'row_id_deaths': 11},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=3), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 7, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=4), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 8, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=5), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 9, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=6), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 12, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=7), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 13, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=8), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 14, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=9), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 15, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=10), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 16, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=11), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 17, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=12), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 18, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=13), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 19, 'row_id_deaths': None}]
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=1), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 5, 'row_id_deaths': 10},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=2), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 6, 'row_id_deaths': 11},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=3), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 7, 'row_id_deaths': None},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=4), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 8, 'row_id_deaths': None},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=5), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 9, 'row_id_deaths': None},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=6), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 12, 'row_id_deaths': None},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=7), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 13, 'row_id_deaths': None},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=8), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 14, 'row_id_deaths': None},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=9), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 15, 'row_id_deaths': None},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=10), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 16, 'row_id_deaths': None},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=11), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 17, 'row_id_deaths': None},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=12), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 18, 'row_id_deaths': None},
+            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=13), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 19, 'row_id_deaths': None}
+                ]
 
 for row in db_array:
     for history in date_arr:
