@@ -1,0 +1,7 @@
+Hallo,
+
+bitte bestätige deine E-Mail-Adresse mit folgendem Link: https://coronavis.dbvis.de/overview/subscription/{{ id }}/{{ token }}/verify
+
+Falls du den CoronaVis E-Mail-Service nicht in Anspruch nehmen willst brauchst du nichts weiter zu unternehmen. Deine E-Mail-Adresse wird automatisch nach einer Stunde gelöscht.
+
+CoronaVis: https://coronavis.dbvis.de

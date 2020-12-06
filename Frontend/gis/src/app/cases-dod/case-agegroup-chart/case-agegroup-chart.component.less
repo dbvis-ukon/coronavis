@@ -1,0 +1,64 @@
+:host {
+    border: 1px solid lightgray;
+    display: block;
+}
+
+.settings {
+    max-width: 824px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .toggleGroup {
+        margin-left: 10px;
+        margin-right: 10px;
+
+        h5 {
+            margin-top: 5px;
+            margin-bottom: 1px;
+        }
+
+        .hint {
+            font-size: 10px;
+            color: gray;
+            margin: 0px;
+            line-height: 10px;
+            padding: 0px;
+        }
+
+        .btngrp {
+            width: 100%;
+            flex: 1 1 100%;
+            box-sizing: border-box;
+            align-items: center;
+            flex-direction: row;
+            display: flex;
+            height: 2.5em;
+            margin-bottom: 5px;
+    
+            .mat-button-toggle {
+                text-align: center;
+                flex: 1 1 100%;
+            }
+    
+        }
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.datasource {
+    font-size: 10px;
+    color: gray;
+    margin: 0px;
+    line-height: 10px;
+    padding: 0px;
+    margin-left: 5px;
+    margin-bottom: 2px;
+
+    a {
+        color: gray;
+    }
+}

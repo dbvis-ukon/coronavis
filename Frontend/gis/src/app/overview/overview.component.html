@@ -7,9 +7,13 @@
       </button>
     </div>
 
-
+    <a mat-button routerLink="/">
+      <img class="logo" src="./assets/coronavislogo300.png" alt="CoronaVis logo" />
+    </a>
 
     <div class="snav-desktop">
+      
+
       <a mat-button routerLink="/overview" routerLinkActive="mat-primary" [routerLinkActiveOptions]="{exact: true}"
         i18n="@@overviewIntroduction">Einführung</a>
 
@@ -25,6 +29,9 @@
 
       <a mat-button routerLink="/overview/map/lockdown-live" routerLinkActive="mat-primary" 
         i18n="@@overviewLockdownViewLive">LIVE Lockdown Ansicht</a>
+
+      <a mat-button routerLink="/overview/subscription" routerLinkActive="mat-primary" 
+        i18n="@@overviewSubscription">E-Mail-Benachrichtigung</a>
     </div>
 
 
@@ -51,6 +58,9 @@
 
         <a mat-list-item (click)="snav.close()" routerLink="/overview/map/lockdown-live" routerLinkActive="mat-primary" 
           i18n="@@overviewLockdownViewLive">LIVE Lockdown Ansicht</a>
+
+        <a mat-list-item (click)="snav.close()" routerLink="/overview/subscription" routerLinkActive="mat-primary" 
+          i18n="@@overviewSubscription">E-Mail-Benachrichtigung</a>
       </mat-nav-list>
     </mat-sidenav>
 

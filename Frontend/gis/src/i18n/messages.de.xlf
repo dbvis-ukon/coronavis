@@ -6,7 +6,7 @@
         <note category="description">cases</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-dialog/case-dialog.component.html:6</note><note category="location">src/app/case-tooltip/case-tooltip.component.html:3</note></notes>
+      <note category="location">src/app/cases-dod/case-dialog/case-dialog.component.html:6</note><note category="location">src/app/cases-dod/case-tooltip/case-tooltip.component.html:3</note></notes>
       <segment state="final">
         <source>Einwohner</source>
       <target>Einwohner</target></segment>
@@ -16,7 +16,7 @@
         <note category="meaning">case-tooltip</note>
         
         
-      <note category="location">src/app/case-info/case-info.component.html:7</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:7</note></notes>
       <segment state="final">
         <source>Fälle Total</source>
       <target>Fälle Total</target></segment>
@@ -25,7 +25,7 @@
         <note category="description">changes</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:8</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:8</note></notes>
       <segment state="final">
         <source>Veränderung</source>
       <target>Veränderung</target></segment>
@@ -34,7 +34,7 @@
         <note category="description">24h</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:13</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:13</note></notes>
       <segment state="final">
         <source>letzte 24h</source>
       <target>letzte 24h</target></segment>
@@ -43,7 +43,7 @@
         <note category="description">72h</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:14</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:14</note></notes>
       <segment state="final">
         <source>letzte 72h</source>
       <target>letzte 72h</target></segment>
@@ -51,8 +51,8 @@
       <notes>
         <note category="description">7d</note>
         <note category="meaning">case-tooltip</note>
-        <note category="location">src/app/case-info/case-info.component.html:15</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:15</note></notes>
       <segment state="final">
         <source>letzte 7t</source>
       <target>letzte 7t</target></segment>
@@ -61,7 +61,7 @@
         <note category="description">sick</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:20</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:20</note></notes>
       <segment state="final">
         <source>Positiv Getestet</source>
       <target>Positiv Getestet</target></segment>
@@ -70,14 +70,14 @@
         <note category="description">deaths</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/case-info/case-info.component.html:108</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:108</note></notes>
       <segment state="final">
         <source>Todesfälle</source>
       <target>Todesfälle</target></segment>
     </unit><unit id="clickForMoreInformation">
       <notes>
-        <note category="location">src/app/case-info/case-info.component.html:200,202</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:200</note></notes>
       <segment state="final">
         <source>
     Klicken Sie um mehr Informationen zu erhalten.
@@ -88,17 +88,108 @@
     </unit><unit id="caseInfoTrendLastThreeDays">
       <notes>
         
-      <note category="location">src/app/case-info/case-info.component.html:215</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:215</note></notes>
       <segment state="final">
         <source>Trend der letzten <ph id="0" equiv="INTERPOLATION" disp="{{ options.daysForTrend }}"/> Tage</source>
       <target>Trend der letzten <ph id="0" equiv="INTERPOLATION" disp="{{ options.daysForTrend }}"/> Tage</target></segment>
     </unit><unit id="caseInfoTrendPerDay">
       <notes>
         
-      <note category="location">src/app/case-info/case-info.component.html:219</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:219</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> pro Tag</source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> pro Tag</target></segment>
+    </unit><unit id="caseDodGranularity">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:44</note>
+      </notes>
+      <segment state="final">
+        <source>Granularität (Zeit)</source>
+      <target>Granularität (Zeit)</target></segment>
+    </unit><unit id="caseDodGranularityDaily">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:47</note>
+      </notes>
+      <segment state="final">
+        <source>Täglich</source>
+      <target>Täglich</target></segment>
+    </unit><unit id="caseDodGranularityWeekly">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:48</note>
+      </notes>
+      <segment state="final">
+        <source>Wöchentlich</source>
+      <target>Wöchentlich</target></segment>
+    </unit><unit id="csaeDodScaling">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:53</note>
+      </notes>
+      <segment state="final">
+        <source>Skalierung</source>
+      <target>Skalierung</target></segment>
+    </unit><unit id="caseDodScalingLinear">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:56</note>
+      </notes>
+      <segment state="final">
+        <source>Linear</source>
+      <target>Linear</target></segment>
+    </unit><unit id="caseDodScalingSqrt">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:57</note>
+      </notes>
+      <segment state="final">
+        <source>Quadratwurzel</source>
+      <target>Quadratwurzel</target></segment>
+    </unit><unit id="caseDodScalingLog">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:58</note>
+      </notes>
+      <segment state="final">
+        <source>Logarithmisch</source>
+      <target>Logarithmisch</target></segment>
+    </unit><unit id="caseDodScalingHint">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:61</note>
+      </notes>
+      <segment state="final">
+        <source>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</source>
+      <target>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</target></segment>
+    </unit><unit id="caseDodYAxisAltersgruppe">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:65</note>
+      </notes>
+      <segment state="final">
+        <source>Altersgruppe</source>
+      <target>Altersgruppe</target></segment>
+    </unit><unit id="caseDodXAxisDatum">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:66</note>
+      </notes>
+      <segment state="final">
+        <source>Datum</source>
+      <target>Datum</target></segment>
+    </unit><unit id="caseDodXAxisWoche">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:67</note>
+      </notes>
+      <segment state="final">
+        <source>Woche</source>
+      <target>Woche</target></segment>
+    </unit><unit id="caseDodDataSourceRKI">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:74</note>
+      </notes>
+      <segment state="final">
+        <source>Datenquelle der Inzidenzen nach Altersgruppe: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Instistut</pc></source>
+      <target>Datenquelle der Inzidenzen nach Altersgruppe: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Instistut</pc></target></segment>
+    </unit><unit id="caseDodDataSourceZensus">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:75</note>
+      </notes>
+      <segment state="final">
+        <source>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Zensus 2011</pc></source>
+      <target>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Zensus 2011</pc></target></segment>
     </unit><unit id="button11">
       <notes>
         <note category="description"> help</note>
@@ -888,7 +979,7 @@
     </unit><unit id="countyDataNotFound">
       <notes>
 
-      <note category="location">src/app/hospital-info/hospital-info.component.html:5</note><note category="location">src/app/case-info/case-info.component.html:1</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:5</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:1</note></notes>
       <segment state="final">
         <source>Es stehen keine Daten zur Verfügung.</source>
       <target>Es stehen keine Daten zur Verfügung.</target></segment>
@@ -1320,7 +1411,7 @@
     </unit><unit id="infoboxTime">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:274</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:274</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:29</note></notes>
       <segment state="final">
         <source>Zeitraum</source>
       <target>Zeitraum</target></segment>
@@ -1338,7 +1429,7 @@
     </unit><unit id="infoboxTime24">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:288</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:288</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:33</note></notes>
       <segment state="final">
         <source>24 Std.
               </source>
@@ -1347,7 +1438,7 @@
     </unit><unit id="infoboxTime72">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:290</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:290</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:35</note></notes>
       <segment state="final">
         <source>72
                 Std.
@@ -1358,7 +1449,7 @@
     </unit><unit id="infoboxTime7Days">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:293</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:293</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:38</note></notes>
       <segment state="final">
         <source>7 Tage
               </source>
@@ -1392,14 +1483,14 @@
     </unit><unit id="infoboxType">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:323</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:323</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:3</note></notes>
       <segment state="final">
         <source>Art</source>
       <target>Art</target></segment>
     </unit><unit id="infoboxTypeSick">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:332</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:332</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:6</note></notes>
       <segment state="final">
         <source>Positiv Getestet
               </source>
@@ -1408,21 +1499,21 @@
     </unit><unit id="infoboxTypeDeath">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:334</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:334</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:8</note></notes>
       <segment state="final">
         <source>Todesfälle</source>
       <target>Todesfälle</target></segment>
     </unit><unit id="infoboxNorm">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:342</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:342</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:15</note></notes>
       <segment state="final">
         <source>Normalisierung</source>
       <target>Normalisierung</target></segment>
     </unit><unit id="infoboxNornNone">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:351</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:351</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:19</note></notes>
       <segment state="final">
         <source>Keine
                 Normalisierung
@@ -1433,7 +1524,7 @@
     </unit><unit id="infoboxNornYes">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:355</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:355</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:22</note></notes>
       <segment state="final">
         <source>Je
                 100.000 Einwohner
@@ -1520,34 +1611,50 @@
       <segment state="final">
         <source>Sprache</source>
       <target>Sprache</target></segment>
+    </unit><unit id="legendDiviAddition">
+      <notes>
+        
+        
+      <note category="location">src/app/shared/bed-inline-legend/bed-inline-legend.component.html:7</note><note category="location">src/app/legend/legend.component.html:96</note></notes>
+      <segment state="final">
+        <source>Persönliche Verfügbarkeits-Einschätzung der Krankenhäuser (inklusive Personalsituation)</source>
+      <target>Persönliche Verfügbarkeits-Einschätzung der Krankenhäuser (inklusive Personalsituation)</target></segment>
     </unit><unit id="overviewIntroduction">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:14</note><note category="location">src/app/overview/overview.component.html:40</note></notes>
+      <note category="location">src/app/overview/overview.component.html:14</note><note category="location">src/app/overview/overview.component.html:43</note></notes>
       <segment state="final">
         <source>Einführung</source>
       <target>Einführung</target></segment>
     </unit><unit id="overviewICUView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:21</note><note category="location">src/app/overview/overview.component.html:47</note></notes>
+      <note category="location">src/app/overview/overview.component.html:21</note><note category="location">src/app/overview/overview.component.html:50</note></notes>
       <segment state="final">
         <source>Intensivbetten-Kapazitäten Ansicht</source>
       <target>Intensivbetten-Kapazitäten Ansicht</target></segment>
     </unit><unit id="overviewLockdownView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:24</note><note category="location">src/app/overview/overview.component.html:50</note></notes>
+      <note category="location">src/app/overview/overview.component.html:24</note><note category="location">src/app/overview/overview.component.html:53</note></notes>
       <segment state="final">
         <source>Lockdown Ansicht</source>
       <target>Lockdown Ansicht</target></segment>
     </unit><unit id="overviewLockdownViewLive">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:27</note><note category="location">src/app/overview/overview.component.html:53</note></notes>
+      <note category="location">src/app/overview/overview.component.html:27</note><note category="location">src/app/overview/overview.component.html:56</note></notes>
       <segment state="final">
         <source>LIVE Lockdown Ansicht</source>
       <target>LIVE Lockdown Ansicht</target></segment>
+    </unit><unit id="overviewSubscription">
+      <notes>
+        <note category="location">src/app/overview/overview.component.html:30</note>
+        <note category="location">src/app/overview/overview.component.html:59</note>
+      </notes>
+      <segment state="final">
+        <source>E-Mail-Benachrichtigung</source>
+      <target>E-Mail-Benachrichtigung</target></segment>
     </unit><unit id="3102430522812415895">
       <notes>
         <note category="description"> hospitals@reported</note>
@@ -1577,14 +1684,14 @@
       <notes>
         
         
-      <note category="location">src/app/legend/legend.component.html:7</note><note category="location">src/app/legend/legend.component.html:68</note></notes>
+      <note category="location">src/app/legend/legend.component.html:8</note><note category="location">src/app/legend/legend.component.html:69</note></notes>
       <segment state="final">
         <source>Klicken um Legende ein-/auszuklappen</source>
       <target>Klicken um Legende ein-/auszuklappen</target></segment>
     </unit><unit id="legendNotAvailable">
       <notes>
-        <note category="location">src/app/legend/legend.component.html:31,33</note>
-      </notes>
+        
+      <note category="location">src/app/legend/legend.component.html:32</note></notes>
       <segment state="final">
         <source>
           nicht verfügbar
@@ -1595,34 +1702,34 @@
     </unit><unit id="clearSelection">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:37</note></notes>
+      <note category="location">src/app/legend/legend.component.html:38</note></notes>
       <segment state="final">
         <source>Selektion aufheben</source>
       <target>Selektion aufheben</target></segment>
     </unit><unit id="legendDatasourceRki">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:50</note></notes>
+      <note category="location">src/app/legend/legend.component.html:51</note></notes>
       <segment state="final">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institut</pc></source>
       <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institut</pc></target></segment>
     </unit><unit id="legendDatasourceRisklayer">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:52</note></notes>
+      <note category="location">src/app/legend/legend.component.html:53</note></notes>
       <segment state="final">
         <source>Datenquelle: 
-          <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
-          <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> at 
-          <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">KIT</pc> and the 
-          <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc>
-        </source>
+            <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
+            <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> at 
+            <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">KIT</pc> and the 
+            <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc>
+          </source>
       <target>Datenquelle: 
-          <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
-          <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> at 
-          <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">KIT</pc> and the 
-          <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc>
-        </target></segment>
+            <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and 
+            <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">CEDIM</pc> at 
+            <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">KIT</pc> and the 
+            <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc>
+          </target></segment>
     </unit><unit id="tooltipHospitalLastUpdate">
       <notes>
 
@@ -1665,7 +1772,7 @@
     </unit><unit id="legendDatasourceDivi">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:95</note></notes>
+      <note category="location">src/app/legend/legend.component.html:100</note></notes>
       <segment state="final">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></source>
       <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></target></segment>
@@ -1713,6 +1820,175 @@
       <segment state="final">
         <source>Source Code auf GitHub</source>
       <target>Source Code auf GitHub</target></segment>
+    </unit><unit id="subEmailSubscription">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:3</note>
+      </notes>
+      <segment state="final">
+        <source>E-Mail-Benachrichtigungen</source>
+      <target>E-Mail-Benachrichtigungen</target></segment>
+    </unit><unit id="subHowWork">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:5</note>
+      </notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Wie funktioniert es?</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Wie funktioniert es?</pc></target></segment>
+    </unit><unit id="subIntro">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:6</note>
+      </notes>
+      <segment state="final">
+        <source>Freiwillige (Crowdsourcer) sammeln laufend die Daten der Kreise, sobald diese auf den entsprechenden Webseiten veröffentlicht werden. Wir erhalten diese Daten und können Dir, sobald ein Update für einen Kreis vorliegt, eine E-Mail zusenden mit den neuesten Daten des Kreises. Du bekommst dann pro ausgewähltem Kreis und pro Tag eine Nachricht von uns. Du kannst diesen Service jederzeit abbestellen mit einem Link der mit jeder Nachricht verschickt wird.</source>
+      <target>Freiwillige (Crowdsourcer) sammeln laufend die Daten der Kreise, sobald diese auf den entsprechenden Webseiten veröffentlicht werden. Wir erhalten diese Daten und können Dir, sobald ein Update für einen Kreis vorliegt, eine E-Mail zusenden mit den neuesten Daten des Kreises. Du bekommst dann pro ausgewähltem Kreis und pro Tag eine Nachricht von uns. Du kannst diesen Service jederzeit abbestellen mit einem Link der mit jeder Nachricht verschickt wird.</target></segment>
+    </unit><unit id="subSubSuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:8</note>
+      </notes>
+      <segment state="final">
+        <source>Bitte prüfe Dein Postfach um deine E-Mail-Adresse zu verifizieren.</source>
+      <target>Bitte prüfe Dein Postfach um deine E-Mail-Adresse zu verifizieren.</target></segment>
+    </unit><unit id="subUnsubSuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:9</note>
+      </notes>
+      <segment state="final">
+        <source>Du hast deine E-Mail-Benachrichtigungen erfolgreich abbestellt.</source>
+      <target>Du hast deine E-Mail-Benachrichtigungen erfolgreich abbestellt.</target></segment>
+    </unit><unit id="subVerifySuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:10</note>
+      </notes>
+      <segment state="final">
+        <source>Deine E-Mail-Adresse wurde erfolgreich verifiziert.</source>
+      <target>Deine E-Mail-Adresse wurde erfolgreich verifiziert.</target></segment>
+    </unit><unit id="subUpdateSuccess">
+      <notes>
+        <note category="location">src/app/overview/subscription/subscription.component.html:11</note>
+      </notes>
+      <segment state="final">
+        <source>Benachrichtigungs-Einstellungen wurden erfolgreich aktualisiert.</source>
+      <target>Benachrichtigungs-Einstellungen wurden erfolgreich aktualisiert.</target></segment>
+    </unit><unit id="subEmail">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:24</note></notes>
+      <segment state="final">
+        <source>E-Mail</source>
+      <target>E-Mail</target></segment>
+    </unit><unit id="subMakeNewHint">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:26</note></notes>
+      <segment state="final">
+        <source>Falls du deine E-Mail-Adresse ändern möchtest bestelle bitte eine neue Benachrichtigung.</source>
+      <target>Falls du deine E-Mail-Adresse ändern möchtest bestelle bitte eine neue Benachrichtigung.</target></segment>
+    </unit><unit id="subEmailCorrectError">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:27</note></notes>
+      <segment state="final">
+        <source>
+          Bitte gib eine korrekte E-Mail-Adresse an.
+        </source>
+      <target>
+          Bitte gib eine korrekte E-Mail-Adresse an.
+        </target></segment>
+    </unit><unit id="subEmailRequiredError">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:30</note></notes>
+      <segment state="final">
+        <source>
+          Eine E-Mail-Adresse ist notwendig.
+        </source>
+      <target>
+          Eine E-Mail-Adresse ist notwendig.
+        </target></segment>
+    </unit><unit id="subSelectCounty">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:36</note></notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Kreis auswählen</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/>(mit der Enter-Taste bestätigen)</source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Kreis auswählen</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/>(mit der Enter-Taste bestätigen)</target></segment>
+    </unit><unit id="subSelectedCounties">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:46</note></notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Ausgewählte Kreise</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Ausgewählte Kreise</pc></target></segment>
+    </unit><unit id="subNoCountiesSelectedError">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:48</note></notes>
+      <segment state="final">
+        <source>Es muss mindestens ein Kreis ausgewählt werden.</source>
+      <target>Es muss mindestens ein Kreis ausgewählt werden.</target></segment>
+    </unit><unit id="subLanguage">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:62</note></notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Sprache</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Sprache</pc></target></segment>
+    </unit><unit id="subLangGerman">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:67</note></notes>
+      <segment state="final">
+        <source>Deutsch</source>
+      <target>Deutsch</target></segment>
+    </unit><unit id="subLangEnglish">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:68</note></notes>
+      <segment state="final">
+        <source>Englisch (we are working on it)</source>
+      <target>Englisch (we are working on it)</target></segment>
+    </unit><unit id="subTermsAndConditions">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:73</note></notes>
+      <segment state="final">
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Nutzungsbedingungen</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Nutzungsbedingungen</pc></target></segment>
+    </unit><unit id="subTerms1">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:76</note></notes>
+      <segment state="final">
+        <source>Ich willige ein, dass meine E-Mail-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die E-Mail-Adresse wird nicht an Dritte weiter gegeben. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Unsere Datenschutzrichtlinien sind hier einzusehen.</pc></source>
+      <target>Ich willige ein, dass meine E-Mail-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die E-Mail-Adresse wird nicht an Dritte weiter gegeben. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Unsere Datenschutzrichtlinien sind hier einzusehen.</pc></target></segment>
+    </unit><unit id="subTerms2">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:78</note></notes>
+      <segment state="final">
+        <source>Mir ist bewusst, dass CoronaVis keine Gewähr auf die Korrektheit der Zahlen geben kann.</source>
+      <target>Mir ist bewusst, dass CoronaVis keine Gewähr auf die Korrektheit der Zahlen geben kann.</target></segment>
+    </unit><unit id="subBtnSubscribe">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:83</note></notes>
+      <segment state="final">
+        <source>E-Mail-Benachrichtungen bestellen</source>
+      <target>E-Mail-Benachrichtungen bestellen</target></segment>
+    </unit><unit id="subBtnChange">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:84</note></notes>
+      <segment state="final">
+        <source>E-Mail-Benachrichtungen ändern</source>
+      <target>E-Mail-Benachrichtungen ändern</target></segment>
+    </unit><unit id="subBtnUnsubscribe">
+      <notes>
+        
+      <note category="location">src/app/overview/subscription/subscription.component.html:85</note></notes>
+      <segment state="final">
+        <source>E-Mail-Benachrichtungen abbestellen</source>
+      <target>E-Mail-Benachrichtungen abbestellen</target></segment>
     </unit>
   </file>
 </xliff>

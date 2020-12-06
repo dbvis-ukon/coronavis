@@ -38,14 +38,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BedTooltipComponent } from './bed-tooltip/bed-tooltip.component';
 import { ButtonPanelComponent } from './button-panel/button-panel.component';
-import { CaseDialogComponent } from './case-dialog/case-dialog.component';
-import { CaseInfoComponent } from './case-info/case-info.component';
-import { CaseTooltipComponent } from './case-tooltip/case-tooltip.component';
+import { GdprComponent } from './gdpr/gdpr.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { HelpModule } from './help/help.module';
 import { HospitalInfoDialogComponent } from './hospital-info-dialog/hospital-info-dialog.component';
 import { HospitalInfoComponent } from './hospital-info/hospital-info.component';
-import { HospitalSearchComponent } from './hospital-search/hospital-search.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { LegendComponent } from './legend/legend.component';
@@ -60,7 +57,7 @@ import { ShareDialogComponent } from './share-dialog/share-dialog.component';
 import { SharedModule } from './shared/shared.module';
 import { TimesliderComponent } from './timeslider/timeslider.component';
 import localeEn from './util/locales/en';
-import { VegaComponent } from './vega/vega.component';
+import { CasesDodModule } from './cases-dod/cases-dod.module';
 
 
 
@@ -128,7 +125,6 @@ const localeProvider = {
     AppComponent,
     MapComponent,
     GlyphTooltipComponent,
-    CaseTooltipComponent,
     OverlayBrandComponent,
     InfoboxComponent,
     HospitalInfoComponent,
@@ -136,22 +132,18 @@ const localeProvider = {
     LegendComponent,
     AboutComponent,
     ImpressumComponent,
-    VegaComponent,
     OsmTooltipComponent,
-    CaseInfoComponent,
-    CaseDialogComponent,
     MapRootComponent,
     ShareDialogComponent,
     ButtonPanelComponent,
     BedTooltipComponent,
-    HospitalSearchComponent,
     TimesliderComponent,
+    GdprComponent,
   ],
   imports: [
     CommonModule,
     SharedModule.forRoot(),
     BrowserModule,
-    SharedModule.forRoot(),
     NgxWebstorageModule.forRoot(),
     HttpClientModule,
     FormsModule,
@@ -186,8 +178,9 @@ const localeProvider = {
     MatSliderModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    NgxWebstorageModule.forRoot(),
-    HelpModule
+    HelpModule,
+    MatCardModule,
+    CasesDodModule
   ],
   providers: [
     localeProvider,

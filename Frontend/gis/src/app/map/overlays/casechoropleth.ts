@@ -1,11 +1,11 @@
 import { MatDialog } from '@angular/material/dialog';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import * as L from 'leaflet';
-import { CaseDialogComponent } from 'src/app/case-dialog/case-dialog.component';
+import { CaseDialogComponent } from 'src/app/cases-dod/case-dialog/case-dialog.component';
 import { RKICaseDevelopmentProperties } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { CaseChoroplethColormapService } from 'src/app/services/case-choropleth-colormap.service';
 import { CaseUtilService } from 'src/app/services/case-util.service';
-import { CaseTooltipComponent } from '../../case-tooltip/case-tooltip.component';
+import { CaseTooltipComponent } from '../../cases-dod/case-tooltip/case-tooltip.component';
 import { TooltipService } from '../../services/tooltip.service';
 import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
 import { Overlay } from './overlay';

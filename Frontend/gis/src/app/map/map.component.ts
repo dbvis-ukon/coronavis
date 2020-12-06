@@ -3,7 +3,7 @@ import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild, View
 import * as L from 'leaflet';
 import { SVGOverlay } from 'leaflet';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
-import { filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { BedChoroplethLayerService } from '../services/bed-choropleth-layer.service';
 import { CaseChoroplethLayerService } from '../services/case-choropleth-layer.service';
@@ -137,7 +137,8 @@ export class MapComponent implements OnInit {
           // zoomOffset: -1,
           attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> ' +
                        '<a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a> | ' +
-                       `<a href="${this.baseHref}imprint">${ this.translationService.translate('Impressum') }</a>`
+                       `<a href="${this.baseHref}overview/imprint">${ this.translationService.translate('Impressum') }</a> | ` +
+                       `<a href="${this.baseHref}overview/gdpr">${ this.translationService.translate('Datenschutzerklärung') }</a>`
         });
 
     // create map, set initial view to to see whole of Germany (country wide deployment)
@@ -325,16 +326,10 @@ export class MapComponent implements OnInit {
       return;
     }
 
-    // internal caching for the glyph positions due to slow force layout:
-    if (this.aggregationLevelToGlyphMap.has(`${o.aggregationLevel}-${o.forceDirectedOn}`)) {
+    this.removeGlyphMapLayers();
 
-      this.showGlyphLayer(this.aggregationLevelToGlyphMap.get(`${o.aggregationLevel}-${o.forceDirectedOn}`));
-
-    } else {
-      // dynamically create the map and load data from api
-
-      let obs: Observable<L.LayerGroup>;
-      if (o.aggregationLevel === AggregationLevel.none) {
+    let obs: Observable<L.LayerGroup>;
+    if (o.aggregationLevel === AggregationLevel.none) {
         obs = this.glyphLayerService.getSimpleGlyphLayer(o, this.bedGlyphOptions$)
         .pipe(
           map(glyphFactories => {
@@ -366,7 +361,7 @@ export class MapComponent implements OnInit {
         }));
       }
 
-      this.glyphLayerSubscription = obs
+    this.glyphLayerSubscription = obs
       .pipe(
         switchMap(l => of(l))
       )
@@ -375,7 +370,6 @@ export class MapComponent implements OnInit {
 
         this.showGlyphLayer(layerGroup);
       });
-    }
   }
 
   private showGlyphLayer(l: L.LayerGroup) {
