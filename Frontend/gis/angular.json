@@ -30,9 +30,12 @@
         }
       },
       "i18n": {
+        "sourceLocale": "de",
         "locales": {
-          "en": "src/i18n/messages.en.xlf",
-          "de": "src/i18n/messages.de.xlf"
+          "en": {
+            "translation": "src/i18n/messages.en.xlf",
+            "baseHref": "/en/"
+          }
         }
       },
       "root": "",
@@ -45,6 +48,7 @@
             "customWebpackConfig": {
               "path": "./webpack.config.js"
             },
+            "i18nMissingTranslation": "error",
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -63,18 +67,12 @@
           },
           "configurations": {
             "de": {
-              "aot": true,
               "outputPath": "dist/de/",
-              "i18nFile": "src/i18n/messages.de.xlf",
-              "i18nFormat": "xlf2",
-              "i18nLocale": "de"
+              "localize": ["de"]
             },
             "en": {
-              "aot": true,
               "outputPath": "dist/en/",
-              "i18nFile": "src/i18n/messages.en.xlf",
-              "i18nFormat": "xlf2",
-              "i18nLocale": "en"
+              "localize": ["en"]
             },
             "production": {
               "fileReplacements": [
@@ -130,7 +128,10 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "gis:build"
+            "browserTarget": "gis:build",
+            "format": "xlf2",
+            "outFile": "messages.xlf",
+            "outputPath": "src/i18n/"
           },
           "configurations": {
             "de": {

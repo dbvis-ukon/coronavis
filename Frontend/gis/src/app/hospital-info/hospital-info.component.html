@@ -2,8 +2,7 @@
   <div>
 
     <div class="content">
-      <div *ngIf="!data.developments" i18n="@@countyDataNotFound" class="noData">Es stehen keine Daten zur Verfügung.
-      </div>
+      <div *ngIf="!data.developments" i18n="@@countyDataNotFound" class="noData">Es stehen keine Daten zur Verfügung.</div>
 
       <h5 *ngIf="latestDevelopment"><span i18n="@@tooltipHospitalLastUpdate">Letzter Stand: </span>
         <span>{{ lastUpdate | date:'medium' }}</span></h5>
