@@ -1595,14 +1595,14 @@
     </unit><unit id="tooltipHospitalAddress">
       <notes>
 
-      <note category="location">src/app/hospital-info/hospital-info.component.html:169</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:168</note></notes>
       <segment state="initial">
         <source>Adresse: </source>
       <target>Address: </target></segment>
     </unit><unit id="tooltipHospitalContact">
       <notes>
 
-      <note category="location">src/app/hospital-info/hospital-info.component.html:172</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:171</note></notes>
       <segment state="initial">
         <source>Kontakt: </source>
       <target>Contact: </target></segment>
@@ -1657,7 +1657,7 @@
     </unit><unit id="tooltipHospitalLastUpdate">
       <notes>
 
-      <note category="location">src/app/bed-tooltip/bed-tooltip.component.html:14</note><note category="location">src/app/hospital-info/hospital-info.component.html:8</note></notes>
+      <note category="location">src/app/bed-tooltip/bed-tooltip.component.html:14</note><note category="location">src/app/hospital-info/hospital-info.component.html:7</note></notes>
       <segment state="initial">
         <source>Letzter Stand: </source>
       <target>Last Update: </target></segment>
@@ -1671,14 +1671,14 @@
     </unit><unit id="tooltipHospitalOldData">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:209</note><note category="location">src/app/hospital-info/hospital-info.component.html:16</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:15</note><note category="location">src/app/infobox/infobox.component.html:209</note></notes>
       <segment state="initial">
         <source>Die Daten sind älter als 24 Stunden.</source>
       <target>The data are older than 24 hours.</target></segment>
     </unit><unit id="tooltipHospitalTemporalDevelopment">
       <notes>
         
-      <note category="location">src/app/hospital-info/hospital-info.component.html:101</note><note category="location">src/app/hospital-info/hospital-info.component.html:144</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:100</note><note category="location">src/app/hospital-info/hospital-info.component.html:143</note></notes>
       <segment state="initial">
         <source>Zeitliche Entwicklung:</source>
         <target>Temporal Development: </target>
@@ -1686,7 +1686,7 @@
     </unit><unit id="tooltipHospitalTemporalDevelopmentLastUpdate">
       <notes>
         
-      <note category="location">src/app/hospital-info/hospital-info.component.html:105</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:104</note></notes>
       <segment state="initial">
         <source>Stand seit <ph id="0" equiv="LINE_BREAK" type="fmt" disp="  &lt;d"/> <ph id="1" equiv="INTERPOLATION" disp="=&quot;margin-left: 5px;&quot; fxBox i18n=&quot;@@"/> </source>
       <target>Last updated <ph id="0" equiv="LINE_BREAK" type="fmt" disp="&lt;br/>"/> <ph id="1" equiv="INTERPOLATION" disp="{{ lastUpdate | date:'shortDate' }}"/>  </target></segment>

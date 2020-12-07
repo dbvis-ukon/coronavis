@@ -401,7 +401,7 @@ frontend-code-quality:
     - export SENTRY_DSN
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
-    - npm run-script build:i18n:${LOCALE}
+    - npm run-script build
   artifacts:
     expire_in: 1 day
     paths:
@@ -415,15 +415,8 @@ frontend-code-quality:
   tags:
     - docker
 
-build-frontend-de:
+build-frontend:
   extends: .build-frontend
-  variables:
-    LOCALE: de
-
-build-frontend-en:
-  extends: .build-frontend
-  variables:
-    LOCALE: en
 
 ###########################################
 # DOCKERIZE
@@ -474,12 +467,10 @@ dockerize-frontend:
   <<: *dockerize-template
   <<: *rules-frontend
   needs:
-    - build-frontend-de
-    - build-frontend-en
+    - build-frontend
     - export-environment
   dependencies:
-    - build-frontend-de
-    - build-frontend-en
+    - build-frontend
     - export-environment
 
 dockerize-crawler:

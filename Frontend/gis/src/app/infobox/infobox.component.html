@@ -193,8 +193,8 @@
           </mat-checkbox>
         </p>
 
-        <p class="stats" i18n="@@infoboxLastUpdate">
-          <span>Letzter Stand: {{ c.rki?.timestamp | date:'full' }}</span>
+        <p class="stats">
+          <span i18n="@@infoboxLastUpdate">Letzter Stand: {{ c.rki?.timestamp | date:'full' }}</span>
         </p>
 
         <p class="stats flex" *ngIf="mo.covidNumberCaseOptions.dataSource === 'risklayer'">
