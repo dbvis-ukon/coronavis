@@ -30,6 +30,7 @@
         }
       },
       "i18n": {
+        "sourceLocale": "de-DE",
         "locales": {
           "en": "src/i18n/messages.en.xlf",
           "de": "src/i18n/messages.de.xlf"
