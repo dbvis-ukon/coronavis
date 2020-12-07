@@ -29,7 +29,7 @@ export class CaseChoroplethColormapService {
   private lockDownColorMap = scaleThreshold<number, string>()
     .domain([
       0,
-      0 + 0.000000000000000001,
+      0.000000000000000001,
       8.75 / 100000,
       17.5 / 100000,
       26.25 / 100000,
@@ -39,21 +39,27 @@ export class CaseChoroplethColormapService {
       50 / 100000,
       100 / 100000,
       150 / 100000,
-      200 / 100000
+      200 / 100000,
+      350 / 100000,
+      500 / 100000,
+      650 / 100000
     ])
     .range([
       '#ffffff', // < 0 mostly unused
       '#fefefe', // < ~0
       '#fee6ce', // < 8.75
-      '#fdd0a2', // < 17.5
-      '#fdae6b', // < 26.25
-      '#ff9c54', // < 35
-      '#d94801', // < 40
-      '#a63603', // < 45
-      '#7f2706', // < 50
-      '#4a4a4a', // < 100
-      '#363636', // < 150
-      '#000000'  // < 200
+      '#ffc499', // < 17.5
+      '#ffa666', // < 26.25
+      '#ff8833', // < 35
+      '#fe5501', // < 40
+      '#e44d01', // < 45
+      '#cb4401', // < 50
+      '#B80087', // < 100
+      '#990070', // < 150
+      '#66004b', // < 200
+      '#4d4d4d', // < 300
+      '#333333', // < 400
+      '#000000'  // < 500
     ]);
 
 
@@ -201,7 +207,7 @@ export class CaseChoroplethColormapService {
       }
 
       if (this.caseUtil.isLockdownMode(options)) {
-        return [0, 200 / 100000];
+        return extent(this.lockDownColorMap.domain());
       }
 
       return [0, max<number>(cases)];
@@ -218,7 +224,7 @@ export class CaseChoroplethColormapService {
 
   private getRangeExtent(options: CovidNumberCaseOptions): [number, number] {
     if (this.caseUtil.isLockdownMode(options)) {
-      return [0, 200 / 100000];
+      return extent(this.lockDownColorMap.domain());
     }
     return options.change === CovidNumberCaseChange.absolute ? [0, 1] : [-1, 1];
   }
