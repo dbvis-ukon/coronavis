@@ -215,8 +215,8 @@ export-environment:
     - URL_PROTOCOL="https"
     - ENV_TYPE="review"
     - REPLICA_COUNT="2"
-    - CPU_REQ="4000m"
-    - CPU_LIMIT="6000m"
+    - CPU_REQ="2000m"
+    - CPU_LIMIT="4000m"
     - MEM_REQ="3Gi"
     - MEM_LIMIT="5Gi"
     # multiple things happen here:
