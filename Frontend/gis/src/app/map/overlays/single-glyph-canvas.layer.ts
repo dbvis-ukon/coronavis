@@ -105,7 +105,9 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
         .replace(this.rxSlash, '') // Remove additional descriptions
         .replace(this.rxDash, '-$1.') // Initials for second of double names
         .split(' ');
-    return this.doubleNames.has(nameParts[0]) ? nameParts.slice(0, 2).join(' ') : nameParts[0];
+    let str: string = this.doubleNames.has(nameParts[0]) ? nameParts.slice(0, 2).join(' ') : nameParts[0];
+
+    return str.replace(/,$/, '');
   }
 
 }
