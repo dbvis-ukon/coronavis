@@ -4,6 +4,7 @@
 
 import datetime
 import logging
+import json
 from datetime import date
 
 import psycopg2 as pg
@@ -45,7 +46,11 @@ has_data = True
 offset = 0
 while has_data:
     r = requests.get(URL.format(offset))
-    rj = r.json()
+    rj = None
+    try:
+        rj = json.loads(r.text.encode().replace(b'\\\\',b'\\').decode('unicode-escape'))
+    except:
+        rj = r.json()
     if data is None:
         data = rj
     else:
