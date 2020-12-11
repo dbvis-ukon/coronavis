@@ -424,22 +424,24 @@ build-frontend:
 
 .dockerize-template: &dockerize-template
   stage: build:docker
-  image: docker:latest
-  services: 
-    - docker:dind
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
-    # needed for VERSION
-    - source var.env
-    - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    # load the var.env variables from the export-environment job
+    - source ./var.env
+    # Login
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - cd ${FOLDER}
     # generate imagename using a lowercased foldername == app
     - IMGNAME=$(echo "${FOLDER}" | tr '[:upper:]' '[:lower:]')
     - IMG="${CI_REGISTRY_IMAGE}/${IMGNAME}:${VERSION}"
     - IMG2="${CI_REGISTRY_IMAGE}/${IMGNAME}:${CI_COMMIT_SHORT_SHA}"
-    - docker build --build-arg VERSION=${VERSION} -t "$IMG" -t "$IMG2" .
-    - docker push "$IMG"
+    # build and push :)
+    - /kaniko/executor --context $DOCKER_CONTEXT --dockerfile $DOCKERFILE_LOC --destination $IMG --destination $IMG2 --cache=true
   tags:
-    - docker-build
+    - docker
 
 dockerize-backend:
   variables:
