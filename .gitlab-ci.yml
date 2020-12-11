@@ -439,7 +439,7 @@ build-frontend:
     - IMG="${CI_REGISTRY_IMAGE}/${IMGNAME}:${VERSION}"
     - IMG2="${CI_REGISTRY_IMAGE}/${IMGNAME}:${CI_COMMIT_SHORT_SHA}"
     # build and push :)
-    - /kaniko/executor --context $DOCKER_CONTEXT --dockerfile $DOCKERFILE_LOC --destination $IMG --destination $IMG2 --cache=true
+    - /kaniko/executor --context . --dockerfile ./Dockerfile --build-arg VERSION=${VERSION} --destination $IMG --destination $IMG2 --cache=true
   tags:
     - docker
 
