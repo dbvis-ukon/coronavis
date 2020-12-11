@@ -48,7 +48,7 @@ while has_data:
     r = requests.get(URL.format(offset))
     rj = None
     try:
-        rj = json.loads(r.text.encode().replace(b'\\\\',b'\\').decode('unicode-escape'))
+        rj = r.text.encode().replace(b'\\\\',b'\\').decode('utf-8').encode('unicode-escape').replace(b'\\\\',b'\\').decode('unicode-escape')
     except:
         rj = r.json()
     if data is None:
