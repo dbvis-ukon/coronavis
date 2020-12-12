@@ -27,10 +27,12 @@
     [choroplethLayer$]="currentCaseChoropleth$"
   ></app-legend>
 
-
-  <app-timeslider class="timeslider"
-  [mapOptions]="mapOptions"
-  (mapOptionsChange)="mapOptionsUpdated($event)"
-  ></app-timeslider>
+  <div class="timeslider">
+    <app-timeslider
+    [mapOptions]="mapOptions"
+    (mapOptionsChange)="mapOptionsUpdated($event)"
+    ></app-timeslider>
+  </div>
+  
 
 </div>
