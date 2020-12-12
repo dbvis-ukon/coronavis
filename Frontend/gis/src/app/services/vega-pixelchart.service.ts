@@ -72,7 +72,18 @@ export class VegaPixelchartService {
           "scale": {
             "type": "linear"
           }
-      }
+      },
+      "tooltip": [
+        {
+          "field": "x", "type": "temporal", "title": "Day"
+        },
+        {
+          "field": "y", "type": "ordinal", "title": "Agegroup"
+        },
+        {
+          "field": "val", "title": "Cases per 100", "type": "quantitative", "format": ",.2f"
+        }
+      ]
     }
   };
 
@@ -85,6 +96,7 @@ export class VegaPixelchartService {
     chartOptions: {
       xAxisTitle: string;
       yAxisTitle: string;
+      zAxisTitle: string;
       width: number;
       scaleType: string;
       timeAgg: string;
@@ -103,6 +115,10 @@ export class VegaPixelchartService {
     spec.encoding.x.title = chartOptions.xAxisTitle || '';
 
     spec.encoding.y.title = chartOptions.yAxisTitle || '';
+
+    spec.encoding.tooltip[0].title = chartOptions.xAxisTitle || '';
+    spec.encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
+    spec.encoding.tooltip[2].title = chartOptions.zAxisTitle || '';
 
     spec.encoding.color.scale.type = chartOptions.scaleType || 'linear';
 

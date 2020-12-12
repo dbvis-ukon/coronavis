@@ -176,6 +176,13 @@
       <segment state="final">
         <source>Woche</source>
       <target>Woche</target></segment>
+    </unit><unit id="caseDodZAxisVal">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:68</note>
+      </notes>
+      <segment state="final">
+        <source>7-Tages-Inzidenz</source>
+      <target>7-Tages-Inzidenz</target></segment>
     </unit><unit id="caseDodDataSourceRKI">
       <notes>
         <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:74</note>

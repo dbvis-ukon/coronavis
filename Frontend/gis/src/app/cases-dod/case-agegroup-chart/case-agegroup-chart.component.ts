@@ -21,6 +21,9 @@ export class CaseAgegroupChartComponent implements OnInit {
   @ViewChild('i18nWoche', {static: true})
   i18nWoche: ElementRef<HTMLSpanElement>;
 
+  @ViewChild('i18nVal', {static: true})
+  i18nVal: ElementRef<HTMLSpanElement>;
+
   _data: RKICaseDevelopmentProperties;
 
   _options: CovidNumberCaseOptions;
@@ -148,9 +151,12 @@ export class CaseAgegroupChartComponent implements OnInit {
 
     const xAxis = this.timeAgg === 'week' ? this.i18nWoche.nativeElement.textContent : this.i18nDatum.nativeElement.textContent;
 
+    const zAxis = this.i18nVal.nativeElement.textContent;
+
     this.spec = this.vegaPixelchartService.compileChart(data, {
       xAxisTitle: xAxis,
       yAxisTitle: yAxis,
+      zAxisTitle: zAxis,
       width: 600,
       scaleType: this.scaleType,
       timeAgg: this.timeAgg

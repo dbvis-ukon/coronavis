@@ -176,6 +176,13 @@
       <segment state="initial">
         <source>Woche</source>
       <target>Week</target></segment>
+    </unit><unit id="caseDodZAxisVal">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:68</note>
+      </notes>
+      <segment state="initial">
+        <source>7-Tages-Inzidenz</source>
+      <target>7-Day-Incidence</target></segment>
     </unit><unit id="caseDodDataSourceRKI">
       <notes>
         <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:74</note>
@@ -1248,7 +1255,8 @@
       </notes>
       <segment state="initial">
         <source> Hochrechnung: <ph id="0" equiv="INTERPOLATION" disp="eit gemeldete Covid-19 Fälle&lt;/p>
-"/> neue Covid-19 Fälle heute <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="vidNumberCaseOptions.dataSource === 'risklayer'&quot; i18n=&quot;@@infoboxPrognosis&quot;>
+
+"/> neue Covid-19 Fälle heute <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="vidNumberCaseOptions.dataSource === 'risklayer'&quot; i18n=&quot;@@infoboxPrognosis&quot;>
           Hochrechnung: {{ c.risklayerPrognosis | number }} neue Covid-19 Fälle heute
           &lt;mat-icon
             style=&quot;vertical-align: middle;&quot;
