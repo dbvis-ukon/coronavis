@@ -308,6 +308,7 @@ frontend-install-dependencies:
   cache:
     key:
       files:
+        - ./Frontend/gis/package.json
         - ./Frontend/gis/package-lock.json
     paths:
       - ./Frontend/gis/node_modules
