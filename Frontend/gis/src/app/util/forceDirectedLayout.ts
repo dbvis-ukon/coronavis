@@ -1,7 +1,7 @@
 import { forceX, forceY } from 'd3';
 import { forceSimulation, Simulation } from 'd3-force';
 import { FeatureCollection, Geometry } from 'geojson';
-import { LocalStorageService } from 'ngx-webstorage';
+import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { Observable, Subject } from 'rxjs';
 import { MAP_FORCE_CACHE_KEY } from '../../constants';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -27,7 +27,7 @@ export class ForceDirectedLayout<G extends Geometry, P extends ForceLayoutProper
 
   private obs$: Subject<ForceDirectedLayoutEvent<FeatureCollection<G, P>>> = new Subject();
 
-  constructor(private storage: LocalStorageService,
+  constructor(private storage: MyLocalStorageService,
               aggregationLevel: AggregationLevel) {
 
     this.cacheKey = MAP_FORCE_CACHE_KEY + aggregationLevel;

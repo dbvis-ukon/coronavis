@@ -1,7 +1,7 @@
 import { MatDialog } from '@angular/material/dialog';
 import { Feature, FeatureCollection, Point } from 'geojson';
 import { Bounds } from 'leaflet';
-import { LocalStorageService } from 'ngx-webstorage';
+import { MyLocalStorageService } from '../../services/my-local-storage.service';
 import { BehaviorSubject } from 'rxjs';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
 import { SingleHospitalOut } from 'src/app/repositories/types/out/single-hospital-out';
@@ -31,7 +31,7 @@ export class SingleGlyphCanvasLayer extends AbstractGlyphCanvasLayer<Point, Sing
     colormapService: QualitativeColormapService,
     glyphOptions: BehaviorSubject<BedGlyphOptions>,
     dialog: MatDialog,
-    storage: LocalStorageService
+    storage: MyLocalStorageService
   ) {
     super(name, data, AggregationLevel.none, tooltipService, colormapService, glyphOptions, dialog, storage);
   }

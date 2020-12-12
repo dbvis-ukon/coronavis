@@ -1,6 +1,6 @@
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import L, { Bounds, DomUtil, Point } from 'leaflet';
-import { LocalStorageService } from 'ngx-webstorage/public_api';
+import { MyLocalStorageService } from '../../services/my-local-storage.service';
 import * as Quadtree from 'quadtree-lib';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -44,7 +44,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
     protected data: FeatureCollection < G, P > ,
     protected granularity: AggregationLevel,
     protected options$: BehaviorSubject < C > ,
-    protected storage: LocalStorageService
+    protected storage: MyLocalStorageService
   ) {
     super({
       interactive: false,

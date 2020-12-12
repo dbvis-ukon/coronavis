@@ -40,7 +40,6 @@
     "lodash-es": "^4.17.15",
     "moment": "^2.29.1",
     "ng2-nouislider": "^1.8.2",
-    "ngx-webstorage": "^6.0.0",
     "nouislider": "^14.6.2",
     "quadtree-lib": "^1.0.9",
     "rxjs": "~6.6.3",

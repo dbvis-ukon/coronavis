@@ -2,7 +2,7 @@ import { MatDialog } from '@angular/material/dialog/dialog';
 import { Selection } from 'd3-selection';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import L, { Bounds, DomUtil, LeafletMouseEvent, Point } from 'leaflet';
-import { LocalStorageService } from 'ngx-webstorage/public_api';
+import { MyLocalStorageService } from '../../services/my-local-storage.service';
 import * as Quadtree from 'quadtree-lib';
 import { BehaviorSubject, NEVER, Observable, Subject, timer } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
@@ -78,7 +78,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
     protected colormapService: QualitativeColormapService,
     protected glyphOptions$: BehaviorSubject < BedGlyphOptions > ,
     protected dialog: MatDialog,
-    protected storage: LocalStorageService
+    protected storage: MyLocalStorageService
   ) {
     super({
       interactive: true,

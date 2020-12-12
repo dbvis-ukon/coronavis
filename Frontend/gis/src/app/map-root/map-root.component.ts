@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { FeatureCollection } from 'geojson';
-import { LocalStorageService } from 'ngx-webstorage';
+import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { BehaviorSubject, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -60,7 +60,7 @@ export class MapRootComponent implements OnInit {
     private translationService: TranslationService,
     private urlHandlerService: UrlHandlerService,
     private route: ActivatedRoute,
-    private storage: LocalStorageService,
+    private storage: MyLocalStorageService,
               ) {
   }
 

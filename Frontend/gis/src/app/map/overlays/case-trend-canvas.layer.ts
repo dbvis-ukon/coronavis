@@ -1,6 +1,6 @@
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { Bounds, Point } from 'leaflet';
-import { LocalStorageService } from 'ngx-webstorage';
+import { MyLocalStorageService } from '../../services/my-local-storage.service';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
@@ -25,7 +25,7 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
     data: FeatureCollection < MultiPolygon, RKICaseDevelopmentProperties > ,
     granularity: AggregationLevel,
     options$: BehaviorSubject < CovidNumberCaseOptions > ,
-    storage: LocalStorageService,
+    storage: MyLocalStorageService,
     private caseUtil: CaseUtilService
   ) {
     super(name, data, granularity, options$, storage);
