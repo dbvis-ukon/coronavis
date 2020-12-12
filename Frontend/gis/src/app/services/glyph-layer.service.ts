@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { LocalStorageService } from 'ngx-webstorage';
+import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
@@ -24,7 +24,7 @@ export class GlyphLayerService {
     private tooltipService: TooltipService,
     private colormapService: QualitativeColormapService,
     private matDialog: MatDialog,
-    private storage: LocalStorageService,
+    private storage: MyLocalStorageService,
     private hospitalUtil: HospitalUtilService
   ) {}
 

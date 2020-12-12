@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MultiPolygon } from 'geojson';
-import { LocalStorageService } from 'ngx-webstorage';
+import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
@@ -27,7 +27,7 @@ export class CaseChoroplethLayerService {
     private tooltipService: TooltipService,
     private colormapService: CaseChoroplethColormapService,
     private matDialog: MatDialog,
-    private storage: LocalStorageService,
+    private storage: MyLocalStorageService,
     private caseUtil: CaseUtilService
   ) {}
 

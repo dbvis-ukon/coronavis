@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MultiPolygon } from 'geojson';
-import { LocalStorageService } from 'ngx-webstorage';
+import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -28,7 +28,7 @@ export class BedChoroplethLayerService {
     private qualitativeColorMapService: QualitativeColormapService,
     private tooltipService: TooltipService,
     private matDialog: MatDialog,
-    private storage: LocalStorageService,
+    private storage: MyLocalStorageService,
     private hospitalUtil: HospitalUtilService
     ) {
   }
