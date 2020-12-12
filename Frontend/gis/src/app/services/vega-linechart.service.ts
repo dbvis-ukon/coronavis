@@ -84,7 +84,15 @@ export class VegaLinechartService {
               {"test": "datum.y >= 50", "value": "firebrick"},
               {"test": "datum.y >= 35 && datum.y < 50", "value": "orange"}
             ]
-          }
+          },
+          "tooltip": [
+            {
+              "field": "x", "title": "Date", "type": "temporal"
+            },
+            {
+              "field": "y", "title": "Cases per 100", "format": ",.2f"
+            }
+          ]
         }
       }
     ],
@@ -119,9 +127,11 @@ export class VegaLinechartService {
 
     // also overwrite the title
     spec.layer[2].encoding.x.title = chartOptions.xAxisTitle || '';
+    // spec.layer[3].encoding.tooltip[0].title = chartOptions.xAxisTitle || '';
 
     spec.layer[2].encoding.y.title = chartOptions.yAxisTitle || '';
     spec.layer[3].encoding.y.title = chartOptions.yAxisTitle || '';
+    spec.layer[3].encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
 
     spec.width = chartOptions.width;
     spec.height = chartOptions.height;
