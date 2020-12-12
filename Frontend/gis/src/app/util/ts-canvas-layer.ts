@@ -18,7 +18,7 @@ export interface IViewInfo {
     bounds: LatLngBounds;
     canvas: HTMLCanvasElement;
     center: LatLng;
-    corner: { x: number, y: number };
+    corner: { x: number; y: number };
     layer: CanvasLayer;
     size: Point;
     zoom: number;

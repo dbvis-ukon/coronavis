@@ -234,8 +234,7 @@ export class InfoboxComponent implements OnInit {
       .getDiviDevelopmentSingleHospitals(from, to)
       .pipe(
         mergeMap(d => d.features),
-        map(d => {
-          return {
+        map(d => ({
             name: d.properties.name,
             addition: d.properties.address,
             point: {
@@ -243,24 +242,21 @@ export class InfoboxComponent implements OnInit {
               lng: d.geometry.coordinates[0]
             },
             zoom
-          } as Searchable;
-        }),
+          } as Searchable)),
       );
     } else if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel !== AggregationLevel.none) {
       return this.hospitalRepo
       .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to)
       .pipe(
         mergeMap(d => d.features),
-        map(d => {
-          return {
+        map(d => ({
             name: d.properties.name,
             point: {
               lat: d.properties.centroid.coordinates[1],
               lng: d.properties.centroid.coordinates[0]
             },
             zoom
-          } as Searchable;
-        })
+          } as Searchable))
       );
     }
 
@@ -275,16 +271,14 @@ export class InfoboxComponent implements OnInit {
       .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to)
       .pipe(
         mergeMap(d => d.features),
-        map(d => {
-          return {
+        map(d => ({
             name: d.properties.name,
             point: {
               lat: d.properties.centroid.coordinates[1],
               lng: d.properties.centroid.coordinates[0]
             },
             zoom
-          } as Searchable;
-        })
+          } as Searchable))
       );
     }
 
@@ -300,8 +294,7 @@ export class InfoboxComponent implements OnInit {
       .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this.mo.covidNumberCaseOptions.aggregationLevel, from, to)
       .pipe(
         mergeMap(d => d.features),
-        map(d => {
-          return {
+        map(d => ({
             name: d.properties.name,
             addition: d.properties.description,
             point: {
@@ -309,8 +302,7 @@ export class InfoboxComponent implements OnInit {
               lng: d.properties.centroid.coordinates[0]
             },
             zoom
-          } as Searchable;
-        })
+          } as Searchable))
       );
     }
 

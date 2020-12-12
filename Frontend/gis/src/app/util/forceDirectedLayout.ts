@@ -40,22 +40,6 @@ export class ForceDirectedLayout<G extends Geometry, P extends ForceLayoutProper
     return this.obs$.asObservable();
   }
 
-  private forceComplete(zoom) {
-    // persist to cache
-    const positions = [];
-    this.data.features.forEach((d) => {
-      positions.push([d.properties.x, d.properties.y]);
-    });
-    this.levelPositionMap[zoom] = positions;
-    this.storage.store(this.cacheKey, JSON.stringify(this.levelPositionMap));
-
-    this.obs$.next({
-      type: 'end',
-      zoom,
-      data: this.data
-    });
-  }
-
   public update(glyphSizes: number[][], data: FeatureCollection<G, P>, zoom: number) {
     if (this.sim) {
       this.sim.stop();
@@ -105,6 +89,22 @@ export class ForceDirectedLayout<G extends Geometry, P extends ForceLayoutProper
         // }))
         .on('end', () => this.forceComplete(zoom));
     }
+  }
+
+  private forceComplete(zoom) {
+    // persist to cache
+    const positions = [];
+    this.data.features.forEach((d) => {
+      positions.push([d.properties.x, d.properties.y]);
+    });
+    this.levelPositionMap[zoom] = positions;
+    this.storage.store(this.cacheKey, JSON.stringify(this.levelPositionMap));
+
+    this.obs$.next({
+      type: 'end',
+      zoom,
+      data: this.data
+    });
   }
 
   private loadOrInvalidateCache() {

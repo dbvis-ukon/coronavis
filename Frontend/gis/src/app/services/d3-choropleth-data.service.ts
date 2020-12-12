@@ -36,8 +36,7 @@ export class D3ChoroplethDataService {
 
       return this.bedRepo.getDiviDevelopmentForAggLevel(mo.bedBackgroundOptions.aggregationLevel, from, to)
       .pipe(
-        map(d => {
-          return {
+        map(d => ({
             data: d,
 
             width: 200,
@@ -45,8 +44,7 @@ export class D3ChoroplethDataService {
             height: 200,
 
             fillFn: (d1: Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>) => this.bedColorMap.getLatestBedStatusColor(d1.properties, mo.bedBackgroundOptions.bedType)
-          };
-        })
+          }))
       );
     }
     else if (mo.covidNumberCaseOptions.enabled) {

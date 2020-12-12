@@ -95,9 +95,9 @@ export class VegaBarchartService {
     acc: ((d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts) | string,
     bedStati: string[] = null,
     chartOptions: {
-      xAxisTitle: string,
-      yAxisTitle: string,
-      width: number
+      xAxisTitle: string;
+      yAxisTitle: string;
+      width: number;
     }
     ): any {
     if (!data) {

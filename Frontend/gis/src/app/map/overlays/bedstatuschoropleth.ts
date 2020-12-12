@@ -66,8 +66,7 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
 
     // create geojson layer (looks more complex than it is)
     const aggregationLayer = L.geoJSON(this.featureCollection, {
-      style: (feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>) => {
-        return {
+      style: (feature: Feature<Geometry, AggregatedHospitalOut<QualitativeTimedStatus>>) => ({
           fillColor: this.colorsService.getLatestBedStatusColor(feature.properties, this.options.bedType, this.options.date),
           weight: 0.5,
           opacity: 1,
@@ -75,8 +74,7 @@ export class BedStatusChoropleth<T extends AbstractTimedStatus> extends Overlay<
           // dashArray: '3',
           fillOpacity: 1,
           pointerEvents: 'none'
-        };
-      },
+        }),
       onEachFeature: (feature, layer) => {
         layer.on({
           // on mouseover update tooltip and highlight county

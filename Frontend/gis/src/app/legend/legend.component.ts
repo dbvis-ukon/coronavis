@@ -143,13 +143,11 @@ export class LegendComponent implements OnInit, OnDestroy {
       // else
       return b;
     })
-    .map(b => {
-      return {
+    .map(b => ({
         ...b,
         minStr: this.getBinStr(b.min, mo),
         maxStr: this.getBinStr(b.max, mo)
-      };
-    });
+      }));
 
     return caseBins;
   }
