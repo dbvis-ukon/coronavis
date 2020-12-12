@@ -7,6 +7,8 @@ RUN apk add --update curl
 
 COPY ./mysite.conf /etc/nginx/conf.d/default.conf
 
+RUN ls -la /var/run
+
 # test config syntax and debug
 RUN nginx -T
 
