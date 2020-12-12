@@ -14,11 +14,11 @@ import { ShareDialogComponent } from '../share-dialog/share-dialog.component';
 })
 export class ButtonPanelComponent implements OnInit {
 
-  // tslint:disable-next-line:no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('mapOptions')
   mo: MapOptions;
 
-  // tslint:disable-next-line:no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('mapLocationSettings')
   mls: MapLocationSettings;
 

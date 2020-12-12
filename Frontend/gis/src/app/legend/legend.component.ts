@@ -32,7 +32,7 @@ interface LegendColorMapBin extends ColorMapBin {
 })
 export class LegendComponent implements OnInit, OnDestroy {
 
-  // tslint:disable-next-line:no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('mapOptions$')
   mo$: Observable<MapOptions>;
 

@@ -1,4 +1,4 @@
-// tslint:disable:quotemark object-literal-key-quotes
+/* eslint-disable @typescript-eslint/quotes, quote-props */
 
 import { Component, Input, OnInit } from '@angular/core';
 import moment, { Moment } from 'moment';
@@ -134,7 +134,7 @@ export class HospitalInfoComponent implements OnInit {
       return;
     }
 
-    // tslint:disable-next-line:prefer-const
+    // eslint-disable-next-line prefer-const
     let [from, to] = this.hospitalUtil.getFromToTupleFromOptions(this.options);
 
     from = getStrDate(getMoment(to).subtract(11, 'days'));
