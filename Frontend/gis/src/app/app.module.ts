@@ -32,7 +32,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NouisliderModule } from 'ng2-nouislider';
-import { NgxWebstorageModule } from 'ngx-webstorage';
 import { AboutComponent } from './about/about.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -144,7 +143,6 @@ const localeProvider = {
     CommonModule,
     SharedModule.forRoot(),
     BrowserModule,
-    NgxWebstorageModule.forRoot(),
     HttpClientModule,
     FormsModule,
     OverlayModule,

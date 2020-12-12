@@ -1,7 +1,7 @@
 import { forceX, forceY } from 'd3';
 import { forceSimulation, Simulation } from 'd3-force';
 import { FeatureCollection, Geometry } from 'geojson';
-import { LocalStorageService } from 'ngx-webstorage';
+import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { Observable, Subject } from 'rxjs';
 import { MAP_FORCE_CACHE_KEY } from '../../constants';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -27,7 +27,7 @@ export class ForceDirectedLayout<G extends Geometry, P extends ForceLayoutProper
 
   private obs$: Subject<ForceDirectedLayoutEvent<FeatureCollection<G, P>>> = new Subject();
 
-  constructor(private storage: LocalStorageService,
+  constructor(private storage: MyLocalStorageService,
               aggregationLevel: AggregationLevel) {
 
     this.cacheKey = MAP_FORCE_CACHE_KEY + aggregationLevel;
@@ -38,22 +38,6 @@ export class ForceDirectedLayout<G extends Geometry, P extends ForceLayoutProper
 
   public getEvents(): Observable<ForceDirectedLayoutEvent<FeatureCollection<G, P>>> {
     return this.obs$.asObservable();
-  }
-
-  private forceComplete(zoom) {
-    // persist to cache
-    const positions = [];
-    this.data.features.forEach((d) => {
-      positions.push([d.properties.x, d.properties.y]);
-    });
-    this.levelPositionMap[zoom] = positions;
-    this.storage.store(this.cacheKey, JSON.stringify(this.levelPositionMap));
-
-    this.obs$.next({
-      type: 'end',
-      zoom,
-      data: this.data
-    });
   }
 
   public update(glyphSizes: number[][], data: FeatureCollection<G, P>, zoom: number) {
@@ -105,6 +89,22 @@ export class ForceDirectedLayout<G extends Geometry, P extends ForceLayoutProper
         // }))
         .on('end', () => this.forceComplete(zoom));
     }
+  }
+
+  private forceComplete(zoom) {
+    // persist to cache
+    const positions = [];
+    this.data.features.forEach((d) => {
+      positions.push([d.properties.x, d.properties.y]);
+    });
+    this.levelPositionMap[zoom] = positions;
+    this.storage.store(this.cacheKey, JSON.stringify(this.levelPositionMap));
+
+    this.obs$.next({
+      type: 'end',
+      zoom,
+      data: this.data
+    });
   }
 
   private loadOrInvalidateCache() {

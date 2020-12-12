@@ -9,7 +9,7 @@
 
 import { Bounds, Browser, DomUtil, InteractiveLayerOptions, LatLng, LatLngBounds, Layer, LeafletEventHandlerFn, LeafletMouseEvent, Map as LMap, Point, ResizeEvent, Util, ZoomAnimEvent } from 'leaflet';
 
-// tslint:disable:interface-name
+/* eslint-disable @typescript-eslint/naming-convention */
 interface Map extends LMap {
     _latLngBoundsToNewLayerBounds(ll: LatLngBounds, z: number, c: LatLng): Bounds;
 }
@@ -18,7 +18,7 @@ export interface IViewInfo {
     bounds: LatLngBounds;
     canvas: HTMLCanvasElement;
     center: LatLng;
-    corner: { x: number, y: number };
+    corner: { x: number; y: number };
     layer: CanvasLayer;
     size: Point;
     zoom: number;

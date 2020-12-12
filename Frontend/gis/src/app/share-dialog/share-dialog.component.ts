@@ -25,7 +25,7 @@ export class ShareDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ShareDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {mo: MapOptions, mls: MapLocationSettings},
+    @Inject(MAT_DIALOG_DATA) public data: {mo: MapOptions; mls: MapLocationSettings},
     private urlHandlerService: UrlHandlerService
   ) { }
 

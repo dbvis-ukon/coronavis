@@ -78,14 +78,12 @@ export class SubscriptionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.counties$ = this.countyRepo.get().pipe(map(d => d.sort((a, b) => a.name.localeCompare(b.name)).map(d1 => {
-      return {
+    this.counties$ = this.countyRepo.get().pipe(map(d => d.sort((a, b) => a.name.localeCompare(b.name)).map(d1 => ({
         name: d1.name,
         addition: d1.desc,
         desc: d1.desc,
         ags: d1.ags,
-      } as Searchable;
-    })));
+      } as Searchable))));
 
     this.route.queryParams.subscribe(p => {
       if (p.success) {

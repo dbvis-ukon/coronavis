@@ -1,4 +1,4 @@
-// tslint:disable:quotemark object-literal-key-quotes
+/* eslint-disable @typescript-eslint/quotes, quote-props */
 
 import { Injectable } from '@angular/core';
 import { getMoment } from '../util/date-util';
@@ -84,7 +84,15 @@ export class VegaLinechartService {
               {"test": "datum.y >= 50", "value": "firebrick"},
               {"test": "datum.y >= 35 && datum.y < 50", "value": "orange"}
             ]
-          }
+          },
+          "tooltip": [
+            {
+              "field": "x", "title": "Date", "type": "temporal"
+            },
+            {
+              "field": "y", "title": "Cases per 100", "format": ",.2f"
+            }
+          ]
         }
       }
     ],
@@ -96,16 +104,16 @@ export class VegaLinechartService {
 
 
   compileChart(
-    data: {x: string, y: number}[],
+    data: {x: string; y: number}[],
     chartOptions: {
-      xAxisTitle: string,
-      yAxisTitle: string,
-      width: number,
-      height: number,
+      xAxisTitle: string;
+      yAxisTitle: string;
+      width: number;
+      height: number;
       regression?: {
         from: string;
         to: string;
-      }
+      };
     }
     ): any {
     if (!data) {
@@ -119,9 +127,11 @@ export class VegaLinechartService {
 
     // also overwrite the title
     spec.layer[2].encoding.x.title = chartOptions.xAxisTitle || '';
+    // spec.layer[3].encoding.tooltip[0].title = chartOptions.xAxisTitle || '';
 
     spec.layer[2].encoding.y.title = chartOptions.yAxisTitle || '';
     spec.layer[3].encoding.y.title = chartOptions.yAxisTitle || '';
+    spec.layer[3].encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
 
     spec.width = chartOptions.width;
     spec.height = chartOptions.height;

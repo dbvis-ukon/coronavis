@@ -26,11 +26,11 @@ export class HelipadLayer extends Overlay < OSMHelipadProperties > {
 
     // create geojson layer (looks more complex than it is)
     const helipadLayer = L.geoJSON(this.featureCollection, {
-      pointToLayer: (_, latlng) => {
-        return L.marker(latlng, {
+      pointToLayer: (_, latlng) =>
+         L.marker(latlng, {
           icon: helipadIcon
-        }); // L.circleMarker(latlng, geojsonMarkerOptions);
-      },
+        }) // L.circleMarker(latlng, geojsonMarkerOptions);
+      ,
       onEachFeature: (feature, layer) => {
         layer.on({
           // on mouseover update tooltip and highlight county

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MultiPolygon } from 'geojson';
-import { LocalStorageService } from 'ngx-webstorage';
+import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -28,7 +28,7 @@ export class BedChoroplethLayerService {
     private qualitativeColorMapService: QualitativeColormapService,
     private tooltipService: TooltipService,
     private matDialog: MatDialog,
-    private storage: LocalStorageService,
+    private storage: MyLocalStorageService,
     private hospitalUtil: HospitalUtilService
     ) {
   }
@@ -39,8 +39,7 @@ export class BedChoroplethLayerService {
     this.loading$.next(true);
     return this.qualitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel, from, to)
     .pipe(
-      map(data => {
-        return [
+      map(data => [
           new BedStatusChoropleth(
             this.getName(option.aggregationLevel, option.bedType),
             data,
@@ -56,8 +55,7 @@ export class BedChoroplethLayerService {
             options$,
             this.storage
           )
-      ] as [BedStatusChoropleth<QualitativeTimedStatus>, LabelCanvasLayer<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>, BedBackgroundOptions>];
-      }),
+      ] as [BedStatusChoropleth<QualitativeTimedStatus>, LabelCanvasLayer<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>, BedBackgroundOptions>]),
       tap(() => this.loading$.next(false))
     );
   }

@@ -2,16 +2,18 @@ import { timer } from 'rxjs';
 
 /**
  * This code is taken from https://stackoverflow.com/a/49924510/1986417 and modified.
+ *
  * @author Manuel Otto, Wolfgang Jentner
  */
 export class TouchHack {
   /**
    * The list of touchpoints.
    */
-  private _touchpoints: {x: number, y: number}[] = [];
+  private _touchpoints: {x: number; y: number}[] = [];
 
   /**
    * Adds the defined listeners to the document.
+   *
    * @param target the target document
    * @param toRegister the touch events to register touches (e.g., touchstart, touchend)
    * @param toHandle the mouse events to be handeled (e.g., mouseover, mousemove)
@@ -42,6 +44,7 @@ export class TouchHack {
   /**
    * Stores all pageX/pageY for every finger into a list.
    * Each item is stored for max ()
+   *
    * @param e the touch event to register
    */
   private registerTouch(e: TouchEvent) {
@@ -67,6 +70,7 @@ export class TouchHack {
   /**
    * Injects a triggeredByTouch flag into the mouse event if a touch event was previously registered and one of the fingers
    * was close to the position of the mouse.
+   *
    * @param e the mouse event to handle
    */
   private handleMouseEvent(e: MouseEvent) {

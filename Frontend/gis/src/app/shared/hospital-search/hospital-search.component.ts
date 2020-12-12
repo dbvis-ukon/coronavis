@@ -36,7 +36,7 @@ export class HospitalSearchComponent implements OnInit {
   myControl = new FormControl();
 
 
-  // tslint:disable-next-line:no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('data')
   data$: Observable<Searchable[]>;
 

@@ -5,7 +5,7 @@ import { TouchHack } from './app/util/touch-hack';
 import { environment } from './environments/environment';
 
 
-// tslint:disable-next-line:no-unused-expression
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 new TouchHack(document);
 
 if (environment.env === 'production') {

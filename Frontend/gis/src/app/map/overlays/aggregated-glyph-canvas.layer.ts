@@ -1,7 +1,7 @@
 import { MatDialog } from '@angular/material/dialog';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { Bounds, Point } from 'leaflet';
-import { LocalStorageService } from 'ngx-webstorage';
+import { MyLocalStorageService } from '../../services/my-local-storage.service';
 import { BehaviorSubject } from 'rxjs';
 import { QualitativeTimedStatus } from 'src/app/repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from 'src/app/repositories/types/out/aggregated-hospital-out';
@@ -23,7 +23,7 @@ export class AggregatedGlyphCanvasLayer extends AbstractGlyphCanvasLayer<MultiPo
     colormapService: QualitativeColormapService,
     glyphOptions: BehaviorSubject<BedGlyphOptions>,
     dialog: MatDialog,
-    storage: LocalStorageService
+    storage: MyLocalStorageService
   ) {
     super(name, data, aggLevel, tooltipService, colormapService, glyphOptions, dialog, storage);
   }

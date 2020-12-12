@@ -28,11 +28,11 @@ export class HospitalLayer extends Overlay < OSMHospitalProperties > {
 
     // create geojson layer (looks more complex than it is)
     const hospitalLayer = L.geoJSON(this.featureCollection, {
-      pointToLayer: (_, latlng) => {
-        return L.marker(latlng, {
+      pointToLayer: (_, latlng) =>
+         L.marker(latlng, {
           icon: krankenhausIcon
-        }); // L.circleMarker(latlng, geojsonMarkerOptions);
-      },
+        }) // L.circleMarker(latlng, geojsonMarkerOptions);
+      ,
       onEachFeature: (feature, layer) => {
         layer.on({
           // on mouseover update tooltip and highlight county

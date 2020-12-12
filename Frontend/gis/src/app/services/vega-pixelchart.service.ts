@@ -1,4 +1,4 @@
-// tslint:disable:quotemark object-literal-key-quotes
+/* eslint-disable @typescript-eslint/quotes, quote-props */
 
 import { Injectable } from '@angular/core';
 
@@ -72,7 +72,18 @@ export class VegaPixelchartService {
           "scale": {
             "type": "linear"
           }
-      }
+      },
+      "tooltip": [
+        {
+          "field": "x", "type": "temporal", "title": "Day"
+        },
+        {
+          "field": "y", "type": "ordinal", "title": "Agegroup"
+        },
+        {
+          "field": "val", "title": "Cases per 100", "type": "quantitative", "format": ",.2f"
+        }
+      ]
     }
   };
 
@@ -81,13 +92,14 @@ export class VegaPixelchartService {
 
 
   compileChart(
-    data: {x: string, y: string, val: number}[],
+    data: {x: string; y: string; val: number}[],
     chartOptions: {
-      xAxisTitle: string,
-      yAxisTitle: string,
-      width: number,
-      scaleType: string,
-      timeAgg: string
+      xAxisTitle: string;
+      yAxisTitle: string;
+      zAxisTitle: string;
+      width: number;
+      scaleType: string;
+      timeAgg: string;
     }
     ): any {
     if (!data) {
@@ -103,6 +115,10 @@ export class VegaPixelchartService {
     spec.encoding.x.title = chartOptions.xAxisTitle || '';
 
     spec.encoding.y.title = chartOptions.yAxisTitle || '';
+
+    spec.encoding.tooltip[0].title = chartOptions.xAxisTitle || '';
+    spec.encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
+    spec.encoding.tooltip[2].title = chartOptions.zAxisTitle || '';
 
     spec.encoding.color.scale.type = chartOptions.scaleType || 'linear';
 

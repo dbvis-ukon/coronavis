@@ -45,7 +45,7 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
 
   rollingChart: Observable<any>;
 
-  trend: Observable<{m: number, b: number, rotation: number}>;
+  trend: Observable<{m: number; b: number; rotation: number}>;
 
   lastUpdated: string;
 
@@ -88,9 +88,7 @@ export class CaseInfoComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.trend = this.caseUtil.getTrendForCase7DaysPer100k(this.data, this.options.date, this.options.daysForTrend)
       .pipe(
-        map(d => {
-          return { m: d.m, b: d.b, rotation: this.caseUtil.getRotationForTrend(d.m)};
-        })
+        map(d => ({ m: d.m, b: d.b, rotation: this.caseUtil.getRotationForTrend(d.m)}))
       );
     });
   }

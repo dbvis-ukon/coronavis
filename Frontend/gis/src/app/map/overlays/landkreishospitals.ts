@@ -15,8 +15,7 @@ export class LandkreiseHospitalsLayer extends Overlay<any> {
 
     // create geojson layer (looks more complex than it is)
     const landkreiseHospitalsLayer = L.geoJSON(this.featureCollection, {
-      style: () => {
-          return {
+      style: () => ({
               fillColor: 'transparent',
               interactive: false,
               weight: 0.5,
@@ -24,8 +23,7 @@ export class LandkreiseHospitalsLayer extends Overlay<any> {
               color: 'grey',
               // dashArray: '3',
               // fillOpacity: 0.7
-          };
-      }});
+          })});
 
     return landkreiseHospitalsLayer;
   }

@@ -36,7 +36,7 @@ export function Cache(options: CacheOptions) {
       let argsNotChanged = true;
 
       for (let i = 0; i < lastCallArguments.length; i++) {
-        argsNotChanged = argsNotChanged && lastCallArguments[i] == args[i];
+        argsNotChanged = argsNotChanged && lastCallArguments[i] === args[i];
       }
 
 

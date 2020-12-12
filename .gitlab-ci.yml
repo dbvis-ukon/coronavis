@@ -299,11 +299,21 @@ frontend-install-dependencies:
   image: node:14
   script:
     - cd ./Frontend/gis
-    - npm ci --unsafe-perm
+    # if node_modules does not exist use npm ci to create it
+    - test -d ./node_modules || npm ci --cache ./.npm --unsafe-perm --prefer-offline
   artifacts:
     expire_in: 1 day
     paths:
       - ./Frontend/gis/node_modules
+  cache:
+    key:
+      files:
+        - ./Frontend/gis/package.json
+        - ./Frontend/gis/package-lock.json
+    paths:
+      - ./Frontend/gis/node_modules
+      - ./Frontend/gis/.npm
+    policy: pull-push
   needs: []
   tags:
     - docker

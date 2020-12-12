@@ -32,7 +32,7 @@ interface LegendColorMapBin extends ColorMapBin {
 })
 export class LegendComponent implements OnInit, OnDestroy {
 
-  // tslint:disable-next-line:no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('mapOptions$')
   mo$: Observable<MapOptions>;
 
@@ -143,13 +143,11 @@ export class LegendComponent implements OnInit, OnDestroy {
       // else
       return b;
     })
-    .map(b => {
-      return {
+    .map(b => ({
         ...b,
         minStr: this.getBinStr(b.min, mo),
         maxStr: this.getBinStr(b.max, mo)
-      };
-    });
+      }));
 
     return caseBins;
   }

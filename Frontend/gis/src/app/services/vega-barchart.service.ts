@@ -1,4 +1,4 @@
-// tslint:disable:quotemark object-literal-key-quotes
+/* eslint-disable @typescript-eslint/quotes, quote-props */
 
 import { Injectable } from '@angular/core';
 import { QualitativeAggregatedBedStateCounts } from '../repositories/types/in/qualitative-aggregated-bed-states';
@@ -95,9 +95,9 @@ export class VegaBarchartService {
     acc: ((d: QualitativeTimedStatus) => QualitativeAggregatedBedStateCounts) | string,
     bedStati: string[] = null,
     chartOptions: {
-      xAxisTitle: string,
-      yAxisTitle: string,
-      width: number
+      xAxisTitle: string;
+      yAxisTitle: string;
+      width: number;
     }
     ): any {
     if (!data) {
