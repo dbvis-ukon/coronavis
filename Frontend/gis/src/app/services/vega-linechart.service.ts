@@ -1,4 +1,4 @@
-// tslint:disable:quotemark object-literal-key-quotes
+/* eslint-disable @typescript-eslint/quotes, quote-props */
 
 import { Injectable } from '@angular/core';
 import { getMoment } from '../util/date-util';

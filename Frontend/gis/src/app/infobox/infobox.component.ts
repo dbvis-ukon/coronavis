@@ -85,7 +85,7 @@ export class InfoboxComponent implements OnInit {
   @Output()
   mapOptionsChange: EventEmitter<MapOptions> = new EventEmitter();
 
-  // tslint:disable-next-line:no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('mapLocationSettings')
   mls: MapLocationSettings;
 

@@ -1,4 +1,4 @@
-// tslint:disable
+/* eslint-disable */
 
 import {quadtree} from 'd3-quadtree';
 
