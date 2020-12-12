@@ -96,16 +96,16 @@ export class VegaLinechartService {
 
 
   compileChart(
-    data: {x: string, y: number}[],
+    data: {x: string; y: number}[],
     chartOptions: {
-      xAxisTitle: string,
-      yAxisTitle: string,
-      width: number,
-      height: number,
+      xAxisTitle: string;
+      yAxisTitle: string;
+      width: number;
+      height: number;
       regression?: {
         from: string;
         to: string;
-      }
+      };
     }
     ): any {
     if (!data) {

@@ -158,7 +158,7 @@ export class CaseUtilService {
     );
   }
 
-  public getTrendForCase7DaysPer100k(data: RKICaseDevelopmentProperties, date: string, lastNItems: number): Observable<{m: number, b: number}> {
+  public getTrendForCase7DaysPer100k(data: RKICaseDevelopmentProperties, date: string, lastNItems: number): Observable<{m: number; b: number}> {
     const refDate = getMoment(date);
 
     return this.extractXYForCase7DaysPer100k(data)

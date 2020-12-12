@@ -10,5 +10,5 @@ export const environment = {
 
   env: 'development',
 
-  dsn: ""
+  dsn: ''
 };

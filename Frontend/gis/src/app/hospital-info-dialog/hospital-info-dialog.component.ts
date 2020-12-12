@@ -19,7 +19,7 @@ export class HospitalInfoDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<HospitalInfoDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>, options: BedGlyphOptions | BedBackgroundOptions},
+    @Inject(MAT_DIALOG_DATA) public data: {data: SingleHospitalOut<QualitativeTimedStatus> | AggregatedHospitalOut<QualitativeTimedStatus>; options: BedGlyphOptions | BedBackgroundOptions},
     private hospitalUtilService: HospitalUtilService) {}
 
 

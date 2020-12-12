@@ -15,7 +15,7 @@ export class CaseDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<CaseDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions},
+    @Inject(MAT_DIALOG_DATA) public data: {data: RKICaseDevelopmentProperties; options: CovidNumberCaseOptions},
     private caseUtil: CaseUtilService
   ) { }
 

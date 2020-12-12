@@ -81,13 +81,13 @@ export class VegaPixelchartService {
 
 
   compileChart(
-    data: {x: string, y: string, val: number}[],
+    data: {x: string; y: string; val: number}[],
     chartOptions: {
-      xAxisTitle: string,
-      yAxisTitle: string,
-      width: number,
-      scaleType: string,
-      timeAgg: string
+      xAxisTitle: string;
+      yAxisTitle: string;
+      width: number;
+      scaleType: string;
+      timeAgg: string;
     }
     ): any {
     if (!data) {

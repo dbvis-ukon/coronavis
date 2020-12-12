@@ -43,7 +43,13 @@
             "code": 140
           }
         ],
-        "no-underscore-dangle": "off"
+        "no-underscore-dangle": "off",
+        "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "prefer-arrow/prefer-arrow-functions": "off",
+        "@angular-eslint/no-input-rename": "off",
+        "no-shadow":"off",
+        "@typescript-eslint/ban-types": "warn"
       }
     },
     {

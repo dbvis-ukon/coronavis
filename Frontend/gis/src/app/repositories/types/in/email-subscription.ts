@@ -10,6 +10,6 @@ export interface EmailSubscription {
       ags: string;
       desc: string;
       name: string;
-    }
+    };
   }[];
 }

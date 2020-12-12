@@ -19,7 +19,7 @@ export class GeojsonUtilService {
     return this.isPointInBBox({lat: latAcc(f), lng: lngAcc(f)}, bbox);
   }
 
-  public isPointInBBox(pt: LatLngLiteral, bbox:ExplicitBBox) {
+  public isPointInBBox(pt: LatLngLiteral, bbox: ExplicitBBox) {
     return bbox.min.lat <= pt.lat && bbox.min.lng <= pt.lng && bbox.max.lat >= pt.lat && bbox.max.lng >= pt.lng;
   }
 
@@ -40,7 +40,7 @@ export class GeojsonUtilService {
     fs.forEach(f => {
       const lat = latAcc(f);
       const lng = lngAcc(f);
-      
+
       if(bbox.min.lat > lat) {
         bbox.min.lat = lat;
       }

@@ -22,7 +22,7 @@ import { CaseChoropleth } from './overlays/casechoropleth';
 import { GlyphLayer } from './overlays/GlyphLayer';
 
 
-enum MapOptionKeys {
+export enum MapOptionKeys {
   bedGlyphOptions, bedBackgroundOptions, covidNumberCaseOptions, showOsmHospitals, showOsmHeliports
 }
 
@@ -426,12 +426,10 @@ export class MapComponent implements OnInit {
       switchMap(opt => {
         const c = this.caseChoroplehtLayerService.getLayer(this.caseChoroplethOptions$)
         .pipe(
-          map(d => {
-            return {
+          map(d => ({
               opt,
               data: d
-            };
-          })
+            }))
         );
         return c;
       })
