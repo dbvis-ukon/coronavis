@@ -2,6 +2,8 @@
 # coding: utf-8
 # author: Max Fischer
 
+import sys
+import time
 import datetime
 import logging
 from datetime import date
@@ -14,6 +16,7 @@ import requests
 from db_config import SQLALCHEMY_DATABASE_URI
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 logger.info('Crawler for RKI detailed case data')
 
@@ -34,7 +37,8 @@ if last_update is not None and last_update >= date.today():
     exit(0)
 
 
-URL = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset={}&resultRecordCount=2000&cacheHint=true"
+URL = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset={}&resultRecordCount=5000&cacheHint=true"
+MAX_RETRIES = 5
 
 
 logger.debug('Fetch data')
@@ -43,9 +47,21 @@ logger.debug('Fetch data')
 data = None
 has_data = True
 offset = 0
+retries = 0
 while has_data:
-    r = requests.get(URL.format(offset))
-    rj = r.json()
+    while retries < MAX_RETRIES:
+        r = requests.get(URL.format(offset))
+        rj = r.json()
+        if "error" in rj:
+            retries += 1
+            delay = 2 * retries
+            logger.warning(f"Error in RKI API response ('{rj['error']['message']}'), retrying in {delay} sec...")
+            time.sleep(delay)
+        else:
+            break
+    if retries >= MAX_RETRIES:
+        logger.error(f"Max retries ({MAX_RETRIES}) exceeded, aborting")
+        exit(1)
     if data is None:
         data = rj
     else:
