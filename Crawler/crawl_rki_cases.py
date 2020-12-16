@@ -36,8 +36,10 @@ if last_update is not None and last_update >= date.today():
     logger.info('Data seems to be up to date (Database: %s, Today: %s). Won\'t fetch.', last_update, date.today())
     exit(0)
 
+LIMIT = 5000
 
-URL = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset={}&resultRecordCount=5000&cacheHint=true"
+
+URL = f"https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset={}&resultRecordCount={LIMIT}&cacheHint=true"
 MAX_RETRIES = 5
 
 
@@ -68,7 +70,7 @@ while has_data:
         data['features'].extend(rj['features'])
         if len(rj['features']) == 0:
             has_data = False
-    offset += 2000
+    offset += LIMIT
     logger.debug('Offset: %s', offset)
 data = [d['attributes'] for d in data['features']]
 
