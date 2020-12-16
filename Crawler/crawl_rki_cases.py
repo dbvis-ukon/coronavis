@@ -39,7 +39,7 @@ if last_update is not None and last_update >= date.today():
 LIMIT = 5000
 
 
-URL = f"https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset={}&resultRecordCount={LIMIT}&cacheHint=true"
+URL = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset={}&resultRecordCount={}&cacheHint=true"
 MAX_RETRIES = 5
 
 
@@ -52,7 +52,7 @@ offset = 0
 retries = 0
 while has_data:
     while retries < MAX_RETRIES:
-        r = requests.get(URL.format(offset))
+        r = requests.get(URL.format(offset, LIMIT))
         rj = r.json()
         if "error" in rj:
             retries += 1
