@@ -27,6 +27,7 @@ def get_connection():
     cur = conn.cursor()
     return conn, cur
 
+
 conn, cur = get_connection()
 
 cur.execute("select max(datenbestand)::date from cases")
@@ -38,13 +39,10 @@ if last_update is not None and last_update >= date.today():
 
 LIMIT = 5000
 
-
-URL = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset={}&resultRecordCount={}&cacheHint=true"
+URL = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset={offset}&resultRecordCount={limit}&cacheHint=true"
 MAX_RETRIES = 5
 
-
 logger.debug('Fetch data')
-
 
 data = None
 has_data = True
@@ -52,7 +50,7 @@ offset = 0
 retries = 0
 while has_data:
     while retries < MAX_RETRIES:
-        r = requests.get(URL.format(offset, LIMIT))
+        r = requests.get(URL.format(offset=offset, limit=LIMIT))
         rj = r.json()
         if "error" in rj:
             retries += 1
@@ -74,34 +72,30 @@ while has_data:
     logger.debug('Offset: %s', offset)
 data = [d['attributes'] for d in data['features']]
 
-
 logger.info('Parse data')
-
 
 entries = []
 for el in data:
     cc = ['case' for i in range(el['AnzahlFall'])]
     cc.extend(['death' for i in range(el['AnzahlTodesfall'])])
     entry = [{
-    'datenbestand': datetime.datetime.strptime(el['Datenstand'], '%d.%m.%Y, %H:%M Uhr'),
-    'idbundesland': el['IdBundesland'],
-    'bundesland': el['Bundesland'],
-    'landkreis': el['Landkreis'],
-    'idlandkreis': el['IdLandkreis'],
-    'objectid': el['ObjectId'],
-    'meldedatum': datetime.datetime.utcfromtimestamp(el['Meldedatum'] / 1000),
-    'gender': el['Geschlecht'],
-    'agegroup': el['Altersgruppe'],
-    'casetype': casetype
+        'datenbestand': datetime.datetime.strptime(el['Datenstand'], '%d.%m.%Y, %H:%M Uhr'),
+        'idbundesland': el['IdBundesland'],
+        'bundesland': el['Bundesland'],
+        'landkreis': el['Landkreis'],
+        'idlandkreis': el['IdLandkreis'],
+        'objectid': el['ObjectId'],
+        'meldedatum': datetime.datetime.utcfromtimestamp(el['Meldedatum'] / 1000),
+        'gender': el['Geschlecht'],
+        'agegroup': el['Altersgruppe'],
+        'casetype': casetype
     } for casetype in cc]
     entries.extend(entry)
 
-
 logger.debug('current cases: %s', len(entries))
 
-
 aquery = 'INSERT INTO cases(datenbestand, idbundesland, bundesland, landkreis, idlandkreis, objectid, meldedatum, gender, agegroup, casetype) VALUES %s'
-try:  
+try:
     conn, cur = get_connection()
 
     cur.execute("Select Max(datenbestand) from cases")
@@ -116,7 +110,7 @@ try:
     logger.info("fetched data version: %s", current_update)
     logger.info("Num cases in DB %s, num cases fetched %2", num_cases_in_db, len(entries))
 
-    if last_update is not None and abs((current_update - last_update).total_seconds()) <= 2*60*60:
+    if last_update is not None and abs((current_update - last_update).total_seconds()) <= 2 * 60 * 60:
         logger.info("No new data available (+/- 2h), skip update")
         exit(0)
     elif len(entries) < (num_cases_in_db - 1000):
@@ -126,8 +120,10 @@ try:
     else:
         logger.info('Insert new data into DB (takes 2-5 seconds)...')
 
-        psycopg2.extras.execute_values (
-            cur, aquery, entries, template='(%(datenbestand)s, %(idbundesland)s, %(bundesland)s, %(landkreis)s, %(idlandkreis)s, %(objectid)s, %(meldedatum)s, %(gender)s, %(agegroup)s, %(casetype)s)', page_size=500
+        psycopg2.extras.execute_values(
+            cur, aquery, entries,
+            template='(%(datenbestand)s, %(idbundesland)s, %(bundesland)s, %(landkreis)s, %(idlandkreis)s, %(objectid)s, %(meldedatum)s, %(gender)s, %(agegroup)s, %(casetype)s)',
+            page_size=500
         )
         conn.commit()
 
@@ -138,14 +134,13 @@ try:
         cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
         conn.commit()
 
-
         logger.info('Success')
 
-        if(conn):
+        if (conn):
             cur.close()
             conn.close()
 
-        exit(0)    
+        exit(0)
 except (Exception, pg.DatabaseError) as error:
     conn, cur = get_connection()
 
@@ -155,8 +150,8 @@ except (Exception, pg.DatabaseError) as error:
 
     conn.rollback()
 
-    if(conn):
+    if (conn):
         cur.close()
-        conn.close()   
+        conn.close()
 
-    exit(1)   
+    exit(1)
