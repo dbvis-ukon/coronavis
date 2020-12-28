@@ -39,7 +39,7 @@ export class OverviewComponent implements OnInit {
       verticalPosition: 'top',
       horizontalPosition: 'center',
       panelClass: 'snackbar-warning'
-    })
+    });
   }
 
   navigateAndCloseSidenav(url: string) {
