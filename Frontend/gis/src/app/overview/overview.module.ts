@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HelpModule } from '../help/help.module';
 import { SharedModule } from '../shared/shared.module';
@@ -51,7 +52,8 @@ import { SubscriptionComponent } from './subscription/subscription.component';
     MatSelectModule,
     MatListModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSnackBarModule
   ],
   providers: [
   ],

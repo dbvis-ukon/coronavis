@@ -832,6 +832,13 @@
       <segment state="initial">
         <source>Erfolgreich in die Zwischenablage kopiert</source>
       <target>Successfully copied</target></segment>
+    </unit><unit id="dataWarning">
+      <notes>
+        <note category="location">src/app/overview/overview.component.html:1</note>
+      </notes>
+      <segment state="initial">
+        <source>Aktuelle Inzidenzstatistiken sind durch weniger Meldungen der Gesundheitsämter während der Feiertage zu niedrig und tendenziell wenig aussagekräftig.</source>
+      <target>Current incidence statistics are too low due to fewer reports from public health departments during the holidays and tend to be less meaningful.</target></segment>
     </unit><unit id="1687905935286624851">
       <notes>
         <note category="description">@shareExplIframe</note>
@@ -1558,28 +1565,28 @@
     </unit><unit id="overviewIntroduction">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:18</note><note category="location">src/app/overview/overview.component.html:47</note></notes>
+      <note category="location">src/app/overview/overview.component.html:19</note><note category="location">src/app/overview/overview.component.html:48</note></notes>
       <segment state="initial">
         <source>Einführung</source>
       <target>Introduction</target></segment>
     </unit><unit id="overviewICUView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:25</note><note category="location">src/app/overview/overview.component.html:54</note></notes>
+      <note category="location">src/app/overview/overview.component.html:26</note><note category="location">src/app/overview/overview.component.html:55</note></notes>
       <segment state="initial">
         <source>Intensivbetten-Kapazitäten Ansicht</source>
       <target>ICU Bed Capacities View</target></segment>
     </unit><unit id="overviewLockdownView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:28</note><note category="location">src/app/overview/overview.component.html:57</note></notes>
+      <note category="location">src/app/overview/overview.component.html:29</note><note category="location">src/app/overview/overview.component.html:58</note></notes>
       <segment state="initial">
         <source>Lockdown Ansicht</source>
       <target>Lockdown View</target></segment>
     </unit><unit id="overviewLockdownViewLive">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:31</note><note category="location">src/app/overview/overview.component.html:60</note></notes>
+      <note category="location">src/app/overview/overview.component.html:32</note><note category="location">src/app/overview/overview.component.html:61</note></notes>
       <segment state="initial">
         <source>LIVE Lockdown Ansicht</source>
       <target>LIVE Lockdown View</target></segment>
@@ -1587,7 +1594,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/overview.component.html:34</note><note category="location">src/app/overview/overview.component.html:63</note></notes>
+      <note category="location">src/app/overview/overview.component.html:35</note><note category="location">src/app/overview/overview.component.html:64</note></notes>
       <segment state="initial">
         <source>E-Mail-Benachrichtigung</source>
       <target>Email Notification</target></segment>
