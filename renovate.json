@@ -9,6 +9,10 @@
       "groupName": "angular packages"
     },
     {
+      "packagePatterns": ["^@typescript-eslint"],
+      "groupName": "typescript eslint packages"
+    },
+    {
       "updateTypes": ["lockFileMaintenance"],
       "automerge": true
     }
