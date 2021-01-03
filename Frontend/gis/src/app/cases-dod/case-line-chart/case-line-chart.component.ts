@@ -19,6 +19,14 @@ export class CaseLineChartComponent implements OnInit {
   @ViewChild('i18nAccumulated', {static: true})
   i18nAccumulated: ElementRef<HTMLSpanElement>;
 
+  @ViewChild('i18nPer100k', {static: true})
+  i18nPer100k: ElementRef<HTMLSpanElement>;
+
+  @ViewChild('i18nPerDay', {static: true})
+  i18nPerDay: ElementRef<HTMLSpanElement>;
+
+  tDay: number = 7;
+
   @Input()
   public data: RKICaseDevelopmentProperties;
 
@@ -56,6 +64,21 @@ export class CaseLineChartComponent implements OnInit {
       return;
     }
 
+    // to avoid Expression has changed after it has been checked error
+    switch (this.options.timeWindow) {
+      case CovidNumberCaseTimeWindow.twentyFourhours:
+        this.tDay = 1;
+      break;
+
+      case CovidNumberCaseTimeWindow.seventyTwoHours:
+        this.tDay = 3;
+      break;
+
+      case CovidNumberCaseTimeWindow.sevenDays:
+        this.tDay = 7;
+      break;
+    }
+
     setTimeout(() => {
       this.rollingChart = this.caseRepo.getCasesDevelopmentForAggLevelSingle(
         this.options.dataSource,
@@ -69,28 +92,14 @@ export class CaseLineChartComponent implements OnInit {
 
           const tType = this.options.type;
 
-          const tNorm = this.options.normalization === CovidNumberCaseNormalization.per100k ? ' per 100k' : '';
+          const tNorm = this.options.normalization === CovidNumberCaseNormalization.per100k ? ' ' + this.i18nPer100k.nativeElement.textContent : '';
 
-          let tWindow = '';
-          switch (this.options.timeWindow) {
-            case CovidNumberCaseTimeWindow.twentyFourhours:
-              tWindow = ' / 1 day';
-            break;
-
-            case CovidNumberCaseTimeWindow.seventyTwoHours:
-              tWindow = ' / 3 days';
-            break;
-
-            case CovidNumberCaseTimeWindow.sevenDays:
-              tWindow = ' / 7 days';
-            break;
-          }
-
+          const tWindow = ' / ' + this.i18nPerDay.nativeElement.textContent;
 
           return this.vegaLinechartService.compileChart(d.splice(7), {
             xAxisTitle: null,
             yAxisTitle: 'New ' + tType + tNorm + tWindow,
-            yAxis2Title: this.i18nAccumulated.nativeElement.textContent,
+            yAxis2Title: this.i18nAccumulated.nativeElement.textContent + tNorm,
             width: 700,
             height: 150,
             regression: {

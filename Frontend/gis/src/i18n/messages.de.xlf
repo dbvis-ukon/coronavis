@@ -88,14 +88,14 @@
     </unit><unit id="caseInfoTrendLastThreeDays">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:14</note></notes>
+      <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:16</note></notes>
       <segment state="final">
         <source>Trend der letzten <ph id="0" equiv="INTERPOLATION" disp="{{ options.daysForTrend }}"/> Tage</source>
       <target>Trend der letzten <ph id="0" equiv="INTERPOLATION" disp="{{ options.daysForTrend }}"/> Tage</target></segment>
     </unit><unit id="caseInfoTrendPerDay">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:18</note></notes>
+      <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:20</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> pro Tag</source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> pro Tag</target></segment>
@@ -190,10 +190,24 @@
       <segment state="final">
         <source>Akkumuliert</source>
       <target>Akkumuliert</target></segment>
+    </unit><unit id="caseLineChartPer100k">
+      <notes>
+        <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:2</note>
+      </notes>
+      <segment state="final">
+        <source>pro 100T</source>
+      <target>pro 100T</target></segment>
+    </unit><unit id="caseLineChartPerDay">
+      <notes>
+        <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:3</note>
+      </notes>
+      <segment state="final">
+        <source>{VAR_PLURAL, plural, =1 {Tag} other {<ph id="0" equiv="INTERPOLATION"/> Tage}}</source>
+      <target>{VAR_PLURAL, plural, =1 {Tag} other {<ph id="0" equiv="INTERPOLATION"/> Tage}}</target></segment>
     </unit><unit id="caseInfoBrushingHint">
       <notes>
-        <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:24,25</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:26</note></notes>
       <segment state="final">
         <source> Ziehen Sie hier mit der Maus, um das obere Diagramm zu vergrößern. </source>
       <target> Ziehen Sie hier mit der Maus, um das obere Diagramm zu vergrößern. </target></segment>

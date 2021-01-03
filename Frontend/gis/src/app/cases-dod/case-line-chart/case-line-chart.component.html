@@ -1,4 +1,6 @@
 <span class="hidden" #i18nAccumulated i18n="@@caseLineChartAccumulated">Akkumuliert</span>
+<span class="hidden" #i18nPer100k i18n="@@caseLineChartPer100k">pro 100T</span>
+<span class="hidden" #i18nPerDay i18n="@@caseLineChartPerDay">{tDay, plural, =1 {Tag} other {{{tDay}} Tage}}</span>
 
 <div class="trend-wrapper">
     <div *ngIf="rollingChart | async; let chart; else elseBlock">
