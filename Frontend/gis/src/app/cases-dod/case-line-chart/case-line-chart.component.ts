@@ -110,7 +110,7 @@ export class CaseLineChartComponent implements OnInit {
         this.data.id
       )
       .pipe(
-        mergeMap(d => this.caseUtil.getTrendForCase7DaysPer100k(d.properties, this.options.date, this.options.daysForTrend, this.options)),
+        mergeMap(d => this.caseUtil.getTrendForCase7DaysPer100k(d.properties, this.options)),
         map(d => ({ m: d.m, b: d.b, rotation: this.caseUtil.getRotationForTrend(d.m)}))
       );
     });

@@ -180,33 +180,15 @@ export class CaseUtilService {
     );
   }
 
-  public extractXYForCase7DaysPer100k(data: RKICaseDevelopmentProperties) {
-    return of(data)
-    .pipe(
-      mergeMap(d1 => d1.developments),
-      // filter((_, i) => i >= data.developments.length - 7),
-      filter(d => d.inserted !== null && d.inserted !== undefined),
-      map(d => {
-        let t = null;
-        if (!d.cases7_per_100k) {
-          t = this.getNowPrevTimedStatusTuple(data, getStrDate(getMoment(d.timestamp)), CovidNumberCaseTimeWindow.sevenDays);
-        }
-        return {
-          x: getStrDate(getMoment(d.timestamp)),
-          y: d.cases7_per_100k || (t[0].cases_per_100k - t[1].cases_per_100k)}; }),
-      toArray()
-    );
-  }
-
-  public getTrendForCase7DaysPer100k(data: RKICaseDevelopmentProperties, date: string, lastNItems: number, options: CovidNumberCaseOptions): Observable<{m: number; b: number}> {
-    const refDate = getMoment(date);
+  public getTrendForCase7DaysPer100k(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): Observable<{m: number; b: number}> {
+    const refDate = getMoment(options.date);
 
     return this.extractXYByOptions(data, options)
     .pipe(
       map(d => {
         const myXY = d
           .filter(d1 => getMoment(d1.x).isSameOrBefore(refDate))
-          .filter((_, i, n) => i >= (n.length - lastNItems))
+          .filter((_, i, n) => i >= (n.length - options.daysForTrend))
           .map((d1, i) => ({x: i, y: d1.y}));
 
         return linearRegression(myXY);
