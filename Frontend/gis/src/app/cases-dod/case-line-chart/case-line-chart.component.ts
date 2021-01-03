@@ -25,7 +25,7 @@ export class CaseLineChartComponent implements OnInit {
   @ViewChild('i18nPerDay', {static: true})
   i18nPerDay: ElementRef<HTMLSpanElement>;
 
-  tDay: number = 7;
+  tDay = 7;
 
   @Input()
   public data: RKICaseDevelopmentProperties;
