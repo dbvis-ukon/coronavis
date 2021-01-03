@@ -1,0 +1,40 @@
+table {
+    border-spacing: 0;
+    margin-top: 10px;
+    font-size: 13px;
+
+    th {
+      text-align: center;
+      margin: 0;
+      padding: 6px;
+    }
+    
+    td {
+      text-align: right;
+      margin: 0;
+      padding: 6px;
+    }
+    
+    td:first-child {
+      text-align: left;
+    }
+    
+    /* Color columns */
+    th:nth-child(2),
+    th:nth-child(4),
+    td:nth-child(2),
+    td:nth-child(3),
+    td:nth-child(7),
+    td:nth-child(8),
+    td:nth-child(9) {
+      background-color: #f2f2f2;
+    }
+  
+    .active {
+      font-weight: bold;
+    }
+}
+
+.loading {
+    text-align: center;
+}

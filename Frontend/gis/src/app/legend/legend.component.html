@@ -47,16 +47,8 @@
         </div>
       </div>
   
-      <div>
-        <h5 *ngIf="(mo$ | async)?.covidNumberCaseOptions.dataSource === 'rki'; else elseBlockDatSource" class="source" i18n="@@legendDatasourceRki">Datenquelle: <a href="https://rki.de">Robert Koch Institut</a></h5>
-        <ng-template #elseBlockDatSource>
-          <h5 class="source" i18n="@@legendDatasourceRisklayer">Datenquelle: 
-            <a href="http://risklayer.com/">Risklayer GmbH</a> and 
-            <a href="https://www.cedim.kit.edu/" matTooltip="Center for Disaster Management and Risk Reduction Technology">CEDIM</a> at 
-            <a href="https://www.kit.edu/" matTooltip="Karlsruhe Institute of Technology">KIT</a> and the 
-            <a href="https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</a>
-          </h5>
-        </ng-template>
+      <div style="margin-top: 5px;">
+        <app-data-source [source]="(mo$ | async)?.covidNumberCaseOptions.dataSource"></app-data-source>
       </div>
   </div>
   
@@ -92,12 +84,8 @@
       </div>
     </div>
 
-    <div>
-      <h5 class="source" i18n="@@legendDiviAddition">Persönliche Verfügbarkeits-Einschätzung der Krankenhäuser (inklusive Personalsituation)</h5>
-    </div>
-  
-    <div>
-      <h5 class="source" i18n="@@legendDatasourceDivi">Datenquelle: <a href="https://intensivregister.de">DIVI Intensivregister</a></h5>
+    <div style="margin-top: 5px;">
+      <app-data-source source="divi"></app-data-source>
     </div>
   </div>
 </div>

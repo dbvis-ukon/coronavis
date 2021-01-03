@@ -1,75 +1,54 @@
-table {
-    border-spacing: 0;
-    margin-top: 10px;
-    font-size: 13px;
-
-    th {
-      text-align: center;
-      margin: 0;
-      padding: 6px;
-    }
-    
-    td {
-      text-align: right;
-      margin: 0;
-      padding: 6px;
-    }
-    
-    td:first-child {
-      text-align: left;
-    }
-    
-    /* Color columns */
-    th:nth-child(2),
-    th:nth-child(4),
-    td:nth-child(2),
-    td:nth-child(3),
-    td:nth-child(7),
-    td:nth-child(8),
-    td:nth-child(9) {
-      background-color: #f2f2f2;
-    }
-  
-    .active {
-      font-weight: bold;
-    }
-}
-  
-  
-
-.trend-wrapper {
-  display: flex;
-  justify-content: stretch;
-  align-items: stretch;
-
-  .trend-icon-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-items: center;
-    align-items: center;
-    justify-content: space-around;
-
-    h4,p {
-      margin: 0;
-    }
-
-    p {
-      font-size: 12px;
-    }
-
-    .trend-icon {
-      font-size: 5em;
-      width: 60px;
-      height: 60px;
-    }
-  }
-
-  
-}
-
 .moreinfo {
   text-align: center;
   margin-top: 10px;
   margin-bottom: 0px;
   font-weight: bold;
+}
+
+.settings {
+  max-width: 824px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .toggleGroup {
+      margin-left: 10px;
+      margin-right: 10px;
+
+      h5 {
+          margin-top: 5px;
+          margin-bottom: 1px;
+      }
+
+      .hint {
+          font-size: 10px;
+          color: gray;
+          margin: 0px;
+          line-height: 10px;
+          padding: 0px;
+      }
+
+      .btngrp {
+          width: 100%;
+          flex: 1 1 100%;
+          box-sizing: border-box;
+          align-items: center;
+          flex-direction: row;
+          display: flex;
+          height: 2.5em;
+          margin-bottom: 5px;
+  
+          .mat-button-toggle {
+              text-align: center;
+              flex: 1 1 100%;
+          }
+  
+      }
+  }
+}
+
+.greyblock {
+  border: 1px solid lightgray;
+  margin-top: 2px;
+  margin-bottom: 2px;
 }

@@ -51,7 +51,7 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
     if (status?._regression?.rotation) {
       rot$ = of(status._regression.rotation);
     } else {
-      rot$ = this.caseUtil.getTrendForCase7DaysPer100k(glyphData.properties, this.options$.value.date, this.options$.value.daysForTrend)
+      rot$ = this.caseUtil.getTrendForCase7DaysPer100k(glyphData.properties, this.options$.value.date, this.options$.value.daysForTrend, this.options$.value)
       .pipe(
         map(t => this.caseUtil.getRotationForTrend(t.m)),
         tap(r => {

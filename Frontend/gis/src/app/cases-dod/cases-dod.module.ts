@@ -14,6 +14,9 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { CaseLineChartComponent } from './case-line-chart/case-line-chart.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { CaseTableComponent } from './case-table/case-table.component';
 
 
 
@@ -22,7 +25,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     CaseDialogComponent,
     CaseInfoComponent,
     CaseTooltipComponent,
-    CaseAgegroupChartComponent
+    CaseAgegroupChartComponent,
+    CaseLineChartComponent,
+    CaseTableComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +40,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatButtonModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatTooltipModule
   ]
 })
 export class CasesDodModule { }
