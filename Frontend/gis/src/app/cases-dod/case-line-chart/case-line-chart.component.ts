@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
@@ -15,6 +15,9 @@ import { CovidChartOptions } from '../covid-chart-options';
   styleUrls: ['./case-line-chart.component.less']
 })
 export class CaseLineChartComponent implements OnInit {
+
+  @ViewChild('i18nAccumulated', {static: true})
+  i18nAccumulated: ElementRef<HTMLSpanElement>;
 
   @Input()
   public data: RKICaseDevelopmentProperties;
@@ -85,8 +88,9 @@ export class CaseLineChartComponent implements OnInit {
 
 
           return this.vegaLinechartService.compileChart(d.splice(7), {
-            xAxisTitle: '',
+            xAxisTitle: null,
             yAxisTitle: 'New ' + tType + tNorm + tWindow,
+            yAxis2Title: this.i18nAccumulated.nativeElement.textContent,
             width: 700,
             height: 150,
             regression: {

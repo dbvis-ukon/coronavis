@@ -370,7 +370,7 @@ export class VegaLinechartService {
                   "x": {
                     "field": "x",
                     "type": "temporal",
-                    "title": "Date",
+                    "title": "",
                     "axis": {"title": null},
                     "scale": {"domain": {"selection": "brush"}},
                     "timeUnit": "yearmonthdate"
@@ -415,7 +415,7 @@ export class VegaLinechartService {
           "x": {
             "field": "x",
             "type": "temporal",
-            "axis": {"title": "Date"},
+            "axis": {"title": ""},
             "title": "",
             "timeUnit": "yearmonthdate"
           },
@@ -441,6 +441,7 @@ export class VegaLinechartService {
     chartOptions: {
       xAxisTitle: string;
       yAxisTitle: string;
+      yAxis2Title: string;
       width: number;
       height: number;
       regression? : {
@@ -469,6 +470,9 @@ export class VegaLinechartService {
     spec.vconcat[0].layer[1].layer[2].encoding.y.title = chartOptions.yAxisTitle || '';
     spec.vconcat[0].layer[1].layer[3].encoding.y.title = chartOptions.yAxisTitle || '';
     spec.vconcat[0].layer[1].layer[3].encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
+
+    spec.vconcat[0].layer[0].encoding.y.title = chartOptions.yAxis2Title || '';
+    spec.vconcat[0].layer[1].layer[3].encoding.tooltip[2].title = chartOptions.yAxis2Title || '';
 
     spec.vconcat[0].width = chartOptions.width;
     spec.vconcat[0].height = chartOptions.height;

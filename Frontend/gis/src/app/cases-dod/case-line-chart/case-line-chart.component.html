@@ -1,3 +1,5 @@
+<span class="hidden" #i18nAccumulated i18n="@@caseLineChartAccumulated">Akkumuliert</span>
+
 <div class="trend-wrapper">
     <div *ngIf="rollingChart | async; let chart; else elseBlock">
         <app-vega [spec]="chart"></app-vega>
@@ -15,6 +17,12 @@
 
         <p i18n="@@caseInfoTrendPerDay">{{ t.m | plusminus:'1.0-1' }} pro Tag</p>
     </div>
+</div>
+
+<div>
+    <p class="hint" i18n="@@caseInfoBrushingHint">
+        Ziehen Sie hier mit der Maus, um das obere Diagramm zu vergrößern.
+    </p>
 </div>
 
 <div>
