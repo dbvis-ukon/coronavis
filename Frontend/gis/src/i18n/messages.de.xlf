@@ -16,7 +16,7 @@
         <note category="meaning">case-tooltip</note>
         
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:7</note></notes>
+      <note category="location">src/app/cases-dod/case-table/case-table.component.html:11</note></notes>
       <segment state="final">
         <source>Fälle Total</source>
       <target>Fälle Total</target></segment>
@@ -25,7 +25,7 @@
         <note category="description">changes</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:8</note></notes>
+      <note category="location">src/app/cases-dod/case-table/case-table.component.html:12</note></notes>
       <segment state="final">
         <source>Veränderung</source>
       <target>Veränderung</target></segment>
@@ -34,7 +34,7 @@
         <note category="description">24h</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:13</note></notes>
+      <note category="location">src/app/cases-dod/case-table/case-table.component.html:17</note></notes>
       <segment state="final">
         <source>letzte 24h</source>
       <target>letzte 24h</target></segment>
@@ -43,7 +43,7 @@
         <note category="description">72h</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:14</note></notes>
+      <note category="location">src/app/cases-dod/case-table/case-table.component.html:18</note></notes>
       <segment state="final">
         <source>letzte 72h</source>
       <target>letzte 72h</target></segment>
@@ -52,7 +52,7 @@
         <note category="description">7d</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:15</note></notes>
+      <note category="location">src/app/cases-dod/case-table/case-table.component.html:19</note></notes>
       <segment state="final">
         <source>letzte 7t</source>
       <target>letzte 7t</target></segment>
@@ -61,7 +61,7 @@
         <note category="description">sick</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:20</note></notes>
+      <note category="location">src/app/cases-dod/case-table/case-table.component.html:24</note></notes>
       <segment state="final">
         <source>Positiv Getestet</source>
       <target>Positiv Getestet</target></segment>
@@ -70,14 +70,14 @@
         <note category="description">deaths</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:108</note></notes>
+      <note category="location">src/app/cases-dod/case-table/case-table.component.html:112</note></notes>
       <segment state="final">
         <source>Todesfälle</source>
       <target>Todesfälle</target></segment>
     </unit><unit id="clickForMoreInformation">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:201</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:86</note></notes>
       <segment state="final">
         <source>
     Klicken Sie um mehr Informationen zu erhalten.
@@ -88,115 +88,136 @@
     </unit><unit id="caseInfoTrendLastThreeDays">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:215</note></notes>
+      <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:16</note></notes>
       <segment state="final">
         <source>Trend der letzten <ph id="0" equiv="INTERPOLATION" disp="{{ options.daysForTrend }}"/> Tage</source>
       <target>Trend der letzten <ph id="0" equiv="INTERPOLATION" disp="{{ options.daysForTrend }}"/> Tage</target></segment>
     </unit><unit id="caseInfoTrendPerDay">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:219</note></notes>
+      <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:20</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> pro Tag</source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> pro Tag</target></segment>
     </unit><unit id="caseDodGranularity">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:44</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:58</note></notes>
       <segment state="final">
         <source>Granularität (Zeit)</source>
       <target>Granularität (Zeit)</target></segment>
     </unit><unit id="caseDodGranularityDaily">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:47</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:61</note></notes>
       <segment state="final">
         <source>Täglich</source>
       <target>Täglich</target></segment>
     </unit><unit id="caseDodGranularityWeekly">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:48</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:63</note></notes>
       <segment state="final">
         <source>Wöchentlich</source>
       <target>Wöchentlich</target></segment>
     </unit><unit id="csaeDodScaling">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:53</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:68</note></notes>
       <segment state="final">
         <source>Skalierung</source>
       <target>Skalierung</target></segment>
     </unit><unit id="caseDodScalingLinear">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:56</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:71</note></notes>
       <segment state="final">
         <source>Linear</source>
       <target>Linear</target></segment>
     </unit><unit id="caseDodScalingSqrt">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:57</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:72</note></notes>
       <segment state="final">
         <source>Quadratwurzel</source>
       <target>Quadratwurzel</target></segment>
     </unit><unit id="caseDodScalingLog">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:58</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:73</note></notes>
       <segment state="final">
         <source>Logarithmisch</source>
       <target>Logarithmisch</target></segment>
     </unit><unit id="caseDodScalingHint">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:61</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:76</note></notes>
       <segment state="final">
         <source>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</source>
       <target>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</target></segment>
     </unit><unit id="caseDodYAxisAltersgruppe">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:65</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:1</note></notes>
       <segment state="final">
         <source>Altersgruppe</source>
       <target>Altersgruppe</target></segment>
     </unit><unit id="caseDodXAxisDatum">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:66</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:2</note></notes>
       <segment state="final">
         <source>Datum</source>
       <target>Datum</target></segment>
     </unit><unit id="caseDodXAxisWoche">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:67</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:3</note></notes>
       <segment state="final">
         <source>Woche</source>
       <target>Woche</target></segment>
     </unit><unit id="caseDodZAxisVal">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:68</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:4</note></notes>
       <segment state="final">
         <source>7-Tages-Inzidenz</source>
       <target>7-Tages-Inzidenz</target></segment>
-    </unit><unit id="caseDodDataSourceRKI">
+    </unit><unit id="caseLineChartAccumulated">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:74</note>
+        <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:1</note>
       </notes>
       <segment state="final">
-        <source>Datenquelle der Inzidenzen nach Altersgruppe: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="n=&quot;@@caseDodDataSourceRKI&quot;" dispEnd="denz">Robert Koch Instistut</pc></source>
-      <target>Datenquelle der Inzidenzen nach Altersgruppe: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="n=&quot;@@caseDodDataSourceRKI&quot;" dispEnd="denz">Robert Koch Instistut</pc></target></segment>
+        <source>Akkumuliert</source>
+      <target>Akkumuliert</target></segment>
+    </unit><unit id="caseLineChartPer100k">
+      <notes>
+        <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:2</note>
+      </notes>
+      <segment state="final">
+        <source>pro 100T</source>
+      <target>pro 100T</target></segment>
+    </unit><unit id="caseLineChartPerDay">
+      <notes>
+        <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:3</note>
+      </notes>
+      <segment state="final">
+        <source>{VAR_PLURAL, plural, =1 {Tag} other {<ph id="0" equiv="INTERPOLATION"/> Tage}}</source>
+      <target>{VAR_PLURAL, plural, =1 {Tag} other {<ph id="0" equiv="INTERPOLATION"/> Tage}}</target></segment>
+    </unit><unit id="caseInfoBrushingHint">
+      <notes>
+        
+      <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:26</note></notes>
+      <segment state="final">
+        <source> Ziehen Sie hier mit der Maus, um das obere Diagramm zu vergrößern. </source>
+      <target> Ziehen Sie hier mit der Maus, um das obere Diagramm zu vergrößern. </target></segment>
     </unit><unit id="caseDodDataSourceZensus">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:75</note>
-      </notes>
+        
+      <note category="location">src/app/shared/data-source/data-source.component.html:25</note></notes>
       <segment state="final">
-        <source>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="ource&quot; i18n=&quot;@@caseDodDataSourceZensus&quot;>Datenquelle der Pop" dispEnd="en: ">Zensus 2011</pc></source>
-      <target>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="ource&quot; i18n=&quot;@@caseDodDataSourceZensus&quot;>Datenquelle der Pop" dispEnd="en: ">Zensus 2011</pc></target></segment>
+        <source>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.zensus2011.de/DE/Home/home_node.html&quot;>" dispEnd="&lt;/a>">Zensus 2011</pc></source>
+      <target>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.zensus2011.de/DE/Home/home_node.html&quot;>" dispEnd="&lt;/a>">Zensus 2011</pc></target></segment>
     </unit><unit id="button11">
       <notes>
         <note category="description"> help</note>
@@ -921,7 +942,7 @@
     </unit><unit id="countyDataNotFound">
       <notes>
 
-      <note category="location">src/app/hospital-info/hospital-info.component.html:5</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:1</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:5</note><note category="location">src/app/cases-dod/case-table/case-table.component.html:1</note></notes>
       <segment state="final">
         <source>Es stehen keine Daten zur Verfügung.</source>
       <target>Es stehen keine Daten zur Verfügung.</target></segment>
@@ -1309,14 +1330,14 @@
     </unit><unit id="infoboxDataSource">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:226</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:226</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:3</note></notes>
       <segment state="final">
         <source>Daten Quelle</source>
       <target>Daten Quelle</target></segment>
     </unit><unit id="infoboxDataSourceRKI">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:236</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:236</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:8</note></notes>
       <segment state="final">
         <source>Offizielle Daten
               </source>
@@ -1325,14 +1346,14 @@
     </unit><unit id="tooltipDataSourceRKI">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:236</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:236</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:8</note></notes>
       <segment state="final">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institut</target></segment>
     </unit><unit id="infoboxDataSourceRisklayer">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:239</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:239</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:11</note></notes>
       <segment state="final">
         <source>Live Daten
               </source>
@@ -1341,7 +1362,7 @@
     </unit><unit id="tooltipDataSourceRisklayer">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:239</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:239</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:11</note></notes>
       <segment state="final">
         <source>Live-Ansicht Risklayer Daten</source>
       <target>Live-Ansicht Risklayer Daten</target></segment>
@@ -1355,7 +1376,7 @@
     </unit><unit id="infoboxTime">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:274</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:29</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:274</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:43</note></notes>
       <segment state="final">
         <source>Zeitraum</source>
       <target>Zeitraum</target></segment>
@@ -1369,7 +1390,7 @@
     </unit><unit id="infoboxTime24">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:288</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:33</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:288</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:47</note></notes>
       <segment state="final">
         <source>24 Std.
               </source>
@@ -1378,14 +1399,14 @@
     </unit><unit id="infoboxTime72">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:290</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:35</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:290</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:49</note></notes>
       <segment state="final">
         <source>72 Std. </source>
       <target>72 Std. </target></segment>
     </unit><unit id="infoboxTime7Days">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:293</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:38</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:293</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:52</note></notes>
       <segment state="final">
         <source>7 Tage
               </source>
@@ -1415,14 +1436,14 @@
     </unit><unit id="infoboxType">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:323</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:3</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:323</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:17</note></notes>
       <segment state="final">
         <source>Art</source>
       <target>Art</target></segment>
     </unit><unit id="infoboxTypeSick">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:332</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:6</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:332</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:20</note></notes>
       <segment state="final">
         <source>Positiv Getestet
               </source>
@@ -1431,28 +1452,28 @@
     </unit><unit id="infoboxTypeDeath">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:334</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:8</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:334</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:22</note></notes>
       <segment state="final">
         <source>Todesfälle</source>
       <target>Todesfälle</target></segment>
     </unit><unit id="infoboxNorm">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:342</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:15</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:342</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:29</note></notes>
       <segment state="final">
         <source>Normalisierung</source>
       <target>Normalisierung</target></segment>
     </unit><unit id="infoboxNornNone">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:351</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:19</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:351</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:33</note></notes>
       <segment state="final">
         <source>Keine Normalisierung </source>
       <target>Keine Normalisierung </target></segment>
     </unit><unit id="infoboxNornYes">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:355</note><note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:22</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:355</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:36</note></notes>
       <segment state="final">
         <source>Je 100.000 Einwohner </source>
       <target>Je 100.000 Einwohner </target></segment>
@@ -1537,7 +1558,7 @@
       <notes>
         
         
-      <note category="location">src/app/shared/bed-inline-legend/bed-inline-legend.component.html:7</note><note category="location">src/app/legend/legend.component.html:96</note></notes>
+      <note category="location">src/app/shared/data-source/data-source.component.html:15</note><note category="location">src/app/shared/bed-inline-legend/bed-inline-legend.component.html:7</note></notes>
       <segment state="final">
         <source>Persönliche Verfügbarkeits-Einschätzung der Krankenhäuser (inklusive Personalsituation)</source>
       <target>Persönliche Verfügbarkeits-Einschätzung der Krankenhäuser (inklusive Personalsituation)</target></segment>
@@ -1606,7 +1627,7 @@
       <notes>
         
         
-      <note category="location">src/app/legend/legend.component.html:8</note><note category="location">src/app/legend/legend.component.html:69</note></notes>
+      <note category="location">src/app/legend/legend.component.html:8</note><note category="location">src/app/legend/legend.component.html:61</note></notes>
       <segment state="final">
         <source>Klicken um Legende ein-/auszuklappen</source>
       <target>Klicken um Legende ein-/auszuklappen</target></segment>
@@ -1631,23 +1652,19 @@
     </unit><unit id="legendDatasourceRki">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:51</note></notes>
+      <note category="location">src/app/shared/data-source/data-source.component.html:1</note></notes>
       <segment state="final">
-        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="source&quot; i18n=&quot;@@legendDat" dispEnd="lle:">Robert Koch Institut</pc></source>
-      <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="source&quot; i18n=&quot;@@legendDat" dispEnd="lle:">Robert Koch Institut</pc></target></segment>
+        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://rki.de&quot;>" dispEnd="&lt;/a>">Robert Koch Institut</pc></source>
+      <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://rki.de&quot;>" dispEnd="&lt;/a>">Robert Koch Institut</pc></target></segment>
     </unit><unit id="legendDatasourceRisklayer">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:53</note></notes>
+      <note category="location">src/app/shared/data-source/data-source.component.html:4</note></notes>
       <segment state="final">
-        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="egendDatasourceRisklayer&quot;>Datenq" dispEnd="CEDI">Risklayer GmbH</pc> and <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK_1" type="other" dispStart="/risklayer.com/&quot;>Risklayer GmbH&lt;/a> and 
-            &lt;a href=&quot;https://www.cedim.kit.edu/&quot; matTooltip=&quot;Center f">CEDIM</pc> at <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK_2" type="other" dispStart=" Risk Reduction Technology&quot;>CEDIM&lt;/a> at 
-            &lt;a href=&quot;https://www.ki">KIT</pc> and the <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK_3" type="other" dispStart=" Institute of Technology&quot;>KIT&lt;/a> and the 
-            &lt;a href=&quot;https://docs.google.com/spreadsheets/d/">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc></source>
-      <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="egendDatasourceRisklayer&quot;>Datenq" dispEnd="CEDI">Risklayer GmbH</pc> and <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK_1" type="other" dispStart="/risklayer.com/&quot;>Risklayer GmbH&lt;/a> and 
-            &lt;a href=&quot;https://www.cedim.kit.edu/&quot; matTooltip=&quot;Center f">CEDIM</pc> at <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK_2" type="other" dispStart=" Risk Reduction Technology&quot;>CEDIM&lt;/a> at 
-            &lt;a href=&quot;https://www.ki">KIT</pc> and the <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK_3" type="other" dispStart=" Institute of Technology&quot;>KIT&lt;/a> and the 
-            &lt;a href=&quot;https://docs.google.com/spreadsheets/d/">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc></target></segment>
+        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;http://risklayer.com/&quot;>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK_1" type="other" dispStart="&lt;a href=&quot;https://www.cedim.kit.edu/&quot;
+    matTooltip=&quot;Center for Disaster Management and Risk Reduction Technology&quot;>">CEDIM</pc> at <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK_2" type="other" dispStart="&lt;a href=&quot;https://www.kit.edu/&quot; matTooltip=&quot;Karlsruhe Institute of Technology&quot;>">KIT</pc> and the <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK_3" type="other" dispStart="&lt;a href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#&quot;>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc></source>
+      <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;http://risklayer.com/&quot;>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK_1" type="other" dispStart="&lt;a href=&quot;https://www.cedim.kit.edu/&quot;
+    matTooltip=&quot;Center for Disaster Management and Risk Reduction Technology&quot;>">CEDIM</pc> at <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK_2" type="other" dispStart="&lt;a href=&quot;https://www.kit.edu/&quot; matTooltip=&quot;Karlsruhe Institute of Technology&quot;>">KIT</pc> and the <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK_3" type="other" dispStart="&lt;a href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#&quot;>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc></target></segment>
     </unit><unit id="tooltipHospitalLastUpdate">
       <notes>
 
@@ -1686,18 +1703,10 @@
     </unit><unit id="legendDatasourceDivi">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:100</note></notes>
+      <note category="location">src/app/shared/data-source/data-source.component.html:20</note></notes>
       <segment state="final">
-        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="5>
-    &lt;/div>
-  
-    &lt;div>
-      &lt;" dispEnd="n=&quot;@">DIVI Intensivregister</pc></source>
-      <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="5>
-    &lt;/div>
-  
-    &lt;div>
-      &lt;" dispEnd="n=&quot;@">DIVI Intensivregister</pc></target></segment>
+        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://intensivregister.de&quot;>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></source>
+      <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://intensivregister.de&quot;>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></target></segment>
     </unit><unit id="buttonPanelTooltipVideo">
       <notes>
         <note category="location">src/app/button-panel/button-panel.component.html:8</note>

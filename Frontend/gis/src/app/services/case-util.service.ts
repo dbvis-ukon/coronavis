@@ -62,10 +62,6 @@ export class CaseUtilService {
     return this.getTimedStatus(data, getMoment(options.date));
   }
 
-  public getNowPrevTimedStatusTupleWithOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): [RKICaseTimedStatus | undefined, RKICaseTimedStatus | undefined] {
-    return this.getNowPrevTimedStatusTuple(data, options.date, options.timeWindow);
-  }
-
   public getNowPrevTimedStatusTuple(data: RKICaseDevelopmentProperties, refDateStr: string, timeWindow: CovidNumberCaseTimeWindow): [RKICaseTimedStatus | undefined, RKICaseTimedStatus | undefined] {
     const dateRef = getMoment(refDateStr);
     let currentTimedStatus = this.getTimedStatus(data, dateRef);
@@ -98,10 +94,14 @@ export class CaseUtilService {
     return fc.features.map(d => this.getCaseNumbers(d.properties, options));
   }
 
-  public getCaseNumbers(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): number {
+  public getCaseNumbers(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions, refDate?: string): number {
+    if (!refDate) {
+      refDate = options.date;
+    }
+
     const typeAccessor = this.getTypeAccessorFnWithOptions(options);
 
-    const [currentTimedStatus, prevTimedStatus] = this.getNowPrevTimedStatusTupleWithOptions(data, options);
+    const [currentTimedStatus, prevTimedStatus] = this.getNowPrevTimedStatusTuple(data, refDate, options.timeWindow);
 
     if (!currentTimedStatus) {
       return undefined;
@@ -140,33 +140,55 @@ export class CaseUtilService {
       unnormalizedResult / currentTimedStatus.population;
   }
 
-  public extractXYForCase7DaysPer100k(data: RKICaseDevelopmentProperties) {
+  public extractXYByOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): Observable<{x: string; y: number}[]> {
     return of(data)
     .pipe(
       mergeMap(d1 => d1.developments),
-      // filter((_, i) => i >= data.developments.length - 7),
       filter(d => d.inserted !== null && d.inserted !== undefined),
       map(d => {
-        let t = null;
-        if (!d.cases7_per_100k) {
-          t = this.getNowPrevTimedStatusTuple(data, getStrDate(getMoment(d.timestamp)), CovidNumberCaseTimeWindow.sevenDays);
+        const x = getStrDate(getMoment(d.timestamp));
+        let y = null;
+
+        if (
+          options.normalization === CovidNumberCaseNormalization.per100k
+          && options.timeWindow === CovidNumberCaseTimeWindow.sevenDays
+          && options.type === CovidNumberCaseType.cases
+          && d.cases7_per_100k) {
+            y = d.cases7_per_100k;
+        } else {
+          // do it manually
+          y = this.getCaseNumbers(data, options, x);
+
+          if (options.normalization === CovidNumberCaseNormalization.per100k) {
+            y *= 100000;
+          }
         }
+
+        let y2 = options.type === CovidNumberCaseType.cases ? d.cases : d.deaths;
+
+        if (options.normalization === CovidNumberCaseNormalization.per100k) {
+          y2 = y2 / d.population * 100000;
+        }
+
         return {
-          x: getStrDate(getMoment(d.timestamp)),
-          y: d.cases7_per_100k || (t[0].cases_per_100k - t[1].cases_per_100k)}; }),
+          x,
+          y,
+          y2
+        };
+      }),
       toArray()
     );
   }
 
-  public getTrendForCase7DaysPer100k(data: RKICaseDevelopmentProperties, date: string, lastNItems: number): Observable<{m: number; b: number}> {
-    const refDate = getMoment(date);
+  public getTrendForCase7DaysPer100k(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): Observable<{m: number; b: number}> {
+    const refDate = getMoment(options.date);
 
-    return this.extractXYForCase7DaysPer100k(data)
+    return this.extractXYByOptions(data, options)
     .pipe(
       map(d => {
         const myXY = d
           .filter(d1 => getMoment(d1.x).isSameOrBefore(refDate))
-          .filter((_, i, n) => i >= (n.length - lastNItems))
+          .filter((_, i, n) => i >= (n.length - options.daysForTrend))
           .map((d1, i) => ({x: i, y: d1.y}));
 
         return linearRegression(myXY);

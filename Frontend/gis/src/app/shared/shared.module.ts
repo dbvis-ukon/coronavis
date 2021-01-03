@@ -16,6 +16,8 @@ import { ResizedDirective } from './resize.directive';
 import { TranslatePipe } from './translate.pipe';
 import { WithLoadingPipe } from './with-loading.pipe';
 import { VegaComponent } from './vega/vega.component';
+import { DataSourceComponent } from './data-source/data-source.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -28,7 +30,8 @@ import { VegaComponent } from './vega/vega.component';
     WithLoadingPipe,
     BedInlineLegendComponent,
     HospitalSearchComponent,
-    VegaComponent
+    VegaComponent,
+    DataSourceComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +43,8 @@ import { VegaComponent } from './vega/vega.component';
     MatAutocompleteModule,
     MatIconModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTooltipModule
   ],
   exports: [
     CommonModule,
@@ -52,7 +56,8 @@ import { VegaComponent } from './vega/vega.component';
     WithLoadingPipe,
     BedInlineLegendComponent,
     HospitalSearchComponent,
-    VegaComponent
+    VegaComponent,
+    DataSourceComponent
   ],
   providers: [
     TranslatePipe,

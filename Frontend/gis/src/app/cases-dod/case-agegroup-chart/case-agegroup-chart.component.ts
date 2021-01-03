@@ -4,6 +4,7 @@ import { CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTi
 import { CaseDevelopmentRepository } from 'src/app/repositories/case-development.repository';
 import { RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { VegaPixelchartService } from '../../services/vega-pixelchart.service';
+import { CovidChartOptions, TimeGranularity, ScaleType } from '../covid-chart-options';
 
 @Component({
   selector: 'app-case-agegroup-chart',
@@ -26,7 +27,7 @@ export class CaseAgegroupChartComponent implements OnInit {
 
   _data: RKICaseDevelopmentProperties;
 
-  _options: CovidNumberCaseOptions;
+  _options: CovidChartOptions;
 
   @Input()
   public set data(d: RKICaseDevelopmentProperties) {
@@ -40,27 +41,29 @@ export class CaseAgegroupChartComponent implements OnInit {
   }
 
   @Input()
-  public set options(o: CovidNumberCaseOptions) {
+  public set options(o: CovidChartOptions) {
     this._options = JSON.parse(JSON.stringify(o));
 
-    this.updateChart(true);
+    this.updateChart(false);
   }
 
-  public get options(): CovidNumberCaseOptions {
+  public get options(): CovidChartOptions {
     return this._options;
   }
 
   spec: any;
 
-  timeAggs = ['yearmonthdate', 'week'];
-  timeAgg = 'yearmonthdate';
+  // timeAggs = ['yearmonthdate', 'yearweek'];
+  // timeAgg = 'yearmonthdate';
 
-  scaleTypes = ['linear', 'sqrt', 'symlog'];
-  scaleType = 'linear';
+  // scaleTypes = ['linear', 'sqrt', 'symlog'];
+  // scaleType = 'linear';
 
   eCovidNumberCaseType = CovidNumberCaseType;
   eCovidNumberCaseNormalization = CovidNumberCaseNormalization;
   eCovidNumberCaseTimeWindow = CovidNumberCaseTimeWindow;
+  eCovidChartTimeGranularity = TimeGranularity;
+  eCovidChartScaleType = ScaleType;
 
   constructor(
     private vegaPixelchartService: VegaPixelchartService,
@@ -92,18 +95,18 @@ export class CaseAgegroupChartComponent implements OnInit {
     switch (this._options.timeWindow) {
       case CovidNumberCaseTimeWindow.twentyFourhours:
         idxDiff = 1;
-        this.timeAgg = 'yearmonthdate';
+        this._options.timeAgg = TimeGranularity.yearmonthdate;
         break;
 
       case CovidNumberCaseTimeWindow.seventyTwoHours:
         idxDiff = 3;
-        this.timeAgg = 'yearmonthdate';
+        this._options.timeAgg = TimeGranularity.yearmonthdate;
         break;
 
       case CovidNumberCaseTimeWindow.sevenDays:
         idxDiff = 7;
         if (autoConfig) {
-          this.timeAgg = 'week';
+          this._options.timeAgg = TimeGranularity.yearweek;
         }
         break;
 
@@ -149,7 +152,7 @@ export class CaseAgegroupChartComponent implements OnInit {
 
     const yAxis = this.i18nAltersgruppe.nativeElement.textContent;
 
-    const xAxis = this.timeAgg === 'week' ? this.i18nWoche.nativeElement.textContent : this.i18nDatum.nativeElement.textContent;
+    const xAxis = this._options.timeAgg === TimeGranularity.yearweek ? this.i18nWoche.nativeElement.textContent : this.i18nDatum.nativeElement.textContent;
 
     const zAxis = this.i18nVal.nativeElement.textContent;
 
@@ -158,8 +161,8 @@ export class CaseAgegroupChartComponent implements OnInit {
       yAxisTitle: yAxis,
       zAxisTitle: zAxis,
       width: 600,
-      scaleType: this.scaleType,
-      timeAgg: this.timeAgg
+      scaleType: this._options.scaleType.toString(),
+      timeAgg: this._options.timeAgg.toString()
     });
   }
 
