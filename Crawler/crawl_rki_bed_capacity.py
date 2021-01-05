@@ -2,6 +2,8 @@
 # coding: utf-8
 # author: Max Fischer
 
+import sys
+
 import datetime
 import logging
 import json
@@ -15,6 +17,7 @@ import requests
 from db_config import SQLALCHEMY_DATABASE_URI
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 logger.info('Crawler for RKI bed capacity per LK')
 
