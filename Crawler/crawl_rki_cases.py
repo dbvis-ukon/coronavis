@@ -108,7 +108,7 @@ try:
 
     logger.info("db data version: %s", last_update)
     logger.info("fetched data version: %s", current_update)
-    logger.info("Num cases in DB %s, num cases fetched %2", num_cases_in_db, len(entries))
+    logger.info("Num cases in DB %s, num cases fetched %s", num_cases_in_db, len(entries))
 
     if last_update is not None and abs((current_update - last_update).total_seconds()) <= 2 * 60 * 60:
         logger.info("No new data available (+/- 2h), skip update")
