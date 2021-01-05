@@ -17,9 +17,8 @@ import pandas as pd
 
 from db_config import SQLALCHEMY_DATABASE_URI
 
-#logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-
 logger = logging.getLogger(__name__)
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 logger.info('Crawler for Risklayer spreadsheet and case data')
 
 #
@@ -77,7 +76,7 @@ while current_try <= NUM_RETRIES:
                 # parsing
                 #
                 logger.info('Parse data')
-                data = pd.read_excel(filepath, sheet_name=None, header=None, na_filter=False)
+                data = pd.read_excel(filepath, sheet_name=['Statistik Überblick', 'Haupt', 'Kreise'], header=None, na_filter=False, engine="openpyxl")
                 break
             except:
                 logger.warning(f'Failed parsing spreadsheet {current_try}/{NUM_RETRIES}, dowloading again...')
