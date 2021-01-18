@@ -9,8 +9,11 @@
       "groupName": "angular packages"
     },
     {
-      "packagePatterns": ["^@typescript-eslint"],
-      "groupName": "typescript eslint packages"
+      "depTypeList": ["devDependencies"],
+      "packagePatterns": ["eslint"],
+      "automerge": true,
+      "updateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "eslint packages"
     },
     {
       "updateTypes": ["lockFileMaintenance"],
