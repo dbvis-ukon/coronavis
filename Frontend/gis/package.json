@@ -83,7 +83,7 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "protractor": "~7.0.0",
     "ts-node": "~9.1.0",
-    "typescript": "~4.0.0",
+    "typescript": "~4.1.0",
     "webpack": "^4.44.2",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "2.22.1",
