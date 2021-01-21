@@ -1,0 +1,68 @@
+<div class="outer">
+    <mat-card>
+      <div class="main">
+          
+
+
+
+        <div class="root timelines draggable-list" cdkDropList (cdkDropListDropped)="drop($event)">
+
+
+            <div class="draggable-box timeline row" *ngFor="let timelineItem of timelineData" cdkDrag>
+              <mat-icon class="icon draw" aria-hidden="false" aria-label="drag me" cdkDragHandle>drag_indicator</mat-icon>
+              
+              <!-- <div class="title">
+                  <h5 *ngIf="!timelineItem.titleEditMode" (click)="timelineItem.titleEditMode = !timelineItem.titleEditMode">{{ timelineItem.title }}</h5>
+      
+                  <mat-form-field class="form" *ngIf="timelineItem.titleEditMode">
+                      <input matInput placeholder="Title" 
+                        [(ngModel)]="timelineItem.title" 
+                        (keydown.enter)="timelineItem.titleEditMode = false" 
+                        (keydown.escape)="timelineItem.titleEditMode = false" 
+                        (blur)="timelineItem.titleEditMode = false"
+                      >
+                  </mat-form-field>
+              </div> -->
+              
+              
+              <div class="icons">
+                <button mat-icon-button aria-label="settings" class="icon filter" (click)="timelineItem.titleEditMode = !timelineItem.titleEditMode" matTooltip="Edit Title" >
+                    <mat-icon>edit</mat-icon>
+                </button>
+      
+                <button *ngIf="timelineItem.type === 'streamgraph'" mat-icon-button aria-label="settings" class="icon filter" (click)="openSettings(timelineItem)" matTooltip="Filter Settings">
+                    <mat-icon>settings</mat-icon>
+                </button> 
+      
+                <button mat-icon-button aria-label="delete" class="icon filter" (click)="remove(timelineItem)" matTooltip="Remove">
+                    <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+      
+              
+      
+              <div *ngIf="timelineItem.type === 'separator'" class="separator">
+                <hr>
+              </div>
+
+              <div *ngIf="timelineItem.type === 'pixel'" style="width: 100%;">
+                <app-pixel-chart [dataRequest]="timelineItem.dataRequest" [options]="timelineItem.config"></app-pixel-chart>
+              </div>
+            </div>
+      
+            <div class="timeline row button-row">
+              <div>
+                <button mat-fab color="primary" [matMenuTriggerFor]="menu">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="add('separator')">-Separator-</button>
+                  <button mat-menu-item (click)="openSettings()">Neuen Chart hinzufügen</button>
+                </mat-menu>
+              </div>
+            </div>
+          </div>
+      </div>
+    </mat-card>
+  </div>
+  

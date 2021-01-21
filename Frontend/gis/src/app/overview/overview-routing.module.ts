@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { GdprComponent } from '../gdpr/gdpr.component';
 import { ImpressumComponent } from '../impressum/impressum.component';
 import { MapRootComponent } from '../map-root/map-root.component';
+import { ComparisonViewComponent } from './comparison/comparison-view/comparison-view.component';
 import { OverviewBedComponent } from './overview-bed/overview-bed.component';
 import { OverviewCaseComponent } from './overview-case/overview-case.component';
 import { OverviewIntroductionComponent } from './overview-introduction/overview-introduction.component';
@@ -50,6 +51,10 @@ const routes: Routes = [
             {
                 path: 'gdpr',
                 component: GdprComponent
+            },
+            {
+                path: 'comparison',
+                component: ComparisonViewComponent
             }
         ]
     }

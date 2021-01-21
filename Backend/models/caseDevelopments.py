@@ -1,3 +1,5 @@
+import re
+
 from flask import jsonify
 from sqlalchemy import text
 
@@ -56,9 +58,13 @@ class CaseDevelopments:
         """
         return self.__resCollection(self.__aggQuery('germany', fromTime, toTime, None))
 
+    def getAggregated(self, aggDict: dict, fromTime: str, toTime: str):
+        return self.__resSingle(self.__aggRegionQuery(aggDict, fromTime, toTime))
+
     @staticmethod
-    def __resCollection(sql_stmt):
-        sql_result = db.engine.execute(sql_stmt).fetchall()
+    def __resCollection(sql_ret):
+        sql_result = sql_ret.fetchall()
+        # sql_result = db.engine.execute(sql_stmt).fetchall()
 
         features = []
         for r in sql_result:
@@ -81,8 +87,8 @@ class CaseDevelopments:
         return jsonify(featurecollection), 200
 
     @staticmethod
-    def __resSingle(sql_stmt):
-        r = db.engine.execute(sql_stmt).fetchone()
+    def __resSingle(sql_ret):
+        r = sql_ret.fetchone()
 
         if r is None:
             return jsonify({'error': 'not found'}), 404
@@ -209,7 +215,7 @@ class CaseDevelopments:
             """
         return ret
 
-    def __aggCols(self):
+    def __aggCols(self, region_agg: bool):
         ageStuff = ""
         if self.dataTable == 'cases_per_county_and_day':
             ageStuff = """
@@ -235,14 +241,27 @@ class CaseDevelopments:
                 SUM(c."p_A60-A79")                                            as "p_A60-A79",
                 SUM(c."p_A80+")                                               as "p_A80+"
             """
-        ret = f"""
+
+        if region_agg:
+            r = """
+            array_agg(DISTINCT r.ids)                                           as ids,
+            array_agg(DISTINCT (r.description || ' ' || r.name))                                          as name,
+            array_agg(DISTINCT r.description)                                   as desc,
+            st_union(DISTINCT r.geom)                                           as geom,
+            """
+        else:
+            r = """
             r.ids                                                               as ids,
             r.name                                                              as name,
+            r.geom                                                              as geom,
+            """
+
+        ret = f"""
+            {r}
             c.timestamp                                                         as timestamp,
             MAX(c.last_updated)                                                 as last_updated,
             MAX(c.inserted)                                                     as inserted,
             string_agg(DISTINCT c.name, ',')                                    as landkreise,
-            r.geom                                                              as geom,
             SUM(cases)                                                          as cases,
             SUM(cases_per_100k)                                                 as cases_per_100k,
             AVG(cases_per_population)                                           as cases_per_population,
@@ -273,15 +292,15 @@ class CaseDevelopments:
         sqlIdObj = ""
 
         if fromTime:
-            sqlFromTime = f"AND agg.timestamp >= '{fromTime}'"
+            sqlFromTime = f"AND agg.timestamp >= :fromTimeParam"
 
         if toTime:
-            sqlToTime = f"AND agg.timestamp <= '{toTime}'"
+            sqlToTime = f"AND agg.timestamp <= :toTimeParam"
 
         if idObj:
-            sqlIdObj = f"AND agg.ids = '{idObj}'"
+            sqlIdObj = f"AND agg.ids = :idParam"
 
-        return text("""
+        sql_stmt = text("""
         WITH agg AS (
             SELECT {development_select_cols}
             FROM {dataTable} c
@@ -322,9 +341,17 @@ class CaseDevelopments:
         GROUP BY agg.ids,
                 agg.name,
                 agg.geom
-        """.format(aggTable=aggTable, development_select_cols=self.__aggCols(),
+        """.format(aggTable=aggTable, development_select_cols=self.__aggCols(region_agg=False),
                    development_json_build_obj=self.__buildObj(), dataTable=self.dataTable, sqlFromTime=sqlFromTime,
                    sqlToTime=sqlToTime, sqlIdObj=sqlIdObj))
+
+        # current_app.logger.debug(f'Counties: {sql_stmt}')
+
+        return db.engine.execute(sql_stmt,
+                                 fromTimeParam=fromTime,
+                                 toTimeParam=toTime,
+                                 idParam=idObj
+                                 )
 
     def __getCounties(self, fromTime, toTime, idCounty):
         """
@@ -337,13 +364,13 @@ class CaseDevelopments:
         sqlIdCounty = ""
 
         if fromTime:
-            sqlFromTime = f"AND agg.timestamp >= '{fromTime}'"
+            sqlFromTime = f"AND agg.timestamp >= :fromTimeParam"
 
         if toTime:
-            sqlToTime = f"AND agg.timestamp <= '{toTime}'"
+            sqlToTime = f"AND agg.timestamp <= :toTimeParam"
 
         if idCounty:
-            sqlIdCounty = f"AND agg.ids = '{idCounty}'"
+            sqlIdCounty = f"AND agg.ids = :idParam"
 
         sql_stmt = text("""
             SELECT
@@ -389,4 +416,111 @@ class CaseDevelopments:
 
         # current_app.logger.debug(f'Counties: {sql_stmt}')
 
-        return sql_stmt
+        return db.engine.execute(sql_stmt,
+                                 fromTimeParam=fromTime,
+                                 toTimeParam=toTime,
+                                 idParam=idCounty
+                                 )
+
+
+    def __aggRegionQuery(self, aggTableDict, fromTime, toTime):
+
+        sqlFromTime = ""
+        sqlToTime = ""
+
+        sqlJoinUnion = []
+
+        regex = re.compile(r"[^0-9]", re.IGNORECASE)
+
+        allIds = []
+
+        number_of_ids = 0
+        ids: str
+        for aggTable, ids in aggTableDict.items():
+            if ids is None:
+                continue
+            ids_sanitized = list(map(lambda d: re.sub(regex, "", d.strip()), ids.split(",")))
+            number_of_ids += len(ids_sanitized)
+            allIds += ids_sanitized
+
+            ids_sanitized_sql = "('" + ("', '".join(ids_sanitized)) + "')"
+
+            desc = ''
+            if aggTable == 'landkreise':
+                aggTable = 'landkreise_extended'
+                desc = "bez AS description"
+            elif aggTable == 'regierungsbezirke':
+                desc = "'RB' AS description"
+            elif aggTable == 'bundeslaender':
+                desc = "'BL' AS description"
+            elif aggTable == 'laender':
+                desc = "'L' AS description"
+
+            sqlJoinUnion += [(f"SELECT ids, geom, name, {desc} FROM {aggTable} WHERE ids IN {ids_sanitized_sql}")]
+
+
+
+        sqlJoins = " ( " + (" UNION ".join(sqlJoinUnion)) + " ) AS r"
+
+        if fromTime:
+            sqlFromTime = f"AND agg.timestamp >= :fromTimeParam"
+
+        if toTime:
+            sqlToTime = f"AND agg.timestamp <= :toTimeParam"
+
+
+        allIdsSql = "('" + ("', '".join(allIds)) + "')"
+        sqlIdObj = f"AND r.ids IN {allIdsSql}"
+
+        sql_stmt = text("""
+        WITH agg AS (
+            SELECT {development_select_cols}
+            FROM {dataTable} c
+            JOIN {sqlJoins} ON (c.ids LIKE (r.ids || '%') OR r.ids = 'de')
+            WHERE 1=1
+            {sqlIdObj}
+            GROUP BY c.timestamp
+            HAVING COUNT(DISTINCT r.ids) = {number_of_ids}
+        )
+        SELECT agg.ids,
+            agg.name,
+            agg.desc,
+            st_asgeojson(agg.geom) :: jsonb             AS geom,
+            st_asgeojson(st_centroid(agg.geom)):: jsonb AS centroid,
+            -- check if the first value is null, can ONLY happen if there are no values for the landkreis, then we return null
+            CASE
+                WHEN min(agg.timestamp) IS NULL THEN NULL
+                ELSE json_agg(
+                        {development_json_build_obj}
+                        ORDER BY
+                            agg.timestamp
+                    )::jsonb
+                END                                       AS development,
+            CASE
+                WHEN min(agg.timestamp) IS NULL THEN NULL
+                ELSE json_object_agg(
+                        agg.timestamp::date,
+                        {development_json_build_obj}
+                        ORDER BY
+                            agg.timestamp
+                    )::jsonb
+                END                                       AS developmentDays
+        FROM agg
+        WHERE 1 = 1
+            {sqlFromTime}
+            {sqlToTime}
+        GROUP BY agg.ids,
+                agg.name,
+                agg.geom,
+                agg.desc
+        """.format(aggTable=aggTable, development_select_cols=self.__aggCols(region_agg=True),
+                   development_json_build_obj=self.__buildObj(), dataTable=self.dataTable, sqlFromTime=sqlFromTime,
+                   sqlToTime=sqlToTime, sqlIdObj=sqlIdObj, sqlJoins=sqlJoins, number_of_ids=number_of_ids))
+
+        # current_app.logger.debug(f'Agg Regions: {sql_stmt}')
+
+        # return sql_stmt
+        return db.engine.execute(sql_stmt,
+                                 fromTimeParam=fromTime,
+                                 toTimeParam=toTime
+                                 )

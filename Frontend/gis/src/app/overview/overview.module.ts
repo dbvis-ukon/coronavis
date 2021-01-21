@@ -15,6 +15,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HelpModule } from '../help/help.module';
 import { SharedModule } from '../shared/shared.module';
+import { ComparisonModule } from './comparison/comparison.module';
 import { D3ChoroplethMapComponent } from './d3-choropleth-map/d3-choropleth-map.component';
 import { OverviewBedComponent } from './overview-bed/overview-bed.component';
 import { OverviewCaseComponent } from './overview-case/overview-case.component';
@@ -53,7 +54,8 @@ import { SubscriptionComponent } from './subscription/subscription.component';
     MatListModule,
     MatRadioModule,
     MatCheckboxModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ComparisonModule
   ],
   providers: [
   ],

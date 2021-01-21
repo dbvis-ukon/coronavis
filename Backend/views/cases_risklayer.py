@@ -66,6 +66,18 @@ def get_country(idCountry):
     return cd.getCountry(request.args.get('from'), request.args.get('to'), idCountry)
 
 
+@routes.route('/development/aggregated', methods=['GET'])
+@cache.cached(key_prefix=make_cache_key)
+@timer
+def get_aggregated():
+    return cd.getAggregated({
+        'landkreise': request.args.get('landkreise'),
+        'regierungsbezirke': request.args.get('regierungsbezirke'),
+        'bundeslaender': request.args.get('bundeslaender'),
+        'laender': request.args.get('laender')
+    },request.args.get('from'), request.args.get('to'))
+
+
 @routes.route('/prognosis', methods=['GET'])
 @cache.cached()
 def get_prognosis():

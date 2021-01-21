@@ -97,7 +97,7 @@ export class VegaPixelchartService {
       xAxisTitle: string;
       yAxisTitle: string;
       zAxisTitle: string;
-      width: number;
+      width: number | 'container';
       scaleType: string;
       timeAgg: string;
     }
