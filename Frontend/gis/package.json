@@ -87,7 +87,7 @@
     "webpack": "^4.44.2",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "2.22.1",
-    "eslint-plugin-jsdoc": "31.2.0",
+    "eslint-plugin-jsdoc": "31.2.1",
     "eslint-plugin-prefer-arrow": "1.2.2",
     "@angular-eslint/builder": "1.1.0",
     "@angular-eslint/eslint-plugin": "1.1.0",
