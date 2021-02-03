@@ -169,56 +169,56 @@ cd = CaseDevelopments('cases_per_county_and_day')
 
 
 @routes.route('/development/landkreise', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_counties():
     return cd.getByCounties(request.args.get('from'), request.args.get('to'))
 
 
 @routes.route('/development/regierungsbezirke', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_districts():
     return cd.getByDistricts(request.args.get('from'), request.args.get('to'))
 
 
 @routes.route('/development/bundeslaender', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_states():
     return cd.getByStates(request.args.get('from'), request.args.get('to'))
 
 
 @routes.route('/development/laender', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_countries():
     return cd.getByCountries(request.args.get('from'), request.args.get('to'))
 
 
 @routes.route('/development/landkreis/<idCounty>', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_county(idCounty):
     return cd.getCounty(request.args.get('from'), request.args.get('to'), idCounty)
 
 
 @routes.route('/development/regierungsbezirk/<idDistrict>', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_district(idDistrict):
     return cd.getDistrict(request.args.get('from'), request.args.get('to'), idDistrict)
 
 
 @routes.route('/development/bundesland/<idState>', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_state(idState):
     return cd.getState(request.args.get('from'), request.args.get('to'), idState)
 
 
 @routes.route('/development/land/<idCountry>', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_country(idCountry):
     return cd.getCountry(request.args.get('from'), request.args.get('to'), idCountry)

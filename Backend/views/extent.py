@@ -8,8 +8,8 @@ routes = Blueprint('extent', __name__, url_prefix='/extent')
 
 
 @routes.route('/', methods=['GET'])
-@cache.cached()
 @timer
+@cache.cached()
 def get_extent():
     """
         Returns the extent of our data
