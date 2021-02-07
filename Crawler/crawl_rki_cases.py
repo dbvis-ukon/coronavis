@@ -92,7 +92,7 @@ for el in data:
     } for casetype in cc]
     entries.extend(entry)
 
-logger.debug('current cases: %s', len(entries))
+logger.debug('current entries: %s', len(entries))
 
 aquery = 'INSERT INTO cases(datenbestand, idbundesland, bundesland, landkreis, idlandkreis, objectid, meldedatum, gender, agegroup, casetype) VALUES %s'
 try:
@@ -108,7 +108,7 @@ try:
 
     logger.info("db data version: %s", last_update)
     logger.info("fetched data version: %s", current_update)
-    logger.info("Num cases in DB %s, num cases fetched %s", num_cases_in_db, len(entries))
+    logger.info("Num entries in DB %s, num entries fetched %s", num_cases_in_db, len(entries))
 
     if last_update is not None and abs((current_update - last_update).total_seconds()) <= 2 * 60 * 60:
         logger.info("No new data available (+/- 2h), skip update")
@@ -116,6 +116,9 @@ try:
     elif len(entries) < (num_cases_in_db - 1000):
         # when we have less entries fetched than we already have in the DB the RKI API probably did not return all cases
         logger.error("RKI API data blob is incomplete. Will fail this job and try again at next crawl time.")
+        exit(2)
+    elif (len(entries) - num_cases_in_db) > 100000:
+        logger.error("{} new entries in a single update (> 100k). Seems RKI API data blob is errornous. Will fail this job and try again at next crawl time.".format((len(entries) - num_cases_in_db)))
         exit(2)
     else:
         logger.info('Insert new data into DB (takes 2-5 seconds)...')
