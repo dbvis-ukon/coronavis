@@ -53,6 +53,8 @@ export class CaseAgegroupChartComponent implements OnInit {
 
   spec: any;
 
+  hasPopulationData = true;
+
   // timeAggs = ['yearmonthdate', 'yearweek'];
   // timeAgg = 'yearmonthdate';
 
@@ -91,6 +93,9 @@ export class CaseAgegroupChartComponent implements OnInit {
   }
 
   private compileChart(fullData: RKICaseDevelopmentProperties, autoConfig: boolean) {
+    this.hasPopulationData = !fullData.developments[0].population_by_agegroup.A00_A04 === null;
+
+
     let idxDiff = 1;
     switch (this._options.timeWindow) {
       case CovidNumberCaseTimeWindow.twentyFourhours:
@@ -155,6 +160,8 @@ export class CaseAgegroupChartComponent implements OnInit {
     const xAxis = this._options.timeAgg === TimeGranularity.yearweek ? this.i18nWoche.nativeElement.textContent : this.i18nDatum.nativeElement.textContent;
 
     const zAxis = this.i18nVal.nativeElement.textContent;
+
+    console.log(JSON.parse(JSON.stringify(data)));
 
     this.spec = this.vegaPixelchartService.compileChart(data, {
       xAxisTitle: xAxis,

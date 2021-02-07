@@ -4,7 +4,13 @@
 <span class="hidden" #i18nVal i18n="@@caseDodZAxisVal">7-Tages-Inzidenz</span>
 
 
-<app-vega [spec]="spec"></app-vega>
+<p i18n="@@agregroupChartNoPopDataError" class="error" *ngIf="hasPopulationData === false && _options.normalization === eCovidNumberCaseNormalization.per100k">
+    Leider liegen für diesen Kreis keine Populationsdaten nach Altersstruktur vor. 
+    Falls sie diese Daten zur Verfügung stellen können melden sie diese bitte an support@dbvis.inf.uni-konstanz.de.
+    Sie können die Einstellung "Keine Normalisierung" wählen damit diese Visualisierung funktioniert.
+</p>
+
+<app-vega *ngIf="!(hasPopulationData === false && _options.normalization === eCovidNumberCaseNormalization.per100k)" [spec]="spec"></app-vega>
 
 
 <app-data-source source="rki"></app-data-source>
