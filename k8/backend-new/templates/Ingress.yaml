@@ -21,7 +21,9 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: {{ .Release.Name }}
-              servicePort: http
-
+              service:
+                name: {{ .Release.Name }}
+                port:
+                  name: http
