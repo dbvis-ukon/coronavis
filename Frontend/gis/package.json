@@ -37,7 +37,7 @@
     "es5-shim": "^4.5.14",
     "es6-shim": "^0.35.6",
     "json-url": "^2.6.0",
-    "leaflet": "github:dbvis-ukon/Leaflet#v1.6.0.3-fixed",
+    "leaflet": "github:dbvis-ukon/Leaflet#aa2095232c4c0b5b2f5435f1594084c1f97a7b90",
     "lodash-es": "^4.17.15",
     "moment": "^2.29.1",
     "ng2-nouislider": "^1.8.2",
