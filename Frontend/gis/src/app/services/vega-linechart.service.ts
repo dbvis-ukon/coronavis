@@ -13,7 +13,7 @@ import {
 export class VegaLinechartService {
 
   barChartTemplateSpec = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "data": {
       "values": [
         {"x": "2020-03-21", "y": 16.121966178918775},

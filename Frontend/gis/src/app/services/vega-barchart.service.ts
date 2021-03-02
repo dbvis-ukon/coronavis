@@ -11,7 +11,7 @@ import { QualitativeColormapService } from './qualitative-colormap.service';
 export class VegaBarchartService {
 
   barChartTemplateSpec = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "height": 100,
     "width": 60,
     "description": "A simple bar chart with rounded corners at the end of the bar.",
