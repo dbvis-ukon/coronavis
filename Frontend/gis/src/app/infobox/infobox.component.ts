@@ -453,7 +453,11 @@ export class InfoboxComponent implements OnInit {
       map(([diviFiltered, diviUnfiltered, rki, prognosis, refDate]) => {
         this.aggregatedDiviStatistics = diviFiltered;
 
-        const rkiOutdated = getMoment(refDate).endOf('day').subtract(1, 'day').isAfter(getMoment(rki.timestamp));
+        let rkiOutdated;
+
+        if (rki) {
+          rkiOutdated = getMoment(refDate).endOf('day').subtract(1, 'day').isAfter(getMoment(rki.timestamp));
+        }
 
         const combinedStats = {
           diviFiltered,
@@ -465,8 +469,8 @@ export class InfoboxComponent implements OnInit {
             {name: 'ICU high', accessor: 'showIcuHigh', accFunc: (d: QualitativeTimedStatus) => d.icu_high_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.icu_high_state), description: 'ICU high care = Monitoring, invasive Beatmung, Organersatztherapie, vollständige intensivmedizinische Therapiemöglichkeiten'},
             {name: 'ECMO', accessor: 'showEcmo', accFunc: (d: QualitativeTimedStatus) => d.ecmo_state, color: this.colormapService.getBedStatusColor(diviFiltered, (d) => d.ecmo_state), description: 'ECMO = Zusätzlich ECMO'}
           ],
-          casesCountiesAvailable: rki.num_counties_reported,
-          casesCountiesTotal: rki.num_counties_total,
+          casesCountiesAvailable: rki?.num_counties_reported,
+          casesCountiesTotal: rki?.num_counties_total,
           risklayerPrognosis: Math.round(prognosis.prognosis)
         } as CombinedStatistics;
 
