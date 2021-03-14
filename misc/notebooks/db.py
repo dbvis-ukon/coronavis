@@ -1,18 +1,16 @@
-import psycopg2
-
-DATABASE_FILE = 'corona_app'
-SQLALCHEMY_DATABASE_URI = 'postgresql://' # Fallback to Zero
-SQLALCHEMY_ECHO = True
+import psycopg2 as pg
+import psycopg2.extensions
+import psycopg2.extras
 
 import logging
 import os
 from urllib.parse import quote
 
-import sentry_sdk
-from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
-
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
+
+DATABASE_FILE = 'corona_app'
+SQLALCHEMY_DATABASE_URI = 'postgresql://'  # Fallback to Zero
 
 # create postgresql connection string
 try:
@@ -27,20 +25,13 @@ try:
     else:
         SQLALCHEMY_DATABASE_URI = f"postgresql://{quote(DB_USER, safe='')}:{quote(DB_PASS, safe='')}@{quote(DB_HOST, safe='')}:{quote(DB_PORT, safe='')}/{quote(DB_NAME, safe='')}"
 
-    SENTRY_DSN = os.environ.get('SENTRY_DSN').replace('\n', '')
     VERSION = os.environ.get('VERSION').replace('\n', '')
     ENVIRONMENT = os.environ.get('ENVIRONMENT').replace('\n', '')
-    sentry_sdk.init(
-        environment=ENVIRONMENT,
-        release=VERSION,
-        dsn=SENTRY_DSN, 
-        integrations=[SqlalchemyIntegration()]
-    )
 
 except KeyError as e:
     logger.warning('One or multiple necessary environment variables not set.')
     raise e
-    exit(1)
+
 
 def get_connection():
     conn = pg.connect(SQLALCHEMY_DATABASE_URI)
