@@ -48,7 +48,7 @@
         "@typescript-eslint/naming-convention": "off",
         "prefer-arrow/prefer-arrow-functions": "off",
         "@angular-eslint/no-input-rename": "off",
-        "no-shadow":"off",
+        "no-shadow": "off",
         "@typescript-eslint/ban-types": "warn"
       }
     },
