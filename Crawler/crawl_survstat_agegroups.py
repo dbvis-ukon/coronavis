@@ -533,7 +533,7 @@ def fetch_county(county):
             # Totals still included, setting `true` yields duplicates
             "IncludeTotalColumn": False,
             "IncludeTotalRow": False,
-            "IncludeNullRows": False,
+            "IncludeNullRows": True,
             "IncludeNullColumns": True,
             "HierarchyFilters": factory.FilterCollection(
                 [
@@ -595,7 +595,10 @@ def fetch_county(county):
     entries = []
 
     for rowName, row in agg.iterrows():
-        year = rowName[0:4]
+        year = int(rowName[0:4])
+        if year < 2020:
+            continue
+
         kw = rowName[7:10]
 
         entry = row.to_dict()
@@ -623,6 +626,10 @@ for c in counties.keys():
     except Exception as e:
         ex = True
         logger.exception("Something went wrong fetching the data", exc_info=e)
+
+logger.info('Refreshing materialized view')
+cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW cases_per_county_and_day;')
+conn.commit()
 
 if ex:
     exit(1)
