@@ -65,6 +65,18 @@
   </div>
 
   <div class="toggleGroup">
+    <h5 i18n="@@caseDodAgeBinning">Altersgruppen</h5>
+    <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="chartOptions.ageGroupBinning"
+      (change)="chartOptions.ageGroupBinning = $event.value; updateChartOptions()">
+      <mat-button-toggle i18n="@@caseDodAgeGroupBinningAll" [value]="eAgeGroupBinning.all" 
+        [disabled]="chartOptions.type !== eType.cases">Altersjahre</mat-button-toggle>
+      <mat-button-toggle i18n="@@caseDodAgeGroupBinningFiveYears" [value]="eAgeGroupBinning.fiveyears"
+        [disabled]="chartOptions.type !== eType.cases">5 Jahre</mat-button-toggle>
+      <mat-button-toggle i18n="@@caseDodAgeGroupBinningRKI" [value]="eAgeGroupBinning.rki">RKI Schema</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="toggleGroup">
     <h5 i18n="@@csaeDodScaling">Skalierung</h5>
     <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="chartOptions.scaleType"
       (change)="chartOptions.scaleType = $event.value; updateChartOptions()">

@@ -8,7 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
 export class DataSourceComponent implements OnInit {
 
   @Input()
-  source: 'rki' | 'risklayer' | 'divi' | 'zensus';
+  source: 'rki' | 'risklayer' | 'divi' | 'zensus' | 'survstat';
+
+  now = new Date();
 
   constructor() { }
 

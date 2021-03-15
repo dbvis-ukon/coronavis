@@ -12,9 +12,17 @@ export enum ScaleType {
     symlog = 'symlog'
 }
 
+export enum AgeGroupBinning {
+    all = 'all',
+    fiveyears = 'fiveyears',
+    rki = 'rki'
+}
+
 
 export interface CovidChartOptions extends CovidNumberCaseOptions {
     timeAgg: TimeGranularity;
 
     scaleType: ScaleType;
+
+    ageGroupBinning: AgeGroupBinning;
 }

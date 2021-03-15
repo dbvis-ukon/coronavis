@@ -97,9 +97,11 @@ export class VegaPixelchartService {
       xAxisTitle: string;
       yAxisTitle: string;
       zAxisTitle: string;
-      width: number;
+      width: number | 'container';
+      height: number;
       scaleType: string;
       timeAgg: string;
+      domain?: [number, number];
     }
     ): any {
     if (!data) {
@@ -125,6 +127,11 @@ export class VegaPixelchartService {
     spec.encoding.x.timeUnit = chartOptions.timeAgg || 'yearmonthdate';
 
     spec.width = chartOptions.width;
+    spec.height = chartOptions.height;
+
+    if (chartOptions.domain) {
+      spec.encoding.color.scale.domain = chartOptions.domain;
+    }
 
     return spec;
   }

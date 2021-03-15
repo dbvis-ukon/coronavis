@@ -4,6 +4,7 @@ import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOpt
 import { CaseDevelopmentRepository } from 'src/app/repositories/case-development.repository';
 import { RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from 'src/app/services/case-util.service';
+import { getMoment, getStrDate } from 'src/app/util/date-util';
 
 @Component({
   selector: 'app-case-table',
@@ -73,7 +74,8 @@ export class CaseTableComponent implements OnInit {
     this.caseRepo.getCasesDevelopmentForAggLevelSingle(
       this.options.dataSource,
       this.options.aggregationLevel,
-      this.dataId
+      this.dataId,
+      getStrDate(getMoment(this.options.date).add(1, 'day'))
     ).subscribe(d => {
       const data = d.properties;
 
@@ -92,7 +94,7 @@ export class CaseTableComponent implements OnInit {
       this.sevenDaysTimedStatus = this.caseUtil.getTimedStatusByIdx(data, refIdx - 7);
 
 
-      const slice = data.developments.slice().reverse().find(d => d.inserted);
+      const slice = data.developments.slice().reverse().find(d1 => d1.inserted);
 
       this.lastUpdated = slice ? slice.inserted : (this.curTimedStatus.last_updated || this.curTimedStatus.timestamp);
 

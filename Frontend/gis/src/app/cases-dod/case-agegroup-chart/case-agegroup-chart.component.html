@@ -13,5 +13,6 @@
 <app-vega *ngIf="!(hasPopulationData === false && _options.normalization === eCovidNumberCaseNormalization.per100k)" [spec]="spec"></app-vega>
 
 
-<app-data-source source="rki"></app-data-source>
+<app-data-source source="survstat" *ngIf="_options.type === eCovidNumberCaseType.cases"></app-data-source>
+<app-data-source source="rki" *ngIf="_options.type === eCovidNumberCaseType.deaths"></app-data-source>
 <app-data-source source="zensus"></app-data-source>

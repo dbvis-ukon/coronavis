@@ -5,9 +5,7 @@ import { I18nService, SupportedLocales } from '../../services/i18n.service';
 @Component({
   selector: 'app-vega',
   template: `
-  <div>
-    <div #chart></div>
-  </div>
+    <div class="chart" #chart></div>
   `,
   styleUrls: ['./vega.component.less']
 })
