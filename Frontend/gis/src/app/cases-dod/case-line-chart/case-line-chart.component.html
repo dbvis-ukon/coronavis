@@ -3,7 +3,7 @@
 <span class="hidden" #i18nPerDay i18n="@@caseLineChartPerDay">{tDay, plural, =1 {Tag} other {{{tDay}} Tage}}</span>
 
 <div class="trend-wrapper">
-    <div *ngIf="rollingChart | async; let chart; else elseBlock">
+    <div *ngIf="rollingChart | async; let chart; else elseBlock" class="chart-wrapper">
         <app-vega [spec]="chart"></app-vega>
     </div>
 

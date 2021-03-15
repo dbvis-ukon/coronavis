@@ -442,7 +442,7 @@ export class VegaLinechartService {
       xAxisTitle: string;
       yAxisTitle: string;
       yAxis2Title: string;
-      width: number;
+      width: number | 'container';
       height: number;
       regression? : {
         from: string;
