@@ -450,7 +450,7 @@ FROM cc a
          LEFT JOIN bed_capacity bc
                    ON bc2le.bed_capacity_name::text = bc.county::text AND bc.datenbestand::date = a."timestamp"::date
          LEFT OUTER JOIN survstat_cases_agegroup surv ON surv.ags::text = a.ids
-                                                                AND extract(year from a.timestamp) = surv.year
+                                                                AND extract(isoyear from a.timestamp) = surv.year
                                                                 AND extract(week from a.timestamp) = surv.week
          LEFT OUTER JOIN population_survstat_agegroup pop_surv ON a.ids = pop_surv.ags::text
 ORDER BY a."timestamp", a.name;
