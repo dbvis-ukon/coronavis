@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { merge } from 'lodash-es';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties } from '../../repositories/types/in/quantitative-rki-case-development';
-import { CovidChartOptions, ScaleType, TimeGranularity } from '../covid-chart-options';
+import { AgeGroupBinning, CovidChartOptions, ScaleType, TimeGranularity } from '../covid-chart-options';
 
 @Component({
   selector: 'app-case-info',
@@ -23,7 +23,8 @@ export class CaseInfoComponent {
     if (o) {
       this.chartOptions = {...merge<CovidNumberCaseOptions, Partial<CovidChartOptions>>(o, {
         timeAgg: TimeGranularity.yearmonthdate,
-        scaleType: ScaleType.linear
+        scaleType: ScaleType.linear,
+        ageGroupBinning: AgeGroupBinning.fiveyears
       })} as CovidChartOptions;
     }
   }
@@ -47,6 +48,8 @@ export class CaseInfoComponent {
   eType = CovidNumberCaseType;
 
   eNorm = CovidNumberCaseNormalization;
+
+  eAgeGroupBinning = AgeGroupBinning;
 
   eGran = TimeGranularity;
 
