@@ -111,7 +111,35 @@ class CaseDevelopments:
     def __build_obj(self):
         age_stuff = ""
         if self.data_table == 'cases_per_county_and_day':
-            age_stuff = """
+            ranges = [[0, 30], [30, 60], [60, 80]]
+
+            c2 = []
+            p2 = []
+            for r in ranges:
+                c2i = "json_build_object("
+                p2i = "json_build_object("
+                for a in range(r[0], r[1]):
+                    c2i += "'A{:02d}', agg.\"c2_A{:02d}\"".format(a, a)
+                    p2i += "'A{:02d}', agg.\"p2_A{:02d}\"".format(a, a)
+                    if a < r[1]-1 or r[1] == 80:
+                        c2i += ", "
+                        p2i += ", "
+
+                if r[1] == 80:
+                    c2i += "'A80plus', agg.\"c2_A80+\", "
+                    c2i += "'Aunknown', agg.\"c2_AUnbekannt\""
+                    p2i += "'A80plus', agg.\"p2_A80+\""
+
+                c2i += ")::jsonb"
+                p2i += ")::jsonb"
+
+                c2.append(c2i)
+                p2.append(p2i)
+
+            c2str = " || ".join(c2)
+            p2str = " || ".join(p2)
+
+            age_stuff = f"""
                 ,
                 'cases_by_agegroup',
                 json_build_object(
@@ -161,7 +189,11 @@ class CaseDevelopments:
                     agg."p_A60-A79",
                     'A80plus',
                     agg."p_A80+"
-                )::jsonb
+                )::jsonb,
+                'cases_survstat_by_agegroup',
+                ({c2str})::jsonb,
+                'population_survstat_by_agegroup',
+                ({p2str})::jsonb
             """
 
         ret = f"""
@@ -218,7 +250,17 @@ class CaseDevelopments:
     def __agg_cols(self, region_agg: bool):
         age_stuff = ""
         if self.data_table == 'cases_per_county_and_day':
-            age_stuff = """
+            c2 = ""
+            p2 = ""
+            for a in range(0, 80):
+                c2 += "SUM(c.\"c2_A{:02d}\")                                            as \"c2_A{:02d}\",\n".format(a,a)
+                p2 += "SUM(c.\"p2_A{:02d}\")                                            as \"p2_A{:02d}\",\n".format(a,a)
+
+            c2 += "SUM(c.\"c2_A80+\")                                            as \"c2_A80+\",\n"
+            c2 += "SUM(c.\"c2_AUnbekannt\")                                      as \"c2_AUnbekannt\",\n"
+            p2 += "SUM(c.\"p2_A80+\")                                            as \"p2_A80+\"\n"
+
+            age_stuff = f"""
                 ,
                 SUM(c."c_A00-A04")                                            as "c_A00-A04",
                 SUM(c."c_A05-A14")                                            as "c_A05-A14",
@@ -239,7 +281,9 @@ class CaseDevelopments:
                 SUM(c."p_A15-A34")                                            as "p_A15-A34",
                 SUM(c."p_A35-A59")                                            as "p_A35-A59",
                 SUM(c."p_A60-A79")                                            as "p_A60-A79",
-                SUM(c."p_A80+")                                               as "p_A80+"
+                SUM(c."p_A80+")                                               as "p_A80+",
+                {c2}
+                {p2}
             """
 
         if region_agg:
