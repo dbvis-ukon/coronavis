@@ -13,6 +13,10 @@
 <app-vega *ngIf="!(hasPopulationData === false && _options.normalization === eCovidNumberCaseNormalization.per100k)" [spec]="spec"></app-vega>
 
 
+<p i18n="@@agegroupChartLastWeekHint" class="hint">
+    Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
+</p>
+
 <app-data-source source="survstat" *ngIf="_options.type === eCovidNumberCaseType.cases"></app-data-source>
 <app-data-source source="rki" *ngIf="_options.type === eCovidNumberCaseType.deaths"></app-data-source>
 <app-data-source source="zensus"></app-data-source>

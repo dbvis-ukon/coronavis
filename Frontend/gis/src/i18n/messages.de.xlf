@@ -220,6 +220,15 @@
 </source>
       <target> Leider liegen für diesen Kreis keine Populationsdaten nach Altersstruktur vor. Falls sie diese Daten zur Verfügung stellen können melden sie diese bitte an support@dbvis.inf.uni-konstanz.de. Sie können die Einstellung "Keine Normalisierung" wählen damit diese Visualisierung funktioniert.
 </target></segment>
+    </unit><unit id="agegroupChartLastWeekHint">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:17,18</note>
+      </notes>
+      <segment state="final">
+        <source> Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
+</source>
+      <target> Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
+</target></segment>
     </unit><unit id="caseLineChartAccumulated">
       <notes>
         <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:1</note>
