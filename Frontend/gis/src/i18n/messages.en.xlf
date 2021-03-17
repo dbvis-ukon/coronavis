@@ -220,6 +220,15 @@
 </source>
       <target> Unfortunately, population data by age structure is not available for this county. If you can provide this data, please report it to support@dbvis.inf.uni-konstanz.de. You can choose the setting "No normalization" for this visualization to work.
 </target></segment>
+    </unit><unit id="agegroupChartLastWeekHint">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:17,18</note>
+      </notes>
+      <segment state="initial">
+        <source> Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
+</source>
+      <target> Incidences for the current calendar week are lower and contain uncertainties. From the middle of the week, trends may become visible.
+</target></segment>
     </unit><unit id="caseLineChartAccumulated">
       <notes>
         <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:1</note>
