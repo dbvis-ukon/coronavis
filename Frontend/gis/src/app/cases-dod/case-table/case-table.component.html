@@ -13,7 +13,18 @@
     </tr>
     <tr>
         <th></th>
-        <th colspan="2">{{ lastUpdated | date:'short' }}</th>
+        <th colspan="2">
+            <div *ngIf="dataOutdated">
+                <p class="data-warning">
+                    <mat-icon color="warn">warning</mat-icon>
+                    {{ lastUpdated | date:'short' }}
+                </p>
+                
+                <p class="errormsg" i18n="@@casesDodTableOutdatedData">Die Daten sind nicht aktuell.</p>
+            </div>
+            
+            <span *ngIf="!dataOutdated">{{ lastUpdated | date:'short' }}</span>
+        </th>
         <th colspan="3" i18n="case-tooltip|24h@@24h" *ngIf="!tooltip">letzte 24h</th>
         <th colspan="3" i18n="case-tooltip|72h@@72h" *ngIf="!tooltip">letzte 72h</th>
         <th colspan="3" i18n="case-tooltip|7d@@7d">letzte 7t</th>

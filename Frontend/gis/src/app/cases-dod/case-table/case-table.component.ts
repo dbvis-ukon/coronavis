@@ -53,6 +53,8 @@ export class CaseTableComponent implements OnInit {
 
   loading = true;
 
+  dataOutdated: boolean;
+
   constructor(
     private caseRepo: CaseDevelopmentRepository,
     private caseUtil: CaseUtilService,
@@ -97,6 +99,8 @@ export class CaseTableComponent implements OnInit {
       const slice = data.developments.slice().reverse().find(d1 => d1.inserted);
 
       this.lastUpdated = slice ? slice.inserted : (this.curTimedStatus.last_updated || this.curTimedStatus.timestamp);
+
+      this.dataOutdated = !(getMoment(this.lastUpdated).isSame(getMoment('now'), 'day'));
 
       this.loading = false;
     });
