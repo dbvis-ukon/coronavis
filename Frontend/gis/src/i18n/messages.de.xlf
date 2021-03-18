@@ -34,8 +34,8 @@
         <note category="location">src/app/cases-dod/case-table/case-table.component.html:23</note>
       </notes>
       <segment state="final">
-        <source>Die Daten sind von gestern.</source>
-      <target>Die Daten sind von gestern.</target></segment>
+        <source>Die Daten sind nicht aktuell.</source>
+      <target>Die Daten sind nicht aktuell.</target></segment>
     </unit><unit id="24h">
       <notes>
         <note category="description">24h</note>

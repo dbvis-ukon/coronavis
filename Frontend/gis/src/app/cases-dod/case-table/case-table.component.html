@@ -20,7 +20,7 @@
                     {{ lastUpdated | date:'short' }}
                 </p>
                 
-                <p class="errormsg" i18n="@@casesDodTableOutdatedData">Die Daten sind von gestern.</p>
+                <p class="errormsg" i18n="@@casesDodTableOutdatedData">Die Daten sind nicht aktuell.</p>
             </div>
             
             <span *ngIf="!dataOutdated">{{ lastUpdated | date:'short' }}</span>
