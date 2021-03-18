@@ -50,7 +50,7 @@ export class CountryAggregatorService {
 
     return this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(AggregationLevel.country, from, to, lastNumberOfDays)
     .pipe(
-      map(fc => fc.features[0].properties.developmentDays[refDate]),
+      map(fc => fc.features[0]?.properties?.developmentDays[refDate]),
     );
   }
 

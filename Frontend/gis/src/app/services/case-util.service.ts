@@ -5,7 +5,7 @@ import { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
 import { filter, map, mergeMap, toArray } from 'rxjs/operators';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
-import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
+import { RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus, SurvStatAgeGroups } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
 import { linearRegression } from '../util/regression';
 
@@ -218,6 +218,45 @@ export class CaseUtilService {
 
   public isHoveredOrSelectedBin(opt: CovidNumberCaseOptions, nmbr: number): boolean {
     return (!opt._binHovered && !opt._binSelection) || this.isHoverBin(opt, nmbr) || this.isSelectedBin(opt, nmbr);
+  }
+
+  public groupAgeStatus(input: SurvStatAgeGroups, ageGroups?: [number, number][]): any {
+    if (!ageGroups) {
+      return input;
+    }
+
+    const out = {};
+
+    for (const a of ageGroups) {
+      let sum = 0;
+      for (let i = a[0]; i <= a[1]; i++) {
+        sum += input[this.getAgeGroupKey(i)] || 0;
+      }
+      let newkey = this.getAgeGroupKey(a[0]) + '-' + this.getAgeGroupKey(a[1]).substring(1);
+      if (a[0] === a[1]) {
+        newkey = this.getAgeGroupKey(a[0]);
+      }
+
+      out[newkey] = sum;
+    }
+
+    return out;
+  }
+
+  private getAgeGroupKey(age: number): string {
+    if (age < 0) {
+      throw new Error('age ' + age + ' out of bounds');
+    }
+
+    if (age >= 80) {
+      return 'A80plus';
+    }
+
+    if (age < 10) {
+      return 'A0' + age;
+    }
+
+    return 'A' + age;
   }
 
   getTypeAccessorFnWithOptions(options: CovidNumberCaseOptions): (d: RKICaseTimedStatus) => number | undefined {

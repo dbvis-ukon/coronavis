@@ -77,7 +77,7 @@
     </unit><unit id="clickForMoreInformation">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:86</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:98</note></notes>
       <segment state="final">
         <source>
     Klicken Sie um mehr Informationen zu erhalten.
@@ -120,38 +120,66 @@
       <segment state="final">
         <source>Wöchentlich</source>
       <target>Wöchentlich</target></segment>
+    </unit><unit id="caseDodAgeBinning">
+      <notes>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:68</note>
+      </notes>
+      <segment state="final">
+        <source>Altersgruppen</source>
+      <target>Altersgruppen</target></segment>
+    </unit><unit id="caseDodAgeGroupBinningAll">
+      <notes>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:72</note>
+      </notes>
+      <segment state="final">
+        <source>Altersjahre</source>
+      <target>Altersjahre</target></segment>
+    </unit><unit id="caseDodAgeGroupBinningFiveYears">
+      <notes>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:74</note>
+      </notes>
+      <segment state="final">
+        <source>5 Jahre</source>
+      <target>5 Jahre</target></segment>
+    </unit><unit id="caseDodAgeGroupBinningRKI">
+      <notes>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:75</note>
+      </notes>
+      <segment state="final">
+        <source>RKI Schema</source>
+      <target>RKI Schema</target></segment>
     </unit><unit id="csaeDodScaling">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:68</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:80</note></notes>
       <segment state="final">
         <source>Skalierung</source>
       <target>Skalierung</target></segment>
     </unit><unit id="caseDodScalingLinear">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:71</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:83</note></notes>
       <segment state="final">
         <source>Linear</source>
       <target>Linear</target></segment>
     </unit><unit id="caseDodScalingSqrt">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:72</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:84</note></notes>
       <segment state="final">
         <source>Quadratwurzel</source>
       <target>Quadratwurzel</target></segment>
     </unit><unit id="caseDodScalingLog">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:73</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:85</note></notes>
       <segment state="final">
         <source>Logarithmisch</source>
       <target>Logarithmisch</target></segment>
     </unit><unit id="caseDodScalingHint">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:76</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:88</note></notes>
       <segment state="final">
         <source>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</source>
       <target>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</target></segment>
@@ -183,6 +211,24 @@
       <segment state="final">
         <source>7-Tages-Inzidenz</source>
       <target>7-Tages-Inzidenz</target></segment>
+    </unit><unit id="agregroupChartNoPopDataError">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:8,11</note>
+      </notes>
+      <segment state="final">
+        <source> Leider liegen für diesen Kreis keine Populationsdaten nach Altersstruktur vor. Falls sie diese Daten zur Verfügung stellen können melden sie diese bitte an support@dbvis.inf.uni-konstanz.de. Sie können die Einstellung "Keine Normalisierung" wählen damit diese Visualisierung funktioniert.
+</source>
+      <target> Leider liegen für diesen Kreis keine Populationsdaten nach Altersstruktur vor. Falls sie diese Daten zur Verfügung stellen können melden sie diese bitte an support@dbvis.inf.uni-konstanz.de. Sie können die Einstellung "Keine Normalisierung" wählen damit diese Visualisierung funktioniert.
+</target></segment>
+    </unit><unit id="agegroupChartLastWeekHint">
+      <notes>
+        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:17,18</note>
+      </notes>
+      <segment state="final">
+        <source> Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
+</source>
+      <target> Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
+</target></segment>
     </unit><unit id="caseLineChartAccumulated">
       <notes>
         <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:1</note>
@@ -218,6 +264,13 @@
       <segment state="final">
         <source>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.zensus2011.de/DE/Home/home_node.html&quot;>" dispEnd="&lt;/a>">Zensus 2011</pc></source>
       <target>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.zensus2011.de/DE/Home/home_node.html&quot;>" dispEnd="&lt;/a>">Zensus 2011</pc></target></segment>
+    </unit><unit id="caseDodDataSourceSurvstat">
+      <notes>
+        <note category="location">src/app/shared/data-source/data-source.component.html:27</note>
+      </notes>
+      <segment state="final">
+        <source>Robert Koch Institut: SurvStat@RKI 2.0, <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://survstat.rki.de&quot;>" dispEnd="&lt;/a>">https://survstat.rki.de</pc>, Abfragedatum: <ph id="1" equiv="INTERPOLATION" disp="{{ now | date:'shortDate' }}"/></source>
+      <target>Robert Koch Institut: SurvStat@RKI 2.0, <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://survstat.rki.de&quot;>" dispEnd="&lt;/a>">https://survstat.rki.de</pc>, Abfragedatum: <ph id="1" equiv="INTERPOLATION" disp="{{ now | date:'shortDate' }}"/></target></segment>
     </unit><unit id="button11">
       <notes>
         <note category="description"> help</note>
@@ -270,8 +323,8 @@
         
       <note category="location">src/app/help/help-dialog-beds/help-dialog-beds.component.html:9</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="bed" dispEnd="ung "><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="s-2" dispEnd="u>&lt;b>">Wo?</pc> (A) Wählen Sie eine Aggregationsstufe für die Darstellung aus:</pc></source>
-      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="bed" dispEnd="ung "><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="s-2" dispEnd="u>&lt;b>">Wo?</pc> (A) Wählen Sie eine Aggregationsstufe für die Darstellung aus:</pc></target></segment>
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Wo?</pc> (A) Wählen Sie eine Aggregationsstufe für die Darstellung aus:</pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Wo?</pc> (A) Wählen Sie eine Aggregationsstufe für die Darstellung aus:</pc></target></segment>
     </unit><unit id="helpdialog-beds-2.1">
       <notes>
         <note category="description"> help</note>
@@ -315,8 +368,8 @@
         
       <note category="location">src/app/help/help-dialog-beds/help-dialog-beds.component.html:19</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="elp" dispEnd="dlun"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="dia" dispEnd="beds-">Was?</pc> (B) Wählen Sie die Art der Behandlungsmöglichkeit:</pc></source>
-      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="elp" dispEnd="dlun"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="dia" dispEnd="beds-">Was?</pc> (B) Wählen Sie die Art der Behandlungsmöglichkeit:</pc></target></segment>
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Was?</pc> (B) Wählen Sie die Art der Behandlungsmöglichkeit:</pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Was?</pc> (B) Wählen Sie die Art der Behandlungsmöglichkeit:</pc></target></segment>
     </unit><unit id="helpdialog-beds-3.0">
       <notes>
         <note category="description"> help</note>
@@ -369,8 +422,8 @@
         
       <note category="location">src/app/help/help-dialog-beds/help-dialog-beds.component.html:31</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="elp" dispEnd="stel"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="| h" dispEnd="pdial">Wieviel?</pc> (C) Darstellung der Bettenauslastung:</pc></source>
-      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="elp" dispEnd="stel"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="| h" dispEnd="pdial">Wieviel?</pc> (C) Darstellung der Bettenauslastung:</pc></target></segment>
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Wieviel?</pc> (C) Darstellung der Bettenauslastung:</pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Wieviel?</pc> (C) Darstellung der Bettenauslastung:</pc></target></segment>
     </unit><unit id="helpdialog-beds-4.1">
       <notes>
         <note category="description"> help</note>
@@ -474,8 +527,8 @@
         
       <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:13</note></notes>
       <segment state="final">
-        <source> Die Fallzahlen basieren auf den offiziellen Daten des Robert-Koch-Institutes (RKI; <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="tutes (RKI; &lt;a href=&quot;esri" dispEnd="I-Da">RKI-Datensätze</pc>). </source>
-      <target> Die Fallzahlen basieren auf den offiziellen Daten des Robert-Koch-Institutes (RKI; <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="tutes (RKI; &lt;a href=&quot;esri" dispEnd="I-Da">RKI-Datensätze</pc>). </target></segment>
+        <source> Die Fallzahlen basieren auf den offiziellen Daten des Robert-Koch-Institutes (RKI; <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;esri.de/corona&quot;>" dispEnd="&lt;/a>">RKI-Datensätze</pc>). </source>
+      <target> Die Fallzahlen basieren auf den offiziellen Daten des Robert-Koch-Institutes (RKI; <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;esri.de/corona&quot;>" dispEnd="&lt;/a>">RKI-Datensätze</pc>). </target></segment>
     </unit><unit id="helpdialog-cases-3">
       <notes>
         <note category="description"> help</note>
@@ -483,8 +536,8 @@
         
       <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:16</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="ial" dispEnd="ellu"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="og-" dispEnd="es-3&quot;">Wo?</pc> (A) Wählen zwischen der Darstellung für die:</pc></source>
-      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="ial" dispEnd="ellu"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="og-" dispEnd="es-3&quot;">Wo?</pc> (A) Wählen zwischen der Darstellung für die:</pc></target></segment>
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Wo?</pc> (A) Wählen zwischen der Darstellung für die:</pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Wo?</pc> (A) Wählen zwischen der Darstellung für die:</pc></target></segment>
     </unit><unit id="helpdialog-cases-3.1">
       <notes>
         <note category="description"> help</note>
@@ -519,8 +572,8 @@
         
       <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:23</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="@@h" dispEnd=" Wäh"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="elp" dispEnd="g-cas">Wann?</pc> (B) Wählen Sie zwischen: </pc></source>
-      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="@@h" dispEnd=" Wäh"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="elp" dispEnd="g-cas">Wann?</pc> (B) Wählen Sie zwischen: </pc></target></segment>
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Wann?</pc> (B) Wählen Sie zwischen: </pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Wann?</pc> (B) Wählen Sie zwischen: </pc></target></segment>
     </unit><unit id="helpdialog-cases-4.1">
       <notes>
         <note category="description"> help</note>
@@ -555,8 +608,8 @@
         
       <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:30</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="p| " dispEnd="isch"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="hel" dispEnd="g-cas">Veränderung?</pc> (C) Wählen Sie zwischend der Darstellung für: </pc></source>
-      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="p| " dispEnd="isch"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="hel" dispEnd="g-cas">Veränderung?</pc> (C) Wählen Sie zwischend der Darstellung für: </pc></target></segment>
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Veränderung?</pc> (C) Wählen Sie zwischend der Darstellung für: </pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Veränderung?</pc> (C) Wählen Sie zwischend der Darstellung für: </pc></target></segment>
     </unit><unit id="helpdialog-cases-5.1">
       <notes>
         <note category="description"> help</note>
@@ -582,8 +635,8 @@
         
       <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:36</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="n=&quot;" dispEnd="hlen"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="hel" dispEnd="@help">Fallart?</pc> (D) Wählen zwischen der Darstellung für: </pc></source>
-      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="n=&quot;" dispEnd="hlen"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="hel" dispEnd="@help">Fallart?</pc> (D) Wählen zwischen der Darstellung für: </pc></target></segment>
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Fallart?</pc> (D) Wählen zwischen der Darstellung für: </pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Fallart?</pc> (D) Wählen zwischen der Darstellung für: </pc></target></segment>
     </unit><unit id="helpdialog-cases-6.1">
       <notes>
         <note category="description"> help</note>
@@ -609,8 +662,8 @@
         
       <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:42</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;p " dispEnd="Wähl"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="i18" dispEnd="p@@he">Bezugsgröße?</pc> (E) Wählen Sie zwischen der Darstellung für: </pc></source>
-      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;p " dispEnd="Wähl"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="i18" dispEnd="p@@he">Bezugsgröße?</pc> (E) Wählen Sie zwischen der Darstellung für: </pc></target></segment>
+        <source><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Bezugsgröße?</pc> (E) Wählen Sie zwischen der Darstellung für: </pc></source>
+      <target><pc id="0" equivStart="START_UNDERLINED_TEXT" equivEnd="CLOSE_UNDERLINED_TEXT" type="fmt" dispStart="&lt;u>" dispEnd="&lt;/u>"><pc id="1" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b>" dispEnd="&lt;/b> ">Bezugsgröße?</pc> (E) Wählen Sie zwischen der Darstellung für: </pc></target></segment>
     </unit><unit id="helpdialog-cases-7.1">
       <notes>
         <note category="description"> help</note>
@@ -680,10 +733,10 @@
         
       <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:17</note></notes>
       <segment state="final">
-        <source> CoronaVIS - die visuelle Darstellung von freien und belegten Betten für Covid-19-Patienten wird von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="en wird von der &lt;a
-            href=&quot;http://vis." dispEnd="nd Vi">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität Konstanz entwickelt und betreut. </source>
-      <target> CoronaVIS - die visuelle Darstellung von freien und belegten Betten für Covid-19-Patienten wird von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="en wird von der &lt;a
-            href=&quot;http://vis." dispEnd="nd Vi">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität Konstanz entwickelt und betreut. </target></segment>
+        <source> CoronaVIS - die visuelle Darstellung von freien und belegten Betten für Covid-19-Patienten wird von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a
+            href=&quot;http://vis.uni-konstanz.de&quot;>" dispEnd="&lt;/a> ">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität Konstanz entwickelt und betreut. </source>
+      <target> CoronaVIS - die visuelle Darstellung von freien und belegten Betten für Covid-19-Patienten wird von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a
+            href=&quot;http://vis.uni-konstanz.de&quot;>" dispEnd="&lt;/a> ">Arbeitsgruppe Datenanalyse und Visualisierung</pc> an der Universität Konstanz entwickelt und betreut. </target></segment>
     </unit><unit id="helpdialog-theproject-5">
       <notes>
         <note category="description"> help</note>
@@ -691,10 +744,10 @@
         
       <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:22</note></notes>
       <segment state="final">
-        <source> Die Darstellungen der Bettenkapazität in CoronaVIS basiert derzeit auf den öffentlichen Daten der Deutschen Interdisziplinären Vereinigung für Intensiv- und Notfallmedizin (DIVI) (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="otfallmedizin (DIVI) (&lt;a
-            href=&quot;https://www.divi.de/register/intens" dispEnd="gist">Link</pc>) zur Bettenauslastung. Bitte beachten Sie, dass derzeit kein Zugriff auf die nichtöffentlichen exakten Kapazitätsdaten der DIVI erfolgen kann. Deshalb können Frühwarnungen vor Überlastungen derzeit nicht erfolgen. Diese Frühwarn-Funktionalität und weitere Funktionen sind bereits entwickelt und in CoronaVIS enthalten, jedoch aufgrund des fehlenden Zugangs zu den nichtöffentlichen exakten Kapazitätsdaten der DIVI sind diese derzeit nicht aktiviert. </source>
-      <target> Die Darstellungen der Bettenkapazität in CoronaVIS basiert derzeit auf den öffentlichen Daten der Deutschen Interdisziplinären Vereinigung für Intensiv- und Notfallmedizin (DIVI) (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="otfallmedizin (DIVI) (&lt;a
-            href=&quot;https://www.divi.de/register/intens" dispEnd="gist">Link</pc>) zur Bettenauslastung. Bitte beachten Sie, dass derzeit kein Zugriff auf die nichtöffentlichen exakten Kapazitätsdaten der DIVI erfolgen kann. Deshalb können Frühwarnungen vor Überlastungen derzeit nicht erfolgen. Diese Frühwarn-Funktionalität und weitere Funktionen sind bereits entwickelt und in CoronaVIS enthalten, jedoch aufgrund des fehlenden Zugangs zu den nichtöffentlichen exakten Kapazitätsdaten der DIVI sind diese derzeit nicht aktiviert. </target></segment>
+        <source> Die Darstellungen der Bettenkapazität in CoronaVIS basiert derzeit auf den öffentlichen Daten der Deutschen Interdisziplinären Vereinigung für Intensiv- und Notfallmedizin (DIVI) (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a
+            href=&quot;https://www.divi.de/register/intensivregister?view=items&quot;>" dispEnd="&lt;/a>">Link</pc>) zur Bettenauslastung. Bitte beachten Sie, dass derzeit kein Zugriff auf die nichtöffentlichen exakten Kapazitätsdaten der DIVI erfolgen kann. Deshalb können Frühwarnungen vor Überlastungen derzeit nicht erfolgen. Diese Frühwarn-Funktionalität und weitere Funktionen sind bereits entwickelt und in CoronaVIS enthalten, jedoch aufgrund des fehlenden Zugangs zu den nichtöffentlichen exakten Kapazitätsdaten der DIVI sind diese derzeit nicht aktiviert. </source>
+      <target> Die Darstellungen der Bettenkapazität in CoronaVIS basiert derzeit auf den öffentlichen Daten der Deutschen Interdisziplinären Vereinigung für Intensiv- und Notfallmedizin (DIVI) (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a
+            href=&quot;https://www.divi.de/register/intensivregister?view=items&quot;>" dispEnd="&lt;/a>">Link</pc>) zur Bettenauslastung. Bitte beachten Sie, dass derzeit kein Zugriff auf die nichtöffentlichen exakten Kapazitätsdaten der DIVI erfolgen kann. Deshalb können Frühwarnungen vor Überlastungen derzeit nicht erfolgen. Diese Frühwarn-Funktionalität und weitere Funktionen sind bereits entwickelt und in CoronaVIS enthalten, jedoch aufgrund des fehlenden Zugangs zu den nichtöffentlichen exakten Kapazitätsdaten der DIVI sind diese derzeit nicht aktiviert. </target></segment>
     </unit><unit id="helpdialog-theproject-6">
       <notes>
         <note category="description"> help</note>
@@ -702,10 +755,10 @@
         
       <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:31</note></notes>
       <segment state="final">
-        <source> CoronaVIS ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird in Zusammenarbeit mit Experten kontinuierlich weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="Videoüberblick finden Sie unter &lt;a target=&quot;_blank&quot;
-            href=&quot;h" dispEnd=">htt">https://video.coronavis.dbvis.de</pc>. </source>
-      <target> CoronaVIS ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird in Zusammenarbeit mit Experten kontinuierlich weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="Videoüberblick finden Sie unter &lt;a target=&quot;_blank&quot;
-            href=&quot;h" dispEnd=">htt">https://video.coronavis.dbvis.de</pc>. </target></segment>
+        <source> CoronaVIS ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird in Zusammenarbeit mit Experten kontinuierlich weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot;
+            href=&quot;https://video.coronavis.dbvis.de&quot;>" dispEnd="&lt;/a>">https://video.coronavis.dbvis.de</pc>. </source>
+      <target> CoronaVIS ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird in Zusammenarbeit mit Experten kontinuierlich weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot;
+            href=&quot;https://video.coronavis.dbvis.de&quot;>" dispEnd="&lt;/a>">https://video.coronavis.dbvis.de</pc>. </target></segment>
     </unit><unit id="helpdialog-theproject-7">
       <notes>
         <note category="description"> help</note>
@@ -735,25 +788,21 @@
         
       <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:7</note></notes>
       <segment state="final">
-        <source> Die Live Ansicht wird durch die Firma <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="Firma &lt;a href=&quot;http://risklayer." dispEnd="ontri">Risklayer GmbH</pc> und das <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK_1" type="other" dispStart="
-      &lt;a href=&quot;https://www.cedim.kit.edu/&quot;
-        matTooltip=&quot;Center for Disaster Management and Risk Reduction Tech">CEDIM</pc> am <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK_2" type="other" dispStart="m
-      &lt;a href=&quot;https://www.kit.edu/&quot; matTooltip=&quot;Karlsruhe Institute of Tec">KIT</pc> und durch die <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK_3" type="other" dispStart="ie
-      &lt;a href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/h">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc> ermöglicht. </source>
-      <target> Die Live Ansicht wird durch die Firma <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="Firma &lt;a href=&quot;http://risklayer." dispEnd="ontri">Risklayer GmbH</pc> und das <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK_1" type="other" dispStart="
-      &lt;a href=&quot;https://www.cedim.kit.edu/&quot;
-        matTooltip=&quot;Center for Disaster Management and Risk Reduction Tech">CEDIM</pc> am <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK_2" type="other" dispStart="m
-      &lt;a href=&quot;https://www.kit.edu/&quot; matTooltip=&quot;Karlsruhe Institute of Tec">KIT</pc> und durch die <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK_3" type="other" dispStart="ie
-      &lt;a href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/h">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc> ermöglicht. </target></segment>
+        <source> Die Live Ansicht wird durch die Firma <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;http://risklayer.com/&quot;>" dispEnd="&lt;/a> ">Risklayer GmbH</pc> und das <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK_1" type="other" dispStart="&lt;a href=&quot;https://www.cedim.kit.edu/&quot;
+        matTooltip=&quot;Center for Disaster Management and Risk Reduction Technology&quot;>">CEDIM</pc> am <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK_2" type="other" dispStart="&lt;a href=&quot;https://www.kit.edu/&quot; matTooltip=&quot;Karlsruhe Institute of Technology&quot;>">KIT</pc> und durch die <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK_3" type="other" dispStart="&lt;a href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#&quot;>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc> ermöglicht. </source>
+      <target> Die Live Ansicht wird durch die Firma <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;http://risklayer.com/&quot;>" dispEnd="&lt;/a> ">Risklayer GmbH</pc> und das <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK_1" type="other" dispStart="&lt;a href=&quot;https://www.cedim.kit.edu/&quot;
+        matTooltip=&quot;Center for Disaster Management and Risk Reduction Technology&quot;>">CEDIM</pc> am <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK_2" type="other" dispStart="&lt;a href=&quot;https://www.kit.edu/&quot; matTooltip=&quot;Karlsruhe Institute of Technology&quot;>">KIT</pc> und durch die <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK_3" type="other" dispStart="&lt;a href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#&quot;>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc> ermöglicht. </target></segment>
     </unit><unit id="helpLiveViewSheet">
       <notes>
         
       <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:16</note></notes>
       <segment state="final">
-        <source> Mit der Hilfe von freiwilligen Personen wird ein <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="sonen wird ein &lt;a
-        href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqv" dispEnd="cher Google">öffentlich zugänglicher Google Sheet</pc> dauerhaft mit den aktuellsten Zahlen zur Covid-19 Pandemie betrieben (genannt crowdsourcing). Die Daten stammen in der Regel von den Veröffentlichungen der Landkreise bzw. der Gesundheitsämter. Im Gegensatz zu den offiziellen Zahlen des Robert Koch Instituts sind diese Daten aktueller, können aber Ungenauigkeiten enthalten. Die Daten des Robert Koch Instituts sind normalerweise zum Stand der Veröffentlichung ca. 48 Stunden alt. Die Datengrundlage des Google Sheets ist tagesaktuell und wird von uns halb-stündlich aktualisiert. Über den Tag werden somit die Daten der 401 Landkreise aufgenommen. Wenn noch keine Daten vorliegen werden die Daten des Vortags verwendet. </source>
-      <target> Mit der Hilfe von freiwilligen Personen wird ein <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="sonen wird ein &lt;a
-        href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqv" dispEnd="cher Google">öffentlich zugänglicher Google Sheet</pc> dauerhaft mit den aktuellsten Zahlen zur Covid-19 Pandemie betrieben (genannt crowdsourcing). Die Daten stammen in der Regel von den Veröffentlichungen der Landkreise bzw. der Gesundheitsämter. Im Gegensatz zu den offiziellen Zahlen des Robert Koch Instituts sind diese Daten aktueller, können aber Ungenauigkeiten enthalten. Die Daten des Robert Koch Instituts sind normalerweise zum Stand der Veröffentlichung ca. 48 Stunden alt. Die Datengrundlage des Google Sheets ist tagesaktuell und wird von uns halb-stündlich aktualisiert. Über den Tag werden somit die Daten der 401 Landkreise aufgenommen. Wenn noch keine Daten vorliegen werden die Daten des Vortags verwendet. </target></segment>
+        <source> Mit der Hilfe von freiwilligen Personen wird ein <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a
+        href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#&quot;>" dispEnd="&lt;/a>
+      ">öffentlich zugänglicher Google Sheet</pc> dauerhaft mit den aktuellsten Zahlen zur Covid-19 Pandemie betrieben (genannt crowdsourcing). Die Daten stammen in der Regel von den Veröffentlichungen der Landkreise bzw. der Gesundheitsämter. Im Gegensatz zu den offiziellen Zahlen des Robert Koch Instituts sind diese Daten aktueller, können aber Ungenauigkeiten enthalten. Die Daten des Robert Koch Instituts sind normalerweise zum Stand der Veröffentlichung ca. 48 Stunden alt. Die Datengrundlage des Google Sheets ist tagesaktuell und wird von uns halb-stündlich aktualisiert. Über den Tag werden somit die Daten der 401 Landkreise aufgenommen. Wenn noch keine Daten vorliegen werden die Daten des Vortags verwendet. </source>
+      <target> Mit der Hilfe von freiwilligen Personen wird ein <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a
+        href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#&quot;>" dispEnd="&lt;/a>
+      ">öffentlich zugänglicher Google Sheet</pc> dauerhaft mit den aktuellsten Zahlen zur Covid-19 Pandemie betrieben (genannt crowdsourcing). Die Daten stammen in der Regel von den Veröffentlichungen der Landkreise bzw. der Gesundheitsämter. Im Gegensatz zu den offiziellen Zahlen des Robert Koch Instituts sind diese Daten aktueller, können aber Ungenauigkeiten enthalten. Die Daten des Robert Koch Instituts sind normalerweise zum Stand der Veröffentlichung ca. 48 Stunden alt. Die Datengrundlage des Google Sheets ist tagesaktuell und wird von uns halb-stündlich aktualisiert. Über den Tag werden somit die Daten der 401 Landkreise aufgenommen. Wenn noch keine Daten vorliegen werden die Daten des Vortags verwendet. </target></segment>
     </unit><unit id="helpLiveViewPrognosis">
       <notes>
         
@@ -964,8 +1013,8 @@
         <note category="location">src/app/about/about.component.html:14,16</note>
       </notes>
       <segment state="final">
-        <source> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="kelt von der &lt;a href=&quot;https:/" dispEnd="Visua">AG Datenanalyse und Visualisierung</pc> von Prof. Dr. Daniel Keim an der Universität Konstanz. </source>
-          <target> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="kelt von der &lt;a href=&quot;https:/" dispEnd="Visua">AG Datenanalyse und Visualisierung</pc> von Prof. Dr. Daniel Keim an der Universität Konstanz. </target>
+        <source> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://vis.uni.kn&quot;>" dispEnd="&lt;/a> ">AG Datenanalyse und Visualisierung</pc> von Prof. Dr. Daniel Keim an der Universität Konstanz. </source>
+          <target> Dieses Tool wird entwickelt von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://vis.uni.kn&quot;>" dispEnd="&lt;/a> ">AG Datenanalyse und Visualisierung</pc> von Prof. Dr. Daniel Keim an der Universität Konstanz. </target>
       </segment>
     </unit>
     <unit id="orgComm">
@@ -1075,7 +1124,7 @@
     </unit><unit id="infoboxLastUpdate">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:41</note><note category="location">src/app/infobox/infobox.component.html:197</note><note category="location">src/app/overview/overview-case/overview-case.component.html:29</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:29</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:41</note><note category="location">src/app/infobox/infobox.component.html:198</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:29</note><note category="location">src/app/overview/overview-case/overview-case.component.html:29</note></notes>
       <segment state="final">
         <source>Letzter Stand: <ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.timestamp | date:'full' }}"/></source>
       <target>Letzter Stand: <ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.timestamp | date:'full' }}"/></target></segment>
@@ -1090,7 +1139,7 @@
       <notes>
         
         
-      <note category="location">src/app/infobox/infobox.component.html:60</note><note category="location">src/app/infobox/infobox.component.html:255</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:60</note><note category="location">src/app/infobox/infobox.component.html:260</note></notes>
       <segment state="final">
         <source>Deutschland
         </source>
@@ -1100,14 +1149,14 @@
       <notes>
         
         
-      <note category="location">src/app/infobox/infobox.component.html:60</note><note category="location">src/app/infobox/infobox.component.html:255</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:60</note><note category="location">src/app/infobox/infobox.component.html:260</note></notes>
       <segment state="final">
         <source>Deutschland</source>
       <target>Deutschland</target></segment>
     </unit><unit id="infoboxStates">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:63</note><note category="location">src/app/infobox/infobox.component.html:258</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:63</note><note category="location">src/app/infobox/infobox.component.html:263</note></notes>
       <segment state="final">
         <source>Länder</source>
       <target>Länder</target></segment>
@@ -1115,14 +1164,14 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:63</note><note category="location">src/app/infobox/infobox.component.html:258</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:63</note><note category="location">src/app/infobox/infobox.component.html:263</note></notes>
       <segment state="final">
         <source>Bundesländer</source>
       <target>Bundesländer</target></segment>
     </unit><unit id="infoboxRegions">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:66</note><note category="location">src/app/infobox/infobox.component.html:261</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:66</note><note category="location">src/app/infobox/infobox.component.html:266</note></notes>
       <segment state="final">
         <source>Bezirke</source>
       <target>Bezirke</target></segment>
@@ -1130,14 +1179,14 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:66</note><note category="location">src/app/infobox/infobox.component.html:261</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:66</note><note category="location">src/app/infobox/infobox.component.html:266</note></notes>
       <segment state="final">
         <source>Regierungsbezirke</source>
       <target>Regierungsbezirke</target></segment>
     </unit><unit id="infoboxCounties">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:69</note><note category="location">src/app/infobox/infobox.component.html:264</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:69</note><note category="location">src/app/infobox/infobox.component.html:269</note></notes>
       <segment state="final">
         <source>Kreise</source>
       <target>Kreise</target></segment>
@@ -1145,7 +1194,7 @@
       <notes>
 
 
-      <note category="location">src/app/infobox/infobox.component.html:69</note><note category="location">src/app/infobox/infobox.component.html:264</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:69</note><note category="location">src/app/infobox/infobox.component.html:269</note></notes>
       <segment state="final">
         <source>Landkreise</source>
       <target>Landkreise</target></segment>
@@ -1249,61 +1298,57 @@
     </unit><unit id="infoboxNumberOfCovidCases">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:171</note><note category="location">src/app/overview/overview-case/overview-case.component.html:27</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:172</note><note category="location">src/app/overview/overview-case/overview-case.component.html:27</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.cases | number }}"/> bundesweit gemeldete Covid-19 Fälle</source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.cases | number }}"/> bundesweit gemeldete Covid-19 Fälle</target></segment>
     </unit><unit id="infoboxPrognosis">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:173,180</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:174</note></notes>
       <segment state="final">
-        <source> Hochrechnung: <ph id="0" equiv="INTERPOLATION" disp="eit gemeldete Covid-19 Fälle&lt;/p>
-"/> neue Covid-19 Fälle heute <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="vidNumberCaseOptions.dataSource === 'risklayer'&quot; i18n=&quot;@@infoboxPrognosis&quot;>
-          Hochrechnung: {{ c.risklayerPrognosis | number }} neue Covid-19 Fälle heute
-          &lt;mat-icon
-            style=&quot;vertical-align: middle;&quot;
-            i18n-matTooltip=&quot;@@tooltipRisklayerPrognosis&quot;
-            matTooltip=&quot;Diese Hochrechnung basiert auf den bereits eingegangen sowie v" dispEnd="ufigen Meld">help</pc></source>
-      <target> Hochrechnung: <ph id="0" equiv="INTERPOLATION" disp="eit gemeldete Covid-19 Fälle&lt;/p>
-"/> neue Covid-19 Fälle heute <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="vidNumberCaseOptions.dataSource === 'risklayer'&quot; i18n=&quot;@@infoboxPrognosis&quot;>
-          Hochrechnung: {{ c.risklayerPrognosis | number }} neue Covid-19 Fälle heute
-          &lt;mat-icon
-            style=&quot;vertical-align: middle;&quot;
-            i18n-matTooltip=&quot;@@tooltipRisklayerPrognosis&quot;
-            matTooltip=&quot;Diese Hochrechnung basiert auf den bereits eingegangen sowie v" dispEnd="ufigen Meld">help</pc></target></segment>
+        <source> Hochrechnung: <ph id="0" equiv="INTERPOLATION" disp=" {{ c.risklayerPrognosis | number }"/> neue Covid-19 Fälle heute <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon
+              style=&quot;vertical-align: middle;&quot;
+              i18n-matTooltip=&quot;@@tooltipRisklayerPrognosis&quot;
+              matTooltip=&quot;Diese Hochrechnung basiert auf den bereits eingegangen sowie vorläufigen Meldungen der Landkreise bzw. Gesundheitsämter. Je höher die Zahl der Landkreise mit verfügbaren Daten, desto höher ist die Genauigkeit der Hochrechnung.&quot;
+            >" dispEnd="&lt;/mat-icon>">help</pc></source>
+      <target> Hochrechnung: <ph id="0" equiv="INTERPOLATION" disp=" {{ c.risklayerPrognosis | number }"/> neue Covid-19 Fälle heute <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon
+              style=&quot;vertical-align: middle;&quot;
+              i18n-matTooltip=&quot;@@tooltipRisklayerPrognosis&quot;
+              matTooltip=&quot;Diese Hochrechnung basiert auf den bereits eingegangen sowie vorläufigen Meldungen der Landkreise bzw. Gesundheitsämter. Je höher die Zahl der Landkreise mit verfügbaren Daten, desto höher ist die Genauigkeit der Hochrechnung.&quot;
+            >" dispEnd="&lt;/mat-icon>">help</pc></target></segment>
     </unit><unit id="tooltipRisklayerPrognosis">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:178</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:179</note></notes>
       <segment state="final">
         <source>Diese Hochrechnung basiert auf den bereits eingegangen sowie vorläufigen Meldungen der Landkreise bzw. Gesundheitsämter. Je höher die Zahl der Landkreise mit verfügbaren Daten, desto höher ist die Genauigkeit der Hochrechnung.</source>
       <target>Diese Hochrechnung basiert auf den bereits eingegangen sowie vorläufigen Meldungen der Landkreise bzw. Gesundheitsämter. Je höher die Zahl der Landkreise mit verfügbaren Daten, desto höher ist die Genauigkeit der Hochrechnung.</target></segment>
     </unit><unit id="infoboxNumberOfCovidDeaths">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:182</note><note category="location">src/app/overview/overview-case/overview-case.component.html:28</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:183</note><note category="location">src/app/overview/overview-case/overview-case.component.html:28</note></notes>
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> bundesweit gemeldete Covid-19 Todesfälle</source>
       <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> bundesweit gemeldete Covid-19 Todesfälle</target></segment>
     </unit><unit id="infoboxCountiesAvailable">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:185</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:186</note></notes>
       <segment state="final">
         <source>Daten von <ph id="0" equiv="INTERPOLATION" disp="{{ c.casesCountiesAvailable }}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="{{ c.casesCountiesTotal }}"/> Landkreisen verfügbar</source>
       <target>Daten von <ph id="0" equiv="INTERPOLATION" disp="{{ c.casesCountiesAvailable }}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="{{ c.casesCountiesTotal }}"/> Landkreisen verfügbar</target></segment>
     </unit><unit id="tooltipNumberOfCounties">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:189</note>
-      </notes>
+        
+      <note category="location">src/app/infobox/infobox.component.html:190</note></notes>
       <segment state="final">
         <source>Die Daten werden von Freiwilligen in einer öffentlich zugänglichen Tabelle gesammelt (crowdsourcing) sobald die Landkreise bzw. Gesundheitsämter die Daten veröffentlichen. Falls noch keine aktuellen Daten vorliegen werden die Daten vom vorherigen Tag verwendet.</source>
       <target>Die Daten werden von Freiwilligen in einer öffentlich zugänglichen Tabelle gesammelt (crowdsourcing) sobald die Landkreise bzw. Gesundheitsämter die Daten veröffentlichen. Falls noch keine aktuellen Daten vorliegen werden die Daten vom vorherigen Tag verwendet.</target></segment>
     </unit><unit id="infoboxShowOnlyAvailableCounties">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:192</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:193</note></notes>
       <segment state="final">
         <source>
             nur Landkreise mit aktuellen Daten anzeigen
@@ -1314,14 +1359,21 @@
     </unit><unit id="infoboxNextUpdate">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:201</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:202</note></notes>
       <segment state="final">
         <source>Nächste Aktualisierung: </source>
       <target>Nächste Aktualisierung: </target></segment>
+    </unit><unit id="infoboxNoRKIData">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:214</note>
+      </notes>
+      <segment state="final">
+        <source>Es stehen momentan keine Inzidenzstatistiken<ph id="0" equiv="LINE_BREAK" type="fmt" disp="&lt;br>"/>für diesen Zeitpunkt zur Verfügung.</source>
+      <target>Es stehen momentan keine Inzidenzstatistiken<ph id="0" equiv="LINE_BREAK" type="fmt" disp="&lt;br>"/>für diesen Zeitpunkt zur Verfügung.</target></segment>
     </unit><unit id="infoboxCaseViewShow">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:219</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:224</note></notes>
       <segment state="final">
         <source>Covid-19 Fallansicht anzeigen / ausblenden
         </source>
@@ -1330,14 +1382,14 @@
     </unit><unit id="infoboxDataSource">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:226</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:3</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:3</note><note category="location">src/app/infobox/infobox.component.html:231</note></notes>
       <segment state="final">
         <source>Daten Quelle</source>
       <target>Daten Quelle</target></segment>
     </unit><unit id="infoboxDataSourceRKI">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:236</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:8</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:8</note><note category="location">src/app/infobox/infobox.component.html:241</note></notes>
       <segment state="final">
         <source>Offizielle Daten
               </source>
@@ -1346,14 +1398,14 @@
     </unit><unit id="tooltipDataSourceRKI">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:236</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:8</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:8</note><note category="location">src/app/infobox/infobox.component.html:241</note></notes>
       <segment state="final">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institut</target></segment>
     </unit><unit id="infoboxDataSourceRisklayer">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:239</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:11</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:11</note><note category="location">src/app/infobox/infobox.component.html:244</note></notes>
       <segment state="final">
         <source>Live Daten
               </source>
@@ -1362,35 +1414,35 @@
     </unit><unit id="tooltipDataSourceRisklayer">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:239</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:11</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:11</note><note category="location">src/app/infobox/infobox.component.html:244</note></notes>
       <segment state="final">
         <source>Live-Ansicht Risklayer Daten</source>
       <target>Live-Ansicht Risklayer Daten</target></segment>
     </unit><unit id="infoboxAggregation">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:245</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:250</note></notes>
       <segment state="final">
         <source>Aggregation</source>
       <target>Aggregation</target></segment>
     </unit><unit id="infoboxTime">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:274</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:43</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:43</note><note category="location">src/app/infobox/infobox.component.html:279</note></notes>
       <segment state="final">
         <source>Zeitraum</source>
       <target>Zeitraum</target></segment>
     </unit><unit id="infoboxTimeAll">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:284</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:289</note></notes>
       <segment state="final">
         <source>Alle Daten </source>
       <target>Alle Daten </target></segment>
     </unit><unit id="infoboxTime24">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:288</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:47</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:47</note><note category="location">src/app/infobox/infobox.component.html:293</note></notes>
       <segment state="final">
         <source>24 Std.
               </source>
@@ -1399,14 +1451,14 @@
     </unit><unit id="infoboxTime72">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:290</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:49</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:49</note><note category="location">src/app/infobox/infobox.component.html:295</note></notes>
       <segment state="final">
         <source>72 Std. </source>
       <target>72 Std. </target></segment>
     </unit><unit id="infoboxTime7Days">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:293</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:52</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:52</note><note category="location">src/app/infobox/infobox.component.html:298</note></notes>
       <segment state="final">
         <source>7 Tage
               </source>
@@ -1415,35 +1467,35 @@
     </unit><unit id="infoboxCaseNum">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:301</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:306</note></notes>
       <segment state="final">
         <source>Fallzahlen</source>
       <target>Fallzahlen</target></segment>
     </unit><unit id="infoboxCasesAll">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:310</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:315</note></notes>
       <segment state="final">
         <source>Alle erfassten Fälle </source>
       <target>Alle erfassten Fälle </target></segment>
     </unit><unit id="infoboxCasesDiff">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:315</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:320</note></notes>
       <segment state="final">
         <source>Veränderung im gewählten Zeitraum</source>
       <target>Veränderung im gewählten Zeitraum</target></segment>
     </unit><unit id="infoboxType">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:323</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:17</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:17</note><note category="location">src/app/infobox/infobox.component.html:328</note></notes>
       <segment state="final">
         <source>Art</source>
       <target>Art</target></segment>
     </unit><unit id="infoboxTypeSick">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:332</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:20</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:20</note><note category="location">src/app/infobox/infobox.component.html:337</note></notes>
       <segment state="final">
         <source>Positiv Getestet
               </source>
@@ -1452,35 +1504,35 @@
     </unit><unit id="infoboxTypeDeath">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:334</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:22</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:22</note><note category="location">src/app/infobox/infobox.component.html:339</note></notes>
       <segment state="final">
         <source>Todesfälle</source>
       <target>Todesfälle</target></segment>
     </unit><unit id="infoboxNorm">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:342</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:29</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:29</note><note category="location">src/app/infobox/infobox.component.html:347</note></notes>
       <segment state="final">
         <source>Normalisierung</source>
       <target>Normalisierung</target></segment>
     </unit><unit id="infoboxNornNone">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:351</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:33</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:33</note><note category="location">src/app/infobox/infobox.component.html:356</note></notes>
       <segment state="final">
         <source>Keine Normalisierung </source>
       <target>Keine Normalisierung </target></segment>
     </unit><unit id="infoboxNornYes">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:355</note><note category="location">src/app/cases-dod/case-info/case-info.component.html:36</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:36</note><note category="location">src/app/infobox/infobox.component.html:360</note></notes>
       <segment state="final">
         <source>Je 100.000 Einwohner </source>
       <target>Je 100.000 Einwohner </target></segment>
     </unit><unit id="infoboxGeo">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:370</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:375</note></notes>
       <segment state="final">
         <source>
           Geographische Verortung
@@ -1491,7 +1543,7 @@
     </unit><unit id="infoboxGeoHospital">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:384</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:389</note></notes>
       <segment state="final">
         <source>Krankenhäuser
         </source>
@@ -1500,7 +1552,7 @@
     </unit><unit id="infoboxGeoHeli">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:392</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:397</note></notes>
       <segment state="final">
         <source>Hubschrauberlandeplätze
         </source>
@@ -1509,7 +1561,7 @@
     </unit><unit id="infoboxData">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:401</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:406</note></notes>
       <segment state="final">
         <source>
           Datenquellen
@@ -1520,28 +1572,28 @@
     </unit><unit id="infoboxDIVI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:408</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:38</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:413</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:38</note></notes>
       <segment state="final">
         <source>DIVI Intensivregister</source>
       <target>DIVI Intensivregister</target></segment>
     </unit><unit id="infoboxRKI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:413</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:418</note></notes>
       <segment state="final">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institut</target></segment>
     </unit><unit id="infoboxRKICases">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:417</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:422</note></notes>
       <segment state="final">
         <source>• Covid-19 Fallzahlen</source>
       <target>• Covid-19 Fallzahlen</target></segment>
     </unit><unit id="infoboxDESTATIS">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:435</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:440</note></notes>
       <segment state="final">
         <source>Statistisches Bundesamt</source>
       <target>Statistisches Bundesamt</target></segment>
@@ -1682,7 +1734,7 @@
     </unit><unit id="tooltipHospitalOldData">
       <notes>
         
-      <note category="location">src/app/hospital-info/hospital-info.component.html:15</note><note category="location">src/app/infobox/infobox.component.html:209</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:15</note><note category="location">src/app/infobox/infobox.component.html:210</note></notes>
       <segment state="final">
         <source>Die Daten sind älter als 24 Stunden.</source>
       <target>Die Daten sind älter als 24 Stunden.</target></segment>
@@ -1763,8 +1815,8 @@
         <note category="location">src/app/overview/subscription/subscription.component.html:5</note>
       </notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="rk&quot;>&lt;str" dispEnd=" es?&lt;/str">Wie funktioniert es?</pc></source>
-      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="rk&quot;>&lt;str" dispEnd=" es?&lt;/str">Wie funktioniert es?</pc></target></segment>
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Wie funktioniert es?</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Wie funktioniert es?</pc></target></segment>
     </unit><unit id="subIntro">
       <notes>
         <note category="location">src/app/overview/subscription/subscription.component.html:6</note>
@@ -1841,19 +1893,15 @@
         
       <note category="location">src/app/overview/subscription/subscription.component.html:36</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="
-      &lt;" dispEnd="lectCount">Kreis auswählen</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="y&quot;>&lt;"/>(mit der Enter-Taste bestätigen)</source>
-      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="
-      &lt;" dispEnd="lectCount">Kreis auswählen</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="y&quot;>&lt;"/>(mit der Enter-Taste bestätigen)</target></segment>
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Kreis auswählen</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br>"/>(mit der Enter-Taste bestätigen)</source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Kreis auswählen</pc><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br>"/>(mit der Enter-Taste bestätigen)</target></segment>
     </unit><unit id="subSelectedCounties">
       <notes>
         
       <note category="location">src/app/overview/subscription/subscription.component.html:46</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="s&quot;>
-   " dispEnd="bSelected">Ausgewählte Kreise</pc></source>
-      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="s&quot;>
-   " dispEnd="bSelected">Ausgewählte Kreise</pc></target></segment>
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Ausgewählte Kreise</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Ausgewählte Kreise</pc></target></segment>
     </unit><unit id="subNoCountiesSelectedError">
       <notes>
         
@@ -1866,10 +1914,8 @@
         
       <note category="location">src/app/overview/subscription/subscription.component.html:62</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="      &lt;/" dispEnd="
-      &lt;d">Sprache</pc></source>
-      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="      &lt;/" dispEnd="
-      &lt;d">Sprache</pc></target></segment>
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Sprache</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Sprache</pc></target></segment>
     </unit><unit id="subLangGerman">
       <notes>
         
@@ -1889,19 +1935,15 @@
         
       <note category="location">src/app/overview/subscription/subscription.component.html:73</note></notes>
       <segment state="final">
-        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="
-      &lt;" dispEnd=">
-      ">Nutzungsbedingungen</pc></source>
-      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="
-      &lt;" dispEnd=">
-      ">Nutzungsbedingungen</pc></target></segment>
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Nutzungsbedingungen</pc></source>
+      <target><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong>" dispEnd="&lt;/strong>">Nutzungsbedingungen</pc></target></segment>
     </unit><unit id="subTerms1">
       <notes>
         
       <note category="location">src/app/overview/subscription/subscription.component.html:76</note></notes>
       <segment state="final">
-        <source>Ich willige ein, dass meine E-Mail-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die E-Mail-Adresse wird nicht an Dritte weiter gegeben. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart=" gespeichert wird. Die E-Mail-A" dispEnd="erLi">Unsere Datenschutzrichtlinien sind hier einzusehen.</pc></source>
-      <target>Ich willige ein, dass meine E-Mail-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die E-Mail-Adresse wird nicht an Dritte weiter gegeben. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart=" gespeichert wird. Die E-Mail-A" dispEnd="erLi">Unsere Datenschutzrichtlinien sind hier einzusehen.</pc></target></segment>
+        <source>Ich willige ein, dass meine E-Mail-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die E-Mail-Adresse wird nicht an Dritte weiter gegeben. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a routerLink=&quot;/overview/gdpr&quot;>" dispEnd="&lt;/a>">Unsere Datenschutzrichtlinien sind hier einzusehen.</pc></source>
+      <target>Ich willige ein, dass meine E-Mail-Adresse zum Zweck der Benachrichtigungen verschlüsselt gespeichert wird. Die E-Mail-Adresse wird nicht an Dritte weiter gegeben. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a routerLink=&quot;/overview/gdpr&quot;>" dispEnd="&lt;/a>">Unsere Datenschutzrichtlinien sind hier einzusehen.</pc></target></segment>
     </unit><unit id="subTerms2">
       <notes>
         

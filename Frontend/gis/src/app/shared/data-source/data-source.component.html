@@ -24,3 +24,5 @@
 
 <h5 *ngIf="source === 'zensus'" class="source" i18n="@@caseDodDataSourceZensus">Datenquelle der Populationsdaten: <a href="https://www.zensus2011.de/DE/Home/home_node.html">Zensus 2011</a></h5>
 
+<h5 *ngIf="source === 'survstat'" class="source" i18n="@@caseDodDataSourceSurvstat">Robert Koch Institut: SurvStat@RKI 2.0, <a href="https://survstat.rki.de">https://survstat.rki.de</a>, Abfragedatum: {{ now | date:'shortDate' }}</h5>
+

@@ -100,7 +100,7 @@ export class CaseLineChartComponent implements OnInit {
             xAxisTitle: null,
             yAxisTitle: 'New ' + tType + tNorm + tWindow,
             yAxis2Title: this.i18nAccumulated.nativeElement.textContent + tNorm,
-            width: 700,
+            width: 'container',
             height: 150,
             regression: {
               to: getMoment(this.options.date).toISOString(),

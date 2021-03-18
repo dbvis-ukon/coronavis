@@ -215,7 +215,7 @@ export-environment:
     - URL_PROTOCOL="https"
     - ENV_TYPE="review"
     - REPLICA_COUNT="2"
-    - CPU_REQ="2000m"
+    - CPU_REQ="200m"
     - CPU_LIMIT="4000m"
     - MEM_REQ="3Gi"
     - MEM_LIMIT="5Gi"
@@ -234,8 +234,8 @@ export-environment:
     - if [ "${CI_COMMIT_BRANCH}" == "${STAGING_BRANCH}" ]; then ENV_TYPE="staging"; fi
 
     # Determine URL, ReplicaCount, and ReleaseName based on ENV_TYPE
-    - if [ "${ENV_TYPE}" == "staging" ]; then FRONTEND_URL_TILES_PREFIX="staging."; URL_PREFIX="staging."; REPLICA_COUNT="1"; RELEASE_NAME_RAW="${ENV_TYPE}/$CI_PROJECT_NAME/${CI_COMMIT_REF_SLUG}"; CPU_REQ="500m"; CPU_LIMIT="1000m"; MEM_REQ="1Gi"; MEM_LIMIT="2Gi"; fi
-    - if [ "${ENV_TYPE}" == "review" ]; then FRONTEND_URL_TILES_PREFIX="staging."; URL_PREFIX="${SHORTENED_CI_COMMIT_REF_SLUG}."; REPLICA_COUNT="1"; RELEASE_NAME_RAW="${ENV_TYPE}/$CI_PROJECT_NAME/${CI_COMMIT_REF_SLUG}"; CPU_REQ="500m"; CPU_LIMIT="1000m"; MEM_REQ="1Gi"; MEM_LIMIT="2Gi"; fi
+    - if [ "${ENV_TYPE}" == "staging" ]; then FRONTEND_URL_TILES_PREFIX="staging."; URL_PREFIX="staging."; REPLICA_COUNT="1"; RELEASE_NAME_RAW="${ENV_TYPE}/$CI_PROJECT_NAME/${CI_COMMIT_REF_SLUG}"; CPU_REQ="50m"; CPU_LIMIT="1000m"; MEM_REQ="1Gi"; MEM_LIMIT="2Gi"; fi
+    - if [ "${ENV_TYPE}" == "review" ]; then FRONTEND_URL_TILES_PREFIX="staging."; URL_PREFIX="${SHORTENED_CI_COMMIT_REF_SLUG}."; REPLICA_COUNT="1"; RELEASE_NAME_RAW="${ENV_TYPE}/$CI_PROJECT_NAME/${CI_COMMIT_REF_SLUG}"; CPU_REQ="50m"; CPU_LIMIT="1000m"; MEM_REQ="500Mi"; MEM_LIMIT="2Gi"; fi
 
     # Build the frontend url: prefix.suffix
     - URL_FRONTEND="${URL_PREFIX}${URL_SUFFIX}"
@@ -267,13 +267,14 @@ export-environment:
     paths:
       - var.env
     expire_in: 3000 days
+  retry: 2
   tags:
     - docker
 
 set up sentry release:
   stage: prepare
   image:
-    name: getsentry/sentry-cli:1.61.0
+    name: getsentry/sentry-cli:1.63.1
     entrypoint: [""]
   variables:
     RUN_ALWAYS: "no"
@@ -293,10 +294,11 @@ set up sentry release:
   <<: *rules-frontend
   interruptible: true
   allow_failure: true
+  retry: 2
 
 frontend-install-dependencies:
   stage: prepare
-  image: node:14
+  image: node:15
   script:
     - cd ./Frontend/gis
     # if node_modules does not exist use npm ci to create it
@@ -315,6 +317,7 @@ frontend-install-dependencies:
       - ./Frontend/gis/.npm
     policy: pull-push
   needs: []
+  retry: 2
   tags:
     - docker
 
@@ -329,12 +332,13 @@ syntax-check-crawler-scripts:
     - export-environment
   needs:
     - export-environment
+  retry: 2
   tags:
     - docker
 
 frontend-lint:
   stage: test
-  image: node:14
+  image: node:15
   script:
     - cd ./Frontend/gis
     - npm run-script lint
@@ -342,6 +346,7 @@ frontend-lint:
     - frontend-install-dependencies
   needs:
     - frontend-install-dependencies
+  retry: 2
   tags:
     - docker
 
@@ -389,6 +394,7 @@ frontend-code-quality:
     - if: '$CODE_QUALITY_DISABLED'
       when: never
     - if: '$CI_COMMIT_TAG || $CI_COMMIT_BRANCH'
+  retry: 2
   tags:
     - docker-build
     
@@ -399,7 +405,7 @@ frontend-code-quality:
 
 .build-frontend: &build-frontend
   stage: build:frontend
-  image: node:14
+  image: node:15
   script:
     - source var.env
     - cd ./Frontend
@@ -422,6 +428,7 @@ frontend-code-quality:
   needs:
     - export-environment
     - frontend-install-dependencies
+  retry: 2
   tags:
     - docker
 
@@ -452,6 +459,7 @@ build-frontend:
     - /kaniko/executor --context . --dockerfile ./Dockerfile --build-arg VERSION=${VERSION} --destination $IMG --destination $IMG2 --cache=true
   tags:
     - docker
+  retry: 2
 
 dockerize-backend:
   variables:
@@ -543,6 +551,7 @@ test-backend:
     - dockerize-backend
   dependencies:
     - export-environment
+  retry: 2
   tags:
     - docker
 
@@ -553,7 +562,7 @@ test-backend:
 .deploy-script-new: &deploy-template-new
   stage: deploy
   image:
-    name: alpine/helm:3.5.0
+    name: alpine/helm:3.5.3
     entrypoint: ["sh", "-c", "apk add bash sed && /bin/bash"]
   script:
     - echo $KUBECONFIG
@@ -583,6 +592,7 @@ test-backend:
     # use chart name and the folder by uppercasing the first character of the app name; result: Backend
     - helm upgrade --namespace=${K8_NAMESPACE} --dry-run --debug --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} --set environment=${ENV_TYPE} --set replicaCount=${REPLICA_COUNT} --set cpu.req=${CPU_REQ} --set cpu.limit=${CPU_LIMIT} --set mem.req=${MEM_REQ} --set mem.limit=${MEM_LIMIT} ${CHART_NAME} ./k8/${APP}-new
     - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} --set environment=${ENV_TYPE} --set replicaCount=${REPLICA_COUNT} --set cpu.req=${CPU_REQ} --set cpu.limit=${CPU_LIMIT} --set mem.req=${MEM_REQ} --set mem.limit=${MEM_LIMIT} ${CHART_NAME} ./k8/${APP}-new
+  retry: 2
   tags:
     - docker
 
@@ -820,7 +830,7 @@ deploy-tiles-production-new:
 .remove-deployment-new:
   stage: deploy
   image:
-    name: alpine/helm:3.5.0
+    name: alpine/helm:3.5.3
     entrypoint: ["sh", "-c", "apk add bash && /bin/bash"]
   variables:
     GIT_STRATEGY: none
@@ -837,6 +847,7 @@ deploy-tiles-production-new:
     - helm delete --namespace=${K8_NAMESPACE} ${CHART_NAME}
   dependencies: []
   allow_failure: true
+  retry: 2
   tags:
     - docker
 

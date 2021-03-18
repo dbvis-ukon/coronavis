@@ -1,3 +1,5 @@
+import psycopg2
+
 DATABASE_FILE = 'corona_app'
 SQLALCHEMY_DATABASE_URI = 'postgresql://' # Fallback to Zero
 SQLALCHEMY_ECHO = True
@@ -39,3 +41,9 @@ except KeyError as e:
     logger.warning('One or multiple necessary environment variables not set.')
     raise e
     exit(1)
+
+def get_connection():
+    conn = pg.connect(SQLALCHEMY_DATABASE_URI)
+    conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
+    cur = conn.cursor()
+    return conn, cur

@@ -85,6 +85,7 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
           click: (e) => {
             this.tooltipService.close();
             this.matDialog.open(CaseDialogComponent, {
+              maxWidth: '90vw',
               data: {
                 data: feature.properties,
                 options: this.options

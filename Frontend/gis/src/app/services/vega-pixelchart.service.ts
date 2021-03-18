@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 export class VegaPixelchartService {
 
   template = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "height": 100,
     "width": 60,
     "description": "A simple bar chart with rounded corners at the end of the bar.",
@@ -98,8 +98,10 @@ export class VegaPixelchartService {
       yAxisTitle: string;
       zAxisTitle: string;
       width: number | 'container';
+      height: number;
       scaleType: string;
       timeAgg: string;
+      domain?: [number, number];
     }
     ): any {
     if (!data) {
@@ -125,6 +127,11 @@ export class VegaPixelchartService {
     spec.encoding.x.timeUnit = chartOptions.timeAgg || 'yearmonthdate';
 
     spec.width = chartOptions.width;
+    spec.height = chartOptions.height;
+
+    if (chartOptions.domain) {
+      spec.encoding.color.scale.domain = chartOptions.domain;
+    }
 
     return spec;
   }

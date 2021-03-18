@@ -4,6 +4,7 @@
 
 import os
 import sys
+import traceback
 import logging
 import loadenv
 from datetime import datetime, timezone, timedelta, time
@@ -78,8 +79,10 @@ while current_try <= NUM_RETRIES:
                 logger.info('Parse data')
                 data = pd.read_excel(filepath, sheet_name=['Statistik Überblick', 'Haupt', 'Kreise'], header=None, na_filter=False, engine="openpyxl")
                 break
-            except:
+            except Exception as e:
                 logger.warning(f'Failed parsing spreadsheet {current_try}/{NUM_RETRIES}, dowloading again...')
+                logger.warning(str(e))
+                logger.warning(traceback.format_exc())
                 logger.info(f'Removing file from archive...')
                 os.remove(filepath)
                 logger.info(f'Backoff delay for {delay_s} sec...')

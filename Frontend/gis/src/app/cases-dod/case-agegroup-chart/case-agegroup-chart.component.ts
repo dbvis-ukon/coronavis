@@ -3,8 +3,9 @@ import { map } from 'rxjs/operators';
 import { CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from 'src/app/repositories/case-development.repository';
 import { RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
+import { CaseUtilService } from 'src/app/services/case-util.service';
 import { VegaPixelchartService } from '../../services/vega-pixelchart.service';
-import { CovidChartOptions, TimeGranularity, ScaleType } from '../covid-chart-options';
+import { CovidChartOptions, TimeGranularity, ScaleType, AgeGroupBinning } from '../covid-chart-options';
 
 @Component({
   selector: 'app-case-agegroup-chart',
@@ -28,6 +29,37 @@ export class CaseAgegroupChartComponent implements OnInit {
   _data: RKICaseDevelopmentProperties;
 
   _options: CovidChartOptions;
+
+  _ageGroups: {[key: string]: [number, number][] | null} = {
+    all: null,
+    fiveyears: [
+      [0, 4],
+      [5, 9],
+      [10, 14],
+      [15, 19],
+      [20, 24],
+      [25, 29],
+      [30, 34],
+      [35, 39],
+      [40, 44],
+      [45, 49],
+      [50, 54],
+      [55, 59],
+      [60, 64],
+      [65, 69],
+      [70, 74],
+      [75, 79],
+      [80, 80],
+    ],
+    rki: [
+      [0, 4],
+      [5, 14],
+      [15, 34],
+      [35, 59],
+      [60, 79],
+      [80, 80]
+    ]
+  };
 
   @Input()
   public set data(d: RKICaseDevelopmentProperties) {
@@ -53,6 +85,8 @@ export class CaseAgegroupChartComponent implements OnInit {
 
   spec: any;
 
+  hasPopulationData = true;
+
   // timeAggs = ['yearmonthdate', 'yearweek'];
   // timeAgg = 'yearmonthdate';
 
@@ -67,7 +101,8 @@ export class CaseAgegroupChartComponent implements OnInit {
 
   constructor(
     private vegaPixelchartService: VegaPixelchartService,
-    private caseRepo: CaseDevelopmentRepository
+    private caseRepo: CaseDevelopmentRepository,
+    private caseUtils: CaseUtilService
   ) { }
 
   ngOnInit(): void {
@@ -91,6 +126,8 @@ export class CaseAgegroupChartComponent implements OnInit {
   }
 
   private compileChart(fullData: RKICaseDevelopmentProperties, autoConfig: boolean) {
+    this.hasPopulationData = fullData.developments[0].population_by_agegroup.A00_A04 !== null;
+
     let idxDiff = 1;
     switch (this._options.timeWindow) {
       case CovidNumberCaseTimeWindow.twentyFourhours:
@@ -114,23 +151,66 @@ export class CaseAgegroupChartComponent implements OnInit {
         idxDiff = 7;
     }
 
-    let ageGroupAccessor: ((s: RKICaseTimedStatus) => RKIAgeGroups);
+    // let ageGroupAccessor: ((s: RKICaseTimedStatus) => RKIAgeGroups);
 
-    switch (this._options.type) {
-      case CovidNumberCaseType.cases:
-        ageGroupAccessor = ((s: RKICaseTimedStatus) => s.cases_by_agegroup);
-        break;
+    // switch (this._options.type) {
+    //   case CovidNumberCaseType.cases:
+    //     ageGroupAccessor = ((s: RKICaseTimedStatus) => s.cases_survstat_by_agegroup);
+    //     break;
 
-      case CovidNumberCaseType.deaths:
-        ageGroupAccessor = ((s: RKICaseTimedStatus) => s.deaths_by_agegroup);
-        break;
-    }
+    //   case CovidNumberCaseType.deaths:
+    //     ageGroupAccessor = ((s: RKICaseTimedStatus) => s.deaths_by_agegroup);
+    //     break;
+    // }
+
+    const ageGroups: [number, number][] = this._ageGroups[this._options.ageGroupBinning];
 
     const data = [];
+    let maxDiff = 0;
+    let numberOfAgeGroups = 0;
+
+    const converted = [];
+
+    for (let i = 0; i < idxDiff; i++) {
+      let agNow;
+      switch (this._options.type) {
+        case CovidNumberCaseType.cases:
+          agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+          converted[i] = agNow;
+
+          this._options.timeAgg = TimeGranularity.yearweek;
+          idxDiff = 7;
+
+          break;
+
+        case CovidNumberCaseType.deaths:
+          agNow = fullData.developments[i].deaths_by_agegroup;
+          break;
+      }
+      converted[i] = agNow;
+    }
 
     for (let i = idxDiff; i < fullData.developments.length; i++) {
-      const agNow: RKIAgeGroups = ageGroupAccessor(fullData.developments[i]);
-      const agOld: RKIAgeGroups = ageGroupAccessor(fullData.developments[i - idxDiff]);
+      let agNow;
+      let agPop;
+      switch (this._options.type) {
+        case CovidNumberCaseType.cases:
+          agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+          agPop = this.caseUtils.groupAgeStatus(fullData.developments[i].population_survstat_by_agegroup, ageGroups);
+          break;
+
+        case CovidNumberCaseType.deaths:
+          agNow = fullData.developments[i].deaths_by_agegroup;
+          agPop = fullData.developments[i].population_by_agegroup;
+          break;
+      }
+
+      converted[i] = agNow;
+      const agOld = converted[i - idxDiff];
+
+      // const agNow: RKIAgeGroups = ageGroupAccessor(fullData.developments[i]);
+      // const agOld: RKIAgeGroups = ageGroupAccessor(fullData.developments[i - idxDiff]);
+      numberOfAgeGroups = Object.keys(agNow).length;
 
       for (const k of Object.keys(agNow)) {
         if (this._options.normalization === CovidNumberCaseNormalization.per100k && k === 'Aunknown') {
@@ -139,7 +219,11 @@ export class CaseAgegroupChartComponent implements OnInit {
         let diff = (agNow[k] - agOld[k]);
 
         if (this._options.normalization === CovidNumberCaseNormalization.per100k) {
-          diff = diff / fullData.developments[i].population_by_agegroup[k] * 100000;
+          diff = diff / agPop[k] * 100000;
+        }
+
+        if (diff > maxDiff) {
+          maxDiff = diff;
         }
 
         data.push({
@@ -160,10 +244,14 @@ export class CaseAgegroupChartComponent implements OnInit {
       xAxisTitle: xAxis,
       yAxisTitle: yAxis,
       zAxisTitle: zAxis,
-      width: 600,
+      width: 'container',
+      height: numberOfAgeGroups * 9,
       scaleType: this._options.scaleType.toString(),
-      timeAgg: this._options.timeAgg.toString()
+      timeAgg: this._options.timeAgg.toString(),
+      domain: [0, maxDiff]
     });
+
+    // console.log(JSON.stringify(this.spec));
   }
 
 }

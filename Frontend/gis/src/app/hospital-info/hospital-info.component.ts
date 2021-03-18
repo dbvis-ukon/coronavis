@@ -66,7 +66,7 @@ export class HospitalInfoComponent implements OnInit {
   glyphLegendColors = QualitativeColormapService.bedStati;
 
   temporalChartTemplateSpec = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": 260, "height": 50,
     "aggregated": true,
     "data": {

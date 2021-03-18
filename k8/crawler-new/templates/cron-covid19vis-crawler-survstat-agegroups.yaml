@@ -1,0 +1,58 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: covid19vis-crawler-survstat-agegroups
+  annotations:
+    description: "Crawler that gets agegroup data from survstat"
+spec:
+  # run every hour (performs database check before actually fetching data from RKI)
+  schedule: "0 6,9,12,15,18,21 * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          containers:
+          - name: covid19vis-crawler-survstat-agegroups
+            image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
+            imagePullPolicy: Always
+            command: ['python']
+            args: ['crawl_survstat_agegroups.py']
+            env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_PORT
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_PASS
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-info
+                  key: DB_NAME
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: sentry
+                  key: SENTRY_DSN
+            - name: VERSION
+              value: {{ .Values.sha | quote }}
+            - name: ENVIRONMENT
+              value: {{ .Values.environment | quote }}
+          restartPolicy: Never
+          imagePullSecrets:
+            - name: regcred-server

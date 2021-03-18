@@ -58,70 +58,70 @@ icu = IcuDevelopments()
 
 
 @routes.route('/development/<idHospital>', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_hospital(idHospital):
     return icu.getHospital(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), idHospital)
 
 
 @routes.route('/development', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_hospitals2():
     return icu.getHospitals(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
 
 
 @routes.route('/development/landkreis/<idCounty>', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_county(idCounty):
     return icu.getCounty(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), idCounty)
 
 
 @routes.route('/development/landkreise', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_counties():
     return icu.getByCounties(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
 
 
 @routes.route('/development/regierungsbezirk/<idDistrict>', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_district(idDistrict):
     return icu.getDistrict(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), idDistrict)
 
 
 @routes.route('/development/regierungsbezirke', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_districts():
     return icu.getByDistricts(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
 
 
 @routes.route('/development/bundesland/<idState>', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_state(idState):
     return icu.getState(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), idState)
 
 
 @routes.route('/development/bundeslaender', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_states():
     return icu.getByStates(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
 
 
 @routes.route('/development/land/<idCountry>', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_country(idCountry):
     return icu.getCountry(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), idCountry)
 
 
 @routes.route('/development/laender', methods=['GET'])
-@cache.cached(key_prefix=make_cache_key)
 @timer
+@cache.cached(key_prefix=make_cache_key)
 def get_countries():
     return icu.getByCountries(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))

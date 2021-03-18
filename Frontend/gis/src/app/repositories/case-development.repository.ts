@@ -25,13 +25,13 @@ export class CaseDevelopmentRepository {
       .get<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggLevel}`, this.prepareParams(from, to));
   }
 
-  getCasesDevelopmentForAggLevelSingle(dataSource: 'rki' | 'risklayer', aggLevel: AggregationLevel, id: string): Observable<Feature<MultiPolygon, RKICaseDevelopmentProperties>> {
+  getCasesDevelopmentForAggLevelSingle(dataSource: 'rki' | 'risklayer', aggLevel: AggregationLevel, id: string, to?: string): Observable<Feature<MultiPolygon, RKICaseDevelopmentProperties>> {
     const endpoint = dataSource === 'rki' ? 'cases' : 'cases-risklayer';
     const aggEndpoint = aggLevelToEndpointSingle(aggLevel);
 
     return this
       .cachedRepository
-      .get<Feature<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggEndpoint}/${id}`);
+      .get<Feature<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggEndpoint}/${id}`, this.prepareParams(null, to));
   }
 
   getRisklayerPrognosis(): Observable<RisklayerPrognosis> {
@@ -47,19 +47,18 @@ export class CaseDevelopmentRepository {
       .get<Feature<MultiPolygon, AggregatedRKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/aggregated`, this.prepareAggParams(dataRequests));
   }
 
-  private prepareParams(from: string, to: string): HttpParams {
+  private prepareParams(from?: string, to?: string): HttpParams {
     let params = new HttpParams();
 
-    if (!to) {
-      to = 'now';
+    if (from) {
+      const fromDate = getMoment(from);
+      params = params.append('from', getStrDate(fromDate));
     }
 
-    const fromDate = getMoment(from);
-    const toDate = getMoment(to);
-
-
-    params = params.append('from', getStrDate(fromDate));
-    params = params.append('to', getStrDate(toDate));
+    if (to) {
+      const toDate = getMoment(to);
+      params = params.append('to', getStrDate(toDate));
+    }
 
     return params;
   }

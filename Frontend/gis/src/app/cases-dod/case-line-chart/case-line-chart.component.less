@@ -1,10 +1,19 @@
+:host {
+  display: block;
+}
+
 .trend-wrapper {
   display: flex;
   justify-content: stretch;
   align-items: stretch;
 
+  .chart-wrapper {
+    flex-grow: 5;
+  }
+
   .trend-icon-wrapper {
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
     justify-items: center;
     align-items: center;
