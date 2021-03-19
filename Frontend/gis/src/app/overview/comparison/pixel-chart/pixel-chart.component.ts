@@ -165,6 +165,7 @@ export class PixelChartComponent implements OnInit {
       yAxisTitle: yAxis,
       zAxisTitle: zAxis,
       width: 'container',
+      height: 200,
       scaleType: this._options.scaleType.toString(),
       timeAgg: this._options.timeAgg.toString()
     });

@@ -56,7 +56,7 @@ export class CasesRegionAggregatorService {
   constructor() { }
 
   public aggregate(data: Feature<MultiPolygon, RKICaseDevelopmentProperties>[]): AggRKICaseDevelopmentProperties {
-    
+
     const ret: AggRKICaseDevelopmentProperties = {
       ids: data.map(d => d.properties.id),
       names: data.map(d => d.properties.name),

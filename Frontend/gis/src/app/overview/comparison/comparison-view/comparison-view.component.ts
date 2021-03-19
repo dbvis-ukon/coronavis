@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
-import { CovidChartOptions, ScaleType, TimeGranularity } from 'src/app/cases-dod/covid-chart-options';
+import { AgeGroupBinning, CovidChartOptions, ScaleType, TimeGranularity } from 'src/app/cases-dod/covid-chart-options';
 import { AggregationLevel } from 'src/app/map/options/aggregation-level.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
 
@@ -57,6 +57,7 @@ export class ComparisonViewComponent implements OnInit {
         daysForTrend: 7,
         normalization: CovidNumberCaseNormalization.per100k,
         scaleType: ScaleType.linear,
+        ageGroupBinning: AgeGroupBinning.fiveyears,
         showLabels: true,
         showOnlyAvailableCounties: true,
         showTrendGlyphs: true,
@@ -81,6 +82,7 @@ export class ComparisonViewComponent implements OnInit {
         date: 'now',
         daysForTrend: 7,
         normalization: CovidNumberCaseNormalization.per100k,
+        ageGroupBinning: AgeGroupBinning.fiveyears,
         scaleType: ScaleType.linear,
         showLabels: true,
         showOnlyAvailableCounties: true,
