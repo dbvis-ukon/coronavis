@@ -61,9 +61,6 @@ class CaseDevelopments:
     def get_aggregated(self, agg_dict: dict, from_time: str, to_time: str):
         return self.__res_single(self.__agg_region_query(agg_dict, from_time, to_time))
 
-    def getAggregated(self, aggDict: dict, fromTime: str, toTime: str):
-        return self.__resSingle(self.__aggRegionQuery(aggDict, fromTime, toTime))
-
     @staticmethod
     def __res_collection(sql_ret):
         sql_result = sql_ret.fetchall()

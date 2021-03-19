@@ -228,7 +228,7 @@ def get_country(idCountry):
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_aggregated():
-    return cd.getAggregated({
+    return cd.get_aggregated({
         'landkreise': request.args.get('landkreise'),
         'regierungsbezirke': request.args.get('regierungsbezirke'),
         'bundeslaender': request.args.get('bundeslaender'),
