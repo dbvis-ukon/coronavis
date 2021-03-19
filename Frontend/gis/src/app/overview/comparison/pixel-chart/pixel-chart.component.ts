@@ -4,7 +4,7 @@ import { CovidChartOptions, ScaleType, TimeGranularity } from 'src/app/cases-dod
 import { CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from 'src/app/repositories/case-development.repository';
 import { AggregatedRKICaseDevelopmentProperties, RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
-import { VegaPixelchartService } from 'src/app/services/vega-pixelchart.service';
+import { PixelChartDataPoint, VegaPixelchartService } from 'src/app/services/vega-pixelchart.service';
 import { DataRequest } from '../comparison-view/comparison-view.component';
 
 @Component({
@@ -130,7 +130,7 @@ export class PixelChartComponent implements OnInit {
         break;
     }
 
-    const data = [];
+    const data: PixelChartDataPoint[] = [];
 
     for (let i = idxDiff; i < fullData.developments.length; i++) {
       const agNow: RKIAgeGroups = ageGroupAccessor(fullData.developments[i]);
@@ -169,5 +169,7 @@ export class PixelChartComponent implements OnInit {
       scaleType: this._options.scaleType.toString(),
       timeAgg: this._options.timeAgg.toString()
     });
+
+    console.log(JSON.stringify(this.spec));
   }
 }

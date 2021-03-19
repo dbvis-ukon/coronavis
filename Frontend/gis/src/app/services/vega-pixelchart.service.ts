@@ -2,6 +2,12 @@
 
 import { Injectable } from '@angular/core';
 
+export interface PixelChartDataPoint {
+  x: string;
+  y: string;
+  val: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -92,7 +98,7 @@ export class VegaPixelchartService {
 
 
   compileChart(
-    data: {x: string; y: string; val: number}[],
+    data: PixelChartDataPoint[],
     chartOptions: {
       xAxisTitle: string;
       yAxisTitle: string;

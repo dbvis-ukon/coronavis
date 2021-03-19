@@ -48,6 +48,10 @@ export class ComparisonViewComponent implements OnInit {
         {
           id: '08335',
           aggLevel: AggregationLevel.county
+        },
+        {
+          id: '08336',
+          aggLevel: AggregationLevel.county
         }
       ],
       config: {
@@ -74,6 +78,32 @@ export class ComparisonViewComponent implements OnInit {
         {
           id: '08',
           aggLevel: AggregationLevel.state
+        }
+      ],
+      config: {
+        change: CovidNumberCaseChange.absolute,
+        dataSource: 'rki',
+        date: 'now',
+        daysForTrend: 7,
+        normalization: CovidNumberCaseNormalization.per100k,
+        ageGroupBinning: AgeGroupBinning.fiveyears,
+        scaleType: ScaleType.linear,
+        showLabels: true,
+        showOnlyAvailableCounties: true,
+        showTrendGlyphs: true,
+        timeAgg: TimeGranularity.yearmonthdate,
+        timeWindow: CovidNumberCaseTimeWindow.sevenDays,
+        type: CovidNumberCaseType.cases
+      }
+    },
+    {
+      type: 'pixel',
+      titleEditMode: false,
+      title: 'Test123',
+      dataRequest: [
+        {
+          id: 'de',
+          aggLevel: AggregationLevel.country
         }
       ],
       config: {

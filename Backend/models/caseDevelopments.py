@@ -503,6 +503,9 @@ class CaseDevelopments:
             elif agg_table == 'bundeslaender':
                 desc = "'BL' AS description"
             elif agg_table == 'laender':
+                agg_table = 'germany'
+                ids_sanitized_sql = '(\'de\')'
+                all_ids.append('de')
                 desc = "'L' AS description"
 
             # noinspection SqlResolve
