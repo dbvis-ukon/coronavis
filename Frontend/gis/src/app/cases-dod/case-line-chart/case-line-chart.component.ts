@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
@@ -45,6 +45,9 @@ export class CaseLineChartComponent implements OnInit {
     return this._options;
   }
 
+  @ViewChild('chartwrapper', {static: true})
+  chartwrapper: ElementRef<HTMLDivElement>;
+
   rollingChart: Observable<any>;
 
   trend: Observable<{m: number; b: number; rotation: number}>;
@@ -59,10 +62,16 @@ export class CaseLineChartComponent implements OnInit {
     this.updateChart();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.updateChart();
+  }
+
   updateChart() {
     if (!this.options || !this.data) {
       return;
     }
+    this.rollingChart = null;
 
     // to avoid Expression has changed after it has been checked error
     switch (this.options.timeWindow) {
@@ -90,6 +99,9 @@ export class CaseLineChartComponent implements OnInit {
         mergeMap(d => this.caseUtil.extractXYByOptions(d, this.options)),
         map(d => {
 
+          // why -100? cause VEGA, that's why
+          const wrapperWidth = this.chartwrapper.nativeElement.offsetWidth - 100;
+
           const tType = this.options.type;
 
           const tNorm = this.options.normalization === CovidNumberCaseNormalization.per100k ? ' ' + this.i18nPer100k.nativeElement.textContent : '';
@@ -100,7 +112,7 @@ export class CaseLineChartComponent implements OnInit {
             xAxisTitle: null,
             yAxisTitle: 'New ' + tType + tNorm + tWindow,
             yAxis2Title: this.i18nAccumulated.nativeElement.textContent + tNorm,
-            width: 'container',
+            width: wrapperWidth,
             height: 150,
             regression: {
               to: getMoment(this.options.date).toISOString(),

@@ -3,21 +3,25 @@
 <span class="hidden" #i18nPerDay i18n="@@caseLineChartPerDay">{tDay, plural, =1 {Tag} other {{{tDay}} Tage}}</span>
 
 <div class="trend-wrapper">
-    <div *ngIf="rollingChart | async; let chart; else elseBlock" class="chart-wrapper">
-        <app-vega [spec]="chart"></app-vega>
+    <div #chartwrapper class="chart-wrapper">
+        <div *ngIf="rollingChart | async; let chart; else elseBlock">
+            <app-vega [spec]="chart"></app-vega>
+        </div>
+        
+        <ng-template #elseBlock>
+            <mat-spinner diameter="40" strokeWidth="2" style="margin: 40px 80px;"></mat-spinner>
+        </ng-template>
     </div>
-
-    <ng-template #elseBlock>
-        <mat-spinner diameter="40" strokeWidth="2" style="margin: 40px 80px;"></mat-spinner>
-    </ng-template>
     
     
-    <div class="trend-icon-wrapper" *ngIf="trend | async; let t">
-        <p i18n="@@caseInfoTrendLastThreeDays">Trend der letzten {{ options.daysForTrend }} Tage</p>
+    <div class="trend-icon-wrapper">
+        <div *ngIf="trend | async; let t">
+            <p i18n="@@caseInfoTrendLastThreeDays">Trend der letzten {{ options.daysForTrend }} Tage</p>
 
-        <mat-icon class="trend-icon" aria-hidden="false" aria-label="Example home icon" [ngStyle]="{'transform': 'rotate(' + t.rotation + 'deg)'}">trending_flat</mat-icon>
-
-        <p i18n="@@caseInfoTrendPerDay">{{ t.m | plusminus:'1.0-1' }} pro Tag</p>
+            <mat-icon class="trend-icon" aria-hidden="false" aria-label="Example home icon" [ngStyle]="{'transform': 'rotate(' + t.rotation + 'deg)'}">trending_flat</mat-icon>
+    
+            <p i18n="@@caseInfoTrendPerDay">{{ t.m | plusminus:'1.0-1' }} pro Tag</p>
+        </div>
     </div>
 </div>
 
