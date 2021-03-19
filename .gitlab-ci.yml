@@ -303,7 +303,7 @@ frontend-install-dependencies:
     - cd ./Frontend/gis
     - yarn config set registry https://nexus.dbvis.de/repository/npmjs/
     # if node_modules does not exist use yarn to create it
-    - test -d ./node_modules || yarn --frozen-lockfile --non-interactive --no-progress --cache-folder ./.npm --prefer-offline
+    - test -d ./node_modules || yarn --frozen-lockfile --non-interactive --no-progress
   artifacts:
     expire_in: 1 day
     paths:
@@ -315,7 +315,6 @@ frontend-install-dependencies:
         - ./Frontend/gis/yarn.lock
     paths:
       - ./Frontend/gis/node_modules
-      - ./Frontend/gis/.npm
     policy: pull-push
   needs: []
   retry: 2
