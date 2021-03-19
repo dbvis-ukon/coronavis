@@ -301,8 +301,9 @@ frontend-install-dependencies:
   image: node:15
   script:
     - cd ./Frontend/gis
-    # if node_modules does not exist use npm ci to create it
-    - test -d ./node_modules || npm ci --cache ./.npm --unsafe-perm --prefer-offline
+    - yarn config set registry https://nexus.dbvis.de/repository/npmjs/
+    # if node_modules does not exist use yarn to create it
+    - test -d ./node_modules || yarn --frozen-lockfile --non-interactive --no-progress --cache-folder ./.npm --prefer-offline
   artifacts:
     expire_in: 1 day
     paths:
@@ -341,7 +342,7 @@ frontend-lint:
   image: node:15
   script:
     - cd ./Frontend/gis
-    - npm run-script lint
+    - yarn lint
   dependencies:
     - frontend-install-dependencies
   needs:
@@ -417,7 +418,7 @@ frontend-code-quality:
     - export SENTRY_DSN
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
-    - npm run-script build
+    - yarn build
   artifacts:
     expire_in: 1 day
     paths:
