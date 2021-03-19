@@ -312,7 +312,7 @@ frontend-install-dependencies:
     key:
       files:
         - ./Frontend/gis/package.json
-        - ./Frontend/gis/package-lock.json
+        - ./Frontend/gis/yarn.lock
     paths:
       - ./Frontend/gis/node_modules
       - ./Frontend/gis/.npm
