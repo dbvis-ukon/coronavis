@@ -177,6 +177,8 @@ def insert_data(data):
 
     for d in data['data']:
         e = d['krankenhausStandort']
+        e['intensivmedizinischePlanbetten'] = None
+        e['meldebereicheNichtVollstaendig'] = None
         e['pos_lon'] = e['position']['longitude']
         e['pos_lat'] = e['position']['latitude']
         entries_kh_standorte.append(e)
@@ -203,7 +205,8 @@ def insert_data(data):
                                   f'patienteninvasivbeatmet, patientenecmo, freieivkapazitaet, freieecmokapazitaet, ' \
                                   f'intensivbettennotfall7d, statuseinschaetzunglowcare, ' \
                                   f'statuseinschaetzunghighcare, statuseinschaetzungecmo, behandlungsschwerpunktl1, ' \
-                                  f'behandlungsschwerpunktl2, behandlungsschwerpunktl3) ' \
+                                  f'behandlungsschwerpunktl2, behandlungsschwerpunktl3, ' \
+                                  f'faellecovidaktuellnichtinvasivbeatmet, faellecovidaktuellecmo )' \
                                   f'VALUES %s ON CONFLICT ON CONSTRAINT divi_meldungen_pk DO ' \
                                   f'UPDATE SET ' \
                                   f'bettenmeldungecmo = EXCLUDED.bettenmeldungecmo, ' \
@@ -232,13 +235,33 @@ def insert_data(data):
                                   f'statuseinschaetzungecmo = EXCLUDED.statuseinschaetzungecmo, ' \
                                   f'behandlungsschwerpunktl1 = EXCLUDED.behandlungsschwerpunktl1, ' \
                                   f'behandlungsschwerpunktl2 = EXCLUDED.behandlungsschwerpunktl2, ' \
-                                  f'behandlungsschwerpunktl3 = EXCLUDED.behandlungsschwerpunktl3;'
+                                  f'behandlungsschwerpunktl3 = EXCLUDED.behandlungsschwerpunktl3,' \
+                                  f'faellecovidaktuellnichtinvasivbeatmet = EXCLUDED.faellecovidaktuellnichtinvasivbeatmet, ' \
+                                  f'faellecovidaktuellecmo = EXCLUDED.faellecovidaktuellecmo;'
 
     entries_meldunden = []
 
     for d in data['data']:
-        e = d
-        e.update(d['kapazitaeten'])
+        e = {'meldezeitpunkt': d['letzteMeldezeitpunkt'], 'id': d['krankenhausStandort']['id'],
+             'bettenmeldungECMO': None, 'bettenmeldungLowCare': None, 'bettenmeldungHighCare': None,
+             'faelleCovidAktuell': d['faelleCovidAktuell'], 'faelleCovidAktuellBeatmet': d['faelleCovidAktuellBeatmet'],
+             'faelleCovidGenesen': d['faelleCovidGenesen'], 'faelleCovidVerstorben': d['faelleCovidVerstorben'],
+             'betriebssituation': d['bestBetriebssituation'], 'betriebseinschraenkungPersonal': None,
+             'betriebseinschraenkungRaum': None, 'betriebseinschraenkungBeatmungsgeraet': None,
+             'betriebseinschraenkungVerbrauchsmaterial': None,
+             'meldebereiche': list(map(lambda x: x['meldebereichBezeichnung'], d['meldebereiche'])),
+             'ardsNetzwerkMitglied': None, 'intensivBetten': d['intensivBettenGesamt'],
+             'intensivBettenBelegt': d['intensivBettenBelegt'], 'patientenInvasivBeatmet': d['patientenIvBeatmet'],
+             'patientenEcmo': d['patientenEcmoBeatmet'], 'freieIvKapazitaet': d['freieIvKapazitaet'],
+             'freieEcmoKapazitaet': d['freieEcmoKapazitaet'], 'intensivBettenNotfall7d': d['intensivBettenNotfall7d'],
+             'statusEinschaetzungLowcare': d['maxBettenStatusEinschaetzungLowCare'],
+             'statusEinschaetzungHighcare': d['maxBettenStatusEinschaetzungHighCare'],
+             'statusEinschaetzungEcmo': d['maxBettenStatusEinschaetzungEcmo'],
+             'behandlungsschwerpunktL1': list(map(lambda x: x['behandlungsschwerpunktL1'], d['meldebereiche'])),
+             'behandlungsschwerpunktL2': list(map(lambda x: x['behandlungsschwerpunktL2'], d['meldebereiche'])),
+             'behandlungsschwerpunktL3': list(map(lambda x: x['behandlungsschwerpunktL3'], d['meldebereiche'])),
+             'faelleCovidAktuellNichtInvasivBeatmet': d['faelleCovidAktuellNichtInvasivBeatmet'],
+             'faelleCovidAktuellEcmo': d['faelleCovidAktuellEcmo']}
         entries_meldunden.append(e)
 
     psycopg2.extras.execute_values(
@@ -254,7 +277,7 @@ def insert_data(data):
                  '%(patientenInvasivBeatmet)s, %(patientenEcmo)s, %(freieIvKapazitaet)s, %(freieEcmoKapazitaet)s, '
                  '%(intensivBettenNotfall7d)s, %(statusEinschaetzungLowcare)s, %(statusEinschaetzungHighcare)s, '
                  '%(statusEinschaetzungEcmo)s, %(behandlungsschwerpunktL1)s, %(behandlungsschwerpunktL2)s, '
-                 '%(behandlungsschwerpunktL3)s)',
+                 '%(behandlungsschwerpunktL3)s, %(faelleCovidAktuellNichtInvasivBeatmet)s, %(faelleCovidAktuellEcmo)s)',
         page_size=500
     )
     conn.commit()
