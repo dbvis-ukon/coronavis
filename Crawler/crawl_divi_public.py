@@ -130,10 +130,14 @@ def insert_data(data):
     entries_meldunden = []
 
     for d in data['data']:
-        e = d
-        e['statusEinschaetzungLowcare'] = d['bettenStatus']['statusLowCare']
-        e['statusEinschaetzungHighcare'] = d['bettenStatus']['statusHighCare']
-        e['statusEinschaetzungEcmo'] = d['bettenStatus']['statusECMO']
+        e = {'id': d['krankenhausStandort']['id'], 'meldezeitpunkt': d['letzteMeldezeitpunkt'],
+             'statusEinschaetzungLowcare': d['maxBettenStatusEinschaetzungLowCare'],
+             'statusEinschaetzungHighcare': d['maxBettenStatusEinschaetzungHighCare'],
+             'statusEinschaetzungEcmo': d['maxBettenStatusEinschaetzungEcmo'],
+             'meldebereiche': list(map(lambda x: x['meldebereichBezeichnung'], d['meldebereiche'])),
+             'behandlungsschwerpunktL1': list(map(lambda x: x['behandlungsschwerpunktL1'], d['meldebereiche'])),
+             'behandlungsschwerpunktL2': list(map(lambda x: x['behandlungsschwerpunktL2'], d['meldebereiche'])),
+             'behandlungsschwerpunktL3': list(map(lambda x: x['behandlungsschwerpunktL3'], d['meldebereiche']))}
         entries_meldunden.append(e)
 
     psycopg2.extras.execute_values(
