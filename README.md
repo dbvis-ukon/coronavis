@@ -24,7 +24,7 @@ Backend:
 For more have a look at the [requirements.txt](./Backend/requirements.txt)
 
 Database:
-- [Postgresql](https://www.postgresql.org/) v12 with [PostGIS](https://postgis.net/) extension
+- [Postgresql](https://www.postgresql.org/) v13 with [PostGIS](https://postgis.net/) extension
 
 Tileserver:
 - self-hosted tileserver based on [nginx](https://nginx.com)
