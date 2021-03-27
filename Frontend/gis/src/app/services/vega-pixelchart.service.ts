@@ -66,87 +66,78 @@ export class VegaPixelchartService {
 
   template = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "height": 100,
-    "width": 60,
+    "height": 300,
+    "width": "container",
     "description": "A simple bar chart with rounded corners at the end of the bar.",
     "data": {
-      "values": [{
-          "cat": "Verfügbar",
-          "num": 6,
-          "color": "red"
-        },
-        {
-          "cat": "Begrenzt",
-          "num": 3,
-          "color": "green"
-        },
-        {
-          "cat": "Ausgelastet",
-          "num": 1,
-          "color": "blue"
-        },
-        {
-          "cat": "Nicht verfügbar",
-          "num": 0,
-          "color": "yellow"
-        }
-      ]
+      "values": []
     },
-    "config": {
-        "view": {
-            "strokeWidth": 0,
-            "step": 18
-        },
-        "axis": {
-            "domain": false
-        }
-    },
-  "mark": {
-    "type": "rect",
-    "tooltip": true
-  },
-  "encoding": {
+    "encoding": {
       "x": {
-          "field": "x",
-          "timeUnit": "yearmonthdate",
-          "type": "temporal",
-          "title": "Day",
-          "axis": {
-              "labelAngle": 45,
+        "field": "x",
+        "timeUnit": "yearweek",
+        "type": "temporal",
+        "title": "Woche",
+        "axis": {"labelAngle": 45},
+        "bandPosition": 0.5,
+        "scale": {}
+      },
+      "y": {"field": "y", "type": "ordinal", "title": "Altersgruppe", "axis": {
+        "minExtent": 40,
+        "maxExtent": 40
+      }}
+    },
+    "layer": [
+      {
+        "transform": [
+          {"filter": "day(datum.x) >= 0"}
+        ],
+        "mark": {"type": "rect", "tooltip": true},
+        "encoding": {
+          "color": {
+            "field": "val",
+            "type": "quantitative",
+            "legend": {"title": null, "orient": "bottom", "gradientLength": {"signal": "width - 400"}},
+            "scale": {"type": "linear", "domain": [0, 579.7865331400711], "scheme": "inferno"}
           },
-          "scale": {}
-      },
-      "y": {
-          "field": "y",
-          "type": "ordinal",
-          "title": "Month",
-          "axis": {
-            "minExtent": 40,
-            "maxExtent": 40
-          }
-      },
-      "color": {
-          "field": "val",
-          "type": "quantitative",
-          "legend": {
-              "title": null,
-              "orient": "bottom"
-          },
-          "scale": {
-            "type": "linear"
-          }
-      },
-      "tooltip": [
-        {
-          "field": "x", "type": "temporal", "title": "Day"
-        },
-        {
-          "field": "y", "type": "ordinal", "title": "Agegroup"
-        },
-        {
-          "field": "val", "title": "Cases per 100", "type": "quantitative", "format": ",.2f"
+          "tooltip": [
+            {"field": "x", "type": "temporal", "title": "Woche"},
+            {"field": "y", "type": "ordinal", "title": "Altersgruppe"},
+            {
+              "field": "val",
+              "title": "7-Tages-Inzidenz",
+              "type": "quantitative",
+              "format": ",.2f"
+            }
+          ]
         }
-      ]
+      },
+      {
+        "transform": [
+          {"filter": "day(datum.x) == 6"}
+        ],
+        "mark": {"type": "text", "fontWeight": "lighter", "fontSize": 10},
+        "encoding": {
+          "text": {"field": "val", "type": "quantitative", "format": ",.0f"},
+          "color": {
+            "condition": {"test": "datum['val'] > 300", "value": "black"},
+            "value": "white"
+          },
+          "tooltip": [
+            {"field": "x", "type": "temporal", "title": "Woche"},
+            {"field": "y", "type": "ordinal", "title": "Altersgruppe"},
+            {
+              "field": "val",
+              "title": "7-Tages-Inzidenz",
+              "type": "quantitative",
+              "format": ",.2f"
+            }
+          ]
+        }
+      }
+    ],
+    "config": {
+      "axis": {"grid": true, "tickBand": "extent"}
     }
   };
 
@@ -276,7 +267,7 @@ export class VegaPixelchartService {
         yAxisTitle: yAxis,
         zAxisTitle: zAxis,
         width: 'container',
-        height: numberOfAgeGroups * 9,
+        height: numberOfAgeGroups * 20,
         scaleType: o.scaleType.toString(),
         timeAgg: o.timeAgg.toString(),
         domain: [0, maxDiff],
@@ -314,11 +305,13 @@ export class VegaPixelchartService {
 
     spec.encoding.y.title = chartOptions.yAxisTitle || '';
 
-    spec.encoding.tooltip[0].title = chartOptions.xAxisTitle || '';
-    spec.encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
-    spec.encoding.tooltip[2].title = chartOptions.zAxisTitle || '';
+    for (const i of [0, 1]) {
+      spec.layer[i].encoding.tooltip[0].title = chartOptions.xAxisTitle || '';
+      spec.layer[i].encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
+      spec.layer[i].encoding.tooltip[2].title = chartOptions.zAxisTitle || '';
+    }
 
-    spec.encoding.color.scale.type = chartOptions.scaleType || 'linear';
+    spec.layer[0].encoding.color.scale.type = chartOptions.scaleType || 'linear';
 
     spec.encoding.x.timeUnit = chartOptions.timeAgg || 'yearmonthdate';
 
@@ -326,12 +319,15 @@ export class VegaPixelchartService {
     spec.height = chartOptions.height;
 
     if (chartOptions.domain) {
-      spec.encoding.color.scale.domain = chartOptions.domain;
+      spec.layer[0].encoding.color.scale.domain = chartOptions.domain;
     }
 
     if (chartOptions.xDomain) {
       spec.encoding.x.scale.domain = chartOptions.xDomain;
     }
+
+    const colorBreakpoint = chartOptions.domain[1] * 0.75;
+    spec.layer[1].encoding.color.condition.text = "datum.val > " + colorBreakpoint;
 
     return spec;
   }

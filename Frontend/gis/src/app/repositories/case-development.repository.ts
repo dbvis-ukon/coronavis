@@ -9,7 +9,7 @@ import { CachedRepository } from './cached.repository';
 import { AggregatedRKICaseDevelopmentProperties, RKICaseDevelopmentProperties } from './types/in/quantitative-rki-case-development';
 import { RisklayerPrognosis } from './types/in/risklayer-prognosis';
 import {aggLevelToEndpointSingle} from '../util/aggregation-level';
-import { DataRequest } from '../overview/comparison/comparison-view/comparison-view.component';
+import { Region } from './types/in/region';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +40,7 @@ export class CaseDevelopmentRepository {
       .get<RisklayerPrognosis>(`${environment.apiUrl}cases-risklayer/prognosis`);
   }
 
-  getCasesDevelopmentAggregated(dataSource: 'rki' | 'risklayer', dataRequests: DataRequest[]): Observable<Feature<MultiPolygon, AggregatedRKICaseDevelopmentProperties>> {
+  getCasesDevelopmentAggregated(dataSource: 'rki' | 'risklayer', dataRequests: Region[]): Observable<Feature<MultiPolygon, AggregatedRKICaseDevelopmentProperties>> {
     const endpoint = dataSource === 'rki' ? 'cases' : 'cases-risklayer';
     return this
       .cachedRepository
@@ -63,7 +63,7 @@ export class CaseDevelopmentRepository {
     return params;
   }
 
-  private prepareAggParams(dataRequests: DataRequest[]): HttpParams {
+  private prepareAggParams(dataRequests: Region[]): HttpParams {
     const map = new Map<string, string[]>();
 
     dataRequests.forEach(d => {

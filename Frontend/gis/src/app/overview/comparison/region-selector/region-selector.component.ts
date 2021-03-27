@@ -1,10 +1,11 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
-import {MatChipInputEvent} from '@angular/material/chips';
 import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import {filter, mergeMap, startWith, switchMap, toArray} from 'rxjs/operators';
+import { RegionRepository } from 'src/app/repositories/region.repository';
+import { Region } from 'src/app/repositories/types/in/region';
 
 /**
  * @title Chips Autocomplete
@@ -14,59 +15,73 @@ import {map, startWith} from 'rxjs/operators';
   templateUrl: 'region-selector.component.html',
   styleUrls: ['region-selector.component.less'],
 })
-export class RegionSelectorComponent {
-  visible = true;
-  selectable = true;
-  removable = true;
+export class RegionSelectorComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fruitCtrl = new FormControl();
-  filteredFruits: Observable<string[]>;
-  fruits: string[] = ['Lemon'];
-  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+
+  allRegions: Observable<Region[]>;
+  filteredRegions: Observable<Region[]>;
 
   @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
-  constructor() {
-    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+  @Input()
+  public selectedRegions: Region[] = [];
+
+  @Output()
+  public selectedRegionsChange: EventEmitter<Region[]> = new EventEmitter();
+
+  constructor(private regionRepo: RegionRepository) {
+    this.filteredRegions = this.fruitCtrl.valueChanges.pipe(
         startWith(null),
-        map((fruit: string | null) => fruit ? this._filter(fruit) : this.allFruits.slice()));
+        switchMap((search: string | null) => this._filter(search))
+    );
   }
 
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    // Add our fruit
-    if ((value || '').trim()) {
-      this.fruits.push(value.trim());
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-
-    this.fruitCtrl.setValue(null);
+  ngOnInit(): void {
+    this.allRegions = this.regionRepo.getAll();
   }
 
-  remove(fruit: string): void {
-    const index = this.fruits.indexOf(fruit);
+  remove(region: Region): void {
+    const index = this.selectedRegions.indexOf(region);
 
     if (index >= 0) {
-      this.fruits.splice(index, 1);
+      this.selectedRegions.splice(index, 1);
+
+      this.selectedRegionsChange.emit([...this.selectedRegions]);
     }
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.fruits.push(event.option.viewValue);
+    const newRegion: Region = event.option.value;
+    if (this.selectedRegions.findIndex(r => r.id === newRegion.id) === -1) {
+      this.selectedRegions.push(newRegion);
+    }
+
     this.fruitInput.nativeElement.value = '';
     this.fruitCtrl.setValue(null);
+
+    this.selectedRegionsChange.emit([...this.selectedRegions]);
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+  private _filter(value: string | Region | null): Observable<Region[]> {
+    if (!value) {
+      return this.allRegions;
+    }
 
-    return this.allFruits.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+    if ((value as Region).id) {
+      return this.allRegions;
+    }
+
+    // console.log('value', value);
+
+    const filterValue = (value as string).toLowerCase();
+
+    return this.allRegions
+      .pipe(
+        mergeMap(arr => arr),
+        filter(region => region.name.toLowerCase().indexOf(filterValue) === 0),
+        toArray()
+      );
   }
 }

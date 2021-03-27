@@ -18,6 +18,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { RegionSelectorComponent } from './region-selector/region-selector.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MarkdownModule } from 'ngx-markdown';
 
 
 
@@ -32,10 +34,10 @@ import { MatChipsModule } from '@angular/material/chips';
   imports: [
     CommonModule,
     SharedModule.forRoot(),
+    MarkdownModule.forRoot(),
     MatCardModule,
     MatIconModule,
     MatFormFieldModule,
-    FormsModule,
     MatMenuModule,
     MatButtonModule,
     MatTooltipModule,
@@ -45,7 +47,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatAutocompleteModule,
     FormsModule,
     ReactiveFormsModule,
-    MatChipsModule
+    MatChipsModule,
+    MatButtonToggleModule
   ],
   exports: [
     ComparisonViewComponent

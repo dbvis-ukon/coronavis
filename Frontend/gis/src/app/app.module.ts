@@ -57,6 +57,7 @@ import { SharedModule } from './shared/shared.module';
 import { TimesliderComponent } from './timeslider/timeslider.component';
 import localeEn from './util/locales/en';
 import { CasesDodModule } from './cases-dod/cases-dod.module';
+import { MarkdownModule } from 'ngx-markdown';
 
 
 
@@ -142,6 +143,7 @@ const localeProvider = {
   imports: [
     CommonModule,
     SharedModule.forRoot(),
+    MarkdownModule.forRoot(),
     BrowserModule,
     HttpClientModule,
     FormsModule,

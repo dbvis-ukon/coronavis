@@ -1,12 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { CovidChartOptions, ScaleType, TimeGranularity } from 'src/app/cases-dod/covid-chart-options';
+import { ScaleType, TimeGranularity } from 'src/app/cases-dod/covid-chart-options';
 import { CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
-import { CaseDevelopmentRepository } from 'src/app/repositories/case-development.repository';
-import { AggregatedRKICaseDevelopmentProperties, RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { MultiLineChartDataAndOptions, VegaMultiLineChartService } from 'src/app/services/vega-multilinechart.service';
-import { PixelChartDataAndOptions, PixelChartDataPoint, VegaPixelchartService } from 'src/app/services/vega-pixelchart.service';
-import { DataRequest } from '../comparison-view/comparison-view.component';
 
 @Component({
   selector: 'app-multi-line-chart',

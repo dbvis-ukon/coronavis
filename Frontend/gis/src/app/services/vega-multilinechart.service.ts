@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/quotes, quote-props */
 
 import { Injectable } from '@angular/core';
-import { from, Observable, pipe } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { map, mergeMap, toArray } from 'rxjs/operators';
-import { CovidChartOptions, TimeGranularity } from '../cases-dod/covid-chart-options';
-import { CovidNumberCaseTimeWindow, CovidNumberCaseType, CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
-import { DataRequest } from '../overview/comparison/comparison-view/comparison-view.component';
+import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
-import { AggregatedRKICaseDevelopmentProperties, RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
+import { Region } from '../repositories/types/in/region';
 import { getMoment } from '../util/date-util';
-import { CaseUtilService } from './case-util.service';
 
 export interface MultiLineChartDataPoint {
   /**
@@ -127,7 +124,7 @@ export class VegaMultiLineChartService {
   ) {}
 
 
-  compileToDataAndOptions(o: CovidChartOptions, dataRequests: DataRequest[]): Observable<MultiLineChartDataAndOptions> {
+  compileToDataAndOptions(o: CovidChartOptions, dataRequests: Region[]): Observable<MultiLineChartDataAndOptions> {
     const xExtent: [string, string] = [null, null];
     const yExtent: [number, number] = [0, 0];
     return from(dataRequests)

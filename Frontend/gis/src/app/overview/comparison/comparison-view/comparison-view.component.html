@@ -27,25 +27,50 @@
             </div>
           </div>
 
-            <div class="draggable-box timeline row" *ngFor="let timelineItem of timelineData" cdkDrag>
+            <div class="draggable-box timeline row" *ngFor="let timelineItem of timelineData; index as idx" cdkDrag>
               <mat-icon class="icon draw" aria-hidden="false" aria-label="drag me" cdkDragHandle>drag_indicator</mat-icon>            
               
               <div class="icons">
-                <!-- <button mat-icon-button aria-label="settings" class="icon filter" (click)="timelineItem.titleEditMode = !timelineItem.titleEditMode" matTooltip="Edit Title" >
+                <button *ngIf="timelineItem.type === 'markdown'" mat-icon-button aria-label="settings" class="icon filter" (click)="timelineItem._text = timelineItem.text; timelineItem._editMode = true" matTooltip="Edit Text" >
                     <mat-icon>edit</mat-icon>
-                </button> -->
+                </button>
       
-                <button mat-icon-button aria-label="settings" class="icon filter" (click)="openSettings(timelineItem)" matTooltip="Filter Settings">
+                <button *ngIf="timelineItem.type !== 'markdown'" mat-icon-button aria-label="settings" class="icon filter" (click)="openSettings(timelineItem, idx)" matTooltip="Filter Settings">
                     <mat-icon>settings</mat-icon>
                 </button> 
-      
-                <button mat-icon-button aria-label="delete" class="icon filter" (click)="remove(timelineItem)" matTooltip="Remove">
+    
+                <button *ngIf="!timelineItem._reallyDelete" mat-icon-button aria-label="delete" class="icon filter" (click)="timelineItem._reallyDelete = true" matTooltip="Remove">
                     <mat-icon>delete</mat-icon>
                 </button>
+
+                <div *ngIf="timelineItem._reallyDelete">
+                  <button mat-icon-button aria-label="delete" class="icon filter" (click)="remove(timelineItem)" matTooltip="Yes, remove">
+                    <mat-icon>check</mat-icon>
+                  </button>
+
+                  <button mat-icon-button aria-label="delete" class="icon filter" (click)="timelineItem._reallyDelete = false" matTooltip="No, cancel">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
               </div>
       
+              <div *ngIf="timelineItem.type === 'markdown'" class="full-width">
+                <div *ngIf="timelineItem._editMode">
+                  <h3 style="background-color: grey; margin: 0 0;">Vorschau:</h3>
+                  <markdown [ngStyle]="{'display': 'block', 'background-color': 'lightgrey'}" [data]="timelineItem._text"></markdown>
+  
+                  <mat-form-field style="margin-top: 10px;" class="full-width">
+                    <mat-label>Text bearbeiten</mat-label>
+                    <textarea matInput [(ngModel)]="timelineItem._text" cdkTextareaAutosize></textarea>
+                  </mat-form-field>
+
+                  <button mat-raised-button color="primary" (click)="timelineItem.text = timelineItem._text; timelineItem._editMode = false">Speichern</button> 
+                  <button style="margin-left: 10px;" mat-raised-button color="warn" (click)="timelineItem._editMode = false">Abbrechen</button>
+                </div>
+
+                <markdown *ngIf="!timelineItem._editMode" [data]="timelineItem.text"></markdown>
+              </div>
               
-      
               <div *ngIf="timelineItem.type === 'separator'" class="separator">
                 <hr>
               </div>
