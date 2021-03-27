@@ -4,15 +4,16 @@ import { CovidChartOptions, ScaleType, TimeGranularity } from 'src/app/cases-dod
 import { CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from 'src/app/repositories/case-development.repository';
 import { AggregatedRKICaseDevelopmentProperties, RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
+import { MultiLineChartDataAndOptions, VegaMultiLineChartService } from 'src/app/services/vega-multilinechart.service';
 import { PixelChartDataAndOptions, PixelChartDataPoint, VegaPixelchartService } from 'src/app/services/vega-pixelchart.service';
 import { DataRequest } from '../comparison-view/comparison-view.component';
 
 @Component({
-  selector: 'app-pixel-chart',
-  templateUrl: './pixel-chart.component.html',
-  styleUrls: ['./pixel-chart.component.less']
+  selector: 'app-multi-line-chart',
+  templateUrl: './multi-line-chart.component.html',
+  styleUrls: ['./multi-line-chart.component.less']
 })
-export class PixelChartComponent implements OnInit {
+export class MultiLineChartComponent implements OnInit {
 
   @ViewChild('i18nAltersgruppe', {static: true})
   i18nAltersgruppe: ElementRef<HTMLSpanElement>;
@@ -26,16 +27,16 @@ export class PixelChartComponent implements OnInit {
   @ViewChild('i18nVal', {static: true})
   i18nVal: ElementRef<HTMLSpanElement>;
 
-  _dataAndOptions: PixelChartDataAndOptions;
+  _dataAndOptions: MultiLineChartDataAndOptions;
 
   @Input()
-  public set dataAndOptions(d: PixelChartDataAndOptions) {
+  public set dataAndOptions(d: MultiLineChartDataAndOptions) {
     this._dataAndOptions = d;
 
     this.updateChart();
   }
 
-  public get dataAndOptions(): PixelChartDataAndOptions {
+  public get dataAndOptions(): MultiLineChartDataAndOptions {
     return this._dataAndOptions;
   }
 
@@ -50,8 +51,7 @@ export class PixelChartComponent implements OnInit {
   eCovidChartScaleType = ScaleType;
 
   constructor(
-    private vegaPixelchartService: VegaPixelchartService,
-    private caseRepo: CaseDevelopmentRepository
+    private multiLineChartService: VegaMultiLineChartService
   ) { }
 
   ngOnInit(): void {
@@ -63,8 +63,6 @@ export class PixelChartComponent implements OnInit {
       return;
     }
 
-    this.titleRegions = this._dataAndOptions.chartOptions.titleRegions.join(', ');
-
-    this.spec = this.vegaPixelchartService.compileChart(this._dataAndOptions.data, this._dataAndOptions.chartOptions);
+    this.spec = this.multiLineChartService.compileChart(this._dataAndOptions);
   }
 }

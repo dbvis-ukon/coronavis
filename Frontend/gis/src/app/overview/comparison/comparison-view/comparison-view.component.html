@@ -8,29 +8,34 @@
         <div class="root timelines draggable-list" cdkDropList (cdkDropListDropped)="drop($event)">
 
 
+          <div class="draggable-box timeline row" *ngIf="pleaseWait">
+            <mat-icon class="icon draw" disabled="disabled" aria-hidden="false" aria-label="drag me">drag_indicator</mat-icon>            
+            
+            <div class="icons"> 
+              <button mat-icon-button aria-label="settings" class="icon filter" disabled="disabled" matTooltip="Filter Settings">
+                  <mat-icon>settings</mat-icon>
+              </button> 
+    
+              <button mat-icon-button aria-label="delete" class="icon filter" disabled="disabled" matTooltip="Remove">
+                  <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+    
+
+            <div class="please-wait" #pleaseWait style="width: 100%">
+              <h3>Please wait... loading</h3>
+            </div>
+          </div>
+
             <div class="draggable-box timeline row" *ngFor="let timelineItem of timelineData" cdkDrag>
-              <mat-icon class="icon draw" aria-hidden="false" aria-label="drag me" cdkDragHandle>drag_indicator</mat-icon>
-              
-              <!-- <div class="title">
-                  <h5 *ngIf="!timelineItem.titleEditMode" (click)="timelineItem.titleEditMode = !timelineItem.titleEditMode">{{ timelineItem.title }}</h5>
-      
-                  <mat-form-field class="form" *ngIf="timelineItem.titleEditMode">
-                      <input matInput placeholder="Title" 
-                        [(ngModel)]="timelineItem.title" 
-                        (keydown.enter)="timelineItem.titleEditMode = false" 
-                        (keydown.escape)="timelineItem.titleEditMode = false" 
-                        (blur)="timelineItem.titleEditMode = false"
-                      >
-                  </mat-form-field>
-              </div> -->
-              
+              <mat-icon class="icon draw" aria-hidden="false" aria-label="drag me" cdkDragHandle>drag_indicator</mat-icon>            
               
               <div class="icons">
-                <button mat-icon-button aria-label="settings" class="icon filter" (click)="timelineItem.titleEditMode = !timelineItem.titleEditMode" matTooltip="Edit Title" >
+                <!-- <button mat-icon-button aria-label="settings" class="icon filter" (click)="timelineItem.titleEditMode = !timelineItem.titleEditMode" matTooltip="Edit Title" >
                     <mat-icon>edit</mat-icon>
-                </button>
+                </button> -->
       
-                <button *ngIf="timelineItem.type === 'streamgraph'" mat-icon-button aria-label="settings" class="icon filter" (click)="openSettings(timelineItem)" matTooltip="Filter Settings">
+                <button mat-icon-button aria-label="settings" class="icon filter" (click)="openSettings(timelineItem)" matTooltip="Filter Settings">
                     <mat-icon>settings</mat-icon>
                 </button> 
       
@@ -46,7 +51,11 @@
               </div>
 
               <div *ngIf="timelineItem.type === 'pixel'" style="width: 100%;">
-                <app-pixel-chart [dataRequest]="timelineItem.dataRequest" [options]="timelineItem.config"></app-pixel-chart>
+                <app-pixel-chart [dataAndOptions]="timelineItem._compiled"></app-pixel-chart>
+              </div>
+
+              <div *ngIf="timelineItem.type === 'multiline'" style="width: 100%">
+                <app-multi-line-chart [dataAndOptions]="timelineItem._compiled"></app-multi-line-chart>
               </div>
             </div>
       

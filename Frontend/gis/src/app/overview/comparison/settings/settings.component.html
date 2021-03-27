@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Hi</h1>
+<div mat-dialog-content>
+    Test
+
+    <app-region-selector></app-region-selector>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Abbrechen</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Speichern</button>
+</div>

@@ -128,128 +128,15 @@ export class CaseAgegroupChartComponent implements OnInit {
   private compileChart(fullData: RKICaseDevelopmentProperties, autoConfig: boolean) {
     this.hasPopulationData = fullData.developments[0].population_by_agegroup.A00_A04 !== null;
 
-    let idxDiff = 1;
-    switch (this._options.timeWindow) {
-      case CovidNumberCaseTimeWindow.twentyFourhours:
-        idxDiff = 1;
-        this._options.timeAgg = TimeGranularity.yearmonthdate;
-        break;
+    const dataAndOptions = this.vegaPixelchartService.compileToDataAndOptions(this._options, fullData, autoConfig);
 
-      case CovidNumberCaseTimeWindow.seventyTwoHours:
-        idxDiff = 3;
-        this._options.timeAgg = TimeGranularity.yearmonthdate;
-        break;
+    dataAndOptions.chartOptions.yAxisTitle = this.i18nAltersgruppe.nativeElement.textContent;
 
-      case CovidNumberCaseTimeWindow.sevenDays:
-        idxDiff = 7;
-        if (autoConfig) {
-          this._options.timeAgg = TimeGranularity.yearweek;
-        }
-        break;
+    dataAndOptions.chartOptions.xAxisTitle = this._options.timeAgg === TimeGranularity.yearweek ? this.i18nWoche.nativeElement.textContent : this.i18nDatum.nativeElement.textContent;
 
-      default:
-        idxDiff = 7;
-    }
+    dataAndOptions.chartOptions.zAxisTitle = this.i18nVal.nativeElement.textContent;
 
-    // let ageGroupAccessor: ((s: RKICaseTimedStatus) => RKIAgeGroups);
-
-    // switch (this._options.type) {
-    //   case CovidNumberCaseType.cases:
-    //     ageGroupAccessor = ((s: RKICaseTimedStatus) => s.cases_survstat_by_agegroup);
-    //     break;
-
-    //   case CovidNumberCaseType.deaths:
-    //     ageGroupAccessor = ((s: RKICaseTimedStatus) => s.deaths_by_agegroup);
-    //     break;
-    // }
-
-    const ageGroups: [number, number][] = this._ageGroups[this._options.ageGroupBinning];
-
-    const data = [];
-    let maxDiff = 0;
-    let numberOfAgeGroups = 0;
-
-    const converted = [];
-
-    for (let i = 0; i < idxDiff; i++) {
-      let agNow;
-      switch (this._options.type) {
-        case CovidNumberCaseType.cases:
-          agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
-          converted[i] = agNow;
-
-          this._options.timeAgg = TimeGranularity.yearweek;
-          idxDiff = 7;
-
-          break;
-
-        case CovidNumberCaseType.deaths:
-          agNow = fullData.developments[i].deaths_by_agegroup;
-          break;
-      }
-      converted[i] = agNow;
-    }
-
-    for (let i = idxDiff; i < fullData.developments.length; i++) {
-      let agNow;
-      let agPop;
-      switch (this._options.type) {
-        case CovidNumberCaseType.cases:
-          agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
-          agPop = this.caseUtils.groupAgeStatus(fullData.developments[i].population_survstat_by_agegroup, ageGroups);
-          break;
-
-        case CovidNumberCaseType.deaths:
-          agNow = fullData.developments[i].deaths_by_agegroup;
-          agPop = fullData.developments[i].population_by_agegroup;
-          break;
-      }
-
-      converted[i] = agNow;
-      const agOld = converted[i - idxDiff];
-
-      // const agNow: RKIAgeGroups = ageGroupAccessor(fullData.developments[i]);
-      // const agOld: RKIAgeGroups = ageGroupAccessor(fullData.developments[i - idxDiff]);
-      numberOfAgeGroups = Object.keys(agNow).length;
-
-      for (const k of Object.keys(agNow)) {
-        if (this._options.normalization === CovidNumberCaseNormalization.per100k && k === 'Aunknown') {
-          continue;
-        }
-        let diff = (agNow[k] - agOld[k]);
-
-        if (this._options.normalization === CovidNumberCaseNormalization.per100k) {
-          diff = diff / agPop[k] * 100000;
-        }
-
-        if (diff > maxDiff) {
-          maxDiff = diff;
-        }
-
-        data.push({
-          x: fullData.developments[i].timestamp,
-          y: k,
-          val: diff
-        });
-      }
-    }
-
-    const yAxis = this.i18nAltersgruppe.nativeElement.textContent;
-
-    const xAxis = this._options.timeAgg === TimeGranularity.yearweek ? this.i18nWoche.nativeElement.textContent : this.i18nDatum.nativeElement.textContent;
-
-    const zAxis = this.i18nVal.nativeElement.textContent;
-
-    this.spec = this.vegaPixelchartService.compileChart(data, {
-      xAxisTitle: xAxis,
-      yAxisTitle: yAxis,
-      zAxisTitle: zAxis,
-      width: 'container',
-      height: numberOfAgeGroups * 9,
-      scaleType: this._options.scaleType.toString(),
-      timeAgg: this._options.timeAgg.toString(),
-      domain: [0, maxDiff]
-    });
+    this.spec = this.vegaPixelchartService.compileChart(dataAndOptions.data, dataAndOptions.chartOptions);
 
     // console.log(JSON.stringify(this.spec));
   }
