@@ -40,9 +40,7 @@ export class MyLocalStorageService {
 
     public isAvailable(): boolean {
         try {
-            if (window.localStorage !== undefined) {
-                return true;
-            }
+            return window.localStorage !== undefined;
         } catch (e) {
             console.warn('Local storage unavailable, will use in-memory storage');
             return false;

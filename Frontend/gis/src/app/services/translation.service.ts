@@ -151,7 +151,23 @@ export class TranslationService {
     {
       'de-DE': 'Bettenauslastung (%)',
       'en-US': 'Bed occupancy (%)'
-    }
+    },
+    {
+      'de-DE': 'Positiv Getestet',
+      'en-US': 'Tested positive'
+    },
+    {
+      'de-DE': 'Todesfälle',
+      'en-US': 'Deaths'
+    },
+    {
+      'de-DE': 'Covid-19 Patienten (beatmet)',
+      'en-US': 'Covid-19 patients (ventilated)'
+    },
+    {
+      'de-DE': 'Bettenauslastung',
+      'en-US': 'Bed occupancy'
+    },
   ];
 
   constructor(

@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { filter, map, mergeMap, toArray } from 'rxjs/operators';
 import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
-import { RKICaseDevelopmentProperties, RKICaseTimedStatus, SurvStatAgeGroups } from '../repositories/types/in/quantitative-rki-case-development';
+import { AggregatedRKICaseDevelopmentProperties, RKICaseDevelopmentProperties, RKICaseTimedStatus, SurvStatAgeGroups } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
 import { linearRegression } from '../util/regression';
 import { TranslationService } from './translation.service';
@@ -29,7 +29,7 @@ export class CaseUtilService {
     && options.type === CovidNumberCaseType.cases;
   }
 
-  public findHighestIdxWhereInsertedIsNotNull(data: RKICaseDevelopmentProperties): number {
+  public findHighestIdxWhereInsertedIsNotNull(data: RKICaseDevelopmentProperties | AggregatedRKICaseDevelopmentProperties): number {
     for (let i = data.developments.length - 1; i >= 0; i--) {
       if (data.developments[i].inserted) {
         return i;
@@ -39,7 +39,7 @@ export class CaseUtilService {
     return -1;
   }
 
-  public getTimedStatusByIdx(data: RKICaseDevelopmentProperties, idx: number): RKICaseTimedStatus | undefined {
+  public getTimedStatusByIdx(data: RKICaseDevelopmentProperties | AggregatedRKICaseDevelopmentProperties, idx: number): RKICaseTimedStatus | undefined {
     if (idx < 0 && idx >= data.developments.length) {
       return undefined;
     }

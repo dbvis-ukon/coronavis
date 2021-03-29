@@ -3,12 +3,12 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 import { merge } from 'lodash-es';
 import { Observable, of } from 'rxjs';
 import { filter, map, mergeMap, toArray } from 'rxjs/operators';
-import { ScaleType, AgeGroupBinning, TimeGranularity } from '../cases-dod/covid-chart-options';
+import { AgeGroupBinning, ScaleType, TimeGranularity } from '../cases-dod/covid-chart-options';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { CovidNumberCaseChange, CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { RegionRepository } from '../repositories/region.repository';
 import { Dashboard } from '../repositories/types/in/dashboard';
-import { Item, MarkdownItem, MultiLineChartItem } from './chart.service';
+import { Item, MarkdownItem, MultiLineChartItem, TableOverviewItem } from './chart.service';
 import { ConfigService } from './config.service';
 
 @Injectable({
@@ -84,10 +84,16 @@ export class DashboardService implements Resolve<Dashboard> {
           text: `# Auto-generated dashboard
 
 This is an automatically generated dashboard based on ${name}. Feel free to modify anything here.
-If you save this dashboard it will receive a new ID and URL.
+If you save this dashboard, it will receive a new ID and URL.
 
 > With :heart: from [@dbvis](https://twitter.com/dbvis)`
         } as MarkdownItem);
+
+        dashboard.items.push({
+          type: 'table',
+          dataRequest: [rRegion],
+          config: this.configService.getDefaultChartConfig('table')
+        } as TableOverviewItem);
 
         dashboard.items.push({
           type: 'multiline',

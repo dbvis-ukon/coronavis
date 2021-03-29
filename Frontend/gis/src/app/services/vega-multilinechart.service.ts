@@ -8,7 +8,6 @@ import { CaseDevelopmentRepository } from '../repositories/case-development.repo
 import { Region } from '../repositories/types/in/region';
 import { getMoment } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
-import { ChartService } from './chart.service';
 
 export interface MultiLineChartDataPoint {
   /**

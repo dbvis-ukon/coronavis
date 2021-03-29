@@ -102,6 +102,10 @@
               <div *ngIf="timelineItem.type === 'multiline'" style="width: 100%">
                 <app-multi-line-chart [dataAndOptions]="timelineItem._compiled"></app-multi-line-chart>
               </div>
+
+              <div *ngIf="timelineItem.type === 'table'" style="width: 100%">
+                <app-table-overview [tableData$]="timelineItem._compiled"></app-table-overview>
+              </div>
             </div>
       
             <div class="timeline row button-row">

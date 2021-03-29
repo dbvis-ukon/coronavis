@@ -8,6 +8,7 @@ import { CovidNumberCaseDataSource } from '../map/options/covid-number-case-opti
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { Region } from '../repositories/types/in/region';
 import { getMoment } from '../util/date-util';
+import { TableOverviewDataAndOptions, TableOverviewService } from './table-overview.service';
 import { MultiLineChartDataAndOptions, VegaMultiLineChartService } from './vega-multilinechart.service';
 import { PixelChartDataAndOptions, VegaPixelchartService } from './vega-pixelchart.service';
 
@@ -39,7 +40,14 @@ export interface MultiLineChartItem {
   _compiled?: MultiLineChartDataAndOptions;
 }
 
-export type Item = PixelChartItem | SeparatorItem | MultiLineChartItem | MarkdownItem;
+export interface TableOverviewItem {
+  type: 'table';
+  dataRequest: Region[];
+  config: CovidChartOptions;
+  _compiled?: Observable<TableOverviewDataAndOptions>;
+}
+
+export type Item = PixelChartItem | SeparatorItem | MultiLineChartItem | MarkdownItem | TableOverviewItem;
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +60,8 @@ export class ChartService {
   constructor(
     private vegaPixelchartService: VegaPixelchartService,
     private vegaMultiLineChartService: VegaMultiLineChartService,
-    private caseRepo: CaseDevelopmentRepository
+    private caseRepo: CaseDevelopmentRepository,
+    private tableOverviewService: TableOverviewService
   ) {}
 
 
@@ -102,6 +111,12 @@ export class ChartService {
           return d;
         })
       );
+    }
+
+    if (d.type === 'table') {
+      d._compiled = this.tableOverviewService.compileToDataAndOptions(d.config, d.dataRequest);
+
+      return of(d);
     }
 
     return of(d);

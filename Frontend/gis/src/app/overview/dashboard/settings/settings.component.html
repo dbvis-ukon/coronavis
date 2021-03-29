@@ -2,7 +2,7 @@
 <div class="dialog-content" mat-dialog-content #dialogContent>
 
     <div class="toggleGroup">
-        <h5 i18n="@@infoboxAggregation">Chart Type</h5>
+        <h5 i18n="@@chartSettingsAggregation">Chart Type</h5>
 
         <mat-button-toggle-group
           class="btngrp"
@@ -11,11 +11,11 @@
           [value]="data.chartItem.type"
           (change)="data.chartItem.type = $event.value; compileChart(true);"
         >
-          <mat-button-toggle [value]="'multiline'" i18n="@@infoboxCountries" i18n-matTooltip="@@CountryTP"
-                             matTooltip="Multi-Series-Linechart">Multi-Series-Linechart
+          <mat-button-toggle [value]="'table'" i18n="@@chartSettingsViewTable">Tabelle
           </mat-button-toggle>
-          <mat-button-toggle [value]="'pixel'" i18n="@@infoboxStates" i18n-matTooltip="@@StatesTP"
-                             matTooltip="Pixel">Altersgruppen
+          <mat-button-toggle [value]="'multiline'" i18n="@@chartSettingsViewMultiSeries">Multi-Series-Linechart
+          </mat-button-toggle>
+          <mat-button-toggle [value]="'pixel'" i18n="@@chartSettingsViewAgegroups">Altersgruppen
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
@@ -26,6 +26,8 @@
       <app-multi-line-chart *ngIf="data.chartItem.type === 'multiline'" [dataAndOptions]="data.chartItem._compiled"></app-multi-line-chart>
 
       <app-pixel-chart *ngIf="data.chartItem.type === 'pixel'" [dataAndOptions]="data.chartItem._compiled"></app-pixel-chart>
+
+      <app-table-overview *ngIf="data.chartItem.type === 'table'" [tableData$]="data.chartItem._compiled"></app-table-overview>
     </div>
 
     <h2 style="text-align: center;" *ngIf="pleaseWait">Please wait... loading</h2>
@@ -35,25 +37,25 @@
 
     <div class="settings">
 
-      <div class="toggleGroup">
-        <h5 i18n="@@infoboxType">Art</h5>
+      <div class="toggleGroup" *ngIf="!hidden.has('type')">
+        <h5 i18n="@@chartSettingsType">Art</h5>
         <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="data.chartItem.config.type"
           (change)="data.chartItem.config.type= $event.value; compileChart(true)">
-          <mat-button-toggle [disabled]="disabled.has('type.cases')" i18n="@@infoboxTypeSick" [value]="eType.cases">Positiv Getestet
+          <mat-button-toggle [disabled]="disabled.has('type.cases')" i18n="@@chartSettingsTypeSick" [value]="eType.cases">Positiv Getestet
           </mat-button-toggle>
-          <mat-button-toggle [disabled]="disabled.has('type.deaths')" i18n="@@infoboxTypeDeath" [value]="eType.deaths">Todesfälle
+          <mat-button-toggle [disabled]="disabled.has('type.deaths')" i18n="@@chartSettingsTypeDeath" [value]="eType.deaths">Todesfälle
           </mat-button-toggle>
-          <mat-button-toggle [disabled]="disabled.has('type.patients')" i18n="@@infoboxTypePatients" [value]="eType.patients">Patienten
+          <mat-button-toggle [disabled]="disabled.has('type.patients')" i18n="@@chartSettingsTypePatients" [value]="eType.patients">Patienten
           </mat-button-toggle>
-          <mat-button-toggle [disabled]="disabled.has('type.patientsVentilated')" i18n="@@infoboxTypePatientsVentilated" [value]="eType.patientsVentilated">Patienten (beatmet)
+          <mat-button-toggle [disabled]="disabled.has('type.patientsVentilated')" i18n="@@chartSettingsTypePatientsVentilated" [value]="eType.patientsVentilated">Patienten (beatmet)
           </mat-button-toggle>
-          <mat-button-toggle [disabled]="disabled.has('type.bedOccupancyPercent')" i18n="@@infoboxTypeBedOccupancyPercent" [value]="eType.bedOccupancyPercent">Bettenauslastung (%)
+          <mat-button-toggle [disabled]="disabled.has('type.bedOccupancyPercent')" i18n="@@chartSettingsTypeBedOccupancyPercent" [value]="eType.bedOccupancyPercent">Bettenauslastung (%)
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
 
-      <div class="toggleGroup">
-        <h5 i18n="@@infoboxDataSource">Daten Quelle</h5>
+      <div class="toggleGroup" *ngIf="!hidden.has('dataSource')">
+        <h5 i18n="@@chartSettingsDataSource">Daten Quelle</h5>
   
         <mat-button-toggle-group
           class="btngrp"
@@ -63,94 +65,94 @@
           (change)="data.chartItem.config.dataSource = $event.value; compileChart()"
           [disabled]="disabled.has('dataSource')"
         >
-          <mat-button-toggle [disabled]="disabled.has('dataSource.rki')" [value]="eDataSource.rki" i18n="@@infoboxDataSourceRKI" i18n-matTooltip="@@tooltipDataSourceRKI"
+          <mat-button-toggle [disabled]="disabled.has('dataSource.rki')" [value]="eDataSource.rki" i18n="@@chartSettingsDataSourceRKI" i18n-matTooltip="@@tooltipDataSourceRKI"
                              matTooltip="Robert Koch Institut">RKI
           </mat-button-toggle>
-          <mat-button-toggle [disabled]="disabled.has('dataSource.risklayer')" [value]="eDataSource.risklayer" i18n="@@infoboxDataSourceRisklayer" i18n-matTooltip="@@tooltipDataSourceRisklayer"
+          <mat-button-toggle [disabled]="disabled.has('dataSource.risklayer')" [value]="eDataSource.risklayer" i18n="@@chartSettingsDataSourceRisklayer" i18n-matTooltip="@@tooltipDataSourceRisklayer"
                              matTooltip="Live-Ansicht Risklayer Daten">Risklayer
           </mat-button-toggle>
 
-          <mat-button-toggle [disabled]="disabled.has('dataSource.divi')" [value]="eDataSource.divi" i18n="@@infoboxDataSourceDivi" i18n-matTooltip="@@tooltipDataSourceSurvstat"
+          <mat-button-toggle [disabled]="disabled.has('dataSource.divi')" [value]="eDataSource.divi" i18n="@@chartSettingsDataSourceDivi" i18n-matTooltip="@@tooltipDataSourceSurvstat"
                              matTooltip="DIVI Intensivregister">DIVI
           </mat-button-toggle>
 
-          <mat-button-toggle [disabled]="disabled.has('dataSource.survstat')" [value]="eDataSource.survstat" i18n="@@infoboxDataSourceSurvstat">SurvStat @ RKI
+          <mat-button-toggle [disabled]="disabled.has('dataSource.survstat')" [value]="eDataSource.survstat" i18n="@@chartSettingsDataSourceSurvstat">SurvStat @ RKI
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
 
 
-      <div class="toggleGroup">
-        <h5 i18n="@@infoboxNorm">Normalisierung</h5>
+      <div class="toggleGroup" *ngIf="!hidden.has('normalization')">
+        <h5 i18n="@@chartSettingsNorm">Normalisierung</h5>
     
         <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style"
           [value]="data.chartItem.config.normalization" 
           (change)="data.chartItem.config.normalization = $event.value; compileChart()"
           [disabled]="disabled.has('normalization')"
         >
-          <mat-button-toggle [disabled]="disabled.has('normalization.absolut')" i18n="@@infoboxNornNone" [value]="eNorm.absolut">Keine
+          <mat-button-toggle [disabled]="disabled.has('normalization.absolut')" i18n="@@chartSettingsNornNone" [value]="eNorm.absolut">Keine
             Normalisierung
           </mat-button-toggle>
-          <mat-button-toggle [disabled]="disabled.has('normalization.per100k')" i18n="@@infoboxNornYes" [value]="eNorm.per100k">Je
+          <mat-button-toggle [disabled]="disabled.has('normalization.per100k')" i18n="@@chartSettingsNornYes" [value]="eNorm.per100k">Je
             100.000 Einwohner
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
     
-      <div class="toggleGroup">
-        <h5 i18n="@@infoboxTime">Zeitraum Veränderung</h5>
+      <div class="toggleGroup" *ngIf="!hidden.has('timeWindow')">
+        <h5 i18n="@@chartSettingsTime">Zeitraum Veränderung</h5>
     
         <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="data.chartItem.config.timeWindow"
           (change)="data.chartItem.config.timeWindow = $event.value; compileChart()"
           [disabled]="disabled.has('timeWindow')"  
         >
-          <mat-button-toggle i18n="@@infoboxTimeAll" [value]="eTime.all">Aktuell</mat-button-toggle>
+          <mat-button-toggle i18n="@@chartSettingsTimeAll" [value]="eTime.all">Aktuell</mat-button-toggle>
 
-          <mat-button-toggle i18n="@@infoboxTime24" onerror=" " [value]="eTime.twentyFourhours">24 Std.
+          <mat-button-toggle i18n="@@chartSettingsTime24" onerror=" " [value]="eTime.twentyFourhours">24 Std.
           </mat-button-toggle>
-          <mat-button-toggle i18n="@@infoboxTime72" [value]="eTime.seventyTwoHours">72
+          <mat-button-toggle i18n="@@chartSettingsTime72" [value]="eTime.seventyTwoHours">72
             Std.
           </mat-button-toggle>
-          <mat-button-toggle i18n="@@infoboxTime7Days" [value]="eTime.sevenDays">7 Tage
+          <mat-button-toggle i18n="@@chartSettingsTime7Days" [value]="eTime.sevenDays">7 Tage
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
     
-      <div class="toggleGroup">
-        <h5 i18n="@@caseDodGranularity">Granularität (Zeit)</h5>
+      <div class="toggleGroup" *ngIf="!hidden.has('timeAgg')">
+        <h5 i18n="@@chartSettingsGranularity">Granularität (Zeit)</h5>
         <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="data.chartItem.config.timeAgg"
           (change)="data.chartItem.config.timeAgg = $event.value; compileChart()">
-          <mat-button-toggle i18n="@@caseDodGranularityDaily" [value]="eGran.yearmonthdate">Täglich</mat-button-toggle>
-          <mat-button-toggle i18n="@@caseDodGranularityWeekly" [value]="eGran.yearweek"
+          <mat-button-toggle i18n="@@chartSettingsGranularityDaily" [value]="eGran.yearmonthdate">Täglich</mat-button-toggle>
+          <mat-button-toggle i18n="@@chartSettingsGranularityWeekly" [value]="eGran.yearweek"
             [disabled]="disabled.has('timeAgg.yearweek')">Wöchentlich</mat-button-toggle>
         </mat-button-toggle-group>
       </div>
     
-      <div class="toggleGroup">
-        <h5 i18n="@@caseDodAgeBinning">Altersgruppen</h5>
+      <div class="toggleGroup" *ngIf="!hidden.has('ageGroupBinning')">
+        <h5 i18n="@@chartSettingsAgeBinning">Altersgruppen</h5>
         <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" 
           [value]="data.chartItem.config.ageGroupBinning"
           (change)="data.chartItem.config.ageGroupBinning = $event.value; compileChart()"
           [disabled]="disabled.has('ageGroupBinning')"
         >
-          <mat-button-toggle i18n="@@caseDodAgeGroupBinningAll" [value]="eAgeGroupBinning.all" 
+          <mat-button-toggle i18n="@@chartSettingsAgeGroupBinningAll" [value]="eAgeGroupBinning.all" 
             [disabled]="disabled.has('ageGroupBinning.all')">Altersjahre</mat-button-toggle>
-          <mat-button-toggle i18n="@@caseDodAgeGroupBinningFiveYears" [value]="eAgeGroupBinning.fiveyears"
+          <mat-button-toggle i18n="@@chartSettingsAgeGroupBinningFiveYears" [value]="eAgeGroupBinning.fiveyears"
             [disabled]="disabled.has('ageGroupBinning.fiveyears')">5 Jahre</mat-button-toggle>
-          <mat-button-toggle i18n="@@caseDodAgeGroupBinningRKI" [value]="eAgeGroupBinning.rki">RKI Schema</mat-button-toggle>
+          <mat-button-toggle i18n="@@chartSettingsAgeGroupBinningRKI" [value]="eAgeGroupBinning.rki">RKI Schema</mat-button-toggle>
         </mat-button-toggle-group>
       </div>
     
-      <div class="toggleGroup">
+      <div class="toggleGroup" *ngIf="!hidden.has('scaleType')">
         <h5 i18n="@@csaeDodScaling">Skalierung</h5>
         <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="data.chartItem.config.scaleType"
           (change)="data.chartItem.config.scaleType = $event.value; compileChart()">
-          <mat-button-toggle i18n="@@caseDodScalingLinear" [value]="eScaleType.linear">Linear</mat-button-toggle>
-          <mat-button-toggle i18n="@@caseDodScalingSqrt" [value]="eScaleType.sqrt">Quadratwurzel</mat-button-toggle>
-          <mat-button-toggle i18n="@@caseDodScalingLog" [value]="eScaleType.symlog">Logarithmisch</mat-button-toggle>
+          <mat-button-toggle i18n="@@chartSettingsScalingLinear" [value]="eScaleType.linear">Linear</mat-button-toggle>
+          <mat-button-toggle i18n="@@chartSettingsScalingSqrt" [value]="eScaleType.sqrt">Quadratwurzel</mat-button-toggle>
+          <mat-button-toggle i18n="@@chartSettingsScalingLog" [value]="eScaleType.symlog">Logarithmisch</mat-button-toggle>
         </mat-button-toggle-group>
     
-        <p class="hint" i18n="@@caseDodScalingHint">Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</p>
+        <p class="hint" i18n="@@chartSettingsScalingHint">Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</p>
       </div>
 
     </div>

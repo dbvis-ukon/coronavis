@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { timer } from 'rxjs';
 import { AgeGroupBinning, ScaleType, TimeGranularity } from 'src/app/cases-dod/covid-chart-options';
 import { CovidNumberCaseChange, CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
-import { ChartService, MultiLineChartItem, PixelChartItem } from 'src/app/services/chart.service';
+import { ChartService, MultiLineChartItem, PixelChartItem, TableOverviewItem } from 'src/app/services/chart.service';
 import { ConfigService } from 'src/app/services/config.service';
 
 @Component({
@@ -35,10 +35,11 @@ export class SettingsComponent implements OnInit {
   eDataSource = CovidNumberCaseDataSource;
 
   disabled: Set<string> = new Set();
+  hidden: Set<string> = new Set();
 
   constructor(
     public dialogRef: MatDialogRef<SettingsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {chartItem: MultiLineChartItem | PixelChartItem; arrIdx: number},
+    @Inject(MAT_DIALOG_DATA) public data: {chartItem: MultiLineChartItem | PixelChartItem | TableOverviewItem; arrIdx: number},
     private chartService: ChartService,
     private configService: ConfigService) {}
 
@@ -62,6 +63,7 @@ export class SettingsComponent implements OnInit {
     this.data.chartItem.config = ret.config;
 
     this.disabled = ret.disabled;
+    this.hidden = ret.hidden;
 
     timer(100)
     .subscribe(() => {

@@ -20,14 +20,14 @@ export class CaseDevelopmentRepository {
   constructor(private cachedRepository: CachedRepository) {}
 
   getCasesDevelopmentForAggLevel(dataSource: CovidNumberCaseDataSource, aggLevel: AggregationLevel, from: string, to: string): Observable<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>> {
-    const endpoint = dataSource === 'rki' ? 'cases' : 'cases-risklayer';
+    const endpoint = dataSource === 'risklayer' ? 'cases-risklayer' : 'cases';
     return this
       .cachedRepository
       .get<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggLevel}`, this.prepareParams(from, to));
   }
 
   getCasesDevelopmentForAggLevelSingle(dataSource: CovidNumberCaseDataSource, aggLevel: AggregationLevel, id: string, to?: string): Observable<Feature<MultiPolygon, RKICaseDevelopmentProperties>> {
-    const endpoint = dataSource === 'rki' ? 'cases' : 'cases-risklayer';
+    const endpoint = dataSource === 'risklayer' ? 'cases-risklayer' : 'cases';
     const aggEndpoint = aggLevelToEndpointSingle(aggLevel);
 
     return this
@@ -42,7 +42,7 @@ export class CaseDevelopmentRepository {
   }
 
   getCasesDevelopmentAggregated(dataSource: CovidNumberCaseDataSource, dataRequests: Region[]): Observable<Feature<MultiPolygon, AggregatedRKICaseDevelopmentProperties>> {
-    const endpoint = dataSource === 'rki' ? 'cases' : 'cases-risklayer';
+    const endpoint = dataSource === 'risklayer' ? 'cases-risklayer' : 'cases';
     return this
       .cachedRepository
       .get<Feature<MultiPolygon, AggregatedRKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/aggregated`, this.prepareAggParams(dataRequests));

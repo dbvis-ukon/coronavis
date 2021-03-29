@@ -22,6 +22,7 @@ import { MultiLineChartComponent } from './multi-line-chart/multi-line-chart.com
 import { PixelChartComponent } from './pixel-chart/pixel-chart.component';
 import { RegionSelectorComponent } from './region-selector/region-selector.component';
 import { SettingsComponent } from './settings/settings.component';
+import { TableOverviewComponent } from './table-overview/table-overview.component';
 import { TitleEditDialogComponent } from './title-edit-dialog/title-edit-dialog.component';
 
 
@@ -33,7 +34,8 @@ import { TitleEditDialogComponent } from './title-edit-dialog/title-edit-dialog.
     MultiLineChartComponent,
     SettingsComponent,
     RegionSelectorComponent,
-    TitleEditDialogComponent
+    TitleEditDialogComponent,
+    TableOverviewComponent
   ],
   imports: [
     CommonModule,

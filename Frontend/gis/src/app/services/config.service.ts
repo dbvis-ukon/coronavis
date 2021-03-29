@@ -3,7 +3,7 @@ import { merge } from 'lodash-es';
 import { AgeGroupBinning, CovidChartOptions, ScaleType, TimeGranularity } from '../cases-dod/covid-chart-options';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
-import { CovidNumberCaseChange, CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { CovidNumberCaseChange, CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 
@@ -147,7 +147,7 @@ export class ConfigService {
     return merge<MapLocationSettings, RecursivePartial<MapLocationSettings>, RecursivePartial<MapLocationSettings>>(this.getDefaultMapLocationSettings(), override, override2);
   }
 
-  getDefaultChartConfig(chartType: 'multiline' | 'pixel'): CovidChartOptions {
+  getDefaultChartConfig(chartType: 'multiline' | 'pixel' | 'table'): CovidChartOptions {
     if (chartType === 'multiline') {
       return {
         type: CovidNumberCaseType.cases,
@@ -180,13 +180,33 @@ export class ConfigService {
         showLabels: true,
         showOnlyAvailableCounties: false
       };
+    } else if (chartType === 'table') {
+        return {
+          type: CovidNumberCaseType.cases,
+          dataSource: CovidNumberCaseDataSource.rki,
+          normalization: CovidNumberCaseNormalization.per100k,
+          timeWindow: CovidNumberCaseTimeWindow.sevenDays,
+          timeAgg: TimeGranularity.yearweek,
+          ageGroupBinning: AgeGroupBinning.fiveyears,
+          scaleType: ScaleType.linear,
+          date: 'now',
+          showTrendGlyphs: true,
+          daysForTrend: 7,
+          change: CovidNumberCaseChange.absolute,
+          showLabels: true,
+          showOnlyAvailableCounties: false
+        };
     } else {
       throw new Error('ChartType ' + chartType + ' unknown.');
     }
   }
 
-  parseConfig(cfg: CovidChartOptions, chartType: 'multiline' | 'pixel', autoConfig = false): {config: CovidChartOptions; disabled: Set<string>} {
-    const ret: {config: CovidChartOptions; disabled: Set<string>} = {config: null, disabled: new Set<string>()};
+  parseConfig(cfg: CovidChartOptions | CovidNumberCaseOptions, chartType: 'multiline' | 'pixel' | 'table', autoConfig = false): {config: CovidChartOptions; disabled: Set<string>; hidden: Set<string>} {
+    const ret: {
+      config: CovidChartOptions;
+      disabled: Set<string>;
+      hidden: Set<string>;
+    } = {config: null, disabled: new Set<string>(), hidden: new Set<string>()};
 
     ret.config = merge(this.getDefaultChartConfig(chartType), cfg);
 
@@ -262,6 +282,17 @@ export class ConfigService {
         ret.disabled.add('ageGroupBinning.all');
         ret.disabled.add('ageGroupBinning.fiveyears');
       }
+    }
+
+    if (chartType === 'table') {
+      ret.hidden.add('type');
+      ret.disabled.add('dataSource.divi');
+      ret.disabled.add('dataSource.survstat');
+      ret.hidden.add('normalization');
+      ret.hidden.add('timeWindow');
+      ret.hidden.add('timeAgg');
+      ret.hidden.add('ageGroupBinning');
+      ret.hidden.add('scaleType');
     }
 
     return ret;
