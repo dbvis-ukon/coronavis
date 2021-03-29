@@ -1,9 +1,9 @@
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
-import {Observable} from 'rxjs';
-import {filter, mergeMap, startWith, switchMap, toArray} from 'rxjs/operators';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { Observable } from 'rxjs';
+import { filter, mergeMap, startWith, switchMap, toArray } from 'rxjs/operators';
 import { RegionRepository } from 'src/app/repositories/region.repository';
 import { Region } from 'src/app/repositories/types/in/region';
 
@@ -16,6 +16,8 @@ import { Region } from 'src/app/repositories/types/in/region';
   styleUrls: ['region-selector.component.less'],
 })
 export class RegionSelectorComponent implements OnInit {
+  MAX_REGIONS = 20;
+
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fruitCtrl = new FormControl();
 
@@ -54,7 +56,7 @@ export class RegionSelectorComponent implements OnInit {
 
   selected(event: MatAutocompleteSelectedEvent): void {
     const newRegion: Region = event.option.value;
-    if (this.selectedRegions.findIndex(r => r.id === newRegion.id) === -1) {
+    if (this.selectedRegions.findIndex(r => r.id === newRegion.id) === -1 && this.selectedRegions.length < this.MAX_REGIONS) {
       this.selectedRegions.push(newRegion);
     }
 

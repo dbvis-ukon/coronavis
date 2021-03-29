@@ -97,7 +97,7 @@ export class VegaComponent implements AfterViewInit {
       return;
     }
 
-    embed(node, this._spec, {actions: false, formatLocale, timeFormatLocale});
+    embed(node, this._spec, {actions: true, formatLocale, timeFormatLocale});
   }
 
 }

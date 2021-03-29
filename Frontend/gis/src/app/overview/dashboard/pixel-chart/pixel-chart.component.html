@@ -4,10 +4,7 @@
 <span class="hidden" #i18nVal i18n="@@caseDodZAxisVal">7-Tages-Inzidenz</span>
 
 <h4 class="title">
-    <span>Positiv getestete </span>
-    <span>innerhalb </span>
-    <span>7 Tage </span>
-    <span>pro 100k Einwohner</span>
+    {{ _dataAndOptions?.chartOptions?.title }}
 </h4>
 
 
@@ -15,5 +12,6 @@
 
 
 <div class="datasources" *ngIf="_dataAndOptions">
-    <app-data-source [source]="_dataAndOptions.chartOptions.dataSource"></app-data-source>
+    <app-data-source [source]="_dataAndOptions.config.dataSource"></app-data-source>
+    <app-data-source source="zensus"></app-data-source>
 </div>

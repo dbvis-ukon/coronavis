@@ -7,6 +7,8 @@ import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { Region } from '../repositories/types/in/region';
 import { getMoment } from '../util/date-util';
+import { CaseUtilService } from './case-util.service';
+import { ChartService } from './chart.service';
 
 export interface MultiLineChartDataPoint {
   /**
@@ -21,9 +23,10 @@ export interface MultiLineChartDataPoint {
 }
 
 export interface MultiLineChartDataAndOptions {
+  config: CovidChartOptions;
   data: MultiLineChartDataPoint[];
   chartOptions: {
-    dataSource: 'rki' | 'risklayer';
+    title: string;
     xAxisTitle: string;
     yAxisTitle: string;
     width: number | 'container';
@@ -66,8 +69,8 @@ export class VegaMultiLineChartService {
             "legend": {"orient": "bottom", "title": null, "symbolType": "stroke", "columns": 10}
           },
           "y": {"field": "y", "type": "quantitative", "title": "", "scale": {}, "axis": {
-            "minExtent": 40,
-            "maxExtent": 40
+            "minExtent": 50,
+            "maxExtent": 50
           }},
           "opacity": {
             "condition": {"param": "labelhover", "value": 1},
@@ -120,7 +123,8 @@ export class VegaMultiLineChartService {
   };
 
   constructor(
-    private caseRepo: CaseDevelopmentRepository
+    private caseRepo: CaseDevelopmentRepository,
+    private caseUtil: CaseUtilService
   ) {}
 
 
@@ -131,28 +135,29 @@ export class VegaMultiLineChartService {
     .pipe(
       mergeMap(d => this.caseRepo.getCasesDevelopmentForAggLevelSingle(o.dataSource, d.aggLevel, d.id)
         .pipe(
-          map(d1 => {
-            const data = d1.properties.developments.map(d2 => {
-              if (xExtent[0] === null || getMoment(xExtent[0]).isAfter(getMoment(d2.timestamp))) {
-                xExtent[0] = d2.timestamp;
+          mergeMap(d1 => this.caseUtil.extractXYByOptions(d1.properties, o)),
+          map(xyArr => {
+            const data = xyArr.filter((_, i) => i > 7).map(xy => {
+              if (xExtent[0] === null || getMoment(xExtent[0]).isAfter(getMoment(xy.x))) {
+                xExtent[0] = xy.x;
               }
 
-              if (xExtent[1] === null || getMoment(xExtent[1]).isBefore(getMoment(d2.timestamp))) {
-                xExtent[1] = d2.timestamp;
+              if (xExtent[1] === null || getMoment(xExtent[1]).isBefore(getMoment(xy.x))) {
+                xExtent[1] = xy.x;
               }
 
-              if (yExtent[0] > d2.cases7_per_100k) {
-                yExtent[0] = d2.cases7_per_100k;
+              if (yExtent[0] > xy.y) {
+                yExtent[0] = xy.y;
               }
 
-              if (yExtent[1] < d2.cases7_per_100k) {
-                yExtent[1] = d2.cases7_per_100k;
+              if (yExtent[1] < xy.y) {
+                yExtent[1] = xy.y;
               }
 
               return {
-                x: d2.timestamp,
-                y: d2.cases7_per_100k,
-                region: d1.properties.name
+                x: xy.x,
+                y: xy.y,
+                region: xy.region
               } as MultiLineChartDataPoint;
             });
 
@@ -164,9 +169,11 @@ export class VegaMultiLineChartService {
           const data: MultiLineChartDataPoint[] = [].concat(...arr);
           data.sort((a, b) => a.x.localeCompare(b.x));
           return {
+            config: o,
             data,
             chartOptions: {
-              dataSource: o.dataSource,
+              title: this.caseUtil.getChartTitle(o),
+              yAxisTitle: '7-Tage-Inzidenz',
               width: 'container',
               height: 200,
               timeAgg: o.timeAgg,

@@ -1,5 +1,24 @@
-<div class="outer">
+<div class="outer" *ngIf="dashboard">
+    <mat-toolbar color="primary">
+      <button mat-icon-button matTooltip="Save as new dashboard">
+        <mat-icon>save</mat-icon>
+      </button> | 
+      <button mat-icon-button matTooltip="Edit title" (click)="openEditTitleDialog()">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <h1>{{ dashboard.title }}</h1>
+
+      
+
+      <span class="example-spacer"></span>
+
+      <button mat-icon-button matTooltip="Upvote this dashboard">
+        <mat-icon>thumb_up</mat-icon>
+      </button> {{ dashboard.upvotes }} | 
+      &nbsp;<mat-icon matTooltip="Number of views">visibility</mat-icon>&nbsp; {{ dashboard.visits }}
+    </mat-toolbar>
     <mat-card>
+
       <div class="main">
           
 
@@ -8,8 +27,7 @@
         <div class="root timelines draggable-list" cdkDropList (cdkDropListDropped)="drop($event)">
 
 
-          <div class="draggable-box timeline row" *ngIf="pleaseWait">
-            <mat-icon class="icon draw" disabled="disabled" aria-hidden="false" aria-label="drag me">drag_indicator</mat-icon>            
+          <div class="draggable-box timeline row" *ngIf="pleaseWait">           
             
             <div class="icons"> 
               <button mat-icon-button aria-label="settings" class="icon filter" disabled="disabled" matTooltip="Filter Settings">
@@ -23,14 +41,16 @@
     
 
             <div class="please-wait" #pleaseWait style="width: 100%">
+              <mat-spinner diameter="40" strokeWidth="2" style="margin: 40px 80px;"></mat-spinner>
               <h3>Please wait... loading</h3>
             </div>
           </div>
 
-            <div class="draggable-box timeline row" *ngFor="let timelineItem of timelineData; index as idx" cdkDrag>
-              <mat-icon class="icon draw" aria-hidden="false" aria-label="drag me" cdkDragHandle>drag_indicator</mat-icon>            
+            <div class="draggable-box timeline row" *ngFor="let timelineItem of dashboard.items; index as idx" cdkDrag>           
               
               <div class="icons">
+                <mat-icon class="icon draw" aria-hidden="false" aria-label="drag me" cdkDragHandle>drag_indicator</mat-icon>
+
                 <button *ngIf="timelineItem.type === 'markdown'" mat-icon-button aria-label="settings" class="icon filter" (click)="timelineItem._text = timelineItem.text; timelineItem._editMode = true" matTooltip="Edit Text" >
                     <mat-icon>edit</mat-icon>
                 </button>
@@ -56,8 +76,8 @@
       
               <div *ngIf="timelineItem.type === 'markdown'" class="full-width">
                 <div *ngIf="timelineItem._editMode">
-                  <h3 style="background-color: grey; margin: 0 0;">Vorschau:</h3>
-                  <markdown [ngStyle]="{'display': 'block', 'background-color': 'lightgrey'}" [data]="timelineItem._text"></markdown>
+                  <mat-toolbar>Vorschau</mat-toolbar>
+                  <markdown [ngStyle]="{'display': 'block', 'background-color': 'lightgrey'}" [data]="timelineItem._text" emoji></markdown>
   
                   <mat-form-field style="margin-top: 10px;" class="full-width">
                     <mat-label>Text bearbeiten</mat-label>
@@ -68,7 +88,7 @@
                   <button style="margin-left: 10px;" mat-raised-button color="warn" (click)="timelineItem._editMode = false">Abbrechen</button>
                 </div>
 
-                <markdown *ngIf="!timelineItem._editMode" [data]="timelineItem.text"></markdown>
+                <markdown *ngIf="!timelineItem._editMode" [data]="timelineItem.text" emoji></markdown>
               </div>
               
               <div *ngIf="timelineItem.type === 'separator'" class="separator">
@@ -90,8 +110,8 @@
                   <mat-icon>add</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="add('separator')">-Separator-</button>
-                  <button mat-menu-item (click)="openSettings()">Neuen Chart hinzufügen</button>
+                  <button mat-menu-item (click)="add('markdown')">Neuen Textblock hinzufügen</button>
+                  <button mat-menu-item (click)="add('multiline')">Neuen Chart hinzufügen</button>
                 </mat-menu>
               </div>
             </div>

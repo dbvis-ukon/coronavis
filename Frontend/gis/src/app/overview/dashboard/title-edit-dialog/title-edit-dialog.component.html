@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Edit Title</h1>
+<div class="dialog-content" mat-dialog-content #dialogContent>
+
+  <mat-form-field style="width: 100%;">
+    <mat-label>Dashboard Title</mat-label>
+    <input matInput #titleInput [(ngModel)]="title" maxlength="50">
+    <mat-hint [align]="'end'">{{ titleInput.value.length }} / 50</mat-hint>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [mat-dialog-close]="title">Speichern</button>
+  <button mat-raised-button color="warn" (click)="onNoClick()">Abbrechen</button>
+</div>

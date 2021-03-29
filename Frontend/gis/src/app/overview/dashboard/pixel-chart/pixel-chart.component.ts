@@ -1,7 +1,4 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { ScaleType, TimeGranularity } from 'src/app/cases-dod/covid-chart-options';
-import { CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
-import { CaseDevelopmentRepository } from 'src/app/repositories/case-development.repository';
 import { PixelChartDataAndOptions, VegaPixelchartService } from 'src/app/services/vega-pixelchart.service';
 
 @Component({
@@ -38,17 +35,8 @@ export class PixelChartComponent implements OnInit {
 
   spec: any;
 
-  titleRegions: string;
-
-  eCovidNumberCaseType = CovidNumberCaseType;
-  eCovidNumberCaseNormalization = CovidNumberCaseNormalization;
-  eCovidNumberCaseTimeWindow = CovidNumberCaseTimeWindow;
-  eCovidChartTimeGranularity = TimeGranularity;
-  eCovidChartScaleType = ScaleType;
-
   constructor(
     private vegaPixelchartService: VegaPixelchartService,
-    private caseRepo: CaseDevelopmentRepository
   ) { }
 
   ngOnInit(): void {
@@ -59,8 +47,6 @@ export class PixelChartComponent implements OnInit {
     if (!this._dataAndOptions) {
       return;
     }
-
-    this.titleRegions = this._dataAndOptions.chartOptions.titleRegions.join(', ');
 
     this.spec = this.vegaPixelchartService.compileChart(this._dataAndOptions.data, this._dataAndOptions.chartOptions);
   }

@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { GdprComponent } from '../gdpr/gdpr.component';
 import { ImpressumComponent } from '../impressum/impressum.component';
 import { MapRootComponent } from '../map-root/map-root.component';
-import { ComparisonViewComponent } from './comparison/comparison-view/comparison-view.component';
+import { DashboardService } from '../services/dashboard.service';
+import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 import { OverviewBedComponent } from './overview-bed/overview-bed.component';
 import { OverviewCaseComponent } from './overview-case/overview-case.component';
 import { OverviewIntroductionComponent } from './overview-introduction/overview-introduction.component';
@@ -53,8 +54,9 @@ const routes: Routes = [
                 component: GdprComponent
             },
             {
-                path: 'comparison',
-                component: ComparisonViewComponent
+                path: 'dashboard/:id',
+                resolve: {dashboard: DashboardService},
+                component: DashboardComponent
             }
         ]
     }

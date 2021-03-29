@@ -4,10 +4,12 @@ import { FeatureCollection, Geometry } from 'geojson';
 import { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
 import { filter, map, mergeMap, toArray } from 'rxjs/operators';
+import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
-import { RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus, SurvStatAgeGroups } from '../repositories/types/in/quantitative-rki-case-development';
+import { RKICaseDevelopmentProperties, RKICaseTimedStatus, SurvStatAgeGroups } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
 import { linearRegression } from '../util/regression';
+import { TranslationService } from './translation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,7 @@ export class CaseUtilService {
   .range([45, -45])
   .clamp(true);
 
-  constructor() { }
+  constructor(private translation: TranslationService) { }
 
   public isLockdownMode(options: CovidNumberCaseOptions) {
     return options.normalization === CovidNumberCaseNormalization.per100k
@@ -111,7 +113,11 @@ export class CaseUtilService {
     const prev = typeAccessor(prevTimedStatus);
     const now = typeAccessor(currentTimedStatus);
 
-    let unnormalizedResult = 0;
+    if (!now) {
+      return undefined;
+    }
+
+    let unnormalizedResult = null;
     if (options.change === CovidNumberCaseChange.absolute) {
       if (options.timeWindow === CovidNumberCaseTimeWindow.all) {
         unnormalizedResult = now;
@@ -132,7 +138,7 @@ export class CaseUtilService {
       if (!prevTimedStatus) {
         return undefined;
       }
-      unnormalizedResult = ((now - prev) / prev) * 100 || 0;
+      unnormalizedResult = ((now - prev) / prev) * 100;
     }
 
     return options.normalization === CovidNumberCaseNormalization.absolut ?
@@ -140,14 +146,14 @@ export class CaseUtilService {
       unnormalizedResult / currentTimedStatus.population;
   }
 
-  public extractXYByOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): Observable<{x: string; y: number}[]> {
+  public extractXYByOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): Observable<{x: string; y: number; y2: number; region: string}[]> {
     return of(data)
     .pipe(
       mergeMap(d1 => d1.developments),
       filter(d => d.inserted !== null && d.inserted !== undefined),
       map(d => {
         const x = getStrDate(getMoment(d.timestamp));
-        let y = null;
+        let y: number = null;
 
         if (
           options.normalization === CovidNumberCaseNormalization.per100k
@@ -164,7 +170,7 @@ export class CaseUtilService {
           }
         }
 
-        let y2 = options.type === CovidNumberCaseType.cases ? d.cases : d.deaths;
+        let y2 = this.getTypeAccessorFnWithOptions(options)(d);
 
         if (options.normalization === CovidNumberCaseNormalization.per100k) {
           y2 = y2 / d.population * 100000;
@@ -173,7 +179,8 @@ export class CaseUtilService {
         return {
           x,
           y,
-          y2
+          y2,
+          region: (data.description ? data.description + ' ' : '') + data.name
         };
       }),
       toArray()
@@ -273,8 +280,79 @@ export class CaseUtilService {
       case CovidNumberCaseType.deaths:
         typeAccessor = d => d?.deaths;
         break;
+
+      case CovidNumberCaseType.patients:
+        typeAccessor = d => d?.cases_covid;
+        break;
+
+      case CovidNumberCaseType.patientsVentilated:
+        typeAccessor = d => d?.cases_covid_ventilated;
+        break;
+
+      case CovidNumberCaseType.bedOccupancyPercent:
+        typeAccessor = d => (d?.beds_occupied / d?.beds_total) * 100;
+        break;
     }
 
     return typeAccessor;
+  }
+
+  getChartTitle(c: CovidChartOptions, titleRegions?: string[]): string {
+    const str = [];
+
+    switch(c.type) {
+      case CovidNumberCaseType.cases:
+        str.push(this.translation.translate('Positiv getestete'));
+        break;
+
+      case CovidNumberCaseType.deaths:
+        str.push(this.translation.translate('Todesfälle'));
+        break;
+
+      case CovidNumberCaseType.patients:
+        str.push(this.translation.translate('Covid-19 Patienten'));
+        break;
+
+      case CovidNumberCaseType.patientsVentilated:
+        str.push(this.translation.translate('Covid-19 Patienten (beatmet)'));
+        break;
+
+      case CovidNumberCaseType.bedOccupancyPercent:
+        str.push(this.translation.translate('Bettenauslastung (%)'));
+        break;
+    }
+
+    if (c.ageGroupBinning) {
+      str.push(this.translation.translate('nach Altersgruppen'));
+    }
+
+    if (titleRegions) {
+      str.push(this.translation.translate('für'));
+      str.push(titleRegions.join(', '));
+    }
+
+    if (c.timeWindow !== CovidNumberCaseTimeWindow.all) {
+      str.push(this.translation.translate('innerhalb'));
+    }
+
+    switch(c.timeWindow) {
+      case CovidNumberCaseTimeWindow.twentyFourhours:
+        str.push(this.translation.translate('24 Std'));
+        break;
+
+      case CovidNumberCaseTimeWindow.twentyFourhours:
+        str.push(this.translation.translate('72 Std'));
+        break;
+
+      case CovidNumberCaseTimeWindow.sevenDays:
+        str.push(this.translation.translate('7 Tage'));
+        break;
+    }
+
+    if (c.normalization === CovidNumberCaseNormalization.per100k) {
+      str.push(this.translation.translate('pro 100k Einwohner'));
+    }
+
+    return str.join(' ');
   }
 }

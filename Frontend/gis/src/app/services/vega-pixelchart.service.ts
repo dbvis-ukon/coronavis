@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { CovidChartOptions, TimeGranularity } from '../cases-dod/covid-chart-options';
 import { CovidNumberCaseTimeWindow, CovidNumberCaseType, CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
 import { AggregatedRKICaseDevelopmentProperties, RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
+import { getMoment, getStrDate } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 
 export interface PixelChartDataPoint {
@@ -13,9 +14,10 @@ export interface PixelChartDataPoint {
 }
 
 export interface PixelChartDataAndOptions {
+  config: CovidChartOptions;
   data: PixelChartDataPoint[];
   chartOptions: {
-    titleRegions: string[];
+    title: string;
     xAxisTitle: string;
     yAxisTitle: string;
     zAxisTitle: string;
@@ -70,6 +72,7 @@ export class VegaPixelchartService {
     "width": "container",
     "description": "A simple bar chart with rounded corners at the end of the bar.",
     "data": {
+      "name": "data",
       "values": []
     },
     "encoding": {
@@ -83,8 +86,8 @@ export class VegaPixelchartService {
         "scale": {}
       },
       "y": {"field": "y", "type": "ordinal", "title": "Altersgruppe", "axis": {
-        "minExtent": 40,
-        "maxExtent": 40
+        "minExtent": 50,
+        "maxExtent": 50
       }}
     },
     "layer": [
@@ -97,7 +100,7 @@ export class VegaPixelchartService {
           "color": {
             "field": "val",
             "type": "quantitative",
-            "legend": {"title": null, "orient": "bottom", "gradientLength": {"signal": "width - 400"}},
+            "legend": {"title": null, "orient": "bottom", "gradientLength": {"signal": "width - 600"}},
             "scale": {"type": "linear", "domain": [0, 579.7865331400711], "scheme": "inferno"}
           },
           "tooltip": [
@@ -114,14 +117,14 @@ export class VegaPixelchartService {
       },
       {
         "transform": [
-          {"filter": "day(datum.x) == 6"}
+          {"filter": "day(datum.x) == 6 || dayofyear(peek(data('data')).x) == dayofyear(datum.x)"}
         ],
         "mark": {"type": "text", "fontWeight": "lighter", "fontSize": 10},
         "encoding": {
           "text": {"field": "val", "type": "quantitative", "format": ",.0f"},
           "color": {
             "condition": {"test": "datum['val'] > 300", "value": "black"},
-            "value": "white"
+            "value": "lightgrey"
           },
           "tooltip": [
             {"field": "x", "type": "temporal", "title": "Woche"},
@@ -146,7 +149,7 @@ export class VegaPixelchartService {
   ) {}
 
 
-  compileToDataAndOptions(o: CovidChartOptions, fullData: RKICaseDevelopmentProperties | AggregatedRKICaseDevelopmentProperties, autoConfig: boolean) {
+  compileToDataAndOptions(o: CovidChartOptions, fullData: RKICaseDevelopmentProperties | AggregatedRKICaseDevelopmentProperties, autoConfig: boolean): PixelChartDataAndOptions {
     let idxDiff = 1;
     switch (o.timeWindow) {
       case CovidNumberCaseTimeWindow.twentyFourhours:
@@ -253,16 +256,22 @@ export class VegaPixelchartService {
       }
     }
 
-    const yAxis = "";
+    const yAxis = "Altersgruppe";
 
-    const xAxis = "";
+    const xAxis = "Woche";
 
-    const zAxis = "";
+    const zAxis = "7-Tage-Inzidenz";
+
+    const xDomain = [
+      getStrDate(getMoment(data[0].x).startOf('week')),
+      getStrDate(getMoment(data[data.length-1].x).endOf('week'))
+    ];
 
     return {
+      config: o,
       data,
       chartOptions: {
-        titleRegions: (fullData as AggregatedRKICaseDevelopmentProperties).name,
+        title: this.caseUtils.getChartTitle(o, (fullData as AggregatedRKICaseDevelopmentProperties).name),
         xAxisTitle: xAxis,
         yAxisTitle: yAxis,
         zAxisTitle: zAxis,
@@ -271,7 +280,7 @@ export class VegaPixelchartService {
         scaleType: o.scaleType.toString(),
         timeAgg: o.timeAgg.toString(),
         domain: [0, maxDiff],
-        xDomain: [data[0].x, data[data.length-1].x]
+        xDomain
       }
     } as PixelChartDataAndOptions;
   }

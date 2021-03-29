@@ -4,19 +4,13 @@
 <span class="hidden" #i18nVal i18n="@@caseDodZAxisVal">7-Tages-Inzidenz</span>
 
 <h4 class="title">
-    <span>Positiv getestete </span>
-    <span>nach Altersgruppen für </span>
-    <span>{{ titleRegions }} </span>
-    <span>innerhalb </span>
-    <span>7 Tage </span>
-    <span>pro 100k Einwohner</span>
+    {{_dataAndOptions?.chartOptions?.title}}
 </h4>
 
 
 <app-vega [spec]="spec"></app-vega>
 
 
-<div class="datasources">
-    <app-data-source source="rki"></app-data-source>
-    <app-data-source source="zensus"></app-data-source>
+<div class="datasources" *ngIf="_dataAndOptions">
+    <app-data-source [source]="_dataAndOptions.config.dataSource"></app-data-source>
 </div>

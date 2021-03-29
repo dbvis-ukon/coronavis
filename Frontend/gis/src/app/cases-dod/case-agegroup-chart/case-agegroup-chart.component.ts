@@ -1,11 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
+import { CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from 'src/app/repositories/case-development.repository';
-import { RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
+import { RKICaseDevelopmentProperties } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from 'src/app/services/case-util.service';
 import { VegaPixelchartService } from '../../services/vega-pixelchart.service';
-import { CovidChartOptions, TimeGranularity, ScaleType, AgeGroupBinning } from '../covid-chart-options';
+import { CovidChartOptions, ScaleType, TimeGranularity } from '../covid-chart-options';
 
 @Component({
   selector: 'app-case-agegroup-chart',
@@ -115,7 +115,7 @@ export class CaseAgegroupChartComponent implements OnInit {
     }
 
     this.caseRepo.getCasesDevelopmentForAggLevelSingle(
-      'rki',
+      CovidNumberCaseDataSource.rki,
       this._options.aggregationLevel,
       this._data.id
     )

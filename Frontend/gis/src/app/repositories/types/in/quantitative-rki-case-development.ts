@@ -170,4 +170,13 @@ export interface RKICaseTimedStatus {
 
   cases_survstat_by_agegroup?: SurvStatAgeGroups;
   population_survstat_by_agegroup?: SurvStatAgeGroups;
+
+  beds_free?: number;
+  beds_occupied?: number;
+  beds_total?: number;
+  cases_covid?: number;
+  cases_covid_ventilated?: number;
+  proportion_beds_free?: number;
+  proportion_covid_beds?: number;
+  proportion_covid_ventilated?: number;
 }

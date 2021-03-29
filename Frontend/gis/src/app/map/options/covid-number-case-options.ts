@@ -21,17 +21,30 @@ export enum CovidNumberCaseType {
 
     cases = 'cases',
 
-    deaths = 'deaths'
+    deaths = 'deaths',
+
+    patients = 'patients',
+
+    patientsVentilated = 'patientsVentilated',
+
+    bedOccupancyPercent = 'bedOccupancyPercent'
 
   }
 
 export enum CovidNumberCaseNormalization {
 
-    absolut = 'absolute',
+  absolut = 'absolute',
 
-    'per100k' = 'per100k'
+  'per100k' = 'per100k'
 
-  }
+}
+
+export enum CovidNumberCaseDataSource {
+  rki = 'rki',
+  risklayer = 'risklayer',
+  divi = 'divi',
+  survstat = 'survstat'
+}
 
 export interface CovidNumberCaseOptions {
 
@@ -39,7 +52,7 @@ export interface CovidNumberCaseOptions {
 
     date: string;
 
-    dataSource: 'rki' | 'risklayer';
+    dataSource: CovidNumberCaseDataSource;
 
     /**
      * The number of days used for the regression
