@@ -444,7 +444,7 @@ export class VegaLinechartService {
       yAxis2Title: string;
       width: number | 'container';
       height: number;
-      regression? : {
+      regression?: {
         from: string;
         to: string;
       };
