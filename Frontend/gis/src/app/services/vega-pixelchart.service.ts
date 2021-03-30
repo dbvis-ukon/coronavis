@@ -147,7 +147,7 @@ export class VegaPixelchartService {
       },
       {
         "transform": [{
-          "filter": "day(datum.x) == 6 || dayofyear(peek(data('data')).x) == dayofyear(datum.x)"
+          "filter": "day(datum.x) == 6 || (dayofyear(peek(data('data')).x) == dayofyear(datum.x) && year(peek(data('data')).x) == year(datum.x))"
         }],
         "mark": {
           "type": "text",
