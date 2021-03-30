@@ -26,37 +26,37 @@ class CaseDevelopments:
         """
             Return the development of covid cases and deaths for one district
         """
-        return self.__res_single(self.__agg_query('regierungsbezirke', from_time, to_time, id_district))
+        return self.__res_single(self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, id_district))
 
     def get_by_districts(self, from_time, to_time):
         """
             Return the development of covid cases and deaths by districts
         """
-        return self.__res_collection(self.__agg_query('regierungsbezirke', from_time, to_time, None))
+        return self.__res_collection(self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, None))
 
     def get_state(self, from_time, to_time, id_state):
         """
             Return the development of covid cases and deaths for one state
         """
-        return self.__res_single(self.__agg_query('bundeslaender', from_time, to_time, id_state))
+        return self.__res_single(self.__agg_query('state', 'bundeslaender', from_time, to_time, id_state))
 
     def get_by_states(self, from_time, to_time):
         """
             Return the development of covid cases and deaths by states
         """
-        return self.__res_collection(self.__agg_query('bundeslaender', from_time, to_time, None))
+        return self.__res_collection(self.__agg_query('state', 'bundeslaender', from_time, to_time, None))
 
     def get_country(self, from_time, to_time, id_country):
         """
             Return the development of covid cases and deaths for one country
         """
-        return self.__res_single(self.__agg_query('germany', from_time, to_time, id_country))
+        return self.__res_single(self.__agg_query('country', 'germany', from_time, to_time, id_country))
 
     def get_by_countries(self, from_time, to_time):
         """
             Return the development of covid cases and deaths by countries
         """
-        return self.__res_collection(self.__agg_query('germany', from_time, to_time, None))
+        return self.__res_collection(self.__agg_query('country', 'germany', from_time, to_time, None))
 
     def get_aggregated(self, agg_dict: dict, from_time: str, to_time: str):
         return self.__res_single(self.__agg_region_query(agg_dict, from_time, to_time))
@@ -253,8 +253,8 @@ class CaseDevelopments:
             c2 = ""
             p2 = ""
             for a in range(0, 80):
-                c2 += "SUM(c.\"c2_A{:02d}\")                                            as \"c2_A{:02d}\",\n".format(a,a)
-                p2 += "SUM(c.\"p2_A{:02d}\")                                            as \"p2_A{:02d}\",\n".format(a,a)
+                c2 += "SUM(c.\"c2_A{:02d}\")                          as \"c2_A{:02d}\",\n".format(a, a)
+                p2 += "SUM(c.\"p2_A{:02d}\")                          as \"p2_A{:02d}\",\n".format(a, a)
 
             c2 += "SUM(c.\"c2_A80+\")                                            as \"c2_A80+\",\n"
             c2 += "SUM(c.\"c2_AUnbekannt\")                                      as \"c2_AUnbekannt\",\n"
@@ -287,18 +287,18 @@ class CaseDevelopments:
             """
 
         if region_agg:
-            r = """
-            array_agg(DISTINCT r.ids)                                           as ids,
-            array_agg(DISTINCT (r.description || ' ' || r.name))                                          as name,
-            array_agg(DISTINCT r.description)                                   as desc,
-            st_union(DISTINCT r.geom)                                           as geom,
-            """
+            r = ""
+            # array_agg(DISTINCT r.ids)                                           as ids,
+            # array_agg(DISTINCT (r.description || ' ' || r.name))                                          as name,
+            # array_agg(DISTINCT r.description)                                   as desc,
+            # st_union(DISTINCT r.geom)                                           as geom,
+            # """
         else:
-            r = """
-            r.ids                                                               as ids,
-            r.name                                                              as name,
-            r.geom                                                              as geom,
-            """
+            r = ""
+            # r.ids                                                               as ids,
+            # r.name                                                              as name,
+            # r.geom                                                              as geom,
+            # """
 
         ret = f"""
             {r}
@@ -329,7 +329,7 @@ class CaseDevelopments:
         """
         return ret
 
-    def __agg_query(self, agg_table, from_time, to_time, id_obj):
+    def __agg_query(self, agg_cols_prefix, region_table, from_time, to_time, id_obj):
 
         sql_from_time = ""
         sql_to_time = ""
@@ -346,14 +346,16 @@ class CaseDevelopments:
 
         # noinspection SqlResolve
         sql_stmt = text("""
-        WITH agg AS (
-            SELECT {development_select_cols}
+        WITH pre_agg AS (
+            SELECT {development_select_cols}, {agg_cols_prefix}_id
             FROM {dataTable} c
-            LEFT OUTER JOIN {aggTable} r ON (c.ids LIKE (r.ids || '%') OR r.ids = 'de')
-            GROUP BY r.ids,
-                    r.name,
-                    r.geom,
+            GROUP BY {agg_cols_prefix}_id,
                     c.timestamp
+        ),
+        agg as (
+            SELECT *
+            FROM pre_agg
+            JOIN {region_table} r ON r.ids = pre_agg.{agg_cols_prefix}_id
         )
         SELECT agg.ids,
             agg.name,
@@ -387,7 +389,9 @@ class CaseDevelopments:
         GROUP BY agg.ids,
                 agg.name,
                 agg.geom
-        """.format(aggTable=agg_table, development_select_cols=self.__agg_cols(region_agg=False),
+        """.format(agg_cols_prefix=agg_cols_prefix,
+                   development_select_cols=self.__agg_cols(region_agg=False),
+                   region_table=region_table,
                    development_json_build_obj=self.__build_obj(), dataTable=self.data_table,
                    sql_from_time=sql_from_time, sql_to_time=sql_to_time, sql_id_obj=sql_id_obj))
 
@@ -485,6 +489,7 @@ class CaseDevelopments:
         number_of_ids = 0
         ids: str
         agg_table = ''
+        region_filter_arr = []
         for agg_table, ids in agg_table_dict.items():
             if ids is None:
                 continue
@@ -498,20 +503,25 @@ class CaseDevelopments:
             if agg_table == 'landkreise':
                 agg_table = 'landkreise_extended'
                 desc = "bez AS description"
+                region_filter_arr.append(f'county_id IN {ids_sanitized_sql}')
             elif agg_table == 'regierungsbezirke':
                 desc = "'RB' AS description"
+                region_filter_arr.append(f'gd_id IN {ids_sanitized_sql}')
             elif agg_table == 'bundeslaender':
                 desc = "'BL' AS description"
+                region_filter_arr.append(f'state_id IN {ids_sanitized_sql}')
             elif agg_table == 'laender':
                 agg_table = 'germany'
                 ids_sanitized_sql = '(\'de\')'
                 all_ids.append('de')
+                region_filter_arr.append(f'country_id IN {ids_sanitized_sql}')
                 desc = "'L' AS description"
 
             # noinspection SqlResolve
             sql_join_union += [f"SELECT ids, geom, name, {desc} FROM {agg_table} WHERE ids IN {ids_sanitized_sql}"]
 
         sql_joins = " ( " + (" UNION ".join(sql_join_union)) + " ) AS r"
+        region_filters = " OR ".join(region_filter_arr)
 
         if from_time:
             sql_from_time = f"AND agg.timestamp >= :fromTimeParam"
@@ -524,14 +534,25 @@ class CaseDevelopments:
 
         # noinspection SqlResolve
         sql_stmt = text("""
-        WITH agg AS (
+        WITH 
+        regions_arr AS (
+            SELECT 
+                array_agg(DISTINCT r.ids)                                           as ids,
+                array_agg(DISTINCT (r.description || ' ' || r.name))                as name,
+                array_agg(DISTINCT r.description)                                   as desc,
+                st_union(DISTINCT r.geom)                                           as geom
+            FROM {sql_joins}
+        ),
+        filtered AS (
             SELECT {development_select_cols}
             FROM {data_table} c
-            JOIN {sql_joins} ON (c.ids LIKE (r.ids || '%') OR r.ids = 'de')
-            WHERE 1=1
-            {sql_id_obj}
+            WHERE {region_filters}
             GROUP BY c.timestamp
-            HAVING COUNT(DISTINCT r.ids) = {number_of_ids}
+        ), 
+        agg AS (
+            SELECT *
+            FROM filtered c
+            CROSS JOIN regions_arr
         )
         SELECT agg.ids,
             agg.name,
@@ -568,7 +589,7 @@ class CaseDevelopments:
         """.format(agg_table=agg_table, development_select_cols=self.__agg_cols(region_agg=True),
                    development_json_build_obj=self.__build_obj(), data_table=self.data_table,
                    sql_from_time=sql_from_time, sql_to_time=sql_to_time, sql_id_obj=sql_id_obj, sql_joins=sql_joins,
-                   number_of_ids=number_of_ids))
+                   number_of_ids=number_of_ids, region_filters=region_filters))
 
         # current_app.logger.debug(f'Agg Regions: {sql_stmt}')
 
