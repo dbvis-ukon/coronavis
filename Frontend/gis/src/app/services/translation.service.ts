@@ -120,6 +120,58 @@ export class TranslationService {
       'de-DE': 'ECMO',
       'en-US': 'ECMO'
     },
+    {
+      'de-DE': 'Covid-19 Patienten',
+      'en-US': 'Covid-19 patients'
+    },
+    {
+      'de-DE': 'Positiv getestete',
+      'en-US': 'Tested positive'
+    },
+    {
+      'de-DE': 'nach Altersgruppen',
+      'en-US': 'by age groups'
+    },
+    {
+      'de-DE': 'innerhalb',
+      'en-US': 'within'
+    },
+    {
+      'de-DE': '7 Tage',
+      'en-US': '7 days'
+    },
+    {
+      'de-DE': 'pro 100k Einwohner',
+      'en-US': 'per 100k residents'
+    },
+    {
+      'de-DE': 'für',
+      'en-US': 'for'
+    },
+    {
+      'de-DE': 'Bettenauslastung (%)',
+      'en-US': 'Bed occupancy (%)'
+    },
+    {
+      'de-DE': 'Positiv Getestet',
+      'en-US': 'Tested positive'
+    },
+    {
+      'de-DE': 'Todesfälle',
+      'en-US': 'Deaths'
+    },
+    {
+      'de-DE': 'Covid-19 Patienten (beatmet)',
+      'en-US': 'Covid-19 patients (ventilated)'
+    },
+    {
+      'de-DE': 'Bettenauslastung',
+      'en-US': 'Bed occupancy'
+    },
+    {
+      'de-DE': '/100k',
+      'en-US': '/100k',
+    }
   ];
 
   constructor(

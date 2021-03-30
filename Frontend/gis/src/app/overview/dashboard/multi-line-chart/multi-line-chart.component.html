@@ -1,0 +1,16 @@
+<span class="hidden" #i18nAltersgruppe i18n="@@caseDodYAxisAltersgruppe">Altersgruppe</span>
+<span class="hidden" #i18nDatum i18n="@@caseDodXAxisDatum">Datum</span>
+<span class="hidden" #i18nWoche i18n="@@caseDodXAxisWoche">Woche</span>
+<span class="hidden" #i18nVal i18n="@@caseDodZAxisVal">7-Tages-Inzidenz</span>
+
+<h4 class="title">
+    {{_dataAndOptions?.chartOptions?.title}}
+</h4>
+
+
+<app-vega [spec]="spec"></app-vega>
+
+
+<div class="datasources" *ngIf="_dataAndOptions">
+    <app-data-source [source]="_dataAndOptions.config.dataSource" [hideHint]="true"></app-data-source>
+</div>

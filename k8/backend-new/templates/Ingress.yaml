@@ -7,6 +7,7 @@ metadata:
     {{- include "nginx.annotations" . | nindent 4 }}
     nginx.ingress.kubernetes.io/proxy-read-timeout: '180s'
     nginx.ingress.kubernetes.io/enable-cors: 'true'
+    nginx.ingress.kubernetes.io/proxy-body-size: 8m
 spec:
   tls:
     - hosts: 

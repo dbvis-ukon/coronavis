@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { merge } from 'lodash-es';
+import { AgeGroupBinning, CovidChartOptions, ScaleType, TimeGranularity } from '../cases-dod/covid-chart-options';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { BedType } from '../map/options/bed-type.enum';
-import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { CovidNumberCaseChange, CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 
@@ -42,7 +43,7 @@ export class ConfigService {
 
     covidNumberCaseOptions: {
       date: 'now',
-      dataSource: 'rki',
+      dataSource: CovidNumberCaseDataSource.rki,
       daysForTrend: 7,
       change: CovidNumberCaseChange.absolute,
       normalization: CovidNumberCaseNormalization.absolut,
@@ -100,7 +101,7 @@ export class ConfigService {
       },
       covidNumberCaseOptions: {
         enabled: true,
-        dataSource: (live ? 'risklayer' : 'rki'),
+        dataSource: (live ? CovidNumberCaseDataSource.risklayer : CovidNumberCaseDataSource.rki),
         aggregationLevel: AggregationLevel.county,
         change: CovidNumberCaseChange.absolute,
         date: 'now',
@@ -144,5 +145,156 @@ export class ConfigService {
     }
 
     return merge<MapLocationSettings, RecursivePartial<MapLocationSettings>, RecursivePartial<MapLocationSettings>>(this.getDefaultMapLocationSettings(), override, override2);
+  }
+
+  getDefaultChartConfig(chartType: 'multiline' | 'pixel' | 'table'): CovidChartOptions {
+    if (chartType === 'multiline') {
+      return {
+        type: CovidNumberCaseType.cases,
+        dataSource: CovidNumberCaseDataSource.rki,
+        normalization: CovidNumberCaseNormalization.per100k,
+        timeWindow: CovidNumberCaseTimeWindow.sevenDays,
+        timeAgg: TimeGranularity.yearmonthdate,
+        ageGroupBinning: null,
+        scaleType: ScaleType.linear,
+        date: 'now',
+        showTrendGlyphs: true,
+        daysForTrend: 7,
+        change: CovidNumberCaseChange.absolute,
+        showLabels: true,
+        showOnlyAvailableCounties: false
+      };
+    } else if (chartType === 'pixel') {
+      return {
+        type: CovidNumberCaseType.cases,
+        dataSource: CovidNumberCaseDataSource.survstat,
+        normalization: CovidNumberCaseNormalization.per100k,
+        timeWindow: CovidNumberCaseTimeWindow.sevenDays,
+        timeAgg: TimeGranularity.yearweek,
+        ageGroupBinning: AgeGroupBinning.fiveyears,
+        scaleType: ScaleType.linear,
+        date: 'now',
+        showTrendGlyphs: true,
+        daysForTrend: 7,
+        change: CovidNumberCaseChange.absolute,
+        showLabels: true,
+        showOnlyAvailableCounties: false
+      };
+    } else if (chartType === 'table') {
+        return {
+          type: CovidNumberCaseType.cases,
+          dataSource: CovidNumberCaseDataSource.rki,
+          normalization: CovidNumberCaseNormalization.per100k,
+          timeWindow: CovidNumberCaseTimeWindow.sevenDays,
+          timeAgg: TimeGranularity.yearweek,
+          ageGroupBinning: AgeGroupBinning.fiveyears,
+          scaleType: ScaleType.linear,
+          date: 'now',
+          showTrendGlyphs: true,
+          daysForTrend: 7,
+          change: CovidNumberCaseChange.absolute,
+          showLabels: true,
+          showOnlyAvailableCounties: false
+        };
+    } else {
+      throw new Error('ChartType ' + chartType + ' unknown.');
+    }
+  }
+
+  parseConfig(cfg: CovidChartOptions | CovidNumberCaseOptions, chartType: 'multiline' | 'pixel' | 'table', autoConfig = false): {config: CovidChartOptions; disabled: Set<string>; hidden: Set<string>} {
+    const ret: {
+      config: CovidChartOptions;
+      disabled: Set<string>;
+      hidden: Set<string>;
+    } = {config: null, disabled: new Set<string>(), hidden: new Set<string>()};
+
+    ret.config = merge(this.getDefaultChartConfig(chartType), cfg);
+
+
+    if (ret.config.type === CovidNumberCaseType.patients
+      || ret.config.type === CovidNumberCaseType.patientsVentilated
+      || ret.config.type === CovidNumberCaseType.bedOccupancyPercent) {
+      ret.config.dataSource = CovidNumberCaseDataSource.divi;
+      ret.disabled.add('dataSource');
+
+      ret.config.ageGroupBinning = null;
+      ret.disabled.add('ageGroupBinning');
+
+      if (autoConfig) {
+        ret.config.timeWindow = CovidNumberCaseTimeWindow.all;
+        if (ret.config.type !== CovidNumberCaseType.bedOccupancyPercent) {
+          ret.config.normalization = CovidNumberCaseNormalization.per100k;
+        } else {
+          ret.config.normalization = CovidNumberCaseNormalization.absolut;
+        }
+      }
+    }
+
+
+    if (chartType === 'multiline') {
+      ret.config.ageGroupBinning = null;
+      ret.disabled.add('ageGroupBinning');
+
+      if (ret.config.type === CovidNumberCaseType.cases || ret.config.type === CovidNumberCaseType.deaths) {
+        ret.disabled.add('dataSource.divi');
+        ret.disabled.add('dataSource.survstat');
+      }
+    }
+
+    if (ret.config.type === CovidNumberCaseType.bedOccupancyPercent) {
+      ret.disabled.add('normalization.per100k');
+    }
+
+
+    if (chartType === 'pixel') {
+      ret.disabled.add('type.patients');
+      ret.disabled.add('type.patientsVentilated');
+      ret.disabled.add('type.bedOccupancyPercent');
+      ret.disabled.add('dataSource.risklayer');
+      ret.disabled.add('dataSource.divi');
+
+      if (ret.config.type !== CovidNumberCaseType.cases && ret.config.type !== CovidNumberCaseType.deaths) {
+        ret.config.type = CovidNumberCaseType.cases;
+        ret.config.dataSource = CovidNumberCaseDataSource.survstat;
+      }
+
+      if (autoConfig) {
+        ret.config.normalization = CovidNumberCaseNormalization.per100k;
+        ret.config.timeAgg = TimeGranularity.yearweek;
+        ret.config.timeWindow = CovidNumberCaseTimeWindow.sevenDays;
+
+        if (ret.config.type === CovidNumberCaseType.cases) {
+          ret.config.dataSource = CovidNumberCaseDataSource.survstat;
+          ret.config.ageGroupBinning = AgeGroupBinning.fiveyears;
+        } else {
+          ret.config.dataSource = CovidNumberCaseDataSource.rki;
+          ret.config.ageGroupBinning = AgeGroupBinning.rki;
+        }
+      }
+
+      if (ret.config.type === CovidNumberCaseType.deaths) {
+        ret.config.dataSource = CovidNumberCaseDataSource.rki;
+        ret.disabled.add('dataSource.survstat');
+      }
+
+      if (ret.config.dataSource === CovidNumberCaseDataSource.rki) {
+        ret.config.ageGroupBinning = AgeGroupBinning.rki;
+        ret.disabled.add('ageGroupBinning.all');
+        ret.disabled.add('ageGroupBinning.fiveyears');
+      }
+    }
+
+    if (chartType === 'table') {
+      ret.hidden.add('type');
+      ret.disabled.add('dataSource.divi');
+      ret.disabled.add('dataSource.survstat');
+      ret.hidden.add('normalization');
+      ret.hidden.add('timeWindow');
+      ret.hidden.add('timeAgg');
+      ret.hidden.add('ageGroupBinning');
+      ret.hidden.add('scaleType');
+    }
+
+    return ret;
   }
 }

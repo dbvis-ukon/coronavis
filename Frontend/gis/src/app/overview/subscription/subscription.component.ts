@@ -100,8 +100,6 @@ export class SubscriptionComponent implements OnInit {
           this.subId = id;
           this.subToken = token;
 
-          console.log('PARAMS', params);
-
           this.verifyMode = params.get('verify') === 'verify';
           return this.emailRepo.get(id, token);
         }
@@ -169,10 +167,10 @@ export class SubscriptionComponent implements OnInit {
     return this.checkoutForm.get('counties') as FormArray;
   }
 
-  addCounty(c: County) {
+  addCounty(c: County): void {
     if (this.counties.controls.find(cntrl => cntrl.get('ags').value === c.ags)) {
       this.resetSearch = Math.random();
-      return false;
+      return;
     }
 
     this.counties.push(this.formBuilder.group({

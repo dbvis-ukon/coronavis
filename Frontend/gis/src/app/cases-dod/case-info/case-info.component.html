@@ -1,3 +1,5 @@
+<button *ngIf="!tooltip" mat-raised-button color="primary" i18n="@@caseInfoOpenAsDashboard" (click)="openAsDashboard()">Als Dashboard öffnen</button>
+
 <div class="settings" *ngIf="!tooltip">
   <div class="toggleGroup">
     <h5 i18n="@@infoboxDataSource">Daten Quelle</h5>
@@ -90,7 +92,7 @@
 </div>
 
 <div [ngClass]="{'greyblock': !tooltip}">
-  <app-case-table [dataId]="data.id" [tooltip]="tooltip" [options]="chartOptions"></app-case-table>
+  <app-table-overview [tableData$]="tableData$"  [tooltip]="tooltip" [showTitle]="false"></app-table-overview>
 </div>
 
 
@@ -104,5 +106,5 @@
 
 
 <div *ngIf="!tooltip" class="greyblock">
-  <app-case-agegroup-chart [data]="data" [options]="chartOptions"></app-case-agegroup-chart>
+  <app-pixel-chart [dataAndOptions]="pixelChartDataAndOptions"></app-pixel-chart>
 </div>

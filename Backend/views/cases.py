@@ -222,3 +222,15 @@ def get_state(idState):
 @cache.cached(key_prefix=make_cache_key)
 def get_country(idCountry):
     return cd.get_country(request.args.get('from'), request.args.get('to'), idCountry)
+
+
+@routes.route('/development/aggregated', methods=['GET'])
+@timer
+@cache.cached(key_prefix=make_cache_key)
+def get_aggregated():
+    return cd.get_aggregated({
+        'landkreise': request.args.get('landkreise'),
+        'regierungsbezirke': request.args.get('regierungsbezirke'),
+        'bundeslaender': request.args.get('bundeslaender'),
+        'laender': request.args.get('laender')
+    },request.args.get('from'), request.args.get('to'))
