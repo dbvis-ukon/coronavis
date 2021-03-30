@@ -168,6 +168,10 @@ export class TranslationService {
       'de-DE': 'Bettenauslastung',
       'en-US': 'Bed occupancy'
     },
+    {
+      'de-DE': '/100k',
+      'en-US': '/100k',
+    }
   ];
 
   constructor(

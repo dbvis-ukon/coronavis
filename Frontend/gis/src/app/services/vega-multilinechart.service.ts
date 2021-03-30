@@ -172,7 +172,7 @@ export class VegaMultiLineChartService {
             data,
             chartOptions: {
               title: this.caseUtil.getChartTitle(o),
-              yAxisTitle: '7-Tage-Inzidenz',
+              yAxisTitle: this.caseUtil.getChartTitle(o, null, true),
               width: 'container',
               height: 200,
               timeAgg: o.timeAgg,

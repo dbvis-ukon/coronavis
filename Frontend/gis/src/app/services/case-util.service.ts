@@ -297,7 +297,7 @@ export class CaseUtilService {
     return typeAccessor;
   }
 
-  getChartTitle(c: CovidChartOptions, titleRegions?: string[]): string {
+  getChartTitle(c: CovidChartOptions, titleRegions?: string[], short: boolean = false): string {
     const str = [];
 
     switch(c.type) {
@@ -337,20 +337,20 @@ export class CaseUtilService {
 
     switch(c.timeWindow) {
       case CovidNumberCaseTimeWindow.twentyFourhours:
-        str.push(this.translation.translate('24 Std'));
+        str.push(this.translation.translate(short ? '24h' : '24 Std'));
         break;
 
       case CovidNumberCaseTimeWindow.twentyFourhours:
-        str.push(this.translation.translate('72 Std'));
+        str.push(this.translation.translate(short ? '72h' : '72 Std'));
         break;
 
       case CovidNumberCaseTimeWindow.sevenDays:
-        str.push(this.translation.translate('7 Tage'));
+        str.push(this.translation.translate(short ? '7d' : '7 Tage'));
         break;
     }
 
     if (c.normalization === CovidNumberCaseNormalization.per100k) {
-      str.push(this.translation.translate('pro 100k Einwohner'));
+        str.push(this.translation.translate(short ? '/100k' : 'pro 100k Einwohner'));
     }
 
     return str.join(' ');
