@@ -45,7 +45,7 @@
 
             <div class="please-wait" #pleaseWait style="width: 100%">
               <mat-spinner diameter="40" strokeWidth="2" style="margin: 40px 80px;"></mat-spinner>
-              <h3>Please wait... loading</h3>
+              <h3 i18n="@@pleaseWaitLoading">Bitte warten... lädt</h3>
             </div>
           </div>
 
@@ -117,8 +117,8 @@
                   <mat-icon>add</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="add('markdown')">Neuen Textblock hinzufügen</button>
-                  <button mat-menu-item (click)="add('multiline')">Neuen Chart hinzufügen</button>
+                  <button mat-menu-item (click)="add('markdown')" i18n="@@dashboardAddTextBlock">Neuen Textblock hinzufügen</button>
+                  <button mat-menu-item (click)="add('multiline')" i18n="@@dasboardAddChart">Neuen Chart hinzufügen</button>
                 </mat-menu>
               </div>
             </div>

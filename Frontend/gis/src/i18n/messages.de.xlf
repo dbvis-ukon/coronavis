@@ -188,6 +188,27 @@
       <segment state="final">
         <source>7-Tages-Inzidenz</source>
       <target>7-Tages-Inzidenz</target></segment>
+    </unit><unit id="regionSelectorSelectedRegions">
+      <notes>
+        <note category="location">src/app/overview/dashboard/region-selector/region-selector.component.html:2</note>
+      </notes>
+      <segment state="final">
+        <source>Ausgewählte Regionen</source>
+      <target>Ausgewählte Regionen</target></segment>
+    </unit><unit id="regionSelectorSearchRegion">
+      <notes>
+        <note category="location">src/app/overview/dashboard/region-selector/region-selector.component.html:8</note>
+      </notes>
+      <segment state="final">
+        <source>Region suchen</source>
+      <target>Region suchen</target></segment>
+    </unit><unit id="regionSelectorMaximumRegions">
+      <notes>
+        <note category="location">src/app/overview/dashboard/region-selector/region-selector.component.html:17</note>
+      </notes>
+      <segment state="final">
+        <source>Die maximale Anzahl an Regionen ist erreicht.</source>
+      <target>Die maximale Anzahl an Regionen ist erreicht.</target></segment>
     </unit><unit id="chartSettingsTitle">
       <notes>
         <note category="location">src/app/overview/dashboard/settings/settings.component.html:1</note>
@@ -1676,6 +1697,20 @@
       <segment state="final">
         <source>Selektion aufheben</source>
       <target>Selektion aufheben</target></segment>
+    </unit><unit id="dashboardAddTextBlock">
+      <notes>
+        <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:120</note>
+      </notes>
+      <segment state="final">
+        <source>Neuen Textblock hinzufügen</source>
+      <target>Neuen Textblock hinzufügen</target></segment>
+    </unit><unit id="dasboardAddChart">
+      <notes>
+        <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:121</note>
+      </notes>
+      <segment state="final">
+        <source>Neuen Chart hinzufügen</source>
+      <target>Neuen Chart hinzufügen</target></segment>
     </unit><unit id="dashboardsOverviewNew">
       <notes>
         <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:2</note>
@@ -1746,6 +1781,20 @@
       <segment state="final">
         <source>Altersgruppen </source>
       <target>Altersgruppen </target></segment>
+    </unit><unit id="pleaseWaitLoading">
+      <notes>
+        
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:48</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:33</note></notes>
+      <segment state="final">
+        <source>Bitte warten... lädt</source>
+      <target>Bitte warten... lädt</target></segment>
+    </unit><unit id="chartSettingsMinimumOneRegion">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:35</note>
+      </notes>
+      <segment state="final">
+        <source>Es muss mindestens eine Region ausgewählt werden.</source>
+      <target>Es muss mindestens eine Region ausgewählt werden.</target></segment>
     </unit><unit id="chartSettingsType">
       <notes>
         <note category="location">src/app/overview/dashboard/settings/settings.component.html:41</note>

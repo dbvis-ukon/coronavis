@@ -30,9 +30,9 @@
       <app-table-overview *ngIf="data.chartItem.type === 'table'" [tableData$]="data.chartItem._compiled"></app-table-overview>
     </div>
 
-    <h2 style="text-align: center;" *ngIf="pleaseWait">Please wait... loading</h2>
+    <h2 style="text-align: center;" *ngIf="pleaseWait" i18n="@@pleaseWaitLoading">Bitte warten... lädt</h2>
 
-    <h2 style="text-align: center;" *ngIf="!pleaseWait && data.chartItem.dataRequest.length === 0">Es muss mindestens eine Region ausgewählt werden.</h2>
+    <h2 style="text-align: center;" *ngIf="!pleaseWait && data.chartItem.dataRequest.length === 0" i18n="@@chartSettingsMinimumOneRegion">Es muss mindestens eine Region ausgewählt werden.</h2>
 
 
     <div class="settings">

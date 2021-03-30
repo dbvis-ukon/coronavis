@@ -1,11 +1,11 @@
 <mat-form-field class="example-chip-list">
-  <mat-label>Ausgewählte Regionen</mat-label>
+  <mat-label i18n="@@regionSelectorSelectedRegions">Ausgewählte Regionen</mat-label>
   <mat-chip-list #chipList aria-label="Regionen auswählen">
     <mat-chip *ngFor="let region of selectedRegions" [selectable]="true" [removable]="true" (removed)="remove(region)">
       {{region.description}} {{region.name}}
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
-    <input placeholder="Region suchen" #fruitInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
+    <input i18n-placeholder="@@regionSelectorSearchRegion" placeholder="Region suchen" #fruitInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
       [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
   </mat-chip-list>
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
@@ -14,4 +14,4 @@
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>
-<p *ngIf="selectedRegions.length >= MAX_REGIONS" style="color:red;">Die maximale Anzahl an Regionen ist erreicht.</p>
+<p *ngIf="selectedRegions.length >= MAX_REGIONS" style="color:red;" i18n="@@regionSelectorMaximumRegions">Die maximale Anzahl an Regionen ist erreicht.</p>
