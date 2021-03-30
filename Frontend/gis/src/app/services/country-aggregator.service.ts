@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { concatMap, flatMap, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { CovidNumberCaseDataSource } from '../map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
@@ -21,7 +22,7 @@ export class CountryAggregatorService {
   ) {
   }
 
-  public rkiAggregationForCountry(dataSource: 'rki' | 'risklayer', refDate: string): Observable<RKICaseTimedStatus | undefined> {
+  public rkiAggregationForCountry(dataSource: CovidNumberCaseDataSource, refDate: string): Observable<RKICaseTimedStatus | undefined> {
     const from = getStrDate(getMoment(refDate).subtract(1, 'day'));
     const to = getStrDate(getMoment(refDate).add(1, 'day'));
 

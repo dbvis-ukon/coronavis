@@ -3,7 +3,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import moment, { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
-import { mergeMap, map, max } from 'rxjs/operators';
+import { map, max, mergeMap } from 'rxjs/operators';
 import { BedBackgroundOptions } from '../map/options/bed-background-options';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
 import { BedType } from "../map/options/bed-type.enum";
@@ -197,7 +197,7 @@ export class HospitalInfoComponent implements OnInit {
     const barChartSpecs = [];
 
     if (!this.latestDevelopment) {
-      return;
+      return undefined;
     }
 
     const bedStati = this.glyphLegendColors;
@@ -236,9 +236,9 @@ export class HospitalInfoComponent implements OnInit {
     );
   }
 
-  private prepareAddressAndContactInformation() {
+  private prepareAddressAndContactInformation(): void {
     if (!this.isSingleHospital) {
-      return false;
+      return;
     }
 
 

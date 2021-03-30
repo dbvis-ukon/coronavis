@@ -1,0 +1,16 @@
+<mat-card class="card">
+    <button mat-raised-button color="primary" routerLink="/overview/dashboard/08335" i18n="@@dashboardsOverviewNew">Neues Dashboard</button>
+
+    <h1 i18n="@@dashboardsOverviewPopular">Beliebteste Dashboards</h1>
+
+    <app-dashboards-table [dashboards]="mostUpvoted$"></app-dashboards-table>
+
+    <h1 i18n="@@dashboardsOverviewMostVisited">Populärste Dashboards</h1>
+
+    <app-dashboards-table [dashboards]="mostVisited$"></app-dashboards-table>
+
+    <h1 i18n="@@dashboardsOverviewNewest">Neueste Dashboards</h1>
+
+    <app-dashboards-table [dashboards]="newest$"></app-dashboards-table>
+
+</mat-card>

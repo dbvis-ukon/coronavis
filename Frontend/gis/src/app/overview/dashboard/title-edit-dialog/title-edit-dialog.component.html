@@ -1,0 +1,14 @@
+<h1 mat-dialog-title i18n="@@dashboardTitleEditHeader">Dashboard Name bearbeiten</h1>
+<div class="dialog-content" mat-dialog-content #dialogContent>
+
+  <mat-form-field style="width: 100%;">
+    <mat-label i18n="@@dashboardTitle">Dashboard Name</mat-label>
+    <input matInput #titleInput [(ngModel)]="title" maxlength="50">
+    <mat-hint [align]="'end'">{{ titleInput.value.length }} / 50</mat-hint>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [mat-dialog-close]="title" i18n="@@buttonSave">Speichern</button>
+  <button mat-raised-button color="warn" (click)="onNoClick()" i18n="@@buttonCancel">Abbrechen</button>
+</div>

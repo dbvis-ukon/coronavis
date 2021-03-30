@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import {quadtree} from 'd3-quadtree';
+import { quadtree } from 'd3-quadtree';
 
 
 export function rectCollide(bbox) {
@@ -117,7 +117,7 @@ export function rectCollide(bbox) {
                 }
 
               }
-              return;
+              return undefined;
             }
 
             return x0 > nx2 || x1 < nx1 || y0 > ny2 || y1 < ny1;

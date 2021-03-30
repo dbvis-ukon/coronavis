@@ -2,7 +2,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { AggregationLevel } from 'src/app/map/options/aggregation-level.enum';
 import { BedType } from 'src/app/map/options/bed-type.enum';
-import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
+import { CovidNumberCaseChange, CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
 import { RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { ConfigService } from 'src/app/services/config.service';
 import { CountryAggregatorService } from 'src/app/services/country-aggregator.service';
@@ -47,7 +47,7 @@ export class OverviewCaseComponent implements OnInit {
         this.gridNumCols = matched.matches ? 1 : 3;
       });
 
-    this.countryAggregatorService.rkiAggregationForCountry('rki', 'now')
+    this.countryAggregatorService.rkiAggregationForCountry(CovidNumberCaseDataSource.rki, 'now')
       .subscribe(r => {
         this.aggregatedRkiStatistics = r;
       });

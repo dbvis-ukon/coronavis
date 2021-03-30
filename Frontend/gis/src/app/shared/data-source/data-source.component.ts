@@ -10,6 +10,9 @@ export class DataSourceComponent implements OnInit {
   @Input()
   source: 'rki' | 'risklayer' | 'divi' | 'zensus' | 'survstat';
 
+  @Input()
+  hideHint = false;
+
   now = new Date();
 
   constructor() { }

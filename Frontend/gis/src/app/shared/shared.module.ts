@@ -7,17 +7,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BedInlineLegendComponent } from './bed-inline-legend/bed-inline-legend.component';
+import { DataSourceComponent } from './data-source/data-source.component';
 import { HospitalSearchComponent } from './hospital-search/hospital-search.component';
 import { LanguageSwitcherComponent } from './language-switcher/language-switcher.component';
+import { PixelChartComponent } from './pixel-chart/pixel-chart.component';
 import { PlusminusPipe } from './plusminus.pipe';
 import { ResizedDirective } from './resize.directive';
+import { TableOverviewComponent } from './table-overview/table-overview.component';
 import { TranslatePipe } from './translate.pipe';
-import { WithLoadingPipe } from './with-loading.pipe';
 import { VegaComponent } from './vega/vega.component';
-import { DataSourceComponent } from './data-source/data-source.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { WithLoadingPipe } from './with-loading.pipe';
 
 
 
@@ -31,7 +34,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     BedInlineLegendComponent,
     HospitalSearchComponent,
     VegaComponent,
-    DataSourceComponent
+    DataSourceComponent,
+    PixelChartComponent,
+    TableOverviewComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +49,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatInputModule,
     MatButtonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     CommonModule,
@@ -57,7 +63,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     BedInlineLegendComponent,
     HospitalSearchComponent,
     VegaComponent,
-    DataSourceComponent
+    DataSourceComponent,
+    PixelChartComponent,
+    TableOverviewComponent
   ],
   providers: [
     TranslatePipe,

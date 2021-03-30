@@ -1,5 +1,26 @@
 import { Point } from 'geojson';
 
+export interface AggregatedRKICaseDevelopmentProperties {
+  centroid: Point;
+  /**
+   * An object where the keys are dates in form of YYYY-MM-DD
+   */
+  developmentDays: {[key: string]: RKICaseTimedStatus};
+  developments: RKICaseTimedStatus[];
+  id: string[];
+
+  /**
+   * Name of the county, district, state
+   */
+  name: string[];
+
+  /**
+   * A description e.g. "Landkreis", "Kreis", "Kreisfreie Stadt"
+   * Only available for counties
+   */
+  description?: string[];
+}
+
 export interface RKICaseDevelopmentProperties {
   centroid: Point;
   /**
@@ -149,4 +170,13 @@ export interface RKICaseTimedStatus {
 
   cases_survstat_by_agegroup?: SurvStatAgeGroups;
   population_survstat_by_agegroup?: SurvStatAgeGroups;
+
+  beds_free?: number;
+  beds_occupied?: number;
+  beds_total?: number;
+  cases_covid?: number;
+  cases_covid_ventilated?: number;
+  proportion_beds_free?: number;
+  proportion_covid_beds?: number;
+  proportion_covid_ventilated?: number;
 }

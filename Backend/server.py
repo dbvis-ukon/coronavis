@@ -15,7 +15,7 @@ from werkzeug.exceptions import HTTPException
 from cache import cache
 from db import db
 from views import (cases, cases_risklayer, divi, extent, health, hospitals,
-                   osm, version, email_subs, counties)
+                   osm, version, email_subs, counties, regions, dashboards)
 
 # add sentry integration
 
@@ -125,6 +125,8 @@ app.register_blueprint(cases_risklayer.routes)
 app.register_blueprint(extent.routes)
 app.register_blueprint(email_subs.routes)
 app.register_blueprint(counties.routes)
+app.register_blueprint(regions.routes)
+app.register_blueprint(dashboards.routes)
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

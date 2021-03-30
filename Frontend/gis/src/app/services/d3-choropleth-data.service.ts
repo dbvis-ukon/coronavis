@@ -31,10 +31,11 @@ export class D3ChoroplethDataService {
 
 
   public get(mo: MapOptions, mls: MapLocationSettings): Observable<D3ChoroplethMapData> {
+    let ret: Observable<D3ChoroplethMapData>;
     if (mo.bedBackgroundOptions.enabled) {
       const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(mo.bedGlyphOptions);
 
-      return this.bedRepo.getDiviDevelopmentForAggLevel(mo.bedBackgroundOptions.aggregationLevel, from, to)
+      ret = this.bedRepo.getDiviDevelopmentForAggLevel(mo.bedBackgroundOptions.aggregationLevel, from, to)
       .pipe(
         map(d => ({
             data: d,
@@ -50,7 +51,7 @@ export class D3ChoroplethDataService {
     else if (mo.covidNumberCaseOptions.enabled) {
       const [from, to] = this.caseUtil.getFromToTupleFromOptions(mo.covidNumberCaseOptions);
 
-      return this.caseRepo.getCasesDevelopmentForAggLevel(mo.covidNumberCaseOptions.dataSource, mo.covidNumberCaseOptions.aggregationLevel, from, to)
+      ret = this.caseRepo.getCasesDevelopmentForAggLevel(mo.covidNumberCaseOptions.dataSource, mo.covidNumberCaseOptions.aggregationLevel, from, to)
       .pipe(
         map(d => {
           const scale = this.caseColorMap.getScale(d, mo.covidNumberCaseOptions);
@@ -67,5 +68,7 @@ export class D3ChoroplethDataService {
         })
       );
     }
+
+    return ret;
   }
 }

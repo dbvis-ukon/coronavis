@@ -1,6 +1,12 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { merge } from 'lodash-es';
+import { Observable } from 'rxjs';
+import { Region } from 'src/app/repositories/types/in/region';
+import { TableOverviewDataAndOptions, TableOverviewService } from 'src/app/services/table-overview.service';
+import { PixelChartDataAndOptions, VegaPixelchartService } from 'src/app/services/vega-pixelchart.service';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties } from '../../repositories/types/in/quantitative-rki-case-development';
 import { AgeGroupBinning, CovidChartOptions, ScaleType, TimeGranularity } from '../covid-chart-options';
@@ -11,7 +17,7 @@ import { AgeGroupBinning, CovidChartOptions, ScaleType, TimeGranularity } from '
   styleUrls: ['./case-info.component.less'],
   providers: [DecimalPipe]
 })
-export class CaseInfoComponent {
+export class CaseInfoComponent implements OnInit {
 
   @Input()
   public data: RKICaseDevelopmentProperties;
@@ -55,12 +61,40 @@ export class CaseInfoComponent {
 
   eScaleType = ScaleType;
 
+  pixelChartDataAndOptions: PixelChartDataAndOptions;
+  tableData$: Observable<TableOverviewDataAndOptions>;
+
   constructor(
+    private router: Router,
+    private dialogService: MatDialog,
+    private vegaPixelchartService: VegaPixelchartService,
+    private tableOverviewService: TableOverviewService
   ) {}
 
 
+  ngOnInit(): void {
+    this.updateChartOptions();
+  }
+
   updateChartOptions() {
     this.chartOptions = {...this.chartOptions};
+
+    const region: Region = {
+      id: this.data.id,
+      name: this.data.name,
+      description: this.data.description,
+      aggLevel: this.chartOptions.aggregationLevel
+    };
+
+    this.tableData$ = this.tableOverviewService.compileToDataAndOptions(JSON.parse(JSON.stringify(this.chartOptions)), [region]);
+
+    this.vegaPixelchartService.compileToDataAndOptions(JSON.parse(JSON.stringify(this.chartOptions)), [region], false)
+    .subscribe(d => this.pixelChartDataAndOptions = d);
+  }
+
+  openAsDashboard() {
+    this.dialogService.closeAll();
+    this.router.navigate(['/', 'overview', 'dashboard', this.data.id]);
   }
 
 }

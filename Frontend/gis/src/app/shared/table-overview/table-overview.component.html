@@ -1,0 +1,66 @@
+<div *ngIf="tableData$ | async as t; else loadBlock">
+
+    <h4 class="title" *ngIf="showTitle">
+        {{t.data.title}}
+    </h4>
+
+
+    <table>
+        <thead>
+        <tr>
+            <th></th>
+            <th i18n="@@tableOverviewCurrent" colspan="2">Aktuell</th>
+            <th colspan="9" i18n="@@TableOverviewChanges">Veränderung</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th colspan="2">
+                <div *ngIf="t.data.dataOutdated">
+                    <p class="data-warning">
+                        <mat-icon color="warn">warning</mat-icon>
+                        {{ t.data.lastUpdated | date:'short' }}
+                    </p>
+                    
+                    <p class="errormsg" i18n="@@casesDodTableOutdatedData">Die Daten sind nicht aktuell.</p>
+                </div>
+                
+                <span *ngIf="!t.data.dataOutdated">{{ t.data.lastUpdated | date:'short' }}</span>
+            </th>
+            <th colspan="3" i18n="case-tooltip|24h@@24h" *ngIf="!tooltip">letzte 24h</th>
+            <th colspan="3" i18n="case-tooltip|72h@@72h" *ngIf="!tooltip">letzte 72h</th>
+            <th colspan="3" i18n="case-tooltip|7d@@7d">letzte 7t</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of t.data.rows">
+                <td>{{ row.title }}</td>
+
+                <ng-container *ngFor="let col of row.cols">
+                    <td *ngIf="!(tooltip && (col.timeWindow === eTimeWindow.twentyFourhours || col.timeWindow== eTimeWindow.seventyTwoHours))">
+                        <div [ngClass]="{'active': col.isActive}">
+                            {{ col.value }}
+                        </div>
+                    </td>
+                </ng-container>
+                
+            </tr>        
+        </tbody>
+    </table>
+    
+    <div class="datasources">
+        <app-data-source [source]="t.config.dataSource"></app-data-source>
+        <h5>&amp;</h5>
+        <app-data-source [hideHint]="true" source="divi"></app-data-source>
+    </div>
+
+
+</div>
+
+<ng-template #loadBlock>
+    <div class="loading">
+        <mat-spinner diameter="40" strokeWidth="2" style="margin: 40px 80px;"></mat-spinner>
+    </div>
+</ng-template>
+
+
+
