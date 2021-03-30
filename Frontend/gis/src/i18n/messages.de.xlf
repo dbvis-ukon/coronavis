@@ -10,29 +10,17 @@
       <segment state="final">
         <source>Einwohner</source>
       <target>Einwohner</target></segment>
-    </unit><unit id="cases">
+    </unit><unit id="caseInfoOpenAsDashboard">
       <notes>
-        <note category="description">cases</note>
-        <note category="meaning">case-tooltip</note>
-        
-        
-      <note category="location">src/app/cases-dod/case-table/case-table.component.html:11</note></notes>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:1</note>
+      </notes>
       <segment state="final">
-        <source>Fälle Total</source>
-      <target>Fälle Total</target></segment>
-    </unit><unit id="changes">
-      <notes>
-        <note category="description">changes</note>
-        <note category="meaning">case-tooltip</note>
-        
-      <note category="location">src/app/cases-dod/case-table/case-table.component.html:12</note></notes>
-      <segment state="final">
-        <source>Veränderung</source>
-      <target>Veränderung</target></segment>
+        <source>Als Dashboard öffnen</source>
+      <target>Als Dashboard öffnen</target></segment>
     </unit><unit id="casesDodTableOutdatedData">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-table/case-table.component.html:23</note><note category="location">src/app/overview/dashboard/table-overview/table-overview.component.html:24</note></notes>
+      <note category="location">src/app/shared/table-overview/table-overview.component.html:24</note></notes>
       <segment state="final">
         <source>Die Daten sind nicht aktuell.</source>
       <target>Die Daten sind nicht aktuell.</target></segment>
@@ -41,7 +29,7 @@
         <note category="description">24h</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/cases-dod/case-table/case-table.component.html:28</note><note category="location">src/app/overview/dashboard/table-overview/table-overview.component.html:29</note></notes>
+      <note category="location">src/app/shared/table-overview/table-overview.component.html:29</note></notes>
       <segment state="final">
         <source>letzte 24h</source>
       <target>letzte 24h</target></segment>
@@ -50,7 +38,7 @@
         <note category="description">72h</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/cases-dod/case-table/case-table.component.html:29</note><note category="location">src/app/overview/dashboard/table-overview/table-overview.component.html:30</note></notes>
+      <note category="location">src/app/shared/table-overview/table-overview.component.html:30</note></notes>
       <segment state="final">
         <source>letzte 72h</source>
       <target>letzte 72h</target></segment>
@@ -59,32 +47,14 @@
         <note category="description">7d</note>
         <note category="meaning">case-tooltip</note>
         
-      <note category="location">src/app/cases-dod/case-table/case-table.component.html:30</note><note category="location">src/app/overview/dashboard/table-overview/table-overview.component.html:31</note></notes>
+      <note category="location">src/app/shared/table-overview/table-overview.component.html:31</note></notes>
       <segment state="final">
         <source>letzte 7t</source>
       <target>letzte 7t</target></segment>
-    </unit><unit id="sick">
-      <notes>
-        <note category="description">sick</note>
-        <note category="meaning">case-tooltip</note>
-        
-      <note category="location">src/app/cases-dod/case-table/case-table.component.html:35</note></notes>
-      <segment state="final">
-        <source>Positiv Getestet</source>
-      <target>Positiv Getestet</target></segment>
-    </unit><unit id="deaths">
-      <notes>
-        <note category="description">deaths</note>
-        <note category="meaning">case-tooltip</note>
-        
-      <note category="location">src/app/cases-dod/case-table/case-table.component.html:123</note></notes>
-      <segment state="final">
-        <source>Todesfälle</source>
-      <target>Todesfälle</target></segment>
     </unit><unit id="clickForMoreInformation">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:98</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:100</note></notes>
       <segment state="final">
         <source>
     Klicken Sie um mehr Informationen zu erhalten.
@@ -109,128 +79,119 @@
     </unit><unit id="caseDodGranularity">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:58</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:60</note></notes>
       <segment state="final">
         <source>Granularität (Zeit)</source>
       <target>Granularität (Zeit)</target></segment>
     </unit><unit id="caseDodGranularityDaily">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:61</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:63</note></notes>
       <segment state="final">
         <source>Täglich</source>
       <target>Täglich</target></segment>
     </unit><unit id="caseDodGranularityWeekly">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:63</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:65</note></notes>
       <segment state="final">
         <source>Wöchentlich</source>
       <target>Wöchentlich</target></segment>
     </unit><unit id="caseDodAgeBinning">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:68</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:70</note></notes>
       <segment state="final">
         <source>Altersgruppen</source>
       <target>Altersgruppen</target></segment>
     </unit><unit id="caseDodAgeGroupBinningAll">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:72</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:74</note></notes>
       <segment state="final">
         <source>Altersjahre</source>
       <target>Altersjahre</target></segment>
     </unit><unit id="caseDodAgeGroupBinningFiveYears">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:74</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:76</note></notes>
       <segment state="final">
         <source>5 Jahre</source>
       <target>5 Jahre</target></segment>
     </unit><unit id="caseDodAgeGroupBinningRKI">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:75</note>
-      </notes>
+        
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:77</note></notes>
       <segment state="final">
         <source>RKI Schema</source>
       <target>RKI Schema</target></segment>
     </unit><unit id="csaeDodScaling">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:80</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:147</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:82</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:147</note></notes>
       <segment state="final">
         <source>Skalierung</source>
       <target>Skalierung</target></segment>
     </unit><unit id="caseDodScalingLinear">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:83</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:85</note></notes>
       <segment state="final">
         <source>Linear</source>
       <target>Linear</target></segment>
     </unit><unit id="caseDodScalingSqrt">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:84</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:86</note></notes>
       <segment state="final">
         <source>Quadratwurzel</source>
       <target>Quadratwurzel</target></segment>
     </unit><unit id="caseDodScalingLog">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:85</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:87</note></notes>
       <segment state="final">
         <source>Logarithmisch</source>
       <target>Logarithmisch</target></segment>
     </unit><unit id="caseDodScalingHint">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:88</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:90</note></notes>
       <segment state="final">
         <source>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</source>
       <target>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</target></segment>
     </unit><unit id="caseDodYAxisAltersgruppe">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:1</note><note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:1</note><note category="location">src/app/overview/dashboard/pixel-chart/pixel-chart.component.html:1</note></notes>
+      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:1</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:1</note></notes>
       <segment state="final">
         <source>Altersgruppe</source>
       <target>Altersgruppe</target></segment>
     </unit><unit id="caseDodXAxisDatum">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:2</note><note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:2</note><note category="location">src/app/overview/dashboard/pixel-chart/pixel-chart.component.html:2</note></notes>
+      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:2</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:2</note></notes>
       <segment state="final">
         <source>Datum</source>
       <target>Datum</target></segment>
     </unit><unit id="caseDodXAxisWoche">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:3</note><note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:3</note><note category="location">src/app/overview/dashboard/pixel-chart/pixel-chart.component.html:3</note></notes>
+      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:3</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:3</note></notes>
       <segment state="final">
         <source>Woche</source>
       <target>Woche</target></segment>
     </unit><unit id="caseDodZAxisVal">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:4</note><note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:4</note><note category="location">src/app/overview/dashboard/pixel-chart/pixel-chart.component.html:4</note></notes>
+      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:4</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:4</note></notes>
       <segment state="final">
         <source>7-Tages-Inzidenz</source>
       <target>7-Tages-Inzidenz</target></segment>
-    </unit><unit id="agregroupChartNoPopDataError">
-      <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:8,11</note>
-      </notes>
-      <segment state="final">
-        <source> Leider liegen für diesen Kreis keine Populationsdaten nach Altersstruktur vor. Falls sie diese Daten zur Verfügung stellen können melden sie diese bitte an support@dbvis.inf.uni-konstanz.de. Sie können die Einstellung "Keine Normalisierung" wählen damit diese Visualisierung funktioniert.
-</source>
-      <target> Leider liegen für diesen Kreis keine Populationsdaten nach Altersstruktur vor. Falls sie diese Daten zur Verfügung stellen können melden sie diese bitte an support@dbvis.inf.uni-konstanz.de. Sie können die Einstellung "Keine Normalisierung" wählen damit diese Visualisierung funktioniert.
-</target></segment>
     </unit><unit id="agegroupChartLastWeekHint">
       <notes>
-        <note category="location">src/app/cases-dod/case-agegroup-chart/case-agegroup-chart.component.html:17,18</note>
-      </notes>
+        
+      <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:16</note></notes>
       <segment state="final">
         <source> Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
 </source>
@@ -998,7 +959,7 @@
     </unit><unit id="countyDataNotFound">
       <notes>
 
-      <note category="location">src/app/hospital-info/hospital-info.component.html:5</note><note category="location">src/app/cases-dod/case-table/case-table.component.html:1</note></notes>
+      <note category="location">src/app/hospital-info/hospital-info.component.html:5</note></notes>
       <segment state="final">
         <source>Es stehen keine Daten zur Verfügung.</source>
       <target>Es stehen keine Daten zur Verfügung.</target></segment>
@@ -1389,14 +1350,14 @@
     </unit><unit id="infoboxDataSource">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:3</note><note category="location">src/app/infobox/infobox.component.html:231</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:5</note><note category="location">src/app/infobox/infobox.component.html:231</note></notes>
       <segment state="final">
         <source>Daten Quelle</source>
       <target>Daten Quelle</target></segment>
     </unit><unit id="infoboxDataSourceRKI">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:8</note><note category="location">src/app/infobox/infobox.component.html:241</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:10</note><note category="location">src/app/infobox/infobox.component.html:241</note></notes>
       <segment state="final">
         <source>Offizielle Daten
               </source>
@@ -1405,14 +1366,14 @@
     </unit><unit id="tooltipDataSourceRKI">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:8</note><note category="location">src/app/infobox/infobox.component.html:241</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:69</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:10</note><note category="location">src/app/infobox/infobox.component.html:241</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:69</note></notes>
       <segment state="final">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institut</target></segment>
     </unit><unit id="infoboxDataSourceRisklayer">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:11</note><note category="location">src/app/infobox/infobox.component.html:244</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:13</note><note category="location">src/app/infobox/infobox.component.html:244</note></notes>
       <segment state="final">
         <source>Live Daten
               </source>
@@ -1421,7 +1382,7 @@
     </unit><unit id="tooltipDataSourceRisklayer">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:11</note><note category="location">src/app/infobox/infobox.component.html:244</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:72</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:13</note><note category="location">src/app/infobox/infobox.component.html:244</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:72</note></notes>
       <segment state="final">
         <source>Live-Ansicht Risklayer Daten</source>
       <target>Live-Ansicht Risklayer Daten</target></segment>
@@ -1435,7 +1396,7 @@
     </unit><unit id="infoboxTime">
       <notes>
 
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:43</note><note category="location">src/app/infobox/infobox.component.html:279</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:45</note><note category="location">src/app/infobox/infobox.component.html:279</note></notes>
       <segment state="final">
         <source>Zeitraum</source>
       <target>Zeitraum</target></segment>
@@ -1449,7 +1410,7 @@
     </unit><unit id="infoboxTime24">
       <notes>
 
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:47</note><note category="location">src/app/infobox/infobox.component.html:293</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:49</note><note category="location">src/app/infobox/infobox.component.html:293</note></notes>
       <segment state="final">
         <source>24 Std.
               </source>
@@ -1458,14 +1419,14 @@
     </unit><unit id="infoboxTime72">
       <notes>
 
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:49</note><note category="location">src/app/infobox/infobox.component.html:295</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:51</note><note category="location">src/app/infobox/infobox.component.html:295</note></notes>
       <segment state="final">
         <source>72 Std. </source>
       <target>72 Std. </target></segment>
     </unit><unit id="infoboxTime7Days">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:52</note><note category="location">src/app/infobox/infobox.component.html:298</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:54</note><note category="location">src/app/infobox/infobox.component.html:298</note></notes>
       <segment state="final">
         <source>7 Tage
               </source>
@@ -1495,14 +1456,14 @@
     </unit><unit id="infoboxType">
       <notes>
 
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:17</note><note category="location">src/app/infobox/infobox.component.html:328</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:19</note><note category="location">src/app/infobox/infobox.component.html:328</note></notes>
       <segment state="final">
         <source>Art</source>
       <target>Art</target></segment>
     </unit><unit id="infoboxTypeSick">
       <notes>
 
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:20</note><note category="location">src/app/infobox/infobox.component.html:337</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:22</note><note category="location">src/app/infobox/infobox.component.html:337</note></notes>
       <segment state="final">
         <source>Positiv Getestet
               </source>
@@ -1511,28 +1472,28 @@
     </unit><unit id="infoboxTypeDeath">
       <notes>
 
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:22</note><note category="location">src/app/infobox/infobox.component.html:339</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:24</note><note category="location">src/app/infobox/infobox.component.html:339</note></notes>
       <segment state="final">
         <source>Todesfälle</source>
       <target>Todesfälle</target></segment>
     </unit><unit id="infoboxNorm">
       <notes>
 
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:29</note><note category="location">src/app/infobox/infobox.component.html:347</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:31</note><note category="location">src/app/infobox/infobox.component.html:347</note></notes>
       <segment state="final">
         <source>Normalisierung</source>
       <target>Normalisierung</target></segment>
     </unit><unit id="infoboxNornNone">
       <notes>
 
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:33</note><note category="location">src/app/infobox/infobox.component.html:356</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:35</note><note category="location">src/app/infobox/infobox.component.html:356</note></notes>
       <segment state="final">
         <source>Keine Normalisierung </source>
       <target>Keine Normalisierung </target></segment>
     </unit><unit id="infoboxNornYes">
       <notes>
 
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:36</note><note category="location">src/app/infobox/infobox.component.html:360</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:38</note><note category="location">src/app/infobox/infobox.component.html:360</note></notes>
       <segment state="final">
         <source>Je 100.000 Einwohner </source>
       <target>Je 100.000 Einwohner </target></segment>
@@ -1624,28 +1585,28 @@
     </unit><unit id="overviewIntroduction">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:19</note><note category="location">src/app/overview/overview.component.html:48</note></notes>
+      <note category="location">src/app/overview/overview.component.html:19</note><note category="location">src/app/overview/overview.component.html:50</note></notes>
       <segment state="final">
         <source>Einführung</source>
       <target>Einführung</target></segment>
     </unit><unit id="overviewICUView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:26</note><note category="location">src/app/overview/overview.component.html:55</note></notes>
+      <note category="location">src/app/overview/overview.component.html:26</note><note category="location">src/app/overview/overview.component.html:57</note></notes>
       <segment state="final">
         <source>Intensivbetten-Kapazitäten Ansicht</source>
       <target>Intensivbetten-Kapazitäten Ansicht</target></segment>
     </unit><unit id="overviewLockdownView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:29</note><note category="location">src/app/overview/overview.component.html:58</note></notes>
+      <note category="location">src/app/overview/overview.component.html:29</note><note category="location">src/app/overview/overview.component.html:60</note></notes>
       <segment state="final">
         <source>Lockdown Ansicht</source>
       <target>Lockdown Ansicht</target></segment>
     </unit><unit id="overviewLockdownViewLive">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:32</note><note category="location">src/app/overview/overview.component.html:61</note></notes>
+      <note category="location">src/app/overview/overview.component.html:32</note><note category="location">src/app/overview/overview.component.html:63</note></notes>
       <segment state="final">
         <source>LIVE Lockdown Ansicht</source>
       <target>LIVE Lockdown Ansicht</target></segment>
@@ -1653,7 +1614,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/overview.component.html:35</note><note category="location">src/app/overview/overview.component.html:64</note></notes>
+      <note category="location">src/app/overview/overview.component.html:37</note><note category="location">src/app/overview/overview.component.html:69</note></notes>
       <segment state="final">
         <source>E-Mail-Benachrichtigung</source>
       <target>E-Mail-Benachrichtigung</target></segment>
@@ -1708,6 +1669,48 @@
       <segment state="final">
         <source>Selektion aufheben</source>
       <target>Selektion aufheben</target></segment>
+    </unit><unit id="dashboardsOverviewNew">
+      <notes>
+        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:2</note>
+      </notes>
+      <segment state="final">
+        <source>Neues Dashboard</source>
+      <target>Neues Dashboard</target></segment>
+    </unit><unit id="dashboardsOverviewPopular">
+      <notes>
+        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:4</note>
+      </notes>
+      <segment state="final">
+        <source>Beliebteste Dashboards</source>
+      <target>Beliebteste Dashboards</target></segment>
+    </unit><unit id="dashboardsOverviewMostVisited">
+      <notes>
+        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:8</note>
+      </notes>
+      <segment state="final">
+        <source>Populärste Dashboards</source>
+      <target>Populärste Dashboards</target></segment>
+    </unit><unit id="dashboardsOverviewNewest">
+      <notes>
+        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:12</note>
+      </notes>
+      <segment state="final">
+        <source>Neueste Dashboards</source>
+      <target>Neueste Dashboards</target></segment>
+    </unit><unit id="dashboardTableVisits">
+      <notes>
+        <note category="location">src/app/overview/dashboard/dashboards-table/dashboards-table.component.html:20</note>
+      </notes>
+      <segment state="final">
+        <source> Aufrufe </source>
+      <target> Aufrufe </target></segment>
+    </unit><unit id="dashboardTableCreated">
+      <notes>
+        <note category="location">src/app/overview/dashboard/dashboards-table/dashboards-table.component.html:26</note>
+      </notes>
+      <segment state="final">
+        <source> Erstellt </source>
+      <target> Erstellt </target></segment>
     </unit><unit id="chartSettingsAggregation">
       <notes>
         <note category="location">src/app/overview/dashboard/settings/settings.component.html:5</note>
@@ -1955,15 +1958,15 @@
       <target>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</target></segment>
     </unit><unit id="tableOverviewCurrent">
       <notes>
-        <note category="location">src/app/overview/dashboard/table-overview/table-overview.component.html:12</note>
-      </notes>
+        
+      <note category="location">src/app/shared/table-overview/table-overview.component.html:12</note></notes>
       <segment state="final">
         <source>Aktuell</source>
       <target>Aktuell</target></segment>
     </unit><unit id="TableOverviewChanges">
       <notes>
-        <note category="location">src/app/overview/dashboard/table-overview/table-overview.component.html:13</note>
-      </notes>
+        
+      <note category="location">src/app/shared/table-overview/table-overview.component.html:13</note></notes>
       <segment state="final">
         <source>Veränderung</source>
       <target>Veränderung</target></segment>
