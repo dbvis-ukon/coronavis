@@ -10,7 +10,7 @@ import { DashboardRepository } from '../repositories/dashboard.repository';
 import { RegionRepository } from '../repositories/region.repository';
 import { Dashboard } from '../repositories/types/in/dashboard';
 import { Region } from '../repositories/types/in/region';
-import { MarkdownItem, MultiLineChartItem, TableOverviewItem } from './chart.service';
+import { Item, MarkdownItem, MultiLineChartItem, PixelChartItem, TableOverviewItem } from './chart.service';
 import { ConfigService } from './config.service';
 
 @Injectable({
@@ -137,7 +137,15 @@ If you save this dashboard, it will receive a new ID and URL.
   }
 
   save(dashboard: Dashboard): Observable<Dashboard> {
-    return this.dashboardRepo.save({title: dashboard.title, items: dashboard.items});
+    const newDashboard: Dashboard = {id: dashboard.id, title: dashboard.title, upvotes: null, visits: null, items: []};
+
+    dashboard.items.forEach(i => newDashboard.items.push({
+      type: i.type,
+      text: (i as MarkdownItem).text,
+      dataRequest: (i as PixelChartItem).dataRequest,
+      config: (i as PixelChartItem).config
+    } as Item));
+    return this.dashboardRepo.save(newDashboard);
   }
 
   get404(): Observable<Dashboard> {
