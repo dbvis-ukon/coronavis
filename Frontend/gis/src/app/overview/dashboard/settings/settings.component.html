@@ -1,8 +1,8 @@
-<h1 mat-dialog-title>Chart bearbeiten</h1>
+<h1 mat-dialog-title i18n="@@chartSettingsTitle">Chart bearbeiten</h1>
 <div class="dialog-content" mat-dialog-content #dialogContent>
 
     <div class="toggleGroup">
-        <h5 i18n="@@chartSettingsAggregation">Chart Type</h5>
+        <h5 i18n="@@chartSettingsAggregation">Chart</h5>
 
         <mat-button-toggle-group
           class="btngrp"
@@ -160,6 +160,6 @@
     
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button color="primary" [mat-dialog-close]="data">Speichern</button>
-  <button mat-raised-button color="warn" (click)="onNoClick()">Abbrechen</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" i18n="@@buttonSave">Speichern</button>
+  <button mat-raised-button color="warn" (click)="onNoClick()" i18n="@@buttonCancel">Abbrechen</button>
 </div>

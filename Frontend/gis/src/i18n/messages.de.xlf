@@ -188,6 +188,13 @@
       <segment state="final">
         <source>7-Tages-Inzidenz</source>
       <target>7-Tages-Inzidenz</target></segment>
+    </unit><unit id="chartSettingsTitle">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:1</note>
+      </notes>
+      <segment state="final">
+        <source>Chart bearbeiten</source>
+      <target>Chart bearbeiten</target></segment>
     </unit><unit id="agegroupChartLastWeekHint">
       <notes>
         
@@ -1716,8 +1723,8 @@
         <note category="location">src/app/overview/dashboard/settings/settings.component.html:5</note>
       </notes>
       <segment state="final">
-        <source>Chart Type</source>
-      <target>Chart Type</target></segment>
+        <source>Chart</source>
+      <target>Chart</target></segment>
     </unit><unit id="chartSettingsViewTable">
       <notes>
         <note category="location">src/app/overview/dashboard/settings/settings.component.html:14,15</note>
@@ -1956,6 +1963,36 @@
       <segment state="final">
         <source>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</source>
       <target>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</target></segment>
+    </unit><unit id="buttonSave">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:163</note>
+        <note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note>
+      </notes>
+      <segment state="final">
+        <source>Speichern</source>
+      <target>Speichern</target></segment>
+    </unit><unit id="buttonCancel">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:164</note>
+        <note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note>
+      </notes>
+      <segment state="final">
+        <source>Abbrechen</source>
+      <target>Abbrechen</target></segment>
+    </unit><unit id="dashboardTitleEditHeader">
+      <notes>
+        <note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:1</note>
+      </notes>
+      <segment state="final">
+        <source>Dashboard Name bearbeiten</source>
+      <target>Dashboard Name bearbeiten</target></segment>
+    </unit><unit id="dashboardTitle">
+      <notes>
+        <note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:5</note>
+      </notes>
+      <segment state="final">
+        <source>Dashboard Name</source>
+      <target>Dashboard Name</target></segment>
     </unit><unit id="tableOverviewCurrent">
       <notes>
         

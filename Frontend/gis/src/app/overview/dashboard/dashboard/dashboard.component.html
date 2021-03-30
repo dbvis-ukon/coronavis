@@ -15,7 +15,7 @@
 
       <span class="example-spacer"></span>
 
-      <button mat-icon-button matTooltip="Upvote this dashboard" (click)="upvote()">
+      <button mat-icon-button matTooltip="Upvote this dashboard" (click)="upvote()" [disabled]="dashboard.id.length < 6">
         <mat-icon>thumb_up</mat-icon>
       </button> {{ dashboard.upvotes }} | 
       &nbsp;<mat-icon matTooltip="Number of views">visibility</mat-icon>&nbsp; {{ dashboard.visits }}
