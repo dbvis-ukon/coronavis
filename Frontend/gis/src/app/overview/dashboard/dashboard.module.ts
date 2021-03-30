@@ -1,3 +1,4 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -13,34 +14,36 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardsOverviewComponent } from './dashboards-overview/dashboards-overview.component';
+import { DashboardsTableComponent } from './dashboards-table/dashboards-table.component';
 import { MultiLineChartComponent } from './multi-line-chart/multi-line-chart.component';
-import { PixelChartComponent } from './pixel-chart/pixel-chart.component';
 import { RegionSelectorComponent } from './region-selector/region-selector.component';
 import { SettingsComponent } from './settings/settings.component';
-import { TableOverviewComponent } from './table-overview/table-overview.component';
 import { TitleEditDialogComponent } from './title-edit-dialog/title-edit-dialog.component';
-
 
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    PixelChartComponent,
     MultiLineChartComponent,
     SettingsComponent,
     RegionSelectorComponent,
     TitleEditDialogComponent,
-    TableOverviewComponent
+    DashboardsOverviewComponent,
+    DashboardsTableComponent
   ],
   imports: [
     CommonModule,
     SharedModule.forRoot(),
     MarkdownModule.forRoot(),
+    RouterModule.forChild([]),
     MatCardModule,
     MatIconModule,
     MatFormFieldModule,
@@ -56,10 +59,13 @@ import { TitleEditDialogComponent } from './title-edit-dialog/title-edit-dialog.
     MatChipsModule,
     MatButtonToggleModule,
     MatToolbarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTableModule,
+    ClipboardModule
   ],
   exports: [
-    DashboardComponent
+    DashboardComponent,
+    DashboardsOverviewComponent
   ]
 })
 export class DashboardModule { }

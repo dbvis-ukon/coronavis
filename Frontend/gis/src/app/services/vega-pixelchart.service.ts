@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/quotes, quote-props */
 
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { CovidChartOptions, TimeGranularity } from '../cases-dod/covid-chart-options';
-import { CovidNumberCaseTimeWindow, CovidNumberCaseType, CovidNumberCaseNormalization } from '../map/options/covid-number-case-options';
-import { AggregatedRKICaseDevelopmentProperties, RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
+import { CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
+import { AggregatedRKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
+import { Region } from '../repositories/types/in/region';
 import { getMoment, getStrDate } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 
@@ -81,31 +85,57 @@ export class VegaPixelchartService {
         "timeUnit": "yearweek",
         "type": "temporal",
         "title": "Woche",
-        "axis": {"labelAngle": 45},
+        "axis": {
+          "labelAngle": 45
+        },
         "bandPosition": 0.5,
         "scale": {}
       },
-      "y": {"field": "y", "type": "ordinal", "title": "Altersgruppe", "axis": {
-        "minExtent": 50,
-        "maxExtent": 50
-      }}
+      "y": {
+        "field": "y",
+        "type": "ordinal",
+        "title": "Altersgruppe",
+        "axis": {
+          "minExtent": 50,
+          "maxExtent": 50
+        }
+      }
     },
-    "layer": [
-      {
-        "transform": [
-          {"filter": "day(datum.x) >= 0"}
-        ],
-        "mark": {"type": "rect", "tooltip": true},
+    "layer": [{
+        "transform": [{
+          "filter": "day(datum.x) >= 0"
+        }],
+        "mark": {
+          "type": "rect",
+          "tooltip": true
+        },
         "encoding": {
           "color": {
             "field": "val",
             "type": "quantitative",
-            "legend": {"title": null, "orient": "bottom", "gradientLength": {"signal": "width - 600"}},
-            "scale": {"type": "linear", "domain": [0, 579.7865331400711], "scheme": "inferno"}
+            "legend": {
+              "title": null,
+              "orient": "bottom",
+              "gradientLength": {
+                "signal": "width * 0.35"
+              }
+            },
+            "scale": {
+              "type": "linear",
+              "domain": [0, 579.7865331400711],
+              "scheme": "inferno"
+            }
           },
-          "tooltip": [
-            {"field": "x", "type": "temporal", "title": "Woche"},
-            {"field": "y", "type": "ordinal", "title": "Altersgruppe"},
+          "tooltip": [{
+              "field": "x",
+              "type": "temporal",
+              "title": "Woche"
+            },
+            {
+              "field": "y",
+              "type": "ordinal",
+              "title": "Altersgruppe"
+            },
             {
               "field": "val",
               "title": "7-Tages-Inzidenz",
@@ -116,19 +146,37 @@ export class VegaPixelchartService {
         }
       },
       {
-        "transform": [
-          {"filter": "day(datum.x) == 6 || dayofyear(peek(data('data')).x) == dayofyear(datum.x)"}
-        ],
-        "mark": {"type": "text", "fontWeight": "lighter", "fontSize": 10},
+        "transform": [{
+          "filter": "day(datum.x) == 6 || dayofyear(peek(data('data')).x) == dayofyear(datum.x)"
+        }],
+        "mark": {
+          "type": "text",
+          "fontWeight": "lighter",
+          "fontSize": 10
+        },
         "encoding": {
-          "text": {"field": "val", "type": "quantitative", "format": ",.0f"},
+          "text": {
+            "field": "val",
+            "type": "quantitative",
+            "format": ",.0f"
+          },
           "color": {
-            "condition": {"test": "datum['val'] > 300", "value": "black"},
+            "condition": {
+              "test": "datum['val'] > 300",
+              "value": "black"
+            },
             "value": "lightgrey"
           },
-          "tooltip": [
-            {"field": "x", "type": "temporal", "title": "Woche"},
-            {"field": "y", "type": "ordinal", "title": "Altersgruppe"},
+          "tooltip": [{
+              "field": "x",
+              "type": "temporal",
+              "title": "Woche"
+            },
+            {
+              "field": "y",
+              "type": "ordinal",
+              "title": "Altersgruppe"
+            },
             {
               "field": "val",
               "title": "7-Tages-Inzidenz",
@@ -140,16 +188,20 @@ export class VegaPixelchartService {
       }
     ],
     "config": {
-      "axis": {"grid": true, "tickBand": "extent"}
+      "axis": {
+        "grid": true,
+        "tickBand": "extent"
+      }
     }
   };
 
   constructor(
-    private caseUtils: CaseUtilService
+    private caseUtils: CaseUtilService,
+    private caseRepo: CaseDevelopmentRepository
   ) {}
 
 
-  compileToDataAndOptions(o: CovidChartOptions, fullData: RKICaseDevelopmentProperties | AggregatedRKICaseDevelopmentProperties, autoConfig: boolean): PixelChartDataAndOptions {
+  compileToDataAndOptions(o: CovidChartOptions, dataRequest: Region[], autoConfig: boolean): Observable<PixelChartDataAndOptions> {
     let idxDiff = 1;
     switch (o.timeWindow) {
       case CovidNumberCaseTimeWindow.twentyFourhours:
@@ -173,116 +225,114 @@ export class VegaPixelchartService {
         idxDiff = 7;
     }
 
-    // let ageGroupAccessor: ((s: RKICaseTimedStatus) => RKIAgeGroups);
-
-    // switch (o.type) {
-    //   case CovidNumberCaseType.cases:
-    //     ageGroupAccessor = ((s: RKICaseTimedStatus) => s.cases_survstat_by_agegroup);
-    //     break;
-
-    //   case CovidNumberCaseType.deaths:
-    //     ageGroupAccessor = ((s: RKICaseTimedStatus) => s.deaths_by_agegroup);
-    //     break;
-    // }
-
     const ageGroups: [number, number][] = this._ageGroups[o.ageGroupBinning];
 
     const data: PixelChartDataPoint[] = [];
     let maxDiff = 0;
     let numberOfAgeGroups = 0;
 
-    const converted = [];
+    return this.caseRepo.getCasesDevelopmentAggregated(
+      CovidNumberCaseDataSource.rki,
+      dataRequest,
+    ).pipe(
+      map(d => d.properties),
+      map(fullData => {
+        const converted = [];
 
-    for (let i = 0; i < idxDiff; i++) {
-      let agNow;
-      switch (o.type) {
-        case CovidNumberCaseType.cases:
-          agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+        for (let i = 0; i < idxDiff; i++) {
+          let agNow;
+          switch (o.type) {
+            case CovidNumberCaseType.cases:
+              agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+              converted[i] = agNow;
+
+              o.timeAgg = TimeGranularity.yearweek;
+              idxDiff = 7;
+
+              break;
+
+            case CovidNumberCaseType.deaths:
+              agNow = fullData.developments[i].deaths_by_agegroup;
+              break;
+          }
           converted[i] = agNow;
-
-          o.timeAgg = TimeGranularity.yearweek;
-          idxDiff = 7;
-
-          break;
-
-        case CovidNumberCaseType.deaths:
-          agNow = fullData.developments[i].deaths_by_agegroup;
-          break;
-      }
-      converted[i] = agNow;
-    }
-
-    for (let i = idxDiff; i < fullData.developments.length; i++) {
-      let agNow;
-      let agPop;
-      switch (o.type) {
-        case CovidNumberCaseType.cases:
-          agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
-          agPop = this.caseUtils.groupAgeStatus(fullData.developments[i].population_survstat_by_agegroup, ageGroups);
-          break;
-
-        case CovidNumberCaseType.deaths:
-          agNow = fullData.developments[i].deaths_by_agegroup;
-          agPop = fullData.developments[i].population_by_agegroup;
-          break;
-      }
-
-      converted[i] = agNow;
-      const agOld = converted[i - idxDiff];
-
-      // const agNow: RKIAgeGroups = ageGroupAccessor(fullData.developments[i]);
-      // const agOld: RKIAgeGroups = ageGroupAccessor(fullData.developments[i - idxDiff]);
-      numberOfAgeGroups = Object.keys(agNow).length;
-
-      for (const k of Object.keys(agNow)) {
-        if (o.normalization === CovidNumberCaseNormalization.per100k && k === 'Aunknown') {
-          continue;
-        }
-        let diff = (agNow[k] - agOld[k]);
-
-        if (o.normalization === CovidNumberCaseNormalization.per100k) {
-          diff = diff / agPop[k] * 100000;
         }
 
-        if (diff > maxDiff) {
-          maxDiff = diff;
+        for (let i = idxDiff; i < fullData.developments.length; i++) {
+          let agNow;
+          let agPop;
+          switch (o.type) {
+            case CovidNumberCaseType.cases:
+              agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+              agPop = this.caseUtils.groupAgeStatus(fullData.developments[i].population_survstat_by_agegroup, ageGroups);
+              break;
+
+            case CovidNumberCaseType.deaths:
+              agNow = fullData.developments[i].deaths_by_agegroup;
+              agPop = fullData.developments[i].population_by_agegroup;
+              break;
+          }
+
+          converted[i] = agNow;
+          const agOld = converted[i - idxDiff];
+
+          // const agNow: RKIAgeGroups = ageGroupAccessor(fullData.developments[i]);
+          // const agOld: RKIAgeGroups = ageGroupAccessor(fullData.developments[i - idxDiff]);
+          numberOfAgeGroups = Object.keys(agNow).length;
+
+          for (const k of Object.keys(agNow)) {
+            if (o.normalization === CovidNumberCaseNormalization.per100k && k === 'Aunknown') {
+              continue;
+            }
+            let diff = (agNow[k] - agOld[k]);
+
+            if (o.normalization === CovidNumberCaseNormalization.per100k) {
+              diff = diff / agPop[k] * 100000;
+            }
+
+            if (diff > maxDiff) {
+              maxDiff = diff;
+            }
+
+            data.push({
+              x: fullData.developments[i].timestamp,
+              y: k,
+              val: diff
+            });
+          }
         }
 
-        data.push({
-          x: fullData.developments[i].timestamp,
-          y: k,
-          val: diff
-        });
-      }
-    }
+        const yAxis = "Altersgruppe";
 
-    const yAxis = "Altersgruppe";
+        const xAxis = "Woche";
 
-    const xAxis = "Woche";
+        const zAxis = "7-Tage-Inzidenz";
 
-    const zAxis = "7-Tage-Inzidenz";
+        const xDomain: [string, string] = [
+          getStrDate(getMoment(data[0].x).startOf('week')),
+          getStrDate(getMoment(data[data.length - 1].x).endOf('week'))
+        ];
 
-    const xDomain = [
-      getStrDate(getMoment(data[0].x).startOf('week')),
-      getStrDate(getMoment(data[data.length-1].x).endOf('week'))
-    ];
+        const ret: PixelChartDataAndOptions = {
+          config: o,
+          data,
+          chartOptions: {
+            title: this.caseUtils.getChartTitle(o, (fullData as AggregatedRKICaseDevelopmentProperties).name),
+            xAxisTitle: xAxis,
+            yAxisTitle: yAxis,
+            zAxisTitle: zAxis,
+            width: 'container',
+            height: numberOfAgeGroups * 20,
+            scaleType: o.scaleType.toString(),
+            timeAgg: o.timeAgg.toString(),
+            domain: [0, maxDiff],
+            xDomain
+          }
+        };
 
-    return {
-      config: o,
-      data,
-      chartOptions: {
-        title: this.caseUtils.getChartTitle(o, (fullData as AggregatedRKICaseDevelopmentProperties).name),
-        xAxisTitle: xAxis,
-        yAxisTitle: yAxis,
-        zAxisTitle: zAxis,
-        width: 'container',
-        height: numberOfAgeGroups * 20,
-        scaleType: o.scaleType.toString(),
-        timeAgg: o.timeAgg.toString(),
-        domain: [0, maxDiff],
-        xDomain
-      }
-    } as PixelChartDataAndOptions;
+        return ret;
+      })
+    );
   }
 
 
@@ -310,7 +360,8 @@ export class VegaPixelchartService {
     spec.data.values = data;
 
     // also overwrite the title
-    spec.encoding.x.title = chartOptions.xAxisTitle || '';
+    // spec.encoding.x.title = chartOptions.xAxisTitle || '';
+    spec.encoding.x.title = '';
 
     spec.encoding.y.title = chartOptions.yAxisTitle || '';
 

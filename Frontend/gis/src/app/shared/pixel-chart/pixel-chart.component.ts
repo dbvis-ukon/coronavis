@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { TimeGranularity } from 'src/app/cases-dod/covid-chart-options';
 import { PixelChartDataAndOptions, VegaPixelchartService } from 'src/app/services/vega-pixelchart.service';
 
 @Component({
@@ -47,6 +48,12 @@ export class PixelChartComponent implements OnInit {
     if (!this._dataAndOptions) {
       return;
     }
+
+    this._dataAndOptions.chartOptions.yAxisTitle = this.i18nAltersgruppe.nativeElement.textContent;
+
+    this._dataAndOptions.chartOptions.xAxisTitle = this._dataAndOptions.config.timeAgg === TimeGranularity.yearweek ? this.i18nWoche.nativeElement.textContent : this.i18nDatum.nativeElement.textContent;
+
+    this._dataAndOptions.chartOptions.zAxisTitle = this.i18nVal.nativeElement.textContent;
 
     this.spec = this.vegaPixelchartService.compileChart(this._dataAndOptions.data, this._dataAndOptions.chartOptions);
   }

@@ -1,6 +1,9 @@
 <div class="outer" *ngIf="dashboard">
     <mat-toolbar color="primary">
-      <button mat-icon-button matTooltip="Save as new dashboard">
+      <button mat-icon-button matTooltip="Copy URL" (click)="copyUrl()">
+        <mat-icon>add_link</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Save as new dashboard" (click)="save()">
         <mat-icon>save</mat-icon>
       </button> | 
       <button mat-icon-button matTooltip="Edit title" (click)="openEditTitleDialog()">
@@ -12,7 +15,7 @@
 
       <span class="example-spacer"></span>
 
-      <button mat-icon-button matTooltip="Upvote this dashboard">
+      <button mat-icon-button matTooltip="Upvote this dashboard" (click)="upvote()">
         <mat-icon>thumb_up</mat-icon>
       </button> {{ dashboard.upvotes }} | 
       &nbsp;<mat-icon matTooltip="Number of views">visibility</mat-icon>&nbsp; {{ dashboard.visits }}
@@ -55,7 +58,7 @@
                     <mat-icon>edit</mat-icon>
                 </button>
       
-                <button *ngIf="timelineItem.type !== 'markdown'" mat-icon-button aria-label="settings" class="icon filter" (click)="openSettings(timelineItem, idx)" matTooltip="Filter Settings">
+                <button *ngIf="timelineItem.type !== 'markdown'" mat-icon-button aria-label="settings" class="icon filter" (click)="openSettings(timelineItem, idx)" matTooltip="Chart Settings">
                     <mat-icon>settings</mat-icon>
                 </button> 
     

@@ -1,6 +1,6 @@
 <div *ngIf="tableData$ | async as t; else loadBlock">
 
-    <h4 class="title">
+    <h4 class="title" *ngIf="showTitle">
         {{t.data.title}}
     </h4>
 
@@ -35,17 +35,21 @@
             <tr *ngFor="let row of t.data.rows">
                 <td>{{ row.title }}</td>
 
-                <td *ngFor="let col of row.cols">
-                    <div [ngClass]="{'active': col.isActive}">
-                        {{ col.value }}
-                    </div>
-                </td>
+                <ng-container *ngFor="let col of row.cols">
+                    <td *ngIf="!(tooltip && (col.timeWindow === eTimeWindow.twentyFourhours || col.timeWindow== eTimeWindow.seventyTwoHours))">
+                        <div [ngClass]="{'active': col.isActive}">
+                            {{ col.value }}
+                        </div>
+                    </td>
+                </ng-container>
+                
             </tr>        
         </tbody>
     </table>
     
-    <div style="margin-top: 5px;">
+    <div class="datasources">
         <app-data-source [source]="t.config.dataSource"></app-data-source>
+        <h5>&amp;</h5>
         <app-data-source [hideHint]="true" source="divi"></app-data-source>
     </div>
 

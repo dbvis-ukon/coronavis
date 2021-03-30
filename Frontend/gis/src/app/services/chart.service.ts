@@ -4,21 +4,12 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CovidChartOptions } from '../cases-dod/covid-chart-options';
-import { CovidNumberCaseDataSource } from '../map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { Region } from '../repositories/types/in/region';
 import { getMoment } from '../util/date-util';
 import { TableOverviewDataAndOptions, TableOverviewService } from './table-overview.service';
 import { MultiLineChartDataAndOptions, VegaMultiLineChartService } from './vega-multilinechart.service';
 import { PixelChartDataAndOptions, VegaPixelchartService } from './vega-pixelchart.service';
-
-export interface SeparatorItem {
-  type: 'separator';
-  title: string;
-  titleEditMode: boolean;
-  dataRequest?: undefined;
-  config?: undefined;
-}
 
 export interface MarkdownItem {
   type: 'markdown';
@@ -47,7 +38,7 @@ export interface TableOverviewItem {
   _compiled?: Observable<TableOverviewDataAndOptions>;
 }
 
-export type Item = PixelChartItem | SeparatorItem | MultiLineChartItem | MarkdownItem | TableOverviewItem;
+export type Item = PixelChartItem | MultiLineChartItem | MarkdownItem | TableOverviewItem;
 
 @Injectable({
   providedIn: 'root'
@@ -67,11 +58,10 @@ export class ChartService {
 
   public updateChartFull(d: Item): Observable<Item> {
     if (d.type === 'pixel') {
-      return this.caseRepo.getCasesDevelopmentAggregated(CovidNumberCaseDataSource.rki, d.dataRequest)
+      return this.vegaPixelchartService.compileToDataAndOptions(d.config, d.dataRequest, false)
         .pipe(
-          map(d1 => d1.properties),
           map(d1 => {
-            d._compiled = this.vegaPixelchartService.compileToDataAndOptions(d.config, d1, false);
+            d._compiled = d1;
 
             if (this.tExtent[0] === null || getMoment(this.tExtent[0]).isAfter(getMoment(d._compiled.chartOptions.xDomain[0]))) {
               this.tExtent[0] = d._compiled.chartOptions.xDomain[0];

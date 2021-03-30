@@ -12,6 +12,10 @@
 
 
 <div class="datasources" *ngIf="_dataAndOptions">
+    <p i18n="@@agegroupChartLastWeekHint" class="hint">
+        Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
+    </p>
+
     <app-data-source [source]="_dataAndOptions.config.dataSource"></app-data-source>
     <app-data-source source="zensus"></app-data-source>
 </div>

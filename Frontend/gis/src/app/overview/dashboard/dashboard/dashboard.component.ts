@@ -1,12 +1,15 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { from, Observable, timer } from 'rxjs';
 import { map, mergeMap, toArray } from 'rxjs/operators';
 import { Dashboard } from 'src/app/repositories/types/in/dashboard';
 import { ChartService, Item, MarkdownItem, MultiLineChartItem } from 'src/app/services/chart.service';
 import { ConfigService } from 'src/app/services/config.service';
+import { DashboardService } from 'src/app/services/dashboard.service';
 import { SettingsComponent } from '../settings/settings.component';
 import { TitleEditDialogComponent } from '../title-edit-dialog/title-edit-dialog.component';
 
@@ -31,7 +34,11 @@ export class DashboardComponent implements OnInit {
     private dialog: MatDialog,
     private chartService: ChartService,
     private configService: ConfigService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dashboardService: DashboardService,
+    private router: Router,
+    private clipboard: Clipboard,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -149,6 +156,28 @@ export class DashboardComponent implements OnInit {
         this.chartService.updateChartsShallow(this.dashboard.items, containerWidth);
         this.pleaseWait = false;
       });
+    });
+  }
+
+  save() {
+    this.dashboardService.save(this.dashboard)
+    .subscribe(ds => {
+      this.router.navigate(['overview', 'dashboard', ds.id]);
+    });
+  }
+
+  upvote() {
+    this.dashboardService.upvote(this.dashboard)
+    .subscribe(ds => {
+      this.dashboard.upvotes = ds.upvotes;
+    });
+  }
+
+  copyUrl() {
+    this.clipboard.copy(window.location.href);
+    this.snackBar.open('URL successfully copied to clipboard', 'OK', {
+      duration: 2000,
+      verticalPosition: 'top'
     });
   }
 }

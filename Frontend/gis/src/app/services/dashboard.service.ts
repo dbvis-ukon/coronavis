@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { merge } from 'lodash-es';
 import { Observable, of } from 'rxjs';
-import { filter, map, mergeMap, toArray } from 'rxjs/operators';
-import { AgeGroupBinning, ScaleType, TimeGranularity } from '../cases-dod/covid-chart-options';
+import { catchError, filter, map, mergeMap, toArray } from 'rxjs/operators';
+import { AgeGroupBinning } from '../cases-dod/covid-chart-options';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
-import { CovidNumberCaseChange, CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { CovidNumberCaseDataSource, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { DashboardRepository } from '../repositories/dashboard.repository';
 import { RegionRepository } from '../repositories/region.repository';
 import { Dashboard } from '../repositories/types/in/dashboard';
-import { Item, MarkdownItem, MultiLineChartItem, TableOverviewItem } from './chart.service';
+import { Region } from '../repositories/types/in/region';
+import { MarkdownItem, MultiLineChartItem, TableOverviewItem } from './chart.service';
 import { ConfigService } from './config.service';
 
 @Injectable({
@@ -16,9 +18,12 @@ import { ConfigService } from './config.service';
 })
 export class DashboardService implements Resolve<Dashboard> {
 
+  private alreadyUpvoted: Set<string> = new Set();
+
   constructor(
     private regionRepo: RegionRepository,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private dashboardRepo: DashboardRepository
   ) {}
 
 
@@ -30,33 +35,28 @@ export class DashboardService implements Resolve<Dashboard> {
 
   public resolveDashboard(idOrAgs: string): Observable<Dashboard> {
     if (idOrAgs.length <= 5) {
-      return this.createFromAgs(idOrAgs);
+      return this.createFromAgs(idOrAgs).pipe(
+        catchError(() => this.get404())
+      );
     } else {
-      return this.getExample();
+      return this.dashboardRepo.get(idOrAgs).pipe(
+        catchError(() => this.get404())
+      );
     }
   }
 
   public createFromAgs(ags: string): Observable<Dashboard> {
-    let aggLevel: AggregationLevel;
-
     const regions = [];
 
     if (ags === 'de') {
-      aggLevel = AggregationLevel.country;
       regions.push('de');
     } else if (ags.length === 2) {
-      aggLevel = AggregationLevel.state;
-
       regions.push(ags);
       regions.push('de');
     } else if (ags.length === 3) {
-      aggLevel = AggregationLevel.governmentDistrict;
-
       regions.push(ags);
       regions.push('de');
     } else {
-      aggLevel = AggregationLevel.county;
-
       regions.push(ags);
       regions.push(ags.substring(0, 2));
       regions.push('de');
@@ -136,250 +136,78 @@ If you save this dashboard, it will receive a new ID and URL.
     );
   }
 
-  public getExample(): Observable<Dashboard> {
-    const items: Item[] = [
-      {
-        type: 'markdown',
-        text: `# CoronaVis Dashboards
-  
-  In dieser Version können Benutzer selbständig Dashboards generieren, anpassen und über URLs teilen.
-  Zusätzlich zu den Charts können Textblöcke mit Markdown eingefügt werden um Erklärungen zu schreiben.
-  
-  ## Funktioniert bereits:
-  - Markdown bearbeiten
-  - Charts editieren (work-in-progress)
-  - Charts löschen
-  - Charts neu anordnen
-  - Multi-Series-Linechart mit Inzidenzen
-  - Inzidenzen nach Altersgruppen
-  
-  ## Todo:
-  - Dashboards persistent speichern
-  - Charts editieren
-  - Neue Charts und Text Elemente hinzufügen
-  - Multi-Series-Linechart erweitern für Bettenkapazitäten, Covid-19 Patienten, Todesfälle
-  - Tabellen-Chart
-        `
-      },
-      // {
-      //   type: 'multiline',
-      //   dataRequest: [
-      //     {
-      //       id: '01',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '02',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '03',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '04',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '05',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '06',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '07',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '08',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '09',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '10',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '11',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '12',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '13',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '14',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '15',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: '16',
-      //       aggLevel: AggregationLevel.state
-      //     },
-      //     {
-      //       id: 'de',
-      //       aggLevel: AggregationLevel.country
-      //     }
-      //   ],
-      //   config: {
-      //     change: CovidNumberCaseChange.absolute,
-      //     dataSource: 'rki',
-      //     date: 'now',
-      //     daysForTrend: 7,
-      //     normalization: CovidNumberCaseNormalization.per100k,
-      //     scaleType: ScaleType.linear,
-      //     ageGroupBinning: AgeGroupBinning.fiveyears,
-      //     showLabels: true,
-      //     showOnlyAvailableCounties: true,
-      //     showTrendGlyphs: true,
-      //     timeAgg: TimeGranularity.yearmonthdate,
-      //     timeWindow: CovidNumberCaseTimeWindow.sevenDays,
-      //     type: CovidNumberCaseType.cases
-      //   }
-      // },
-      {
-        type: 'multiline',
-        dataRequest: [
-          {
-            id: '08335',
-            aggLevel: AggregationLevel.county,
-            name: 'Konstanz',
-            description: 'Landkreis'
-          },
-          {
-            id: '08',
-            aggLevel: AggregationLevel.state,
-            name: 'Baden-Württemberg',
-            description: 'BL'
-          },
-          {
-            id: 'de',
-            aggLevel: AggregationLevel.country,
-            name: 'Germany',
-            description: 'L'
-          }
-        ],
-        config: {
-          change: CovidNumberCaseChange.absolute,
-          dataSource: CovidNumberCaseDataSource.risklayer,
-          date: 'now',
-          daysForTrend: 7,
-          normalization: CovidNumberCaseNormalization.per100k,
-          scaleType: ScaleType.linear,
-          ageGroupBinning: AgeGroupBinning.fiveyears,
-          showLabels: true,
-          showOnlyAvailableCounties: true,
-          showTrendGlyphs: true,
-          timeAgg: TimeGranularity.yearmonthdate,
-          timeWindow: CovidNumberCaseTimeWindow.sevenDays,
-          type: CovidNumberCaseType.cases
-        }
-      },
-      {
-        type: 'pixel',
-        dataRequest: [
-          {
-            id: '08335',
-            aggLevel: AggregationLevel.county,
-            name: 'Konstanz',
-            description: 'Landkreis'
-          },
-          {
-            id: '08336',
-            aggLevel: AggregationLevel.county,
-            name: 'Lörrach',
-            description: 'Landkreis'
-          }
-        ],
-        config: {
-          change: CovidNumberCaseChange.absolute,
-          dataSource: CovidNumberCaseDataSource.rki,
-          date: 'now',
-          daysForTrend: 7,
-          normalization: CovidNumberCaseNormalization.per100k,
-          scaleType: ScaleType.linear,
-          ageGroupBinning: AgeGroupBinning.fiveyears,
-          showLabels: true,
-          showOnlyAvailableCounties: true,
-          showTrendGlyphs: true,
-          timeAgg: TimeGranularity.yearmonthdate,
-          timeWindow: CovidNumberCaseTimeWindow.sevenDays,
-          type: CovidNumberCaseType.cases
-        }
-      },
-      {
-        type: 'pixel',
-        dataRequest: [
-          {
-            id: '08',
-            aggLevel: AggregationLevel.state,
-            name: 'Baden-Württemberg',
-            description: 'BL'
-          }
-        ],
-        config: {
-          change: CovidNumberCaseChange.absolute,
-          dataSource: CovidNumberCaseDataSource.rki,
-          date: 'now',
-          daysForTrend: 7,
-          normalization: CovidNumberCaseNormalization.per100k,
-          ageGroupBinning: AgeGroupBinning.fiveyears,
-          scaleType: ScaleType.linear,
-          showLabels: true,
-          showOnlyAvailableCounties: true,
-          showTrendGlyphs: true,
-          timeAgg: TimeGranularity.yearmonthdate,
-          timeWindow: CovidNumberCaseTimeWindow.sevenDays,
-          type: CovidNumberCaseType.cases
-        }
-      },
-      // {
-      //   type: 'pixel',
-      //   dataRequest: [
-      //     {
-      //       id: 'de',
-      //       aggLevel: AggregationLevel.country,
-      //       name: 'Germany',
-      //       description: 'L'
-      //     }
-      //   ],
-      //   config: {
-      //     change: CovidNumberCaseChange.absolute,
-      //     dataSource: 'rki',
-      //     date: 'now',
-      //     daysForTrend: 7,
-      //     normalization: CovidNumberCaseNormalization.per100k,
-      //     ageGroupBinning: AgeGroupBinning.fiveyears,
-      //     scaleType: ScaleType.linear,
-      //     showLabels: true,
-      //     showOnlyAvailableCounties: true,
-      //     showTrendGlyphs: true,
-      //     timeAgg: TimeGranularity.yearmonthdate,
-      //     timeWindow: CovidNumberCaseTimeWindow.sevenDays,
-      //     type: CovidNumberCaseType.cases
-      //   }
-      // }
-    ];
+  save(dashboard: Dashboard): Observable<Dashboard> {
+    return this.dashboardRepo.save({title: dashboard.title, items: dashboard.items});
+  }
 
-    return of({
-      id: 'example',
-      title: 'Example',
-      items,
-      upvotes: 100,
-      visits: 404
-    } as Dashboard);
+  get404(): Observable<Dashboard> {
+    const dashboard: Dashboard = {
+      id: '404',
+      title: '404 Dashboard not found',
+      visits: 0,
+      upvotes: 0,
+      items: []
+    };
+
+    dashboard.items.push({
+      type:'markdown',
+      text: `# We could not find this dashboard
+
+We could not find the dashboard you are looking for. You can search again or start here and add some more charts.
+
+> With :heart: from [@dbvis](https://twitter.com/dbvis)`
+    } as MarkdownItem);
+
+    const r: Region[] = [{id: 'de', name: 'Deutschland', aggLevel: AggregationLevel.country, description: ''}];
+
+    dashboard.items.push({
+      type: 'table',
+      config: this.configService.getDefaultChartConfig('table'),
+      dataRequest: r
+    });
+
+    dashboard.items.push({
+      type: 'multiline',
+      config: this.configService.getDefaultChartConfig('multiline'),
+      dataRequest: r
+    });
+
+    dashboard.items.push({
+      type: 'multiline',
+      dataRequest: r,
+      config: this.configService.parseConfig(
+        merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.patients}),
+        'multiline',
+        true
+      ).config
+    });
+
+    dashboard.items.push({
+      type: 'multiline',
+      dataRequest: r,
+      config: this.configService.parseConfig(
+        merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.bedOccupancyPercent}),
+        'multiline',
+        true
+      ).config
+    });
+
+    dashboard.items.push({
+      type: 'pixel',
+      config: this.configService.getDefaultChartConfig('pixel'),
+      dataRequest: r
+    });
+
+    return of(dashboard);
+  }
+
+  upvote(dashboard: Dashboard): Observable<Dashboard> {
+    if (this.alreadyUpvoted.has(dashboard.id) || dashboard.id.length < 6) {
+      return of(dashboard);
+    }
+
+    this.alreadyUpvoted.add(dashboard.id);
+    return this.dashboardRepo.upvote(dashboard.id);
   }
 
 }

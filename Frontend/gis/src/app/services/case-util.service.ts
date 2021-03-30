@@ -326,7 +326,7 @@ export class CaseUtilService {
       str.push(this.translation.translate('nach Altersgruppen'));
     }
 
-    if (titleRegions) {
+    if (titleRegions && titleRegions.length > 0) {
       str.push(this.translation.translate('für'));
       str.push(titleRegions.join(', '));
     }
