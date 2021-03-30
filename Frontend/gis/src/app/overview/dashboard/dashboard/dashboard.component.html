@@ -79,16 +79,16 @@
       
               <div *ngIf="timelineItem.type === 'markdown'" class="full-width">
                 <div *ngIf="timelineItem._editMode">
-                  <mat-toolbar>Vorschau</mat-toolbar>
+                  <mat-toolbar i18n="@@dashboardVorschau">Vorschau</mat-toolbar>
                   <markdown [ngStyle]="{'display': 'block', 'background-color': 'lightgrey'}" [data]="timelineItem._text" emoji></markdown>
   
                   <mat-form-field style="margin-top: 10px;" class="full-width">
-                    <mat-label>Text bearbeiten</mat-label>
+                    <mat-label i18n="@@dashboardEditText">Text bearbeiten</mat-label>
                     <textarea matInput [(ngModel)]="timelineItem._text" cdkTextareaAutosize></textarea>
                   </mat-form-field>
 
-                  <button mat-raised-button color="primary" (click)="timelineItem.text = timelineItem._text; timelineItem._editMode = false">Speichern</button> 
-                  <button style="margin-left: 10px;" mat-raised-button color="warn" (click)="timelineItem._editMode = false">Abbrechen</button>
+                  <button mat-raised-button color="primary" (click)="timelineItem.text = timelineItem._text; timelineItem._editMode = false" i18n="@@buttonSave">Speichern</button> 
+                  <button style="margin-left: 10px;" mat-raised-button color="warn" (click)="timelineItem._editMode = false" i18n="@@buttonCancel">Abbrechen</button>
                 </div>
 
                 <markdown *ngIf="!timelineItem._editMode" [data]="timelineItem.text" emoji></markdown>
