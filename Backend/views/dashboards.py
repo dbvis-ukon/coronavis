@@ -3,6 +3,8 @@ import json
 from datetime import datetime
 
 from flask import Blueprint, request, jsonify
+from sqlalchemy import text
+from sqlalchemy.orm import session
 from tzlocal import get_localzone
 
 from db import db
@@ -69,6 +71,84 @@ def upvote(id_db):
     return _get_and_prepare(id_db, up_visit=False, up_vote=True)
 
 
+@routes.route('/<id_db>/history', methods=['GET'])
+def get_ancestors(id_db):
+    current_dashboard = Dashboard.query.get(id_db)
+
+    if current_dashboard is None:
+        current_dashboard = Dashboard(
+            id=id_db,
+            dashboard={},
+            current=True
+        )
+
+    q = db.session.query(Dashboard).from_statement(
+        text("""
+        WITH RECURSIVE supplytree AS
+        (
+            SELECT id, parent_id, id::text As si_item_fullname
+            FROM dashboards
+            WHERE dashboards.id = :n
+        UNION ALL
+            SELECT si.id,
+            si.parent_id,
+            (sp.si_item_fullname || '->' || si.id::text)::text As si_item_fullname
+            FROM dashboards As si
+            INNER JOIN supplytree AS sp
+            ON (si.id = sp.parent_id)
+        )
+        SELECT supplytree.parent_id AS id,
+        d.dashboard,
+        d.upvotes,
+        d.visits,
+        d.created_at
+        FROM supplytree
+        JOIN dashboards d ON supplytree.parent_id = d.id
+        ORDER BY si_item_fullname DESC;
+        """)).params(n=id_db)
+    all_dashboards: list[Dashboard] = q.all()
+    if len(all_dashboards) > 0 and all_dashboards[0].parent_id is not None:
+        all_dashboards.insert(0, Dashboard(
+            id=all_dashboards[0].parent_id,
+            dashboard={}
+        ))
+
+    current_dashboard.current = True
+
+    all_dashboards.append(current_dashboard)
+
+    # if this is a dashboard that comes right after AGS dashboard
+    if len(all_dashboards) > 0 and all_dashboards[0].parent_id is not None:
+        all_dashboards.insert(0, Dashboard(
+            id=all_dashboards[0].parent_id,
+            dashboard={}
+        ))
+
+    children_query = db.session.query(Dashboard).from_statement(
+        text("""
+        WITH RECURSIVE supplytree AS
+            (SELECT id, parent_id, id::text As si_item_fullname
+            FROM dashboards
+            WHERE dashboards.parent_id = :n
+        UNION ALL
+            SELECT si.id,
+                si.parent_id,
+                (sp.si_item_fullname || '->' || si.id::text)::text As si_item_fullname
+            FROM dashboards As si
+                INNER JOIN supplytree AS sp
+                ON (si.parent_id = sp.id)
+        )
+        SELECT d.*
+        FROM supplytree
+        JOIN dashboards d ON supplytree.id = d.id
+        ORDER BY si_item_fullname;
+            """)).params(n=id_db)
+
+    children: list[Dashboard] = children_query.all()
+
+    return _prepare_all(all_dashboards + children)
+
+
 @routes.route('/newest', methods=['GET'])
 def get_newest():
     return _prepare_all(Dashboard.query.order_by(Dashboard.created_at.desc()).limit(10).all())
@@ -102,8 +182,11 @@ def _prepare(dashboard: Dashboard) -> dir:
     sanitized['id'] = dashboard.id
     sanitized['visits'] = dashboard.visits
     sanitized['upvotes'] = dashboard.upvotes
-    sanitized['created_at'] = dashboard.created_at.isoformat()
+    if dashboard.created_at is not None:
+        sanitized['created_at'] = dashboard.created_at.isoformat()
     sanitized['parent_id'] = dashboard.parent_id
+    if dashboard.current:
+        sanitized['current'] = True
     return sanitized
 
 

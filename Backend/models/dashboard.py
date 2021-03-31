@@ -14,6 +14,7 @@ class Dashboard(db.Model):
     visits = db.Column(db.Integer, unique=False, nullable=False, default=0)
     created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.now(tz=get_localzone()))
     parent_id = db.Column(db.String, nullable=True)
+    current: bool = False
 
 
 class DashboardsSchema(SQLAlchemyAutoSchema):

@@ -7,4 +7,9 @@ export interface Dashboard {
     visits: number;
 
     items: Item[];
+
+    /**
+     * Used for the history view to mark the current dashboard
+     */
+    current?: boolean;
 }

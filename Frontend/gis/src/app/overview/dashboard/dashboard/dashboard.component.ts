@@ -10,6 +10,7 @@ import { Dashboard } from 'src/app/repositories/types/in/dashboard';
 import { ChartService, Item, MarkdownItem, MultiLineChartItem } from 'src/app/services/chart.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
+import { VegaDashboardHistoryService } from 'src/app/services/vega-dashboard-history.service';
 import { SettingsComponent } from '../settings/settings.component';
 import { TitleEditDialogComponent } from '../title-edit-dialog/title-edit-dialog.component';
 
@@ -30,6 +31,10 @@ export class DashboardComponent implements OnInit {
 
   private containerWidth: number;
 
+  historySpec: any;
+
+  expandVersionHistory = true;
+
   constructor(
     private dialog: MatDialog,
     private chartService: ChartService,
@@ -38,7 +43,8 @@ export class DashboardComponent implements OnInit {
     private dashboardService: DashboardService,
     private router: Router,
     private clipboard: Clipboard,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private vegaDashboardHistoryService: VegaDashboardHistoryService
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +60,8 @@ export class DashboardComponent implements OnInit {
             )
             .subscribe(items => {
               this.chartService.updateChartsShallow(items, containerWidth);
+
+              this.updateHistoryChart(containerWidth);
 
               this.pleaseWait = false;
             });
@@ -183,5 +191,20 @@ export class DashboardComponent implements OnInit {
 
   downloadData(item: Item): void {
     this.chartService.downloadDataAsCsv(item);
+  }
+
+  updateHistoryChart(width: number) {
+    this.dashboardService.getHistory(this.dashboard.id)
+    .pipe(
+      map(d => this.vegaDashboardHistoryService.compileChart(d, width, 100))
+    )
+    .subscribe(spec => {
+      this.historySpec = spec;
+      setTimeout(() => this.expandVersionHistory = false, 2000);
+    });
+  }
+
+  navigateToDashboard(dashboard: Dashboard) {
+    this.router.navigate(['overview', 'dashboard', dashboard.id]);
   }
 }

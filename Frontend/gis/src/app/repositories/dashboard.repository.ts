@@ -36,4 +36,8 @@ export class DashboardRepository {
   getMostUpvoted(): Observable<Dashboard[]> {
     return this.http.get<Dashboard[]>(`${environment.apiUrl}dashboards/most-upvoted`);
   }
+
+  getHistory(id: string): Observable<Dashboard[]> {
+    return this.http.get<Dashboard[]>(`${environment.apiUrl}dashboards/${id}/history`);
+  }
 }
