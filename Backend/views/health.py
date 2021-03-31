@@ -1,6 +1,6 @@
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, tzinfo, timezone
 
 from flask import Blueprint, jsonify
 
@@ -15,8 +15,7 @@ def healthcheck():
     output = 'database is ok'
 
     # DEBUG
-    logger = logging.getLogger(__name__)
-    logger.debug(f"{os.getenv('TZ')} Time: {datetime.now().isoformat()}")
+    print(f"{os.getenv('TZ')} Time: {datetime.now().isoformat()}, {datetime.now(tz=timezone.utc).isoformat()}")
 
     try:
         # to check database we will execute raw query
