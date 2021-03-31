@@ -85,6 +85,8 @@
                 <div *ngIf="timelineItem._editMode">
                   <mat-toolbar i18n="@@dashboardVorschau">Vorschau</mat-toolbar>
                   <markdown [ngStyle]="{'display': 'block', 'background-color': 'lightgrey'}" [data]="timelineItem._text" emoji></markdown>
+
+                  <p class="markdown-hint" i18n="@@dashboardMarkdownExplanation">Formatiere deinen Text mit Markdown. Hier findest du einen <a target="_blank" href="https://commonmark.org/help/">Cheatsheet <mat-icon inline="true">launch</mat-icon></a></p>
   
                   <mat-form-field style="margin-top: 10px;" class="full-width">
                     <mat-label i18n="@@dashboardEditText">Text bearbeiten</mat-label>
