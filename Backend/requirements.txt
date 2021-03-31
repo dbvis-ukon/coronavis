@@ -18,3 +18,4 @@ python-dotenv==0.16.0
 marshmallow-sqlalchemy==0.24.2
 bcrypt==3.2.0
 alembic==1.5.8
+tzdata==2021.1
