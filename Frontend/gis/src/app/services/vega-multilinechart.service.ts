@@ -8,6 +8,8 @@ import { CaseDevelopmentRepository } from '../repositories/case-development.repo
 import { Region } from '../repositories/types/in/region';
 import { getMoment } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
+import { MultiLineChartItem } from './chart.service';
+import { ExportCsvService } from './export-csv.service';
 
 export interface MultiLineChartDataPoint {
   /**
@@ -123,7 +125,8 @@ export class VegaMultiLineChartService {
 
   constructor(
     private caseRepo: CaseDevelopmentRepository,
-    private caseUtil: CaseUtilService
+    private caseUtil: CaseUtilService,
+    private exportCsv: ExportCsvService
   ) {}
 
 
@@ -235,5 +238,49 @@ export class VegaMultiLineChartService {
     // console.log(JSON.stringify(spec));
 
     return spec;
+  }
+
+  downloadCsv(item: MultiLineChartItem): void {
+    const data = item._compiled.data;
+    const fileName = item._compiled.chartOptions.title.toLowerCase().replace(/ /ig, '-');
+
+    const m: Map<string, {[key: string]: string}> = new Map();
+
+    const cols: Set<string> = new Set();
+
+    data.forEach(d => {
+      if (!m.has(d.x)) {
+        m.set(d.x, {});
+      }
+
+      m.get(d.x)[d.region] = d.y + '';
+
+      cols.add(d.region);
+    });
+
+    const dateArr: string[] = [];
+
+    for (const date of m.keys()) {
+      dateArr.push(date);
+    }
+
+    dateArr.sort();
+
+
+    const records = dateArr.map(d => {
+
+      const record: Record<string, string> = {
+        'Date': d,
+        ...m.get(d)
+      };
+
+      return record;
+    });
+
+    const sortedCols = [...cols].sort();
+
+    const colsArr: string[] = ['Date', ...sortedCols];
+
+    this.exportCsv.exportToCsv(records, fileName, colsArr);
   }
 }

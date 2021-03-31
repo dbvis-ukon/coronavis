@@ -136,4 +136,14 @@ export class ChartService {
     this.updateChartFull(d)
     .subscribe(_ => this.updateChartsShallow(allItems, containerWidth));
   }
+
+  downloadDataAsCsv(item: Item): void {
+    if (item.type === 'multiline') {
+      this.vegaMultiLineChartService.downloadCsv(item);
+    } else if (item.type === 'pixel') {
+      this.vegaPixelchartService.downloadCsv(item);
+    } else {
+      throw new Error(`no download implemented for ${item.type}`);
+    }
+  }
 }

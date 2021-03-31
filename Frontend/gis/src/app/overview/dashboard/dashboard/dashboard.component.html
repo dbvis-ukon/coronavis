@@ -61,6 +61,10 @@
                 <button *ngIf="timelineItem.type !== 'markdown'" mat-icon-button aria-label="settings" class="icon filter" (click)="openSettings(timelineItem, idx)" matTooltip="Chart Settings">
                     <mat-icon>settings</mat-icon>
                 </button> 
+
+                <button *ngIf="timelineItem.type === 'multiline' || timelineItem.type === 'pixel'" mat-icon-button aria-label="download" class="icon filter" (click)="downloadData(timelineItem)" matTooltip="Download data as CSV">
+                  <mat-icon>download</mat-icon>
+                </button>
     
                 <button *ngIf="!timelineItem._reallyDelete" mat-icon-button aria-label="delete" class="icon filter" (click)="timelineItem._reallyDelete = true" matTooltip="Remove">
                     <mat-icon>delete</mat-icon>
