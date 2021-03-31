@@ -131,9 +131,5 @@ app.register_blueprint(counties.routes)
 app.register_blueprint(regions.routes)
 app.register_blueprint(dashboards.routes)
 
-# DEBUG
-logger = logging.getLogger(__name__)
-logger.debug(f"{os.getenv('TZ')} Time: {datetime.now().isoformat()}")
-
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

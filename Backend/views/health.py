@@ -1,4 +1,6 @@
 import logging
+import os
+from datetime import datetime
 
 from flask import Blueprint, jsonify
 
@@ -11,6 +13,10 @@ routes = Blueprint('health', __name__, url_prefix='/health')
 def healthcheck():
     is_database_working = True
     output = 'database is ok'
+
+    # DEBUG
+    logger = logging.getLogger(__name__)
+    logger.debug(f"{os.getenv('TZ')} Time: {datetime.now().isoformat()}")
 
     try:
         # to check database we will execute raw query
