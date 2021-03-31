@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import json
+import logging
 import os
 
 # noinspection PyUnresolvedReferences
+from datetime import datetime
+
 import bcrypt
 from flask import Flask, jsonify
 from flask_compress import Compress
@@ -127,6 +130,10 @@ app.register_blueprint(email_subs.routes)
 app.register_blueprint(counties.routes)
 app.register_blueprint(regions.routes)
 app.register_blueprint(dashboards.routes)
+
+# DEBUG
+logger = logging.getLogger(__name__)
+logger.debug(f"{os.getenv('TZ')} Time: {datetime.now().isoformat()}")
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
