@@ -68,7 +68,8 @@ export class VegaDashboardHistoryService {
           "update": {
             "x": {"field": "x"},
             "y": {"field": "y"},
-            "fill": {"signal": "datum.current ? '#f00' : '#000'"}
+            "fill": {"signal": "datum.current ? '#f00' : '#000'"},
+            "cursor": {"value": "pointer"}
           }
         }
       },
@@ -86,7 +87,8 @@ export class VegaDashboardHistoryService {
             "y": {"field": "y"},
             "dx": {"signal": "datum.children ? -7 : 7"},
             "align": {"signal": "datum.children ? 'right' : 'left'"},
-            "opacity": {"signal": "1"}
+            "opacity": {"signal": "1"},
+            "cursor": {"value": "pointer"}
           }
         }
       }
