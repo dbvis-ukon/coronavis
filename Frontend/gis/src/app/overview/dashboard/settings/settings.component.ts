@@ -37,6 +37,8 @@ export class SettingsComponent implements OnInit {
   disabled: Set<string> = new Set();
   hidden: Set<string> = new Set();
 
+  hasAutoConfig = false;
+
   constructor(
     public dialogRef: MatDialogRef<SettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {chartItem: MultiLineChartItem | PixelChartItem | TableOverviewItem; arrIdx: number},
@@ -57,6 +59,8 @@ export class SettingsComponent implements OnInit {
     }
 
     this.pleaseWait = true;
+
+    this.hasAutoConfig = this.configService.getAutoConfig(this.data.chartItem.config, this.data.chartItem.type) !== null;
 
     const ret = this.configService.parseConfig(this.data.chartItem.config, this.data.chartItem.type, autoConfig);
 
@@ -80,5 +84,13 @@ export class SettingsComponent implements OnInit {
 
   hasErrorState(): boolean {
     return this.data.chartItem.dataRequest.length === 0 || this.data.chartItem.dataRequest.length > 20;
+  }
+
+  loadAutoConfig(): void {
+    const auto = this.configService.getAutoConfig(this.data.chartItem.config, this.data.chartItem.type);
+    if (auto !== null) {
+      this.data.chartItem.config = auto;
+      this.compileChart();
+    }
   }
 }

@@ -295,6 +295,81 @@ export class ConfigService {
       ret.hidden.add('scaleType');
     }
 
+    if (autoConfig) {
+      const autoCfg = this.getAutoConfig(ret.config, chartType);
+      if (autoCfg !== null) {
+        ret.config = autoCfg;
+      }
+    }
+
     return ret;
+  }
+
+  getAutoConfig(cur: CovidChartOptions, chartType: 'multiline' | 'pixel' | 'table'): CovidChartOptions | null {
+    const copy: CovidChartOptions = JSON.parse(JSON.stringify(cur));
+    if (chartType === 'table') {
+      return null;
+    }
+
+    if (chartType === 'pixel') {
+      if (cur.type === CovidNumberCaseType.cases) {
+        copy.dataSource = CovidNumberCaseDataSource.survstat;
+        copy.normalization = CovidNumberCaseNormalization.per100k;
+        copy.timeWindow = CovidNumberCaseTimeWindow.sevenDays;
+        copy.timeAgg = TimeGranularity.yearweek;
+        copy.ageGroupBinning = AgeGroupBinning.fiveyears;
+        copy.scaleType = ScaleType.linear;
+
+        return copy;
+      }
+
+      if (cur.type === CovidNumberCaseType.deaths) {
+        copy.dataSource = CovidNumberCaseDataSource.rki;
+        copy.normalization = CovidNumberCaseNormalization.per100k;
+        copy.timeWindow = CovidNumberCaseTimeWindow.sevenDays;
+        copy.timeAgg = TimeGranularity.yearweek;
+        copy.ageGroupBinning = AgeGroupBinning.rki;
+        copy.scaleType = ScaleType.linear;
+
+        return copy;
+      }
+    }
+
+    if (chartType === 'multiline') {
+      if (cur.type === CovidNumberCaseType.cases || cur.type === CovidNumberCaseType.deaths) {
+        copy.dataSource = CovidNumberCaseDataSource.rki;
+        copy.normalization = CovidNumberCaseNormalization.per100k;
+        copy.timeWindow = CovidNumberCaseTimeWindow.sevenDays;
+        copy.timeAgg = TimeGranularity.yearmonthdate;
+        copy.ageGroupBinning = AgeGroupBinning.fiveyears;
+        copy.scaleType = ScaleType.linear;
+
+        return copy;
+      }
+
+      if (cur.type === CovidNumberCaseType.patients || cur.type === CovidNumberCaseType.patientsVentilated) {
+        copy.dataSource = CovidNumberCaseDataSource.divi;
+        copy.normalization = CovidNumberCaseNormalization.per100k;
+        copy.timeWindow = CovidNumberCaseTimeWindow.all;
+        copy.timeAgg = TimeGranularity.yearmonthdate;
+        copy.ageGroupBinning = AgeGroupBinning.fiveyears;
+        copy.scaleType = ScaleType.linear;
+
+        return copy;
+      }
+
+      if (cur.type === CovidNumberCaseType.bedOccupancyPercent) {
+        copy.dataSource = CovidNumberCaseDataSource.divi;
+        copy.normalization = CovidNumberCaseNormalization.absolut;
+        copy.timeWindow = CovidNumberCaseTimeWindow.all;
+        copy.timeAgg = TimeGranularity.yearmonthdate;
+        copy.ageGroupBinning = AgeGroupBinning.fiveyears;
+        copy.scaleType = ScaleType.linear;
+
+        return copy;
+      }
+    }
+
+    return null;
   }
 }

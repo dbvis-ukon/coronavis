@@ -35,6 +35,13 @@
     <h2 style="text-align: center;" *ngIf="!pleaseWait && data.chartItem.dataRequest.length === 0" i18n="@@chartSettingsMinimumOneRegion" class="error">Es muss mindestens eine Region ausgewählt werden.</h2>
 
 
+
+    <div class="autoconfig-wrapper" *ngIf="hasAutoConfig">
+      <button mat-raised-button color="autoconfigure" (click)="loadAutoConfig()" i18n="@@chartSettingsAutoConfigureButton"><mat-icon>auto_fix_high</mat-icon> Automatische Konfiguration</button>
+
+      <mat-icon class="help" matTooltipPosition="right" i18n-matTooltip="@@chartSettingsAutoConfigureTooltip" matTooltip="Mit der Autokonfiguration werden die Einstellungen für den Chart und die Art der Daten mit den von uns empfohlenen Einstellungen für die beste Lesbarkeit konfiguriert.">help</mat-icon>
+    </div>
+
     <div class="settings">
 
       <div class="toggleGroup" *ngIf="!hidden.has('type')">
