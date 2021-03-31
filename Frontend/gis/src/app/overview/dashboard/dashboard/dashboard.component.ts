@@ -180,4 +180,8 @@ export class DashboardComponent implements OnInit {
       verticalPosition: 'top'
     });
   }
+
+  downloadData(item: Item): void {
+    this.chartService.downloadDataAsCsv(item);
+  }
 }

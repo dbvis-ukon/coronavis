@@ -10,6 +10,8 @@ import { AggregatedRKICaseDevelopmentProperties } from '../repositories/types/in
 import { Region } from '../repositories/types/in/region';
 import { getMoment, getStrDate } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
+import { PixelChartItem } from './chart.service';
+import { ExportCsvService } from './export-csv.service';
 
 export interface PixelChartDataPoint {
   x: string;
@@ -197,7 +199,8 @@ export class VegaPixelchartService {
 
   constructor(
     private caseUtils: CaseUtilService,
-    private caseRepo: CaseDevelopmentRepository
+    private caseRepo: CaseDevelopmentRepository,
+    private exportCsv: ExportCsvService
   ) {}
 
 
@@ -390,5 +393,50 @@ export class VegaPixelchartService {
     spec.layer[1].encoding.color.condition.text = "datum.val > " + colorBreakpoint;
 
     return spec;
+  }
+
+  downloadCsv(item: PixelChartItem): void {
+    const data = item._compiled.data;
+
+    const fileName = item._compiled.chartOptions.title.toLowerCase().replace(/ /ig, '-');
+
+    const m: Map<string, {[key: string]: string}> = new Map();
+
+    const cols: Set<string> = new Set();
+
+    data.forEach(d => {
+      if (!m.has(d.x)) {
+        m.set(d.x, {});
+      }
+
+      m.get(d.x)[d.y] = d.val + '';
+
+      cols.add(d.y);
+    });
+
+    const dateArr: string[] = [];
+
+    for (const date of m.keys()) {
+      dateArr.push(date);
+    }
+
+    dateArr.sort();
+
+
+    const records = dateArr.map(d => {
+
+      const record: Record<string, string> = {
+        'Date': d,
+        ...m.get(d)
+      };
+
+      return record;
+    });
+
+    const sortedCols = [...cols].sort();
+
+    const colsArr: string[] = ['Date', ...sortedCols];
+
+    this.exportCsv.exportToCsv(records, fileName, colsArr);
   }
 }
