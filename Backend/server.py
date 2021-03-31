@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import json
+import logging
 import os
 
 # noinspection PyUnresolvedReferences
+from datetime import datetime
+
 import bcrypt
 from flask import Flask, jsonify
 from flask_compress import Compress
 from flask_cors import CORS, cross_origin
 from flask_mail import Mail
 from flask_marshmallow import Marshmallow
+from prometheus_flask_exporter import PrometheusMetrics
 from werkzeug.exceptions import HTTPException
 
 from cache import cache
@@ -22,6 +26,10 @@ from views import (cases, cases_risklayer, divi, extent, health, hospitals,
 
 # Create Flask application
 app = Flask(__name__)
+metrics = PrometheusMetrics(app,path='/metrics')
+
+# static information as metric
+metrics.info('app_info', 'Application info', version=os.getenv('VERSION'), environment=os.getenv('ENVIRONMENT'))
 app.url_map.strict_slashes = False
 
 if os.environ.get('SENTRY_DSN') is not None:

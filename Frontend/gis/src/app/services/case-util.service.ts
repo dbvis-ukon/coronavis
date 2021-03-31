@@ -345,7 +345,7 @@ export class CaseUtilService {
         break;
 
       case CovidNumberCaseTimeWindow.sevenDays:
-        str.push(this.translation.translate(short ? '7d' : '7 Tage'));
+        str.push(this.translation.translate(short ? '7T' : '7 Tage'));
         break;
     }
 

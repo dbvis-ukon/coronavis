@@ -171,6 +171,10 @@ export class TranslationService {
     {
       'de-DE': '/100k',
       'en-US': '/100k',
+    },
+    {
+      'de-DE': '7T',
+      'en-US': '7d'
     }
   ];
 

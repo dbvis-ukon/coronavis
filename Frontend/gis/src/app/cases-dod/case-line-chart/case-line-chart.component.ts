@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from 'src/app/map/options/covid-number-case-options';
+import { CovidNumberCaseNormalization, CovidNumberCaseTimeWindow } from 'src/app/map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from 'src/app/repositories/case-development.repository';
 import { RKICaseDevelopmentProperties } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from 'src/app/services/case-util.service';
@@ -92,7 +92,8 @@ export class CaseLineChartComponent implements OnInit {
       this.rollingChart = this.caseRepo.getCasesDevelopmentForAggLevelSingle(
         this.options.dataSource,
         this.options.aggregationLevel,
-        this.data.id
+        this.data.id,
+        false
       )
       .pipe(
         map(d => d.properties),
@@ -132,7 +133,8 @@ export class CaseLineChartComponent implements OnInit {
       this.trend = this.caseRepo.getCasesDevelopmentForAggLevelSingle(
         this.options.dataSource,
         this.options.aggregationLevel,
-        this.data.id
+        this.data.id,
+        false
       )
       .pipe(
         mergeMap(d => this.caseUtil.getTrendForCase7DaysPer100k(d.properties, this.options)),

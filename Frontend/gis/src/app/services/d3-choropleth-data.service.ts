@@ -51,7 +51,7 @@ export class D3ChoroplethDataService {
     else if (mo.covidNumberCaseOptions.enabled) {
       const [from, to] = this.caseUtil.getFromToTupleFromOptions(mo.covidNumberCaseOptions);
 
-      ret = this.caseRepo.getCasesDevelopmentForAggLevel(mo.covidNumberCaseOptions.dataSource, mo.covidNumberCaseOptions.aggregationLevel, from, to)
+      ret = this.caseRepo.getCasesDevelopmentForAggLevel(mo.covidNumberCaseOptions.dataSource, mo.covidNumberCaseOptions.aggregationLevel, from, to, false)
       .pipe(
         map(d => {
           const scale = this.caseColorMap.getScale(d, mo.covidNumberCaseOptions);

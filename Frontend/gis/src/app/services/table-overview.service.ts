@@ -53,7 +53,7 @@ export class TableOverviewService {
 
 
   compileToDataAndOptions(o: CovidNumberCaseOptions, dataRequests: Region[]): Observable<TableOverviewDataAndOptions> {
-    return this.caseRepo.getCasesDevelopmentAggregated(o.dataSource, dataRequests)
+    return this.caseRepo.getCasesDevelopmentAggregated(o.dataSource, dataRequests, false)
     .pipe(
       map(d => {
         const data = d.properties;

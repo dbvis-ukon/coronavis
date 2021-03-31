@@ -23,6 +23,20 @@
     <mat-card>
 
       <div class="main">
+
+        <div *ngIf="historySpec">
+
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="expandVersionHistory">
+              <mat-expansion-panel-header>
+                <mat-panel-title i18n="@@dashboardVersionHistory">
+                  Versions Verlauf
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <app-vega [spec]="historySpec" (vegaClick)="navigateToDashboard($event)"></app-vega>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
           
 
 

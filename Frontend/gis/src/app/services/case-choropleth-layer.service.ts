@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MultiPolygon } from 'geojson';
-import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
 import { CaseTrendCanvasLayer } from '../map/overlays/case-trend-canvas.layer';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { LabelCanvasLayer } from '../map/overlays/label-canvas.layer';
+import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
+import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { CaseChoroplethColormapService } from './case-choropleth-colormap.service';
 import { CaseUtilService } from './case-util.service';
 import { TooltipService } from './tooltip.service';
-import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
-import { getMoment, getStrDate } from '../util/date-util';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +36,7 @@ export class CaseChoroplethLayerService {
 
     const [from, to] = this.caseUtil.getFromToTupleFromOptions(options);
 
-    return this.caseRepository.getCasesDevelopmentForAggLevel(options.dataSource, options.aggregationLevel, from, to)
+    return this.caseRepository.getCasesDevelopmentForAggLevel(options.dataSource, options.aggregationLevel, from, to, false)
       .pipe(
         map(data =>
           {

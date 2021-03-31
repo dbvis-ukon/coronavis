@@ -1697,17 +1697,24 @@
       <segment state="final">
         <source>Selektion aufheben</source>
       <target>Selektion aufheben</target></segment>
+    </unit><unit id="dashboardVersionHistory">
+      <notes>
+        <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:33,34</note>
+      </notes>
+      <segment state="final">
+        <source> Versions Verlauf </source>
+      <target> Versions Verlauf </target></segment>
     </unit><unit id="dashboardAddTextBlock">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:126</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:140</note></notes>
       <segment state="final">
         <source>Neuen Textblock hinzufügen</source>
       <target>Neuen Textblock hinzufügen</target></segment>
     </unit><unit id="dasboardAddChart">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:127</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:141</note></notes>
       <segment state="final">
         <source>Neuen Chart hinzufügen</source>
       <target>Neuen Chart hinzufügen</target></segment>
@@ -1784,28 +1791,28 @@
     </unit><unit id="pleaseWaitLoading">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:48</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:33</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:62</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:33</note></notes>
       <segment state="final">
         <source>Bitte warten... lädt</source>
       <target>Bitte warten... lädt</target></segment>
     </unit><unit id="dashboardVorschau">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:86</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:100</note></notes>
       <segment state="final">
         <source>Vorschau</source>
       <target>Vorschau</target></segment>
     </unit><unit id="dashboardMarkdownExplanation">
       <notes>
-        <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:89</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:103</note></notes>
       <segment state="final">
         <source>Formatiere deinen Text mit Markdown. Hier findest du einen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://commonmark.org/help/&quot;>" dispEnd="&lt;/a>">Cheatsheet <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></pc></source>
       <target>Formatiere deinen Text mit Markdown. Hier findest du einen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://commonmark.org/help/&quot;>" dispEnd="&lt;/a>">Cheatsheet <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></pc></target></segment>
     </unit><unit id="dashboardEditText">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:92</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:106</note></notes>
       <segment state="final">
         <source>Text bearbeiten</source>
       <target>Text bearbeiten</target></segment>
@@ -2058,7 +2065,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:96</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:171</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:110</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:171</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
       <segment state="final">
         <source>Speichern</source>
       <target>Speichern</target></segment>
@@ -2066,7 +2073,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:97</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:172</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:111</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:172</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
       <segment state="final">
         <source>Abbrechen</source>
       <target>Abbrechen</target></segment>

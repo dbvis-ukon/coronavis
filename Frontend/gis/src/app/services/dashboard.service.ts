@@ -218,4 +218,25 @@ We could not find the dashboard you are looking for. You can search again or sta
     return this.dashboardRepo.upvote(dashboard.id);
   }
 
+  getHistory(id: string): Observable<Dashboard[]> {
+    return this.dashboardRepo.getHistory(id)
+    .pipe(
+      mergeMap(d => {
+        if (d && d[0].id.length < 6) {
+          return this.createFromAgs(d[0].id)
+          .pipe(
+            map(autoChart => {
+              if (d[0].current) {
+                autoChart.current = true;
+              }
+              d[0] = autoChart;
+              return d;
+            })
+          );
+        }
+
+        return of(d);
+      })
+    );
+  }
 }

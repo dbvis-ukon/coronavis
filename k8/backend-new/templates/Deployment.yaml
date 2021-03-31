@@ -108,6 +108,8 @@ spec:
               value: {{ .Values.sha | quote }}
             - name: ENVIRONMENT
               value: {{ .Values.environment | quote }}
+            - name: TZ
+              value: UTC
           readinessProbe:
             httpGet:
               path: "/health"

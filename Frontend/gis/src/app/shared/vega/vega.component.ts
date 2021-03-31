@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { default as embed, VisualizationSpec } from 'vega-embed';
 import { I18nService, SupportedLocales } from '../../services/i18n.service';
 
@@ -26,6 +26,9 @@ export class VegaComponent implements AfterViewInit {
   get spec(): VisualizationSpec {
     return this._spec;
   }
+
+  @Output()
+  vegaClick: EventEmitter<any> = new EventEmitter();
 
 
   constructor(private i18nService: I18nService) { }
@@ -97,7 +100,15 @@ export class VegaComponent implements AfterViewInit {
       return;
     }
 
-    embed(node, this._spec, {actions: false, formatLocale, timeFormatLocale});
+    embed(node, this._spec, {actions: false, formatLocale, timeFormatLocale})
+    .then(result => {
+      const view = result.view;
+      view.addEventListener('click', (_, item) => {
+        if (item.datum) {
+          this.vegaClick.emit(JSON.parse(JSON.stringify(item.datum)));
+        }
+      });
+    });
   }
 
 }
