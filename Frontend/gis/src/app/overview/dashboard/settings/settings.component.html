@@ -32,7 +32,7 @@
 
     <h2 style="text-align: center;" *ngIf="pleaseWait" i18n="@@pleaseWaitLoading">Bitte warten... lädt</h2>
 
-    <h2 style="text-align: center;" *ngIf="!pleaseWait && data.chartItem.dataRequest.length === 0" i18n="@@chartSettingsMinimumOneRegion">Es muss mindestens eine Region ausgewählt werden.</h2>
+    <h2 style="text-align: center;" *ngIf="!pleaseWait && data.chartItem.dataRequest.length === 0" i18n="@@chartSettingsMinimumOneRegion" class="error">Es muss mindestens eine Region ausgewählt werden.</h2>
 
 
     <div class="settings">
@@ -159,7 +159,8 @@
 
     
 </div>
+<p class="error" *ngIf="hasErrorState()" i18n="@@chartSettingsHasError">Es gibt einen Fehler. Bitte prüfe deine Konfiguration.</p>
 <div mat-dialog-actions>
-  <button mat-raised-button color="primary" [mat-dialog-close]="data" i18n="@@buttonSave">Speichern</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" i18n="@@buttonSave" [disabled]="hasErrorState()">Speichern</button>
   <button mat-raised-button color="warn" (click)="onNoClick()" i18n="@@buttonCancel">Abbrechen</button>
 </div>

@@ -2033,11 +2033,18 @@
       <segment state="final">
         <source>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</source>
       <target>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</target></segment>
+    </unit><unit id="chartSettingsHasError">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:162</note>
+      </notes>
+      <segment state="final">
+        <source>Es gibt einen Fehler. Bitte prüfe deine Konfiguration.</source>
+      <target>Es gibt einen Fehler. Bitte prüfe deine Konfiguration.</target></segment>
     </unit><unit id="buttonSave">
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:96</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:163</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:96</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:164</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
       <segment state="final">
         <source>Speichern</source>
       <target>Speichern</target></segment>
@@ -2045,7 +2052,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:97</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:164</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:97</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:165</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
       <segment state="final">
         <source>Abbrechen</source>
       <target>Abbrechen</target></segment>

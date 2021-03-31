@@ -77,4 +77,8 @@ export class SettingsComponent implements OnInit {
       });
     });
   }
+
+  hasErrorState(): boolean {
+    return this.data.chartItem.dataRequest.length === 0 || this.data.chartItem.dataRequest.length > 20;
+  }
 }

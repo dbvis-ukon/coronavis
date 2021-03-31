@@ -2055,11 +2055,18 @@
       <segment state="initial">
         <source>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</source>
       <target>A non-linear scaling emphasizes low values better.</target></segment>
+    </unit><unit id="chartSettingsHasError">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:162</note>
+      </notes>
+      <segment state="initial">
+        <source>Es gibt einen Fehler. Bitte prüfe deine Konfiguration.</source>
+      <target>There is an error. Please check your configuration.</target></segment>
     </unit><unit id="buttonSave">
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:96</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:163</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:96</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:164</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
       <segment state="initial">
         <source>Speichern</source>
       <target>Save</target></segment>
@@ -2067,7 +2074,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:97</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:164</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:97</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:165</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
       <segment state="initial">
         <source>Abbrechen</source>
       <target>Cancel</target></segment>
