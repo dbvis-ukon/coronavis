@@ -172,56 +172,84 @@ cd = CaseDevelopments('cases_per_county_and_day')
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_counties():
-    return cd.get_by_counties(request.args.get('from'), request.args.get('to'))
+    return cd.get_by_counties(
+        request.args.get('from'),
+        request.args.get('to'),
+        request.args.get('agegroups', type=bool))
 
 
 @routes.route('/development/regierungsbezirke', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_districts():
-    return cd.get_by_districts(request.args.get('from'), request.args.get('to'))
+    return cd.get_by_districts(
+        request.args.get('from'),
+        request.args.get('to'),
+        request.args.get('agegroups', type=bool))
 
 
 @routes.route('/development/bundeslaender', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_states():
-    return cd.get_by_states(request.args.get('from'), request.args.get('to'))
+    return cd.get_by_states(
+        request.args.get('from'),
+        request.args.get('to'),
+        request.args.get('agegroups', type=bool))
 
 
 @routes.route('/development/laender', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_countries():
-    return cd.get_by_countries(request.args.get('from'), request.args.get('to'))
+    return cd.get_by_countries(
+        request.args.get('from'),
+        request.args.get('to'),
+        request.args.get('agegroups', type=bool))
 
 
 @routes.route('/development/landkreis/<idCounty>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_county(idCounty):
-    return cd.get_county(request.args.get('from'), request.args.get('to'), idCounty)
+    return cd.get_county(
+        request.args.get('from'),
+        request.args.get('to'),
+        idCounty,
+        request.args.get('agegroups', type=bool))
 
 
 @routes.route('/development/regierungsbezirk/<idDistrict>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_district(idDistrict):
-    return cd.get_district(request.args.get('from'), request.args.get('to'), idDistrict)
+    return cd.get_district(
+        request.args.get('from'),
+        request.args.get('to'),
+        idDistrict,
+        request.args.get('agegroups', type=bool))
 
 
 @routes.route('/development/bundesland/<idState>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_state(idState):
-    return cd.get_state(request.args.get('from'), request.args.get('to'), idState)
+    return cd.get_state(
+        request.args.get('from'),
+        request.args.get('to'),
+        idState,
+        request.args.get('agegroups', type=bool))
 
 
 @routes.route('/development/land/<idCountry>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_country(idCountry):
-    return cd.get_country(request.args.get('from'), request.args.get('to'), idCountry)
+    return cd.get_country(
+        request.args.get('from'),
+        request.args.get('to'),
+        idCountry,
+        request.args.get('agegroups', type=bool))
 
 
 @routes.route('/development/aggregated', methods=['GET'])
@@ -233,4 +261,4 @@ def get_aggregated():
         'regierungsbezirke': request.args.get('regierungsbezirke'),
         'bundeslaender': request.args.get('bundeslaender'),
         'laender': request.args.get('laender')
-    },request.args.get('from'), request.args.get('to'))
+    },request.args.get('from'), request.args.get('to'), request.args.get('agegroups', type=bool))

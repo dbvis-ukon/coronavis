@@ -19,20 +19,34 @@ export class CaseDevelopmentRepository {
 
   constructor(private cachedRepository: CachedRepository) {}
 
-  getCasesDevelopmentForAggLevel(dataSource: CovidNumberCaseDataSource, aggLevel: AggregationLevel, from: string, to: string): Observable<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>> {
+  getCasesDevelopmentForAggLevel(
+    dataSource: CovidNumberCaseDataSource,
+    aggLevel: AggregationLevel,
+    from: string,
+    to: string,
+    ageGroups: boolean
+  ): Observable<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>> {
     const endpoint = dataSource === 'risklayer' ? 'cases-risklayer' : 'cases';
     return this
       .cachedRepository
-      .get<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggLevel}`, this.prepareParams(from, to));
+      .get<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggLevel}`,
+      this.prepareParams(from, to, ageGroups));
   }
 
-  getCasesDevelopmentForAggLevelSingle(dataSource: CovidNumberCaseDataSource, aggLevel: AggregationLevel, id: string, to?: string): Observable<Feature<MultiPolygon, RKICaseDevelopmentProperties>> {
+  getCasesDevelopmentForAggLevelSingle(
+    dataSource: CovidNumberCaseDataSource,
+    aggLevel: AggregationLevel,
+    id: string,
+    ageGroups: boolean,
+    to?: string,
+  ): Observable<Feature<MultiPolygon, RKICaseDevelopmentProperties>> {
     const endpoint = dataSource === 'risklayer' ? 'cases-risklayer' : 'cases';
     const aggEndpoint = aggLevelToEndpointSingle(aggLevel);
 
     return this
       .cachedRepository
-      .get<Feature<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggEndpoint}/${id}`, this.prepareParams(null, to));
+      .get<Feature<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggEndpoint}/${id}`,
+      this.prepareParams(null, to, ageGroups));
   }
 
   getRisklayerPrognosis(): Observable<RisklayerPrognosis> {
@@ -41,14 +55,19 @@ export class CaseDevelopmentRepository {
       .get<RisklayerPrognosis>(`${environment.apiUrl}cases-risklayer/prognosis`);
   }
 
-  getCasesDevelopmentAggregated(dataSource: CovidNumberCaseDataSource, dataRequests: Region[]): Observable<Feature<MultiPolygon, AggregatedRKICaseDevelopmentProperties>> {
+  getCasesDevelopmentAggregated(
+    dataSource: CovidNumberCaseDataSource,
+    dataRequests: Region[],
+    ageGroups: boolean
+  ): Observable<Feature<MultiPolygon, AggregatedRKICaseDevelopmentProperties>> {
     const endpoint = dataSource === 'risklayer' ? 'cases-risklayer' : 'cases';
     return this
       .cachedRepository
-      .get<Feature<MultiPolygon, AggregatedRKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/aggregated`, this.prepareAggParams(dataRequests));
+      .get<Feature<MultiPolygon, AggregatedRKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/aggregated`,
+      this.prepareAggParams(dataRequests, ageGroups));
   }
 
-  private prepareParams(from?: string, to?: string): HttpParams {
+  private prepareParams(from?: string, to?: string, ageGroups?: boolean): HttpParams {
     let params = new HttpParams();
 
     if (from) {
@@ -61,10 +80,14 @@ export class CaseDevelopmentRepository {
       params = params.append('to', getStrDate(toDate));
     }
 
+    if (ageGroups) {
+      params = params.append('agegroups', 'true');
+    }
+
     return params;
   }
 
-  private prepareAggParams(dataRequests: Region[]): HttpParams {
+  private prepareAggParams(dataRequests: Region[], ageGroups: boolean): HttpParams {
     const map = new Map<string, string[]>();
 
     dataRequests.forEach(d => {
@@ -79,6 +102,10 @@ export class CaseDevelopmentRepository {
 
     for (const [key, value] of map) {
       params = params.append(key, value.join(','));
+    }
+
+    if (ageGroups) {
+      params = params.append('agegroups', 'true');
     }
 
     return params;

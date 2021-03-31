@@ -26,7 +26,7 @@ export class CountryAggregatorService {
     const from = getStrDate(getMoment(refDate).subtract(1, 'day'));
     const to = getStrDate(getMoment(refDate).add(1, 'day'));
 
-    return this.caseRepository.getCasesDevelopmentForAggLevel(dataSource, AggregationLevel.country, from, to)
+    return this.caseRepository.getCasesDevelopmentForAggLevel(dataSource, AggregationLevel.country, from, to, false)
     .pipe(
       map(fc => {
         if (fc.features.length === 0 || !fc.features[0]?.properties) {

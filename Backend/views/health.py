@@ -1,7 +1,4 @@
 import logging
-import os
-from datetime import datetime, timezone
-from zoneinfo import ZoneInfo
 
 from flask import Blueprint, jsonify
 
@@ -14,9 +11,6 @@ routes = Blueprint('health', __name__, url_prefix='/health')
 def healthcheck():
     is_database_working = True
     output = 'database is ok'
-
-    # DEBUG
-    print(f"{os.getenv('TZ')} Time: {datetime.now().isoformat()}, {datetime.now(tz=timezone.utc).isoformat()}, {datetime.now(tz=ZoneInfo('Europe/Berlin')).isoformat()}")
 
     try:
         # to check database we will execute raw query

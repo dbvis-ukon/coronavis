@@ -1,4 +1,5 @@
 from datetime import datetime
+from tzlocal import get_localzone
 
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
@@ -11,7 +12,8 @@ class Dashboard(db.Model):
     dashboard = db.Column(db.JSON, unique=False, nullable=False)
     upvotes = db.Column(db.Integer, unique=False, nullable=False, default=0)
     visits = db.Column(db.Integer, unique=False, nullable=False, default=0)
-    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.now())
+    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.now(tz=get_localzone()))
+    parent_id = db.Column(db.String, nullable=True)
 
 
 class DashboardsSchema(SQLAlchemyAutoSchema):

@@ -10,56 +10,61 @@ class CaseDevelopments:
     def __init__(self, data_table):
         self.data_table = data_table
 
-    def get_county(self, from_time, to_time, id_county):
+    def get_county(self, from_time, to_time, id_county, want_age_groups):
         """
             Return the development of covid cases and deaths for one county
         """
-        return self.__res_single(self.__get_counties(from_time, to_time, id_county))
+        return self.__res_single(self.__get_counties(from_time, to_time, id_county, want_age_groups))
 
-    def get_by_counties(self, from_time, to_time):
+    def get_by_counties(self, from_time, to_time, want_age_groups):
         """
             Return the development of covid cases and deaths by counties
         """
-        return self.__res_collection(self.__get_counties(from_time, to_time, None))
+        return self.__res_collection(self.__get_counties(from_time, to_time, None, want_age_groups))
 
-    def get_district(self, from_time, to_time, id_district):
+    def get_district(self, from_time, to_time, id_district, want_age_groups):
         """
             Return the development of covid cases and deaths for one district
         """
-        return self.__res_single(self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, id_district))
+        return self.__res_single(
+            self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, id_district, want_age_groups))
 
-    def get_by_districts(self, from_time, to_time):
+    def get_by_districts(self, from_time, to_time, want_age_groups):
         """
             Return the development of covid cases and deaths by districts
         """
-        return self.__res_collection(self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, None))
+        return self.__res_collection(
+            self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, None, want_age_groups))
 
-    def get_state(self, from_time, to_time, id_state):
+    def get_state(self, from_time, to_time, id_state, want_age_groups):
         """
             Return the development of covid cases and deaths for one state
         """
-        return self.__res_single(self.__agg_query('state', 'bundeslaender', from_time, to_time, id_state))
+        return self.__res_single(
+            self.__agg_query('state', 'bundeslaender', from_time, to_time, id_state, want_age_groups))
 
-    def get_by_states(self, from_time, to_time):
+    def get_by_states(self, from_time, to_time, want_age_groups):
         """
             Return the development of covid cases and deaths by states
         """
-        return self.__res_collection(self.__agg_query('state', 'bundeslaender', from_time, to_time, None))
+        return self.__res_collection(
+            self.__agg_query('state', 'bundeslaender', from_time, to_time, None, want_age_groups))
 
-    def get_country(self, from_time, to_time, id_country):
+    def get_country(self, from_time, to_time, id_country, want_age_groups):
         """
             Return the development of covid cases and deaths for one country
         """
-        return self.__res_single(self.__agg_query('country', 'germany', from_time, to_time, id_country))
+        return self.__res_single(
+            self.__agg_query('country', 'germany', from_time, to_time, id_country, want_age_groups))
 
-    def get_by_countries(self, from_time, to_time):
+    def get_by_countries(self, from_time, to_time, want_age_groups):
         """
             Return the development of covid cases and deaths by countries
         """
-        return self.__res_collection(self.__agg_query('country', 'germany', from_time, to_time, None))
+        return self.__res_collection(self.__agg_query('country', 'germany', from_time, to_time, None, want_age_groups))
 
-    def get_aggregated(self, agg_dict: dict, from_time: str, to_time: str):
-        return self.__res_single(self.__agg_region_query(agg_dict, from_time, to_time))
+    def get_aggregated(self, agg_dict: dict, from_time: str, to_time: str, want_age_groups: bool):
+        return self.__res_single(self.__agg_region_query(agg_dict, from_time, to_time, want_age_groups))
 
     @staticmethod
     def __res_collection(sql_ret):
@@ -108,9 +113,15 @@ class CaseDevelopments:
 
         return feature
 
-    def __build_obj(self):
+    def __build_obj(self, county_level=False, want_age_groups=False):
+        # agg.num_counties_reported,
+        #                 'num_counties_total',
+        #                 agg.num_counties_total
+        num_counties_reported = 'agg.num_counties_reported' if county_level is False else "'1'"
+        num_counties_total = 'agg.num_counties_total' if county_level is False else "'1'"
+
         age_stuff = ""
-        if self.data_table == 'cases_per_county_and_day':
+        if self.data_table == 'cases_per_county_and_day' and want_age_groups:
             ranges = [[0, 30], [30, 60], [60, 80]]
 
             c2 = []
@@ -121,7 +132,7 @@ class CaseDevelopments:
                 for a in range(r[0], r[1]):
                     c2i += "'A{:02d}', agg.\"c2_A{:02d}\"".format(a, a)
                     p2i += "'A{:02d}', agg.\"p2_A{:02d}\"".format(a, a)
-                    if a < r[1]-1 or r[1] == 80:
+                    if a < r[1] - 1 or r[1] == 80:
                         c2i += ", "
                         p2i += ", "
 
@@ -239,9 +250,9 @@ class CaseDevelopments:
                 'proportion_covid_ventilated',
                 agg.proportion_covid_ventilated,
                 'num_counties_reported',
-                agg.num_counties_reported,
+                {num_counties_reported},
                 'num_counties_total',
-                agg.num_counties_total
+                {num_counties_total}
                 {age_stuff}   
             )::jsonb
             """
@@ -329,7 +340,7 @@ class CaseDevelopments:
         """
         return ret
 
-    def __agg_query(self, agg_cols_prefix, region_table, from_time, to_time, id_obj):
+    def __agg_query(self, agg_cols_prefix, region_table, from_time, to_time, id_obj, want_age_groups):
 
         sql_from_time = ""
         sql_to_time = ""
@@ -392,7 +403,8 @@ class CaseDevelopments:
         """.format(agg_cols_prefix=agg_cols_prefix,
                    development_select_cols=self.__agg_cols(region_agg=False),
                    region_table=region_table,
-                   development_json_build_obj=self.__build_obj(), dataTable=self.data_table,
+                   development_json_build_obj=self.__build_obj(want_age_groups=want_age_groups),
+                   dataTable=self.data_table,
                    sql_from_time=sql_from_time, sql_to_time=sql_to_time, sql_id_obj=sql_id_obj))
 
         # current_app.logger.debug(f'Counties: {sql_stmt}')
@@ -403,7 +415,7 @@ class CaseDevelopments:
                                  idParam=id_obj
                                  )
 
-    def __get_counties(self, from_time, to_time, id_county):
+    def __get_counties(self, from_time, to_time, id_county, want_age_groups: bool):
         """
             Return the development of covid cases and deaths
             by counties
@@ -420,50 +432,52 @@ class CaseDevelopments:
             sql_to_time = f"AND agg.timestamp <= :toTimeParam"
 
         if id_county:
-            sql_id_county = f"AND agg.ids = :idParam"
+            sql_id_county = f"AND agg.county_id = :idParam"
 
         # noinspection SqlConstantCondition,SqlUnused,SqlResolve
         sql_stmt = text("""
-            SELECT
-                agg.ids,
-                agg.name,
-                agg."desc" AS description,
-                st_asgeojson(agg.geom) :: jsonb AS geom,
-                st_asgeojson(st_centroid(agg.geom)):: jsonb AS centroid,
-                -- check if the first value is null, can ONLY happen if there are no values for the landkreis, 
-                -- then we return null
-                CASE
-                    WHEN min(agg.timestamp) IS NULL THEN NULL
-                    ELSE json_agg(
-                        {buildObj}
-                        ORDER BY
-                            agg.timestamp
-                    )::jsonb
-                END AS development,
-                CASE
-                WHEN min(agg.timestamp) IS NULL THEN NULL
-                ELSE json_object_agg(
-                    agg.timestamp::date,
-                    {buildObj}
-                    ORDER BY
-                        agg.timestamp
-                )::jsonb
-            END AS developmentDays
-            FROM
-                (
-                    SELECT *, 1 as num_counties_reported, 1 as num_counties_total
-                    FROM {dataTable}
-                ) agg
-            WHERE 1 = 1
+            WITH filtered_and_agg AS (
+                SELECT 
+                    county_id,
+                    -- check if the first value is null, can ONLY happen if there are no values for the landkreis, 
+                    -- then we return null
+                    CASE
+                        WHEN min(agg.timestamp) IS NULL THEN NULL
+                        ELSE json_agg(
+                            {buildObj}
+                            ORDER BY
+                                agg.timestamp
+                        )::jsonb
+                    END AS development,
+                    CASE
+                        WHEN min(agg.timestamp) IS NULL THEN NULL
+                        ELSE json_object_agg(
+                            agg.timestamp::date,
+                            {buildObj}
+                            ORDER BY
+                                agg.timestamp
+                        )::jsonb
+                    END AS developmentDays
+                FROM {dataTable} AS agg
+                WHERE 1 = 1
                 {sql_from_time}
                 {sql_to_time}
                 {sql_id_county}
-            GROUP BY
-                agg.ids,
-                agg.name,
-                agg."desc",
-                agg.geom
-        """.format(buildObj=self.__build_obj(), dataTable=self.data_table, sql_from_time=sql_from_time,
+                GROUP BY county_id
+            
+            )
+            SELECT 
+                le.ids AS ids,
+                le.name AS name,
+                le.bez AS description,
+                st_asgeojson(le.geom)::jsonb AS geom,
+                st_asgeojson(st_centroid(le.geom))::jsonb AS centroid,
+                agg.development,
+                agg.developmentDays
+            FROM filtered_and_agg AS agg
+            JOIN landkreise_extended AS le ON agg.county_id = le.ids
+        """.format(buildObj=self.__build_obj(county_level=True, want_age_groups=want_age_groups),
+                   dataTable=self.data_table, sql_from_time=sql_from_time,
                    sql_to_time=sql_to_time,
                    sql_id_county=sql_id_county))
 
@@ -475,7 +489,7 @@ class CaseDevelopments:
                                  idParam=id_county
                                  )
 
-    def __agg_region_query(self, agg_table_dict, from_time, to_time):
+    def __agg_region_query(self, agg_table_dict, from_time, to_time, want_age_groups):
 
         sql_from_time = ""
         sql_to_time = ""
@@ -539,7 +553,7 @@ class CaseDevelopments:
             SELECT 
                 array_agg(DISTINCT r.ids)                                           as ids,
                 array_agg(DISTINCT (r.description || ' ' || r.name))                as name,
-                array_agg(DISTINCT r.description)                                   as desc,
+                array_agg(DISTINCT r.description)                                   as "desc",
                 st_union(DISTINCT r.geom)                                           as geom
             FROM {sql_joins}
         ),
@@ -587,7 +601,8 @@ class CaseDevelopments:
                 agg.geom,
                 agg.desc
         """.format(agg_table=agg_table, development_select_cols=self.__agg_cols(region_agg=True),
-                   development_json_build_obj=self.__build_obj(), data_table=self.data_table,
+                   development_json_build_obj=self.__build_obj(want_age_groups=want_age_groups),
+                   data_table=self.data_table,
                    sql_from_time=sql_from_time, sql_to_time=sql_to_time, sql_id_obj=sql_id_obj, sql_joins=sql_joins,
                    number_of_ids=number_of_ids, region_filters=region_filters))
 

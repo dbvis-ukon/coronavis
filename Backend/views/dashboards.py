@@ -1,7 +1,9 @@
 import hashlib
 import json
+from datetime import datetime
 
 from flask import Blueprint, request, jsonify
+from tzlocal import get_localzone
 
 from db import db
 from models.dashboard import Dashboard
@@ -47,7 +49,9 @@ def new_dashboard():
     else:
         dashboard_new = Dashboard(
             id=hashed,
-            dashboard=sanitized
+            dashboard=sanitized,
+            parent_id=request.json['id'] or None,
+            created_at=datetime.now(tz=get_localzone())
         )
         db.session.add(dashboard_new)
         db.session.flush()
@@ -99,6 +103,7 @@ def _prepare(dashboard: Dashboard) -> dir:
     sanitized['visits'] = dashboard.visits
     sanitized['upvotes'] = dashboard.upvotes
     sanitized['created_at'] = dashboard.created_at.isoformat()
+    sanitized['parent_id'] = dashboard.parent_id
     return sanitized
 
 

@@ -291,7 +291,7 @@ export class InfoboxComponent implements OnInit {
       const [from, to] = this.caseUtil.getFromToTupleFromOptions(this._mo.covidNumberCaseOptions);
 
       return this.caseRepo
-      .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this.mo.covidNumberCaseOptions.aggregationLevel, from, to)
+      .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this.mo.covidNumberCaseOptions.aggregationLevel, from, to, false)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
