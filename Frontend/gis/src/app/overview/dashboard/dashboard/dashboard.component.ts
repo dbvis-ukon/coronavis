@@ -51,6 +51,7 @@ export class DashboardComponent implements OnInit {
 
     this.route.data.subscribe((data: {dashboard: Dashboard}) => {
       this.dashboard = data.dashboard;
+      this.chartService.resetExtents();
       this.updateContainerWidth()
         .subscribe(containerWidth => {
           from(this.dashboard.items)

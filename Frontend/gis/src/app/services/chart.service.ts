@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CovidChartOptions } from '../cases-dod/covid-chart-options';
-import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { Region } from '../repositories/types/in/region';
 import { getMoment } from '../util/date-util';
 import { TableOverviewDataAndOptions, TableOverviewService } from './table-overview.service';
@@ -51,9 +50,13 @@ export class ChartService {
   constructor(
     private vegaPixelchartService: VegaPixelchartService,
     private vegaMultiLineChartService: VegaMultiLineChartService,
-    private caseRepo: CaseDevelopmentRepository,
     private tableOverviewService: TableOverviewService
   ) {}
+
+  public resetExtents(): void {
+    this.tExtent = [null, null];
+    this.pixelZExtent = [0, 0];
+  }
 
 
   public updateChartFull(d: Item): Observable<Item> {
