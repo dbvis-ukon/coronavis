@@ -2332,8 +2332,8 @@
         
       <note category="location">src/app/overview/subscription/subscription.component.html:68</note></notes>
       <segment state="final">
-        <source>Englisch (we are working on it)</source>
-      <target>Englisch (we are working on it)</target></segment>
+        <source>Englisch</source>
+      <target>Englisch</target></segment>
     </unit><unit id="subTermsAndConditions">
       <notes>
         
