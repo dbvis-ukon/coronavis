@@ -95,7 +95,7 @@
         <tr>
             <td>Todesfälle</td>
             <td>{{ county_deaths_total }}</td>
-            <td>{{ county_deaths_total_100k }}</td>
+            <td>{{ county_deaths_total_100k }}/100k</td>
 
             <td>{{ county_deaths_24 }}</td>
             <td>{{ county_deaths_24_100k }}/100k</td>
@@ -108,6 +108,60 @@
             <td>{{ county_deaths_7 }}</td>
             <td>{{ county_deaths_7_100k }}/100k</td>
             <td>{{ county_deaths_7_prc }}%</td>
+        </tr>
+    
+        <tr>
+            <td>Covid-19 Patienten</td>
+            <td>{{ county_patients_total }}</td>
+            <td>{{ county_patients_total_100k }}/100k</td>
+
+            <td>{{ county_patients_24 }}</td>
+            <td>{{ county_patients_24_100k }}/100k</td>
+            <td>{{ county_patients_24_prc }}%</td>
+
+            <td>{{ county_patients_72 }}</td>
+            <td>{{ county_patients_72_100k }}/100k</td>
+            <td>{{ county_patients_72_prc }}%</td>
+
+            <td>{{ county_patients_7 }}</td>
+            <td>{{ county_patients_7_100k }}/100k</td>
+            <td>{{ county_patients_7_prc }}%</td>
+        </tr>
+    
+        <tr>
+            <td>Covid-19 Patienten (beatmet)</td>
+            <td>{{ county_patients_ventilated_total }}</td>
+            <td>{{ county_patients_ventilated_total_100k }}/100k</td>
+
+            <td>{{ county_patients_ventilated_24 }}</td>
+            <td>{{ county_patients_ventilated_24_100k }}/100k</td>
+            <td>{{ county_patients_ventilated_24_prc }}%</td>
+
+            <td>{{ county_patients_ventilated_72 }}</td>
+            <td>{{ county_patients_ventilated_72_100k }}/100k</td>
+            <td>{{ county_patients_ventilated_72_prc }}%</td>
+
+            <td>{{ county_patients_ventilated_7 }}</td>
+            <td>{{ county_patients_ventilated_7_100k }}/100k</td>
+            <td>{{ county_patients_ventilated_7_prc }}%</td>
+        </tr>
+
+        <tr>
+            <td>Bettenauslastung</td>
+            <td>{{ county_bed_occupancy_total }}</td>
+            <td>{{ county_bed_occupancy_total_prc }}%</td>
+
+            <td>{{ county_bed_occupancy_24 }}</td>
+            <td></td>
+            <td>{{ county_bed_occupancy_24_prc }}%</td>
+
+            <td>{{ county_bed_occupancy_72 }}</td>
+            <td></td>
+            <td>{{ county_bed_occupancy_72_prc }}%</td>
+
+            <td>{{ county_bed_occupancy_7 }}</td>
+            <td></td>
+            <td>{{ county_bed_occupancy_7_prc }}%</td>
         </tr>
     </tbody>
 </table>
@@ -178,6 +232,61 @@
             <td>{{ country_deaths_7_100k }}/100k</td>
             <td>{{ country_deaths_7_prc }}%</td>
 
+        </tr>
+    
+    
+        <tr>
+            <td>Covid-19 Patienten</td>
+            <td>{{ country_patients_total }}</td>
+            <td>{{ country_patients_total_100k }}/100k</td>
+
+            <td>{{ country_patients_24 }}</td>
+            <td>{{ country_patients_24_100k }}/100k</td>
+            <td>{{ country_patients_24_prc }}%</td>
+
+            <td>{{ country_patients_72 }}</td>
+            <td>{{ country_patients_72_100k }}/100k</td>
+            <td>{{ country_patients_72_prc }}%</td>
+
+            <td>{{ country_patients_7 }}</td>
+            <td>{{ country_patients_7_100k }}/100k</td>
+            <td>{{ country_patients_7_prc }}%</td>
+        </tr>
+    
+        <tr>
+            <td>Covid-19 Patienten (beatmet)</td>
+            <td>{{ country_patients_ventilated_total }}</td>
+            <td>{{ country_patients_ventilated_total_100k }}/100k</td>
+
+            <td>{{ country_patients_ventilated_24 }}</td>
+            <td>{{ country_patients_ventilated_24_100k }}/100k</td>
+            <td>{{ country_patients_ventilated_24_prc }}%</td>
+
+            <td>{{ country_patients_ventilated_72 }}</td>
+            <td>{{ country_patients_ventilated_72_100k }}/100k</td>
+            <td>{{ country_patients_ventilated_72_prc }}%</td>
+
+            <td>{{ country_patients_ventilated_7 }}</td>
+            <td>{{ country_patients_ventilated_7_100k }}/100k</td>
+            <td>{{ country_patients_ventilated_7_prc }}%</td>
+        </tr>
+
+        <tr>
+            <td>Bettenauslastung</td>
+            <td>{{ country_bed_occupancy_total }}</td>
+            <td>{{ country_bed_occupancy_total_prc }}%</td>
+
+            <td>{{ country_bed_occupancy_24 }}</td>
+            <td></td>
+            <td>{{ country_bed_occupancy_24_prc }}%</td>
+
+            <td>{{ country_bed_occupancy_72 }}</td>
+            <td></td>
+            <td>{{ country_bed_occupancy_72_prc }}%</td>
+
+            <td>{{ country_bed_occupancy_7 }}</td>
+            <td></td>
+            <td>{{ country_bed_occupancy_7_prc }}%</td>
         </tr>
     </tbody>
 </table>

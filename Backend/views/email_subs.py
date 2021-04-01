@@ -3,12 +3,12 @@ from datetime import datetime, timedelta, timezone
 
 from flask import Blueprint, request
 
-from services.hash_service import create_hash
+from prometheus import metrics
 
 routes = Blueprint('email-subs', __name__, url_prefix='/sub')
 
 from sqlalchemy.exc import IntegrityError
-from werkzeug.exceptions import BadRequest, Forbidden
+from werkzeug.exceptions import Forbidden
 
 from db import db
 from models.caseDevelopments import CaseDevelopments
@@ -77,15 +77,15 @@ def subscribe_new():
         return schema.dump(sub), 201
 
 
-@routes.route('/<id>/<token>', methods=['GET'])
-def get(id, token):
-    sub = __get_and_verify(id, token)
+@routes.route('/<sub_id>/<token>', methods=['GET'])
+def get(sub_id, token):
+    sub = __get_and_verify(sub_id, token)
     return email_subs_schema.dump(sub)
 
 
-@routes.route('/<id>/<token>', methods=['PATCH'])
-def update(id, token):
-    sub = __get_and_verify(id, token)
+@routes.route('/<sub_id>/<token>', methods=['PATCH'])
+def update(sub_id, token):
+    sub = __get_and_verify(sub_id, token)
 
     if 'email' in request.json:
         sub.email = request.json['email']
@@ -100,12 +100,12 @@ def update(id, token):
     if 'counties' in request.json:
         counties = request.json['counties']
 
-    db.session.query(SubscribedCounties).filter_by(sub_id=id).delete()
+    db.session.query(SubscribedCounties).filter_by(sub_id=sub_id).delete()
     db.session.commit()
 
     for cjson in counties:
         c = SubscribedCounties()
-        c.sub_id = id
+        c.sub_id = sub_id
         c.ags = cjson['ags']
         db.session.add(c)
 
@@ -113,15 +113,16 @@ def update(id, token):
     return email_subs_schema.dump(sub)
 
 
-@routes.route('/<id>/<token>', methods=['DELETE'])
-def delete(id, token):
-    sub = __get_and_verify(id, token)
+@routes.route('/<sub_id>/<token>', methods=['DELETE'])
+def delete(sub_id, token):
+    sub = __get_and_verify(sub_id, token)
     db.session.delete(sub)
     db.session.commit()
     return '', 200
 
 
 @routes.route('/send-notifications', methods=['POST'])
+@metrics.do_not_track()
 def send_notifications():
     if not request.headers.get('X-API-KEY') == os.getenv('API_KEY'):
         f = Forbidden()
@@ -135,7 +136,7 @@ def send_notifications():
     c = CaseDevelopments('cases_per_county_and_day_risklayer')
     sevendaysago = (datetime.now(timezone.utc) - timedelta(days=8)).strftime('%Y-%m-%d')
     tomorrow = (datetime.now(timezone.utc) + timedelta(days=1)).strftime('%Y-%m-%d')
-    de = c.get_country(from_time=sevendaysago, to_time=tomorrow, id_country='de')
+    de = c.get_country(from_time=sevendaysago, to_time=tomorrow, id_country='de', want_age_groups=False)
     de_developments = de['properties']['developments']
     de_today = de_developments[-1]
     de_24h = de_developments[-2]
@@ -158,7 +159,7 @@ def send_notifications():
     num_emails = 0
 
     for row in sql_result:
-        lk = c.get_county(from_time=sevendaysago, to_time=tomorrow, id_county=row['ags'])
+        lk = c.get_county(from_time=sevendaysago, to_time=tomorrow, id_county=row['ags'], want_age_groups=False)
         lk_developments = lk['properties']['developments']
         lk_today = lk_developments[-1]
         lk_24h = lk_developments[-2]
@@ -173,7 +174,7 @@ def send_notifications():
         sub.send_email(
             subject=f'[CoronaVis] Neue Daten für {desc} {name}',
             sender='coronavis@dbvis.inf.uni-konstanz.de',
-            template='mail/county_notification',
+            template='mail/county_notification_' + sub.lang,
             sub_id=row['id'],
             token=decrypt_message(row['token'].tobytes()),
             second_email=row['second_email'],
@@ -207,6 +208,61 @@ def send_notifications():
             county_deaths_7_prc=__diff_str(__prc_change(lk_today['deaths'], lk_7d['deaths'])),
             county_deaths_7_100k=__diff_str(__100k_change(lk_today['deaths'], lk_7d['deaths'], lk_today['population'])),
 
+            # Covid-19 Patients
+            county_patients_total=lk_today['cases_covid'],
+            county_patients_total_100k=round(__100k_change(lk_today['cases_covid'], 0, lk_today['population']), 2),
+            county_patients_24=__diff_str(lk_today['cases_covid'] - lk_24h['cases_covid']),
+            county_patients_24_prc=__diff_str(__prc_change(lk_today['cases_covid'], lk_24h['cases_covid'])),
+            county_patients_24_100k=__diff_str(
+                __100k_change(lk_today['cases_covid'], lk_24h['cases_covid'], lk_today['population'])),
+            county_patients_72=__diff_str(lk_today['cases_covid'] - lk_72h['cases_covid']),
+            county_patients_72_prc=__diff_str(__prc_change(lk_today['cases_covid'], lk_72h['cases_covid'])),
+            county_patients_72_100k=__diff_str(
+                __100k_change(lk_today['cases_covid'], lk_72h['cases_covid'], lk_today['population'])),
+            county_patients_7=__diff_str(lk_today['cases_covid'] - lk_7d['cases_covid']),
+            county_patients_7_prc=__diff_str(__prc_change(lk_today['cases_covid'], lk_7d['cases_covid'])),
+            county_patients_7_100k=__diff_str(
+                __100k_change(lk_today['cases_covid'], lk_7d['cases_covid'], lk_today['population'])),
+
+            # Covid-19 Patients Ventilated
+            county_patients_ventilated_total=lk_today['cases_covid_ventilated'],
+            county_patients_ventilated_total_100k=round(
+                __100k_change(lk_today['cases_covid_ventilated'], 0, lk_today['population']), 2),
+            county_patients_ventilated_24=__diff_str(
+                lk_today['cases_covid_ventilated'] - lk_24h['cases_covid_ventilated']),
+            county_patients_ventilated_24_prc=__diff_str(
+                __prc_change(lk_today['cases_covid_ventilated'], lk_24h['cases_covid_ventilated'])),
+            county_patients_ventilated_24_100k=__diff_str(
+                __100k_change(
+                    lk_today['cases_covid_ventilated'], lk_24h['cases_covid_ventilated'], lk_today['population'])),
+            county_patients_ventilated_72=__diff_str(
+                lk_today['cases_covid_ventilated'] - lk_72h['cases_covid_ventilated']),
+            county_patients_ventilated_72_prc=__diff_str(
+                __prc_change(lk_today['cases_covid_ventilated'], lk_72h['cases_covid_ventilated'])),
+            county_patients_ventilated_72_100k=__diff_str(
+                __100k_change(
+                    lk_today['cases_covid_ventilated'], lk_72h['cases_covid_ventilated'], lk_today['population'])),
+            county_patients_ventilated_7=__diff_str(
+                lk_today['cases_covid_ventilated'] - lk_7d['cases_covid_ventilated']),
+            county_patients_ventilated_7_prc=__diff_str(
+                __prc_change(lk_today['cases_covid_ventilated'], lk_7d['cases_covid_ventilated'])),
+            county_patients_ventilated_7_100k=__diff_str(
+                __100k_change(
+                    lk_today['cases_covid_ventilated'], lk_7d['cases_covid_ventilated'], lk_today['population'])),
+
+            # Bed Occupancy
+            county_bed_occupancy_total=f"{lk_today['beds_occupied']}/{lk_today['beds_total']}",
+            county_bed_occupancy_total_prc=round((lk_today['beds_occupied'] / lk_today['beds_total']) * 10000) / 100,
+            county_bed_occupancy_24=f"{__diff_str(lk_today['beds_occupied'] - lk_24h['beds_occupied'])}/{__diff_str(lk_today['beds_total'] - lk_24h['beds_total'])}",
+            county_bed_occupancy_24_prc=__diff_str(__prc_change(lk_today['beds_occupied'] / lk_today['beds_total'],
+                                                                lk_24h['beds_occupied'] / lk_24h['beds_total'])),
+            county_bed_occupancy_72=f"{__diff_str(lk_today['beds_occupied'] - lk_72h['beds_occupied'])}/{__diff_str(lk_today['beds_total'] - lk_72h['beds_total'])}",
+            county_bed_occupancy_72_prc=__diff_str(__prc_change(lk_today['beds_occupied'] / lk_today['beds_total'],
+                                                                lk_72h['beds_occupied'] / lk_72h['beds_total'])),
+            county_bed_occupancy_7=f"{__diff_str(lk_today['beds_occupied'] - lk_7d['beds_occupied'])}/{__diff_str(lk_today['beds_total'] - lk_7d['beds_total'])}",
+            county_bed_occupancy_7_prc=__diff_str(__prc_change(lk_today['beds_occupied'] / lk_today['beds_total'],
+                                                               lk_7d['beds_occupied'] / lk_7d['beds_total'])),
+
             num_counties_reported=de_today['num_counties_reported'],
             num_counties_total=de_today['num_counties_total'],
             prognosis=round(prognosis.prognosis),
@@ -235,8 +291,63 @@ def send_notifications():
                 __100k_change(de_today['deaths'], de_72h['deaths'], de_today['population'])),
             country_deaths_7=__diff_str(de_today['deaths'] - de_7d['deaths']),
             country_deaths_7_prc=__diff_str(__prc_change(de_today['deaths'], de_7d['deaths'])),
-            country_deaths_7_100k=__diff_str(__100k_change(de_today['deaths'], de_7d['deaths'], de_today['population']))
+            country_deaths_7_100k=__diff_str(
+                __100k_change(de_today['deaths'], de_7d['deaths'], de_today['population'])),
 
+            # Covid-19 Patients
+            country_patients_total=de_today['cases_covid'],
+            country_patients_total_100k=round(__100k_change(de_today['cases_covid'], 0, de_today['population']), 2),
+            country_patients_24=__diff_str(de_today['cases_covid'] - de_24h['cases_covid']),
+            country_patients_24_prc=__diff_str(__prc_change(de_today['cases_covid'], de_24h['cases_covid'])),
+            country_patients_24_100k=__diff_str(
+                __100k_change(de_today['cases_covid'], de_24h['cases_covid'], de_today['population'])),
+            country_patients_72=__diff_str(de_today['cases_covid'] - de_72h['cases_covid']),
+            country_patients_72_prc=__diff_str(__prc_change(de_today['cases_covid'], de_72h['cases_covid'])),
+            country_patients_72_100k=__diff_str(
+                __100k_change(de_today['cases_covid'], de_72h['cases_covid'], de_today['population'])),
+            country_patients_7=__diff_str(de_today['cases_covid'] - de_7d['cases_covid']),
+            country_patients_7_prc=__diff_str(__prc_change(de_today['cases_covid'], de_7d['cases_covid'])),
+            country_patients_7_100k=__diff_str(
+                __100k_change(de_today['cases_covid'], de_7d['cases_covid'], de_today['population'])),
+
+            # Covid-19 Patients Ventilated
+            country_patients_ventilated_total=de_today['cases_covid_ventilated'],
+            country_patients_ventilated_total_100k=round(
+                __100k_change(de_today['cases_covid_ventilated'], 0, de_today['population']), 2),
+            country_patients_ventilated_24=__diff_str(
+                de_today['cases_covid_ventilated'] - de_24h['cases_covid_ventilated']),
+            country_patients_ventilated_24_prc=__diff_str(
+                __prc_change(de_today['cases_covid_ventilated'], de_24h['cases_covid_ventilated'])),
+            country_patients_ventilated_24_100k=__diff_str(
+                __100k_change(
+                    de_today['cases_covid_ventilated'], de_24h['cases_covid_ventilated'], de_today['population'])),
+            country_patients_ventilated_72=__diff_str(
+                de_today['cases_covid_ventilated'] - de_72h['cases_covid_ventilated']),
+            country_patients_ventilated_72_prc=__diff_str(
+                __prc_change(de_today['cases_covid_ventilated'], de_72h['cases_covid_ventilated'])),
+            country_patients_ventilated_72_100k=__diff_str(
+                __100k_change(
+                    de_today['cases_covid_ventilated'], de_72h['cases_covid_ventilated'], de_today['population'])),
+            country_patients_ventilated_7=__diff_str(
+                de_today['cases_covid_ventilated'] - de_7d['cases_covid_ventilated']),
+            country_patients_ventilated_7_prc=__diff_str(
+                __prc_change(de_today['cases_covid_ventilated'], de_7d['cases_covid_ventilated'])),
+            country_patients_ventilated_7_100k=__diff_str(
+                __100k_change(
+                    de_today['cases_covid_ventilated'], de_7d['cases_covid_ventilated'], de_today['population'])),
+
+            # Bed Occupancy
+            country_bed_occupancy_total=f"{de_today['beds_occupied']}/{de_today['beds_total']}",
+            country_bed_occupancy_total_prc=round((de_today['beds_occupied'] / de_today['beds_total']) * 10000) / 100,
+            country_bed_occupancy_24=f"{__diff_str(de_today['beds_occupied'] - de_24h['beds_occupied'])}/{__diff_str(de_today['beds_total'] - de_24h['beds_total'])}",
+            country_bed_occupancy_24_prc=__diff_str(__prc_change(de_today['beds_occupied'] / de_today['beds_total'],
+                                                                 de_24h['beds_occupied'] / de_24h['beds_total'])),
+            country_bed_occupancy_72=f"{__diff_str(de_today['beds_occupied'] - de_72h['beds_occupied'])}/{__diff_str(de_today['beds_total'] - de_72h['beds_total'])}",
+            country_bed_occupancy_72_prc=__diff_str(__prc_change(de_today['beds_occupied'] / de_today['beds_total'],
+                                                                 de_72h['beds_occupied'] / de_72h['beds_total'])),
+            country_bed_occupancy_7=f"{__diff_str(de_today['beds_occupied'] - de_7d['beds_occupied'])}/{__diff_str(de_today['beds_total'] - de_7d['beds_total'])}",
+            country_bed_occupancy_7_prc=__diff_str(__prc_change(de_today['beds_occupied'] / de_today['beds_total'],
+                                                                de_7d['beds_occupied'] / de_7d['beds_total']))
         )
 
         db.session.add(sub)
@@ -262,8 +373,8 @@ def __diff_str(val) -> str:
     return str(round(val, 2))
 
 
-def __get_and_verify(id, token) -> EmailSub:
-    sub = EmailSub.query.get_or_404(id)
+def __get_and_verify(sub_id, token) -> EmailSub:
+    sub = EmailSub.query.get_or_404(sub_id)
     if not sub.verify_token(token):
         b = Forbidden()
         b.description = 'invalid token'

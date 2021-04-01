@@ -1,0 +1,298 @@
+<style type="text/css">
+    table {
+        border-spacing: 0;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th {
+      text-align: center;
+      margin: 0;
+      padding: 6px;
+    }
+
+    tr th:not(:nth-child(1)) {
+      border: 1px solid black;
+    }
+
+    td {
+      text-align: right;
+      margin: 0;
+      padding: 6px;
+    }
+
+    tr td:nth-child(2),
+    tr td:nth-child(4),
+    tr td:nth-child(7),
+    tr td:nth-child(10){
+      border-left: 1px solid dimgray;
+    }
+
+    tr td:nth-child(12) {
+      border-right: 1px solid dimgray;
+    }
+
+    tr:last-child td:not(:nth-child(1)) {
+      border-bottom: 1px solid dimgray;
+    }
+
+    td:first-child {
+      text-align: left;
+    }
+
+    .active {
+        font-weight: bold;
+    }
+</style>
+
+<p>
+    <a href="https://coronavis.dbvis.de">Find the latest visualizations at CoronaVis</a>
+</p>
+
+<h3>New data for {{ county_desc }} {{ county_name }}</h3>
+
+{% if second_email == True %}
+<p>Since our first mail today there were more updates in this county:</p>
+{% endif %}
+
+<p>{{ county_population }} Inhabitants</p>
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th colspan="2">Today</th>
+            <th colspan="9">Change</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th colspan="2">{{ county_last_updated }}</th>
+            <th colspan="3">last 24 hours</th>
+            <th colspan="3">last 72 hours</th>
+            <th colspan="3">last 7 days</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Tested positive</td>
+            <td>{{ county_cases_total }}</td>
+            <td>{{ county_cases_total_100k }}/100k</td>
+
+            <td>{{ county_cases_24 }}</td>
+            <td>{{ county_cases_24_100k }}/100k</td>
+            <td>{{ county_cases_24_prc }}%</td>
+
+
+            <td>{{ county_cases_72 }}</td>
+            <td>{{ county_cases_72_100k }}/100k</td>
+            <td>{{ county_cases_72_prc }}%</td>
+
+            <td>{{ county_cases_7 }}</td>
+            <td class="active">{{ county_cases_7_100k }}/100k</td>
+            <td>{{ county_cases_7_prc }}%</td>
+        </tr>
+
+        <tr>
+            <td>Deaths</td>
+            <td>{{ county_deaths_total }}</td>
+            <td>{{ county_deaths_total_100k }}/100k</td>
+
+            <td>{{ county_deaths_24 }}</td>
+            <td>{{ county_deaths_24_100k }}/100k</td>
+            <td>{{ county_deaths_24_prc }}%</td>
+
+            <td>{{ county_deaths_72 }}</td>
+            <td>{{ county_deaths_72_100k }}/100k</td>
+            <td>{{ county_deaths_72_prc }}%</td>
+
+            <td>{{ county_deaths_7 }}</td>
+            <td>{{ county_deaths_7_100k }}/100k</td>
+            <td>{{ county_deaths_7_prc }}%</td>
+        </tr>
+    
+        <tr>
+            <td>Covid-19 patients</td>
+            <td>{{ county_patients_total }}</td>
+            <td>{{ county_patients_total_100k }}/100k</td>
+
+            <td>{{ county_patients_24 }}</td>
+            <td>{{ county_patients_24_100k }}/100k</td>
+            <td>{{ county_patients_24_prc }}%</td>
+
+            <td>{{ county_patients_72 }}</td>
+            <td>{{ county_patients_72_100k }}/100k</td>
+            <td>{{ county_patients_72_prc }}%</td>
+
+            <td>{{ county_patients_7 }}</td>
+            <td>{{ county_patients_7_100k }}/100k</td>
+            <td>{{ county_patients_7_prc }}%</td>
+        </tr>
+    
+        <tr>
+            <td>Covid-19 patients (ventilated)</td>
+            <td>{{ county_patients_ventilated_total }}</td>
+            <td>{{ county_patients_ventilated_total_100k }}/100k</td>
+
+            <td>{{ county_patients_ventilated_24 }}</td>
+            <td>{{ county_patients_ventilated_24_100k }}/100k</td>
+            <td>{{ county_patients_ventilated_24_prc }}%</td>
+
+            <td>{{ county_patients_ventilated_72 }}</td>
+            <td>{{ county_patients_ventilated_72_100k }}/100k</td>
+            <td>{{ county_patients_ventilated_72_prc }}%</td>
+
+            <td>{{ county_patients_ventilated_7 }}</td>
+            <td>{{ county_patients_ventilated_7_100k }}/100k</td>
+            <td>{{ county_patients_ventilated_7_prc }}%</td>
+        </tr>
+
+        <tr>
+            <td>Bed occupancy</td>
+            <td>{{ county_bed_occupancy_total }}</td>
+            <td>{{ county_bed_occupancy_total_prc }}%</td>
+
+            <td>{{ county_bed_occupancy_24 }}</td>
+            <td></td>
+            <td>{{ county_bed_occupancy_24_prc }}%</td>
+
+            <td>{{ county_bed_occupancy_72 }}</td>
+            <td></td>
+            <td>{{ county_bed_occupancy_72_prc }}%</td>
+
+            <td>{{ county_bed_occupancy_7 }}</td>
+            <td></td>
+            <td>{{ county_bed_occupancy_7_prc }}%</td>
+        </tr>
+    </tbody>
+</table>
+
+{% if county_cases_24 == 0 %}
+<p>0 new positive tested may also mean that the county has not provided data since the last update.</p>
+{% endif %}
+
+<h3>Germany</h3>
+
+<p>{{ country_population }} Inhabitants</p>
+
+<p>Data available from {{ num_counties_reported }} / {{ num_counties_total }} counties.</p>
+
+<p>Extrapolation new positive tested today: {{ prognosis }}
+<br>
+    The more counties have reported data the more reliable is the extrapolation.
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th colspan="2">Today</th>
+            <th colspan="9">Change</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th colspan="2">{{ country_last_updated }}</th>
+            <th colspan="3">last 24 hours</th>
+            <th colspan="3">last 72 hours</th>
+            <th colspan="3">last 7 days</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Tested positive</td>
+            <td>{{ country_cases_total }}</td>
+            <td>{{ country_cases_total_100k }}/100k</td>
+
+            <td>{{ country_cases_24 }}</td>
+            <td>{{ country_cases_24_100k }}/100k</td>
+            <td>{{ country_cases_24_prc }}%</td>
+
+            <td>{{ country_cases_72 }}</td>
+            <td>{{ country_cases_72_100k }}/100k</td>
+            <td>{{ country_cases_72_prc }}%</td>
+
+            <td>{{ country_cases_7 }}</td>
+            <td class="active">{{ country_cases_7_100k }}/100k</td>
+            <td>{{ country_cases_7_prc }}%</td>
+        </tr>
+
+        <tr>
+            <td>Deaths</td>
+            <td>{{ country_deaths_total }}</td>
+            <td>{{ country_deaths_total_100k }}/100k</td>
+
+            <td>{{ country_deaths_24 }}</td>
+            <td>{{ country_deaths_24_100k }}/100k</td>
+            <td>{{ country_deaths_24_prc }}%</td>
+
+            <td>{{ country_deaths_72 }}</td>
+            <td>{{ country_deaths_72_100k }}/100k</td>
+            <td>{{ country_deaths_72_prc }}%</td>
+
+            <td>{{ country_deaths_7 }}</td>
+            <td>{{ country_deaths_7_100k }}/100k</td>
+            <td>{{ country_deaths_7_prc }}%</td>
+
+        </tr>
+    
+    
+        <tr>
+            <td>Covid-19 patients</td>
+            <td>{{ country_patients_total }}</td>
+            <td>{{ country_patients_total_100k }}/100k</td>
+
+            <td>{{ country_patients_24 }}</td>
+            <td>{{ country_patients_24_100k }}/100k</td>
+            <td>{{ country_patients_24_prc }}%</td>
+
+            <td>{{ country_patients_72 }}</td>
+            <td>{{ country_patients_72_100k }}/100k</td>
+            <td>{{ country_patients_72_prc }}%</td>
+
+            <td>{{ country_patients_7 }}</td>
+            <td>{{ country_patients_7_100k }}/100k</td>
+            <td>{{ country_patients_7_prc }}%</td>
+        </tr>
+    
+        <tr>
+            <td>Covid-19 patients (ventilated)</td>
+            <td>{{ country_patients_ventilated_total }}</td>
+            <td>{{ country_patients_ventilated_total_100k }}/100k</td>
+
+            <td>{{ country_patients_ventilated_24 }}</td>
+            <td>{{ country_patients_ventilated_24_100k }}/100k</td>
+            <td>{{ country_patients_ventilated_24_prc }}%</td>
+
+            <td>{{ country_patients_ventilated_72 }}</td>
+            <td>{{ country_patients_ventilated_72_100k }}/100k</td>
+            <td>{{ country_patients_ventilated_72_prc }}%</td>
+
+            <td>{{ country_patients_ventilated_7 }}</td>
+            <td>{{ country_patients_ventilated_7_100k }}/100k</td>
+            <td>{{ country_patients_ventilated_7_prc }}%</td>
+        </tr>
+
+        <tr>
+            <td>Bed occupancy</td>
+            <td>{{ country_bed_occupancy_total }}</td>
+            <td>{{ country_bed_occupancy_total_prc }}%</td>
+
+            <td>{{ country_bed_occupancy_24 }}</td>
+            <td></td>
+            <td>{{ country_bed_occupancy_24_prc }}%</td>
+
+            <td>{{ country_bed_occupancy_72 }}</td>
+            <td></td>
+            <td>{{ country_bed_occupancy_72_prc }}%</td>
+
+            <td>{{ country_bed_occupancy_7 }}</td>
+            <td></td>
+            <td>{{ country_bed_occupancy_7_prc }}%</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>All data without guarantee.</p>
+
+<p>
+    <a href="https://coronavis.dbvis.de/overview/subscription/{{ sub_id }}/{{ token }}">Change or cancel subscription</a>
+</p>

@@ -18,6 +18,7 @@ from werkzeug.exceptions import HTTPException
 
 from cache import cache
 from db import db
+from prometheus import metrics
 from views import (cases, cases_risklayer, divi, extent, health, hospitals,
                    osm, version, email_subs, counties, regions, dashboards)
 
@@ -26,10 +27,10 @@ from views import (cases, cases_risklayer, divi, extent, health, hospitals,
 
 # Create Flask application
 app = Flask(__name__)
-metrics = PrometheusMetrics(app,path='/metrics')
+metrics.init_app(app)
 
 # static information as metric
-metrics.info('app_info', 'Application info', version=os.getenv('VERSION'), environment=os.getenv('ENVIRONMENT'))
+# metrics.info('app_info', 'Application info', version=os.getenv('VERSION'), environment=os.getenv('ENVIRONMENT'))
 app.url_map.strict_slashes = False
 
 if os.environ.get('SENTRY_DSN') is not None:

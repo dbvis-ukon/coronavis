@@ -1,0 +1,84 @@
+Find the latest visualizations at https://coronavis.dbvis.de
+
+New data for {{ county_desc }} {{ county_name }}
+
+{% if second_email == True %}
+Since our first mail today there were more updates in this county:
+{% endif %}
+
+{{ county_population }} Inhabitants
+
+Today ({{ county_last_updated }}):
+Tested positive: {{ county_cases_total }} / {{ county_cases_total_100k }}/100k
+Deaths: {{ county_deaths_total }} / {{ country_cases_total_100k }}/100k
+Covid-19 patients: {{ county_patients_total }} / {{ country_patients_total_100k }}/100k
+Covid-19 patients (ventilated): {{ county_patients_ventilated_total }} / {{ county_patients_ventilated_total_100k }}/100k
+Bed occupancy: {{ county_bed_occupancy_total }} / {{ county_bed_occupancy_total_prc }}%
+
+Within the last 24 hours:
+Tested positive: {{ county_cases_24 }} / {{ county_cases_24_100k }}/100k / {{ county_cases_24_prc }}%
+Deaths: {{ county_deaths_24 }} / {{ county_deaths_24_100k }}/100k / {{ county_deaths_24_prc }}%
+Covid-19 patients: {{ county_patients_24 }} / {{ country_patients_24_100k }}/100k
+Covid-19 patients (ventilated): {{ county_patients_ventilated_24 }} / {{ county_patients_ventilated_24_100k }}/100k
+Bed occupancy: {{ county_bed_occupancy_24 }} / {{ county_bed_occupancy_24_prc }}%
+
+Within the last 72 hours:
+Tested positive: {{ county_cases_72 }} / {{ county_cases_72_100k }}/100k / {{ county_cases_72_prc }}%
+Deaths: {{ county_deaths_72 }} / {{ county_deaths_72_100k }}/100k / {{ county_deaths_72_prc }}%
+Covid-19 patients: {{ county_patients_72 }} / {{ country_patients_72_100k }}/100k
+Covid-19 patients (ventilated): {{ county_patients_ventilated_72 }} / {{ county_patients_ventilated_72_100k }}/100k
+Bed occupancy: {{ county_bed_occupancy_72 }} / {{ county_bed_occupancy_72_prc }}%
+
+Within the last 7 Tage (7-day-incidence):
+Tested positive: {{ county_cases_7 }} / {{ county_cases_7_100k }}/100k / {{ county_cases_7_prc }}%
+Deaths: {{ county_deaths_7 }} / {{ county_deaths_7_100k }}/100k / {{ county_deaths_7_prc }}%
+Covid-19 patients: {{ county_patients_7 }} / {{ country_patients_7_100k }}/100k
+Covid-19 patients (ventilated): {{ county_patients_ventilated_7 }} / {{ county_patients_ventilated_7_100k }}/100k
+Bed occupancy: {{ county_bed_occupancy_7 }} / {{ county_bed_occupancy_7_prc }}%
+
+{% if county_cases_24 == 0 %}
+0 new positive tested may also mean that the county has not provided data since the last update.
+{% endif %}
+
+
+Germany
+
+{{ country_population }} Inhabitants
+
+Data available from {{ num_counties_reported }} / {{ num_counties_total }} counties.
+
+Extrapolation new positive tested today: {{ prognosis }}
+The more counties have reported data the more reliable is the extrapolation.
+
+Today {{ country_last_updated }}:
+Tested positive: {{ country_cases_total }} / {{ country_cases_total_100k }}/100k
+Deaths: {{ country_deaths_total }} / {{ country_deaths_total_100k }}/100k
+Covid-19 patients: {{ country_patients_total }} / {{ country_patients_total_100k }}/100k
+Covid-19 patients (ventilated): {{ country_patients_ventilated_total }} / {{ country_patients_ventilated_total_100k }}/100k
+Bed occupancy: {{ country_bed_occupancy_total }} / {{ country_bed_occupancy_total_prc }}%
+
+Within the last 24 hours:
+Tested positive: {{ country_cases_24 }} / {{ country_cases_24_100k }}/100k / {{ country_cases_24_prc }}%
+Deaths: {{ country_deaths_24 }} / {{ country_deaths_24_100k }}/100k / {{ country_deaths_24_prc }}%
+Covid-19 patients: {{ country_patients_24 }} / {{ country_patients_24_100k }}/100k
+Covid-19 patients (ventilated): {{ country_patients_ventilated_24 }} / {{ country_patients_ventilated_24_100k }}/100k
+Bed occupancy: {{ country_bed_occupancy_24 }} / {{ country_bed_occupancy_24_prc }}%
+
+Within the last 72 hours:
+Tested positive: {{ country_cases_72 }} / {{ country_cases_72_100k }}/100k / {{ country_cases_72_prc }}%
+Deaths: {{ country_deaths_72 }} / {{ country_deaths_72_100k }}/100k / {{ country_deaths_72_prc }}%
+Covid-19 patients: {{ country_patients_72 }} / {{ country_patients_72_100k }}/100k
+Covid-19 patients (ventilated): {{ country_patients_ventilated_72 }} / {{ country_patients_ventilated_72_100k }}/100k
+Bed occupancy: {{ country_bed_occupancy_72 }} / {{ country_bed_occupancy_72_prc }}%
+
+Within the last 7 Tage (7-day-incidence):
+Tested positive: {{ country_cases_7 }} / {{ country_cases_7_100k }}/100k / {{ country_cases_7_prc }}%
+Deaths: {{ country_deaths_7 }} / {{ country_deaths_7_100k }}/100k / {{ country_deaths_7_prc }}%
+Covid-19 patients: {{ country_patients_7 }} / {{ country_patients_7_100k }}/100k
+Covid-19 patients (ventilated): {{ country_patients_ventilated_7 }} / {{ country_patients_ventilated_7_100k }}/100k
+Bed occupancy: {{ country_bed_occupancy_7 }} / {{ country_bed_occupancy_7_prc }}%
+
+
+All data without guarantee.
+
+Change or cancel subscription: https://coronavis.dbvis.de/overview/subscription/{{ sub_id }}/{{ token }}
