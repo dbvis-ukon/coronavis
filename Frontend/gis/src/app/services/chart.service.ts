@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { Region } from '../repositories/types/in/region';
 import { getMoment } from '../util/date-util';
+import { ConfigService } from './config.service';
 import { TableOverviewDataAndOptions, TableOverviewService } from './table-overview.service';
 import { MultiLineChartDataAndOptions, VegaMultiLineChartService } from './vega-multilinechart.service';
 import { PixelChartDataAndOptions, VegaPixelchartService } from './vega-pixelchart.service';
@@ -50,7 +51,8 @@ export class ChartService {
   constructor(
     private vegaPixelchartService: VegaPixelchartService,
     private vegaMultiLineChartService: VegaMultiLineChartService,
-    private tableOverviewService: TableOverviewService
+    private tableOverviewService: TableOverviewService,
+    private configService: ConfigService
   ) {}
 
   public resetExtents(): void {
@@ -61,7 +63,8 @@ export class ChartService {
 
   public updateChartFull(d: Item): Observable<Item> {
     if (d.type === 'pixel') {
-      return this.vegaPixelchartService.compileToDataAndOptions(d.config, d.dataRequest, false)
+      const parsedCfg = this.configService.parseConfig(d.config, d.type, false);
+      return this.vegaPixelchartService.compileToDataAndOptions(parsedCfg.config, d.dataRequest, false)
         .pipe(
           map(d1 => {
             d._compiled = d1;
@@ -88,7 +91,8 @@ export class ChartService {
     }
 
     if (d.type === 'multiline') {
-      return this.vegaMultiLineChartService.compileToDataAndOptions(d.config, d.dataRequest)
+      const parsedCfg = this.configService.parseConfig(d.config, d.type, false);
+      return this.vegaMultiLineChartService.compileToDataAndOptions(parsedCfg.config, d.dataRequest)
       .pipe(
         map(d1 => {
           if (this.tExtent[0] === null || getMoment(this.tExtent[0]).isAfter(getMoment(d1.chartOptions.xDomain[0]))) {
@@ -107,7 +111,8 @@ export class ChartService {
     }
 
     if (d.type === 'table') {
-      d._compiled = this.tableOverviewService.compileToDataAndOptions(d.config, d.dataRequest);
+      const parsedCfg = this.configService.parseConfig(d.config, d.type, false);
+      d._compiled = this.tableOverviewService.compileToDataAndOptions(parsedCfg.config, d.dataRequest);
 
       return of(d);
     }
