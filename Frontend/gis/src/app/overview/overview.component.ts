@@ -1,10 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { UrlHandlerService } from '../services/url-handler.service';
-import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { UrlHandlerService } from '../services/url-handler.service';
 
 @Component({
   selector: 'app-overview',
@@ -34,12 +34,12 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.matSnackBar.open(this.dataWarning.nativeElement.textContent, 'OK', {
-    //   duration: 120000,
-    //   verticalPosition: 'top',
-    //   horizontalPosition: 'center',
-    //   panelClass: 'snackbar-warning'
-    // });
+    this.matSnackBar.open(this.dataWarning.nativeElement.textContent, 'OK', {
+      duration: 120000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      panelClass: 'snackbar-warning'
+    });
   }
 
   navigateAndCloseSidenav(url: string) {
