@@ -175,6 +175,10 @@ export class TranslationService {
     {
       'de-DE': '7T',
       'en-US': '7d'
+    },
+    {
+      'de-DE': 'Datum',
+      'en-US': 'Date'
     }
   ];
 

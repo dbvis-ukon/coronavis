@@ -11,6 +11,7 @@ import { getMoment } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 import { MultiLineChartItem } from './chart.service';
 import { ExportCsvService } from './export-csv.service';
+import { TranslationService } from './translation.service';
 
 export interface IcuCategoriesDataPoint {
   date: string;
@@ -23,9 +24,7 @@ export interface IcuCategoriesDataAndOptions {
   config: CovidChartOptions;
   data: IcuCategoriesDataPoint[];
   chartOptions: {
-    title: string;
-    xAxisTitle: string;
-    yAxisTitle: string;
+    titleRegions: string;
     width: number | 'container';
     height: number;
     scaleType: string;
@@ -93,7 +92,7 @@ export class VegaStackedAreaIcuCategoriesService {
             "params": [
               {
                 "name": "hover",
-                "select": {"type": "point", "fields": ["availbility"]},
+                "select": {"type": "point", "fields": ["availability"]},
                 "bind": {"legend": "mouseover"}
               }
             ],
@@ -104,6 +103,7 @@ export class VegaStackedAreaIcuCategoriesService {
           },
           {
             "transform": [
+              {"filter": "datum.icuCategory == 'icu_low'"},
               {"pivot": "availability", "value": "numberOfHospitals", "groupby": ["date"]}
             ],
             "mark": "rule",
@@ -186,7 +186,7 @@ export class VegaStackedAreaIcuCategoriesService {
             "params": [
               {
                 "name": "hover",
-                "select": {"type": "point", "fields": ["availbility"]},
+                "select": {"type": "point", "fields": ["availability"]},
                 "bind": {"legend": "mouseover"}
               }
             ],
@@ -197,6 +197,7 @@ export class VegaStackedAreaIcuCategoriesService {
           },
           {
             "transform": [
+              {"filter": "datum.icuCategory == 'icu_high'"},
               {"pivot": "availability", "value": "numberOfHospitals", "groupby": ["date"]}
             ],
             "mark": "rule",
@@ -279,7 +280,7 @@ export class VegaStackedAreaIcuCategoriesService {
             "params": [
               {
                 "name": "hover",
-                "select": {"type": "point", "fields": ["availbility"]},
+                "select": {"type": "point", "fields": ["availability"]},
                 "bind": {"legend": "mouseover"}
               }
             ],
@@ -290,6 +291,7 @@ export class VegaStackedAreaIcuCategoriesService {
           },
           {
             "transform": [
+              {"filter": "datum.icuCategory == 'ecmo'"},
               {"pivot": "availability", "value": "numberOfHospitals", "groupby": ["date"]}
             ],
             "mark": "rule",
@@ -332,7 +334,8 @@ export class VegaStackedAreaIcuCategoriesService {
   constructor(
     private caseUtil: CaseUtilService,
     private exportCsv: ExportCsvService,
-    private hospitalRepo: QualitativeDiviDevelopmentRepository
+    private hospitalRepo: QualitativeDiviDevelopmentRepository,
+    private translationServive: TranslationService
   ) {}
 
 
@@ -368,7 +371,7 @@ export class VegaStackedAreaIcuCategoriesService {
                   ret.push({
                     date: d1.timestamp,
                     icuCategory: bed,
-                    availability: avail,
+                    availability: this.translationServive.translate(avail),
                     numberOfHospitals: count
                   } as IcuCategoriesDataPoint);
                 }
@@ -391,8 +394,7 @@ export class VegaStackedAreaIcuCategoriesService {
             config: o,
             data: dps,
             chartOptions: {
-              title: this.caseUtil.getChartTitle(o),
-              yAxisTitle: this.caseUtil.getChartTitle(o, null, true),
+              titleRegions: dataRequests.map(r => (r.description + ' ' + r.name).trim()).join(', '),
               width: 'container',
               height: 50,
               timeAgg: o.timeAgg,
@@ -411,6 +413,9 @@ export class VegaStackedAreaIcuCategoriesService {
       return null;
     }
 
+    const categories = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar', 'Keine Information'];
+    const catTranslated = categories.map(d => this.translationServive.translate(d));
+
     const data = dataAndOptions.data;
     const chartOptions = dataAndOptions.chartOptions;
 
@@ -426,14 +431,22 @@ export class VegaStackedAreaIcuCategoriesService {
       // spec.vconcat[i].encoding.x.timeUnit = chartOptions.timeAgg || 'yearmonthdate';
 
       if (chartOptions.xDomain) {
-        spec.vconcat[i].encoding.x.scale.domain = chartOptions.xDomain;
+        spec.vconcat[i].layer[0].encoding.x.scale.domain = chartOptions.xDomain;
       }
 
       if (chartOptions.yDomain) {
-        spec.vconcat[i].encoding.y.scale.domain = chartOptions.yDomain;
+        spec.vconcat[i].layer[0].encoding.y.scale.domain = chartOptions.yDomain;
       }
 
-      spec.vconcat[i].encoding.y.scale.type = chartOptions.scaleType || 'linear';
+      spec.vconcat[i].layer[0].encoding.color.scale.domain = catTranslated;
+
+      spec.vconcat[i].layer[0].encoding.y.scale.type = chartOptions.scaleType || 'linear';
+
+      const tltp = [{"field": "date", "type": "temporal", "title": this.translationServive.translate('Datum')}];
+
+      catTranslated.forEach(d => tltp.push({"field": d, "type": "quantitative", "title": d}));
+      spec.vconcat[i].layer[1].encoding.tooltip = tltp;
+
     }
 
     console.log(JSON.stringify(spec));

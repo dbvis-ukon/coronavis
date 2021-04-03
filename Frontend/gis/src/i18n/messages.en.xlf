@@ -219,12 +219,28 @@
     </unit><unit id="agegroupChartLastWeekHint">
       <notes>
         
-      <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:17</note><note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:16</note></notes>
+      <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:17</note></notes>
       <segment state="initial">
         <source> Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
 </source>
       <target> Incidences for the current calendar week are lower and contain uncertainties. From the middle of the week, trends may become visible.
 </target></segment>
+    </unit><unit id="stackedAreaChartTitle">
+      <notes>
+        <note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:6,8</note>
+      </notes>
+      <segment state="initial">
+        <source> Anzahl Krankenhäuser und deren Auslastung pro Bettenkategorie für <ph id="0" equiv="INTERPOLATION" disp="{{ _dataAndOptions.chartOptions.titleRegions }"/>
+</source>
+      <target> Number of hospitals and their capacity per bed category for <ph id="0" equiv="INTERPOLATION" disp="{{ _dataAndOptions.chartOptions.titleRegions }"/>
+</target></segment>
+    </unit><unit id="stackedAreaChartHint">
+      <notes>
+        <note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:16</note>
+      </notes>
+      <segment state="initial">
+        <source> ICU Low = Nicht-invasive Beatmung; ICU High = Invsive Beatmung; ECMO = <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://de.wikipedia.org/wiki/Extrakorporale_Membranoxygenierung&quot;>" dispEnd="&lt;/a>">Extrakorporale Membranoxygenierung</pc></source>
+      <target> ICU Low = non-invasive ventilation; ICU High = invasive ventilation; ECMO = <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://en.wikipedia.org/wiki/Extracorporeal_membrane_oxygenation&quot;>" dispEnd="&lt;/a>">Extracorporeal membrane oxygenation</pc></target></segment>
     </unit><unit id="caseLineChartAccumulated">
       <notes>
         <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:1</note>

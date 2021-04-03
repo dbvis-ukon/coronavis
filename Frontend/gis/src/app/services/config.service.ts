@@ -408,6 +408,8 @@ export class ConfigService {
       copy.timeAgg = TimeGranularity.yearmonthdate;
       copy.ageGroupBinning = null;
       copy.scaleType = ScaleType.linear;
+
+      return copy;
     }
 
     return null;
