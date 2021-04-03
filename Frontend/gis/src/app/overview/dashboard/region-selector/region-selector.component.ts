@@ -16,8 +16,6 @@ import { Region } from 'src/app/repositories/types/in/region';
   styleUrls: ['region-selector.component.less'],
 })
 export class RegionSelectorComponent implements OnInit {
-  MAX_REGIONS = 20;
-
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fruitCtrl = new FormControl();
 
@@ -29,6 +27,9 @@ export class RegionSelectorComponent implements OnInit {
 
   @Input()
   public selectedRegions: Region[] = [];
+
+  @Input()
+  public maxRegions = 20;
 
   @Output()
   public selectedRegionsChange: EventEmitter<Region[]> = new EventEmitter();
@@ -56,7 +57,7 @@ export class RegionSelectorComponent implements OnInit {
 
   selected(event: MatAutocompleteSelectedEvent): void {
     const newRegion: Region = event.option.value;
-    if (this.selectedRegions.findIndex(r => r.id === newRegion.id) === -1 && this.selectedRegions.length < this.MAX_REGIONS) {
+    if (this.selectedRegions.findIndex(r => r.id === newRegion.id) === -1 && this.selectedRegions.length < this.maxRegions) {
       this.selectedRegions.push(newRegion);
     }
 
