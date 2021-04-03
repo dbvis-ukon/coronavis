@@ -154,13 +154,13 @@ export class VegaPixelchartService {
         "mark": {
           "type": "text",
           "fontWeight": "lighter",
-          "fontSize": 10
+          "fontSize": {"expr": "datum.val < 1000 ? 9 : 8"}
         },
         "encoding": {
           "text": {
             "field": "val",
             "type": "quantitative",
-            "format": ",.0f"
+            "format": ".0f"
           },
           "color": {
             "condition": {
@@ -390,8 +390,10 @@ export class VegaPixelchartService {
       spec.encoding.x.scale.domain = chartOptions.xDomain;
     }
 
-    const colorBreakpoint = chartOptions.domain[1] * 0.75;
-    spec.layer[1].encoding.color.condition.text = "datum.val > " + colorBreakpoint;
+    const colorBreakpoint = chartOptions.domain[1] * 0.6;
+    spec.layer[1].encoding.color.condition.test = "datum.val > " + Math.round(colorBreakpoint);
+
+    console.log(JSON.stringify(spec));
 
     return spec;
   }
