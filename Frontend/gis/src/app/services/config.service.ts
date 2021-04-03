@@ -279,15 +279,6 @@ export class ConfigService {
 
       ret.config.ageGroupBinning = null;
       ret.disabled.add('ageGroupBinning');
-
-      if (autoConfig) {
-        ret.config.timeWindow = CovidNumberCaseTimeWindow.all;
-        if (ret.config.type !== CovidNumberCaseType.bedOccupancyPercent) {
-          ret.config.normalization = CovidNumberCaseNormalization.per100k;
-        } else {
-          ret.config.normalization = CovidNumberCaseNormalization.absolut;
-        }
-      }
     }
 
 
@@ -319,20 +310,6 @@ export class ConfigService {
       } else {
         ret.config.type = CovidNumberCaseType.deaths;
         ret.config.dataSource = CovidNumberCaseDataSource.rki;
-      }
-
-      if (autoConfig) {
-        ret.config.normalization = CovidNumberCaseNormalization.per100k;
-        ret.config.timeAgg = TimeGranularity.yearweek;
-        ret.config.timeWindow = CovidNumberCaseTimeWindow.sevenDays;
-
-        if (ret.config.type === CovidNumberCaseType.cases) {
-          ret.config.dataSource = CovidNumberCaseDataSource.survstat;
-          ret.config.ageGroupBinning = AgeGroupBinning.fiveyears;
-        } else {
-          ret.config.dataSource = CovidNumberCaseDataSource.rki;
-          ret.config.ageGroupBinning = AgeGroupBinning.rki;
-        }
       }
 
       if (ret.config.type === CovidNumberCaseType.deaths) {
@@ -389,6 +366,8 @@ export class ConfigService {
       return null;
     }
 
+    copy.temporalExtent.type = 'global';
+
     if (chartType === 'pixel') {
       if (cur.type === CovidNumberCaseType.cases) {
         copy.dataSource = CovidNumberCaseDataSource.survstat;
@@ -397,6 +376,7 @@ export class ConfigService {
         copy.timeAgg = TimeGranularity.yearweek;
         copy.ageGroupBinning = AgeGroupBinning.fiveyears;
         copy.scaleType = ScaleType.linear;
+        copy.valueExtent.type = 'global';
 
         return copy;
       }
@@ -414,6 +394,7 @@ export class ConfigService {
     }
 
     if (chartType === 'multiline') {
+      copy.valueExtent.type = 'local';
       if (cur.type === CovidNumberCaseType.cases || cur.type === CovidNumberCaseType.deaths) {
         copy.dataSource = CovidNumberCaseDataSource.rki;
         copy.normalization = CovidNumberCaseNormalization.per100k;
@@ -443,6 +424,8 @@ export class ConfigService {
         copy.timeAgg = TimeGranularity.yearmonthdate;
         copy.ageGroupBinning = AgeGroupBinning.fiveyears;
         copy.scaleType = ScaleType.linear;
+        copy.valueExtent.type = 'manual';
+        copy.valueExtent.manualExtent = [0, 100];
 
         return copy;
       }
@@ -455,6 +438,7 @@ export class ConfigService {
       copy.timeAgg = TimeGranularity.yearmonthdate;
       copy.ageGroupBinning = null;
       copy.scaleType = ScaleType.linear;
+      copy.valueExtent.type = 'local';
 
       return copy;
     }
