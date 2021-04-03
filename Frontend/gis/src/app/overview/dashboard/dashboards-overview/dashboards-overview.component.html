@@ -1,6 +1,13 @@
 <mat-card class="card">
-    <button mat-raised-button color="primary" routerLink="/overview/dashboard/08335" i18n="@@dashboardsOverviewNew">Neues Dashboard</button>
-
+    <div class="new-dashboard-container">
+        <app-region-selector class="region-selector" [(selectedRegions)]="selectedRegions" maxRegions="1"></app-region-selector>
+        <div class="btn-container">
+            <button [disabled]="selectedRegions.length !== 1" mat-raised-button color="primary" 
+            [routerLink]="['/', 'overview', 'dashboard', selectedRegions[0]?.id]" 
+            i18n="@@dashboardsOverviewNew">Neues Dashboard für {{ selectedRegions[0]?.name }}</button>
+        </div>
+    </div>
+    
     <h1 i18n="@@dashboardsOverviewPopular">Beliebteste Dashboards</h1>
 
     <app-dashboards-table [dashboards]="mostUpvoted$"></app-dashboards-table>

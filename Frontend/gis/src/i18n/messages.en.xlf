@@ -204,11 +204,11 @@
       <target>Search region</target></segment>
     </unit><unit id="regionSelectorMaximumRegions">
       <notes>
-        <note category="location">src/app/overview/dashboard/region-selector/region-selector.component.html:17</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/region-selector/region-selector.component.html:18</note></notes>
       <segment state="initial">
-        <source>Die maximale Anzahl an Regionen ist erreicht.</source>
-      <target>This is the maximum number of regions.</target></segment>
+        <source>Die maximale Anzahl an Regionen ist überschritten.</source>
+      <target>The maximum number of regions is exceeded.</target></segment>
     </unit><unit id="chartSettingsTitle">
       <notes>
         <note category="location">src/app/overview/dashboard/settings/settings.component.html:1</note>
@@ -1765,29 +1765,29 @@
       <target>Add new chart</target></segment>
     </unit><unit id="dashboardsOverviewNew">
       <notes>
-        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:2</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:7</note></notes>
       <segment state="initial">
-        <source>Neues Dashboard</source>
-      <target>New dashboard</target></segment>
+        <source>Neues Dashboard für <ph id="0" equiv="INTERPOLATION" disp="{{ selectedRegions[0]?.name }}"/></source>
+      <target>New dashboard for <ph id="0" equiv="INTERPOLATION" disp="{{ selectedRegions[0]?.name }}"/></target></segment>
     </unit><unit id="dashboardsOverviewPopular">
       <notes>
-        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:4</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:11</note></notes>
       <segment state="initial">
         <source>Beliebteste Dashboards</source>
       <target>Most upvoted dashboards</target></segment>
     </unit><unit id="dashboardsOverviewMostVisited">
       <notes>
-        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:8</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:15</note></notes>
       <segment state="initial">
         <source>Populärste Dashboards</source>
       <target>Most visited dashboards</target></segment>
     </unit><unit id="dashboardsOverviewNewest">
       <notes>
-        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:12</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:19</note></notes>
       <segment state="initial">
         <source>Neueste Dashboards</source>
       <target>Newest dashboards</target></segment>
