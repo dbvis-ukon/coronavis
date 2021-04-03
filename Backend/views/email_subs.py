@@ -181,6 +181,7 @@ def send_notifications():
             sub_id=row['id'],
             token=decrypt_message(row['token'].tobytes()),
             second_email=row['second_email'],
+            county_id=row['ags'],
 
             county_desc=desc,
             county_name=name,

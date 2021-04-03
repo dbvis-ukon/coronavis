@@ -2,6 +2,8 @@ Find the latest visualizations at https://coronavis.dbvis.de
 
 New data for {{ county_desc }} {{ county_name }}
 
+NEW: {{ county_desc }} {{ county_name }} as a dashboard: https://coronavis.dbvis.de/en/overview/dashboard/{{ county_id }}
+
 {% if second_email == True %}
 Since our first mail today there were more updates in this county:
 {% endif %}
