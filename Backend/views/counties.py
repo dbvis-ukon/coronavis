@@ -1,7 +1,4 @@
-import os
-from datetime import datetime, timedelta
-
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify
 
 from models.counties import County, county_schema
 

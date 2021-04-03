@@ -1,10 +1,12 @@
 from __future__ import with_statement
+
 import os
-from alembic import context
-from sqlalchemy import engine_from_config, pool, create_engine
 from logging.config import fileConfig
-from dotenv import load_dotenv
 from pathlib import Path  # Python 3.6+ only
+
+from alembic import context
+from dotenv import load_dotenv
+from sqlalchemy import create_engine
 
 if not load_dotenv():
     env_path = Path('.') / '..' / '..' / '.env'
@@ -24,6 +26,7 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 target_metadata = None
 
+
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
@@ -37,6 +40,7 @@ def get_url():
         os.getenv("DB_PORT"),
         os.getenv("DB_NAME"),
     )
+
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
@@ -76,6 +80,7 @@ def run_migrations_online():
 
         with context.begin_transaction():
             context.run_migrations()
+
 
 if context.is_offline_mode():
     run_migrations_offline()

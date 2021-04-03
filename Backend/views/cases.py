@@ -26,14 +26,24 @@ def get_cases_by_landkreise_per_day():
 
     sql_stmt = '''
 with cases_landkreise as (
-	select case when idlandkreis like '11___' then '11000' else idlandkreis end, DATE(meldedatum) as "date", SUM(case when casetype = 'case' then 1 else 0 end) as cases, SUM(case when casetype = 'death' then 1 else 0 end) as deaths
-	from cases_current
-	group by idlandkreis, DATE(meldedatum)
+    select 
+    case when idlandkreis like '11___' then '11000' else idlandkreis end as idlandkreis, 
+    DATE(meldedatum) as "date", 
+    SUM(case when casetype = 'case' then 1 else 0 end) as cases, 
+    SUM(case when casetype = 'death' then 1 else 0 end) as deaths
+    from cases_current
+    group by idlandkreis, DATE(meldedatum)
 )
-select vk.sn_l, vk.sn_r, vk.sn_k, vk.gen, JSON_AGG(JSON_BUILD_OBJECT('date', c."date" , 'cases', c.cases, 'deaths', c.deaths) ORDER by c."date") as cases, ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
-from vg250_krs vk join cases_landkreise c on vk.ags = c.idlandkreis
+select 
+    vk.sn_l, 
+    vk.sn_r, 
+    vk.sn_k, 
+    vk.gen, 
+    JSON_AGG(JSON_BUILD_OBJECT('date', c1."date" , 'cases', c1.cases, 'deaths', c1.deaths) ORDER by c1."date") as cases, 
+    ST_AsGeoJSON(ST_MakeValid(st_simplifyPreserveTopology(ST_union(vk.geom), 0.005))) as outline
+from vg250_krs vk join cases_landkreise c1 on vk.ags = c1.idlandkreis
 group by vk.sn_l, vk.sn_r, vk.sn_k, vk.gen 
-    '''
+'''
     sql_result = db.engine.execute(sql_stmt)
 
     d, features = {}, []
@@ -76,8 +86,8 @@ def get_cases_by_landkreise_total():
         Return all Hospitals
     """
 
-    hospitalsAggregated = db.session.query(CasesPerLandkreisToday).all()
-    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+    hospitals_aggregated = db.session.query(CasesPerLandkreisToday).all()
+    return jsonify(__as_feature_collection(hospitals_aggregated)), 200
 
 
 @routes.route('/landkreise/yesterday', methods=['GET'])
@@ -86,8 +96,8 @@ def get_cases_by_landkreise_yesterday():
     """
         Return all Hospitals
     """
-    hospitalsAggregated = db.session.query(CasesPerLandkreisYesterday).all()
-    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+    hospitals_aggregated = db.session.query(CasesPerLandkreisYesterday).all()
+    return jsonify(__as_feature_collection(hospitals_aggregated)), 200
 
 
 @routes.route('/landkreise/3daysbefore', methods=['GET'])
@@ -97,8 +107,8 @@ def get_cases_by_landkreise_3daysbefore():
         Return all Hospitals
     """
 
-    hospitalsAggregated = db.session.query(CasesPerLandkreis3DaysBefore).all()
-    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+    hospitals_aggregated = db.session.query(CasesPerLandkreis3DaysBefore).all()
+    return jsonify(__as_feature_collection(hospitals_aggregated)), 200
 
 
 @routes.route('/regierungsbezirke/total', methods=['GET'])
@@ -107,8 +117,8 @@ def get_cases_by_regierungsbezirke_total():
     """
         Return all Hospitals
     """
-    hospitalsAggregated = db.session.query(CasesPerRegierungsbezirkToday).all()
-    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+    hospitals_aggregated = db.session.query(CasesPerRegierungsbezirkToday).all()
+    return jsonify(__as_feature_collection(hospitals_aggregated)), 200
 
 
 @routes.route('/regierungsbezirke/yesterday', methods=['GET'])
@@ -117,9 +127,9 @@ def get_cases_by_regierungsbezirke_yesterday():
     """
         Return all Hospitals
     """
-    hospitalsAggregated = db.session.query(
+    hospitals_aggregated = db.session.query(
         CasesPerRegierungsbezirkYesterday).all()
-    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+    return jsonify(__as_feature_collection(hospitals_aggregated)), 200
 
 
 @routes.route('/regierungsbezirke/3daysbefore', methods=['GET'])
@@ -128,9 +138,9 @@ def get_cases_by_regierungsbezirke_3daysbefore():
     """
         Return all Hospitals
     """
-    hospitalsAggregated = db.session.query(
+    hospitals_aggregated = db.session.query(
         CasesPerRegierungsbezirk3DaysBefore).all()
-    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+    return jsonify(__as_feature_collection(hospitals_aggregated)), 200
 
 
 @routes.route('/bundeslaender/total', methods=['GET'])
@@ -139,8 +149,8 @@ def get_cases_by_bundeslaender_total():
     """
         Return all Hospitals
     """
-    hospitalsAggregated = db.session.query(CasesPerBundeslandToday).all()
-    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+    hospitals_aggregated = db.session.query(CasesPerBundeslandToday).all()
+    return jsonify(__as_feature_collection(hospitals_aggregated)), 200
 
 
 @routes.route('/bundeslaender/yesterday', methods=['GET'])
@@ -149,9 +159,9 @@ def get_cases_by_rebundeslaender_yesterday():
     """
         Return all Hospitals
     """
-    hospitalsAggregated = db.session.query(
+    hospitals_aggregated = db.session.query(
         CasesPerBundeslandYesterday).all()
-    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+    return jsonify(__as_feature_collection(hospitals_aggregated)), 200
 
 
 @routes.route('/bundeslaender/3daysbefore', methods=['GET'])
@@ -160,9 +170,9 @@ def get_cases_by_bundeslaender_3daysbefore():
     """
         Return all Hospitals
     """
-    hospitalsAggregated = db.session.query(
+    hospitals_aggregated = db.session.query(
         CasesPerBundesland3DaysBefore).all()
-    return jsonify(__as_feature_collection(hospitalsAggregated)), 200
+    return jsonify(__as_feature_collection(hospitals_aggregated)), 200
 
 
 cd = CaseDevelopments('cases_per_county_and_day')
@@ -208,47 +218,47 @@ def get_cases_development_by_countries():
         request.args.get('agegroups', type=bool))
 
 
-@routes.route('/development/landkreis/<idCounty>', methods=['GET'])
+@routes.route('/development/landkreis/<id_county>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
-def get_county(idCounty):
+def get_county(id_county):
     return cd.get_county(
         request.args.get('from'),
         request.args.get('to'),
-        idCounty,
+        id_county,
         request.args.get('agegroups', type=bool))
 
 
-@routes.route('/development/regierungsbezirk/<idDistrict>', methods=['GET'])
+@routes.route('/development/regierungsbezirk/<id_district>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
-def get_district(idDistrict):
+def get_district(id_district):
     return cd.get_district(
         request.args.get('from'),
         request.args.get('to'),
-        idDistrict,
+        id_district,
         request.args.get('agegroups', type=bool))
 
 
-@routes.route('/development/bundesland/<idState>', methods=['GET'])
+@routes.route('/development/bundesland/<id_state>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
-def get_state(idState):
+def get_state(id_state):
     return cd.get_state(
         request.args.get('from'),
         request.args.get('to'),
-        idState,
+        id_state,
         request.args.get('agegroups', type=bool))
 
 
-@routes.route('/development/land/<idCountry>', methods=['GET'])
+@routes.route('/development/land/<id_country>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
-def get_country(idCountry):
+def get_country(id_country):
     return cd.get_country(
         request.args.get('from'),
         request.args.get('to'),
-        idCountry,
+        id_country,
         request.args.get('agegroups', type=bool))
 
 
@@ -261,4 +271,4 @@ def get_aggregated():
         'regierungsbezirke': request.args.get('regierungsbezirke'),
         'bundeslaender': request.args.get('bundeslaender'),
         'laender': request.args.get('laender')
-    },request.args.get('from'), request.args.get('to'), request.args.get('agegroups', type=bool))
+    }, request.args.get('from'), request.args.get('to'), request.args.get('agegroups', type=bool))

@@ -4,6 +4,7 @@ from cryptography.fernet import Fernet
 # noinspection PyUnresolvedReferences
 import loadenv
 
+
 # https://devqa.io/encrypt-decrypt-data-python/
 
 def generate_key():

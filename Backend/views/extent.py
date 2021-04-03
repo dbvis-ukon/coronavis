@@ -36,7 +36,10 @@ def get_extent():
                 MAX(timestamp) as maxt
             FROM cases_per_county_and_day_risklayer
         )
-        SELECT to_char(MIN(mint), 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as mint, to_char(MAX(maxt), 'YYYY-MM-DD"T"HH24:MI:SSZ') AS maxt FROM allt
+        SELECT 
+        to_char(MIN(mint), 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as mint, to_char(MAX(maxt), 'YYYY-MM-DD"T"HH24:MI:SSZ') 
+            AS maxt 
+        FROM allt
     '''
     res = db.engine.execute(sql_stmt).fetchone()
 
