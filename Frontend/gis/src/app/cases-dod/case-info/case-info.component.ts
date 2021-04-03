@@ -78,7 +78,7 @@ export class CaseInfoComponent implements OnInit {
     this.updateChartOptions();
   }
 
-  updateChartOptions() {
+  updateChartOptions(auto=false) {
     this.chartOptions = {...this.chartOptions};
 
     const region: Region = {
@@ -88,9 +88,9 @@ export class CaseInfoComponent implements OnInit {
       aggLevel: this.chartOptions.aggregationLevel
     };
 
-    this.tableData$ = this.tableOverviewService.compileToDataAndOptions(this.configService.parseConfig(this.chartOptions, 'table', false).config, [region]);
+    this.tableData$ = this.tableOverviewService.compileToDataAndOptions(this.configService.parseConfig(this.chartOptions, 'table', auto).config, [region]);
 
-    this.vegaPixelchartService.compileToDataAndOptions(this.configService.parseConfig(this.chartOptions, 'pixel', false).config, [region], false)
+    this.vegaPixelchartService.compileToDataAndOptions(this.configService.parseConfig(this.chartOptions, 'pixel', false).config, [region], auto)
     .subscribe(d => this.pixelChartDataAndOptions = d);
   }
 

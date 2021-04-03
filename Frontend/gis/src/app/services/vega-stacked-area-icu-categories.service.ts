@@ -48,159 +48,283 @@ export class VegaStackedAreaIcuCategoriesService {
     },
     "vconcat": [
       {
-        "width": 500,
+        "width": 1218,
         "height": 50,
-        "mark": {"type": "area", "interpolate": "step-after", "tooltip": true},
-        "params": [
+        "layer": [
           {
-            "name": "hover",
-            "select": {"type": "point", "fields": ["availability"]},
-            "bind": {"legend": "mouseover"}
-          }
-        ],
-        "transform": [
-          {"filter": "datum.icuCategory == 'icu_low'"},
-          {"filter": {"param": "hover", "empty": true}}
-        ],
-        "encoding": {
-          "x": {
-            "field": "date",
-            "type": "temporal",
-            "title": "",
-            "scale": {}
+            "mark": {"type": "area", "interpolate": "step-after", "tooltip": true},
+            "encoding": {
+              "x": {
+                "field": "date",
+                "type": "temporal",
+                "title": "",
+                "scale": {"domain": ["2020-01-23", "2021-04-03"]}
+              },
+              "y": {
+                "field": "numberOfHospitals",
+                "type": "quantitative",
+                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
+                "scale": {"domain": [0, 38], "type": "linear"},
+                "title": ["ICU Low", "# Hospitals"]
+              },
+              "color": {
+                "type": "nominal",
+                "field": "availability",
+                "title": "Kategorie",
+                "scale": {
+                  "domain": [
+                    "Verfügbar",
+                    "Begrenzt",
+                    "Ausgelastet",
+                    "Nicht verfügbar",
+                    "Keine Information"
+                  ],
+                  "range": [
+                    "rgb(113,167,133)",
+                    "rgb(230,181,72)",
+                    "rgb(198,106,75)",
+                    "#c2cbd4",
+                    "#bbb"
+                  ]
+                },
+                "legend": {"orient": "bottom"}
+              }
+            },
+            "params": [
+              {
+                "name": "hover",
+                "select": {"type": "point", "fields": ["availbility"]},
+                "bind": {"legend": "mouseover"}
+              }
+            ],
+            "transform": [
+              {"filter": "datum.icuCategory == 'icu_low'"},
+              {"filter": {"param": "hover", "empty": true}}
+            ]
           },
-          "y": {
-            "field": "numberOfHospitals",
-            "type": "quantitative",
-            "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
-            "scale": {"domain": [0, 6]},
-            "title": ["ICU Low", "# Hospitals"]
-          },
-          "color": {
-            "type": "nominal",
-            "field": "availability",
-            "scale": {
-              "domain": [
-                "Verfügbar",
-                "Begrenzt",
-                "Ausgelastet",
-                "Nicht verfügbar",
-                "Keine Information"
-              ],
-              "range": [
-                "rgb(113,167,133)",
-                "rgb(230,181,72)",
-                "rgb(198,106,75)",
-                "#c2cbd4",
-                "#bbb"
-              ]
-            }
-          }
-        }
-      },
-      {
-        "width": 500,
-        "height": 50,
-        "mark": {"type": "area", "interpolate": "step-after", "tooltip": true},
-        "params": [
           {
-            "name": "hover",
-            "select": {"type": "point", "fields": ["availability"]},
-            "bind": {"legend": "mouseover"}
-          }
-        ],
-        "transform": [
-          {"filter": "datum.icuCategory == 'icu_high'"},
-          {"filter": {"param": "hover", "empty": true}}
-        ],
-        "encoding": {
-          "x": {
-            "field": "date",
-            "type": "temporal",
-            "title": "",
-            "scale": {}
-          },
-          "y": {
-            "field": "numberOfHospitals",
-            "type": "quantitative",
-            "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
-            "scale": {"domain": [0, 6]},
-            "title": ["ICU High", "# Hospitals"]
-          },
-          "color": {
-            "type": "nominal",
-            "field": "availability",
-            "scale": {
-              "domain": [
-                "Verfügbar",
-                "Begrenzt",
-                "Ausgelastet",
-                "Nicht verfügbar",
-                "Keine Information"
-              ],
-              "range": [
-                "rgb(113,167,133)",
-                "rgb(230,181,72)",
-                "rgb(198,106,75)",
-                "#c2cbd4",
-                "#bbb"
-              ]
-            }
-          }
-        }
-      },
-      {
-        "width": 500,
-        "height": 50,
-        "mark": {"type": "area", "interpolate": "step-after", "tooltip": true},
-        "params": [
-          {
-            "name": "hover",
-            "select": {"type": "point", "fields": ["availbility"]},
-            "bind": {"legend": "mouseover"}
-          }
-        ],
-        "transform": [
-          {"filter": "datum.icuCategory == 'ecmo'"},
-          {"filter": {"param": "hover", "empty": true}}
-        ],
-        "encoding": {
-          "x": {
-            "field": "date",
-            "type": "temporal",
-            "title": "",
-            "scale": {}
-          },
-          "y": {
-            "field": "numberOfHospitals",
-            "type": "quantitative",
-            "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
-            "scale": {"domain": [0, 6]},
-            "title": ["ECMO", "# Hospitals"]
-          },
-          "color": {
-            "type": "nominal",
-            "field": "availability",
-            "title": "Kategorie",
-            "scale": {
-              "domain": [
-                "Verfügbar",
-                "Begrenzt",
-                "Ausgelastet",
-                "Nicht verfügbar",
-                "Keine Information"
-              ],
-              "range": [
-                "rgb(113,167,133)",
-                "rgb(230,181,72)",
-                "rgb(198,106,75)",
-                "#c2cbd4",
-                "#bbb"
+            "transform": [
+              {"pivot": "availability", "value": "numberOfHospitals", "groupby": ["date"]}
+            ],
+            "mark": "rule",
+            "encoding": {
+              "x": {
+                "field": "date",
+                "type": "temporal"
+              },
+              "opacity": {
+                "condition": {"value": 0.3, "param": "hover2", "empty": false},
+                "value": 0
+              },
+              "tooltip": [
+                {"field": "date", "type": "temporal", "title": "Date"},
+                {"field": "Verfügbar", "type": "quantitative"},
+                {"field": "Begrenzt", "type": "quantitative"},
+                {"field": "Ausgelastet", "type": "quantitative"},
+                {"field": "Nicht verfügbar", "type": "quantitative"},
+                {"field": "Keine Information", "type": "quantitative"}
               ]
             },
-            "legend": {"orient": "bottom"}
+            "params": [
+              {
+                "name": "hover2",
+                "select": {
+                  "type": "point",
+                  "fields": ["date"],
+                  "nearest": true,
+                  "on": "mouseover",
+                  "clear": "mouseout"
+                }
+              }
+            ]
           }
-        }
+        ]
+      },
+      {
+        "width": 1218,
+        "height": 50,
+        "layer": [
+          {
+            "mark": {"type": "area", "interpolate": "step-after", "tooltip": true},
+            "encoding": {
+              "x": {
+                "field": "date",
+                "type": "temporal",
+                "title": "",
+                "scale": {"domain": ["2020-01-23", "2021-04-03"]}
+              },
+              "y": {
+                "field": "numberOfHospitals",
+                "type": "quantitative",
+                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
+                "scale": {"domain": [0, 38], "type": "linear"},
+                "title": ["ICU High", "# Hospitals"]
+              },
+              "color": {
+                "type": "nominal",
+                "field": "availability",
+                "title": "Kategorie",
+                "scale": {
+                  "domain": [
+                    "Verfügbar",
+                    "Begrenzt",
+                    "Ausgelastet",
+                    "Nicht verfügbar",
+                    "Keine Information"
+                  ],
+                  "range": [
+                    "rgb(113,167,133)",
+                    "rgb(230,181,72)",
+                    "rgb(198,106,75)",
+                    "#c2cbd4",
+                    "#bbb"
+                  ]
+                },
+                "legend": {"orient": "bottom"}
+              }
+            },
+            "params": [
+              {
+                "name": "hover",
+                "select": {"type": "point", "fields": ["availbility"]},
+                "bind": {"legend": "mouseover"}
+              }
+            ],
+            "transform": [
+              {"filter": "datum.icuCategory == 'icu_high'"},
+              {"filter": {"param": "hover", "empty": true}}
+            ]
+          },
+          {
+            "transform": [
+              {"pivot": "availability", "value": "numberOfHospitals", "groupby": ["date"]}
+            ],
+            "mark": "rule",
+            "encoding": {
+              "x": {
+                "field": "date",
+                "type": "temporal"
+              },
+              "opacity": {
+                "condition": {"value": 0.3, "param": "hover2", "empty": false},
+                "value": 0
+              },
+              "tooltip": [
+                {"field": "date", "type": "temporal", "title": "Date"},
+                {"field": "Verfügbar", "type": "quantitative"},
+                {"field": "Begrenzt", "type": "quantitative"},
+                {"field": "Ausgelastet", "type": "quantitative"},
+                {"field": "Nicht verfügbar", "type": "quantitative"},
+                {"field": "Keine Information", "type": "quantitative"}
+              ]
+            },
+            "params": [
+              {
+                "name": "hover2",
+                "select": {
+                  "type": "point",
+                  "fields": ["date"],
+                  "nearest": true,
+                  "on": "mouseover",
+                  "clear": "mouseout"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "width": 1218,
+        "height": 50,
+        "layer": [
+          {
+            "mark": {"type": "area", "interpolate": "step-after", "tooltip": true},
+            "encoding": {
+              "x": {
+                "field": "date",
+                "type": "temporal",
+                "title": "",
+                "scale": {"domain": ["2020-01-23", "2021-04-03"]}
+              },
+              "y": {
+                "field": "numberOfHospitals",
+                "type": "quantitative",
+                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
+                "scale": {"domain": [0, 38], "type": "linear"},
+                "title": ["ECMO", "# Hospitals"]
+              },
+              "color": {
+                "type": "nominal",
+                "field": "availability",
+                "title": "Kategorie",
+                "scale": {
+                  "domain": [
+                    "Verfügbar",
+                    "Begrenzt",
+                    "Ausgelastet",
+                    "Nicht verfügbar",
+                    "Keine Information"
+                  ],
+                  "range": [
+                    "rgb(113,167,133)",
+                    "rgb(230,181,72)",
+                    "rgb(198,106,75)",
+                    "#c2cbd4",
+                    "#bbb"
+                  ]
+                },
+                "legend": {"orient": "bottom"}
+              }
+            },
+            "params": [
+              {
+                "name": "hover",
+                "select": {"type": "point", "fields": ["availbility"]},
+                "bind": {"legend": "mouseover"}
+              }
+            ],
+            "transform": [
+              {"filter": "datum.icuCategory == 'ecmo'"},
+              {"filter": {"param": "hover", "empty": true}}
+            ]
+          },
+          {
+            "transform": [
+              {"pivot": "availability", "value": "numberOfHospitals", "groupby": ["date"]}
+            ],
+            "mark": "rule",
+            "encoding": {
+              "x": {
+                "field": "date",
+                "type": "temporal"
+              },
+              "opacity": {
+                "condition": {"value": 0.3, "param": "hover2", "empty": false},
+                "value": 0
+              },
+              "tooltip": [
+                {"field": "date", "type": "temporal", "title": "Date"},
+                {"field": "Verfügbar", "type": "quantitative"},
+                {"field": "Begrenzt", "type": "quantitative"},
+                {"field": "Ausgelastet", "type": "quantitative"},
+                {"field": "Nicht verfügbar", "type": "quantitative"},
+                {"field": "Keine Information", "type": "quantitative"}
+              ]
+            },
+            "params": [
+              {
+                "name": "hover2",
+                "select": {
+                  "type": "point",
+                  "fields": ["date"],
+                  "nearest": true,
+                  "on": "mouseover",
+                  "clear": "mouseout"
+                }
+              }
+            ]
+          }
+        ]
       }
     ]
   };

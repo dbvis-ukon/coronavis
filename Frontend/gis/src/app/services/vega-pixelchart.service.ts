@@ -163,10 +163,10 @@ export class VegaPixelchartService {
             "format": ".0f"
           },
           "color": {
-            "condition": {
-              "test": "datum['val'] > 300",
-              "value": "black"
-            },
+            "condition": [
+              {"value": "black", "test": "datum.val > 792"},
+              {"value": "grey", "test": "datum.val == 0"}
+            ],
             "value": "lightgrey"
           },
           "tooltip": [{
@@ -391,7 +391,7 @@ export class VegaPixelchartService {
     }
 
     const colorBreakpoint = chartOptions.domain[1] * 0.6;
-    spec.layer[1].encoding.color.condition.test = "datum.val > " + Math.round(colorBreakpoint);
+    spec.layer[1].encoding.color.condition[0].test = "datum.val > " + Math.round(colorBreakpoint);
 
     console.log(JSON.stringify(spec));
 
