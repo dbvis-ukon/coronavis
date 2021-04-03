@@ -30,6 +30,7 @@ import { MultiLineChartComponent } from './multi-line-chart/multi-line-chart.com
 import { RegionSelectorComponent } from './region-selector/region-selector.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TitleEditDialogComponent } from './title-edit-dialog/title-edit-dialog.component';
+import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { TitleEditDialogComponent } from './title-edit-dialog/title-edit-dialog.
     RegionSelectorComponent,
     TitleEditDialogComponent,
     DashboardsOverviewComponent,
-    DashboardsTableComponent
+    DashboardsTableComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,

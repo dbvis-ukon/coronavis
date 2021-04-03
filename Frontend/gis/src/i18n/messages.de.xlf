@@ -1783,6 +1783,20 @@
       <segment state="final">
         <source> Erstellt </source>
       <target> Erstellt </target></segment>
+    </unit><unit id="imprint">
+      <notes>
+        <note category="location">src/app/overview/dashboard/footer/footer.component.html:12</note>
+      </notes>
+      <segment state="final">
+        <source>Impressum</source>
+      <target>Impressum</target></segment>
+    </unit><unit id="gdpr">
+      <notes>
+        <note category="location">src/app/overview/dashboard/footer/footer.component.html:13</note>
+      </notes>
+      <segment state="final">
+        <source>Datenschutzerklärung</source>
+      <target>Datenschutzerklärung</target></segment>
     </unit><unit id="chartSettingsAggregation">
       <notes>
         
