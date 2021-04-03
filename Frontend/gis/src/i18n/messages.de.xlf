@@ -128,7 +128,7 @@
     </unit><unit id="csaeDodScaling">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:82</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:154</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:82</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:181</note></notes>
       <segment state="final">
         <source>Skalierung</source>
       <target>Skalierung</target></segment>
@@ -163,28 +163,28 @@
     </unit><unit id="caseDodYAxisAltersgruppe">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:1</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:1</note></notes>
+      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:1</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:1</note><note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:1</note></notes>
       <segment state="final">
         <source>Altersgruppe</source>
       <target>Altersgruppe</target></segment>
     </unit><unit id="caseDodXAxisDatum">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:2</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:2</note></notes>
+      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:2</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:2</note><note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:2</note></notes>
       <segment state="final">
         <source>Datum</source>
       <target>Datum</target></segment>
     </unit><unit id="caseDodXAxisWoche">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:3</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:3</note></notes>
+      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:3</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:3</note><note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:3</note></notes>
       <segment state="final">
         <source>Woche</source>
       <target>Woche</target></segment>
     </unit><unit id="caseDodZAxisVal">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:4</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:4</note></notes>
+      <note category="location">src/app/overview/dashboard/multi-line-chart/multi-line-chart.component.html:4</note><note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:4</note><note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:4</note></notes>
       <segment state="final">
         <source>7-Tages-Inzidenz</source>
       <target>7-Tages-Inzidenz</target></segment>
@@ -204,11 +204,11 @@
       <target>Region suchen</target></segment>
     </unit><unit id="regionSelectorMaximumRegions">
       <notes>
-        <note category="location">src/app/overview/dashboard/region-selector/region-selector.component.html:17</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/region-selector/region-selector.component.html:18</note></notes>
       <segment state="final">
-        <source>Die maximale Anzahl an Regionen ist erreicht.</source>
-      <target>Die maximale Anzahl an Regionen ist erreicht.</target></segment>
+        <source>Die maximale Anzahl an Regionen ist überschritten.</source>
+      <target>Die maximale Anzahl an Regionen ist überschritten.</target></segment>
     </unit><unit id="chartSettingsTitle">
       <notes>
         <note category="location">src/app/overview/dashboard/settings/settings.component.html:1</note>
@@ -219,12 +219,28 @@
     </unit><unit id="agegroupChartLastWeekHint">
       <notes>
         
-      <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:16</note></notes>
+      <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:17</note></notes>
       <segment state="final">
         <source> Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
 </source>
       <target> Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
 </target></segment>
+    </unit><unit id="stackedAreaChartTitle">
+      <notes>
+        <note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:6,8</note>
+      </notes>
+      <segment state="final">
+        <source> Anzahl Krankenhäuser und deren Auslastung pro Bettenkategorie für <ph id="0" equiv="INTERPOLATION" disp="{{ _dataAndOptions.chartOptions.titleRegions }"/>
+</source>
+      <target> Anzahl Krankenhäuser und deren Auslastung pro Bettenkategorie für <ph id="0" equiv="INTERPOLATION" disp="{{ _dataAndOptions.chartOptions.titleRegions }"/>
+</target></segment>
+    </unit><unit id="stackedAreaChartHint">
+      <notes>
+        <note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:16</note>
+      </notes>
+      <segment state="final">
+        <source> ICU Low = Nicht-invasive Beatmung; ICU High = Invsive Beatmung; ECMO = <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://de.wikipedia.org/wiki/Extrakorporale_Membranoxygenierung&quot;>" dispEnd="&lt;/a>">Extrakorporale Membranoxygenierung</pc></source>
+      <target> ICU Low = Nicht-invasive Beatmung; ICU High = Invsive Beatmung; ECMO = <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://de.wikipedia.org/wiki/Extrakorporale_Membranoxygenierung&quot;>" dispEnd="&lt;/a>">Extrakorporale Membranoxygenierung</pc></target></segment>
     </unit><unit id="caseLineChartAccumulated">
       <notes>
         <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:1</note>
@@ -1394,7 +1410,7 @@
     </unit><unit id="tooltipDataSourceRKI">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:10</note><note category="location">src/app/infobox/infobox.component.html:241</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:76</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:10</note><note category="location">src/app/infobox/infobox.component.html:241</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:98</note></notes>
       <segment state="final">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institut</target></segment>
@@ -1410,7 +1426,7 @@
     </unit><unit id="tooltipDataSourceRisklayer">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:13</note><note category="location">src/app/infobox/infobox.component.html:244</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:79</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:13</note><note category="location">src/app/infobox/infobox.component.html:244</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:102</note></notes>
       <segment state="final">
         <source>Live-Ansicht Risklayer Daten</source>
       <target>Live-Ansicht Risklayer Daten</target></segment>
@@ -1602,6 +1618,13 @@
       <segment state="final">
         <source>Sprache</source>
       <target>Sprache</target></segment>
+    </unit><unit id="caseDodZAxisValDeaths">
+      <notes>
+        <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:5</note>
+      </notes>
+      <segment state="final">
+        <source>Neue Todesfälle /7 Tage /100k Einwohner</source>
+      <target>Neue Todesfälle /7 Tage /100k Einwohner</target></segment>
     </unit><unit id="legendDiviAddition">
       <notes>
         
@@ -1707,42 +1730,42 @@
     </unit><unit id="dashboardAddTextBlock">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:140</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:144</note></notes>
       <segment state="final">
         <source>Neuen Textblock hinzufügen</source>
       <target>Neuen Textblock hinzufügen</target></segment>
     </unit><unit id="dasboardAddChart">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:141</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:145</note></notes>
       <segment state="final">
         <source>Neuen Chart hinzufügen</source>
       <target>Neuen Chart hinzufügen</target></segment>
     </unit><unit id="dashboardsOverviewNew">
       <notes>
-        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:2</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:7</note></notes>
       <segment state="final">
-        <source>Neues Dashboard</source>
-      <target>Neues Dashboard</target></segment>
+        <source>Neues Dashboard für <ph id="0" equiv="INTERPOLATION" disp="{{ selectedRegions[0]?.name }}"/></source>
+      <target>Neues Dashboard für <ph id="0" equiv="INTERPOLATION" disp="{{ selectedRegions[0]?.name }}"/></target></segment>
     </unit><unit id="dashboardsOverviewPopular">
       <notes>
-        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:4</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:11</note></notes>
       <segment state="final">
         <source>Beliebteste Dashboards</source>
       <target>Beliebteste Dashboards</target></segment>
     </unit><unit id="dashboardsOverviewMostVisited">
       <notes>
-        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:8</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:15</note></notes>
       <segment state="final">
         <source>Populärste Dashboards</source>
       <target>Populärste Dashboards</target></segment>
     </unit><unit id="dashboardsOverviewNewest">
       <notes>
-        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:12</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:19</note></notes>
       <segment state="final">
         <source>Neueste Dashboards</source>
       <target>Neueste Dashboards</target></segment>
@@ -1762,36 +1785,50 @@
       <target> Erstellt </target></segment>
     </unit><unit id="chartSettingsAggregation">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:5</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:7</note></notes>
       <segment state="final">
         <source>Chart</source>
       <target>Chart</target></segment>
     </unit><unit id="chartSettingsViewTable">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:14,15</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:11</note></notes>
       <segment state="final">
         <source>Tabelle </source>
       <target>Tabelle </target></segment>
     </unit><unit id="chartSettingsViewMultiSeries">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:16,17</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:13</note></notes>
       <segment state="final">
         <source>Multi-Series-Linechart </source>
       <target>Multi-Series-Linechart </target></segment>
     </unit><unit id="chartSettingsViewAgegroups">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:18,19</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:15</note></notes>
       <segment state="final">
         <source>Altersgruppen </source>
       <target>Altersgruppen </target></segment>
+    </unit><unit id="chartSettingsViewStackedAreaIcu">
+      <notes>
+        
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:17</note></notes>
+      <segment state="final">
+        <source>Bettenauslastung (kategorisch) </source>
+      <target>Bettenauslastung (kategorisch) </target></segment>
+    </unit><unit id="chartSettingsChartTypeHint">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:22</note>
+      </notes>
+      <segment state="final">
+        <source>Was möchtest du gerne sehen?</source>
+      <target>Was möchtest du gerne sehen?</target></segment>
     </unit><unit id="pleaseWaitLoading">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:62</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:33</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:62</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:67</note></notes>
       <segment state="final">
         <source>Bitte warten... lädt</source>
       <target>Bitte warten... lädt</target></segment>
@@ -1818,246 +1855,344 @@
       <target>Text bearbeiten</target></segment>
     </unit><unit id="chartSettingsMinimumOneRegion">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:35</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:70</note></notes>
       <segment state="final">
         <source>Es muss mindestens eine Region ausgewählt werden.</source>
       <target>Es muss mindestens eine Region ausgewählt werden.</target></segment>
     </unit><unit id="chartSettingsAutoConfigureButton">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:40</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:77</note></notes>
       <segment state="final">
         <source><pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon>" dispEnd="&lt;/mat-icon>">auto_fix_high</pc> Automatische Konfiguration</source>
       <target><pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon>" dispEnd="&lt;/mat-icon>">auto_fix_high</pc> Automatische Konfiguration</target></segment>
     </unit><unit id="chartSettingsAutoConfigureTooltip">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:42</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:81</note></notes>
       <segment state="final">
         <source>Mit der Autokonfiguration werden die Einstellungen für den Chart und die Art der Daten mit den von uns empfohlenen Einstellungen für die beste Lesbarkeit konfiguriert.</source>
       <target>Mit der Autokonfiguration werden die Einstellungen für den Chart und die Art der Daten mit den von uns empfohlenen Einstellungen für die beste Lesbarkeit konfiguriert.</target></segment>
     </unit><unit id="chartSettingsType">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:48</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:26</note></notes>
       <segment state="final">
         <source>Art</source>
       <target>Art</target></segment>
     </unit><unit id="chartSettingsTypeSick">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:51</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:30</note></notes>
       <segment state="final">
         <source>Positiv Getestet </source>
       <target>Positiv Getestet </target></segment>
     </unit><unit id="chartSettingsTypeDeath">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:53</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:33</note></notes>
       <segment state="final">
         <source>Todesfälle </source>
       <target>Todesfälle </target></segment>
     </unit><unit id="chartSettingsTypePatients">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:55</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:36</note></notes>
       <segment state="final">
         <source>Patienten </source>
       <target>Patienten </target></segment>
     </unit><unit id="chartSettingsTypePatientsVentilated">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:57</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:39</note></notes>
       <segment state="final">
         <source>Patienten (beatmet) </source>
       <target>Patienten (beatmet) </target></segment>
     </unit><unit id="chartSettingsTypeBedOccupancyPercent">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:59</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:42</note></notes>
       <segment state="final">
         <source>Bettenauslastung (%) </source>
       <target>Bettenauslastung (%) </target></segment>
+    </unit><unit id="chartSettingsTypeHint">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:46</note>
+      </notes>
+      <segment state="final">
+        <source>Welche Daten möchtest du gerne sehen?</source>
+      <target>Welche Daten möchtest du gerne sehen?</target></segment>
     </unit><unit id="chartSettingsDataSource">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:65</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:90</note></notes>
       <segment state="final">
         <source>Daten Quelle</source>
       <target>Daten Quelle</target></segment>
     </unit><unit id="chartSettingsDataSourceRKI">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:76</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:98</note></notes>
       <segment state="final">
         <source>RKI </source>
       <target>RKI </target></segment>
     </unit><unit id="chartSettingsDataSourceRisklayer">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:79</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:102</note></notes>
       <segment state="final">
         <source>Risklayer </source>
       <target>Risklayer </target></segment>
     </unit><unit id="tooltipDataSourceSurvstat">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:83</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:107</note></notes>
       <segment state="final">
         <source>DIVI Intensivregister</source>
       <target>DIVI Intensivregister</target></segment>
     </unit><unit id="chartSettingsDataSourceDivi">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:83</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:107</note></notes>
       <segment state="final">
         <source>DIVI </source>
       <target>DIVI </target></segment>
     </unit><unit id="chartSettingsDataSourceSurvstat">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:86</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:111</note></notes>
       <segment state="final">
         <source>SurvStat @ RKI </source>
       <target>SurvStat @ RKI </target></segment>
     </unit><unit id="chartSettingsNorm">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:93</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:118</note></notes>
       <segment state="final">
         <source>Normalisierung</source>
       <target>Normalisierung</target></segment>
     </unit><unit id="chartSettingsNornNone">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:100</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:125</note></notes>
       <segment state="final">
         <source>Keine Normalisierung </source>
       <target>Keine Normalisierung </target></segment>
     </unit><unit id="chartSettingsNornYes">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:103</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:129</note></notes>
       <segment state="final">
         <source>Je 100.000 Einwohner </source>
       <target>Je 100.000 Einwohner </target></segment>
     </unit><unit id="chartSettingsTime">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:110</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:136</note></notes>
       <segment state="final">
         <source>Zeitraum Veränderung</source>
       <target>Zeitraum Veränderung</target></segment>
     </unit><unit id="chartSettingsTimeAll">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:116</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:142</note></notes>
       <segment state="final">
         <source>Aktuell</source>
       <target>Aktuell</target></segment>
     </unit><unit id="chartSettingsTime24">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:118</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:144</note></notes>
       <segment state="final">
         <source>24 Std. </source>
       <target>24 Std. </target></segment>
     </unit><unit id="chartSettingsTime72">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:120</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:146</note></notes>
       <segment state="final">
         <source>72 Std. </source>
       <target>72 Std. </target></segment>
     </unit><unit id="chartSettingsTime7Days">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:123</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:149</note></notes>
       <segment state="final">
         <source>7 Tage </source>
       <target>7 Tage </target></segment>
     </unit><unit id="chartSettingsGranularity">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:129</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:155</note></notes>
       <segment state="final">
         <source>Granularität (Zeit)</source>
       <target>Granularität (Zeit)</target></segment>
     </unit><unit id="chartSettingsGranularityDaily">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:132</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:158</note></notes>
       <segment state="final">
         <source>Täglich</source>
       <target>Täglich</target></segment>
     </unit><unit id="chartSettingsGranularityWeekly">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:134</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:161</note></notes>
       <segment state="final">
         <source>Wöchentlich</source>
       <target>Wöchentlich</target></segment>
     </unit><unit id="chartSettingsAgeBinning">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:139</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:166</note></notes>
       <segment state="final">
         <source>Altersgruppen</source>
       <target>Altersgruppen</target></segment>
     </unit><unit id="chartSettingsAgeGroupBinningAll">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:146</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:172</note></notes>
       <segment state="final">
         <source>Altersjahre</source>
       <target>Altersjahre</target></segment>
     </unit><unit id="chartSettingsAgeGroupBinningFiveYears">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:148</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:174</note></notes>
       <segment state="final">
         <source>5 Jahre</source>
       <target>5 Jahre</target></segment>
     </unit><unit id="chartSettingsAgeGroupBinningRKI">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:149</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:175</note></notes>
       <segment state="final">
         <source>RKI Schema</source>
       <target>RKI Schema</target></segment>
     </unit><unit id="chartSettingsScalingLinear">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:157</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:185</note></notes>
       <segment state="final">
         <source>Linear</source>
       <target>Linear</target></segment>
     </unit><unit id="chartSettingsScalingSqrt">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:158</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:186</note></notes>
       <segment state="final">
         <source>Quadratwurzel</source>
       <target>Quadratwurzel</target></segment>
     </unit><unit id="chartSettingsScalingLog">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:159</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:187</note></notes>
       <segment state="final">
         <source>Logarithmisch</source>
       <target>Logarithmisch</target></segment>
     </unit><unit id="chartSettingsScalingHint">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:162</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:191</note></notes>
       <segment state="final">
         <source>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</source>
       <target>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</target></segment>
+    </unit><unit id="chartSettingsTemporalExtentTitle">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:196</note>
+      </notes>
+      <segment state="final">
+        <source>Zeitlicher Umfang</source>
+      <target>Zeitlicher Umfang</target></segment>
+    </unit><unit id="chartSettingsTemporalExtentGlobal">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:200</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:253</note>
+      </notes>
+      <segment state="final">
+        <source>Global</source>
+      <target>Global</target></segment>
+    </unit><unit id="chartSettingsTemporalExtentLocal">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:201</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:254</note>
+      </notes>
+      <segment state="final">
+        <source>Lokal</source>
+      <target>Lokal</target></segment>
+    </unit><unit id="chartSettingsTemporalExtentManual">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:202</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:255</note>
+      </notes>
+      <segment state="final">
+        <source>Manuell</source>
+      <target>Manuell</target></segment>
+    </unit><unit id="chartSettingsLastVisibleDays">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:209</note>
+      </notes>
+      <segment state="final">
+        <source>Anzahl der letzen sichtbaren Tage</source>
+      <target>Anzahl der letzen sichtbaren Tage</target></segment>
+    </unit><unit id="chartSettingsDays">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:211</note>
+      </notes>
+      <segment state="final">
+        <source>Tage</source>
+      <target>Tage</target></segment>
+    </unit><unit id="chartSettingsOr">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:217,218</note>
+      </notes>
+      <segment state="final">
+        <source> ODER </source>
+      <target> ODER </target></segment>
+    </unit><unit id="chartSettingsFrom">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:222</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:262</note>
+      </notes>
+      <segment state="final">
+        <source>Von</source>
+      <target>Von</target></segment>
+    </unit><unit id="chartSettingsTo">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:230</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:267</note>
+      </notes>
+      <segment state="final">
+        <source>Bis</source>
+      <target>Bis</target></segment>
+    </unit><unit id="chartSettingsUpdatePreview">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:239</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:273</note>
+      </notes>
+      <segment state="final">
+        <source>Vorschau aktualisieren</source>
+      <target>Vorschau aktualisieren</target></segment>
+    </unit><unit id="chartSettingsTemporalExtentHint">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:244,245</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:278,279</note>
+      </notes>
+      <segment state="final">
+        <source>Global macht Charts besser vergleichbar. Lokal hebt Eigenschaften in den Daten eines Charts besser hervor.</source>
+      <target>Global macht Charts besser vergleichbar. Lokal hebt Eigenschaften in den Daten eines Charts besser hervor.</target></segment>
+    </unit><unit id="chartSettingsValueExtentTitle">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:249</note>
+      </notes>
+      <segment state="final">
+        <source>Werte Umfang</source>
+      <target>Werte Umfang</target></segment>
     </unit><unit id="chartSettingsHasError">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:169</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:287</note></notes>
       <segment state="final">
         <source>Es gibt einen Fehler. Bitte prüfe deine Konfiguration.</source>
       <target>Es gibt einen Fehler. Bitte prüfe deine Konfiguration.</target></segment>
@@ -2065,7 +2200,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:110</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:171</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:110</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:291</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
       <segment state="final">
         <source>Speichern</source>
       <target>Speichern</target></segment>
@@ -2073,7 +2208,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:111</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:172</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:111</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:292</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
       <segment state="final">
         <source>Abbrechen</source>
       <target>Abbrechen</target></segment>

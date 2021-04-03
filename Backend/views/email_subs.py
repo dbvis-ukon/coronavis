@@ -7,6 +7,7 @@ from prometheus import metrics
 
 routes = Blueprint('email-subs', __name__, url_prefix='/sub')
 
+# noinspection PyPep8
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import Forbidden
 
@@ -16,9 +17,10 @@ from models.email_subs import EmailSub, EmailSubsSchema, email_subs_schema, Subs
 from services.crypt_service import decrypt_message
 # noinspection PyUnresolvedReferences
 from psycopg2.errors import UniqueViolation
-from models.risklayer_prognosis import RisklayerPrognosis
+from models.risklayerPrognosis import RisklayerPrognosis
 
 
+# noinspection PyPep8
 @routes.route('/', methods=['POST'])
 def subscribe_new():
     """
@@ -61,6 +63,7 @@ def subscribe_new():
         print(ex)
         assert isinstance(ex.orig, UniqueViolation)  # proves the original exception
         db.session.rollback()
+        # noinspection PyPep8
         sub = db.session.query(EmailSub) \
             .filter(EmailSub.verified == False, EmailSub.email_hash == request.json['email']) \
             .first()
@@ -178,6 +181,7 @@ def send_notifications():
             sub_id=row['id'],
             token=decrypt_message(row['token'].tobytes()),
             second_email=row['second_email'],
+            county_id=row['ags'],
 
             county_desc=desc,
             county_name=name,

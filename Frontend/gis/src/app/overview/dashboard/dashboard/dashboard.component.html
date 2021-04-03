@@ -76,7 +76,7 @@
                     <mat-icon>settings</mat-icon>
                 </button> 
 
-                <button *ngIf="timelineItem.type === 'multiline' || timelineItem.type === 'pixel'" mat-icon-button aria-label="download" class="icon filter" (click)="downloadData(timelineItem)" matTooltip="Download data as CSV">
+                <button *ngIf="timelineItem.type === 'multiline' || timelineItem.type === 'pixel' || timelineItem.type === 'stackedareaicu'" mat-icon-button aria-label="download" class="icon filter" (click)="downloadData(timelineItem)" matTooltip="Download data as CSV">
                   <mat-icon>download</mat-icon>
                 </button>
     
@@ -128,6 +128,10 @@
 
               <div *ngIf="timelineItem.type === 'table'" style="width: 100%">
                 <app-table-overview [tableData$]="timelineItem._compiled"></app-table-overview>
+              </div>
+
+              <div *ngIf="timelineItem.type === 'stackedareaicu'" style="width: 100%">
+                <app-stacked-area-icu-chart [dataAndOptions]="timelineItem._compiled"></app-stacked-area-icu-chart>
               </div>
             </div>
       

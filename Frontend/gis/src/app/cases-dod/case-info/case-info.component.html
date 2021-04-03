@@ -18,7 +18,7 @@
   <div class="toggleGroup">
     <h5 i18n="@@infoboxType">Art</h5>
     <mat-button-toggle-group class="btngrp" name="fontStyle" aria-label="Font Style" [value]="chartOptions.type"
-      (change)="chartOptions.type = $event.value; updateChartOptions()">
+      (change)="chartOptions.type = $event.value; updateChartOptions(true)">
       <mat-button-toggle i18n="@@infoboxTypeSick" [value]="eType.cases">Positiv Getestet
       </mat-button-toggle>
       <mat-button-toggle i18n="@@infoboxTypeDeath" [value]="eType.deaths">Todesfälle

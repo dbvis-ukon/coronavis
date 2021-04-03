@@ -1,6 +1,5 @@
 from db import db
 
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, fields
 
 class RisklayerPrognosis(db.Model):
     __tablename__ = 'risklayer_prognosis'
@@ -13,5 +12,5 @@ class RisklayerPrognosis(db.Model):
 #         strict = True
 #         model = RisklayerPrognosis
 #
-    # timestamp = fields.Timestamp(data_key="datenbestand")
+# timestamp = fields.Timestamp(data_key="datenbestand")
 #     prognosis = fields.Number(data_key="prognosis")

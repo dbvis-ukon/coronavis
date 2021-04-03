@@ -6,8 +6,6 @@ Create Date: 2021-03-12 17:41:02.421128
 
 """
 from alembic import op
-import sqlalchemy as sa
-
 
 # revision identifiers, used by Alembic.
 revision = '296c837aaf67'
@@ -19,7 +17,6 @@ ages = ""
 
 for a in range(0, 80):
     ages += "A{:02d} int not null,".format(a)
-
 
 
 def upgrade():

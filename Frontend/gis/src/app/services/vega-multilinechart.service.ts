@@ -53,6 +53,10 @@ export class VegaMultiLineChartService {
       "values": [
       ]
     },
+    "transform": [
+      {"filter": {"field": "x", "timeUnit": "yearmonthdate", "range": []}},
+      {"filter": {"field": "y", "range": []}}
+    ],
     "description": "A simple bar chart with rounded corners at the end of the bar.",
     "encoding": {"x": {
           "field": "x",
@@ -80,7 +84,7 @@ export class VegaMultiLineChartService {
         },
         "layer": [
           {
-            "mark": "line",
+            "mark": {"type": "line", "clip": true},
             "params": [
               {
                 "name": "labelhover",
@@ -217,10 +221,12 @@ export class VegaMultiLineChartService {
 
     if (chartOptions.yDomain) {
       spec.layer[0].encoding.y.scale.domain = chartOptions.yDomain;
+      spec.transform[1].filter.range = chartOptions.yDomain;
     }
 
     if (chartOptions.xDomain) {
       spec.encoding.x.scale.domain = chartOptions.xDomain;
+      spec.transform[0].filter.range = chartOptions.xDomain;
     }
 
 
@@ -234,8 +240,6 @@ export class VegaMultiLineChartService {
       type: "quantitative",
       format: ".2f"
     }));
-
-    // console.log(JSON.stringify(spec));
 
     return spec;
   }

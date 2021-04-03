@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { merge } from 'lodash-es';
 import { Observable } from 'rxjs';
 import { Region } from 'src/app/repositories/types/in/region';
+import { ConfigService } from 'src/app/services/config.service';
 import { TableOverviewDataAndOptions, TableOverviewService } from 'src/app/services/table-overview.service';
 import { PixelChartDataAndOptions, VegaPixelchartService } from 'src/app/services/vega-pixelchart.service';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../../map/options/covid-number-case-options';
@@ -68,7 +69,8 @@ export class CaseInfoComponent implements OnInit {
     private router: Router,
     private dialogService: MatDialog,
     private vegaPixelchartService: VegaPixelchartService,
-    private tableOverviewService: TableOverviewService
+    private tableOverviewService: TableOverviewService,
+    private configService: ConfigService
   ) {}
 
 
@@ -76,7 +78,7 @@ export class CaseInfoComponent implements OnInit {
     this.updateChartOptions();
   }
 
-  updateChartOptions() {
+  updateChartOptions(auto=false) {
     this.chartOptions = {...this.chartOptions};
 
     const region: Region = {
@@ -86,9 +88,9 @@ export class CaseInfoComponent implements OnInit {
       aggLevel: this.chartOptions.aggregationLevel
     };
 
-    this.tableData$ = this.tableOverviewService.compileToDataAndOptions(JSON.parse(JSON.stringify(this.chartOptions)), [region]);
+    this.tableData$ = this.tableOverviewService.compileToDataAndOptions(this.configService.parseConfig(this.chartOptions, 'table', auto).config, [region]);
 
-    this.vegaPixelchartService.compileToDataAndOptions(JSON.parse(JSON.stringify(this.chartOptions)), [region], false)
+    this.vegaPixelchartService.compileToDataAndOptions(this.configService.parseConfig(this.chartOptions, 'pixel', false).config, [region], auto)
     .subscribe(d => this.pixelChartDataAndOptions = d);
   }
 

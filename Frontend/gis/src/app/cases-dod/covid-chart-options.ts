@@ -18,6 +18,17 @@ export enum AgeGroupBinning {
     rki = 'rki'
 }
 
+export interface TemporalExtentOptions {
+    type: 'local' | 'global' | 'manual';
+    manualExtent: [string, string];
+    manualLastDays: number | null;
+}
+
+export interface ValueExtentOptions {
+    type: 'local' | 'global' | 'manual';
+    manualExtent: [number, number];
+}
+
 
 export interface CovidChartOptions extends CovidNumberCaseOptions {
     timeAgg: TimeGranularity;
@@ -25,4 +36,8 @@ export interface CovidChartOptions extends CovidNumberCaseOptions {
     scaleType: ScaleType;
 
     ageGroupBinning: AgeGroupBinning;
+
+    temporalExtent: TemporalExtentOptions;
+
+    valueExtent: ValueExtentOptions;
 }

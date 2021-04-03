@@ -4,7 +4,6 @@ from datetime import datetime
 
 from flask import Blueprint, request, jsonify
 from sqlalchemy import text
-from sqlalchemy.orm import session
 from tzlocal import get_localzone
 
 from db import db

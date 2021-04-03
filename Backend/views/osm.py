@@ -69,7 +69,8 @@ def get_osm_nearby_helipads():
             wkb_geometry AS geom
         FROM hospitals_max
         )
-        SELECT b.osm_id, b.name, st_asgeojson(b.geom), st_distance(krankenhaus.geom::geography, b.geom::geography) as distance_to_hospital
+        SELECT b.osm_id, b.name, st_asgeojson(b.geom), st_distance(krankenhaus.geom::geography, b.geom::geography) 
+            as distance_to_hospital
         FROM krankenhaus JOIN LATERAL (
             SELECT *
             FROM helipads

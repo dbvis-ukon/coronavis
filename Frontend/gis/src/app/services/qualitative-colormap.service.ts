@@ -118,7 +118,6 @@ export class QualitativeColormapService {
 
         latest = this.hospitalUtil.getLatestTimedStatus(t, actualDate);
 
-        // console.log('need to use fallback method', strDate, latest, p);
       }
 
       return this.getBedStatusColor(latest, this.propertyAccessor(type));

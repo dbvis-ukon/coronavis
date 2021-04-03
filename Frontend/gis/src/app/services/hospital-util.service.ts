@@ -78,8 +78,6 @@ export class HospitalUtilService {
         const d = entries[i];
         const t = getMoment(d.timestamp).startOf('day');
 
-        // console.log(t.format('YYYY-MM-DD'), mDate.format('YYYY-MM-DD'), t.isSameOrBefore(mDate), t.isSameOrAfter(mDate))
-
         if (t.isSameOrBefore(mDate)) {
           filtered.push(d);
           break;

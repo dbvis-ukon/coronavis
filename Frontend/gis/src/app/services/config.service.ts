@@ -147,7 +147,7 @@ export class ConfigService {
     return merge<MapLocationSettings, RecursivePartial<MapLocationSettings>, RecursivePartial<MapLocationSettings>>(this.getDefaultMapLocationSettings(), override, override2);
   }
 
-  getDefaultChartConfig(chartType: 'multiline' | 'pixel' | 'table'): CovidChartOptions {
+  getDefaultChartConfig(chartType: 'multiline' | 'pixel' | 'table' | 'stackedareaicu'): CovidChartOptions {
     if (chartType === 'multiline') {
       return {
         type: CovidNumberCaseType.cases,
@@ -162,7 +162,16 @@ export class ConfigService {
         daysForTrend: 7,
         change: CovidNumberCaseChange.absolute,
         showLabels: true,
-        showOnlyAvailableCounties: false
+        showOnlyAvailableCounties: false,
+        temporalExtent: {
+          type: 'global',
+          manualExtent: [null, null],
+          manualLastDays: null
+        },
+        valueExtent: {
+          type: 'local',
+          manualExtent: [0, 0]
+        }
       };
     } else if (chartType === 'pixel') {
       return {
@@ -178,7 +187,16 @@ export class ConfigService {
         daysForTrend: 7,
         change: CovidNumberCaseChange.absolute,
         showLabels: true,
-        showOnlyAvailableCounties: false
+        showOnlyAvailableCounties: false,
+        temporalExtent: {
+          type: 'global',
+          manualExtent: [null, null],
+          manualLastDays: null
+        },
+        valueExtent: {
+          type: 'global',
+          manualExtent: [0, 0]
+        }
       };
     } else if (chartType === 'table') {
         return {
@@ -187,21 +205,55 @@ export class ConfigService {
           normalization: CovidNumberCaseNormalization.per100k,
           timeWindow: CovidNumberCaseTimeWindow.sevenDays,
           timeAgg: TimeGranularity.yearweek,
-          ageGroupBinning: AgeGroupBinning.fiveyears,
+          ageGroupBinning: null,
           scaleType: ScaleType.linear,
           date: 'now',
           showTrendGlyphs: true,
           daysForTrend: 7,
           change: CovidNumberCaseChange.absolute,
           showLabels: true,
-          showOnlyAvailableCounties: false
+          showOnlyAvailableCounties: false,
+          temporalExtent: {
+            type: 'global',
+            manualExtent: [null, null],
+            manualLastDays: null
+          },
+          valueExtent: {
+            type: 'local',
+            manualExtent: [0, 0]
+          }
+        };
+    } else if (chartType === 'stackedareaicu') {
+        return {
+          type: CovidNumberCaseType.cases,
+          dataSource: CovidNumberCaseDataSource.divi,
+          normalization: CovidNumberCaseNormalization.absolut,
+          timeWindow: CovidNumberCaseTimeWindow.all,
+          timeAgg: TimeGranularity.yearmonthdate,
+          ageGroupBinning: null,
+          scaleType: ScaleType.linear,
+          date: 'now',
+          showTrendGlyphs: true,
+          daysForTrend: 7,
+          change: CovidNumberCaseChange.absolute,
+          showLabels: true,
+          showOnlyAvailableCounties: false,
+          temporalExtent: {
+            type: 'global',
+            manualExtent: [null, null],
+            manualLastDays: null
+          },
+          valueExtent: {
+            type: 'local',
+            manualExtent: [0, 0]
+          }
         };
     } else {
       throw new Error('ChartType ' + chartType + ' unknown.');
     }
   }
 
-  parseConfig(cfg: CovidChartOptions | CovidNumberCaseOptions, chartType: 'multiline' | 'pixel' | 'table', autoConfig = false): {config: CovidChartOptions; disabled: Set<string>; hidden: Set<string>} {
+  parseConfig(cfg: CovidChartOptions | CovidNumberCaseOptions, chartType: 'multiline' | 'pixel' | 'table' | 'stackedareaicu', autoConfig = false): {config: CovidChartOptions; disabled: Set<string>; hidden: Set<string>} {
     const ret: {
       config: CovidChartOptions;
       disabled: Set<string>;
@@ -209,6 +261,14 @@ export class ConfigService {
     } = {config: null, disabled: new Set<string>(), hidden: new Set<string>()};
 
     ret.config = merge(this.getDefaultChartConfig(chartType), cfg);
+
+    if ((ret.config.temporalExtent.manualExtent[0] as any) instanceof Date) {
+      ret.config.temporalExtent.manualExtent[0] = (ret.config.temporalExtent.manualExtent[0] as unknown as Date).toISOString();
+    }
+
+    if ((ret.config.temporalExtent.manualExtent[1] as any) instanceof Date) {
+      ret.config.temporalExtent.manualExtent[1] = (ret.config.temporalExtent.manualExtent[1] as unknown as Date).toISOString();
+    }
 
 
     if (ret.config.type === CovidNumberCaseType.patients
@@ -219,15 +279,6 @@ export class ConfigService {
 
       ret.config.ageGroupBinning = null;
       ret.disabled.add('ageGroupBinning');
-
-      if (autoConfig) {
-        ret.config.timeWindow = CovidNumberCaseTimeWindow.all;
-        if (ret.config.type !== CovidNumberCaseType.bedOccupancyPercent) {
-          ret.config.normalization = CovidNumberCaseNormalization.per100k;
-        } else {
-          ret.config.normalization = CovidNumberCaseNormalization.absolut;
-        }
-      }
     }
 
 
@@ -253,23 +304,12 @@ export class ConfigService {
       ret.disabled.add('dataSource.risklayer');
       ret.disabled.add('dataSource.divi');
 
-      if (ret.config.type !== CovidNumberCaseType.cases && ret.config.type !== CovidNumberCaseType.deaths) {
+      if (ret.config.type !== CovidNumberCaseType.deaths) {
         ret.config.type = CovidNumberCaseType.cases;
         ret.config.dataSource = CovidNumberCaseDataSource.survstat;
-      }
-
-      if (autoConfig) {
-        ret.config.normalization = CovidNumberCaseNormalization.per100k;
-        ret.config.timeAgg = TimeGranularity.yearweek;
-        ret.config.timeWindow = CovidNumberCaseTimeWindow.sevenDays;
-
-        if (ret.config.type === CovidNumberCaseType.cases) {
-          ret.config.dataSource = CovidNumberCaseDataSource.survstat;
-          ret.config.ageGroupBinning = AgeGroupBinning.fiveyears;
-        } else {
-          ret.config.dataSource = CovidNumberCaseDataSource.rki;
-          ret.config.ageGroupBinning = AgeGroupBinning.rki;
-        }
+      } else {
+        ret.config.type = CovidNumberCaseType.deaths;
+        ret.config.dataSource = CovidNumberCaseDataSource.rki;
       }
 
       if (ret.config.type === CovidNumberCaseType.deaths) {
@@ -293,6 +333,21 @@ export class ConfigService {
       ret.hidden.add('timeAgg');
       ret.hidden.add('ageGroupBinning');
       ret.hidden.add('scaleType');
+
+      ret.hidden.add('temporalExtent');
+      ret.hidden.add('valueExtent');
+    }
+
+    if (chartType === 'stackedareaicu') {
+      ret.hidden.add('type');
+      ret.disabled.add('dataSource.rki');
+      ret.disabled.add('dataSource.survstat');
+      ret.disabled.add('dataSource.risklayer');
+      ret.hidden.add('normalization');
+      ret.hidden.add('timeWindow');
+      ret.hidden.add('timeAgg');
+      ret.hidden.add('ageGroupBinning');
+      ret.hidden.add('scaleType');
     }
 
     if (autoConfig) {
@@ -305,11 +360,13 @@ export class ConfigService {
     return ret;
   }
 
-  getAutoConfig(cur: CovidChartOptions, chartType: 'multiline' | 'pixel' | 'table'): CovidChartOptions | null {
+  getAutoConfig(cur: CovidChartOptions, chartType: 'multiline' | 'pixel' | 'table' | 'stackedareaicu'): CovidChartOptions | null {
     const copy: CovidChartOptions = JSON.parse(JSON.stringify(cur));
     if (chartType === 'table') {
       return null;
     }
+
+    copy.temporalExtent.type = 'global';
 
     if (chartType === 'pixel') {
       if (cur.type === CovidNumberCaseType.cases) {
@@ -319,6 +376,7 @@ export class ConfigService {
         copy.timeAgg = TimeGranularity.yearweek;
         copy.ageGroupBinning = AgeGroupBinning.fiveyears;
         copy.scaleType = ScaleType.linear;
+        copy.valueExtent.type = 'global';
 
         return copy;
       }
@@ -336,6 +394,7 @@ export class ConfigService {
     }
 
     if (chartType === 'multiline') {
+      copy.valueExtent.type = 'local';
       if (cur.type === CovidNumberCaseType.cases || cur.type === CovidNumberCaseType.deaths) {
         copy.dataSource = CovidNumberCaseDataSource.rki;
         copy.normalization = CovidNumberCaseNormalization.per100k;
@@ -365,9 +424,23 @@ export class ConfigService {
         copy.timeAgg = TimeGranularity.yearmonthdate;
         copy.ageGroupBinning = AgeGroupBinning.fiveyears;
         copy.scaleType = ScaleType.linear;
+        copy.valueExtent.type = 'manual';
+        copy.valueExtent.manualExtent = [0, 100];
 
         return copy;
       }
+    }
+
+    if (chartType === 'stackedareaicu') {
+      copy.dataSource = CovidNumberCaseDataSource.divi;
+      copy.normalization = CovidNumberCaseNormalization.absolut;
+      copy.timeWindow = null;
+      copy.timeAgg = TimeGranularity.yearmonthdate;
+      copy.ageGroupBinning = null;
+      copy.scaleType = ScaleType.linear;
+      copy.valueExtent.type = 'local';
+
+      return copy;
     }
 
     return null;

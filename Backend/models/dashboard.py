@@ -5,6 +5,7 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 from db import db
 
+
 class Dashboard(db.Model):
     __tablename__ = 'dashboards'
 

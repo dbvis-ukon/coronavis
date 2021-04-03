@@ -5,11 +5,12 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { Region } from '../repositories/types/in/region';
-import { getMoment } from '../util/date-util';
+import { getMoment, getStrDate } from '../util/date-util';
 import { ConfigService } from './config.service';
 import { TableOverviewDataAndOptions, TableOverviewService } from './table-overview.service';
 import { MultiLineChartDataAndOptions, VegaMultiLineChartService } from './vega-multilinechart.service';
 import { PixelChartDataAndOptions, VegaPixelchartService } from './vega-pixelchart.service';
+import { IcuCategoriesDataAndOptions, VegaStackedAreaIcuCategoriesService } from './vega-stacked-area-icu-categories.service';
 
 export interface MarkdownItem {
   type: 'markdown';
@@ -38,7 +39,14 @@ export interface TableOverviewItem {
   _compiled?: Observable<TableOverviewDataAndOptions>;
 }
 
-export type Item = PixelChartItem | MultiLineChartItem | MarkdownItem | TableOverviewItem;
+export interface StackedAreaIcuItem {
+  type: 'stackedareaicu';
+  dataRequest: Region[];
+  config: CovidChartOptions;
+  _compiled?: IcuCategoriesDataAndOptions;
+}
+
+export type Item = PixelChartItem | MultiLineChartItem | MarkdownItem | TableOverviewItem | StackedAreaIcuItem;
 
 @Injectable({
   providedIn: 'root'
@@ -46,24 +54,31 @@ export type Item = PixelChartItem | MultiLineChartItem | MarkdownItem | TableOve
 export class ChartService {
 
   private tExtent: [string, string] = [null, null];
-  private pixelZExtent: [number, number] = [0, 0];
+  private valueExtent: Map<string, [number, number]> = new Map();
 
   constructor(
     private vegaPixelchartService: VegaPixelchartService,
     private vegaMultiLineChartService: VegaMultiLineChartService,
     private tableOverviewService: TableOverviewService,
+    private vegaStackedAreaIcuService: VegaStackedAreaIcuCategoriesService,
     private configService: ConfigService
   ) {}
 
   public resetExtents(): void {
     this.tExtent = [null, null];
-    this.pixelZExtent = [0, 0];
+    this.valueExtent.clear();
   }
 
 
   public updateChartFull(d: Item): Observable<Item> {
+    if (d.type === 'markdown') {
+      return of(d);
+    }
+
+    const parsedCfg = this.configService.parseConfig(d.config, d.type, false);
+    const extKey = this.getValueExtentKey(parsedCfg.config);
+
     if (d.type === 'pixel') {
-      const parsedCfg = this.configService.parseConfig(d.config, d.type, false);
       return this.vegaPixelchartService.compileToDataAndOptions(parsedCfg.config, d.dataRequest, false)
         .pipe(
           map(d1 => {
@@ -77,13 +92,17 @@ export class ChartService {
               this.tExtent[1] = d._compiled.chartOptions.xDomain[1];
             }
 
-            if (this.pixelZExtent[0] > d._compiled.chartOptions.domain[0]) {
-              this.pixelZExtent[0] = d._compiled.chartOptions.domain[0];
+            const ext = this.valueExtent.get(extKey) || [0, 0];
+
+            if (ext[0] > d._compiled.chartOptions.domain[0]) {
+              ext[0] = d._compiled.chartOptions.domain[0];
             }
 
-            if (this.pixelZExtent[1] < d._compiled.chartOptions.domain[1]) {
-              this.pixelZExtent[1] = d._compiled.chartOptions.domain[1];
+            if (ext[1] < d._compiled.chartOptions.domain[1]) {
+              ext[1] = d._compiled.chartOptions.domain[1];
             }
+
+            this.valueExtent.set(extKey, ext);
 
             return d;
           })
@@ -91,7 +110,6 @@ export class ChartService {
     }
 
     if (d.type === 'multiline') {
-      const parsedCfg = this.configService.parseConfig(d.config, d.type, false);
       return this.vegaMultiLineChartService.compileToDataAndOptions(parsedCfg.config, d.dataRequest)
       .pipe(
         map(d1 => {
@@ -103,6 +121,18 @@ export class ChartService {
             this.tExtent[1] = d1.chartOptions.xDomain[1];
           }
 
+          const ext = this.valueExtent.get(extKey) || [0, 0];
+
+          if (ext[0] > d1.chartOptions.yDomain[0]) {
+            ext[0] = d1.chartOptions.yDomain[0];
+          }
+
+          if (ext[1] < d1.chartOptions.yDomain[1]) {
+            ext[1] = d1.chartOptions.yDomain[1];
+          }
+
+          this.valueExtent.set(extKey, ext);
+
           d._compiled = d1;
 
           return d;
@@ -111,33 +141,113 @@ export class ChartService {
     }
 
     if (d.type === 'table') {
-      const parsedCfg = this.configService.parseConfig(d.config, d.type, false);
       d._compiled = this.tableOverviewService.compileToDataAndOptions(parsedCfg.config, d.dataRequest);
 
       return of(d);
     }
 
-    return of(d);
+    if (d.type === 'stackedareaicu') {
+      return this.vegaStackedAreaIcuService.compileToDataAndOptions(parsedCfg.config, d.dataRequest)
+      .pipe(
+        map(d1 => {
+          if (this.tExtent[0] === null || getMoment(this.tExtent[0]).isAfter(getMoment(d1.chartOptions.xDomain[0]))) {
+            this.tExtent[0] = d1.chartOptions.xDomain[0];
+          }
+
+          if (this.tExtent[1] === null || getMoment(this.tExtent[1]).isBefore(getMoment(d1.chartOptions.xDomain[1]))) {
+            this.tExtent[1] = d1.chartOptions.xDomain[1];
+          }
+
+          const ext = this.valueExtent.get(extKey) || [0, 0];
+
+          if (ext[0] > d1.chartOptions.yDomain[0]) {
+            ext[0] = d1.chartOptions.yDomain[0];
+          }
+
+          if (ext[1] < d1.chartOptions.yDomain[1]) {
+            ext[1] = d1.chartOptions.yDomain[1];
+          }
+
+          this.valueExtent.set(extKey, ext);
+
+          d._compiled = d1;
+
+          return d;
+        })
+      );
+    }
+
+    throw new Error(`Cannot handle type ${d}`);
   }
 
   updateChartsShallow(items: Item[], containerWidth: number) {
     for(const item of items) {
-        if (item.type === 'pixel') {
-          const o: PixelChartDataAndOptions = item._compiled as PixelChartDataAndOptions;
-          o.chartOptions.domain = this.pixelZExtent;
-          o.chartOptions.xDomain = this.tExtent;
-          o.chartOptions.width = containerWidth;
-
-          item._compiled = {...o};
-        }
-
-        if (item.type === 'multiline') {
-          item._compiled.chartOptions.xDomain = this.tExtent;
-          item._compiled.chartOptions.width = containerWidth;
-
-          item._compiled = {...item._compiled};
+      const cfg = (item as PixelChartItem)?._compiled?.config;
+      let newTExtent: [string, string] = null;
+      if (cfg && cfg.temporalExtent.type === 'global') {
+        newTExtent = this.tExtent;
+      } else if (cfg && cfg.temporalExtent.type === 'manual') {
+        if (cfg.temporalExtent.manualLastDays > 0) {
+          newTExtent = [getMoment(this.tExtent[1]).subtract(cfg.temporalExtent.manualLastDays, 'days').toISOString(), this.tExtent[1]];
+        } else {
+          newTExtent = cfg.temporalExtent.manualExtent;
         }
       }
+
+      const extKey = this.getValueExtentKey(cfg);
+      let newVExtent: [number, number] = null;
+
+      if (cfg && cfg.valueExtent.type === 'global') {
+        newVExtent = this.valueExtent.get(extKey);
+      } else if (cfg && cfg.valueExtent.type === 'manual') {
+        newVExtent = cfg.valueExtent.manualExtent;
+      }
+
+      if (item.type === 'pixel') {
+        if (newTExtent) {
+          item._compiled.chartOptions.xDomain[0] = getStrDate(getMoment(newTExtent[0]).startOf('week'));
+          item._compiled.chartOptions.xDomain[1] = getStrDate(getMoment(newTExtent[1]).endOf('week'));
+        }
+
+        if (newVExtent) {
+          item._compiled.chartOptions.domain = newVExtent;
+        }
+
+        item._compiled.chartOptions.width = containerWidth;
+
+        item._compiled = {...item._compiled};
+      }
+
+      if (item.type === 'multiline') {
+
+        if (newTExtent) {
+          item._compiled.chartOptions.xDomain = newTExtent;
+        }
+
+        if (newVExtent) {
+          item._compiled.chartOptions.yDomain = newVExtent;
+        }
+
+        item._compiled.chartOptions.width = containerWidth;
+
+        item._compiled = {...item._compiled};
+      }
+
+      if (item.type === 'stackedareaicu') {
+        if (newTExtent) {
+          item._compiled.chartOptions.xDomain = newTExtent;
+        }
+
+        if (newVExtent) {
+          item._compiled.chartOptions.yDomain = newVExtent;
+        }
+
+
+        item._compiled.chartOptions.width = containerWidth;
+
+        item._compiled = {...item._compiled};
+      }
+    }
   }
 
   updateChartAndThenRefreshAll(d: Item, allItems: Item[], containerWidth: number) {
@@ -150,8 +260,17 @@ export class ChartService {
       this.vegaMultiLineChartService.downloadCsv(item);
     } else if (item.type === 'pixel') {
       this.vegaPixelchartService.downloadCsv(item);
+    } else if (item.type === 'stackedareaicu') {
+      this.vegaStackedAreaIcuService.downloadCsv(item);
     } else {
       throw new Error(`no download implemented for ${item.type}`);
     }
+  }
+
+  private getValueExtentKey(cfg: CovidChartOptions): string | null {
+    if (!cfg) {
+      return null;
+    }
+    return cfg.type + ':' + cfg.normalization;
   }
 }

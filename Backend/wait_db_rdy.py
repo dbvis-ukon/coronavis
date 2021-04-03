@@ -15,7 +15,7 @@ DB_NAME = os.environ.get('DB_NAME').replace('\n', '')
 
 max_timeout = 120
 
-timeout = datetime.now() + timedelta(seconds = max_timeout)
+timeout = datetime.now() + timedelta(seconds=max_timeout)
 
 database_up = False
 
@@ -23,7 +23,8 @@ print(f"Waiting max {max_timeout} seconds for the database.")
 
 while datetime.now() <= timeout:
     try:
-        conn = psycopg2.connect(f"postgresql://{quote(DB_USER, safe='')}:{quote(DB_PASS, safe='')}@{quote(DB_HOST, safe='')}:{quote(DB_PORT, safe='')}/{quote(DB_NAME, safe='')}")
+        conn = psycopg2.connect(
+            f"postgresql://{quote(DB_USER, safe='')}:{quote(DB_PASS, safe='')}@{quote(DB_HOST, safe='')}:{quote(DB_PORT, safe='')}/{quote(DB_NAME, safe='')}")
         cur = conn.cursor()
         cur.execute("SELECT postgis_version()")
         print(cur.fetchone())
@@ -36,11 +37,9 @@ while datetime.now() <= timeout:
         sleep(10)
         print(e)
 
-
 if not database_up:
     print("Database could not be reached.")
     exit(1)
-
 
 print("Database up and running.")
 exit(0)

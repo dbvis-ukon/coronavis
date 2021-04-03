@@ -21,10 +21,8 @@ export class CachedRepository {
     const key = url + '?' + (params?.toString() || '');
 
     if (this.cache.has(key)) {
-      // console.log('cache hit', key);
       return of(this.cache.get(key));
     } else {
-      // console.log('no cache', key);
       return this.http.get<T>(url, {params})
       .pipe(
         tap(data => this.cache.set(key, data))

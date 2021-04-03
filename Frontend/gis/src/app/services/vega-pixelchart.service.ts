@@ -81,6 +81,9 @@ export class VegaPixelchartService {
       "name": "data",
       "values": []
     },
+    "transform": [
+      {"filter": {"field": "x", "timeUnit": "yearmonthdate", "range": []}}
+    ],
     "encoding": {
       "x": {
         "field": "x",
@@ -154,19 +157,19 @@ export class VegaPixelchartService {
         "mark": {
           "type": "text",
           "fontWeight": "lighter",
-          "fontSize": 10
+          "fontSize": {"expr": "datum.val < 1000 ? 9 : 8"}
         },
         "encoding": {
           "text": {
             "field": "val",
             "type": "quantitative",
-            "format": ",.0f"
+            "format": ".0f"
           },
           "color": {
-            "condition": {
-              "test": "datum['val'] > 300",
-              "value": "black"
-            },
+            "condition": [
+              {"value": "black", "test": "datum.val > 792"},
+              {"value": "grey", "test": "datum.val == 0"}
+            ],
             "value": "lightgrey"
           },
           "tooltip": [{
@@ -388,10 +391,11 @@ export class VegaPixelchartService {
 
     if (chartOptions.xDomain) {
       spec.encoding.x.scale.domain = chartOptions.xDomain;
+      spec.transform[0].filter.range = chartOptions.xDomain;
     }
 
-    const colorBreakpoint = chartOptions.domain[1] * 0.75;
-    spec.layer[1].encoding.color.condition.text = "datum.val > " + colorBreakpoint;
+    const colorBreakpoint = chartOptions.domain[1] * 0.6;
+    spec.layer[1].encoding.color.condition[0].test = "datum.val > " + Math.round(colorBreakpoint);
 
     return spec;
   }

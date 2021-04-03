@@ -2,6 +2,8 @@ Akutelle Visualisierungen auf https://coronavis.dbvis.de
 
 Neue Daten für {{ county_desc }} {{ county_name }}
 
+NEU: {{ county_desc }} {{ county_name }} als Dashboard: https://coronavis.dbvis.de/de/overview/dashboard/{{ county_id }}
+
 {% if second_email == True %}
 Seit unserer ersten Mail heute gab es weitere Updates in diesem Landkreis:
 {% endif %}

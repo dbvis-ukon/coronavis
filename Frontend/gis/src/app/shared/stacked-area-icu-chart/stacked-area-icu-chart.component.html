@@ -1,0 +1,20 @@
+<span class="hidden" #i18nAltersgruppe i18n="@@caseDodYAxisAltersgruppe">Altersgruppe</span>
+<span class="hidden" #i18nDatum i18n="@@caseDodXAxisDatum">Datum</span>
+<span class="hidden" #i18nWoche i18n="@@caseDodXAxisWoche">Woche</span>
+<span class="hidden" #i18nVal i18n="@@caseDodZAxisVal">7-Tages-Inzidenz</span>
+
+<h4 class="title" *ngIf="_dataAndOptions" i18n="@@stackedAreaChartTitle">
+    Anzahl Krankenhäuser und deren Auslastung pro Bettenkategorie für {{ _dataAndOptions.chartOptions.titleRegions }}
+</h4>
+
+
+<app-vega [spec]="spec"></app-vega>
+
+
+<div class="datasources" *ngIf="_dataAndOptions">
+    <p i18n="@@stackedAreaChartHint" class="hint">
+        ICU Low = Nicht-invasive Beatmung; ICU High = Invsive Beatmung; ECMO = <a target="_blank" href="https://de.wikipedia.org/wiki/Extrakorporale_Membranoxygenierung">Extrakorporale Membranoxygenierung</a>
+    </p>
+
+    <app-data-source source="divi"></app-data-source>
+</div>

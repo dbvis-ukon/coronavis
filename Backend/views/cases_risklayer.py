@@ -38,32 +38,32 @@ def get_cases_development_by_countries():
     return cd.get_by_countries(request.args.get('from'), request.args.get('to'), False)
 
 
-@routes.route('/development/landkreis/<idCounty>', methods=['GET'])
+@routes.route('/development/landkreis/<id_county>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
-def get_county(idCounty):
-    return cd.get_county(request.args.get('from'), request.args.get('to'), idCounty, False)
+def get_county(id_county):
+    return cd.get_county(request.args.get('from'), request.args.get('to'), id_county, False)
 
 
-@routes.route('/development/regierungsbezirk/<idDistrict>', methods=['GET'])
+@routes.route('/development/regierungsbezirk/<id_district>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
-def get_district(idDistrict):
-    return cd.get_district(request.args.get('from'), request.args.get('to'), idDistrict, False)
+def get_district(id_district):
+    return cd.get_district(request.args.get('from'), request.args.get('to'), id_district, False)
 
 
-@routes.route('/development/bundesland/<idState>', methods=['GET'])
+@routes.route('/development/bundesland/<id_state>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
-def get_state(idState):
-    return cd.get_state(request.args.get('from'), request.args.get('to'), idState, False)
+def get_state(id_state):
+    return cd.get_state(request.args.get('from'), request.args.get('to'), id_state, False)
 
 
-@routes.route('/development/land/<idCountry>', methods=['GET'])
+@routes.route('/development/land/<id_country>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
-def get_country(idCountry):
-    return cd.get_country(request.args.get('from'), request.args.get('to'), idCountry, False)
+def get_country(id_country):
+    return cd.get_country(request.args.get('from'), request.args.get('to'), id_country, False)
 
 
 @routes.route('/development/aggregated', methods=['GET'])
@@ -75,7 +75,7 @@ def get_aggregated():
         'regierungsbezirke': request.args.get('regierungsbezirke'),
         'bundeslaender': request.args.get('bundeslaender'),
         'laender': request.args.get('laender')
-    },request.args.get('from'), request.args.get('to'), False)
+    }, request.args.get('from'), request.args.get('to'), False)
 
 
 @routes.route('/prognosis', methods=['GET'])
