@@ -81,6 +81,9 @@ export class VegaPixelchartService {
       "name": "data",
       "values": []
     },
+    "transform": [
+      {"filter": {"field": "x", "timeUnit": "yearmonthdate", "range": []}}
+    ],
     "encoding": {
       "x": {
         "field": "x",
@@ -388,6 +391,7 @@ export class VegaPixelchartService {
 
     if (chartOptions.xDomain) {
       spec.encoding.x.scale.domain = chartOptions.xDomain;
+      spec.transform[0].filter.range = chartOptions.xDomain;
     }
 
     const colorBreakpoint = chartOptions.domain[1] * 0.6;

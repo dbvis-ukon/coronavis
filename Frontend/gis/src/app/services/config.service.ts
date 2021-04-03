@@ -162,7 +162,16 @@ export class ConfigService {
         daysForTrend: 7,
         change: CovidNumberCaseChange.absolute,
         showLabels: true,
-        showOnlyAvailableCounties: false
+        showOnlyAvailableCounties: false,
+        temporalExtent: {
+          type: 'global',
+          manualExtent: [null, null],
+          manualLastDays: null
+        },
+        valueExtent: {
+          type: 'local',
+          manualExtent: [0, 0]
+        }
       };
     } else if (chartType === 'pixel') {
       return {
@@ -178,7 +187,16 @@ export class ConfigService {
         daysForTrend: 7,
         change: CovidNumberCaseChange.absolute,
         showLabels: true,
-        showOnlyAvailableCounties: false
+        showOnlyAvailableCounties: false,
+        temporalExtent: {
+          type: 'global',
+          manualExtent: [null, null],
+          manualLastDays: null
+        },
+        valueExtent: {
+          type: 'global',
+          manualExtent: [0, 0]
+        }
       };
     } else if (chartType === 'table') {
         return {
@@ -194,7 +212,16 @@ export class ConfigService {
           daysForTrend: 7,
           change: CovidNumberCaseChange.absolute,
           showLabels: true,
-          showOnlyAvailableCounties: false
+          showOnlyAvailableCounties: false,
+          temporalExtent: {
+            type: 'global',
+            manualExtent: [null, null],
+            manualLastDays: null
+          },
+          valueExtent: {
+            type: 'local',
+            manualExtent: [0, 0]
+          }
         };
     } else if (chartType === 'stackedareaicu') {
         return {
@@ -210,7 +237,16 @@ export class ConfigService {
           daysForTrend: 7,
           change: CovidNumberCaseChange.absolute,
           showLabels: true,
-          showOnlyAvailableCounties: false
+          showOnlyAvailableCounties: false,
+          temporalExtent: {
+            type: 'global',
+            manualExtent: [null, null],
+            manualLastDays: null
+          },
+          valueExtent: {
+            type: 'local',
+            manualExtent: [0, 0]
+          }
         };
     } else {
       throw new Error('ChartType ' + chartType + ' unknown.');
@@ -225,6 +261,14 @@ export class ConfigService {
     } = {config: null, disabled: new Set<string>(), hidden: new Set<string>()};
 
     ret.config = merge(this.getDefaultChartConfig(chartType), cfg);
+
+    if ((ret.config.temporalExtent.manualExtent[0] as any) instanceof Date) {
+      ret.config.temporalExtent.manualExtent[0] = (ret.config.temporalExtent.manualExtent[0] as unknown as Date).toISOString();
+    }
+
+    if ((ret.config.temporalExtent.manualExtent[1] as any) instanceof Date) {
+      ret.config.temporalExtent.manualExtent[1] = (ret.config.temporalExtent.manualExtent[1] as unknown as Date).toISOString();
+    }
 
 
     if (ret.config.type === CovidNumberCaseType.patients
@@ -312,6 +356,9 @@ export class ConfigService {
       ret.hidden.add('timeAgg');
       ret.hidden.add('ageGroupBinning');
       ret.hidden.add('scaleType');
+
+      ret.hidden.add('temporalExtent');
+      ret.hidden.add('valueExtent');
     }
 
     if (chartType === 'stackedareaicu') {

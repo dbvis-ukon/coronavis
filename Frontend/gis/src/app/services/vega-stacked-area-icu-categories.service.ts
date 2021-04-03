@@ -45,6 +45,10 @@ export class VegaStackedAreaIcuCategoriesService {
       "values": [
       ]
     },
+    "transform": [
+      {"filter": {"field": "date", "timeUnit": "yearmonthdate", "range": []}},
+      {"filter": {"field": "numberOfHospitals", "range": []}}
+    ],
     "vconcat": [
       {
         "width": 1218,
@@ -447,6 +451,16 @@ export class VegaStackedAreaIcuCategoriesService {
       spec.vconcat[i].layer[1].encoding.tooltip = tltp;
 
     }
+
+    if (chartOptions.yDomain) {
+      spec.transform[1].filter.range = chartOptions.yDomain;
+    }
+
+    if (chartOptions.xDomain) {
+      spec.transform[0].filter.range = chartOptions.xDomain;
+    }
+
+    console.log(JSON.stringify(spec));
 
     return spec;
   }

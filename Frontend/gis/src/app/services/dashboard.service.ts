@@ -115,7 +115,7 @@ If you save this dashboard, it will receive a new ID and URL.
           type: 'multiline',
           dataRequest: dataRequests,
           config: this.configService.parseConfig(
-            merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.bedOccupancyPercent}),
+            merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.bedOccupancyPercent, valueExtent: {type: 'manual', manualExtent: [0, 100]}}),
             'multiline',
             true
           ).config

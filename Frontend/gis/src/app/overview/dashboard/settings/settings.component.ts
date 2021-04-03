@@ -64,6 +64,8 @@ export class SettingsComponent implements OnInit {
 
     const ret = this.configService.parseConfig(this.data.chartItem.config, this.data.chartItem.type, autoConfig);
 
+    console.log('parsedCfg', ret);
+
     this.data.chartItem.config = ret.config;
 
     this.disabled = ret.disabled;
