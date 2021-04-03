@@ -188,6 +188,8 @@ export class ChartService {
       this.vegaMultiLineChartService.downloadCsv(item);
     } else if (item.type === 'pixel') {
       this.vegaPixelchartService.downloadCsv(item);
+    } else if (item.type === 'stackedareaicu') {
+      this.vegaStackedAreaIcuService.downloadCsv(item);
     } else {
       throw new Error(`no download implemented for ${item.type}`);
     }

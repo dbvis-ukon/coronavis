@@ -76,8 +76,6 @@ export class RegionSelectorComponent implements OnInit {
       return this.allRegions;
     }
 
-    // console.log('value', value);
-
     const filterValue = (value as string).toLowerCase();
 
     return this.allRegions

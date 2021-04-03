@@ -235,8 +235,6 @@ export class VegaMultiLineChartService {
       format: ".2f"
     }));
 
-    // console.log(JSON.stringify(spec));
-
     return spec;
   }
 

@@ -439,7 +439,6 @@ export class InfoboxComponent implements OnInit {
     return (input$: Observable<string>) => input$.pipe(
       tap(() => this.aggregateStatisticsLoading$.next(true)),
       map(s => getStrDate(getMoment(s).endOf('day'))),
-      // tap(refDate => console.log('refdate', refDate)),
       mergeMap(refDate => {
         const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate);
         const unfiltered = this.countryAggregatorService.diviAggregationForCountryUnfiltered(refDate);

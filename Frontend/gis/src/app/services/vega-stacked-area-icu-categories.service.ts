@@ -9,7 +9,7 @@ import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitativ
 import { Region } from '../repositories/types/in/region';
 import { getMoment } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
-import { MultiLineChartItem } from './chart.service';
+import { StackedAreaIcuItem } from './chart.service';
 import { ExportCsvService } from './export-csv.service';
 import { TranslationService } from './translation.service';
 
@@ -345,7 +345,6 @@ export class VegaStackedAreaIcuCategoriesService {
     return this.hospitalRepo.getDiviDevelopmentAggregated(dataRequests)
         .pipe(
           map(d => {
-            console.log('data', d);
             const data = d.properties.developments.map(d1 => {
               if (xExtent[0] === null || getMoment(xExtent[0]).isAfter(getMoment(d1.timestamp))) {
                 xExtent[0] = d1.timestamp;
@@ -449,27 +448,27 @@ export class VegaStackedAreaIcuCategoriesService {
 
     }
 
-    console.log(JSON.stringify(spec));
-
     return spec;
   }
 
-  downloadCsv(item: MultiLineChartItem): void {
+  downloadCsv(item: StackedAreaIcuItem): void {
     const data = item._compiled.data;
-    const fileName = item._compiled.chartOptions.title.toLowerCase().replace(/ /ig, '-');
+    const fileName = 'number-of-hospitals-and-their-capacity-for-bed-categories';
 
     const m: Map<string, {[key: string]: string}> = new Map();
 
     const cols: Set<string> = new Set();
 
     data.forEach(d => {
-      if (!m.has(d.x)) {
-        m.set(d.x, {});
+      if (!m.has(d.date)) {
+        m.set(d.date, {});
       }
 
-      m.get(d.x)[d.region] = d.y + '';
+      const col = d.icuCategory + ':' + d.availability;
 
-      cols.add(d.region);
+      m.get(d.date)[col] = d.numberOfHospitals + '';
+
+      cols.add(col);
     });
 
     const dateArr: string[] = [];

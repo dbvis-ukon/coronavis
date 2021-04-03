@@ -122,6 +122,16 @@ If you save this dashboard, it will receive a new ID and URL.
         });
 
         dashboard.items.push({
+          type: 'stackedareaicu',
+          dataRequest: [rRegion],
+          config: this.configService.parseConfig(
+            merge(this.configService.getDefaultChartConfig('stackedareaicu'), {}),
+            'stackedareaicu',
+            true
+          ).config
+        });
+
+        dashboard.items.push({
           type: 'pixel',
           dataRequest: [rRegion],
           config: this.configService.parseConfig(

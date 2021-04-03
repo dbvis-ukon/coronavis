@@ -49,7 +49,6 @@ export class TouchHack {
    */
   private registerTouch(e: TouchEvent) {
     const touches = e.touches || e.changedTouches;
-    // console.log('registerTouch', touch, e);
     if (!touches) {
       return;
     }

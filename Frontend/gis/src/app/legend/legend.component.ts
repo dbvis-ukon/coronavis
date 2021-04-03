@@ -89,9 +89,6 @@ export class LegendComponent implements OnInit, OnDestroy {
 
     this.titleCases$ = this.mo$
     .pipe(
-      // tap(m => console.log('new mo', m)),
-      // distinctUntilChanged((a, b) => JSON.stringify(a?.covidNumberCaseOptions) === JSON.stringify(b?.covidNumberCaseOptions)),
-      // tap(m => console.log('changed!')),
       map(mo => this.getTitleCases(mo))
     );
 

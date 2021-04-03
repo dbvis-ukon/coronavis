@@ -76,7 +76,7 @@
                     <mat-icon>settings</mat-icon>
                 </button> 
 
-                <button *ngIf="timelineItem.type === 'multiline' || timelineItem.type === 'pixel'" mat-icon-button aria-label="download" class="icon filter" (click)="downloadData(timelineItem)" matTooltip="Download data as CSV">
+                <button *ngIf="timelineItem.type === 'multiline' || timelineItem.type === 'pixel' || timelineItem.type === 'stackedareaicu'" mat-icon-button aria-label="download" class="icon filter" (click)="downloadData(timelineItem)" matTooltip="Download data as CSV">
                   <mat-icon>download</mat-icon>
                 </button>
     
