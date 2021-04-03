@@ -10,6 +10,7 @@ import { ConfigService } from './config.service';
 import { TableOverviewDataAndOptions, TableOverviewService } from './table-overview.service';
 import { MultiLineChartDataAndOptions, VegaMultiLineChartService } from './vega-multilinechart.service';
 import { PixelChartDataAndOptions, VegaPixelchartService } from './vega-pixelchart.service';
+import { IcuCategoriesDataAndOptions, VegaStackedAreaIcuCategoriesService } from './vega-stacked-area-icu-categories.service';
 
 export interface MarkdownItem {
   type: 'markdown';
@@ -38,7 +39,14 @@ export interface TableOverviewItem {
   _compiled?: Observable<TableOverviewDataAndOptions>;
 }
 
-export type Item = PixelChartItem | MultiLineChartItem | MarkdownItem | TableOverviewItem;
+export interface StackedAreaIcuItem {
+  type: 'stackedareaicu';
+  dataRequest: Region[];
+  config: CovidChartOptions;
+  _compiled?: IcuCategoriesDataAndOptions;
+}
+
+export type Item = PixelChartItem | MultiLineChartItem | MarkdownItem | TableOverviewItem | StackedAreaIcuItem;
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +60,7 @@ export class ChartService {
     private vegaPixelchartService: VegaPixelchartService,
     private vegaMultiLineChartService: VegaMultiLineChartService,
     private tableOverviewService: TableOverviewService,
+    private vegaStackedAreaIcuService: VegaStackedAreaIcuCategoriesService,
     private configService: ConfigService
   ) {}
 
@@ -62,8 +71,13 @@ export class ChartService {
 
 
   public updateChartFull(d: Item): Observable<Item> {
+    if (d.type === 'markdown') {
+      return of(d);
+    }
+
+    const parsedCfg = this.configService.parseConfig(d.config, d.type, false);
+
     if (d.type === 'pixel') {
-      const parsedCfg = this.configService.parseConfig(d.config, d.type, false);
       return this.vegaPixelchartService.compileToDataAndOptions(parsedCfg.config, d.dataRequest, false)
         .pipe(
           map(d1 => {
@@ -91,7 +105,6 @@ export class ChartService {
     }
 
     if (d.type === 'multiline') {
-      const parsedCfg = this.configService.parseConfig(d.config, d.type, false);
       return this.vegaMultiLineChartService.compileToDataAndOptions(parsedCfg.config, d.dataRequest)
       .pipe(
         map(d1 => {
@@ -111,13 +124,31 @@ export class ChartService {
     }
 
     if (d.type === 'table') {
-      const parsedCfg = this.configService.parseConfig(d.config, d.type, false);
       d._compiled = this.tableOverviewService.compileToDataAndOptions(parsedCfg.config, d.dataRequest);
 
       return of(d);
     }
 
-    return of(d);
+    if (d.type === 'stackedareaicu') {
+      return this.vegaStackedAreaIcuService.compileToDataAndOptions(parsedCfg.config, d.dataRequest)
+      .pipe(
+        map(d1 => {
+          if (this.tExtent[0] === null || getMoment(this.tExtent[0]).isAfter(getMoment(d1.chartOptions.xDomain[0]))) {
+            this.tExtent[0] = d1.chartOptions.xDomain[0];
+          }
+
+          if (this.tExtent[1] === null || getMoment(this.tExtent[1]).isBefore(getMoment(d1.chartOptions.xDomain[1]))) {
+            this.tExtent[1] = d1.chartOptions.xDomain[1];
+          }
+
+          d._compiled = d1;
+
+          return d;
+        })
+      );
+    }
+
+    throw new Error(`Cannot handle type ${d}`);
   }
 
   updateChartsShallow(items: Item[], containerWidth: number) {
@@ -132,6 +163,13 @@ export class ChartService {
         }
 
         if (item.type === 'multiline') {
+          item._compiled.chartOptions.xDomain = this.tExtent;
+          item._compiled.chartOptions.width = containerWidth;
+
+          item._compiled = {...item._compiled};
+        }
+
+        if (item.type === 'stackedareaicu') {
           item._compiled.chartOptions.xDomain = this.tExtent;
           item._compiled.chartOptions.width = containerWidth;
 

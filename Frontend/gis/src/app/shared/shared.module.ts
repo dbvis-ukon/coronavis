@@ -17,6 +17,7 @@ import { LanguageSwitcherComponent } from './language-switcher/language-switcher
 import { PixelChartComponent } from './pixel-chart/pixel-chart.component';
 import { PlusminusPipe } from './plusminus.pipe';
 import { ResizedDirective } from './resize.directive';
+import { StackedAreaIcuChartComponent } from './stacked-area-icu-chart/stacked-area-icu-chart.component';
 import { TableOverviewComponent } from './table-overview/table-overview.component';
 import { TranslatePipe } from './translate.pipe';
 import { VegaComponent } from './vega/vega.component';
@@ -36,7 +37,8 @@ import { WithLoadingPipe } from './with-loading.pipe';
     VegaComponent,
     DataSourceComponent,
     PixelChartComponent,
-    TableOverviewComponent
+    TableOverviewComponent,
+    StackedAreaIcuChartComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +67,8 @@ import { WithLoadingPipe } from './with-loading.pipe';
     VegaComponent,
     DataSourceComponent,
     PixelChartComponent,
-    TableOverviewComponent
+    TableOverviewComponent,
+    StackedAreaIcuChartComponent
   ],
   providers: [
     TranslatePipe,

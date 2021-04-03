@@ -9,8 +9,10 @@ import { aggLevelToEndpointSingle } from '../util/aggregation-level';
 import { getMoment, getStrDate } from '../util/date-util';
 import { CachedRepository } from './cached.repository';
 import { QualitativeAggregatedHospitalProperties, QualitativeSingleHospitalProperties, QualitativeTimedStatus } from './types/in/qualitative-hospitals-development';
+import { Region } from './types/in/region';
 import { AggregatedHospitalOut } from './types/out/aggregated-hospital-out';
 import { SingleHospitalOut } from './types/out/single-hospital-out';
+import { prepareAggParams } from './utils';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +36,13 @@ export class QualitativeDiviDevelopmentRepository {
   public getDiviDevelopmentForAggLevelSingle(aggregationLevel: AggregationLevel, id: string, from: string, to: string, dayThreshold: number = 5): Observable <Feature<MultiPolygon, AggregatedHospitalOut<QualitativeTimedStatus>>> {
     const ep = aggLevelToEndpointSingle(aggregationLevel);
     return this.cachedRepository.get <Feature<MultiPolygon, QualitativeAggregatedHospitalProperties>> (`${environment.apiUrl}hospitals/development/${ep}/${id}`, this.prepareParams(from, to, dayThreshold));
+  }
+
+  public getDiviDevelopmentAggregated(dataRequests: Region[]): Observable<Feature<MultiPolygon, QualitativeAggregatedHospitalProperties>> {
+    return this
+      .cachedRepository
+      .get<Feature<MultiPolygon, QualitativeAggregatedHospitalProperties>>(`${environment.apiUrl}hospitals/development/aggregated`,
+      prepareAggParams(dataRequests));
   }
 
   private prepareParams(from: string, to: string, dayThreshold: number = 5): HttpParams {

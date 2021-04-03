@@ -147,7 +147,7 @@ export class ConfigService {
     return merge<MapLocationSettings, RecursivePartial<MapLocationSettings>, RecursivePartial<MapLocationSettings>>(this.getDefaultMapLocationSettings(), override, override2);
   }
 
-  getDefaultChartConfig(chartType: 'multiline' | 'pixel' | 'table'): CovidChartOptions {
+  getDefaultChartConfig(chartType: 'multiline' | 'pixel' | 'table' | 'stackedareaicu'): CovidChartOptions {
     if (chartType === 'multiline') {
       return {
         type: CovidNumberCaseType.cases,
@@ -187,7 +187,23 @@ export class ConfigService {
           normalization: CovidNumberCaseNormalization.per100k,
           timeWindow: CovidNumberCaseTimeWindow.sevenDays,
           timeAgg: TimeGranularity.yearweek,
-          ageGroupBinning: AgeGroupBinning.fiveyears,
+          ageGroupBinning: null,
+          scaleType: ScaleType.linear,
+          date: 'now',
+          showTrendGlyphs: true,
+          daysForTrend: 7,
+          change: CovidNumberCaseChange.absolute,
+          showLabels: true,
+          showOnlyAvailableCounties: false
+        };
+    } else if (chartType === 'stackedareaicu') {
+        return {
+          type: CovidNumberCaseType.cases,
+          dataSource: CovidNumberCaseDataSource.divi,
+          normalization: CovidNumberCaseNormalization.absolut,
+          timeWindow: CovidNumberCaseTimeWindow.all,
+          timeAgg: TimeGranularity.yearmonthdate,
+          ageGroupBinning: null,
           scaleType: ScaleType.linear,
           date: 'now',
           showTrendGlyphs: true,
@@ -201,7 +217,7 @@ export class ConfigService {
     }
   }
 
-  parseConfig(cfg: CovidChartOptions | CovidNumberCaseOptions, chartType: 'multiline' | 'pixel' | 'table', autoConfig = false): {config: CovidChartOptions; disabled: Set<string>; hidden: Set<string>} {
+  parseConfig(cfg: CovidChartOptions | CovidNumberCaseOptions, chartType: 'multiline' | 'pixel' | 'table' | 'stackedareaicu', autoConfig = false): {config: CovidChartOptions; disabled: Set<string>; hidden: Set<string>} {
     const ret: {
       config: CovidChartOptions;
       disabled: Set<string>;
@@ -253,9 +269,12 @@ export class ConfigService {
       ret.disabled.add('dataSource.risklayer');
       ret.disabled.add('dataSource.divi');
 
-      if (ret.config.type !== CovidNumberCaseType.cases && ret.config.type !== CovidNumberCaseType.deaths) {
+      if (ret.config.type !== CovidNumberCaseType.deaths) {
         ret.config.type = CovidNumberCaseType.cases;
         ret.config.dataSource = CovidNumberCaseDataSource.survstat;
+      } else {
+        ret.config.type = CovidNumberCaseType.deaths;
+        ret.config.dataSource = CovidNumberCaseDataSource.rki;
       }
 
       if (autoConfig) {
@@ -295,6 +314,18 @@ export class ConfigService {
       ret.hidden.add('scaleType');
     }
 
+    if (chartType === 'stackedareaicu') {
+      ret.hidden.add('type');
+      ret.disabled.add('dataSource.rki');
+      ret.disabled.add('dataSource.survstat');
+      ret.disabled.add('dataSource.risklayer');
+      ret.hidden.add('normalization');
+      ret.hidden.add('timeWindow');
+      ret.hidden.add('timeAgg');
+      ret.hidden.add('ageGroupBinning');
+      ret.hidden.add('scaleType');
+    }
+
     if (autoConfig) {
       const autoCfg = this.getAutoConfig(ret.config, chartType);
       if (autoCfg !== null) {
@@ -305,7 +336,7 @@ export class ConfigService {
     return ret;
   }
 
-  getAutoConfig(cur: CovidChartOptions, chartType: 'multiline' | 'pixel' | 'table'): CovidChartOptions | null {
+  getAutoConfig(cur: CovidChartOptions, chartType: 'multiline' | 'pixel' | 'table' | 'stackedareaicu'): CovidChartOptions | null {
     const copy: CovidChartOptions = JSON.parse(JSON.stringify(cur));
     if (chartType === 'table') {
       return null;
@@ -368,6 +399,15 @@ export class ConfigService {
 
         return copy;
       }
+    }
+
+    if (chartType === 'stackedareaicu') {
+      copy.dataSource = CovidNumberCaseDataSource.divi;
+      copy.normalization = CovidNumberCaseNormalization.absolut;
+      copy.timeWindow = null;
+      copy.timeAgg = TimeGranularity.yearmonthdate;
+      copy.ageGroupBinning = null;
+      copy.scaleType = ScaleType.linear;
     }
 
     return null;

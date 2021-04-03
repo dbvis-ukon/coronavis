@@ -341,11 +341,15 @@ export class VegaLinechartService {
             "layer": [
               {
                 "mark": "rule",
-                "encoding": {"y": {"datum": 50}, "color": {"value": "firebrick"}}
+                "encoding": {"y": {"datum": 100}, "color": {"value": "darkgrey"}}
               },
               {
                 "mark": "rule",
-                "encoding": {"y": {"datum": 35}, "color": {"value": "orange"}}
+                "encoding": {"y": {"datum": 50}, "color": {"value": "darkgrey"}}
+              },
+              {
+                "mark": "rule",
+                "encoding": {"y": {"datum": 35}, "color": {"value": "darkgrey"}}
               },
               {
                 "mark": {"type": "line"},
@@ -384,8 +388,19 @@ export class VegaLinechartService {
                   },
                   "color": {
                     "condition": [
-                      {"test": "datum.y >= 50", "value": "firebrick"},
-                      {"test": "datum.y >= 35 && datum.y < 50", "value": "orange"}
+                      {"test": "datum.y > 100", "value": "firebrick"},
+                      {"test": "datum.y > 50", "value": "orange"}
+                      // {"test": "datum.y < 26.25", "value": "rgb(255, 166, 102)"},
+                      // {"test": "datum.y < 35", "value": "rgb(255, 136, 51)"},
+                      // {"test": "datum.y < 40", "value": "rgb(254, 85, 1)"},
+                      // {"test": "datum.y < 45", "value": "rgb(228, 77, 1)"},
+                      // {"test": "datum.y < 50", "value": "rgb(203, 68, 1)"},
+                      // {"test": "datum.y < 100", "value": "rgb(184, 0, 135)"},
+                      // {"test": "datum.y < 150", "value": "rgb(153, 0, 112)"},
+                      // {"test": "datum.y < 200", "value": "rgb(102, 0, 75)"},
+                      // {"test": "datum.y < 350", "value": "rgb(77, 77, 77)"},
+                      // {"test": "datum.y < 500", "value": "rgb(51, 51, 51)"},
+                      // {"test": "datum.y >= 500", "value": "rgb(0, 0, 0)"},
                     ]
                   },
                   "tooltip": [
@@ -463,16 +478,16 @@ export class VegaLinechartService {
     spec.data.values = data;
 
     // also overwrite the title
-    spec.vconcat[0].layer[1].layer[2].encoding.x.title = chartOptions.xAxisTitle || '';
+    spec.vconcat[0].layer[1].layer[3].encoding.x.title = chartOptions.xAxisTitle || '';
     spec.vconcat[1].encoding.x.title = chartOptions.xAxisTitle || '';
     // spec.layer[3].encoding.tooltip[0].title = chartOptions.xAxisTitle || '';
 
     spec.vconcat[0].layer[1].layer[2].encoding.y.title = chartOptions.yAxisTitle || '';
-    spec.vconcat[0].layer[1].layer[3].encoding.y.title = chartOptions.yAxisTitle || '';
-    spec.vconcat[0].layer[1].layer[3].encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
+    spec.vconcat[0].layer[1].layer[4].encoding.y.title = chartOptions.yAxisTitle || '';
+    spec.vconcat[0].layer[1].layer[4].encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
 
     spec.vconcat[0].layer[0].encoding.y.title = chartOptions.yAxis2Title || '';
-    spec.vconcat[0].layer[1].layer[3].encoding.tooltip[2].title = chartOptions.yAxis2Title || '';
+    spec.vconcat[0].layer[1].layer[4].encoding.tooltip[2].title = chartOptions.yAxis2Title || '';
 
     spec.vconcat[0].width = chartOptions.width;
     spec.vconcat[0].height = chartOptions.height;
@@ -481,18 +496,18 @@ export class VegaLinechartService {
     spec.vconcat[1].height = 40;
 
     if (chartOptions.tempGranularity) {
-      spec.vconcat[0].layer[1].layer[2].encoding.x.timeUnit = chartOptions.tempGranularity;
       spec.vconcat[0].layer[1].layer[3].encoding.x.timeUnit = chartOptions.tempGranularity;
+      spec.vconcat[0].layer[1].layer[4].encoding.x.timeUnit = chartOptions.tempGranularity;
       spec.vconcat[1].encoding.x.timeUnit = chartOptions.tempGranularity;
 
-      spec.vconcat[0].layer[1].layer[2].encoding.y.aggregate = 'mean';
       spec.vconcat[0].layer[1].layer[3].encoding.y.aggregate = 'mean';
+      spec.vconcat[0].layer[1].layer[4].encoding.y.aggregate = 'mean';
       spec.vconcat[1].encoding.y.aggregate = 'mean';
     }
 
     spec.vconcat[0].layer[0].encoding.y.scale = {type: chartOptions.scaleType};
-    spec.vconcat[0].layer[1].layer[2].encoding.y.scale = {type: chartOptions.scaleType};
     spec.vconcat[0].layer[1].layer[3].encoding.y.scale = {type: chartOptions.scaleType};
+    spec.vconcat[0].layer[1].layer[4].encoding.y.scale = {type: chartOptions.scaleType};
     spec.vconcat[1].encoding.y.scale = {type: chartOptions.scaleType};
 
     if (chartOptions.regression) {

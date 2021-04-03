@@ -406,6 +406,8 @@ export class HospitalInfoComponent implements OnInit {
             s.chart.encoding.color.scale.domain = bedStati;
             s.chart.encoding.color.scale.range = colors;
             // spec.encoding.color.range = Math.min(maxNum+1, 5);
+
+            console.log(JSON.stringify(s.chart));
           });
 
         }

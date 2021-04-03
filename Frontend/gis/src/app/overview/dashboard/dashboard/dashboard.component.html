@@ -129,6 +129,10 @@
               <div *ngIf="timelineItem.type === 'table'" style="width: 100%">
                 <app-table-overview [tableData$]="timelineItem._compiled"></app-table-overview>
               </div>
+
+              <div *ngIf="timelineItem.type === 'stackedareaicu'" style="width: 100%">
+                <app-stacked-area-icu-chart [dataAndOptions]="timelineItem._compiled"></app-stacked-area-icu-chart>
+              </div>
             </div>
       
             <div class="timeline row button-row">

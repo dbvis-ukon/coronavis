@@ -17,6 +17,8 @@
           </mat-button-toggle>
           <mat-button-toggle [value]="'pixel'" i18n="@@chartSettingsViewAgegroups">Altersgruppen
           </mat-button-toggle>
+          <mat-button-toggle [value]="'stackedareaicu'" i18n="@@chartSettingsViewStackedAreaIcu">Bettenauslastung (kategorisch)
+          </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
 
@@ -28,6 +30,8 @@
       <app-pixel-chart *ngIf="data.chartItem.type === 'pixel'" [dataAndOptions]="data.chartItem._compiled"></app-pixel-chart>
 
       <app-table-overview *ngIf="data.chartItem.type === 'table'" [tableData$]="data.chartItem._compiled"></app-table-overview>
+
+      <app-stacked-area-icu-chart *ngIf="data.chartItem.type === 'stackedareaicu'" [dataAndOptions]="data.chartItem._compiled"></app-stacked-area-icu-chart>
     </div>
 
     <h2 style="text-align: center;" *ngIf="pleaseWait" i18n="@@pleaseWaitLoading">Bitte warten... lädt</h2>

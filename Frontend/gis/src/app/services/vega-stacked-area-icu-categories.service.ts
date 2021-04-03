@@ -1,0 +1,363 @@
+/* eslint-disable @typescript-eslint/quotes, quote-props */
+
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { CovidChartOptions } from '../cases-dod/covid-chart-options';
+import { BedType } from '../map/options/bed-type.enum';
+import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
+import { Region } from '../repositories/types/in/region';
+import { getMoment } from '../util/date-util';
+import { CaseUtilService } from './case-util.service';
+import { MultiLineChartItem } from './chart.service';
+import { ExportCsvService } from './export-csv.service';
+
+export interface IcuCategoriesDataPoint {
+  date: string;
+  icuCategory: string;
+  availability: string;
+  numberOfHospitals: number;
+}
+
+export interface IcuCategoriesDataAndOptions {
+  config: CovidChartOptions;
+  data: IcuCategoriesDataPoint[];
+  chartOptions: {
+    title: string;
+    xAxisTitle: string;
+    yAxisTitle: string;
+    width: number | 'container';
+    height: number;
+    scaleType: string;
+    timeAgg: string;
+    xDomain?: [string, string];
+    yDomain?: [number, number];
+  };
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class VegaStackedAreaIcuCategoriesService {
+
+  template = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {
+      "values": [
+      ]
+    },
+    "vconcat": [
+      {
+        "width": 500,
+        "height": 50,
+        "mark": {"type": "area", "interpolate": "step-after", "tooltip": true},
+        "params": [
+          {
+            "name": "hover",
+            "select": {"type": "point", "fields": ["availability"]},
+            "bind": {"legend": "mouseover"}
+          }
+        ],
+        "transform": [
+          {"filter": "datum.icuCategory == 'icu_low'"},
+          {"filter": {"param": "hover", "empty": true}}
+        ],
+        "encoding": {
+          "x": {
+            "field": "date",
+            "type": "temporal",
+            "title": "",
+            "scale": {}
+          },
+          "y": {
+            "field": "numberOfHospitals",
+            "type": "quantitative",
+            "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
+            "scale": {"domain": [0, 6]},
+            "title": ["ICU Low", "# Hospitals"]
+          },
+          "color": {
+            "type": "nominal",
+            "field": "availability",
+            "scale": {
+              "domain": [
+                "Verfügbar",
+                "Begrenzt",
+                "Ausgelastet",
+                "Nicht verfügbar",
+                "Keine Information"
+              ],
+              "range": [
+                "rgb(113,167,133)",
+                "rgb(230,181,72)",
+                "rgb(198,106,75)",
+                "#c2cbd4",
+                "#bbb"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "width": 500,
+        "height": 50,
+        "mark": {"type": "area", "interpolate": "step-after", "tooltip": true},
+        "params": [
+          {
+            "name": "hover",
+            "select": {"type": "point", "fields": ["availability"]},
+            "bind": {"legend": "mouseover"}
+          }
+        ],
+        "transform": [
+          {"filter": "datum.icuCategory == 'icu_high'"},
+          {"filter": {"param": "hover", "empty": true}}
+        ],
+        "encoding": {
+          "x": {
+            "field": "date",
+            "type": "temporal",
+            "title": "",
+            "scale": {}
+          },
+          "y": {
+            "field": "numberOfHospitals",
+            "type": "quantitative",
+            "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
+            "scale": {"domain": [0, 6]},
+            "title": ["ICU High", "# Hospitals"]
+          },
+          "color": {
+            "type": "nominal",
+            "field": "availability",
+            "scale": {
+              "domain": [
+                "Verfügbar",
+                "Begrenzt",
+                "Ausgelastet",
+                "Nicht verfügbar",
+                "Keine Information"
+              ],
+              "range": [
+                "rgb(113,167,133)",
+                "rgb(230,181,72)",
+                "rgb(198,106,75)",
+                "#c2cbd4",
+                "#bbb"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "width": 500,
+        "height": 50,
+        "mark": {"type": "area", "interpolate": "step-after", "tooltip": true},
+        "params": [
+          {
+            "name": "hover",
+            "select": {"type": "point", "fields": ["availbility"]},
+            "bind": {"legend": "mouseover"}
+          }
+        ],
+        "transform": [
+          {"filter": "datum.icuCategory == 'ecmo'"},
+          {"filter": {"param": "hover", "empty": true}}
+        ],
+        "encoding": {
+          "x": {
+            "field": "date",
+            "type": "temporal",
+            "title": "",
+            "scale": {}
+          },
+          "y": {
+            "field": "numberOfHospitals",
+            "type": "quantitative",
+            "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
+            "scale": {"domain": [0, 6]},
+            "title": ["ECMO", "# Hospitals"]
+          },
+          "color": {
+            "type": "nominal",
+            "field": "availability",
+            "title": "Kategorie",
+            "scale": {
+              "domain": [
+                "Verfügbar",
+                "Begrenzt",
+                "Ausgelastet",
+                "Nicht verfügbar",
+                "Keine Information"
+              ],
+              "range": [
+                "rgb(113,167,133)",
+                "rgb(230,181,72)",
+                "rgb(198,106,75)",
+                "#c2cbd4",
+                "#bbb"
+              ]
+            },
+            "legend": {"orient": "bottom"}
+          }
+        }
+      }
+    ]
+  };
+
+  constructor(
+    private caseUtil: CaseUtilService,
+    private exportCsv: ExportCsvService,
+    private hospitalRepo: QualitativeDiviDevelopmentRepository
+  ) {}
+
+
+  compileToDataAndOptions(o: CovidChartOptions, dataRequests: Region[]): Observable<IcuCategoriesDataAndOptions> {
+    const xExtent: [string, string] = [null, null];
+    const yExtent: [number, number] = [0, 0];
+    return this.hospitalRepo.getDiviDevelopmentAggregated(dataRequests)
+        .pipe(
+          map(d => {
+            console.log('data', d);
+            const data = d.properties.developments.map(d1 => {
+              if (xExtent[0] === null || getMoment(xExtent[0]).isAfter(getMoment(d1.timestamp))) {
+                xExtent[0] = d1.timestamp;
+              }
+
+              if (xExtent[1] === null || getMoment(xExtent[1]).isBefore(getMoment(d1.timestamp))) {
+                xExtent[1] = d1.timestamp;
+              }
+
+              const ret: IcuCategoriesDataPoint[] = [];
+              for (const bed of [BedType.icuLow, BedType.icuHigh, BedType.ecmo]) {
+                const k = bed+'_state';
+                let countSum = 0;
+                // eslint-disable-next-line guard-for-in
+                for (const avail in d1[k]) {
+                  // if (!d1[bed].hasOwnProperties(avail)) {
+                  //   continue;
+                  // }
+                  // avail == verfuegbar, ausgelastet
+                  const count: number = d1[k][avail];
+                  countSum += count;
+
+                  ret.push({
+                    date: d1.timestamp,
+                    icuCategory: bed,
+                    availability: avail,
+                    numberOfHospitals: count
+                  } as IcuCategoriesDataPoint);
+                }
+
+                if (yExtent[0] > countSum) {
+                  yExtent[0] = countSum;
+                }
+
+                if (yExtent[1] < countSum) {
+                  yExtent[1] = countSum;
+                }
+              }
+
+              return ret;
+            });
+
+          return [].concat(...data);
+        }),
+        map(dps => ({
+            config: o,
+            data: dps,
+            chartOptions: {
+              title: this.caseUtil.getChartTitle(o),
+              yAxisTitle: this.caseUtil.getChartTitle(o, null, true),
+              width: 'container',
+              height: 50,
+              timeAgg: o.timeAgg,
+              scaleType: o.scaleType,
+              xDomain: xExtent,
+              yDomain: yExtent
+            }
+          } as IcuCategoriesDataAndOptions))
+      );
+
+  }
+
+
+  compileChart(dataAndOptions: IcuCategoriesDataAndOptions): any {
+    if (!dataAndOptions) {
+      return null;
+    }
+
+    const data = dataAndOptions.data;
+    const chartOptions = dataAndOptions.chartOptions;
+
+    const spec = JSON.parse(JSON.stringify(this.template));
+
+    // inject data values
+    spec.data.values = data;
+
+    for (let i = 0; i < 3; i++) {
+      spec.vconcat[i].width = chartOptions.width;
+      spec.vconcat[i].height = chartOptions.height;
+
+      // spec.vconcat[i].encoding.x.timeUnit = chartOptions.timeAgg || 'yearmonthdate';
+
+      if (chartOptions.xDomain) {
+        spec.vconcat[i].encoding.x.scale.domain = chartOptions.xDomain;
+      }
+
+      if (chartOptions.yDomain) {
+        spec.vconcat[i].encoding.y.scale.domain = chartOptions.yDomain;
+      }
+
+      spec.vconcat[i].encoding.y.scale.type = chartOptions.scaleType || 'linear';
+    }
+
+    console.log(JSON.stringify(spec));
+
+    return spec;
+  }
+
+  downloadCsv(item: MultiLineChartItem): void {
+    const data = item._compiled.data;
+    const fileName = item._compiled.chartOptions.title.toLowerCase().replace(/ /ig, '-');
+
+    const m: Map<string, {[key: string]: string}> = new Map();
+
+    const cols: Set<string> = new Set();
+
+    data.forEach(d => {
+      if (!m.has(d.x)) {
+        m.set(d.x, {});
+      }
+
+      m.get(d.x)[d.region] = d.y + '';
+
+      cols.add(d.region);
+    });
+
+    const dateArr: string[] = [];
+
+    for (const date of m.keys()) {
+      dateArr.push(date);
+    }
+
+    dateArr.sort();
+
+
+    const records = dateArr.map(d => {
+
+      const record: Record<string, string> = {
+        'Date': d,
+        ...m.get(d)
+      };
+
+      return record;
+    });
+
+    const sortedCols = [...cols].sort();
+
+    const colsArr: string[] = ['Date', ...sortedCols];
+
+    this.exportCsv.exportToCsv(records, fileName, colsArr);
+  }
+}
