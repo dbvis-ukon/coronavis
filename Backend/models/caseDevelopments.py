@@ -7,6 +7,8 @@ from db import db
 
 
 class CaseDevelopments:
+    want_geom: bool = True
+
     def __init__(self, data_table):
         self.data_table = data_table
 
@@ -66,8 +68,10 @@ class CaseDevelopments:
     def get_aggregated(self, agg_dict: dict, from_time: str, to_time: str, want_age_groups: bool):
         return self.__res_single(self.__agg_region_query(agg_dict, from_time, to_time, want_age_groups))
 
-    @staticmethod
-    def __res_collection(sql_ret):
+    def set_want_geom(self, want_geom: bool):
+        self.want_geom = want_geom
+
+    def __res_collection(self, sql_ret):
         sql_result = sql_ret.fetchall()
         # sql_result = db.engine.execute(sql_stmt).fetchall()
 
@@ -75,7 +79,6 @@ class CaseDevelopments:
         for r in sql_result:
             feature = {
                 "type": 'Feature',
-                "geometry": r[3],
                 "properties": {
                     "id": r[0],
                     "name": r[1],
@@ -85,14 +88,15 @@ class CaseDevelopments:
                     "developmentDays": r[6]
                 }
             }
+            if self.want_geom:
+                feature["geometry"] = r[3]
             features.append(feature)
 
         featurecollection = {"type": "FeatureCollection", "features": features}
 
         return jsonify(featurecollection), 200
 
-    @staticmethod
-    def __res_single(sql_ret):
+    def __res_single(self, sql_ret):
         r = sql_ret.fetchone()
 
         if r is None:
@@ -100,7 +104,6 @@ class CaseDevelopments:
 
         feature = {
             "type": 'Feature',
-            "geometry": r[3],
             "properties": {
                 "id": r[0],
                 "name": r[1],
@@ -110,6 +113,8 @@ class CaseDevelopments:
                 "developmentDays": r[6]
             }
         }
+        if self.want_geom:
+            feature["geometry"] = r[3]
 
         return feature
 

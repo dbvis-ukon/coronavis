@@ -182,6 +182,8 @@ cd = CaseDevelopments('cases_per_county_and_day')
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_counties():
+    if request.args.get('nogeom') == 'true':
+        cd.set_want_geom(False)
     return cd.get_by_counties(
         request.args.get('from'),
         request.args.get('to'),
@@ -192,6 +194,8 @@ def get_cases_development_by_counties():
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_districts():
+    if request.args.get('nogeom') == 'true':
+        cd.set_want_geom(False)
     return cd.get_by_districts(
         request.args.get('from'),
         request.args.get('to'),
@@ -202,6 +206,8 @@ def get_cases_development_by_districts():
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_states():
+    if request.args.get('nogeom') == 'true':
+        cd.set_want_geom(False)
     return cd.get_by_states(
         request.args.get('from'),
         request.args.get('to'),
@@ -212,6 +218,8 @@ def get_cases_development_by_states():
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_cases_development_by_countries():
+    if request.args.get('nogeom') == 'true':
+        cd.set_want_geom(False)
     return cd.get_by_countries(
         request.args.get('from'),
         request.args.get('to'),
@@ -222,6 +230,8 @@ def get_cases_development_by_countries():
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_county(id_county):
+    if request.args.get('nogeom') == 'true':
+        cd.set_want_geom(False)
     return cd.get_county(
         request.args.get('from'),
         request.args.get('to'),
@@ -233,6 +243,8 @@ def get_county(id_county):
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_district(id_district):
+    if request.args.get('nogeom') == 'true':
+        cd.set_want_geom(False)
     return cd.get_district(
         request.args.get('from'),
         request.args.get('to'),
@@ -244,6 +256,8 @@ def get_district(id_district):
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_state(id_state):
+    if request.args.get('nogeom') == 'true':
+        cd.set_want_geom(False)
     return cd.get_state(
         request.args.get('from'),
         request.args.get('to'),
@@ -255,6 +269,8 @@ def get_state(id_state):
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_country(id_country):
+    if request.args.get('nogeom') == 'true':
+        cd.set_want_geom(False)
     return cd.get_country(
         request.args.get('from'),
         request.args.get('to'),
@@ -266,6 +282,8 @@ def get_country(id_country):
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_aggregated():
+    if request.args.get('nogeom') == 'true':
+        cd.set_want_geom(False)
     return cd.get_aggregated({
         'landkreise': request.args.get('landkreise'),
         'regierungsbezirke': request.args.get('regierungsbezirke'),

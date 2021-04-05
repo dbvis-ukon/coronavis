@@ -7,6 +7,8 @@ from db import db
 
 
 class IcuDevelopments:
+    want_geom = True
+
     __build_obj = """
     json_build_object(
         'timestamp',
@@ -150,8 +152,10 @@ class IcuDevelopments:
                                  from_time=from_time, to_time=to_time, max_days_old=5, cb=self.__get_feature_agg,
                                  id_hospital=None)
 
-    @staticmethod
-    def __get_feature_hospital(r):
+    def set_want_geom(self, want_geom: bool):
+        self.want_geom = want_geom
+
+    def __get_feature_hospital(self, r):
         # agg.id,
         # agg.name,
         # agg.address,
@@ -167,9 +171,8 @@ class IcuDevelopments:
         #             agg.timestamp
         #     )::jsonb
         # END AS development
-        return {
+        feature = {
             "type": 'Feature',
-            "geometry": r[6],
             "properties": {
                 "id": r[0],
                 "name": r[1],
@@ -179,6 +182,11 @@ class IcuDevelopments:
                 "developments": r[7]
             }
         }
+
+        if self.want_geom:
+            feature['geometry'] = r[6]
+
+        return feature
 
     @staticmethod
     def __res_collection(sql_stmt, from_time, to_time, max_days_old, cb):
@@ -206,17 +214,15 @@ class IcuDevelopments:
 
         return jsonify(feature), 200
 
-    @staticmethod
-    def __get_feature_agg(r):
+    def __get_feature_agg(self, r):
         # agg.ids,
         #     agg.name,
         #     st_asgeojson(agg.geom) :: jsonb             AS geom,
         #     st_asgeojson(st_centroid(agg.geom)):: jsonb AS centroid,
         #     AS development,
         #     AS developmentDays
-        return {
+        feature = {
             "type": 'Feature',
-            "geometry": r[2],
             "properties": {
                 "id": r[0],
                 "name": r[1],
@@ -225,6 +231,11 @@ class IcuDevelopments:
                 "developmentDays": r[5]
             }
         }
+
+        if self.want_geom:
+            feature['geometry'] = r[2]
+
+        return feature
 
     @staticmethod
     def __get_agg_cols(show_region=True):

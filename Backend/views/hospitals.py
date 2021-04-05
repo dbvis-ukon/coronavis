@@ -61,6 +61,8 @@ icu = IcuDevelopments()
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_hospital(id_hospital):
+    if request.args.get('nogeom') == 'true':
+        icu.set_want_geom(False)
     return icu.get_hospital(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'),
                             id_hospital)
 
@@ -69,6 +71,8 @@ def get_hospital(id_hospital):
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_hospitals2():
+    if request.args.get('nogeom') == 'true':
+        icu.set_want_geom(False)
     return icu.get_hospitals(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
 
 
@@ -76,6 +80,8 @@ def get_hospitals2():
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_county(id_county):
+    if request.args.get('nogeom') == 'true':
+        icu.set_want_geom(False)
     return icu.get_county(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), id_county)
 
 
@@ -83,6 +89,8 @@ def get_county(id_county):
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_counties():
+    if request.args.get('nogeom') == 'true':
+        icu.set_want_geom(False)
     return icu.get_by_counties(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
 
 
@@ -90,6 +98,8 @@ def get_counties():
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_district(id_district):
+    if request.args.get('nogeom') == 'true':
+        icu.set_want_geom(False)
     return icu.get_district(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'),
                             id_district)
 
@@ -98,6 +108,8 @@ def get_district(id_district):
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_districts():
+    if request.args.get('nogeom') == 'true':
+        icu.set_want_geom(False)
     return icu.get_by_districts(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
 
 
@@ -105,6 +117,8 @@ def get_districts():
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_state(id_state):
+    if request.args.get('nogeom') == 'true':
+        icu.set_want_geom(False)
     return icu.get_state(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), id_state)
 
 
@@ -112,6 +126,8 @@ def get_state(id_state):
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_states():
+    if request.args.get('nogeom') == 'true':
+        icu.set_want_geom(False)
     return icu.get_by_states(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
 
 
@@ -119,6 +135,8 @@ def get_states():
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_country(id_country):
+    if request.args.get('nogeom') == 'true':
+        icu.set_want_geom(False)
     return icu.get_country(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), id_country)
 
 
@@ -126,6 +144,8 @@ def get_country(id_country):
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_countries():
+    if request.args.get('nogeom') == 'true':
+        icu.set_want_geom(False)
     return icu.get_by_countries(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
 
 
@@ -133,6 +153,8 @@ def get_countries():
 @cache.cached(key_prefix=make_cache_key)
 @timer
 def get_aggregated():
+    if request.args.get('nogeom') == 'true':
+        icu.set_want_geom(False)
     return icu.get_aggregated({
         'landkreise': request.args.get('landkreise'),
         'regierungsbezirke': request.args.get('regierungsbezirke'),
