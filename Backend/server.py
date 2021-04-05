@@ -134,4 +134,4 @@ app.register_blueprint(regions.routes)
 app.register_blueprint(dashboards.routes)
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(port=5000, debug=os.environ.get("DEBUG", '') == 'true' or False)
