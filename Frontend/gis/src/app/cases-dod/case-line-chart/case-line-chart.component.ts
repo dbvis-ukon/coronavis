@@ -93,7 +93,8 @@ export class CaseLineChartComponent implements OnInit {
         this.options.dataSource,
         this.options.aggregationLevel,
         this.data.id,
-        false
+        false,
+        true
       )
       .pipe(
         map(d => d.properties),
@@ -134,7 +135,8 @@ export class CaseLineChartComponent implements OnInit {
         this.options.dataSource,
         this.options.aggregationLevel,
         this.data.id,
-        false
+        false,
+        true
       )
       .pipe(
         mergeMap(d => this.caseUtil.getTrendForCase7DaysPer100k(d.properties, this.options)),

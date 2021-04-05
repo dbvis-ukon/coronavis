@@ -139,7 +139,7 @@ export class VegaMultiLineChartService {
     const yExtent: [number, number] = [0, 0];
     return from(dataRequests)
     .pipe(
-      mergeMap(d => this.caseRepo.getCasesDevelopmentForAggLevelSingle(o.dataSource, d.aggLevel, d.id, false)
+      mergeMap(d => this.caseRepo.getCasesDevelopmentForAggLevelSingle(o.dataSource, d.aggLevel, d.id, false, true)
         .pipe(
           mergeMap(d1 => this.caseUtil.extractXYByOptions(d1.properties, o)),
           map(xyArr => {

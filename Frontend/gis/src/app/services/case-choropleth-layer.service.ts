@@ -36,7 +36,7 @@ export class CaseChoroplethLayerService {
 
     const [from, to] = this.caseUtil.getFromToTupleFromOptions(options);
 
-    return this.caseRepository.getCasesDevelopmentForAggLevel(options.dataSource, options.aggregationLevel, from, to, false)
+    return this.caseRepository.getCasesDevelopmentForAggLevel(options.dataSource, options.aggregationLevel, from, to, false, false)
       .pipe(
         map(data =>
           {

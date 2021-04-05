@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MultiPolygon } from 'geojson';
-import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
@@ -12,6 +11,7 @@ import { LabelCanvasLayer } from '../map/overlays/label-canvas.layer';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
+import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { HospitalUtilService } from './hospital-util.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
 import { TooltipService } from './tooltip.service';
@@ -37,7 +37,7 @@ export class BedChoroplethLayerService {
     const option = options$.value;
     const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(option);
     this.loading$.next(true);
-    return this.qualitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel, from, to)
+    return this.qualitativeDiviDevelopmentRepository.getDiviDevelopmentForAggLevel(option.aggregationLevel, from, to, false)
     .pipe(
       map(data => [
           new BedStatusChoropleth(

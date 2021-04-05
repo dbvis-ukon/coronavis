@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Region } from './types/in/region';
 
-export function prepareAggParams(dataRequests: Region[], ageGroups?: boolean): HttpParams {
+export function prepareAggParams(dataRequests: Region[], ageGroups?: boolean, nogeom?: boolean): HttpParams {
     const map = new Map<string, string[]>();
 
     dataRequests.forEach(d => {
@@ -20,6 +20,10 @@ export function prepareAggParams(dataRequests: Region[], ageGroups?: boolean): H
 
     if (ageGroups) {
         params = params.append('agegroups', 'true');
+    }
+
+    if (nogeom) {
+        params = params.append('nogeom', 'true');
     }
 
     return params;

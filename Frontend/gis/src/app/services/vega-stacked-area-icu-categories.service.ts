@@ -346,7 +346,7 @@ export class VegaStackedAreaIcuCategoriesService {
   compileToDataAndOptions(o: CovidChartOptions, dataRequests: Region[]): Observable<IcuCategoriesDataAndOptions> {
     const xExtent: [string, string] = [null, null];
     const yExtent: [number, number] = [0, 0];
-    return this.hospitalRepo.getDiviDevelopmentAggregated(dataRequests)
+    return this.hospitalRepo.getDiviDevelopmentAggregated(dataRequests, true)
         .pipe(
           map(d => {
             const data = d.properties.developments.map(d1 => {

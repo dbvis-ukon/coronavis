@@ -142,11 +142,11 @@ export class HospitalInfoComponent implements OnInit {
     if (this.hospitalUtil.isSingleHospital(this.data)) {
       this.isSingleHospital = true;
 
-      this.fullData = (await this.diviRepo.getDiviDevelopmentSingleHospital(this.data.id, from, to).toPromise()).properties;
+      this.fullData = (await this.diviRepo.getDiviDevelopmentSingleHospital(this.data.id, from, to, true).toPromise()).properties;
 
       this.singleHospital = this.fullData as SingleHospitalOut<QualitativeTimedStatus>;
     } else {
-      this.fullData = (await this.diviRepo.getDiviDevelopmentForAggLevelSingle(this.options.aggregationLevel, this.data.id, from, to).toPromise()).properties;
+      this.fullData = (await this.diviRepo.getDiviDevelopmentForAggLevelSingle(this.options.aggregationLevel, this.data.id, from, to, true).toPromise()).properties;
     }
 
     if (this.fullData.developments) {

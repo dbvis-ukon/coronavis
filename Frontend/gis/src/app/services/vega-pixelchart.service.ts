@@ -240,6 +240,7 @@ export class VegaPixelchartService {
     return this.caseRepo.getCasesDevelopmentAggregated(
       CovidNumberCaseDataSource.rki,
       dataRequest,
+      true,
       true
     ).pipe(
       map(d => d.properties),

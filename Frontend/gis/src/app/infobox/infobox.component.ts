@@ -231,7 +231,7 @@ export class InfoboxComponent implements OnInit {
 
     if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
       return this.hospitalRepo
-      .getDiviDevelopmentSingleHospitals(from, to)
+      .getDiviDevelopmentSingleHospitals(from, to, true)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
@@ -246,7 +246,7 @@ export class InfoboxComponent implements OnInit {
       );
     } else if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel !== AggregationLevel.none) {
       return this.hospitalRepo
-      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to)
+      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to, true)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
@@ -268,7 +268,7 @@ export class InfoboxComponent implements OnInit {
     if (this._mo.bedBackgroundOptions.enabled && this._mo.bedBackgroundOptions.aggregationLevel !== AggregationLevel.none) {
       const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(this._mo.bedBackgroundOptions);
       return this.hospitalRepo
-      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to)
+      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to, true)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
@@ -291,7 +291,7 @@ export class InfoboxComponent implements OnInit {
       const [from, to] = this.caseUtil.getFromToTupleFromOptions(this._mo.covidNumberCaseOptions);
 
       return this.caseRepo
-      .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this.mo.covidNumberCaseOptions.aggregationLevel, from, to, false)
+      .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this.mo.covidNumberCaseOptions.aggregationLevel, from, to, false, true)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({

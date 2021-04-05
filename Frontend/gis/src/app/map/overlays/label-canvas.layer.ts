@@ -1,12 +1,12 @@
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import L, { Bounds, DomUtil, Point } from 'leaflet';
-import { MyLocalStorageService } from '../../services/my-local-storage.service';
 import * as Quadtree from 'quadtree-lib';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ForceLayoutProperties, HasCentroid, HasName } from 'src/app/repositories/types/out/abstract-hospital-out';
 import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
 import { CanvasLayer, IViewInfo } from 'src/app/util/ts-canvas-layer';
+import { MyLocalStorageService } from '../../services/my-local-storage.service';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import { BedBackgroundOptions } from '../options/bed-background-options';
 import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
@@ -18,6 +18,19 @@ interface MyQuadTreeItem < Payload > {
   width: number;
   height: number;
   payload: Payload;
+}
+
+// contains x,y coordinates in pixel space
+// containes wrapped text
+// contains actual bounds including text
+interface PreparedGlyph {
+  x: number;
+  y: number;
+  _x: number;
+  _y: number;
+  wrappedText: string[];
+  width: number;
+  height: number;
 }
 
 export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutProperties & HasName & HasCentroid, C extends BedBackgroundOptions | CovidNumberCaseOptions> extends CanvasLayer implements GlyphLayer {

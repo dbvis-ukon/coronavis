@@ -7,71 +7,68 @@ from db import db
 
 
 class CaseDevelopments:
-    want_geom: bool = True
 
     def __init__(self, data_table):
         self.data_table = data_table
 
-    def get_county(self, from_time, to_time, id_county, want_age_groups):
+    def get_county(self, from_time, to_time, id_county, want_age_groups, want_geom: bool):
         """
             Return the development of covid cases and deaths for one county
         """
-        return self.__res_single(self.__get_counties(from_time, to_time, id_county, want_age_groups))
+        return self.__res_single(self.__get_counties(from_time, to_time, id_county, want_age_groups), want_geom=want_geom)
 
-    def get_by_counties(self, from_time, to_time, want_age_groups):
+    def get_by_counties(self, from_time, to_time, want_age_groups, want_geom: bool):
         """
             Return the development of covid cases and deaths by counties
         """
-        return self.__res_collection(self.__get_counties(from_time, to_time, None, want_age_groups))
+        return self.__res_collection(self.__get_counties(from_time, to_time, None, want_age_groups), want_geom=want_geom)
 
-    def get_district(self, from_time, to_time, id_district, want_age_groups):
+    def get_district(self, from_time, to_time, id_district, want_age_groups, want_geom: bool):
         """
             Return the development of covid cases and deaths for one district
         """
         return self.__res_single(
-            self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, id_district, want_age_groups))
+            self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, id_district, want_age_groups), want_geom=want_geom)
 
-    def get_by_districts(self, from_time, to_time, want_age_groups):
+    def get_by_districts(self, from_time, to_time, want_age_groups, want_geom: bool):
         """
             Return the development of covid cases and deaths by districts
         """
         return self.__res_collection(
-            self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, None, want_age_groups))
+            self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, None, want_age_groups), want_geom=want_geom)
 
-    def get_state(self, from_time, to_time, id_state, want_age_groups):
+    def get_state(self, from_time, to_time, id_state, want_age_groups, want_geom: bool):
         """
             Return the development of covid cases and deaths for one state
         """
         return self.__res_single(
-            self.__agg_query('state', 'bundeslaender', from_time, to_time, id_state, want_age_groups))
+            self.__agg_query('state', 'bundeslaender', from_time, to_time, id_state, want_age_groups), want_geom=want_geom)
 
-    def get_by_states(self, from_time, to_time, want_age_groups):
+    def get_by_states(self, from_time, to_time, want_age_groups, want_geom: bool):
         """
             Return the development of covid cases and deaths by states
         """
         return self.__res_collection(
-            self.__agg_query('state', 'bundeslaender', from_time, to_time, None, want_age_groups))
+            self.__agg_query('state', 'bundeslaender', from_time, to_time, None, want_age_groups), want_geom=want_geom)
 
-    def get_country(self, from_time, to_time, id_country, want_age_groups):
+    def get_country(self, from_time, to_time, id_country, want_age_groups, want_geom: bool):
         """
             Return the development of covid cases and deaths for one country
         """
         return self.__res_single(
-            self.__agg_query('country', 'germany', from_time, to_time, id_country, want_age_groups))
+            self.__agg_query('country', 'germany', from_time, to_time, id_country, want_age_groups), want_geom=want_geom)
 
-    def get_by_countries(self, from_time, to_time, want_age_groups):
+    def get_by_countries(self, from_time, to_time, want_age_groups, want_geom: bool):
         """
             Return the development of covid cases and deaths by countries
         """
-        return self.__res_collection(self.__agg_query('country', 'germany', from_time, to_time, None, want_age_groups))
+        return self.__res_collection(self.__agg_query('country', 'germany', from_time, to_time, None, want_age_groups), want_geom=want_geom)
 
-    def get_aggregated(self, agg_dict: dict, from_time: str, to_time: str, want_age_groups: bool):
-        return self.__res_single(self.__agg_region_query(agg_dict, from_time, to_time, want_age_groups))
+    def get_aggregated(self, agg_dict: dict, from_time: str, to_time: str, want_age_groups: bool, want_geom: bool):
+        return self.__res_single(self.__agg_region_query(agg_dict, from_time, to_time, want_age_groups), want_geom=want_geom)
 
-    def set_want_geom(self, want_geom: bool):
-        self.want_geom = want_geom
-
-    def __res_collection(self, sql_ret):
+    @staticmethod
+    def __res_collection(sql_ret, want_geom: bool):
         sql_result = sql_ret.fetchall()
         # sql_result = db.engine.execute(sql_stmt).fetchall()
 
@@ -88,7 +85,8 @@ class CaseDevelopments:
                     "developmentDays": r[6]
                 }
             }
-            if self.want_geom:
+            if want_geom:
+                print('want geom2')
                 feature["geometry"] = r[3]
             features.append(feature)
 
@@ -96,7 +94,8 @@ class CaseDevelopments:
 
         return jsonify(featurecollection), 200
 
-    def __res_single(self, sql_ret):
+    @staticmethod
+    def __res_single(sql_ret, want_geom):
         r = sql_ret.fetchone()
 
         if r is None:
@@ -113,7 +112,8 @@ class CaseDevelopments:
                 "developmentDays": r[6]
             }
         }
-        if self.want_geom:
+        if want_geom:
+            print('want geom')
             feature["geometry"] = r[3]
 
         return feature

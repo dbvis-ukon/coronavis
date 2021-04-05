@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
@@ -8,6 +7,7 @@ import { AggregatedGlyphCanvasLayer } from '../map/overlays/aggregated-glyph-can
 import { LandkreiseHospitalsLayer } from '../map/overlays/landkreishospitals';
 import { SingleGlyphCanvasLayer } from '../map/overlays/single-glyph-canvas.layer';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
+import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { HospitalUtilService } from './hospital-util.service';
 import { QualitativeColormapService } from './qualitative-colormap.service';
 import { TooltipService } from './tooltip.service';
@@ -33,7 +33,7 @@ export class GlyphLayerService {
 
     const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(options);
 
-    return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals(from, to)
+    return this.diviDevelopmentRepository.getDiviDevelopmentSingleHospitals(from, to, false)
     .pipe(
       // map(data => {
       //   const filteredFeatures: Feature<Point, SingleHospitalOut<QualitativeTimedStatus>>[] = [];
@@ -140,7 +140,7 @@ export class GlyphLayerService {
     const aggLevel = options.aggregationLevel;
     this.loading$.next(true);
     const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(options);
-    return this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(aggLevel, from, to)
+    return this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(aggLevel, from, to, false)
     .pipe(
       map(result => {
         const factory = new AggregatedGlyphCanvasLayer(
