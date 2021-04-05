@@ -1,5 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CronJob } from 'cron';
 import moment from 'moment';
 import { BehaviorSubject, forkJoin, interval, merge, Observable, of } from 'rxjs';
@@ -140,7 +141,8 @@ export class InfoboxComponent implements OnInit {
     private caseRepo: CaseDevelopmentRepository,
     private caseUtil: CaseUtilService,
     private cache: CachedRepository,
-    private hospitalUtil: HospitalUtilService
+    private hospitalUtil: HospitalUtilService,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -199,6 +201,8 @@ export class InfoboxComponent implements OnInit {
       this.combinedStatsOperator()
     );
 
+    this.activatedRoute.params.subscribe(() => this.updateStatistics());
+
 
     this.updateSearch();
   }
@@ -231,7 +235,7 @@ export class InfoboxComponent implements OnInit {
 
     if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
       return this.hospitalRepo
-      .getDiviDevelopmentSingleHospitals(from, to, true)
+      .getDiviDevelopmentSingleHospitals(from, to, false)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
@@ -310,7 +314,7 @@ export class InfoboxComponent implements OnInit {
   }
 
   private getZoomForAggLevel(lvl: AggregationLevel): number {
-    let zoom;
+    let zoom: number;
 
     switch (this.mo.bedGlyphOptions.aggregationLevel){
       case AggregationLevel.county:
@@ -435,7 +439,7 @@ export class InfoboxComponent implements OnInit {
     });
   }
 
-  private combinedStatsOperator() {
+  private combinedStatsOperator(): (input$: Observable<string>) => Observable<CombinedStatistics> {
     return (input$: Observable<string>) => input$.pipe(
       tap(() => this.aggregateStatisticsLoading$.next(true)),
       map(s => getStrDate(getMoment(s).endOf('day'))),
@@ -452,7 +456,7 @@ export class InfoboxComponent implements OnInit {
       map(([diviFiltered, diviUnfiltered, rki, prognosis, refDate]) => {
         this.aggregatedDiviStatistics = diviFiltered;
 
-        let rkiOutdated;
+        let rkiOutdated: boolean;
 
         if (rki) {
           rkiOutdated = getMoment(refDate).endOf('day').subtract(1, 'day').isAfter(getMoment(rki.timestamp));
