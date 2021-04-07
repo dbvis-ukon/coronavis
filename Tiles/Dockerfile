@@ -11,6 +11,9 @@ COPY ./mysite.conf /etc/nginx/conf.d/default.conf
 # replace the %VERSION% string with the $VERSION provided by the argument which is either a commit sha or tag
 RUN sed -i "s/%VERSION%/$VERSION/" /etc/nginx/conf.d/default.conf
 
+# https://github.com/GoogleContainerTools/kaniko/issues/1278#issuecomment-693459315
+RUN test -e /var/run || ln -s /run /var/run
+
 # Check the syntax of the config and dump it
 RUN nginx -T
 
