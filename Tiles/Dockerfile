@@ -23,5 +23,5 @@ RUN for file in /tmp/tiles/*.tar.gz ; do pigz -dc $file | tar -x --overwrite -C 
 # remove archives to reduce image size
 RUN rm -r /tmp/tiles
 
-# Check if files are correctly placed in nginx web dir
+# Check if files are correctly placed in nginx web dir 
 RUN ls -la /usr/share/nginx/html/
