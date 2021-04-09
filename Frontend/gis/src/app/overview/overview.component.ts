@@ -34,12 +34,12 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.matSnackBar.open(this.dataWarning.nativeElement.textContent, 'OK', {
-      duration: 120000,
-      verticalPosition: 'top',
-      horizontalPosition: 'center',
-      panelClass: 'snackbar-warning'
-    });
+    // this.matSnackBar.open(this.dataWarning.nativeElement.textContent, 'OK', {
+    //   duration: 120000,
+    //   verticalPosition: 'top',
+    //   horizontalPosition: 'center',
+    //   panelClass: 'snackbar-warning'
+    // });
   }
 
   navigateAndCloseSidenav(url: string) {
