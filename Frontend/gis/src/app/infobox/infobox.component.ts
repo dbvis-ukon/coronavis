@@ -1,5 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CronJob } from 'cron';
 import moment from 'moment';
 import { BehaviorSubject, forkJoin, interval, merge, Observable, of } from 'rxjs';
@@ -140,7 +141,8 @@ export class InfoboxComponent implements OnInit {
     private caseRepo: CaseDevelopmentRepository,
     private caseUtil: CaseUtilService,
     private cache: CachedRepository,
-    private hospitalUtil: HospitalUtilService
+    private hospitalUtil: HospitalUtilService,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -199,6 +201,8 @@ export class InfoboxComponent implements OnInit {
       this.combinedStatsOperator()
     );
 
+    this.activatedRoute.params.subscribe(() => this.updateStatistics());
+
 
     this.updateSearch();
   }
@@ -231,7 +235,7 @@ export class InfoboxComponent implements OnInit {
 
     if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
       return this.hospitalRepo
-      .getDiviDevelopmentSingleHospitals(from, to)
+      .getDiviDevelopmentSingleHospitals(from, to, false)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
@@ -246,7 +250,7 @@ export class InfoboxComponent implements OnInit {
       );
     } else if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel !== AggregationLevel.none) {
       return this.hospitalRepo
-      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to)
+      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to, true)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
@@ -268,7 +272,7 @@ export class InfoboxComponent implements OnInit {
     if (this._mo.bedBackgroundOptions.enabled && this._mo.bedBackgroundOptions.aggregationLevel !== AggregationLevel.none) {
       const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(this._mo.bedBackgroundOptions);
       return this.hospitalRepo
-      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to)
+      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to, true)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
@@ -291,7 +295,7 @@ export class InfoboxComponent implements OnInit {
       const [from, to] = this.caseUtil.getFromToTupleFromOptions(this._mo.covidNumberCaseOptions);
 
       return this.caseRepo
-      .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this.mo.covidNumberCaseOptions.aggregationLevel, from, to, false)
+      .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this.mo.covidNumberCaseOptions.aggregationLevel, from, to, false, true)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
@@ -310,7 +314,7 @@ export class InfoboxComponent implements OnInit {
   }
 
   private getZoomForAggLevel(lvl: AggregationLevel): number {
-    let zoom;
+    let zoom: number;
 
     switch (this.mo.bedGlyphOptions.aggregationLevel){
       case AggregationLevel.county:
@@ -435,7 +439,7 @@ export class InfoboxComponent implements OnInit {
     });
   }
 
-  private combinedStatsOperator() {
+  private combinedStatsOperator(): (input$: Observable<string>) => Observable<CombinedStatistics> {
     return (input$: Observable<string>) => input$.pipe(
       tap(() => this.aggregateStatisticsLoading$.next(true)),
       map(s => getStrDate(getMoment(s).endOf('day'))),
@@ -452,7 +456,7 @@ export class InfoboxComponent implements OnInit {
       map(([diviFiltered, diviUnfiltered, rki, prognosis, refDate]) => {
         this.aggregatedDiviStatistics = diviFiltered;
 
-        let rkiOutdated;
+        let rkiOutdated: boolean;
 
         if (rki) {
           rkiOutdated = getMoment(refDate).endOf('day').subtract(1, 'day').isAfter(getMoment(rki.timestamp));

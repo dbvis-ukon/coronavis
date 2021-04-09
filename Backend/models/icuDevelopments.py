@@ -75,83 +75,95 @@ class IcuDevelopments:
         COUNT(r.ids)                     as num_hospitals
     """
 
-    def get_hospital(self, from_time, to_time, max_days_old, id_hospital):
+    def get_hospital(self, from_time, to_time, max_days_old, id_hospital, want_geom: bool):
         """
             Return the development of one hospital
         """
         return self.__res_single(self.__get_hospitals(from_time, to_time, max_days_old, id_hospital),
-                                 from_time, to_time, max_days_old, id_hospital, self.__get_feature_hospital)
+                                 from_time, to_time, max_days_old, id_hospital, self.__get_feature_hospital,
+                                 want_geom=want_geom)
 
-    def get_hospitals(self, from_time, to_time, max_days_old):
+    def get_hospitals(self, from_time, to_time, max_days_old, want_geom: bool):
         """
             Return the development of all hospital
         """
         return self.__res_collection(self.__get_hospitals(from_time, to_time, max_days_old, None), from_time, to_time,
-                                     max_days_old, self.__get_feature_hospital)
+                                     max_days_old, self.__get_feature_hospital, want_geom=want_geom)
 
-    def get_county(self, from_time, to_time, max_days_old, id_county):
+    def get_county(self, from_time, to_time, max_days_old, id_county, want_geom: bool):
         """
             Return the development of icu capacities for one county
         """
-        return self.__res_single(self.__agg_query('landkreise_extended', from_time, to_time, max_days_old, id_county),
-                                 from_time, to_time, max_days_old, id_county, self.__get_feature_agg)
+        return self.__res_single(
+            self.__agg_query('landkreise_extended', 'county_id', from_time, to_time, max_days_old, id_county),
+            from_time, to_time, max_days_old, id_county, self.__get_feature_agg,
+            want_geom=want_geom)
 
-    def get_by_counties(self, from_time, to_time, max_days_old):
+    def get_by_counties(self, from_time, to_time, max_days_old, want_geom: bool):
         """
             Return the development of icu capacities by counties
         """
-        return self.__res_collection(self.__agg_query('landkreise_extended', from_time, to_time, max_days_old, None),
-                                     from_time, to_time, max_days_old, self.__get_feature_agg)
+        return self.__res_collection(
+            self.__agg_query('landkreise_extended', 'county_id', from_time, to_time, max_days_old, None),
+            from_time, to_time, max_days_old, self.__get_feature_agg, want_geom=want_geom)
 
-    def get_district(self, from_time, to_time, max_days_old, id_district):
+    def get_district(self, from_time, to_time, max_days_old, id_district, want_geom: bool):
         """
             Return the development of icu capacities for one district
         """
-        return self.__res_single(self.__agg_query('regierungsbezirke', from_time, to_time, max_days_old, id_district),
-                                 from_time, to_time, max_days_old, id_district, self.__get_feature_agg)
+        return self.__res_single(
+            self.__agg_query('regierungsbezirke', 'gd_id', from_time, to_time, max_days_old, id_district),
+            from_time, to_time, max_days_old, id_district, self.__get_feature_agg,
+            want_geom=want_geom)
 
-    def get_by_districts(self, from_time, to_time, max_days_old):
+    def get_by_districts(self, from_time, to_time, max_days_old, want_geom: bool):
         """
             Return the development of icu capacities by districts
         """
-        return self.__res_collection(self.__agg_query('regierungsbezirke', from_time, to_time, max_days_old, None),
-                                     from_time, to_time, max_days_old, self.__get_feature_agg)
+        return self.__res_collection(
+            self.__agg_query('regierungsbezirke', 'gd_id', from_time, to_time, max_days_old, None),
+            from_time, to_time, max_days_old, self.__get_feature_agg, want_geom=want_geom)
 
-    def get_state(self, from_time, to_time, max_days_old, id_state):
+    def get_state(self, from_time, to_time, max_days_old, id_state, want_geom: bool):
         """
             Return the development of icu capacities for one state
         """
-        return self.__res_single(self.__agg_query('bundeslaender', from_time, to_time, max_days_old, id_state),
-                                 from_time, to_time, max_days_old, id_state, self.__get_feature_agg)
+        return self.__res_single(
+            self.__agg_query('bundeslaender', 'state_id', from_time, to_time, max_days_old, id_state),
+            from_time, to_time, max_days_old, id_state, self.__get_feature_agg,
+            want_geom=want_geom)
 
-    def get_by_states(self, from_time, to_time, max_days_old):
+    def get_by_states(self, from_time, to_time, max_days_old, want_geom: bool):
         """
             Return the development of icu capacities by states
         """
-        return self.__res_collection(self.__agg_query('bundeslaender', from_time, to_time, max_days_old, None),
-                                     from_time, to_time, max_days_old, self.__get_feature_agg)
+        return self.__res_collection(
+            self.__agg_query('bundeslaender', 'state_id', from_time, to_time, max_days_old, None),
+            from_time, to_time, max_days_old, self.__get_feature_agg, want_geom=want_geom)
 
-    def get_country(self, from_time, to_time, max_days_old, id_country):
+    def get_country(self, from_time, to_time, max_days_old, id_country, want_geom: bool):
         """
             Return the development of icu capacities for one country
         """
-        return self.__res_single(self.__agg_query('germany', from_time, to_time, max_days_old, id_country),
-                                 from_time, to_time, max_days_old, id_country, self.__get_feature_agg)
+        return self.__res_single(
+            self.__agg_query('germany', 'country_id', from_time, to_time, max_days_old, id_country),
+            from_time, to_time, max_days_old, id_country, self.__get_feature_agg,
+            want_geom=want_geom)
 
-    def get_by_countries(self, from_time, to_time, max_days_old):
+    def get_by_countries(self, from_time, to_time, max_days_old, want_geom: bool):
         """
             Return the development of icu capacities by countries
         """
-        return self.__res_collection(self.__agg_query('germany', from_time, to_time, max_days_old, None),
-                                     from_time, to_time, max_days_old, self.__get_feature_agg)
+        return self.__res_collection(self.__agg_query('germany', 'country_id', from_time, to_time, max_days_old, None),
+                                     from_time, to_time, max_days_old, self.__get_feature_agg, want_geom=want_geom)
 
-    def get_aggregated(self, agg_dict: dict, from_time: str, to_time: str):
+    def get_aggregated(self, agg_dict: dict, from_time: str, to_time: str, want_geom: bool):
         return self.__res_single(sql_stmt=self.__agg_region_query(agg_dict, from_time, to_time),
                                  from_time=from_time, to_time=to_time, max_days_old=5, cb=self.__get_feature_agg,
-                                 id_hospital=None)
+                                 id_hospital=None, want_geom=want_geom)
 
     @staticmethod
-    def __get_feature_hospital(r):
+    def __get_feature_hospital(r, want_geom: bool):
         # agg.id,
         # agg.name,
         # agg.address,
@@ -167,9 +179,8 @@ class IcuDevelopments:
         #             agg.timestamp
         #     )::jsonb
         # END AS development
-        return {
+        feature = {
             "type": 'Feature',
-            "geometry": r[6],
             "properties": {
                 "id": r[0],
                 "name": r[1],
@@ -180,14 +191,19 @@ class IcuDevelopments:
             }
         }
 
+        if want_geom:
+            feature['geometry'] = r[6]
+
+        return feature
+
     @staticmethod
-    def __res_collection(sql_stmt, from_time, to_time, max_days_old, cb):
-        sql_result = db.engine.execute(sql_stmt, from_time=from_time, to_time=to_time, max_days_old=max_days_old)\
+    def __res_collection(sql_stmt, from_time, to_time, max_days_old, cb, want_geom: bool):
+        sql_result = db.engine.execute(sql_stmt, from_time=from_time, to_time=to_time, max_days_old=max_days_old) \
             .fetchall()
 
         features = []
         for r in sql_result:
-            feature = cb(r)
+            feature = cb(r, want_geom=want_geom)
             features.append(feature)
 
         featurecollection = {"type": "FeatureCollection", "features": features}
@@ -195,28 +211,27 @@ class IcuDevelopments:
         return jsonify(featurecollection), 200
 
     @staticmethod
-    def __res_single(sql_stmt, from_time, to_time, max_days_old, id_hospital, cb):
+    def __res_single(sql_stmt, from_time, to_time, max_days_old, id_hospital, cb, want_geom: bool):
         r = db.engine.execute(sql_stmt, from_time=from_time, to_time=to_time, max_days_old=max_days_old,
                               id_obj=id_hospital).fetchone()
 
         if r is None:
             return jsonify({'error': 'not found'}), 404
 
-        feature = cb(r)
+        feature = cb(r, want_geom=want_geom)
 
         return jsonify(feature), 200
 
     @staticmethod
-    def __get_feature_agg(r):
+    def __get_feature_agg(r, want_geom):
         # agg.ids,
         #     agg.name,
         #     st_asgeojson(agg.geom) :: jsonb             AS geom,
         #     st_asgeojson(st_centroid(agg.geom)):: jsonb AS centroid,
         #     AS development,
         #     AS developmentDays
-        return {
+        feature = {
             "type": 'Feature',
-            "geometry": r[2],
             "properties": {
                 "id": r[0],
                 "name": r[1],
@@ -225,6 +240,11 @@ class IcuDevelopments:
                 "developmentDays": r[5]
             }
         }
+
+        if want_geom:
+            feature['geometry'] = r[2]
+
+        return feature
 
     @staticmethod
     def __get_agg_cols(show_region=True):
@@ -255,7 +275,7 @@ class IcuDevelopments:
                 COUNT(c.hospital_id)             as num_hospitals
             """
 
-    def __agg_query(self, agg_table, from_time, to_time, max_days_old, id_obj):
+    def __agg_query(self, agg_table, region_id_col, from_time, to_time, max_days_old, id_obj):
 
         sql_from_time = ""
         sql_to_time = ""
@@ -279,7 +299,7 @@ class IcuDevelopments:
         WITH agg AS (
             SELECT {agg_cols}
             FROM filled_hospital_timeseries_with_fix c
-            JOIN {agg_table} r ON st_contains(r.geom, c.geom)
+            JOIN {agg_table} r ON c.{region_id_col} = r.ids
             WHERE landkreis_id IS NOT NULL
                 {sql_max_days_old}
             GROUP BY r.ids,
@@ -320,7 +340,8 @@ class IcuDevelopments:
                 agg.geom
         """.format(agg_table=agg_table, agg_cols=self.__agg_cols, build_obj=self.__build_obj,
                    sql_from_time=sql_from_time, sql_to_time=sql_to_time, sql_max_days_old=sql_max_days_old,
-                   sql_id_obj=sql_id_obj))
+                   sql_id_obj=sql_id_obj, region_id_col=region_id_col)
+                     )
 
         # current_app.logger.debug(stmnt)
 
@@ -349,6 +370,7 @@ class IcuDevelopments:
         if id_hospital:
             sql_id_county = "AND agg.hospital_id = :id_obj"
 
+        # noinspection SqlUnused
         sql_stmt = text("""
             SELECT
                 agg.hospital_id,
@@ -397,6 +419,7 @@ class IcuDevelopments:
 
         return sql_stmt
 
+    # noinspection DuplicatedCode
     def __agg_region_query(self, agg_table_dict: dict[str, str], from_time: str, to_time: str):
 
         sql_from_time = ""
@@ -450,9 +473,6 @@ class IcuDevelopments:
 
         if to_time:
             sql_to_time = f"AND agg.timestamp <= :toTimeParam"
-
-        all_ids_sql = "('" + ("', '".join(all_ids)) + "')"
-        sql_id_obj = f"AND r.ids IN {all_ids_sql}"
 
         # noinspection SqlResolve
         sql_stmt = text("""

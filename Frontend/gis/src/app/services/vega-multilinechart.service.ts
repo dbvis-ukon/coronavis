@@ -6,7 +6,7 @@ import { map, mergeMap, toArray } from 'rxjs/operators';
 import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { Region } from '../repositories/types/in/region';
-import { getMoment } from '../util/date-util';
+import { getMoment, getStrDate } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 import { MultiLineChartItem } from './chart.service';
 import { ExportCsvService } from './export-csv.service';
@@ -137,13 +137,32 @@ export class VegaMultiLineChartService {
   compileToDataAndOptions(o: CovidChartOptions, dataRequests: Region[]): Observable<MultiLineChartDataAndOptions> {
     const xExtent: [string, string] = [null, null];
     const yExtent: [number, number] = [0, 0];
+
+    let manXExtent: [string, string] = null;
+    if (o.temporalExtent.type === 'manual') {
+      if (o.temporalExtent.manualLastDays > 0) {
+        manXExtent = [getStrDate(getMoment('now').subtract(o.temporalExtent.manualLastDays, 'days')), getStrDate(getMoment('now'))];
+      } else {
+        manXExtent = o.temporalExtent.manualExtent;
+      }
+    }
+
     return from(dataRequests)
     .pipe(
-      mergeMap(d => this.caseRepo.getCasesDevelopmentForAggLevelSingle(o.dataSource, d.aggLevel, d.id, false)
+      mergeMap(d => this.caseRepo.getCasesDevelopmentForAggLevelSingle(o.dataSource, d.aggLevel, d.id, false, true)
         .pipe(
           mergeMap(d1 => this.caseUtil.extractXYByOptions(d1.properties, o)),
           map(xyArr => {
-            const data = xyArr.filter((_, i) => i > 7).map(xy => {
+            const data = xyArr
+            .filter((_, i) => i > 7)
+            .filter(d2 => {
+              if (manXExtent !== null && !getMoment(d2.x).isBetween(getMoment(manXExtent[0]), getMoment(manXExtent[1]), 'day', '[]')) {
+                return false;
+              }
+
+              return true;
+            })
+            .map(xy => {
               if (xExtent[0] === null || getMoment(xExtent[0]).isAfter(getMoment(xy.x))) {
                 xExtent[0] = xy.x;
               }

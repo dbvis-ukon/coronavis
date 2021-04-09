@@ -81,7 +81,7 @@ export class RegionSelectorComponent implements OnInit {
     return this.allRegions
       .pipe(
         mergeMap(arr => arr),
-        filter(region => region.name.toLowerCase().indexOf(filterValue) === 0),
+        filter(region => region.name.toLowerCase().indexOf(filterValue) >= 0),
         toArray()
       );
   }

@@ -2,7 +2,6 @@ import { MatDialog } from '@angular/material/dialog/dialog';
 import { Selection } from 'd3-selection';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import L, { Bounds, DomUtil, LeafletMouseEvent, Point } from 'leaflet';
-import { MyLocalStorageService } from '../../services/my-local-storage.service';
 import * as Quadtree from 'quadtree-lib';
 import { BehaviorSubject, NEVER, Observable, Subject, timer } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
@@ -15,6 +14,7 @@ import { QualitativeColormapService } from 'src/app/services/qualitative-colorma
 import { TooltipService } from 'src/app/services/tooltip.service';
 import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
 import { CanvasLayer, IViewInfo } from 'src/app/util/ts-canvas-layer';
+import { MyLocalStorageService } from '../../services/my-local-storage.service';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import { BedGlyphOptions } from '../options/bed-glyph-options';
 import { BedType } from '../options/bed-type.enum';
@@ -185,10 +185,12 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       this.quadtree.clear();
     }
 
-    this.quadtree = new Quadtree({
-      width: options.size.x,
-      height: options.size.y
-    });
+    if (options.size.x > 1 && options.size.y > 1) {
+      this.quadtree = new Quadtree({
+        width: options.size.x,
+        height: options.size.y
+      });
+    }
 
     this.ctx = options.canvas.getContext('2d');
 
@@ -394,7 +396,7 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       return;
     }
 
-    const glyphBoxes = [
+    const glyphBoxes: [[number, number], [number, number]] = [
       [-this.getGlyphWidth() / 2, -this.getGlyphHeight() / 2],
       [this.getGlyphWidth() / 2, this.getGlyphHeight() / 2]
     ];

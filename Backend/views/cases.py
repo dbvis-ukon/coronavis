@@ -185,7 +185,9 @@ def get_cases_development_by_counties():
     return cd.get_by_counties(
         request.args.get('from'),
         request.args.get('to'),
-        request.args.get('agegroups', type=bool))
+        request.args.get('agegroups', type=bool),
+        request.args.get('nogeom', type=bool) != True
+    )
 
 
 @routes.route('/development/regierungsbezirke', methods=['GET'])
@@ -195,7 +197,9 @@ def get_cases_development_by_districts():
     return cd.get_by_districts(
         request.args.get('from'),
         request.args.get('to'),
-        request.args.get('agegroups', type=bool))
+        request.args.get('agegroups', type=bool),
+        request.args.get('nogeom', type=bool) != True
+    )
 
 
 @routes.route('/development/bundeslaender', methods=['GET'])
@@ -205,7 +209,9 @@ def get_cases_development_by_states():
     return cd.get_by_states(
         request.args.get('from'),
         request.args.get('to'),
-        request.args.get('agegroups', type=bool))
+        request.args.get('agegroups', type=bool),
+        request.args.get('nogeom', type=bool) != True
+    )
 
 
 @routes.route('/development/laender', methods=['GET'])
@@ -215,7 +221,9 @@ def get_cases_development_by_countries():
     return cd.get_by_countries(
         request.args.get('from'),
         request.args.get('to'),
-        request.args.get('agegroups', type=bool))
+        request.args.get('agegroups', type=bool),
+        request.args.get('nogeom', type=bool) != True
+    )
 
 
 @routes.route('/development/landkreis/<id_county>', methods=['GET'])
@@ -226,7 +234,9 @@ def get_county(id_county):
         request.args.get('from'),
         request.args.get('to'),
         id_county,
-        request.args.get('agegroups', type=bool))
+        request.args.get('agegroups', type=bool),
+        request.args.get('nogeom', type=bool) != True
+    )
 
 
 @routes.route('/development/regierungsbezirk/<id_district>', methods=['GET'])
@@ -237,7 +247,9 @@ def get_district(id_district):
         request.args.get('from'),
         request.args.get('to'),
         id_district,
-        request.args.get('agegroups', type=bool))
+        request.args.get('agegroups', type=bool),
+        request.args.get('nogeom', type=bool) != True
+    )
 
 
 @routes.route('/development/bundesland/<id_state>', methods=['GET'])
@@ -248,7 +260,9 @@ def get_state(id_state):
         request.args.get('from'),
         request.args.get('to'),
         id_state,
-        request.args.get('agegroups', type=bool))
+        request.args.get('agegroups', type=bool),
+        request.args.get('nogeom', type=bool) != True
+    )
 
 
 @routes.route('/development/land/<id_country>', methods=['GET'])
@@ -259,7 +273,9 @@ def get_country(id_country):
         request.args.get('from'),
         request.args.get('to'),
         id_country,
-        request.args.get('agegroups', type=bool))
+        request.args.get('agegroups', type=bool),
+        request.args.get('nogeom', type=bool) != True
+    )
 
 
 @routes.route('/development/aggregated', methods=['GET'])
@@ -271,4 +287,9 @@ def get_aggregated():
         'regierungsbezirke': request.args.get('regierungsbezirke'),
         'bundeslaender': request.args.get('bundeslaender'),
         'laender': request.args.get('laender')
-    }, request.args.get('from'), request.args.get('to'), request.args.get('agegroups', type=bool))
+    },
+        request.args.get('from'),
+        request.args.get('to'),
+        request.args.get('agegroups', type=bool),
+        request.args.get('nogeom', type=bool) != True
+    )

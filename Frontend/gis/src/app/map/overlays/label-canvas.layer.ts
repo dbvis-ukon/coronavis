@@ -1,12 +1,11 @@
 import { Feature, FeatureCollection, Geometry } from 'geojson';
-import L, { Bounds, DomUtil, Point } from 'leaflet';
-import { MyLocalStorageService } from '../../services/my-local-storage.service';
-import * as Quadtree from 'quadtree-lib';
+import L, { Bounds, DomUtil, LatLngLiteral, Point } from 'leaflet';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ForceLayoutProperties, HasCentroid, HasName } from 'src/app/repositories/types/out/abstract-hospital-out';
-import { ForceDirectedLayout } from 'src/app/util/forceDirectedLayout';
+import { ForceDirectedLayout } from 'src/app/util/force-directed-layout';
 import { CanvasLayer, IViewInfo } from 'src/app/util/ts-canvas-layer';
+import { MyLocalStorageService } from '../../services/my-local-storage.service';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import { BedBackgroundOptions } from '../options/bed-background-options';
 import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
@@ -20,13 +19,28 @@ interface MyQuadTreeItem < Payload > {
   payload: Payload;
 }
 
+// contains x,y coordinates in pixel space
+// containes wrapped text
+// contains actual bounds including text
+export interface PreparedGlyph {
+  latlng: LatLngLiteral;
+  x: number;
+  y: number;
+  _x: number;
+  _y: number;
+  textMarginTop: number;
+  wrappedText: {text: string; fontSize: number}[];
+  width: number;
+  height: number;
+}
+
 export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutProperties & HasName & HasCentroid, C extends BedBackgroundOptions | CovidNumberCaseOptions> extends CanvasLayer implements GlyphLayer {
 
-  protected quadtree: Quadtree < MyQuadTreeItem < Feature < G, P >>> ;
+  // protected quadtree: Quadtree < MyQuadTreeItem < Feature < G, P >>> ;
 
   protected visible = true;
 
-  protected forceLayout: ForceDirectedLayout < G, P > ;
+  protected forceLayout: ForceDirectedLayout < PreparedGlyph > ;
 
   protected ctx: CanvasRenderingContext2D;
 
@@ -37,6 +51,8 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
   private initiallyMounted = false;
 
   private showText = false;
+
+  protected preparedGlyphs: PreparedGlyph[] = [];
 
 
   constructor(
@@ -51,17 +67,16 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
       bubblingMouseEvents: false
     });
 
-    this.forceLayout = new ForceDirectedLayout < G, P > (this.storage, granularity);
-
+    this.forceLayout = new ForceDirectedLayout < PreparedGlyph > (this.storage, granularity);
 
     this.forceLayout.getEvents()
       .pipe(
         filter(e => e.type === 'end')
       )
       .subscribe(e => {
-        this.data = e.data;
+        this.preparedGlyphs = e.data;
 
-        this.drawLabels();
+        this.drawPreparedGlyphs();
       });
   }
 
@@ -69,14 +84,14 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
   public onDrawLayer(options: IViewInfo) {
     this.viewInfo = options;
 
-    if (this.quadtree) {
-      this.quadtree.clear();
-    }
+    // if (this.quadtree) {
+    //   this.quadtree.clear();
+    // }
 
-    this.quadtree = new Quadtree({
-      width: options.size.x,
-      height: options.size.y
-    });
+    // this.quadtree = new Quadtree({
+    //   width: options.size.x,
+    //   height: options.size.y
+    // });
 
     this.ctx = options.canvas.getContext('2d');
 
@@ -87,7 +102,11 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
     this.ctx.translate(-topLeft.x, -topLeft.y);
 
-    this.drawLabels();
+    if (!this.initiallyMounted) {
+      this.prepareAllGpyphs().then(() => this.drawPreparedGlyphs());
+    } else {
+      this.drawPreparedGlyphs();
+    }
   }
 
   onLayerDidMount() {
@@ -97,7 +116,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
     this._map.on('zoom', () => this.onZoomed());
 
-    this.onZoomed();
+    setTimeout(() => this.onZoomed(), 100);
 
     this.initiallyMounted = true;
   }
@@ -138,27 +157,17 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
     this.currentScale = scale;
   }
 
-  protected drawAdditionalFeatures(data: Feature<G, P>, pt: L.Point) {
-    let bounds = new Bounds(pt, pt);
-
-    if (this.options$.value.showLabels && this.showText) {
-      const prefix = (data.properties as any).description;
-      const b = this.drawText((prefix && prefix !== 'Landkreis' && prefix !== 'Kreis' ? prefix + ' ' : '') + data.properties.name, pt, 0, false);
-
-      bounds = bounds
-        .extend(b.min)
-        .extend(b.max);
-    }
-
-    return bounds;
-  }
-
   protected onZoomed() {
-    if (!this._map) {
+    if (!this._map || !this.ctx) {
       return;
     }
 
-    this.calculateOverlapFree();
+    this.prepareAllGpyphs()
+    .then(() => {
+      this.drawPreparedGlyphs();
+
+      this.calculateOverlapFree();
+    });
   }
 
   protected getGlyphWidth() {
@@ -203,43 +212,44 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
     this.ctx.clearRect(topLeft.x, topLeft.y, this._canvas.width + Math.abs(topLeft.x), this._canvas.height + Math.abs(topLeft.y));
   }
 
-  protected drawLabels() {
+  protected drawPreparedGlyphs() {
     if (!this.data || !this._map || !this.ctx) {
       return;
     }
 
     this.clearCanvas();
 
-    for (const g of this.data.features) {
-      const latLng = this.getLatLng(g);
-
-      if (!this.viewInfo.bounds.contains(latLng)) {
+    for (const g of this.preparedGlyphs) {
+      if (!this.viewInfo.bounds.contains(g.latlng)) {
         continue;
       }
 
-      this.drawLabel(g);
+      this.drawPreparedGlyph(g);
     }
 
   }
 
-  protected drawLabel(glyphData: Feature < G, P > ) {
-    const pt = this.getGlyphPixelPos(glyphData);
+  protected drawPreparedGlyph(g: PreparedGlyph): void {
+    if (this.options$.value.showLabels && this.showText && g.wrappedText && g.wrappedText.length > 0) {
 
-    let bounds = new Bounds(pt, new Point(pt.x + this.getGlyphWidth(), pt.y));
+      this.ctx.strokeStyle = 'white';
+      this.ctx.lineWidth = 2;
 
-    const boundsAdd = this.drawAdditionalFeatures(glyphData, pt);
 
-    bounds = bounds
-      .extend(boundsAdd.min)
-      .extend(boundsAdd.max);
+      this.ctx.font = `bold ${g.wrappedText[0].fontSize}px Roboto`;
+      // this.ctx.fillStyle = isHovered ? '#193e8a' : 'black';
+      // this.ctx.shadowOffsetX = 1;
+      // this.ctx.shadowOffsetY = 1;
+      // this.ctx.shadowColor = "rgba(255,255,255,1)";
+      // this.ctx.shadowBlur = 4;
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'top';
 
-    this.quadtree.push({
-      x: bounds.min.x, // Mandatory
-      y: bounds.min.y, // Mandatory
-      width: bounds.getSize().x, // Optional, defaults to 1
-      height: bounds.getSize().y, // Optional, defaults to 1
-      payload: glyphData
-    }); // Optional, defaults to false
+      g.wrappedText.forEach((text, i) => {
+        this.ctx.strokeText(text.text, g.x, g.y + g.textMarginTop + i * text.fontSize);
+        this.ctx.fillText(text.text, g.x, g.y + g.textMarginTop + i * text.fontSize);
+      });
+    }
   }
 
   // @method bringToFront(): this
@@ -261,45 +271,40 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
   }
 
   protected calculateOverlapFree() {
-    if (!this.data || !this._map) {
+    if (!this.preparedGlyphs || !this._map || !this.ctx) {
       return;
     }
-
-    this.updateCurrentScale();
-
-    // update glyph positions because they are based on the zoom level
-    this.data.features.forEach(d => {
-      const pt = this._map.latLngToLayerPoint(this.getLatLng(d));
-      // const pt = this.latLngPoint(this.getLatLng(d));
-      d.properties._x = pt.x;
-      d.properties.x = pt.x;
-
-      d.properties._y = pt.y;
-      d.properties.y = pt.y;
-    });
 
     if (!this.visible) {
       return;
     }
 
-    const glyphBoxes = [
-      [-this.getGlyphWidth() / 2, -this.getGlyphHeight() / 2],
-      [this.getGlyphWidth() / 2, this.getGlyphHeight() / 2]
-    ];
+    //  this.ctx.strokeRect(g.x - g.width / 2, g.y, g.width, g.height);
 
-    this.forceLayout.update(glyphBoxes, this.data, this._map.getZoom());
+    const cb = (d: PreparedGlyph, i: number, ds: PreparedGlyph[]) => ([
+      [d.x - d.width / 2, d.y],
+      [d.x + d.width / 2, d.y + d.height]]);
+
+    this.forceLayout.update(cb as any, this.preparedGlyphs, this._map.getZoom());
   }
 
   /**
    * Taken from: https://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
    */
-  protected getWrappedText(text: string, maxWidth: number): {line: string; width: number}[] {
-    const words = text.split(' ');
+  protected getWrappedText(text: string, maxWidth: number, fontSize: number): {line: string; width: number}[] {
+    const words = text.split(/[ -]/g);
     let line = '';
 
     const lines: {line: string; width: number}[] = [];
+    this.ctx.strokeStyle = 'white';
+    this.ctx.lineWidth = 2;
 
-    let testWidth;
+
+    this.ctx.font = `bold ${fontSize}px Roboto`;
+    this.ctx.textAlign = 'center';
+    this.ctx.textBaseline = 'top';
+
+    let testWidth: number;
     for (let n = 0; n < words.length; n++) {
       const testLine = line + words[n] + ' ';
       const metrics = this.ctx.measureText(testLine);
@@ -315,44 +320,68 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
     return lines;
   }
 
-  // returns height of this wrapped text
-  protected drawText(text: string, pt: L.Point, yOffset: number, isHovered: boolean): Bounds {
-    // this.ctx.save();
+  protected prepareGlyph(inGlyph: Feature<G, P>): PreparedGlyph {
+    const latlng = this.getLatLng(inGlyph);
+    const pt = this._map.latLngToLayerPoint(latlng);
 
+    return this.prepareGlyphAdditionalFeatures(inGlyph, pt);
+  }
+
+  protected prepareGlyphAdditionalFeatures(inGlyph: Feature<G, P>, pt: L.Point): PreparedGlyph {
     const centerX = pt.x;
     const belowGlyhY = pt.y;
 
-    const fontSizeAndHeight = Math.round(11 * this.currentScale);
+    // empty bounds
+    let bounds = new Bounds(pt, pt);
 
-    this.ctx.strokeStyle = 'white';
-    this.ctx.lineWidth = 2;
+    let wrappedText: {text: string; fontSize: number}[] = [];
+
+    if (this.options$.value.showLabels && this.showText) {
+      const prefix = (inGlyph.properties as any).description;
+      const text = (prefix && prefix !== 'Landkreis' && prefix !== 'Kreis' ? prefix + ' ' : '') + inGlyph.properties.name;
+
+      const fontSizeAndHeight = Math.round(11 * this.currentScale);
+
+      const wText = this.getWrappedText(text, this.getGlyphWidth() * 4, fontSizeAndHeight);
+      const widthOfWrappedText = wText.map(m => m.width).reduce((agg, val) => Math.max(agg || 0, val));
+
+      wrappedText = wText.map((w, i) => ({text: w.line, fontSize: fontSizeAndHeight}));
 
 
-    this.ctx.font = `bold ${fontSizeAndHeight}px Roboto`;
-    this.ctx.fillStyle = isHovered ? '#193e8a' : 'black';
-    // this.ctx.shadowOffsetX = 1;
-    // this.ctx.shadowOffsetY = 1;
-    // this.ctx.shadowColor = "rgba(255,255,255,1)";
-    // this.ctx.shadowBlur = 4;
-    this.ctx.textAlign = 'center';
-    this.ctx.textBaseline = 'top';
+      const heightOfWrappedText = belowGlyhY + fontSizeAndHeight * wrappedText.length;
 
-    const lineHeight = fontSizeAndHeight;
-    const wrappedText = this.getWrappedText(text, this.getGlyphWidth() * 4);
+      // const b = new Bounds(
+      //   new Point(centerX, belowGlyhY),
+      //   new Point(centerX + widthOfWrappedText, heightOfWrappedText)
+      // );
 
-    for (let i = 0; i < wrappedText.length; i++) {
-      this.ctx.strokeText(wrappedText[i].line, centerX, belowGlyhY + i * lineHeight);
-      this.ctx.fillText(wrappedText[i].line, centerX, belowGlyhY + i * lineHeight);
+      const topLeftPt = new Point(centerX - (widthOfWrappedText / 2), belowGlyhY);
+      const bottomRightPt = new Point(centerX + (widthOfWrappedText / 2), heightOfWrappedText);
+      bounds = new Bounds(topLeftPt, bottomRightPt);
     }
 
-    const maxWidth = wrappedText.map(m => m.width).reduce((agg, val) => Math.max(agg || 0, val));
+    return {
+      latlng: this.getLatLng(inGlyph),
+      x: pt.x,
+      y: pt.y,
+      _x: pt.x,
+      _y: pt.y,
+      wrappedText,
+      textMarginTop: 0,
+      width: bounds.getSize().x,
+      height: bounds.getSize().y,
+    };
+  }
 
-    // this.ctx.restore();
+  protected async prepareAllGpyphs(): Promise<void> {
+    if (!this._map || !this.data || !this.ctx) {
+      return;
+    }
 
-    return new Bounds(
-      new Point(centerX - (maxWidth / 2), belowGlyhY),
-      new Point(centerX + (maxWidth / 2), belowGlyhY + lineHeight * wrappedText.length)
-    );
+    // required so that the showText attribute is properly set
+    this.updateCurrentScale();
+
+    this.preparedGlyphs = this.data.features.map(d => this.prepareGlyph(d));
   }
 
 }

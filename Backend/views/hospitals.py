@@ -62,28 +62,31 @@ icu = IcuDevelopments()
 @cache.cached(key_prefix=make_cache_key)
 def get_hospital(id_hospital):
     return icu.get_hospital(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'),
-                            id_hospital)
+                            id_hospital, request.args.get('nogeom', type=bool) != True)
 
 
 @routes.route('/development', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_hospitals2():
-    return icu.get_hospitals(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
+    return icu.get_hospitals(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'),
+                             request.args.get('nogeom', type=bool) != True)
 
 
 @routes.route('/development/landkreis/<id_county>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_county(id_county):
-    return icu.get_county(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), id_county)
+    return icu.get_county(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), id_county,
+                          request.args.get('nogeom', type=bool) != True)
 
 
 @routes.route('/development/landkreise', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_counties():
-    return icu.get_by_counties(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
+    return icu.get_by_counties(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'),
+                               request.args.get('nogeom', type=bool) != True)
 
 
 @routes.route('/development/regierungsbezirk/<id_district>', methods=['GET'])
@@ -91,42 +94,47 @@ def get_counties():
 @cache.cached(key_prefix=make_cache_key)
 def get_district(id_district):
     return icu.get_district(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'),
-                            id_district)
+                            id_district, request.args.get('nogeom', type=bool) != True)
 
 
 @routes.route('/development/regierungsbezirke', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_districts():
-    return icu.get_by_districts(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
+    return icu.get_by_districts(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'),
+                                request.args.get('nogeom', type=bool) != True)
 
 
 @routes.route('/development/bundesland/<id_state>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_state(id_state):
-    return icu.get_state(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), id_state)
+    return icu.get_state(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), id_state,
+                         request.args.get('nogeom', type=bool) != True)
 
 
 @routes.route('/development/bundeslaender', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_states():
-    return icu.get_by_states(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
+    return icu.get_by_states(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'),
+                             request.args.get('nogeom', type=bool) != True)
 
 
 @routes.route('/development/land/<id_country>', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_country(id_country):
-    return icu.get_country(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), id_country)
+    return icu.get_country(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'), id_country,
+                           request.args.get('nogeom', type=bool) != True)
 
 
 @routes.route('/development/laender', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
 def get_countries():
-    return icu.get_by_countries(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'))
+    return icu.get_by_countries(request.args.get('from'), request.args.get('to'), request.args.get('maxDaysOld'),
+                                request.args.get('nogeom', type=bool) != True)
 
 
 @routes.route('/development/aggregated', methods=['GET'])
@@ -138,4 +146,4 @@ def get_aggregated():
         'regierungsbezirke': request.args.get('regierungsbezirke'),
         'bundeslaender': request.args.get('bundeslaender'),
         'laender': request.args.get('laender')
-    }, request.args.get('from'), request.args.get('to'))
+    }, request.args.get('from'), request.args.get('to'), request.args.get('nogeom', type=bool) != True)

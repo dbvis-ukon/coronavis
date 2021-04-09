@@ -5,6 +5,9 @@ FROM python:3.9-slim
 # Set working directory location
 ENV APP_DIR=/var/opt/gis
 
+RUN mkdir /prometheus-data
+ENV prometheus_multiproc_dir=/prometheus-data
+
 # requirements first to use build caching
 COPY ./requirements.txt ${APP_DIR}/requirements.txt
 

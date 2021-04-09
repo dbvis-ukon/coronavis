@@ -139,7 +139,8 @@ def send_notifications():
     c = CaseDevelopments('cases_per_county_and_day_risklayer')
     sevendaysago = (datetime.now(timezone.utc) - timedelta(days=8)).strftime('%Y-%m-%d')
     tomorrow = (datetime.now(timezone.utc) + timedelta(days=1)).strftime('%Y-%m-%d')
-    de = c.get_country(from_time=sevendaysago, to_time=tomorrow, id_country='de', want_age_groups=False)
+    de = c.get_country(from_time=sevendaysago, to_time=tomorrow, id_country='de', want_age_groups=False,
+                       want_geom=False)
     de_developments = de['properties']['developments']
     de_today = de_developments[-1]
     de_24h = de_developments[-2]
@@ -162,7 +163,8 @@ def send_notifications():
     num_emails = 0
 
     for row in sql_result:
-        lk = c.get_county(from_time=sevendaysago, to_time=tomorrow, id_county=row['ags'], want_age_groups=False)
+        lk = c.get_county(from_time=sevendaysago, to_time=tomorrow, id_county=row['ags'], want_age_groups=False,
+                          want_geom=False)
         lk_developments = lk['properties']['developments']
         lk_today = lk_developments[-1]
         lk_24h = lk_developments[-2]

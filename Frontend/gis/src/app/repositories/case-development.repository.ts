@@ -25,13 +25,14 @@ export class CaseDevelopmentRepository {
     aggLevel: AggregationLevel,
     from: string,
     to: string,
-    ageGroups: boolean
+    ageGroups: boolean,
+    nogeom: boolean
   ): Observable<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>> {
     const endpoint = dataSource === 'risklayer' ? 'cases-risklayer' : 'cases';
     return this
       .cachedRepository
       .get<FeatureCollection<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggLevel}`,
-      this.prepareParams(from, to, ageGroups));
+      this.prepareParams(from, to, ageGroups, nogeom));
   }
 
   getCasesDevelopmentForAggLevelSingle(
@@ -39,7 +40,8 @@ export class CaseDevelopmentRepository {
     aggLevel: AggregationLevel,
     id: string,
     ageGroups: boolean,
-    to?: string,
+    nogeom: boolean,
+    to?: string
   ): Observable<Feature<MultiPolygon, RKICaseDevelopmentProperties>> {
     const endpoint = dataSource === 'risklayer' ? 'cases-risklayer' : 'cases';
     const aggEndpoint = aggLevelToEndpointSingle(aggLevel);
@@ -47,7 +49,7 @@ export class CaseDevelopmentRepository {
     return this
       .cachedRepository
       .get<Feature<MultiPolygon, RKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/${aggEndpoint}/${id}`,
-      this.prepareParams(null, to, ageGroups));
+      this.prepareParams(null, to, ageGroups, nogeom));
   }
 
   getRisklayerPrognosis(): Observable<RisklayerPrognosis> {
@@ -59,16 +61,17 @@ export class CaseDevelopmentRepository {
   getCasesDevelopmentAggregated(
     dataSource: CovidNumberCaseDataSource,
     dataRequests: Region[],
-    ageGroups: boolean
+    ageGroups: boolean,
+    nogeom: boolean
   ): Observable<Feature<MultiPolygon, AggregatedRKICaseDevelopmentProperties>> {
     const endpoint = dataSource === 'risklayer' ? 'cases-risklayer' : 'cases';
     return this
       .cachedRepository
       .get<Feature<MultiPolygon, AggregatedRKICaseDevelopmentProperties>>(`${environment.apiUrl}${endpoint}/development/aggregated`,
-      prepareAggParams(dataRequests, ageGroups));
+      prepareAggParams(dataRequests, ageGroups, nogeom));
   }
 
-  private prepareParams(from?: string, to?: string, ageGroups?: boolean): HttpParams {
+  private prepareParams(from?: string, to?: string, ageGroups?: boolean, nogeom?: boolean): HttpParams {
     let params = new HttpParams();
 
     if (from) {
@@ -83,6 +86,10 @@ export class CaseDevelopmentRepository {
 
     if (ageGroups) {
       params = params.append('agegroups', 'true');
+    }
+
+    if (nogeom) {
+      params = params.append('nogeom', 'true');
     }
 
     return params;
