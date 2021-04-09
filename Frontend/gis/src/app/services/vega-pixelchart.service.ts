@@ -237,6 +237,19 @@ export class VegaPixelchartService {
     let maxDiff = 0;
     let numberOfAgeGroups = 0;
 
+    let manXExtent: [string, string] = null;
+    if (o.temporalExtent.type === 'manual') {
+      if (o.temporalExtent.manualLastDays > 0) {
+        manXExtent = [getStrDate(getMoment('now')
+          .subtract(o.temporalExtent.manualLastDays, 'days')
+          .startOf('week')
+          ),
+          getStrDate(getMoment('now').endOf('week'))];
+      } else {
+        manXExtent = [getStrDate(getMoment(o.temporalExtent.manualExtent[0]).startOf('week')), getStrDate(getMoment(o.temporalExtent.manualExtent[1]).endOf('week'))];
+      }
+    }
+
     return this.caseRepo.getCasesDevelopmentAggregated(
       CovidNumberCaseDataSource.rki,
       dataRequest,
@@ -267,6 +280,11 @@ export class VegaPixelchartService {
         }
 
         for (let i = idxDiff; i < fullData.developments.length; i++) {
+
+          if (manXExtent !== null && !getMoment(fullData.developments[i].timestamp).isBetween(getMoment(manXExtent[0]), getMoment(manXExtent[1]), 'day', '[]')) {
+            continue;
+          }
+
           let agNow;
           let agPop;
           switch (o.type) {

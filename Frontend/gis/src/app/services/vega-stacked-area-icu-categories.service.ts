@@ -7,7 +7,7 @@ import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { BedType } from '../map/options/bed-type.enum';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { Region } from '../repositories/types/in/region';
-import { getMoment } from '../util/date-util';
+import { getMoment, getStrDate } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 import { StackedAreaIcuItem } from './chart.service';
 import { ExportCsvService } from './export-csv.service';
@@ -346,10 +346,28 @@ export class VegaStackedAreaIcuCategoriesService {
   compileToDataAndOptions(o: CovidChartOptions, dataRequests: Region[]): Observable<IcuCategoriesDataAndOptions> {
     const xExtent: [string, string] = [null, null];
     const yExtent: [number, number] = [0, 0];
+
+    let manXExtent: [string, string] = null;
+    if (o.temporalExtent.type === 'manual') {
+      if (o.temporalExtent.manualLastDays > 0) {
+        manXExtent = [getStrDate(getMoment('now').subtract(o.temporalExtent.manualLastDays, 'days')), getStrDate(getMoment('now'))];
+      } else {
+        manXExtent = o.temporalExtent.manualExtent;
+      }
+    }
+
     return this.hospitalRepo.getDiviDevelopmentAggregated(dataRequests, true)
         .pipe(
           map(d => {
-            const data = d.properties.developments.map(d1 => {
+            const data = d.properties.developments
+            .filter(d1 => {
+              if (manXExtent !== null && !getMoment(d1.timestamp).isBetween(getMoment(manXExtent[0]), getMoment(manXExtent[1]), 'day', '[]')) {
+                return false;
+              }
+
+              return true;
+            })
+            .map(d1 => {
               if (xExtent[0] === null || getMoment(xExtent[0]).isAfter(getMoment(d1.timestamp))) {
                 xExtent[0] = d1.timestamp;
               }
