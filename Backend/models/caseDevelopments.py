@@ -15,20 +15,23 @@ class CaseDevelopments:
         """
             Return the development of covid cases and deaths for one county
         """
-        return self.__res_single(self.__get_counties(from_time, to_time, id_county, want_age_groups), want_geom=want_geom)
+        return self.__res_single(self.__get_counties(from_time, to_time, id_county, want_age_groups),
+                                 want_geom=want_geom)
 
     def get_by_counties(self, from_time, to_time, want_age_groups, want_geom: bool):
         """
             Return the development of covid cases and deaths by counties
         """
-        return self.__res_collection(self.__get_counties(from_time, to_time, None, want_age_groups), want_geom=want_geom)
+        return self.__res_collection(self.__get_counties(from_time, to_time, None, want_age_groups),
+                                     want_geom=want_geom)
 
     def get_district(self, from_time, to_time, id_district, want_age_groups, want_geom: bool):
         """
             Return the development of covid cases and deaths for one district
         """
         return self.__res_single(
-            self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, id_district, want_age_groups), want_geom=want_geom)
+            self.__agg_query('gd', 'regierungsbezirke', from_time, to_time, id_district, want_age_groups),
+            want_geom=want_geom)
 
     def get_by_districts(self, from_time, to_time, want_age_groups, want_geom: bool):
         """
@@ -42,7 +45,8 @@ class CaseDevelopments:
             Return the development of covid cases and deaths for one state
         """
         return self.__res_single(
-            self.__agg_query('state', 'bundeslaender', from_time, to_time, id_state, want_age_groups), want_geom=want_geom)
+            self.__agg_query('state', 'bundeslaender', from_time, to_time, id_state, want_age_groups),
+            want_geom=want_geom)
 
     def get_by_states(self, from_time, to_time, want_age_groups, want_geom: bool):
         """
@@ -56,17 +60,21 @@ class CaseDevelopments:
             Return the development of covid cases and deaths for one country
         """
         return self.__res_single(
-            self.__agg_query('country', 'germany', from_time, to_time, id_country, want_age_groups), want_geom=want_geom)
+            self.__agg_query('country', 'germany', from_time, to_time, id_country, want_age_groups),
+            want_geom=want_geom)
 
     def get_by_countries(self, from_time, to_time, want_age_groups, want_geom: bool):
         """
             Return the development of covid cases and deaths by countries
         """
-        return self.__res_collection(self.__agg_query('country', 'germany', from_time, to_time, None, want_age_groups), want_geom=want_geom)
+        return self.__res_collection(self.__agg_query('country', 'germany', from_time, to_time, None, want_age_groups),
+                                     want_geom=want_geom)
 
     def get_aggregated(self, agg_dict: dict, from_time: str, to_time: str, want_age_groups: bool, want_geom: bool):
-        return self.__res_single(self.__agg_region_query(agg_dict, from_time, to_time, want_age_groups), want_geom=want_geom)
+        return self.__res_single(self.__agg_region_query(agg_dict, from_time, to_time, want_age_groups),
+                                 want_geom=want_geom)
 
+    # noinspection DuplicatedCode
     @staticmethod
     def __res_collection(sql_ret, want_geom: bool):
         sql_result = sql_ret.fetchall()
@@ -86,7 +94,6 @@ class CaseDevelopments:
                 }
             }
             if want_geom:
-                print('want geom2')
                 feature["geometry"] = r[3]
             features.append(feature)
 
@@ -94,6 +101,7 @@ class CaseDevelopments:
 
         return jsonify(featurecollection), 200
 
+    # noinspection DuplicatedCode
     @staticmethod
     def __res_single(sql_ret, want_geom):
         r = sql_ret.fetchone()
@@ -113,7 +121,6 @@ class CaseDevelopments:
             }
         }
         if want_geom:
-            print('want geom')
             feature["geometry"] = r[3]
 
         return feature
@@ -494,6 +501,7 @@ class CaseDevelopments:
                                  idParam=id_county
                                  )
 
+    # noinspection DuplicatedCode
     def __agg_region_query(self, agg_table_dict, from_time, to_time, want_age_groups):
 
         sql_from_time = ""
