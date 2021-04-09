@@ -116,7 +116,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
     this._map.on('zoom', () => this.onZoomed());
 
-    setTimeout(() => this.onZoomed(), 50);
+    setTimeout(() => this.onZoomed(), 100);
 
     this.initiallyMounted = true;
   }
