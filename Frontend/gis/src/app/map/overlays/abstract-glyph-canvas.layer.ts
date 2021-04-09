@@ -185,10 +185,12 @@ export abstract class AbstractGlyphCanvasLayer < G extends Geometry, T extends S
       this.quadtree.clear();
     }
 
-    this.quadtree = new Quadtree({
-      width: options.size.x,
-      height: options.size.y
-    });
+    if (options.size.x > 1 && options.size.y > 1) {
+      this.quadtree = new Quadtree({
+        width: options.size.x,
+        height: options.size.y
+      });
+    }
 
     this.ctx = options.canvas.getContext('2d');
 
