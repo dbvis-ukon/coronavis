@@ -142,11 +142,12 @@ export class CanvasLayer extends Layer {
     }
 
     // --------------------------------------------------------------------------------
-    private LatLonToMercator(latlon: LatLng) {
-        return {
-            x: latlon.lng * 6378137 * Math.PI / 180,
-            y: Math.log(Math.tan((90 + latlon.lat) * Math.PI / 360)) * 6378137
-        };
+    private LatLonToMercator(latlon: LatLng): LatLng {
+        return new LatLng(latlon.lng * 6378137 * Math.PI / 180, Math.log(Math.tan((90 + latlon.lat) * Math.PI / 360)) * 6378137);
+        // return {
+        //     x: latlon.lng * 6378137 * Math.PI / 180,
+        //     y: Math.log(Math.tan((90 + latlon.lat) * Math.PI / 360)) * 6378137
+        // };
     }
 
     // ------------------------------------------------------------------------------
@@ -162,9 +163,13 @@ export class CanvasLayer extends Layer {
         const _zoom = this._map.getZoom();
 
         const _center = this.LatLonToMercator(this._map.getCenter());
-        const _corner = this.LatLonToMercator(this._map.containerPointToLatLng(this._map.getSize()));
+        const ltln = this.LatLonToMercator(this._map.containerPointToLatLng(this._map.getSize()));
+        const _corner = {
+            x: ltln.lng,
+            y: ltln.lat
+        };
 
-        const opts = {
+        const opts: IViewInfo = {
             bounds: _bounds,
             canvas: this._canvas,
             center: _center,

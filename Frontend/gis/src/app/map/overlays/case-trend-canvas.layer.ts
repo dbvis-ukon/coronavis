@@ -1,18 +1,22 @@
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
-import { Bounds, Point } from 'leaflet';
-import { MyLocalStorageService } from '../../services/my-local-storage.service';
+import { Point } from 'leaflet';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { RKICaseDevelopmentProperties, RKICaseTimedStatus } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from 'src/app/services/case-util.service';
+import { MyLocalStorageService } from '../../services/my-local-storage.service';
 import { AggregationLevel } from '../options/aggregation-level.enum';
 import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
-import { LabelCanvasLayer } from './label-canvas.layer';
+import { LabelCanvasLayer, PreparedGlyph } from './label-canvas.layer';
 
 interface StatusWithCache extends RKICaseTimedStatus {
   _regression?: {
     rotation: number;
   };
+}
+
+interface PreparedGlyphWithRotation extends PreparedGlyph {
+  rotation: number;
 }
 
 export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICaseDevelopmentProperties, CovidNumberCaseOptions> {
@@ -31,19 +35,53 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
     super(name, data, granularity, options$, storage);
   }
 
-  protected getGlyphWidth() {
+  /**
+   * Override
+   *
+   * @returns width of glyph
+   */
+  protected getGlyphWidth(): number {
     return Math.floor(this.rectWidth * this.currentScale);
   }
 
-  protected getGlyphHeight() {
+  /**
+   * Override
+   *
+   * @returns height of glyph
+   */
+  protected getGlyphHeight(): number {
     return Math.floor(this.rectHeight * this.currentScale);
   }
 
-  protected drawTrendGlyph(glyphData: Feature<MultiPolygon, RKICaseDevelopmentProperties>, pt: Point): Bounds {
-    const topLeftPt = new Point(pt.x - (this.getGlyphWidth() / 2), pt.y - (this.getGlyphHeight() / 2));
+  /**
+   * Override
+   *
+   * @returns empty promise
+   */
+  protected async prepareAllGpyphs(): Promise<void> {
+    if (!this._map || !this.data || !this.ctx) {
+      return;
+    }
 
-    this.ctx.fillStyle = 'white';
-    this.ctx.fillRect(topLeftPt.x, topLeftPt.y, this.getGlyphWidth(), this.getGlyphHeight());
+    // required so that the showText attribute is properly set
+    this.updateCurrentScale();
+
+    this.preparedGlyphs = [];
+    for(const d of this.data.features) {
+      const pGlyph = await this.getPreparedGlyphWithRotation(d);
+      this.preparedGlyphs.push(pGlyph);
+    }
+  }
+
+  protected async getPreparedGlyphWithRotation(glyphData: Feature<MultiPolygon, RKICaseDevelopmentProperties>): Promise<PreparedGlyphWithRotation> {
+    const latlng = this.getLatLng(glyphData);
+    const ptOrig = this._map.latLngToLayerPoint(latlng);
+
+    const pt = new Point(ptOrig.x, ptOrig.y + this.getGlyphHeight());
+
+    // const bounds = new Bounds(pt, new L.Point(pt.x + this.getGlyphWidth(), pt.y));
+
+    const gl = this.prepareGlyphAdditionalFeatures(glyphData, pt);
 
     const status = this.caseUtil.getTimedStatusWithOptions(glyphData.properties, this.options$.value) as StatusWithCache;
 
@@ -64,66 +102,48 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
       );
     }
 
-    rot$.subscribe(rot => {
-      this.ctx.save();
+    const rotation = await rot$.toPromise();
 
-      this.ctx.translate(pt.x, pt.y);
-      this.ctx.rotate(rot * Math.PI / 180);
-      this.ctx.translate(-pt.x, -pt.y);
+    // update bounds
+    // gl.bounds = gl.bounds.extend(new Point(pt.x, pt.y - this.getGlyphHeight() - 3));
+    gl.y = pt.y - this.getGlyphHeight() - 3;
+    gl._y = gl.y;
+    gl.width = Math.max(gl.width, this.getGlyphWidth());
+    gl.height += this.getGlyphHeight() + 3;
+    gl.textMarginTop = this.getGlyphHeight() + 3;
 
-      this.ctx.strokeStyle = 'black';
-      this.ctx.lineWidth = 2 * this.currentScale;
-
-      this.ctx.beginPath();
-      this.ctx.moveTo(topLeftPt.x, pt.y);
-      this.ctx.lineTo(topLeftPt.x + this.getGlyphWidth(), pt.y);
-      this.ctx.stroke();
-
-      this.ctx.restore();
-    });
-
-
-
-    return new Bounds(topLeftPt, new Point(topLeftPt.x + this.getGlyphWidth(), topLeftPt.y + this.getGlyphHeight()));
+    return {...gl, rotation} as PreparedGlyphWithRotation;
   }
 
-  protected drawLabel(glyphData: Feature < MultiPolygon, RKICaseDevelopmentProperties > ) {
-    const opt = this.options$.value;
-    if (this.caseUtil.isLockdownMode(opt) && opt.dataSource === 'risklayer' && opt.showOnlyAvailableCounties === true ) {
-      const status = this.caseUtil.getTimedStatusWithOptions(glyphData.properties, this.options$.value) as StatusWithCache;
-      if (!status.last_updated) {
-        return;
-      }
-    }
+  /**
+   * Override
+   *
+   * @param gl prepared glyph
+   */
+  protected drawPreparedGlyph(gl: PreparedGlyphWithRotation): void {
+    const topLeftPt = new Point(gl.x - (this.getGlyphWidth() / 2), gl.y);
+    const pt = new Point(gl.x, gl.y + (this.getGlyphHeight() / 2));
 
-    const nmbr = this.caseUtil.getCaseNumbers(glyphData.properties, opt);
-    if (!this.caseUtil.isHoveredOrSelectedBin(opt, nmbr)) {
-      return;
-    }
+    // draw actual glyph
+    this.ctx.save();
 
-    const pt = this.getGlyphPixelPos(glyphData);
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillRect(topLeftPt.x, topLeftPt.y, this.getGlyphWidth(), this.getGlyphHeight());
 
-    // let bounds = new Bounds(pt, new Point(pt.x + this.getGlyphWidth(), pt.y));
-    let bounds;
-    if (this.options$.value.showTrendGlyphs) {
-      bounds = this.drawTrendGlyph(glyphData, pt);
-    } else {
-      bounds = new Bounds(pt, pt);
-    }
+    this.ctx.translate(pt.x, pt.y);
+    this.ctx.rotate(gl.rotation * Math.PI / 180);
+    this.ctx.translate(-pt.x, -pt.y);
 
+    this.ctx.strokeStyle = 'black';
+    this.ctx.lineWidth = 2 * this.currentScale;
 
-    const boundsAdd = this.drawAdditionalFeatures(glyphData, new Point(pt.x, bounds.max.y + 3));
+    this.ctx.beginPath();
+    this.ctx.moveTo(topLeftPt.x, pt.y);
+    this.ctx.lineTo(topLeftPt.x + this.getGlyphWidth(), pt.y);
+    this.ctx.stroke();
 
-    bounds = bounds
-      .extend(boundsAdd.min)
-      .extend(boundsAdd.max);
+    this.ctx.restore();
 
-    this.quadtree.push({
-      x: bounds.min.x, // Mandatory
-      y: bounds.min.y, // Mandatory
-      width: bounds.getSize().x, // Optional, defaults to 1
-      height: bounds.getSize().y, // Optional, defaults to 1
-      payload: glyphData
-    }); // Optional, defaults to false
+    super.drawPreparedGlyph(gl);
   }
 }
