@@ -4174,9 +4174,11 @@ d3-shape@2, d3-shape@^2.0.0:
     d3-time "1 - 2"
 
 "d3-time@1 - 2", d3-time@2, d3-time@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-2.0.0.tgz#ad7c127d17c67bd57a4c61f3eaecb81108b1e0ab"
-  integrity sha512-2mvhstTFcMvwStWd9Tj3e6CEqtOivtD8AUiHT8ido/xmzrI9ijrUUihZ6nHuf/vsScRBonagOdj0Vv+SEL5G3Q==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-2.1.0.tgz#951b1702ce01fd9d015f094d22aaa5b1ad6bd67f"
+  integrity sha512-avk0+uuUv3KrMeAlVuD2MyMoppK4TfRHeSQodNZiif+UXtJO6gG7MM2BrTqCn+PqQkmBUYHhkCuV7cxf0RVM/w==
+  dependencies:
+    d3-array "2"
 
 "d3-timer@1 - 2", d3-timer@2, d3-timer@^2.0.0:
   version "2.0.0"
