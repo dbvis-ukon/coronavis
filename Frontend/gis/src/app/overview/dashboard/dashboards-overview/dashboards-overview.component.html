@@ -6,6 +6,10 @@
             [routerLink]="['/', 'overview', 'dashboard', selectedRegions[0]?.id]" 
             i18n="@@dashboardsOverviewNew">Neues Dashboard für {{ selectedRegions[0]?.name }}</button>
         </div>
+
+        <div class="btn-container">
+            <a i18n="@@dashboardsOverviewVideoButton" href="https://www.youtube.com/watch?v=I1ORQd9W9Ok" target="_blank" mat-raised-button>Video: Eigenes Dashboard erstellen <mat-icon>launch</mat-icon></a>
+        </div>
     </div>
     
     <h1 i18n="@@dashboardsOverviewPopular">Beliebteste Dashboards</h1>

@@ -208,4 +208,8 @@ export class DashboardComponent implements OnInit {
   navigateToDashboard(dashboard: Dashboard) {
     this.router.navigate(['overview', 'dashboard', dashboard.id]);
   }
+
+  openVideo(): void {
+    window.open('https://www.youtube.com/watch?v=I1ORQd9W9Ok', '_blank');
+  }
 }

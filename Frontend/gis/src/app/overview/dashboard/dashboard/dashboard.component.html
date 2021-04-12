@@ -1,5 +1,9 @@
 <div class="outer" *ngIf="dashboard">
     <mat-toolbar color="primary">
+      <button (click)="openVideo()" mat-icon-button matTooltip="Video">
+        <mat-icon>help</mat-icon>
+      </button>
+
       <button mat-icon-button matTooltip="Copy URL" (click)="copyUrl()">
         <mat-icon>add_link</mat-icon>
       </button>

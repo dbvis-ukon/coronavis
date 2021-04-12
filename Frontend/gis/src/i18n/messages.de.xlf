@@ -1722,22 +1722,22 @@
       <target>Selektion aufheben</target></segment>
     </unit><unit id="dashboardVersionHistory">
       <notes>
-        <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:33,34</note>
-      </notes>
+        
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:37</note></notes>
       <segment state="final">
         <source> Versions Verlauf </source>
       <target> Versions Verlauf </target></segment>
     </unit><unit id="dashboardAddTextBlock">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:144</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:148</note></notes>
       <segment state="final">
         <source>Neuen Textblock hinzufügen</source>
       <target>Neuen Textblock hinzufügen</target></segment>
     </unit><unit id="dasboardAddChart">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:145</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:149</note></notes>
       <segment state="final">
         <source>Neuen Chart hinzufügen</source>
       <target>Neuen Chart hinzufügen</target></segment>
@@ -1748,24 +1748,31 @@
       <segment state="final">
         <source>Neues Dashboard für <ph id="0" equiv="INTERPOLATION" disp="{{ selectedRegions[0]?.name }}"/></source>
       <target>Neues Dashboard für <ph id="0" equiv="INTERPOLATION" disp="{{ selectedRegions[0]?.name }}"/></target></segment>
+    </unit><unit id="dashboardsOverviewVideoButton">
+      <notes>
+        <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:11</note>
+      </notes>
+      <segment state="final">
+        <source>Video: Eigenes Dashboard erstellen <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon>" dispEnd="&lt;/mat-icon>">launch</pc></source>
+      <target>Video: Eigenes Dashboard erstellen <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon>" dispEnd="&lt;/mat-icon>">launch</pc></target></segment>
     </unit><unit id="dashboardsOverviewPopular">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:11</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:15</note></notes>
       <segment state="final">
         <source>Beliebteste Dashboards</source>
       <target>Beliebteste Dashboards</target></segment>
     </unit><unit id="dashboardsOverviewMostVisited">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:15</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:19</note></notes>
       <segment state="final">
         <source>Populärste Dashboards</source>
       <target>Populärste Dashboards</target></segment>
     </unit><unit id="dashboardsOverviewNewest">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:19</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboards-overview/dashboards-overview.component.html:23</note></notes>
       <segment state="final">
         <source>Neueste Dashboards</source>
       <target>Neueste Dashboards</target></segment>
@@ -1842,28 +1849,28 @@
     </unit><unit id="pleaseWaitLoading">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:62</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:67</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:66</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:67</note></notes>
       <segment state="final">
         <source>Bitte warten... lädt</source>
       <target>Bitte warten... lädt</target></segment>
     </unit><unit id="dashboardVorschau">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:100</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:104</note></notes>
       <segment state="final">
         <source>Vorschau</source>
       <target>Vorschau</target></segment>
     </unit><unit id="dashboardMarkdownExplanation">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:103</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:107</note></notes>
       <segment state="final">
         <source>Formatiere deinen Text mit Markdown. Hier findest du einen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://commonmark.org/help/&quot;>" dispEnd="&lt;/a>">Cheatsheet <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></pc></source>
       <target>Formatiere deinen Text mit Markdown. Hier findest du einen <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://commonmark.org/help/&quot;>" dispEnd="&lt;/a>">Cheatsheet <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></pc></target></segment>
     </unit><unit id="dashboardEditText">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:106</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:110</note></notes>
       <segment state="final">
         <source>Text bearbeiten</source>
       <target>Text bearbeiten</target></segment>
@@ -2214,7 +2221,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:110</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:291</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:114</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:291</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
       <segment state="final">
         <source>Speichern</source>
       <target>Speichern</target></segment>
@@ -2222,7 +2229,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:111</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:292</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:115</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:292</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
       <segment state="final">
         <source>Abbrechen</source>
       <target>Abbrechen</target></segment>
