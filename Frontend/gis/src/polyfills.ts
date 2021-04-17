@@ -2,10 +2,7 @@
  * Load `$localize` - used if i18n tags appear in Angular templates.
  * https://angular.io/guide/migration-localize
  */
-import '@angular/localize/init';
-// Core-JS ES2015 support for browsers: https://angular.io/guide/browser-support#suggested-polyfills
-// https://github.com/zloirock/core-js
-import 'core-js'; // Run `npm install --save core-js`.
+  import '@angular/localize/init';
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
  * You can add your own extra polyfills to this file.
@@ -24,7 +21,7 @@ import 'core-js'; // Run `npm install --save core-js`.
 /***************************************************************************************************
  * BROWSER POLYFILLS
  */
-/** IE10 and IE11 requires the following for NgClass support on SVG elements */
+/** IE11 requires the following for NgClass support on SVG elements */
 // import 'classlist.js';  // Run `npm install --save classlist.js`.
 /**
  * Web Animations `@angular/platform-browser/animations`
@@ -32,8 +29,6 @@ import 'core-js'; // Run `npm install --save core-js`.
  * Standard animation support in Angular DOES NOT require any polyfills (as of Angular 6.0).
  */
 // import 'web-animations-js';  // Run `npm install --save web-animations-js`.
-import 'es5-shim';
-import 'es6-shim';
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents
  * user can disable parts of macroTask/DomEvents patch by setting following flags
@@ -41,7 +36,7 @@ import 'es6-shim';
  * will put import in the top of bundle, so user need to create a separate file
  * in this directory (for example: zone-flags.ts), and put the following flags
  * into that file, and then add the following code before importing zone.js.
- * import './zone-flags.ts';
+ * import './zone-flags';
  *
  * The flags allowed in zone-flags.ts are listed here.
  *
@@ -63,8 +58,7 @@ import 'es6-shim';
 import 'zone.js/dist/zone'; // Included with Angular CLI.
 
 
-
-
-/***************************************************************************************************
- * APPLICATION IMPORTS
- */
+ /***************************************************************************************************
+  * APPLICATION IMPORTS
+  */
+ 
