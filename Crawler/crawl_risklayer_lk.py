@@ -48,6 +48,8 @@ def parse_cookies():
     cookies = {}
     if os.environ.get('GOOGLE_COOKIES') is not None:
         for line in os.environ.get('GOOGLE_COOKIES'):
+            logger.debug(line)
+            logger.debug(line.strip().split('\t'))
             if not re.match(r'^\#', line):
                 lineFields = line.strip().split('\t')
                 cookies[lineFields[5]] = lineFields[6]
