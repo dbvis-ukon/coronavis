@@ -23,3 +23,5 @@ pids
 *.pid
 *.seed
 *.pid.lock
+
+/data-risklayer

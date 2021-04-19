@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify, request
+import os
+
+from flask import Blueprint, jsonify, request, send_file, current_app
 
 from cache import cache, make_cache_key
 from db import db
@@ -121,3 +123,15 @@ def get_prognosis():
     }
 
     return jsonify(ret), 200
+
+
+@routes.route('/xlsx', methods=['GET', 'POST'])
+def download_xlsx():
+    rkfolder = current_app.root_path + '/data-risklayer'
+    _, _, filenames = next(os.walk(rkfolder))
+    filtered = list(filter(lambda x: os.stat(rkfolder + '/' + x).st_size > 1000000 and x.endswith('xlsx'), filenames))
+    filtered.sort(reverse=True)
+    return send_file(filename_or_fp= rkfolder + '/' + filtered[0],
+                     attachment_filename='risklayer-' + filtered[0],
+                     as_attachment=True,
+                     mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
