@@ -5,6 +5,7 @@ import os
 # noinspection PyUnresolvedReferences
 from datetime import datetime
 
+from flasgger import Swagger
 from flask import Flask, jsonify
 from flask_compress import Compress
 from flask_cors import CORS, cross_origin
@@ -28,6 +29,9 @@ metrics.init_app(app)
 # static information as metric
 # metrics.info('app_info', 'Application info', version=os.getenv('VERSION'), environment=os.getenv('ENVIRONMENT'))
 app.url_map.strict_slashes = False
+
+swagger = Swagger(app)
+# app.config['SWAGGER']['openapi'] = '3.0.2'
 
 if os.environ.get('SENTRY_DSN') is not None:
     import sentry_sdk

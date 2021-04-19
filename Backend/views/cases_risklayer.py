@@ -12,6 +12,13 @@ routes = Blueprint('cases-risklayer', __name__, url_prefix='/cases-risklayer')
 cd = CaseDevelopments('cases_per_county_and_day_risklayer')
 
 
+def get_latest_xlsx(rkfolder) -> str:
+    _, _, filenames = next(os.walk(rkfolder))
+    filtered = list(filter(lambda x: os.stat(rkfolder + '/' + x).st_size > 1000000 and x.endswith('xlsx'), filenames))
+    filtered.sort(reverse=True)
+    return filtered[0]
+
+
 @routes.route('/development/landkreise', methods=['GET'])
 @timer
 @cache.cached(key_prefix=make_cache_key)
@@ -125,12 +132,38 @@ def get_prognosis():
     return jsonify(ret), 200
 
 
+@routes.route('/xlsx-last-update', methods=['GET'])
+@cache.cached()
+def latest_xlsx():
+    """Returns the last update of the risklayer spreadsheet
+    The spreadsheet is updated every 30 minutes at xx:00 and xx:30.
+    ---
+    responses:
+      200:
+        description: A JSON object with a key last_update and a UTC timestamp
+        schema:
+          type: object
+          properties:
+            last_update:
+              type: string
+              example: 2021-04-19T20-05-33Z
+    """
+    rkfolder = current_app.root_path + '/data-risklayer'
+    return {'last_update': get_latest_xlsx(rkfolder)[0:-5] + 'Z'}
+
+
 @routes.route('/xlsx', methods=['GET', 'POST'])
 def download_xlsx():
+    """Returns the latest spreadsheet as a .xlsx file
+    The sheet is not modified and generated via the google export to .xlsx function.
+    The spreadsheet is updated every 30 minutes at xx:00 and xx:30.
+    ---
+    responses:
+      200:
+        description: A .xlsx file of the latest risklayer spreadsheet
+    """
     rkfolder = current_app.root_path + '/data-risklayer'
-    _, _, filenames = next(os.walk(rkfolder))
-    filtered = list(filter(lambda x: os.stat(rkfolder + '/' + x).st_size > 1000000 and x.endswith('xlsx'), filenames))
-    filtered.sort(reverse=True)
+    filtered = get_latest_xlsx(rkfolder)
     return send_file(filename_or_fp= rkfolder + '/' + filtered[0],
                      attachment_filename='risklayer-' + filtered[0],
                      as_attachment=True,
