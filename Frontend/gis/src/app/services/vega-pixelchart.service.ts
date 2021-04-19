@@ -301,6 +301,9 @@ export class VegaPixelchartService {
 
           converted[i] = agNow;
           const agOld = converted[i - idxDiff];
+          if (!agOld) {
+            continue;
+          }
 
           // const agNow: RKIAgeGroups = ageGroupAccessor(fullData.developments[i]);
           // const agOld: RKIAgeGroups = ageGroupAccessor(fullData.developments[i - idxDiff]);
