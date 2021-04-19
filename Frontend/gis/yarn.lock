@@ -143,40 +143,40 @@
     rxjs "6.6.3"
 
 "@angular-eslint/builder@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/builder/-/builder-3.0.0.tgz#ad0543eaae28b02e6a75e338814d14f088dec04e"
-  integrity sha512-Ry7xCfTAPoWS2yd+lWtIywoQZOR4FS4sN6lXmigNdmsya1Ixk0aZw3s8kJ4JLpUe64ANQv5bdPwEd7++4cqkaA==
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/builder/-/builder-3.0.1.tgz#576f33a043b99e6277e905e51db1487de3f603b1"
+  integrity sha512-qknzIRXdBpMYHMkogHrX4DmlApxzW4IrUJF00IHQURbzErRkYh41StQ8cj9n4tVV5KLSHsh8X3VnIPOL2AN5jg==
 
-"@angular-eslint/eslint-plugin-template@3.0.0", "@angular-eslint/eslint-plugin-template@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin-template/-/eslint-plugin-template-3.0.0.tgz#bf7611dbbec507ce54d3a06976c5e1be9bb2f818"
-  integrity sha512-W5vrsSp4aVEB8++F3bIa6aov+IoTIb9T/8I0lPketUlk7Kb5z39cmu2hQgSDEgYOArdL+OiFA9cvbtC9xcANmw==
+"@angular-eslint/eslint-plugin-template@3.0.1", "@angular-eslint/eslint-plugin-template@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin-template/-/eslint-plugin-template-3.0.1.tgz#88a2be8f36046085c5ed731c348bce1a03f05592"
+  integrity sha512-E0xIucCeH+tatv5gdIEnzMqUQ5P917E+9EIb0KiyEpqs4O2KF6UUa+RJaMB/AfnUV1URytvqWfGBxTDUgU/w9Q==
   dependencies:
     "@typescript-eslint/experimental-utils" "4.16.1"
     aria-query "^4.2.2"
     axobject-query "^2.2.0"
 
-"@angular-eslint/eslint-plugin@3.0.0", "@angular-eslint/eslint-plugin@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-3.0.0.tgz#71a0d316543bebefb966bf3ff9e9a3621baab3fb"
-  integrity sha512-1No8hRoewkJ6TG/zLi9bCZIvC7v2gyXX55nf0oAZQLHRdSkRWPEmeJJLtjCwZKjBicFXiClQ71bgtzY5V2ZHdg==
+"@angular-eslint/eslint-plugin@3.0.1", "@angular-eslint/eslint-plugin@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-3.0.1.tgz#fb4dad0120dfe1ba4f812fe835961f5de51cfa16"
+  integrity sha512-QP7i2nr7VWhWzYMvaGE8fNac40i1autY0nQ30m0Ir4wU/KKF8Vifoayf++xtGDHJPKbpUa2fzRDTM/ofpIeqGg==
   dependencies:
     "@typescript-eslint/experimental-utils" "4.16.1"
 
 "@angular-eslint/schematics@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/schematics/-/schematics-3.0.0.tgz#96bd4f00c9c38c1a1c7701a5aaaa40f017eb8703"
-  integrity sha512-EudReeV/xg6H4+VsdKhD6mm890Hu9wSA/z8XQhB7ceg49y4Q5cdAPLl+47RfGjB1mDH9REhyxXNHdH/6jWW55g==
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/schematics/-/schematics-3.0.1.tgz#c9a41d66d733b2ec1be43ef092f1bc88df9710d6"
+  integrity sha512-ClVg1g+GdI4sWi8B1bm/ucxHWTnWDPYay4xkQxFVk97edAqaY9OQZ22OQNfzTdGu/wFVqxKpBSnGnlEqxHErmA==
   dependencies:
-    "@angular-eslint/eslint-plugin" "3.0.0"
-    "@angular-eslint/eslint-plugin-template" "3.0.0"
+    "@angular-eslint/eslint-plugin" "3.0.1"
+    "@angular-eslint/eslint-plugin-template" "3.0.1"
     strip-json-comments "3.1.1"
     tslint-to-eslint-config "2.2.0"
 
 "@angular-eslint/template-parser@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/template-parser/-/template-parser-3.0.0.tgz#a056c68b9e24b61e40c4623c72556d88a6d00ea8"
-  integrity sha512-7G4t01CyBEKSgDu0ptvwu1GDuyg8r0zUrEoaXreWlrLGZ3eT9b9th0P/kVZ8MTeU37vr2TIEH4/j72+0cTxHkQ==
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/template-parser/-/template-parser-3.0.1.tgz#08d6ad945e8e2ee44c9ea82bca7125820af35a20"
+  integrity sha512-kkJU4A0um4Gdsmmgi9FKaOAOZpad2PFsjiy91aSQyB3kKJF2Mclg8iN8d0xh6Yoc77tNXUDki4wVcOzHaZgCjw==
   dependencies:
     eslint-scope "^5.1.0"
 
@@ -3138,9 +3138,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001032, caniuse-lite@^1.0.30001181, caniuse-lite@^1.0.30001208:
-  version "1.0.30001209"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001209.tgz#1bb4be0bd118e98e21cfb7ef617b1ef2164622f4"
-  integrity sha512-2Ktt4OeRM7EM/JaOZjuLzPYAIqmbwQMNnYbgooT+icoRGrKOyAxA1xhlnotBD1KArRSPsuJp3TdYcZYrL7qNxA==
+  version "1.0.30001210"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001210.tgz#7c12d029e93b725cc2fe44a5eaabd9b838250d33"
+  integrity sha512-avmGf0Jo00I8vB0I89J4Pba48kddasErV7slu7wrkyM5uY9gE5P+B+V3hjABv8Hp4YNG2nBqIUFUXlnqNteXEA==
 
 canonical-path@1.0.0:
   version "1.0.0"
@@ -7699,9 +7699,9 @@ object-copy@^0.1.0:
     kind-of "^3.0.3"
 
 object-inspect@^1.9.0:
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.10.1.tgz#b69d9494d35a56387bbaebbae61c55510d877a1a"
-  integrity sha512-WQUIkCSDPWm5ing/PTUkLr2KaOXX2uV/vz1hLGW2XbZ/RDUmtgcsOyEqA1ox0rkyNx9mJX4kxX+YWceje3pmag==
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.10.2.tgz#b6385a3e2b7cae0b5eafcf90cddf85d128767f30"
+  integrity sha512-gz58rdPpadwztRrPjZE9DZLOABUpTGdcANUgOwBFO1C+HZZhePoP83M65WGDmbpwFYJSWqavbl4SgDn4k8RYTA==
 
 object-is@^1.0.1:
   version "1.1.5"
@@ -9591,9 +9591,9 @@ socks-proxy-agent@^5.0.0:
     socks "^2.3.3"
 
 socks@^2.3.3:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/socks/-/socks-2.6.0.tgz#6b984928461d39871b3666754b9000ecf39dfac2"
-  integrity sha512-mNmr9owlinMplev0Wd7UHFlqI4ofnBnNzFuzrm63PPaHgbkqCFe4T5LzwKmtQ/f2tX0NTpcdVLyD/FHxFBstYw==
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/socks/-/socks-2.6.1.tgz#989e6534a07cf337deb1b1c94aaa44296520d30e"
+  integrity sha512-kLQ9N5ucj8uIcxrDwjm0Jsqk06xdpBjGNQtpXy4Q8/QY2k+fY7nZH8CARy+hkbG+SGAovmzzuauCpBlb8FrnBA==
   dependencies:
     ip "^1.1.5"
     smart-buffer "^4.1.0"
@@ -11357,9 +11357,9 @@ ws@^6.2.1:
     async-limiter "~1.0.0"
 
 ws@~7.4.2:
-  version "7.4.4"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.4.tgz#383bc9742cb202292c9077ceab6f6047b17f2d59"
-  integrity sha512-Qm8k8ojNQIMx7S+Zp8u/uHOx7Qazv3Yv4q68MiWWWOJhiwG5W3x7iqmRtJo8xxrciZUY4vRxUTJCKuRnF28ZZw==
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.5.tgz#a484dd851e9beb6fdb420027e3885e8ce48986c1"
+  integrity sha512-xzyu3hFvomRfXKH8vOFMU3OguG6oOvhXMo3xsGy3xWExqaM2dxBbVxuD99O7m3ZUFMvvscsZDqxfgMaRr/Nr1g==
 
 xml2js@^0.4.17:
   version "0.4.23"
