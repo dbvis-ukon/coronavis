@@ -27,7 +27,9 @@ try:
     else:
         SQLALCHEMY_DATABASE_URI = f"postgresql://{quote(DB_USER, safe='')}:{quote(DB_PASS, safe='')}@{quote(DB_HOST, safe='')}:{quote(DB_PORT, safe='')}/{quote(DB_NAME, safe='')}"
 
-    SENTRY_DSN = os.environ.get('SENTRY_DSN').replace('\n', '')
+    SENTRY_DSN = None
+    if os.environ.get('SENTRY_DSN') is not None:
+        SENTRY_DSN = os.environ.get('SENTRY_DSN').replace('\n', '')
     VERSION = os.environ.get('VERSION').replace('\n', '')
     ENVIRONMENT = os.environ.get('ENVIRONMENT').replace('\n', '')
     sentry_sdk.init(

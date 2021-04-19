@@ -68,6 +68,11 @@ spec:
                 secretKeyRef:
                   name: database-info
                   key: API_KEY
+            - name: GOOGLE_COOKIES
+              valueFrom:
+                secretKeyRef:
+                  name: google-cookies
+                  key: COOKIES
             - name: VERSION
               value: {{ .Values.sha | quote }}
             - name: ENVIRONMENT

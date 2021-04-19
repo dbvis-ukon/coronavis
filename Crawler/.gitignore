@@ -1,3 +1,5 @@
 /venv
 *.xlsx
+*.html
 divi*.json
+/google.com_cookies.txt
