@@ -167,4 +167,5 @@ def download_xlsx():
     return send_file(filename_or_fp= rkfolder + '/' + filtered,
                      attachment_filename='risklayer-' + filtered,
                      as_attachment=True,
+                     cache_timeout=60,
                      mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
