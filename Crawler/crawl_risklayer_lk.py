@@ -61,14 +61,14 @@ current_try = 1
 filepath = ''
 delay_s = BACKOFF_BASE_TIME
 while current_try <= NUM_RETRIES:
+    if os.name == 'nt':  # debug only
+        STORAGE_PATH = './'
+    if not os.path.isdir(STORAGE_PATH):
+        logger.error(f"Storage path {STORAGE_PATH} does not appear to be a valid directory")
+        exit(1)
+    filepath = STORAGE_PATH + current_update.strftime("%Y-%m-%dT%H-%M-%S") + '.xlsx'
     try:
         r = requests.get(URL, allow_redirects=True)
-        if os.name == 'nt':  # debug only
-            STORAGE_PATH = './'
-        if not os.path.isdir(STORAGE_PATH):
-            logger.error(f"Storage path {STORAGE_PATH} does not appear to be a valid directory")
-            exit(1)
-        filepath = STORAGE_PATH + current_update.strftime("%Y-%m-%dT%H-%M-%S") + '.xlsx'
         with open(filepath, 'wb') as f:
             f.write(r.content)
             logger.info(f'Download succeeded.')
@@ -77,7 +77,8 @@ while current_try <= NUM_RETRIES:
                 # parsing
                 #
                 logger.info('Parse data')
-                data = pd.read_excel(filepath, sheet_name=['Statistik Überblick', 'Haupt', 'Kreise'], header=None, na_filter=False, engine="openpyxl")
+                data = pd.read_excel(filepath, sheet_name=['Statistik Überblick', 'Haupt', 'Kreise'], header=None,
+                                     na_filter=False, engine="openpyxl")
                 break
             except Exception as e:
                 logger.warning(f'Failed parsing spreadsheet {current_try}/{NUM_RETRIES}, dowloading again...')
@@ -89,6 +90,9 @@ while current_try <= NUM_RETRIES:
                 sleep(delay_s)
     except:
         logger.warning(f'Failed download spreadsheet try {current_try}/{NUM_RETRIES}, retrying...')
+        with open(filepath) as f:
+            read_data = f.read()
+            logger.warning(read_data)
     finally:
         current_try += 1
         delay_s = 2 * delay_s
@@ -100,70 +104,73 @@ logger.info('Extract data')
 prognosis_today = data['Statistik Überblick'].iloc[17, 6]
 
 # old
-#df = data['Kreise Alt'].iloc[3:, [1, 2, 13, 8, 10, 25, 26, 27, 28, 29, 41, 42, 30, 31, 32, 33, 34, 35, 36, 37]]
-#df = data['Kreise'].iloc[3:, [1, 2, 13, 8, 10]]
-#df[8] = df[8].apply(lambda x: x != '')
+# df = data['Kreise Alt'].iloc[3:, [1, 2, 13, 8, 10, 25, 26, 27, 28, 29, 41, 42, 30, 31, 32, 33, 34, 35, 36, 37]]
+# df = data['Kreise'].iloc[3:, [1, 2, 13, 8, 10]]
+# df[8] = df[8].apply(lambda x: x != '')
 
 
 # new again...
 #                              0 1  2  3  4  5  6  7  8   9
-df = data['Haupt'].iloc[5:406,[2,0, 0, 10,3,47,48,49, 15,39]] # AGS, Name, Name (->update-status) Today, -1d, -2d, -3d, -4d, death today, death -1d
+df = data['Haupt'].iloc[5:406, [2, 0, 0, 10, 3, 47, 48, 49, 15,
+                                39]]  # AGS, Name, Name (->update-status) Today, -1d, -2d, -3d, -4d, death today, death -1d
 df[2] = df[2].astype(str)
 df[2] = df[2].apply(lambda x: x.zfill(5))
 db_array = df.to_numpy()
 
 # get update status via hack (because RK calc is complex)
-dfhelp = data['Kreise'].iloc[3:,[0,2,8]]
+dfhelp = data['Kreise'].iloc[3:, [0, 2, 8]]
 dfhelp[0] = dfhelp[0] - 1
-dfhelp[8] = dfhelp[8].apply(lambda x: x != '' )
+dfhelp[8] = dfhelp[8].apply(lambda x: x != '')
 db_help_array = dfhelp.to_numpy()
-db_help_array = db_help_array[db_help_array[:,0].argsort()] #sort like the main table
+db_help_array = db_help_array[db_help_array[:, 0].argsort()]  # sort like the main table
 
 # check if alignment fits
-equal_positions = (db_help_array[:, 1] == db_array[:, 1]).sum() 
+equal_positions = (db_help_array[:, 1] == db_array[:, 1]).sum()
 if equal_positions >= 357:
-    pass # perfect, we expect that based on incorrect RK naming
-elif equal_positions >= 320: 
-    logger.warning(f"Aligning update status resulted in {equal_positions} matches, which is likely fine (we expect 357).")
+    pass  # perfect, we expect that based on incorrect RK naming
+elif equal_positions >= 320:
+    logger.warning(
+        f"Aligning update status resulted in {equal_positions} matches, which is likely fine (we expect 357).")
 else:
-    logger.error(f"Aligning RK update status failed with {equal_positions} < 320 matches. RK might have changed their format again!")
+    logger.error(
+        f"Aligning RK update status failed with {equal_positions} < 320 matches. RK might have changed their format again!")
     exit(1)
-    
+
 # copy updated status in the correct ordering
-db_array[:,2] = db_help_array[:,2]
+db_array[:, 2] = db_help_array[:, 2]
 
 # reformat
 entries = []
 updated_today_count = 0
 time_23_59 = time(21, 59)
 date_arr = [{'datenbestand': current_update, 'row_id_cases': 3, 'row_id_deaths': 8},
-             {'datenbestand': datetime.combine(current_update.date() - timedelta(days=1), time_23_59).replace(
-                 tzinfo=timezone.utc), 'row_id_cases': 4, 'row_id_deaths': 9},
-             {'datenbestand': datetime.combine(current_update.date() - timedelta(days=2), time_23_59).replace(
-                 tzinfo=timezone.utc), 'row_id_cases': 5, 'row_id_deaths': None},
-             {'datenbestand': datetime.combine(current_update.date() - timedelta(days=3), time_23_59).replace(
-                 tzinfo=timezone.utc), 'row_id_cases': 6, 'row_id_deaths': None},
-             {'datenbestand': datetime.combine(current_update.date() - timedelta(days=4), time_23_59).replace(
-                 tzinfo=timezone.utc), 'row_id_cases': 7, 'row_id_deaths': None},
+            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=1), time_23_59).replace(
+                tzinfo=timezone.utc), 'row_id_cases': 4, 'row_id_deaths': 9},
+            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=2), time_23_59).replace(
+                tzinfo=timezone.utc), 'row_id_cases': 5, 'row_id_deaths': None},
+            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=3), time_23_59).replace(
+                tzinfo=timezone.utc), 'row_id_cases': 6, 'row_id_deaths': None},
+            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=4), time_23_59).replace(
+                tzinfo=timezone.utc), 'row_id_cases': 7, 'row_id_deaths': None},
             # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=5), time_23_59).replace(
-                # tzinfo=timezone.utc), 'row_id_cases': 9, 'row_id_deaths': None},
+            # tzinfo=timezone.utc), 'row_id_cases': 9, 'row_id_deaths': None},
             # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=6), time_23_59).replace(
-                # tzinfo=timezone.utc), 'row_id_cases': 12, 'row_id_deaths': None},
+            # tzinfo=timezone.utc), 'row_id_cases': 12, 'row_id_deaths': None},
             # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=7), time_23_59).replace(
-                # tzinfo=timezone.utc), 'row_id_cases': 13, 'row_id_deaths': None},
+            # tzinfo=timezone.utc), 'row_id_cases': 13, 'row_id_deaths': None},
             # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=8), time_23_59).replace(
-                # tzinfo=timezone.utc), 'row_id_cases': 14, 'row_id_deaths': None},
+            # tzinfo=timezone.utc), 'row_id_cases': 14, 'row_id_deaths': None},
             # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=9), time_23_59).replace(
-                # tzinfo=timezone.utc), 'row_id_cases': 15, 'row_id_deaths': None},
+            # tzinfo=timezone.utc), 'row_id_cases': 15, 'row_id_deaths': None},
             # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=10), time_23_59).replace(
-                # tzinfo=timezone.utc), 'row_id_cases': 16, 'row_id_deaths': None},
+            # tzinfo=timezone.utc), 'row_id_cases': 16, 'row_id_deaths': None},
             # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=11), time_23_59).replace(
-                # tzinfo=timezone.utc), 'row_id_cases': 17, 'row_id_deaths': None},
+            # tzinfo=timezone.utc), 'row_id_cases': 17, 'row_id_deaths': None},
             # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=12), time_23_59).replace(
-                # tzinfo=timezone.utc), 'row_id_cases': 18, 'row_id_deaths': None},
+            # tzinfo=timezone.utc), 'row_id_cases': 18, 'row_id_deaths': None},
             # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=13), time_23_59).replace(
-                # tzinfo=timezone.utc), 'row_id_cases': 19, 'row_id_deaths': None}
-                ]
+            # tzinfo=timezone.utc), 'row_id_cases': 19, 'row_id_deaths': None}
+            ]
 
 for row in db_array:
     for history in date_arr:
@@ -176,16 +183,17 @@ for row in db_array:
         }
         if (history['datenbestand'] == current_update) and row[2]:
             updated_today_count += 1
-        if (isinstance(entry['cases'], int) or entry['cases'] == None) and (isinstance(entry['deaths'], int) or entry['deaths'] == None):
+        if (isinstance(entry['cases'], int) or entry['cases'] == None) and (
+                isinstance(entry['deaths'], int) or entry['deaths'] == None):
             entries.append(entry)
         else:
             logger.warning(f"Could not parse cases or deaths of {entry} correctly. Will omit this entry.")
 
 # debug
-#print(updated_today_count)
-#import pprint
-#pprint.pprint(entries)
-#exit()
+# print(updated_today_count)
+# import pprint
+# pprint.pprint(entries)
+# exit()
 
 try:
     conn, cur = get_connection()
@@ -210,7 +218,8 @@ try:
         logger.info('Insert new data into DB (takes 2-5 seconds)...')
 
         psycopg2.extras.execute_values(
-            cur, QUERY, entries, template='(%(datenbestand)s::date, %(datenbestand)s, %(ags)s, %(cases)s, %(deaths)s, %(updated_today)s)',
+            cur, QUERY, entries,
+            template='(%(datenbestand)s::date, %(datenbestand)s, %(ags)s, %(cases)s, %(deaths)s, %(updated_today)s)',
             page_size=500
         )
         conn.commit()

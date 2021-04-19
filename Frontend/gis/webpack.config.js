@@ -7,7 +7,7 @@ module.exports = {
         test: /\.m?js$/,
         // you can generate a list of modules that are not valid es-5 by running "yarn are-you-es5 check -r ."
         // the output is a valid webpack inclusion/exclusion regex
-        exclude: /[\\/]node_modules[\\/](?!(vega|vega-embed|vega-parser|vega-lite|cron|lodash-es)[\\/])/,
+        exclude: /[\\/]node_modules[\\/](?!(cron|lodash-es|vega|vega-embed|vega-lite)[\\/])/,
         use: {
           loader: 'babel-loader',
           options: {
