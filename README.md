@@ -4,7 +4,13 @@ This is a volunteer project by members of the [Data Analysis and Visualization G
 
 The live version is available at [https://coronavis.dbvis.de](https://coronavis.dbvis.de).
 
-CoronaVis visualizes intensive care unit (ICU) bed capacities of German hospitals (provided by [DIVI](https://divi.de)) as well as data from the COVID-19 pandemic (provided by [Robert Koch Institut](https://rki.de)).
+CoronaVis visualizes intensive care unit (ICU) bed capacities of German hospitals and other data from the COVID-19 pandemic.
+
+CoronaVis uses the following data sources:
+- [Risklayer GmbH and CEDIM at KIT and the Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors](http://risklayer.com/en/)
+- [Robert Koch Institut](https://rki.de)
+- [DIVI](https://divi.de) / [Intensivregister](https://intensivregister.de)
+- [SurvStat@RKI 2.0](https://survstat.rki.de/)
 
 ## Technologies / Frameworks used
 
