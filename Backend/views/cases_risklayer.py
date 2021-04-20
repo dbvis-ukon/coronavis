@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify, request
+import os
+
+from flask import Blueprint, jsonify, request, send_file, current_app
 
 from cache import cache, make_cache_key
 from db import db
@@ -8,6 +10,13 @@ from timer import timer
 routes = Blueprint('cases-risklayer', __name__, url_prefix='/cases-risklayer')
 
 cd = CaseDevelopments('cases_per_county_and_day_risklayer')
+
+
+def get_latest_xlsx(rkfolder) -> str:
+    _, _, filenames = next(os.walk(rkfolder))
+    filtered = list(filter(lambda x: os.stat(rkfolder + '/' + x).st_size > 1000000 and x.endswith('xlsx'), filenames))
+    filtered.sort(reverse=True)
+    return filtered[0]
 
 
 @routes.route('/development/landkreise', methods=['GET'])
@@ -121,3 +130,42 @@ def get_prognosis():
     }
 
     return jsonify(ret), 200
+
+
+@routes.route('/xlsx-last-update', methods=['GET'])
+@cache.cached()
+def latest_xlsx():
+    """Returns the last update of the risklayer spreadsheet
+    The spreadsheet is updated every 30 minutes at xx:00 and xx:30.
+    ---
+    responses:
+      200:
+        description: A JSON object with a key last_update and a UTC timestamp
+        schema:
+          type: object
+          properties:
+            last_update:
+              type: string
+              example: 2021-04-19T20-05-33Z
+    """
+    rkfolder = current_app.root_path + '/data-risklayer'
+    return {'last_update': get_latest_xlsx(rkfolder)[0:-5] + 'Z'}
+
+
+@routes.route('/xlsx', methods=['GET', 'POST'])
+def download_xlsx():
+    """Returns the latest spreadsheet as a .xlsx file
+    The sheet is not modified and generated via the google export to .xlsx function.
+    The spreadsheet is updated every 30 minutes at xx:00 and xx:30.
+    ---
+    responses:
+      200:
+        description: A .xlsx file of the latest risklayer spreadsheet
+    """
+    rkfolder = current_app.root_path + '/data-risklayer'
+    filtered = get_latest_xlsx(rkfolder)
+    return send_file(filename_or_fp= rkfolder + '/' + filtered,
+                     attachment_filename='risklayer-' + filtered,
+                     as_attachment=True,
+                     cache_timeout=60,
+                     mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

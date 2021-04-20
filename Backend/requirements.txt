@@ -21,3 +21,4 @@ alembic==1.5.8
 tzdata==2021.1
 tzlocal==2.1
 prometheus-flask-exporter==0.18.1
+flasgger==0.9.5

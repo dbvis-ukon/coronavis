@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
-# author: Max Fischer
+# authors: Max Fischer & Wolfgang Jentner
 
 import os
+import re
 import sys
 import traceback
 import logging
@@ -25,21 +26,38 @@ logger.info('Crawler for Risklayer spreadsheet and case data')
 #
 # Parameters
 #
-DB_TABLE = 'cases_lk_risklayer'
-DB_TABLE_CURRENT = 'cases_lk_risklayer_current'
-QUERY = f'INSERT INTO {DB_TABLE} ("date", datenbestand, ags, cases, deaths, updated_today) ' \
+QUERY = f'INSERT INTO cases_lk_risklayer ("date", datenbestand, ags, cases, deaths, updated_today, verified) ' \
         f'VALUES %s ON CONFLICT ON CONSTRAINT no_crawl_duplicates DO ' \
         f'UPDATE SET ' \
         f'datenbestand = EXCLUDED.datenbestand, ' \
         f'cases = EXCLUDED.cases, ' \
-        f'deaths = case when EXCLUDED.deaths IS NOT NULL then EXCLUDED.deaths else {DB_TABLE}.deaths end, ' \
+        f'deaths = case when EXCLUDED.deaths IS NOT NULL then EXCLUDED.deaths else cases_lk_risklayer.deaths end, ' \
         f'updated_today = EXCLUDED.updated_today;'
 URL = "https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/export?format=xlsx"
+#URL = "https://docs.google.com/spreadsheets/d/10HiCpVWvD-WMvxUS33ItJg5V-WUHmjPMZzHHJnuFgPc/export?format=xlsx"
 STORAGE_PATH = "/var/risklayer_spreadsheets/"
 NUM_RETRIES = 5
 WAIT_MS_RETRY = 5000
 BACKOFF_BASE_TIME = 10  # sec
 
+
+def parse_cookies():
+    """Parse a cookies.txt file and return a dictionary of key value pairs
+    compatible with requests."""
+
+    cookies = {}
+    if os.environ.get('GOOGLE_COOKIES') is not None:
+        for line in os.environ.get('GOOGLE_COOKIES').splitlines():
+            if not re.match(r'^\#', line):
+                lineFields = line.strip().split('\t')
+                cookies[lineFields[5]] = lineFields[6]
+    else:
+        with open ('./google.com_cookies.txt', 'r') as fp:
+            for line in fp:
+                if not re.match(r'^\#', line):
+                    lineFields = line.strip().split('\t')
+                    cookies[lineFields[5]] = lineFields[6]
+    return cookies
 
 #
 # DB help
@@ -51,215 +69,236 @@ def get_connection():
     return conn, cur
 
 
-#
-# Fetching data
-#
-data = None
-current_update = datetime.now(timezone.utc)
-logger.debug(f'Fetch risklayer spreadsheet at {current_update.strftime("%Y-%m-%dT%H:%M:%S.%f%Z")}')
-current_try = 1
-filepath = ''
-delay_s = BACKOFF_BASE_TIME
-while current_try <= NUM_RETRIES:
-    if os.name == 'nt':  # debug only
-        STORAGE_PATH = './'
-    if not os.path.isdir(STORAGE_PATH):
-        logger.error(f"Storage path {STORAGE_PATH} does not appear to be a valid directory")
-        exit(1)
-    filepath = STORAGE_PATH + current_update.strftime("%Y-%m-%dT%H-%M-%S") + '.xlsx'
+def download_file(fp: str) -> bool:
+    req = requests.get(URL, allow_redirects=True, cookies=parse_cookies())
+    with open(fp, 'wb') as file:
+        file.write(req.content)
+        file.close()
+        logger.info(f'Downloaded file.')
+        failed = False
+        if req.text.find('nicht verfügbar zu sein') > 0:
+            logger.error('heuristics said: rate limit')
+            failed = True
+        elif req.text.find('Zur Nutzung von') > 0:
+            logger.error('heuristics said: spreadsheet not public. login required')
+            failed = True
+        elif req.text.find('Datei kann derzeit nicht') > 0:
+            logger.error('heuristics said: rate limit')
+            failed = True
+        elif req.text.find('<html') > 0:
+            logger.error('this is a html document')
+            failed = True
+
+        if failed:
+            logger.info('renaming file to html for further debugging')
+            os.rename(fp, fp[0:-4] + "html")
+            return False
+
+        return True
+
+
+def parse_file(fp: str):
     try:
-        r = requests.get(URL, allow_redirects=True)
-        with open(filepath, 'wb') as f:
-            f.write(r.content)
-            logger.info(f'Download succeeded.')
-            try:
-                #
-                # parsing
-                #
-                logger.info('Parse data')
-                data = pd.read_excel(filepath, sheet_name=['Statistik Überblick', 'Haupt', 'Kreise'], header=None,
-                                     na_filter=False, engine="openpyxl")
-                break
-            except Exception as e:
-                logger.warning(f'Failed parsing spreadsheet {current_try}/{NUM_RETRIES}, dowloading again...')
-                logger.warning(str(e))
-                logger.warning(traceback.format_exc())
-                logger.info(f'Removing file from archive...')
-                os.remove(filepath)
-                logger.info(f'Backoff delay for {delay_s} sec...')
-                sleep(delay_s)
-    except:
-        logger.warning(f'Failed download spreadsheet try {current_try}/{NUM_RETRIES}, retrying...')
-        with open(filepath) as f:
-            read_data = f.read()
-            logger.warning(read_data)
-    finally:
-        current_try += 1
-        delay_s = 2 * delay_s
-if current_try > NUM_RETRIES or data is None:
-    logger.error(f"Number of retries ({NUM_RETRIES}) has been exceeded.")
-    exit(1)
-
-logger.info('Extract data')
-prognosis_today = data['Statistik Überblick'].iloc[17, 6]
-
-# old
-# df = data['Kreise Alt'].iloc[3:, [1, 2, 13, 8, 10, 25, 26, 27, 28, 29, 41, 42, 30, 31, 32, 33, 34, 35, 36, 37]]
-# df = data['Kreise'].iloc[3:, [1, 2, 13, 8, 10]]
-# df[8] = df[8].apply(lambda x: x != '')
+        logger.info('Parse data')
+        df = pd.read_excel(fp, sheet_name=['Statistik Überblick', 'Haupt', 'Kreise'], header=None,
+                           na_filter=False, engine="openpyxl")
+        return df
+    except Exception as e:
+        logger.warning(f'Failed parsing spreadsheet')
+        logger.warning(str(e))
+        return None
 
 
-# new again...
-#                              0 1  2  3  4  5  6  7  8   9
-df = data['Haupt'].iloc[5:406, [2, 0, 0, 10, 3, 47, 48, 49, 15,
-                                39]]  # AGS, Name, Name (->update-status) Today, -1d, -2d, -3d, -4d, death today, death -1d
-df[2] = df[2].astype(str)
-df[2] = df[2].apply(lambda x: x.zfill(5))
-db_array = df.to_numpy()
+def get_prognosis(df) -> float:
+    return df['Statistik Überblick'].iloc[17, 6]
 
-# get update status via hack (because RK calc is complex)
-dfhelp = data['Kreise'].iloc[3:, [0, 2, 8]]
-dfhelp[0] = dfhelp[0] - 1
-dfhelp[8] = dfhelp[8].apply(lambda x: x != '')
-db_help_array = dfhelp.to_numpy()
-db_help_array = db_help_array[db_help_array[:, 0].argsort()]  # sort like the main table
 
-# check if alignment fits
-equal_positions = (db_help_array[:, 1] == db_array[:, 1]).sum()
-if equal_positions >= 357:
-    pass  # perfect, we expect that based on incorrect RK naming
-elif equal_positions >= 320:
-    logger.warning(
-        f"Aligning update status resulted in {equal_positions} matches, which is likely fine (we expect 357).")
-else:
-    logger.error(
-        f"Aligning RK update status failed with {equal_positions} < 320 matches. RK might have changed their format again!")
-    exit(1)
+def get_county_data(df_data):
+    df = df_data['Haupt'].iloc[5:406, [2, 0, 0, 10, 3, 47, 48, 49, 15, 39, 23]]
+    # AGS, Name, Name (->update-status) Today, -1d, -2d, -3d, -4d, death today, death -1d, verified (0|1)
+    df[2] = df[2].astype(str)
+    df[2] = df[2].apply(lambda x: x.zfill(5))
+    db_array = df.to_numpy()
 
-# copy updated status in the correct ordering
-db_array[:, 2] = db_help_array[:, 2]
+    # get update status via hack (because RK calc is complex)
+    dfhelp = df_data['Kreise'].iloc[3:, [0, 2, 8]]
+    dfhelp[0] = dfhelp[0] - 1
+    dfhelp[8] = dfhelp[8].apply(lambda x: x != '')
+    db_help_array = dfhelp.to_numpy()
+    db_help_array = db_help_array[db_help_array[:, 0].argsort()]  # sort like the main table
 
-# reformat
-entries = []
-updated_today_count = 0
-time_23_59 = time(21, 59)
-date_arr = [{'datenbestand': current_update, 'row_id_cases': 3, 'row_id_deaths': 8},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=1), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 4, 'row_id_deaths': 9},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=2), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 5, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=3), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 6, 'row_id_deaths': None},
-            {'datenbestand': datetime.combine(current_update.date() - timedelta(days=4), time_23_59).replace(
-                tzinfo=timezone.utc), 'row_id_cases': 7, 'row_id_deaths': None},
-            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=5), time_23_59).replace(
-            # tzinfo=timezone.utc), 'row_id_cases': 9, 'row_id_deaths': None},
-            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=6), time_23_59).replace(
-            # tzinfo=timezone.utc), 'row_id_cases': 12, 'row_id_deaths': None},
-            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=7), time_23_59).replace(
-            # tzinfo=timezone.utc), 'row_id_cases': 13, 'row_id_deaths': None},
-            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=8), time_23_59).replace(
-            # tzinfo=timezone.utc), 'row_id_cases': 14, 'row_id_deaths': None},
-            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=9), time_23_59).replace(
-            # tzinfo=timezone.utc), 'row_id_cases': 15, 'row_id_deaths': None},
-            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=10), time_23_59).replace(
-            # tzinfo=timezone.utc), 'row_id_cases': 16, 'row_id_deaths': None},
-            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=11), time_23_59).replace(
-            # tzinfo=timezone.utc), 'row_id_cases': 17, 'row_id_deaths': None},
-            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=12), time_23_59).replace(
-            # tzinfo=timezone.utc), 'row_id_cases': 18, 'row_id_deaths': None},
-            # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=13), time_23_59).replace(
-            # tzinfo=timezone.utc), 'row_id_cases': 19, 'row_id_deaths': None}
-            ]
-
-for row in db_array:
-    for history in date_arr:
-        entry = {
-            'datenbestand': history['datenbestand'],
-            'ags': row[0],
-            'cases': row[history['row_id_cases']],
-            'deaths': row[history['row_id_deaths']] if history['row_id_deaths'] is not None else None,
-            'updated_today': row[2] or (history['datenbestand'] != current_update)
-        }
-        if (history['datenbestand'] == current_update) and row[2]:
-            updated_today_count += 1
-        if (isinstance(entry['cases'], int) or entry['cases'] == None) and (
-                isinstance(entry['deaths'], int) or entry['deaths'] == None):
-            entries.append(entry)
-        else:
-            logger.warning(f"Could not parse cases or deaths of {entry} correctly. Will omit this entry.")
-
-# debug
-# print(updated_today_count)
-# import pprint
-# pprint.pprint(entries)
-# exit()
-
-try:
-    conn, cur = get_connection()
-
-    cur.execute(f"Select Max(datenbestand) from {DB_TABLE_CURRENT}")
-    last_update = cur.fetchone()[0]
-
-    cur.execute(f"SELECT COUNT(*) FROM {DB_TABLE_CURRENT} WHERE updated_today = True")
-    num_cases_updated_today = cur.fetchone()[0]
-
-    logger.info(f"db data version: {last_update}")
-    logger.info(f"fetched data version: {current_update}")
-    logger.info(f"Number of LK publications for today in DB: {num_cases_updated_today}")
-    logger.info(
-        f"Number of LK publications for today in this update: {updated_today_count} (change: {updated_today_count - num_cases_updated_today})")
-    logger.info(f"Prognosis number of cases for today: {prognosis_today}")
-
-    if last_update is not None and abs((current_update - last_update).total_seconds()) <= 5:
-        logger.info("Apply throttling (+/- 5min) and skip update")
-        exit(0)
+    # check if alignment fits
+    equal_positions = (db_help_array[:, 1] == db_array[:, 1]).sum()
+    if equal_positions >= 357:
+        pass  # perfect, we expect that based on incorrect RK naming
+    elif equal_positions >= 320:
+        logger.warning(
+            f"Aligning update status resulted in {equal_positions} matches, which is likely fine (we expect 357).")
     else:
-        logger.info('Insert new data into DB (takes 2-5 seconds)...')
+        logger.error(
+            f"Aligning RK update status failed with {equal_positions} < 320 matches. RK might have changed their "
+            f"format again!")
+        exit(1)
 
-        psycopg2.extras.execute_values(
-            cur, QUERY, entries,
-            template='(%(datenbestand)s::date, %(datenbestand)s, %(ags)s, %(cases)s, %(deaths)s, %(updated_today)s)',
-            page_size=500
+    # copy updated status in the correct ordering
+    db_array[:, 2] = db_help_array[:, 2]
+
+    # reformat
+    updated_today_count = 0
+    time_23_59 = time(21, 59)
+    date_arr = [{'datenbestand': current_update, 'row_id_cases': 3, 'row_id_deaths': 8},
+                {'datenbestand': datetime.combine(current_update.date() - timedelta(days=1), time_23_59).replace(
+                    tzinfo=timezone.utc), 'row_id_cases': 4, 'row_id_deaths': 9},
+                {'datenbestand': datetime.combine(current_update.date() - timedelta(days=2), time_23_59).replace(
+                    tzinfo=timezone.utc), 'row_id_cases': 5, 'row_id_deaths': None},
+                {'datenbestand': datetime.combine(current_update.date() - timedelta(days=3), time_23_59).replace(
+                    tzinfo=timezone.utc), 'row_id_cases': 6, 'row_id_deaths': None},
+                {'datenbestand': datetime.combine(current_update.date() - timedelta(days=4), time_23_59).replace(
+                    tzinfo=timezone.utc), 'row_id_cases': 7, 'row_id_deaths': None},
+                # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=5), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 9, 'row_id_deaths': None},
+                # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=6), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 12, 'row_id_deaths': None},
+                # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=7), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 13, 'row_id_deaths': None},
+                # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=8), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 14, 'row_id_deaths': None},
+                # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=9), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 15, 'row_id_deaths': None},
+                # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=10), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 16, 'row_id_deaths': None},
+                # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=11), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 17, 'row_id_deaths': None},
+                # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=12), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 18, 'row_id_deaths': None},
+                # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=13), time_23_59).replace(
+                # tzinfo=timezone.utc), 'row_id_cases': 19, 'row_id_deaths': None}
+                ]
+    data_entries = []
+    for row in db_array:
+        for history in date_arr:
+            entry = {
+                'datenbestand': history['datenbestand'],
+                'ags': row[0],
+                'cases': row[history['row_id_cases']],
+                'deaths': row[history['row_id_deaths']] if history['row_id_deaths'] is not None else None,
+                'updated_today': row[2] or (history['datenbestand'] != current_update),
+                'verified': row[10] == 1
+            }
+            if (history['datenbestand'] == current_update) and row[2]:
+                updated_today_count += 1
+            if (isinstance(entry['cases'], int) or entry['cases'] is None) and (
+                    isinstance(entry['deaths'], int) or entry['deaths'] is None):
+                data_entries.append(entry)
+            else:
+                logger.warning(f"Could not parse cases or deaths of {entry} correctly. Will omit this entry.")
+    return data_entries, updated_today_count
+
+
+def insert_into_db(prognosis_today, data_entries, updated_today_count):
+    try:
+        conn, cur = get_connection()
+
+        cur.execute(f"Select Max(datenbestand) from cases_lk_risklayer_current")
+        last_update = cur.fetchone()[0]
+
+        cur.execute(f"SELECT COUNT(*) FROM cases_lk_risklayer_current WHERE updated_today = True")
+        num_cases_updated_today = cur.fetchone()[0]
+
+        logger.info(f"db data version: {last_update}")
+        logger.info(f"fetched data version: {current_update}")
+        logger.info(f"Number of LK publications for today in DB: {num_cases_updated_today}")
+        logger.info(
+            f"Number of LK publications for today in this update: "
+            f"{updated_today_count} (change: {updated_today_count - num_cases_updated_today})"
         )
-        conn.commit()
-        logger.info('Data inserted.')
+        logger.info(f"Prognosis number of cases for today: {prognosis_today}")
 
-        cur.execute("INSERT INTO risklayer_prognosis (datenbestand, prognosis) VALUES(%s, %s)",
-                    (current_update, prognosis_today))
-        conn.commit()
-        logger.info('Prognosis data inserted.')
+        if last_update is not None and abs((current_update - last_update).total_seconds()) <= 5:
+            logger.info("Apply throttling (+/- 5min) and skip update")
+            exit(0)
+        else:
+            logger.info('Insert new data into DB (takes 2-5 seconds)...')
 
-        logger.info('Refreshing materialized view')
-        cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW cases_per_county_and_day_risklayer;')
-        conn.commit()
+            psycopg2.extras.execute_values(
+                cur, QUERY, data_entries,
+                template='(%(datenbestand)s::date, %(datenbestand)s, %(ags)s, %(cases)s, %(deaths)s, '
+                         '%(updated_today)s, %(verified)s)',
+                page_size=500
+            )
+            conn.commit()
+            logger.info('Data inserted.')
 
-        logger.info('Send notification emails')
+            cur.execute("INSERT INTO risklayer_prognosis (datenbestand, prognosis) VALUES(%s, %s)",
+                        (current_update, prognosis_today))
+            conn.commit()
+            logger.info('Prognosis data inserted.')
 
-        notification_result = requests.post('https://api.coronavis.dbvis.de/sub/send-notifications',
-                                            headers={'X-API-KEY': os.getenv('API_KEY')})
-        # notification_result = requests.post('http://localhost:5000/sub/send-notifications',
-        #                                     headers={'X-API-KEY': os.getenv('API_KEY')})
-        logger.info(notification_result.text)
+            logger.info('Refreshing materialized view')
+            cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW cases_per_county_and_day_risklayer;')
+            conn.commit()
 
-        logger.info('Success')
+            logger.info('Send notification emails')
+
+            notification_result = requests.post('https://api.coronavis.dbvis.de/sub/send-notifications',
+                                                headers={'X-API-KEY': os.getenv('API_KEY')})
+            # notification_result = requests.post('http://localhost:5000/sub/send-notifications',
+            #                                     headers={'X-API-KEY': os.getenv('API_KEY')})
+            logger.info(notification_result.text)
+
+            logger.info('Success')
+
+            if conn:
+                cur.close()
+                conn.close()
+
+            exit(0)
+    except (Exception, pg.DatabaseError) as error:
+        conn, cur = get_connection()
+
+        logger.error(error)
+        logger.error("Error in transaction - Reverting all other operations of a transaction")
+        logger.error("Most likely a simultaneous update was applied faster.")
+
+        conn.rollback()
 
         if (conn):
             cur.close()
             conn.close()
 
-        exit(0)
-except (Exception, pg.DatabaseError) as error:
-    conn, cur = get_connection()
+        exit(1)
 
-    logger.error(error)
-    logger.error("Error in transaction - Reverting all other operations of a transaction")
-    logger.error("Most likely a simultaneous update was applied faster.")
 
-    conn.rollback()
+if os.name == 'nt':  # debug only
+    STORAGE_PATH = './'
+if not os.path.isdir(STORAGE_PATH):
+    logger.error(f"Storage path {STORAGE_PATH} does not appear to be a valid directory")
+    exit(1)
 
-    if (conn):
-        cur.close()
-        conn.close()
+cur_try = 1
+max_tries = 5
+while cur_try <= max_tries:
+    current_update = datetime.now(timezone.utc)
+    logger.debug(f'Fetch risklayer spreadsheet at {current_update.strftime("%Y-%m-%dT%H:%M:%S.%f%Z")}')
+    filepath = STORAGE_PATH + current_update.strftime("%Y-%m-%dT%H-%M-%S") + '.xlsx'
 
+    if not download_file(filepath):
+        logger.error('download failed')
+        sleep(cur_try * 10)
+        continue
+
+    data = parse_file(filepath)
+    if data is None:
+        logger.error('parsing failed')
+        sleep(cur_try * 10)
+        continue
+
+    entries, update_count = get_county_data(data)
+    prognosis = get_prognosis(data)
+    insert_into_db(prognosis, entries, update_count)
+
+    cur_try += 1
+
+if cur_try >= max_tries:
+    logger.error('could not download and parse spreadsheet')
     exit(1)
