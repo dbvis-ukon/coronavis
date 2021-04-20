@@ -48,7 +48,7 @@ https://api.coronavis.dbvis.de/cases-risklayer/development/bundeslaender?from=20
 ```
 
 <details>
-    <summary>Example output</summary>
+    <summary>Example output (extensive!!!)</summary>
 
 ```json
     {
@@ -40347,7 +40347,7 @@ https://api.coronavis.dbvis.de/cases-risklayer/development/landkreis/08335?from=
 ```
 
 <details>
-    <summary>Example output:</summary>
+    <summary>Example output</summary>
 
 ```json
 {
