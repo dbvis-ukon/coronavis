@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { I18nService, SupportedLocales } from 'src/app/services/i18n.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class LanguageSwitcherComponent implements OnInit {
 
   supportedLocales: string[];
 
-  selectedLocale: SupportedLocales;
+  selectedLocale$: Observable<SupportedLocales>;
 
   constructor(
     private i18nService: I18nService,
@@ -21,9 +22,7 @@ export class LanguageSwitcherComponent implements OnInit {
   ngOnInit(): void {
     this.supportedLocales = this.i18nService.getSupportedLocales();
 
-    this.i18nService.currentLocale().subscribe(l => {
-      this.selectedLocale = l;
-    });
+    this.selectedLocale$ = this.i18nService.currentLocale();
   }
 
   changeLocale(evt) {

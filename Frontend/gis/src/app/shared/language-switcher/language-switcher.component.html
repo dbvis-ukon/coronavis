@@ -1,6 +1,6 @@
-<mat-form-field class="locale">
+<mat-form-field class="locale" *ngIf="selectedLocale$ | async as sl">
   <mat-label i18n="infobox | infobox@@footer5">Sprache</mat-label>
-  <mat-select (selectionChange)="changeLocale($event)" [value]="selectedLocale">
+  <mat-select (selectionChange)="changeLocale($event)" [value]="sl">
     <mat-option *ngFor="let locale of supportedLocales" [value]="locale">
       {{ locale.slice(0, 2) }}
     </mat-option>
