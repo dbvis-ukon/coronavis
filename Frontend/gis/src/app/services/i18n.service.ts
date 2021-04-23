@@ -13,7 +13,9 @@ export class I18nService {
 
   currentLocale$: BehaviorSubject<SupportedLocales> = new BehaviorSubject(SupportedLocales.EN_US);
 
-  constructor(@Inject(LOCALE_ID) protected localeId: string) {}
+  constructor(@Inject(LOCALE_ID) protected localeId: string) {
+    this.initI18n();
+  }
 
   initI18n() {
     this.updateLocale(this.localeId as SupportedLocales);

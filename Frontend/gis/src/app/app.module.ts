@@ -32,11 +32,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NouisliderModule } from 'ng2-nouislider';
+import { MarkdownModule } from 'ngx-markdown';
 import { AboutComponent } from './about/about.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BedTooltipComponent } from './bed-tooltip/bed-tooltip.component';
 import { ButtonPanelComponent } from './button-panel/button-panel.component';
+import { CasesDodModule } from './cases-dod/cases-dod.module';
 import { GdprComponent } from './gdpr/gdpr.component';
 import { GlyphTooltipComponent } from './glyph-tooltip/glyph-tooltip.component';
 import { HelpModule } from './help/help.module';
@@ -56,8 +58,6 @@ import { ShareDialogComponent } from './share-dialog/share-dialog.component';
 import { SharedModule } from './shared/shared.module';
 import { TimesliderComponent } from './timeslider/timeslider.component';
 import localeEn from './util/locales/en';
-import { CasesDodModule } from './cases-dod/cases-dod.module';
-import { MarkdownModule } from 'ngx-markdown';
 
 
 
