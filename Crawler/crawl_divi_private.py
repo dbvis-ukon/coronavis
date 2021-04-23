@@ -112,8 +112,25 @@ headers = {
 session.headers.update(headers)
 
 logger.info('Assembling bearer and downloading data...')
+JSONPAYLOAD = {"criteria":
+                   {"bundesland": None,
+                    "standortId": None,
+                    "standortBezeichnung":"",
+                    "bettenStatus":[],
+                    "bettenKategorie":[],
+                    # only look for beds for adults since otherwise it always uses the best possible status
+                    # i.e., there are beds for kids available but none for adults: overall status is still available
+                    # this request is also the default on the DIVI website
+                    "behandlungsschwerpunktL1":["ERWACHSENE"],
+                    "behandlungsschwerpunktL2":[],
+                    "behandlungsschwerpunktL3":[]
+                    },
+               "pageNumber":0,
+               "pageSize": 3000
+               }
+
 # get private api data
-x = session.post(URL_API, json={})
+x = session.post(URL_API, json=JSONPAYLOAD)
 data = x.json()
 
 # logout

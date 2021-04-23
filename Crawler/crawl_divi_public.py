@@ -39,9 +39,26 @@ headers = {
 }
 session.headers.update(headers)
 
+JSONPAYLOAD = {"criteria":
+                   {"bundesland": None,
+                    "standortId": None,
+                    "standortBezeichnung":"",
+                    "bettenStatus":[],
+                    "bettenKategorie":[],
+                    # only look for beds for adults since otherwise it always uses the best possible status
+                    # i.e., there are beds for kids available but none for adults: overall status is still available
+                    # this request is also the default on the DIVI website
+                    "behandlungsschwerpunktL1":["ERWACHSENE"],
+                    "behandlungsschwerpunktL2":[],
+                    "behandlungsschwerpunktL3":[]
+                    },
+               "pageNumber":0,
+               "pageSize": 3000
+               }
+
 logger.info('Assembling bearer and downloading data...')
 # get private api data
-x = session.post(URL_API, json={})
+x = session.post(URL_API, json=JSONPAYLOAD)
 data = x.json()
 
 # infos
@@ -138,6 +155,8 @@ def insert_data(data):
              'behandlungsschwerpunktL1': list(map(lambda x: x['behandlungsschwerpunktL1'], d['meldebereiche'])),
              'behandlungsschwerpunktL2': list(map(lambda x: x['behandlungsschwerpunktL2'], d['meldebereiche'])),
              'behandlungsschwerpunktL3': list(map(lambda x: x['behandlungsschwerpunktL3'], d['meldebereiche']))}
+        if d['krankenhausStandort']['id'] == '773017':
+            print(e)
         entries_meldunden.append(e)
 
     psycopg2.extras.execute_values(
