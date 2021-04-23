@@ -6778,10 +6778,10 @@ json-stringify-safe@~5.0.1:
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
 
-json-url@^2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/json-url/-/json-url-2.6.0.tgz#e0f12b254a38234dd9ddcc881b3baef925d885e2"
-  integrity sha512-uMiw/WX8DJUhs/adMJey72Z68Fw1Y4IcfCPTCD4c3uPhynB4ENlYVzDDLNjcmsRmLat+JVNSkNvQrg/ITAXxxQ==
+json-url@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/json-url/-/json-url-3.0.0.tgz#454fbca31342984c3f4ca8ebc6e53c89f4f7bd29"
+  integrity sha512-c5iQnrKGNJ4/qAV1APNFHBDSgB0qgekmcVTBV3RRa2UUw8liUIrUvI3+Om7qtnM8JwobnEsPuAWMYmtCfxSkcw==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
     bluebird "^3.0.6"
