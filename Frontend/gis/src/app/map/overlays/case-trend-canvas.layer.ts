@@ -68,6 +68,9 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
 
     this.preparedGlyphs = [];
     const opt = this.options$.value;
+    if (opt.showTrendGlyphs === false) {
+      return null;
+    }
     for(const d of this.data.features) {
       if (this.caseUtil.isLockdownMode(opt) && opt.dataSource === 'risklayer' && opt.showOnlyAvailableCounties === true ) {
         const status = this.caseUtil.getTimedStatusWithOptions(d.properties, this.options$.value) as StatusWithCache;
