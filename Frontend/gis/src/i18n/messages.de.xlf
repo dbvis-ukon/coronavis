@@ -283,6 +283,13 @@
       <segment state="final">
         <source>Robert Koch Institut: SurvStat@RKI 2.0, <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://survstat.rki.de&quot;>" dispEnd="&lt;/a>">https://survstat.rki.de</pc>, Abfragedatum: <ph id="1" equiv="INTERPOLATION" disp="{{ now | date:'shortDate' }}"/></source>
       <target>Robert Koch Institut: SurvStat@RKI 2.0, <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://survstat.rki.de&quot;>" dispEnd="&lt;/a>">https://survstat.rki.de</pc>, Abfragedatum: <ph id="1" equiv="INTERPOLATION" disp="{{ now | date:'shortDate' }}"/></target></segment>
+    </unit><unit id="snackBarEBrake">
+      <notes>
+        <note category="location">src/app/shared/ebrake-snackbar/ebrake-snackbar.component.ts:8,9</note>
+      </notes>
+      <segment state="final">
+        <source> Seit dem 23.04.2021 gilt das 4. Bevölkerungsschutzgesetz. In der Karte werden alle Kreise dargestellt für die die "Bundesnotbremse" gilt. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://www.bundesgesundheitsministerium.de/service/gesetze-und-verordnungen/guv-19-lp/4-bevschg-faq.html#c21101&quot;>" dispEnd="&lt;/a>">Mehr Informationen gibt es beim Bundesgesundheitsministerium. <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></pc></source>
+      <target> Seit dem 23.04.2021 gilt das 4. Bevölkerungsschutzgesetz. In der Karte werden alle Kreise dargestellt für die die "Bundesnotbremse" gilt. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://www.bundesgesundheitsministerium.de/service/gesetze-und-verordnungen/guv-19-lp/4-bevschg-faq.html#c21101&quot;>" dispEnd="&lt;/a>">Mehr Informationen gibt es beim Bundesgesundheitsministerium. <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></pc></target></segment>
     </unit><unit id="button11">
       <notes>
         <note category="description"> help</note>
@@ -1497,6 +1504,34 @@
       <segment state="final">
         <source>Veränderung im gewählten Zeitraum</source>
       <target>Veränderung im gewählten Zeitraum</target></segment>
+    </unit><unit id="infoBoxEBrake">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:367</note>
+      </notes>
+      <segment state="final">
+        <source>4. Bevölkerungsschutzgesetz "Bundesnotbremse"</source>
+      <target>4. Bevölkerungsschutzgesetz "Bundesnotbremse"</target></segment>
+    </unit><unit id="infoboxEBrakeOff">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:376</note>
+      </notes>
+      <segment state="final">
+        <source>Aus</source>
+      <target>Aus</target></segment>
+    </unit><unit id="infoboxEBrakeOver100">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:378,379</note>
+      </notes>
+      <segment state="final">
+        <source>Über 100 </source>
+      <target>Über 100 </target></segment>
+    </unit><unit id="infoboxEBrakeOver165">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:381,382</note>
+      </notes>
+      <segment state="final">
+        <source>Über 165 </source>
+      <target>Über 165 </target></segment>
     </unit><unit id="infoboxType">
       <notes>
 
@@ -1544,7 +1579,7 @@
     </unit><unit id="infoboxGeo">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:375</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:395</note></notes>
       <segment state="final">
         <source>
           Geographische Verortung
@@ -1555,7 +1590,7 @@
     </unit><unit id="infoboxGeoHospital">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:389</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:409</note></notes>
       <segment state="final">
         <source>Krankenhäuser
         </source>
@@ -1564,7 +1599,7 @@
     </unit><unit id="infoboxGeoHeli">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:397</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:417</note></notes>
       <segment state="final">
         <source>Hubschrauberlandeplätze
         </source>
@@ -1573,7 +1608,7 @@
     </unit><unit id="infoboxData">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:406</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:426</note></notes>
       <segment state="final">
         <source>
           Datenquellen
@@ -1584,28 +1619,28 @@
     </unit><unit id="infoboxDIVI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:413</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:38</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:433</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:38</note></notes>
       <segment state="final">
         <source>DIVI Intensivregister</source>
       <target>DIVI Intensivregister</target></segment>
     </unit><unit id="infoboxRKI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:418</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:438</note></notes>
       <segment state="final">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institut</target></segment>
     </unit><unit id="infoboxRKICases">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:422</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:442</note></notes>
       <segment state="final">
         <source>• Covid-19 Fallzahlen</source>
       <target>• Covid-19 Fallzahlen</target></segment>
     </unit><unit id="infoboxDESTATIS">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:440</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:460</note></notes>
       <segment state="final">
         <source>Statistisches Bundesamt</source>
       <target>Statistisches Bundesamt</target></segment>
@@ -1636,36 +1671,44 @@
     </unit><unit id="overviewIntroduction">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:19</note><note category="location">src/app/overview/overview.component.html:50</note></notes>
+      <note category="location">src/app/overview/overview.component.html:19</note><note category="location">src/app/overview/overview.component.html:53</note></notes>
       <segment state="final">
         <source>Einführung</source>
       <target>Einführung</target></segment>
     </unit><unit id="overviewICUView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:26</note><note category="location">src/app/overview/overview.component.html:57</note></notes>
+      <note category="location">src/app/overview/overview.component.html:26</note><note category="location">src/app/overview/overview.component.html:60</note></notes>
       <segment state="final">
-        <source>Intensivbetten-Kapazitäten Ansicht</source>
-      <target>Intensivbetten-Kapazitäten Ansicht</target></segment>
+        <source>Intensivbetten-Kapazitäten</source>
+      <target>Intensivbetten-Kapazitäten</target></segment>
     </unit><unit id="overviewLockdownView">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:29</note><note category="location">src/app/overview/overview.component.html:60</note></notes>
+      <note category="location">src/app/overview/overview.component.html:29</note><note category="location">src/app/overview/overview.component.html:63</note></notes>
       <segment state="final">
-        <source>Lockdown Ansicht</source>
-      <target>Lockdown Ansicht</target></segment>
+        <source>7-Tage-Inzidenz (RKI)</source>
+      <target>7-Tage-Inzidenz (RKI)</target></segment>
     </unit><unit id="overviewLockdownViewLive">
       <notes>
         
-      <note category="location">src/app/overview/overview.component.html:32</note><note category="location">src/app/overview/overview.component.html:63</note></notes>
+      <note category="location">src/app/overview/overview.component.html:32</note><note category="location">src/app/overview/overview.component.html:66</note></notes>
       <segment state="final">
-        <source>LIVE Lockdown Ansicht</source>
-      <target>LIVE Lockdown Ansicht</target></segment>
+        <source>LIVE 7-Tage-Inzidenz (Risklayer)</source>
+      <target>LIVE 7-Tage-Inzidenz (Risklayer)</target></segment>
+    </unit><unit id="overviewEBrakeView">
+      <notes>
+        <note category="location">src/app/overview/overview.component.html:35</note>
+        <note category="location">src/app/overview/overview.component.html:69</note>
+      </notes>
+      <segment state="final">
+        <source>Bundesnotbremse</source>
+      <target>Bundesnotbremse</target></segment>
     </unit><unit id="overviewSubscription">
       <notes>
         
         
-      <note category="location">src/app/overview/overview.component.html:37</note><note category="location">src/app/overview/overview.component.html:69</note></notes>
+      <note category="location">src/app/overview/overview.component.html:40</note><note category="location">src/app/overview/overview.component.html:75</note></notes>
       <segment state="final">
         <source>E-Mail-Benachrichtigung</source>
       <target>E-Mail-Benachrichtigung</target></segment>
@@ -1698,14 +1741,28 @@
       <notes>
         
         
-      <note category="location">src/app/legend/legend.component.html:8</note><note category="location">src/app/legend/legend.component.html:61</note></notes>
+      <note category="location">src/app/legend/legend.component.html:8</note><note category="location">src/app/legend/legend.component.html:66</note></notes>
       <segment state="final">
         <source>Klicken um Legende ein-/auszuklappen</source>
       <target>Klicken um Legende ein-/auszuklappen</target></segment>
+    </unit><unit id="legendSelectedRegions">
+      <notes>
+        <note category="location">src/app/legend/legend.component.html:12,14</note>
+      </notes>
+      <segment state="final">
+        <source> <ph id="0" equiv="INTERPOLATION" disp="{{num.sel}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="/{{num.total}"/> <ph id="2" equiv="ICU" disp="{num.aggLevel, select, landkreise {Kreise} regierungsbezirke {Regierungsbezirke} bundeslaender {Bundesländer} laender {Länder} other {Regionen}}"/> </source>
+      <target> <ph id="0" equiv="INTERPOLATION" disp="{{num.sel}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="/{{num.total}"/> <ph id="2" equiv="ICU" disp="{num.aggLevel, select, landkreise {Kreise} regierungsbezirke {Regierungsbezirke} bundeslaender {Bundesländer} laender {Länder} other {Regionen}}"/> </target></segment>
+    </unit><unit id="710907318874673007">
+      <notes>
+        <note category="location">src/app/legend/legend.component.html:13</note>
+      </notes>
+      <segment state="final">
+        <source>{VAR_SELECT, select, landkreise {Kreise} regierungsbezirke {Regierungsbezirke} bundeslaender {Bundesländer} laender {Länder} other {Regionen}}</source>
+      <target>{VAR_SELECT, select, landkreise {Kreise} regierungsbezirke {Regierungsbezirke} bundeslaender {Bundesländer} laender {Länder} other {Regionen}}</target></segment>
     </unit><unit id="legendNotAvailable">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:33</note></notes>
+      <note category="location">src/app/legend/legend.component.html:38</note></notes>
       <segment state="final">
         <source>
           nicht verfügbar
@@ -1716,7 +1773,7 @@
     </unit><unit id="clearSelection">
       <notes>
         
-      <note category="location">src/app/legend/legend.component.html:38</note></notes>
+      <note category="location">src/app/legend/legend.component.html:43</note></notes>
       <segment state="final">
         <source>Selektion aufheben</source>
       <target>Selektion aufheben</target></segment>

@@ -341,6 +341,10 @@ export class VegaLinechartService {
             "layer": [
               {
                 "mark": "rule",
+                "encoding": {"y": {"datum": 165}, "color": {"value": "darkgrey"}}
+              },
+              {
+                "mark": "rule",
                 "encoding": {"y": {"datum": 100}, "color": {"value": "darkgrey"}}
               },
               {
@@ -388,7 +392,8 @@ export class VegaLinechartService {
                   },
                   "color": {
                     "condition": [
-                      {"test": "datum.y > 100", "value": "firebrick"},
+                      {"test": "datum.y > 165", "value": "darkred"},
+                      {"test": "datum.y > 100", "value": "orangered"},
                       {"test": "datum.y > 50", "value": "orange"}
                       // {"test": "datum.y < 26.25", "value": "rgb(255, 166, 102)"},
                       // {"test": "datum.y < 35", "value": "rgb(255, 136, 51)"},
@@ -478,16 +483,16 @@ export class VegaLinechartService {
     spec.data.values = data;
 
     // also overwrite the title
-    spec.vconcat[0].layer[1].layer[3].encoding.x.title = chartOptions.xAxisTitle || '';
+    spec.vconcat[0].layer[1].layer[4].encoding.x.title = chartOptions.xAxisTitle || '';
     spec.vconcat[1].encoding.x.title = chartOptions.xAxisTitle || '';
     // spec.layer[3].encoding.tooltip[0].title = chartOptions.xAxisTitle || '';
 
-    spec.vconcat[0].layer[1].layer[2].encoding.y.title = chartOptions.yAxisTitle || '';
-    spec.vconcat[0].layer[1].layer[4].encoding.y.title = chartOptions.yAxisTitle || '';
-    spec.vconcat[0].layer[1].layer[4].encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
+    spec.vconcat[0].layer[1].layer[3].encoding.y.title = chartOptions.yAxisTitle || '';
+    spec.vconcat[0].layer[1].layer[5].encoding.y.title = chartOptions.yAxisTitle || '';
+    spec.vconcat[0].layer[1].layer[5].encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
 
     spec.vconcat[0].layer[0].encoding.y.title = chartOptions.yAxis2Title || '';
-    spec.vconcat[0].layer[1].layer[4].encoding.tooltip[2].title = chartOptions.yAxis2Title || '';
+    spec.vconcat[0].layer[1].layer[5].encoding.tooltip[2].title = chartOptions.yAxis2Title || '';
 
     spec.vconcat[0].width = chartOptions.width;
     spec.vconcat[0].height = chartOptions.height;
@@ -496,18 +501,18 @@ export class VegaLinechartService {
     spec.vconcat[1].height = 40;
 
     if (chartOptions.tempGranularity) {
-      spec.vconcat[0].layer[1].layer[3].encoding.x.timeUnit = chartOptions.tempGranularity;
       spec.vconcat[0].layer[1].layer[4].encoding.x.timeUnit = chartOptions.tempGranularity;
+      spec.vconcat[0].layer[1].layer[5].encoding.x.timeUnit = chartOptions.tempGranularity;
       spec.vconcat[1].encoding.x.timeUnit = chartOptions.tempGranularity;
 
-      spec.vconcat[0].layer[1].layer[3].encoding.y.aggregate = 'mean';
       spec.vconcat[0].layer[1].layer[4].encoding.y.aggregate = 'mean';
+      spec.vconcat[0].layer[1].layer[5].encoding.y.aggregate = 'mean';
       spec.vconcat[1].encoding.y.aggregate = 'mean';
     }
 
     spec.vconcat[0].layer[0].encoding.y.scale = {type: chartOptions.scaleType};
-    spec.vconcat[0].layer[1].layer[3].encoding.y.scale = {type: chartOptions.scaleType};
     spec.vconcat[0].layer[1].layer[4].encoding.y.scale = {type: chartOptions.scaleType};
+    spec.vconcat[0].layer[1].layer[5].encoding.y.scale = {type: chartOptions.scaleType};
     spec.vconcat[1].encoding.y.scale = {type: chartOptions.scaleType};
 
     if (chartOptions.regression) {

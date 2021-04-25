@@ -9,6 +9,7 @@ import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTim
 import { MapOptions } from '../map/options/map-options';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { CaseChoroplethColormapService, ColorMapBin } from '../services/case-choropleth-colormap.service';
+import { CaseUtilService } from '../services/case-util.service';
 import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
@@ -61,6 +62,7 @@ export class LegendComponent implements OnInit, OnDestroy {
 
   titleBeds$: Observable<string>;
   titleCases$: Observable<string>;
+  numCounties$: Observable<{sel: number; total: number; aggLevel: AggregationLevel}>;
 
   optionsSubscription: Subscription;
   currentOptions: MapOptions;
@@ -72,7 +74,8 @@ export class LegendComponent implements OnInit, OnDestroy {
     private numberPipe: DecimalPipe,
     private i18n: I18nService,
     private datePipe: DatePipe,
-    private breakpointObs: BreakpointObserver
+    private breakpointObs: BreakpointObserver,
+    private caseUtil: CaseUtilService
   ) {
 
   }
@@ -99,6 +102,27 @@ export class LegendComponent implements OnInit, OnDestroy {
     .pipe(
       // distinctUntilChanged(([a], [b]) => !isEqual(a?.covidNumberCaseOptions, b?.covidNumberCaseOptions)),
       map(([mo, c]) => this.updateCaseColors(mo, c))
+    );
+
+    this.numCounties$ = combineLatest([this.mo$, this.choroplethLayer$])
+    .pipe(
+      // distinctUntilChanged(([a], [b]) => !isEqual(a?.covidNumberCaseOptions, b?.covidNumberCaseOptions)),
+      map(([mo, c]) => ({sel: c.getData().features.filter(d => {
+        const nmbr = this.caseUtil.getCaseNumbers(d.properties, mo.covidNumberCaseOptions);
+
+        if (this.caseUtil.isEBrakeMode(mo.covidNumberCaseOptions)) {
+          return this.caseUtil.isEBrakeOver(d, mo.covidNumberCaseOptions) && this.caseUtil.isHoveredOrSelectedBin(mo.covidNumberCaseOptions, nmbr);
+        }
+
+        if (mo.covidNumberCaseOptions.showOnlyAvailableCounties === true && mo.covidNumberCaseOptions.dataSource === 'risklayer') {
+          const t = this.caseUtil.getTimedStatus(d.properties, getMoment(mo.covidNumberCaseOptions.date));
+          return !!t.last_updated && this.caseUtil.isHoveredOrSelectedBin(mo.covidNumberCaseOptions, nmbr);
+        }
+
+        return this.caseUtil.isHoveredOrSelectedBin(mo.covidNumberCaseOptions, nmbr);
+      }).length,
+      total: c.getData().features.length,
+      aggLevel: mo.covidNumberCaseOptions.aggregationLevel} as {sel: number; total: number; aggLevel: AggregationLevel})),
     );
   }
 

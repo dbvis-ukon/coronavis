@@ -8,6 +8,11 @@
     matTooltip="Klicken um Legende ein-/auszuklappen"
     matTooltipPosition="above"
     >{{ titleCases$ | async }}</h5>
+
+    <h5 class="title" *ngIf="numCounties$ | async as num" i18n="@@legendSelectedRegions">
+      {{num.sel}}/{{num.total}} {num.aggLevel, select, landkreise {Kreise} regierungsbezirke {Regierungsbezirke} bundeslaender {Bundesländer} laender {Länder} other {Regionen}}
+    </h5>
+
       <div *ngIf="legendCasesExtended">
       <table>
   

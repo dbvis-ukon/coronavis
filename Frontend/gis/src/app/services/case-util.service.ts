@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ScaleLinear, scaleLinear } from 'd3-scale';
-import { FeatureCollection, Geometry } from 'geojson';
+import { Feature, FeatureCollection, Geometry } from 'geojson';
 import { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
 import { filter, map, mergeMap, toArray } from 'rxjs/operators';
 import { CovidChartOptions } from '../cases-dod/covid-chart-options';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { AggregatedRKICaseDevelopmentProperties, RKICaseDevelopmentProperties, RKICaseTimedStatus, SurvStatAgeGroups } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
@@ -47,13 +48,17 @@ export class CaseUtilService {
     return data?.developments[idx];
   }
 
-  public getTimedStatus(data: RKICaseDevelopmentProperties, date: Moment): RKICaseTimedStatus | undefined {
+  public getTimedStatus(data: RKICaseDevelopmentProperties, date: Moment, exact?: boolean): RKICaseTimedStatus | undefined {
     const dateKey = getStrDate(date);
 
     const timedStatus = data.developmentDays[dateKey];
 
     if (timedStatus) {
       return timedStatus;
+    }
+
+    if (exact && !timedStatus) {
+      throw new Error(`Cannot find timed status for ${date} in ${data}`);
     }
 
     // return last available data
@@ -94,6 +99,33 @@ export class CaseUtilService {
 
   public getCaseNumbersArray(fc: FeatureCollection<Geometry, RKICaseDevelopmentProperties>, options: CovidNumberCaseOptions): number[] {
     return fc.features.map(d => this.getCaseNumbers(d.properties, options));
+  }
+
+  public isEBreakModePossible(options: CovidNumberCaseOptions): boolean {
+    return this.isLockdownMode(options) && options.dataSource === 'rki' && options.aggregationLevel === AggregationLevel.county;
+  }
+
+  public isEBrakeMode(options: CovidNumberCaseOptions): boolean {
+    return this.isEBreakModePossible(options) && options.eBrakeOver > 0;
+  }
+
+  public isEBrakeOver(f: Feature<Geometry, RKICaseDevelopmentProperties>, options: CovidNumberCaseOptions): boolean {
+    if (!options.eBrakeOver || options.eBrakeOver < 0) {
+      throw new Error(`Invalid threshold ${options.eBrakeOver}`);
+    }
+
+    const t = this.getTimedStatus(f.properties, getMoment(options.date));
+
+    switch(options.eBrakeOver) {
+      case 100:
+        return t.ebrake100 === true;
+
+      case 165:
+        return t.ebrake165 === true;
+
+      default:
+        throw new Error(`Invalid eBrakeOver ${options.eBrakeOver}`);
+    }
   }
 
   public getCaseNumbers(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions, refDate?: string): number {

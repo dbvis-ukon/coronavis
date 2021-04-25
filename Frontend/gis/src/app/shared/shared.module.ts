@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BedInlineLegendComponent } from './bed-inline-legend/bed-inline-legend.component';
 import { DataSourceComponent } from './data-source/data-source.component';
+import { EbrakeSnackbarComponent } from './ebrake-snackbar/ebrake-snackbar.component';
 import { HospitalSearchComponent } from './hospital-search/hospital-search.component';
 import { LanguageSwitcherComponent } from './language-switcher/language-switcher.component';
 import { PixelChartComponent } from './pixel-chart/pixel-chart.component';
@@ -38,7 +39,8 @@ import { WithLoadingPipe } from './with-loading.pipe';
     DataSourceComponent,
     PixelChartComponent,
     TableOverviewComponent,
-    StackedAreaIcuChartComponent
+    StackedAreaIcuChartComponent,
+    EbrakeSnackbarComponent
   ],
   imports: [
     CommonModule,
@@ -68,7 +70,8 @@ import { WithLoadingPipe } from './with-loading.pipe';
     DataSourceComponent,
     PixelChartComponent,
     TableOverviewComponent,
-    StackedAreaIcuChartComponent
+    StackedAreaIcuChartComponent,
+    EbrakeSnackbarComponent
   ],
   providers: [
     TranslatePipe,

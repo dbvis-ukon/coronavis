@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { FeatureCollection } from 'geojson';
-import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { BehaviorSubject, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -16,8 +15,10 @@ import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { Overlay } from '../map/overlays/overlay';
 import { ConfigService } from '../services/config.service';
 import { I18nService } from '../services/i18n.service';
+import { MyLocalStorageService } from '../services/my-local-storage.service';
 import { TranslationService } from '../services/translation.service';
 import { UrlHandlerService } from '../services/url-handler.service';
+import { EbrakeSnackbarComponent } from '../shared/ebrake-snackbar/ebrake-snackbar.component';
 import { safeDebounce } from '../util/safe-debounce';
 
 @Component({
@@ -170,6 +171,20 @@ export class MapRootComponent implements OnInit {
       this.mapOptions = lockdownMlo;
 
       this.mapOptions$.next(lockdownMlo);
+    } else if ((urlSegments && urlSegments[0] && urlSegments[0].path === 'ebrake') || paramMap && paramMap.get('flavor') === 'ebrake') {
+
+      const lockdownMlo = this.configService.getLockDownMapOptions(false);
+      lockdownMlo.covidNumberCaseOptions.eBrakeOver = 100;
+
+      this.mapOptions = lockdownMlo;
+
+      this.mapOptions$.next(lockdownMlo);
+
+      this.snackbar.openFromComponent(EbrakeSnackbarComponent, {
+        politeness: 'polite',
+        duration: 10000,
+        verticalPosition: 'top'
+      });
     } else if ((urlSegments && urlSegments[0] && urlSegments[0].path === 'bedcapacities') || paramMap && paramMap.get('flavor') === 'bedcapacities') {
       const capacityMlo = this.configService.getICUMapOptions();
 

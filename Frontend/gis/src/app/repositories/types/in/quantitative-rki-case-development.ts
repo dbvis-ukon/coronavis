@@ -179,4 +179,7 @@ export interface RKICaseTimedStatus {
   proportion_beds_free?: number;
   proportion_covid_beds?: number;
   proportion_covid_ventilated?: number;
+
+  ebrake100: boolean | number;
+  ebrake165: boolean | number;
 }

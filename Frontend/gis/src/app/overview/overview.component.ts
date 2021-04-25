@@ -27,7 +27,7 @@ export class OverviewComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private matSnackBar: MatSnackBar
   ) {
-    this.isMobile$ = this.breakpointObserver.observe('(max-width: 1150px)')
+    this.isMobile$ = this.breakpointObserver.observe('(max-width: 1400px)')
     .pipe(
       map(d => d.matches)
     );

@@ -264,7 +264,11 @@ class CaseDevelopments:
                 'num_counties_reported',
                 {num_counties_reported},
                 'num_counties_total',
-                {num_counties_total}
+                {num_counties_total},
+                'ebrake100',
+                agg.ebrake100,
+                'ebrake165',
+                agg.ebrake165
                 {age_stuff}   
             )::jsonb
             """
@@ -347,7 +351,9 @@ class CaseDevelopments:
             AVG(proportion_covid_beds)                                          as proportion_covid_beds,
             AVG(proportion_covid_ventilated)                                    as proportion_covid_ventilated,
             SUM((CASE WHEN c.last_updated IS NULL THEN 0 ELSE 1 END))           as num_counties_reported,
-            COUNT(*)                                                            as num_counties_total
+            COUNT(*)                                                            as num_counties_total,
+            SUM((CASE WHEN c.ebrake100 IS true THEN 1 ELSE 0 END))               as ebrake100,
+            SUM((CASE WHEN c.ebrake165 IS true THEN 1 ELSE 0 END))               as ebrake165
             {age_stuff}
         """
         return ret

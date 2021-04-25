@@ -23,13 +23,16 @@
   <a mat-button routerLink="/overview/cases" routerLinkActive="mat-primary">Cases</a> -->
 
       <a mat-button routerLink="/overview/map/bedcapacities" routerLinkActive="mat-primary"
-        i18n="@@overviewICUView">Intensivbetten-Kapazitäten Ansicht</a>
+        i18n="@@overviewICUView">Intensivbetten-Kapazitäten</a>
 
       <a mat-button routerLink="/overview/map/lockdown" routerLinkActive="mat-primary" [routerLinkActiveOptions]="{exact: true}"
-        i18n="@@overviewLockdownView">Lockdown Ansicht</a>
+        i18n="@@overviewLockdownView">7-Tage-Inzidenz (RKI)</a>
 
       <a mat-button routerLink="/overview/map/lockdown-live" routerLinkActive="mat-primary" 
-        i18n="@@overviewLockdownViewLive">LIVE Lockdown Ansicht</a>
+        i18n="@@overviewLockdownViewLive">LIVE 7-Tage-Inzidenz (Risklayer)</a>
+
+      <a mat-button routerLink="/overview/map/ebrake" routerLinkActive="mat-primary" 
+        i18n="@@overviewEBrakeView">Bundesnotbremse</a>
 
       <a mat-button routerLink="/overview/dashboards" routerLinkActive="mat-primary">Dashboards</a>
 
@@ -54,13 +57,16 @@
     <a mat-button routerLink="/overview/cases" routerLinkActive="mat-primary">Cases</a> -->
 
         <a mat-list-item (click)="snav.close()" routerLink="/overview/map/bedcapacities" routerLinkActive="mat-primary"
-          i18n="@@overviewICUView">Intensivbetten-Kapazitäten Ansicht</a>
+          i18n="@@overviewICUView">Intensivbetten-Kapazitäten</a>
 
         <a mat-list-item (click)="snav.close()" routerLink="/overview/map/lockdown" routerLinkActive="mat-primary"
-          i18n="@@overviewLockdownView">Lockdown Ansicht</a>
+          i18n="@@overviewLockdownView">7-Tage-Inzidenz (RKI)</a>
 
         <a mat-list-item (click)="snav.close()" routerLink="/overview/map/lockdown-live" routerLinkActive="mat-primary" 
-          i18n="@@overviewLockdownViewLive">LIVE Lockdown Ansicht</a>
+          i18n="@@overviewLockdownViewLive">LIVE 7-Tage-Inzidenz (Risklayer)</a>
+
+        <a mat-list-item (click)="snav.close()" routerLink="/overview/map/ebrake" routerLinkActive="mat-primary" 
+          i18n="@@overviewEBrakeView">Bundesnotbremse</a>
 
         <a mat-list-item (click)="snav.close()" routerLink="/overview/dashboards" routerLinkActive="mat-primary" 
           >Dashboards</a>

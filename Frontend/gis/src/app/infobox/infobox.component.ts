@@ -439,6 +439,10 @@ export class InfoboxComponent implements OnInit {
     });
   }
 
+  isEBreakModePossible(): boolean {
+    return this.caseUtil.isEBreakModePossible(this.mo.covidNumberCaseOptions);
+  }
+
   private combinedStatsOperator(): (input$: Observable<string>) => Observable<CombinedStatistics> {
     return (input$: Observable<string>) => input$.pipe(
       tap(() => this.aggregateStatisticsLoading$.next(true)),

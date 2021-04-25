@@ -362,6 +362,26 @@
               </mat-button-toggle>
             </mat-button-toggle-group>
           </div>
+
+          <div class="toggleGroup" *ngIf="isEBreakModePossible()">
+            <h5 i18n="@@infoBoxEBrake">4. Bevölkerungsschutzgesetz "Bundesnotbremse"</h5>
+
+            <mat-button-toggle-group
+              class="btngrp"
+              name="fontStyle"
+              aria-label="Font Style"
+              [value]="mo.covidNumberCaseOptions.eBrakeOver"
+              (change)="mo.covidNumberCaseOptions.eBrakeOver= $event.value; emitMapOptions()"
+            >
+              <mat-button-toggle i18n="@@infoboxEBrakeOff" [value]="undefined">Aus</mat-button-toggle>
+              <mat-button-toggle i18n="@@infoboxEBrakeOver100" [value]="100"
+                                 >Über 100
+              </mat-button-toggle>
+              <mat-button-toggle i18n="@@infoboxEBrakeOver165" [value]="165"
+                                 >Über 165
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
         </div>
 
       </form>

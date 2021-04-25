@@ -80,6 +80,15 @@ export interface CovidNumberCaseOptions {
      */
     showOnlyAvailableCounties: boolean;
 
+    /**
+     * The 4. Bevölkerungsschutzgesetz states that
+     * all counties that have an 7-day-incidence over x for 3 days
+     * and not under x for at least 5 workdays, special regulations will take place.
+     * This option sets the threshold to x = 100 or x = 165 respectively.
+     * More info: https://www.bundesgesundheitsministerium.de/service/gesetze-und-verordnungen/guv-19-lp/4-bevschg-faq.html#c21121
+     */
+    eBrakeOver?: null | 100 | 165;
+
 
     _binHovered?: [number, number];
 
