@@ -143,5 +143,6 @@ app.register_blueprint(ebrake.routes)
 def redirect_to_apidocs():
     return redirect("/apidocs", code=302)
 
+
 if __name__ == "__main__":
     app.run(port=5000, debug=os.environ.get("DEBUG", '') == 'true' or False)
