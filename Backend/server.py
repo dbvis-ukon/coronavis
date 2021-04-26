@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 
 from flasgger import Swagger
-from flask import Flask, jsonify
+from flask import Flask, jsonify, redirect
 from flask_compress import Compress
 from flask_cors import CORS, cross_origin
 from flask_mail import Mail
@@ -17,7 +17,7 @@ from cache import cache
 from db import db
 from prometheus import metrics
 from views import (cases, cases_risklayer, divi, extent, health, hospitals,
-                   osm, version, email_subs, counties, regions, dashboards)
+                   osm, version, email_subs, counties, regions, dashboards, ebrake)
 
 # add sentry integration
 
@@ -136,6 +136,12 @@ app.register_blueprint(email_subs.routes)
 app.register_blueprint(counties.routes)
 app.register_blueprint(regions.routes)
 app.register_blueprint(dashboards.routes)
+app.register_blueprint(ebrake.routes)
+
+
+@app.route('/', methods=['GET'])
+def redirect_to_apidocs():
+    return redirect("/apidocs", code=302)
 
 if __name__ == "__main__":
     app.run(port=5000, debug=os.environ.get("DEBUG", '') == 'true' or False)
