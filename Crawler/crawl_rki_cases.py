@@ -30,89 +30,6 @@ def get_connection():
 
 conn, cur = get_connection()
 
-
-def process_county_ebrake(county_id) -> None:
-    cur.execute(f"""
-        SELECT timestamp, cases7_per_100k 
-        FROM cases_per_county_and_day 
-        WHERE county_id = '{county_id}'
-        AND timestamp >= '2021-04-20' ORDER BY timestamp""")
-    c_data = cur.fetchall()
-
-    # delete existing ebrake data
-    cur.execute(f"DELETE FROM counties_ebrake WHERE id = '{county_id}'")
-
-    ret_data = []
-    for d in c_data:
-        ret_data.append({
-            'id': county_id,
-            'ts': d[0],
-            'val': int(d[1]),
-            'over100': False,
-            'over165': False
-        })
-
-    in_e_brake100 = False
-    in_e_brake165 = False
-    for i in range(4, len(ret_data)):
-
-        # check for date idx = i if ebrake has started
-        # must be over t for 3 days
-        ret_data[i]['over100'] = True
-        ret_data[i]['over165'] = True
-        for j in range(i - 4, i - 1):
-            if c_data[j][1] < 165:
-                ret_data[i]['over165'] = False
-
-            if c_data[j][1] < 100:
-                ret_data[i]['over100'] = False
-                break
-
-        if ret_data[i]['over100'] is True:
-            in_e_brake100 = True
-
-        if ret_data[i]['over165'] is True:
-            in_e_brake165 = True
-
-        # date is still in eBrake
-        if in_e_brake100 is True:
-            ret_data[i]['over100'] = True
-
-        if in_e_brake165 is True:
-            ret_data[i]['over165'] = True
-
-        # ebrake can only be terminated on a sunday
-        if ret_data[i]['ts'].isoweekday() == 7:
-            over100 = False
-            over165 = False
-            for j in range(max(0, i - 6), i - 1):
-                if ret_data[j]['val'] >= 100:
-                    over100 = True
-
-                if ret_data[j]['val'] >= 165:
-                    over165 = True
-                    break
-
-            if over165 is False:
-                ret_data[i]['over165'] = False
-                in_e_brake165 = False
-
-            if over100 is False:
-                ret_data[i]['over100'] = False
-                in_e_brake100 = False
-
-    # write to DB:
-    psycopg2.extras.execute_values(
-        cur,
-        "INSERT INTO counties_ebrake (id, timestamp, ebrake100, ebrake165) VALUES %s",
-        ret_data,
-        template='(%(id)s, %(ts)s, %(over100)s, %(over165)s)',
-        page_size=500
-    )
-    conn.commit()
-    return None
-
-
 cur.execute("select max(datenbestand)::date from cases")
 last_update = cur.fetchone()[0]
 
@@ -217,18 +134,6 @@ try:
 
         logger.info('Refreshing materialized view.')
 
-        cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
-        conn.commit()
-
-        logger.info('Calculate and inject ebrake data')
-        # inject ebrake data
-        cur.execute("SELECT county_id FROM cases_per_county_and_day GROUP BY county_id")
-        county_ids = cur.fetchall()
-
-        for c in county_ids:
-            process_county_ebrake(c[0])
-
-        logger.info('Refreshing materialized view again.')
         cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
         conn.commit()
 
