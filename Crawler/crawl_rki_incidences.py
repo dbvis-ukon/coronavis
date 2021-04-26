@@ -5,6 +5,7 @@ import os
 import sys
 import datetime
 import logging
+import traceback
 from datetime import  datetime, timezone
 
 import pandas as pd
@@ -41,15 +42,14 @@ def get_connection():
     return conn, cur
 
 
-def parse_and_insert(fp: str) -> bool:
-    df = pd.read_excel(fp, sheet_name=['LK_7-Tage-Inzidenz'], header=None,
-                       na_filter=False, engine="openpyxl")
+def parse_and_insert_sheet(df, sheet_name, col_name):
+    logger.info(f"Parse sheet {sheet_name}")
 
-    stand = df['LK_7-Tage-Inzidenz'].iloc[1, 0]
+    stand = df[sheet_name].iloc[1, 0]
 
     datenbestand = datetime.strptime(stand, 'Stand: %d.%m.%Y %H:%M:%S')
 
-    data = df['LK_7-Tage-Inzidenz'].iloc[4:416]
+    data = df[sheet_name].iloc[4:416]
     col = 0
     for d in data.loc[data.index[0]]:
         if isinstance(d, str):
@@ -78,11 +78,11 @@ def parse_and_insert(fp: str) -> bool:
 
     psycopg2.extras.execute_values(
         cur,
-        """INSERT INTO 
-            rki_incidence_excel (datenbestand, ags, timestamp, \"7_day_incidence\") 
+        f"""INSERT INTO 
+            rki_incidence_excel (datenbestand, ags, timestamp, \"{col_name}\") 
             VALUES %s ON CONFLICT ON CONSTRAINT rki_incidence_excel_pk DO
             UPDATE SET
-                \"7_day_incidence\" = EXCLUDED.\"7_day_incidence\",
+                \"{col_name}\" = EXCLUDED.\"{col_name}\",
                 updated_at = NOW();
         """,
         entries,
@@ -94,7 +94,15 @@ def parse_and_insert(fp: str) -> bool:
     return True
 
 
-conn, cur = get_connection()
+def parse_and_insert(fp: str) -> bool:
+    df = pd.read_excel(fp, sheet_name=['LK_7-Tage-Inzidenz', 'LK_7-Tage-Fallzahlen'], header=None,
+                       na_filter=False, engine="openpyxl")
+
+    parse_and_insert_sheet(df=df, sheet_name='LK_7-Tage-Inzidenz', col_name='7_day_incidence')
+    parse_and_insert_sheet(df=df, sheet_name='LK_7-Tage-Fallzahlen', col_name='7_day_cases')
+
+
+    return True
 
 
 def process_county_ebrake(county_id) -> None:
@@ -115,6 +123,17 @@ def process_county_ebrake(county_id) -> None:
             'id': county_id,
             'ts': d[0],
             'val': round(d[1]),
+            'over100': False,
+            'over165': False
+        })
+
+    # nowcast
+    today = datetime.combine(datetime.today(), datetime.min.time())
+    if ret_data[-1]['ts'] < today:
+        ret_data.append({
+            'id': county_id,
+            'ts': today,
+            'val': None,
             'over100': False,
             'over165': False
         })
@@ -181,6 +200,8 @@ def process_county_ebrake(county_id) -> None:
 
 
 try:
+    conn, cur = get_connection()
+
     STORAGE_PATH = "/data/"
     if os.name == 'nt':  # debug only
         STORAGE_PATH = './'
@@ -215,6 +236,7 @@ try:
 
 except Exception as err:
     logger.error(err)
+    traceback.print_exc()
 
     if (conn):
         conn.rollback()
