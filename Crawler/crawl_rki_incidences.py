@@ -181,7 +181,7 @@ def process_county_ebrake(county_id) -> None:
 
 
 try:
-    STORAGE_PATH = "/var/rki_incidences/"
+    STORAGE_PATH = "/data/"
     if os.name == 'nt':  # debug only
         STORAGE_PATH = './'
     if not os.path.isdir(STORAGE_PATH):
