@@ -46,27 +46,66 @@ export class DashboardService implements Resolve<Dashboard> {
   }
 
   public createFromAgs(ags: string): Observable<Dashboard> {
-    const regions = [];
+    const regions: Region[] = [];
 
     if (ags === 'de') {
-      regions.push('de');
-    } else if (ags.length === 2) {
-      regions.push(ags);
-      regions.push('de');
-    } else if (ags.length === 3) {
-      regions.push(ags);
-      regions.push('de');
-    } else {
-      regions.push(ags);
-      regions.push(ags.substring(0, 2));
-      regions.push('de');
+      regions.push({
+        id: 'de',
+        name: undefined,
+        aggLevel: AggregationLevel.country,
+        description: undefined
+      });
+    } else if (ags.length === 2) { // is BL
+      regions.push({
+        id: ags,
+        name: undefined,
+        aggLevel: AggregationLevel.state,
+        description: undefined
+      });
+      regions.push({
+        id: 'de',
+        name: undefined,
+        aggLevel: AggregationLevel.country,
+        description: undefined
+      });
+    } else if (ags.length === 3) { // is GD
+      regions.push({
+        id: ags,
+        name: undefined,
+        aggLevel: AggregationLevel.governmentDistrict,
+        description: undefined
+      });
+      regions.push({
+        id: 'de',
+        name: undefined,
+        aggLevel: AggregationLevel.country,
+        description: undefined
+      });
+    } else { // is county
+      regions.push({
+        id: ags,
+        name: undefined,
+        aggLevel: AggregationLevel.county,
+        description: undefined
+      });
+      regions.push({
+        id: ags.substring(0, 2),
+        name: undefined,
+        aggLevel: AggregationLevel.state,
+        description: undefined
+      });
+      regions.push({
+        id: 'de',
+        name: undefined,
+        aggLevel: AggregationLevel.country,
+        description: undefined
+      });
     }
-
 
     return this.regionRepo.getAll()
     .pipe(
       mergeMap(d => d),
-      filter(d => regions.indexOf(d.id) > -1),
+      filter(d => regions.find(r => r.id === d.id && r.aggLevel === d.aggLevel) !== undefined),
       toArray(),
       map(dataRequests => {
         const rRegion = dataRequests.find(d => d.id === ags);
