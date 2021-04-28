@@ -1919,9 +1919,9 @@
   integrity sha512-1z8k4wzFnNjVK/tlxvrWuK5WMt6mydWWP7+zvH5eFep4oj+UkrfiJTRtjCeBXNpwaA/FYqqtb4/QS4ianFpIRA==
 
 "@types/node@*", "@types/node@>=10.0.0", "@types/node@^15.0.0":
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-15.0.0.tgz#557dd0da4a6dca1407481df3bbacae0cd6f68042"
-  integrity sha512-YN1d+ae2MCb4U0mMa+Zlb5lWTdpFShbAj5nmte6lel27waMMBfivrm0prC16p/Di3DyTrmerrYUT8/145HXxVw==
+  version "15.0.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-15.0.1.tgz#ef34dea0881028d11398be5bf4e856743e3dc35a"
+  integrity sha512-TMkXt0Ck1y0KKsGr9gJtWGjttxlZnnvDtphxUOSd0bfaR6Q1jle+sPvrzNR1urqYTWMinoKvjKfXUGsumaO1PA==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -2392,7 +2392,7 @@ acorn@^7.4.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
-acorn@^8.0.4:
+acorn@^8.2.1:
   version "8.2.1"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.2.1.tgz#0d36af126fb6755095879c1dc6fd7edf7d60a5fb"
   integrity sha512-z716cpm5TX4uzOzILx8PavOE6C6DKshHDw1aQN52M/yNSqE9s5O8SMfyhCCfCJ3HmTL0NkVOi+8a/55T7YB3bg==
@@ -2462,9 +2462,9 @@ ajv@6.12.6, ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.3, ajv@^6.12.4, ajv@
     uri-js "^4.2.2"
 
 ajv@^8.0.1:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.1.0.tgz#45d5d3d36c7cdd808930cc3e603cf6200dbeb736"
-  integrity sha512-B/Sk2Ix7A36fs/ZkuGLIR86EdjbgR6fsAcbx9lOP/QBSXujDNbVmIS/U4Itz5k8fPFDeVZl/zQ/gJW4Jrq6XjQ==
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.2.0.tgz#c89d3380a784ce81b2085f48811c4c101df4c602"
+  integrity sha512-WSNGFuyWd//XO8n/m/EaOlNLtO0yL8EXT/74LqT4khdhpZjP7lkj/kT5uwRmGitKEVp/Oj7ZUHeGfPtgHhQ5CA==
   dependencies:
     fast-deep-equal "^3.1.1"
     json-schema-traverse "^1.0.0"
@@ -3284,9 +3284,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001032, caniuse-lite@^1.0.30001181, caniuse-lite@^1.0.30001214:
-  version "1.0.30001216"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001216.tgz#47418a082a4f952d14d8964ae739e25efb2060a9"
-  integrity sha512-1uU+ww/n5WCJRwUcc9UH/W6925Se5aNnem/G5QaSDga2HzvjYMs8vRbekGUN/PnTZ7ezTHcxxTEb9fgiMYwH6Q==
+  version "1.0.30001218"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001218.tgz#9b44f6ed16f875db6373e2debd4d14a07359002f"
+  integrity sha512-0ASydOWSy3bB88FbDpJSTt+PfDwnMqrym3yRZfqG8EXSQ06OZhF+q5wgYP/EN+jJMERItNcDQUqMyNjzZ+r5+Q==
 
 canonical-path@1.0.0:
   version "1.0.0"
@@ -11402,16 +11402,16 @@ webpack@4.44.2:
     webpack-sources "^1.4.1"
 
 webpack@^5.33.2:
-  version "5.35.1"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.35.1.tgz#857670799465c8a5cbb94c4c175d60ac42d18ba3"
-  integrity sha512-uWKYStqJ23+N6/EnMEwUjPSSKUG1tFmcuKhALEh/QXoUxwN8eb3ATNIZB38A+fO6QZ0xfc7Cu7KNV9LXNhDCsw==
+  version "5.36.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.36.0.tgz#d008da31b721f8fecce88ef2adaf1b16dc2161d1"
+  integrity sha512-HdOhLXClUEwTnzQnzpSG9iL00ej23ojvfnGpF49ba0MkuAT2q+WhQilHFFJHOIVRBqbzakQ1vCWQV2K+QLX0Qw==
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.47"
     "@webassemblyjs/ast" "1.11.0"
     "@webassemblyjs/wasm-edit" "1.11.0"
     "@webassemblyjs/wasm-parser" "1.11.0"
-    acorn "^8.0.4"
+    acorn "^8.2.1"
     browserslist "^4.14.5"
     chrome-trace-event "^1.0.2"
     enhanced-resolve "^5.8.0"
