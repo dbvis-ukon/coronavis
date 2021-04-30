@@ -10,5 +10,5 @@ SQLAlchemy==1.4.11
 GeoAlchemy2==0.8.5
 psycopg2-binary==2.8.6
 sentry_sdk==1.0.0
-python-dotenv==0.17.0
+python-dotenv==0.17.1
 zeep==4.0.0
