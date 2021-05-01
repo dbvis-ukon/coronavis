@@ -2386,6 +2386,13 @@
       <segment state="final">
         <source>Mehr Informationen zum 4. Bevölkerungsschutzgesetz <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></source>
       <target>Mehr Informationen zum 4. Bevölkerungsschutzgesetz <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></target></segment>
+    </unit><unit id="ebrakeOverviewMapView">
+      <notes>
+        
+      <note category="location">src/app/overview/ebrake/temporal-overview/temporal-overview.component.html:2</note></notes>
+      <segment state="final">
+        <source>Kartenansicht</source>
+      <target>Kartenansicht</target></segment>
     </unit><unit id="tableOverviewCurrent">
       <notes>
         

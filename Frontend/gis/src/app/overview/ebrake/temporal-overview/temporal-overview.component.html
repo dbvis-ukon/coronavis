@@ -1,4 +1,6 @@
-<a mat-raised-button color="primary" routerLink="/overview/map/ebrake">Kartenansicht</a>
+<div style="padding:10px;">
+    <a mat-raised-button color="primary" routerLink="/overview/map/ebrake" i18n="@@ebrakeOverviewMapView">Kartenansicht</a>
+</div>
 
 <div style="padding:10px;">
     <app-region-selector [selectedRegions]="activeRegions" (selectedRegionsChange)="updateRegions($event)" [maxRegions]="null"></app-region-selector>

@@ -2408,7 +2408,14 @@
       </notes>
       <segment state="initial">
         <source>Mehr Informationen zum 4. Bevölkerungsschutzgesetz <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></source>
-      <target>More information for the 4th Protection against Infections Act <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></target></segment>
+      <target>More information on the 4th Protection against Infections Act <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></target></segment>
+    </unit><unit id="ebrakeOverviewMapView">
+      <notes>
+        
+      <note category="location">src/app/overview/ebrake/temporal-overview/temporal-overview.component.html:2</note></notes>
+      <segment state="initial">
+        <source>Kartenansicht</source>
+      <target>Map view</target></segment>
     </unit><unit id="tableOverviewCurrent">
       <notes>
         
