@@ -6,7 +6,7 @@ import sys
 import datetime
 import logging
 import traceback
-from datetime import  datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 import pandas as pd
 import psycopg2 as pg
@@ -101,14 +101,13 @@ def parse_and_insert(fp: str) -> bool:
     parse_and_insert_sheet(df=df, sheet_name='LK_7-Tage-Inzidenz', col_name='7_day_incidence')
     parse_and_insert_sheet(df=df, sheet_name='LK_7-Tage-Fallzahlen', col_name='7_day_cases')
 
-
     return True
 
 
 def process_county_ebrake(county_id) -> None:
     cur.execute(f"""
         SELECT timestamp, \"7_day_incidence\" 
-        FROM rki_incidence_excel 
+        FROM rki_incidence_excel_berlin 
         WHERE ags = '{county_id}'
         AND datenbestand = (SELECT MAX(datenbestand) FROM rki_incidence_excel)
         AND timestamp >= '2021-04-20' ORDER BY timestamp""")
@@ -134,25 +133,45 @@ def process_county_ebrake(county_id) -> None:
             'id': county_id,
             'ts': today,
             'val': None,
-            'over100': False,
-            'over165': False
+            'over100': None,
+            'over165': None
         })
 
-    in_e_brake100 = False
-    in_e_brake165 = False
+    # forecast
+    for i in range(1, 8):
+        future_dt = today + timedelta(days=i)
+        ret_data.append({
+            'id': county_id,
+            'ts': future_dt,
+            'val': None,
+            'over100': None,
+            'over165': None
+        })
+
+    in_e_brake100 = None
+    in_e_brake165 = None
     for i in range(4, len(ret_data)):
 
         # check for date idx = i if ebrake has started
         # must be over t for 3 days
         ret_data[i]['over100'] = True
         ret_data[i]['over165'] = True
+        skipped = False
         for j in range(i - 4, i - 1):
-            if c_data[j][1] < 165:
+            if ret_data[j]['val'] is None:
+                skipped = True
+                continue
+
+            if ret_data[j]['val'] < 165:
                 ret_data[i]['over165'] = False
 
-            if c_data[j][1] < 100:
+            if ret_data[j]['val'] < 100:
                 ret_data[i]['over100'] = False
                 break
+
+        if skipped is True:
+            ret_data[i]['over100'] = None
+            ret_data[i]['over165'] = None
 
         if ret_data[i]['over100'] is True:
             in_e_brake100 = True
@@ -167,25 +186,48 @@ def process_county_ebrake(county_id) -> None:
         if in_e_brake165 is True:
             ret_data[i]['over165'] = True
 
-        # ebrake can only be terminated on a sunday
-        if ret_data[i]['ts'].isoweekday() == 7:
-            over100 = False
-            over165 = False
-            for j in range(max(0, i - 6), i - 1):
+        # only necessary if currently in ebrake
+        if i-8 >= 0 and (in_e_brake100 is True or in_e_brake165 is True):
+            over100 = None
+            over165 = None
+            num_weekdays = 0
+            for j in range(i-8, i-1):
+                # weekends do not count
+                if ret_data[j]['ts'].isoweekday() >= 6:
+                    continue
+
+                num_weekdays += 1
+
+                if ret_data[j]['val'] is None:
+                    continue
+
                 if ret_data[j]['val'] >= 100:
                     over100 = True
+                elif over100 is None:
+                    over100 = False
 
                 if ret_data[j]['val'] >= 165:
                     over165 = True
-                    break
+                elif over165 is None:
+                    over165 = False
+
+            # consistency check
+            if num_weekdays != 5:
+                raise Exception(f"Inconsistency. Should have checked 5 workdays but there are {num_weekdays}")
 
             if over165 is False:
                 ret_data[i]['over165'] = False
                 in_e_brake165 = False
+            elif over165 is None:
+                ret_data[i]['over165'] = None
+                in_e_brake165 = None
 
             if over100 is False:
                 ret_data[i]['over100'] = False
                 in_e_brake100 = False
+            elif over100 is None:
+                ret_data[i]['over100'] = None
+                in_e_brake100 = None
 
     # write to DB:
     psycopg2.extras.execute_values(
@@ -196,7 +238,6 @@ def process_county_ebrake(county_id) -> None:
         page_size=500
     )
     conn.commit()
-    return None
 
 
 try:

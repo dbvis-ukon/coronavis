@@ -1,0 +1,35 @@
+<div #main class="main">
+  <h3 style="margin-bottom: 5px;">{{ this.data.name }}</h3>
+  <mat-divider></mat-divider>
+
+  <table>
+    <tr>
+      <td i18n="@@ebrakeTooltipDate">Datum:</td>
+      <td>{{ this.data.timestamp | date:'fullDate' }}</td>
+    </tr>
+
+    <tr *ngIf="data['7_day_incidence']">
+      <td i18n="@@ebrakeTooltip7DIncidence">7-Tage-Inzidenz:</td>
+      <td>{{ this.data['7_day_incidence'] | number: '1.0-0'}}</td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+
+        <div *ngIf="data.ebrake100 === false && data.ebrake165 === false" i18n="@@ebrakeOverviewEbrakeNone">Keine Bundesnotbremse</div>
+
+        <div *ngIf="data.ebrake100 === true && !data.ebrake165" i18n="@@ebrakeOverviewEbrake100">Bundesnotbremse (100)</div>
+
+        <div *ngIf="data.ebrake165 === true" i18n="@@ebrakeOverviewEbrake165">Bundesnotbremse (165)</div>
+
+        <div *ngIf="data.ebrake100 === null && data.ebrake165 === null" i18n="@@ebrakeOverviewEbrakeUnknown">Unbekannt (keine Prognose möglich)</div>
+      </td>
+    </tr>
+
+    <tr *ngIf="isPrognosis()">
+      <td colspan="2">
+        <div i18n="@@ebrakeOverviewEbrakePrognosis">Prognose (Änderungen möglich)</div>
+      </td>
+    </tr>
+  </table>
+</div>

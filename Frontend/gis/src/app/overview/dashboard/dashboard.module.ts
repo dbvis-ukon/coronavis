@@ -27,10 +27,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardsOverviewComponent } from './dashboards-overview/dashboards-overview.component';
 import { DashboardsTableComponent } from './dashboards-table/dashboards-table.component';
 import { MultiLineChartComponent } from './multi-line-chart/multi-line-chart.component';
-import { RegionSelectorComponent } from './region-selector/region-selector.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TitleEditDialogComponent } from './title-edit-dialog/title-edit-dialog.component';
-import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
@@ -38,11 +36,9 @@ import { FooterComponent } from './footer/footer.component';
     DashboardComponent,
     MultiLineChartComponent,
     SettingsComponent,
-    RegionSelectorComponent,
     TitleEditDialogComponent,
     DashboardsOverviewComponent,
-    DashboardsTableComponent,
-    FooterComponent
+    DashboardsTableComponent
   ],
   imports: [
     CommonModule,

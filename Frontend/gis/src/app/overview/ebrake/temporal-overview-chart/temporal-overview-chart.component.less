@@ -1,0 +1,100 @@
+.ebrake-legend {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+
+    .item {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin-left: 10px;
+        margin-right: 10px;
+
+        >div {
+            margin-left: 5px;
+        }
+    }
+}
+
+.ebrake-chart,.legend-chart {
+    shape-rendering: geometricPrecision;
+
+    .background-rect {
+        stroke: lightgray;
+        stroke-width: 1;
+        fill: none;
+    }
+
+    .lborder {
+        fill: none;
+        stroke: lightgray;
+        stroke-width: 1;
+    }
+
+    .bg {
+        &.ebrakeunknown {
+            fill: lightgray;
+            stroke: none;
+        }
+
+        &.ebrakenone {
+            fill: white;
+            stroke: none;
+        }
+
+        &.ebrake100 {
+            fill: rgba(231, 131, 17, 0.1);
+            stroke: none;
+        }
+
+        &.ebrake165 {
+            fill: rgba(136, 27, 27, 0.1);
+            stroke: none;
+        }
+    }
+
+
+
+    .prognosis {
+        fill: url(#diagonalHatch);
+        stroke: none;
+        pointer-events: none;
+    }
+
+    .line {
+        fill: none;
+        stroke: url(#gradient);
+        stroke-width: 1.2;
+    }
+
+    .line.ebrake100 {
+        stroke: rgb(231, 131, 17);;
+    }
+
+    .line.ebrake165 {
+        stroke: rgb(136, 27, 27)
+    }
+
+    .bar {
+        stroke: none;
+        pointer-events: none;
+    }
+
+    .bar.under100 {
+        fill: black;
+    }
+
+    .bar.ebrake100 {
+        fill: rgb(231, 131, 17);;
+    }
+
+    .bar.ebrake165 {
+        fill: rgb(136, 27, 27)
+    }
+
+    .today {
+        stroke: black;
+        stroke-width: 2;
+    }
+}

@@ -17,6 +17,7 @@ import { HelpModule } from '../help/help.module';
 import { SharedModule } from '../shared/shared.module';
 import { D3ChoroplethMapComponent } from './d3-choropleth-map/d3-choropleth-map.component';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { EbrakeModule } from './ebrake/ebrake.module';
 import { OverviewBedComponent } from './overview-bed/overview-bed.component';
 import { OverviewCaseComponent } from './overview-case/overview-case.component';
 import { OverviewIntroductionComponent } from './overview-introduction/overview-introduction.component';
@@ -55,7 +56,8 @@ import { SubscriptionComponent } from './subscription/subscription.component';
     MatRadioModule,
     MatCheckboxModule,
     MatSnackBarModule,
-    DashboardModule
+    DashboardModule,
+    EbrakeModule
   ],
   providers: [
   ],

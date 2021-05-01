@@ -4,19 +4,23 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BedInlineLegendComponent } from './bed-inline-legend/bed-inline-legend.component';
 import { DataSourceComponent } from './data-source/data-source.component';
 import { EbrakeSnackbarComponent } from './ebrake-snackbar/ebrake-snackbar.component';
+import { FooterComponent } from './footer/footer.component';
 import { HospitalSearchComponent } from './hospital-search/hospital-search.component';
 import { LanguageSwitcherComponent } from './language-switcher/language-switcher.component';
 import { PixelChartComponent } from './pixel-chart/pixel-chart.component';
 import { PlusminusPipe } from './plusminus.pipe';
+import { RegionSelectorComponent } from './region-selector/region-selector.component';
 import { ResizedDirective } from './resize.directive';
 import { StackedAreaIcuChartComponent } from './stacked-area-icu-chart/stacked-area-icu-chart.component';
 import { TableOverviewComponent } from './table-overview/table-overview.component';
@@ -40,7 +44,9 @@ import { WithLoadingPipe } from './with-loading.pipe';
     PixelChartComponent,
     TableOverviewComponent,
     StackedAreaIcuChartComponent,
-    EbrakeSnackbarComponent
+    EbrakeSnackbarComponent,
+    RegionSelectorComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,
@@ -54,7 +60,9 @@ import { WithLoadingPipe } from './with-loading.pipe';
     MatInputModule,
     MatButtonModule,
     MatTooltipModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatChipsModule,
+    MatToolbarModule
   ],
   exports: [
     CommonModule,
@@ -71,7 +79,9 @@ import { WithLoadingPipe } from './with-loading.pipe';
     PixelChartComponent,
     TableOverviewComponent,
     StackedAreaIcuChartComponent,
-    EbrakeSnackbarComponent
+    EbrakeSnackbarComponent,
+    RegionSelectorComponent,
+    FooterComponent
   ],
   providers: [
     TranslatePipe,

@@ -7,7 +7,7 @@
     </mat-chip>
     <input i18n-placeholder="@@regionSelectorSearchRegion" placeholder="Region suchen" #fruitInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
       [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-    <mat-hint [ngStyle]="{'color': selectedRegions.length >= maxRegions ? 'red' : 'rgba(0,0,0,.54)'}" [align]="'end'">{{selectedRegions.length}}/{{maxRegions}}</mat-hint>
+    <mat-hint *ngIf="maxRegions" [ngStyle]="{'color': selectedRegions.length >= maxRegions ? 'red' : 'rgba(0,0,0,.54)'}" [align]="'end'">{{selectedRegions.length}}/{{maxRegions}}</mat-hint>
   </mat-chip-list>
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
     <mat-option *ngFor="let region of filteredRegions | async" [value]="region">
@@ -15,4 +15,4 @@
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>
-<p *ngIf="selectedRegions.length > maxRegions" style="color:red;" i18n="@@regionSelectorMaximumRegions">Die maximale Anzahl an Regionen ist überschritten.</p>
+<p *ngIf="maxRegions && selectedRegions.length > maxRegions" style="color:red;" i18n="@@regionSelectorMaximumRegions">Die maximale Anzahl an Regionen ist überschritten.</p>
