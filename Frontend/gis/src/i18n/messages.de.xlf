@@ -190,22 +190,22 @@
       <target>7-Tages-Inzidenz</target></segment>
     </unit><unit id="regionSelectorSelectedRegions">
       <notes>
-        <note category="location">src/app/overview/dashboard/region-selector/region-selector.component.html:2</note>
-      </notes>
+        
+      <note category="location">src/app/shared/region-selector/region-selector.component.html:2</note></notes>
       <segment state="final">
         <source>Ausgewählte Regionen</source>
       <target>Ausgewählte Regionen</target></segment>
     </unit><unit id="regionSelectorSearchRegion">
       <notes>
-        <note category="location">src/app/overview/dashboard/region-selector/region-selector.component.html:8</note>
-      </notes>
+        
+      <note category="location">src/app/shared/region-selector/region-selector.component.html:8</note></notes>
       <segment state="final">
         <source>Region suchen</source>
       <target>Region suchen</target></segment>
     </unit><unit id="regionSelectorMaximumRegions">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/region-selector/region-selector.component.html:18</note></notes>
+      <note category="location">src/app/shared/region-selector/region-selector.component.html:18</note></notes>
       <segment state="final">
         <source>Die maximale Anzahl an Regionen ist überschritten.</source>
       <target>Die maximale Anzahl an Regionen ist überschritten.</target></segment>
@@ -1849,15 +1849,15 @@
       <target> Erstellt </target></segment>
     </unit><unit id="imprint">
       <notes>
-        <note category="location">src/app/overview/dashboard/footer/footer.component.html:12</note>
-      </notes>
+        
+      <note category="location">src/app/shared/footer/footer.component.html:17</note></notes>
       <segment state="final">
         <source>Impressum</source>
       <target>Impressum</target></segment>
     </unit><unit id="gdpr">
       <notes>
-        <note category="location">src/app/overview/dashboard/footer/footer.component.html:13</note>
-      </notes>
+        
+      <note category="location">src/app/shared/footer/footer.component.html:18</note></notes>
       <segment state="final">
         <source>Datenschutzerklärung</source>
       <target>Datenschutzerklärung</target></segment>
@@ -2304,6 +2304,88 @@
       <segment state="final">
         <source>Dashboard Name</source>
       <target>Dashboard Name</target></segment>
+    </unit><unit id="ebrakeTooltipDate">
+      <notes>
+        <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:7</note>
+      </notes>
+      <segment state="final">
+        <source>Datum:</source>
+      <target>Datum:</target></segment>
+    </unit><unit id="ebrakeTooltip7DIncidence">
+      <notes>
+        <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:12</note>
+      </notes>
+      <segment state="final">
+        <source>7-Tage-Inzidenz:</source>
+      <target>7-Tage-Inzidenz:</target></segment>
+    </unit><unit id="ebrakeOverviewEbrakeNone">
+      <notes>
+        
+        
+      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:19</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:36</note></notes>
+      <segment state="final">
+        <source> Keine Bundesnotbremse </source>
+      <target> Keine Bundesnotbremse </target></segment>
+    </unit><unit id="ebrakeOverviewEbrake100">
+      <notes>
+        
+        
+      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:21</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:45</note></notes>
+      <segment state="final">
+        <source> Bundesnotbremse (100) </source>
+      <target> Bundesnotbremse (100) </target></segment>
+    </unit><unit id="ebrakeOverviewEbrake165">
+      <notes>
+        
+        
+      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:23</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:54</note></notes>
+      <segment state="final">
+        <source> Bundesnotbremse (165) </source>
+      <target> Bundesnotbremse (165) </target></segment>
+    </unit><unit id="ebrakeOverviewEbrakeUnknown">
+      <notes>
+        
+        
+      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:25</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:63</note></notes>
+      <segment state="final">
+        <source> Unbekannt (keine Prognose möglich) </source>
+      <target> Unbekannt (keine Prognose möglich) </target></segment>
+    </unit><unit id="ebrakeOverviewEbrakePrognosis">
+      <notes>
+        
+        
+      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:31</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:72</note></notes>
+      <segment state="final">
+        <source>Prognose (Änderungen möglich)</source>
+      <target>Prognose (Änderungen möglich)</target></segment>
+    </unit><unit id="ebrakeOverview7DIncicenceBelow100">
+      <notes>
+        <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:9</note>
+      </notes>
+      <segment state="final">
+        <source>7-Tage-Inzidenz unter 100</source>
+      <target>7-Tage-Inzidenz unter 100</target></segment>
+    </unit><unit id="ebrakeOverview7DIncicenceOber100">
+      <notes>
+        <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:18</note>
+      </notes>
+      <segment state="final">
+        <source>7-Tage-Inzidenz über 100</source>
+      <target>7-Tage-Inzidenz über 100</target></segment>
+    </unit><unit id="ebrakeOverview7DIncicenceOver165">
+      <notes>
+        <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:27</note>
+      </notes>
+      <segment state="final">
+        <source>7-Tage-Inzidenz über 165</source>
+      <target>7-Tage-Inzidenz über 165</target></segment>
+    </unit><unit id="ebrakeOverviewEbrakeMoreInformation">
+      <notes>
+        <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:76</note>
+      </notes>
+      <segment state="final">
+        <source>Mehr Informationen zum 4. Bevölkerungsschutzgesetz <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></source>
+      <target>Mehr Informationen zum 4. Bevölkerungsschutzgesetz <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></target></segment>
     </unit><unit id="tableOverviewCurrent">
       <notes>
         

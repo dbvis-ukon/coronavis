@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { FormatLocaleDefinition } from 'd3-format';
+import { TimeLocaleDefinition } from 'd3-time-format';
 import { default as embed, VisualizationSpec } from 'vega-embed';
-import { I18nService, SupportedLocales } from '../../services/i18n.service';
+import { I18nService } from '../../services/i18n.service';
 
 @Component({
   selector: 'app-vega',
@@ -39,50 +41,9 @@ export class VegaComponent implements AfterViewInit {
   }
 
   updateChart() {
-    let formatLocale;
+    const formatLocale: FormatLocaleDefinition = this.i18nService.getD3FormatLocaleDefinition();
 
-    let timeFormatLocale;
-    if (this.i18nService.getCurrentLocale() === SupportedLocales.DE_DE) {
-      formatLocale = {
-        decimal: ',',
-        thousands: '.',
-        grouping: [3],
-        currency: ['', '\u00a0€']
-      };
-
-      timeFormatLocale = {
-        dateTime: '%A, der %e. %B %Y, %X',
-        date: '%d.%m.%Y',
-        time: '%H:%M:%S',
-        periods: ['AM', 'PM'],
-        days: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
-        shortDays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
-        months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-        shortMonths: ['Jan', 'Feb', 'Mrz', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
-      };
-    }
-
-    // ...
-
-    else { // default english
-      formatLocale = {
-        decimal: '.',
-        thousands: ',',
-        grouping: [3],
-        currency: ['$', '']
-      };
-
-      timeFormatLocale = {
-        dateTime: '%x, %X',
-        date: '%-m/%-d/%Y',
-        time: '%-I:%M:%S %p',
-        periods: ['AM', 'PM'],
-        days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        shortDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-        months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-      };
-    }
+    const timeFormatLocale: TimeLocaleDefinition = this.i18nService.getD3TimeLocaleDefinition();
 
 
 
@@ -100,7 +61,7 @@ export class VegaComponent implements AfterViewInit {
       return;
     }
 
-    embed(node, this._spec, {actions: false, formatLocale, timeFormatLocale})
+    embed(node, this._spec, {actions: false, formatLocale: formatLocale as unknown as any, timeFormatLocale: timeFormatLocale as unknown as any})
     .then(result => {
       const view = result.view;
       view.addEventListener('click', (_, item) => {

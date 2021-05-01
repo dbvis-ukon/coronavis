@@ -57,7 +57,7 @@ export class RegionSelectorComponent implements OnInit {
 
   selected(event: MatAutocompleteSelectedEvent): void {
     const newRegion: Region = event.option.value;
-    if (this.selectedRegions.findIndex(r => r.id === newRegion.id) === -1 && this.selectedRegions.length < this.maxRegions) {
+    if (this.selectedRegions.findIndex(r => r.id === newRegion.id) === -1 && (!this.maxRegions || this.selectedRegions.length < this.maxRegions)) {
       this.selectedRegions.push(newRegion);
     }
 

@@ -6,6 +6,7 @@ import { MapRootComponent } from '../map-root/map-root.component';
 import { DashboardService } from '../services/dashboard.service';
 import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 import { DashboardsOverviewComponent } from './dashboard/dashboards-overview/dashboards-overview.component';
+import { TemporalOverviewComponent } from './ebrake/temporal-overview/temporal-overview.component';
 import { OverviewBedComponent } from './overview-bed/overview-bed.component';
 import { OverviewCaseComponent } from './overview-case/overview-case.component';
 import { OverviewIntroductionComponent } from './overview-introduction/overview-introduction.component';
@@ -62,6 +63,10 @@ const routes: Routes = [
             {
                 path: 'dashboards',
                 component: DashboardsOverviewComponent
+            },
+            {
+                path: 'ebrake',
+                component: TemporalOverviewComponent
             }
         ]
     }
