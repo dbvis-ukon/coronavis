@@ -8,18 +8,58 @@ import logging
 import traceback
 from datetime import datetime, timezone, timedelta
 
+import holidays
 import pandas as pd
 import psycopg2 as pg
 import psycopg2.extensions
 import psycopg2.extras
 import requests
 
+# noinspection PyUnresolvedReferences
 import loadenv
 
 from db_config import SQLALCHEMY_DATABASE_URI
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+
+# https://de.wikipedia.org/wiki/Amtlicher_Gemeindeschl%C3%BCssel
+# 01	Schleswig-Holstein
+# 02	Freie und Hansestadt Hamburg
+# 03	Niedersachsen
+# 04	Freie Hansestadt Bremen
+# 05	Nordrhein-Westfalen
+# 06	Hessen
+# 07	Rheinland-Pfalz
+# 08	Baden-Württemberg
+# 09	Freistaat Bayern
+# 10	Saarland
+# 11	Berlin
+# 12	Brandenburg
+# 13	Mecklenburg-Vorpommern
+# 14	Freistaat Sachsen
+# 15	Sachsen-Anhalt
+# 16	Freistaat Thüringen
+# holidays: BW, BY, BYP, BE, BB, HB, HH, HE, MV, NI, NW, RP, SL, SN, ST, SH, TH
+# refers to ISO code: https://en.wikipedia.org/wiki/States_of_Germany
+AGS_TO_ISO = {
+    '01': 'SH',
+    '02': 'HH',
+    '03': 'NI',
+    '04': 'HB',
+    '05': 'NW',
+    '06': 'HE',
+    '07': 'RP',
+    '08': 'BW',
+    '09': 'BY',
+    '10': 'SL',
+    '11': 'BE',
+    '12': 'BB',
+    '13': 'MV',
+    '14': 'SN',
+    '15': 'ST',
+    '16': 'TH'
+}
 
 URL = 'https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Fallzahlen_Kum_Tab.xlsx?__blob=publicationFile'
 
@@ -36,10 +76,10 @@ def download_file(fp: str) -> bool:
 
 
 def get_connection():
-    conn = pg.connect(SQLALCHEMY_DATABASE_URI)
-    conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
-    cur = conn.cursor()
-    return conn, cur
+    _conn = pg.connect(SQLALCHEMY_DATABASE_URI)
+    _conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
+    _cur = _conn.cursor()
+    return _conn, _cur
 
 
 def parse_and_insert_sheet(df, sheet_name, col_name):
@@ -57,7 +97,7 @@ def parse_and_insert_sheet(df, sheet_name, col_name):
                 parsed = datetime.strptime(d, '%d.%m.%Y')
 
                 data.iat[0, col] = parsed
-            except:
+            except ValueError as _:
                 pass
 
         col += 1
@@ -116,12 +156,15 @@ def process_county_ebrake(county_id) -> None:
     # delete existing ebrake data
     cur.execute(f"DELETE FROM counties_ebrake WHERE id = '{county_id}'")
 
+    # get holidays for the state of the county:
+    state_holidays = holidays.Germany(prov=AGS_TO_ISO[county_id[0:2]])
+
     ret_data = []
     for d in c_data:
         ret_data.append({
             'id': county_id,
             'ts': d[0],
-            'val': round(d[1]),
+            'val': round(d[1], 2),
             'over100': False,
             'over165': False
         })
@@ -187,18 +230,25 @@ def process_county_ebrake(county_id) -> None:
             ret_data[i]['over165'] = True
 
         # only necessary if currently in ebrake
-        if i-8 >= 0 and (in_e_brake100 is True or in_e_brake165 is True):
+        if in_e_brake100 is True or in_e_brake165 is True:
             over100 = None
             over165 = None
             num_weekdays = 0
-            for j in range(i-8, i-1):
-                # weekends do not count
-                if ret_data[j]['ts'].isoweekday() >= 6:
+            # start with -2 because it only concerns the day after tomorrow
+            j = i - 2
+            # go back in time until 5 weekdays are processed or beginning of data is reached
+            while j >= 0 and num_weekdays < 5:
+                # sunday and holidays are skipped
+                if ret_data[j]['ts'].isoweekday() == 7 \
+                        or ret_data[j]['ts'] in state_holidays:
+                    j -= 1
                     continue
 
-                num_weekdays += 1
-
+                # in case incidence is not available because of future predictions
                 if ret_data[j]['val'] is None:
+                    j -= 1
+                    # still count this as a weekday
+                    num_weekdays += 1
                     continue
 
                 if ret_data[j]['val'] >= 100:
@@ -208,12 +258,12 @@ def process_county_ebrake(county_id) -> None:
 
                 if ret_data[j]['val'] >= 165:
                     over165 = True
+                    break
                 elif over165 is None:
                     over165 = False
 
-            # consistency check
-            if num_weekdays != 5:
-                raise Exception(f"Inconsistency. Should have checked 5 workdays but there are {num_weekdays}")
+                num_weekdays += 1
+                j -= 1
 
             if over165 is False:
                 ret_data[i]['over165'] = False
@@ -240,6 +290,8 @@ def process_county_ebrake(county_id) -> None:
     conn.commit()
 
 
+conn = None
+cur = None
 try:
     conn, cur = get_connection()
 
@@ -279,7 +331,7 @@ except Exception as err:
     logger.error(err)
     traceback.print_exc()
 
-    if (conn):
+    if conn:
         conn.rollback()
         cur.close()
         conn.close()
