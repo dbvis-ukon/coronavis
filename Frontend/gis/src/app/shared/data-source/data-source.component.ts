@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class DataSourceComponent implements OnInit {
 
   @Input()
-  source: 'rki' | 'risklayer' | 'divi' | 'zensus' | 'survstat';
+  source: 'rki' | 'risklayer' | 'divi' | 'zensus' | 'survstat' | 'rki_incidences';
 
   @Input()
   hideHint = false;

@@ -26,3 +26,4 @@
 
 <h5 *ngIf="source === 'survstat'" class="source" i18n="@@caseDodDataSourceSurvstat">Robert Koch Institut: SurvStat@RKI 2.0, <a href="https://survstat.rki.de">https://survstat.rki.de</a>, Abfragedatum: {{ now | date:'shortDate' }}</h5>
 
+<h5 *ngIf="source === 'rki_incidences'" class="source" i18n="@@dataSourceRKIIncidences">Offizielle <a href="https://www.rki.de/inzidenzen">RKI Inzidenzwerte</a> zum <a href="https://www.bundesgesundheitsministerium.de/service/gesetze-und-verordnungen/guv-19-lp/4-bevschg-faq.html">4. Bevölkerungsschutzgesetz</a></h5>

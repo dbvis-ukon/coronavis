@@ -283,6 +283,13 @@
       <segment state="initial">
         <source>Robert Koch Institut: SurvStat@RKI 2.0, <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://survstat.rki.de&quot;>" dispEnd="&lt;/a>">https://survstat.rki.de</pc>, Abfragedatum: <ph id="1" equiv="INTERPOLATION" disp="{{ now | date:'shortDate' }}"/></source>
       <target>Robert Koch Institute: SurvStat@RKI 2.0, <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://survstat.rki.de&quot;>" dispEnd="&lt;/a>">https://survstat.rki.de</pc>, query date: <ph id="1" equiv="INTERPOLATION" disp="{{ now | date:'shortDate' }}"/></target></segment>
+    </unit><unit id="dataSourceRKIIncidences">
+      <notes>
+        <note category="location">src/app/shared/data-source/data-source.component.html:29</note>
+      </notes>
+      <segment state="initial">
+        <source>Offizielle <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.rki.de/inzidenzen&quot;>" dispEnd="&lt;/a>">RKI Inzidenzwerte</pc> zum <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.bundesgesundheitsministerium.de/service/gesetze-und-verordnungen/guv-19-lp/4-bevschg-faq.html&quot;>" dispEnd="&lt;/a>">4. Bevölkerungsschutzgesetz</pc></source>
+      <target>Official <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.rki.de/inzidenzen&quot;>" dispEnd="&lt;/a>">RKI Incidence values</pc> for the <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.bundesgesundheitsministerium.de/service/gesetze-und-verordnungen/guv-19-lp/4-bevschg-faq.html&quot;>" dispEnd="&lt;/a>">4th Protection against Infections Act</pc></target></segment>
     </unit><unit id="snackBarEBrake">
       <notes>
         <note category="location">src/app/shared/ebrake-snackbar/ebrake-snackbar.component.ts:8,9</note>
