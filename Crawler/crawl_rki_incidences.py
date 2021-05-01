@@ -15,6 +15,7 @@ import psycopg2.extensions
 import psycopg2.extras
 import requests
 
+# noinspection PyUnresolvedReferences
 import loadenv
 
 from db_config import SQLALCHEMY_DATABASE_URI
@@ -75,10 +76,10 @@ def download_file(fp: str) -> bool:
 
 
 def get_connection():
-    conn = pg.connect(SQLALCHEMY_DATABASE_URI)
-    conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
-    cur = conn.cursor()
-    return conn, cur
+    _conn = pg.connect(SQLALCHEMY_DATABASE_URI)
+    _conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
+    _cur = _conn.cursor()
+    return _conn, _cur
 
 
 def parse_and_insert_sheet(df, sheet_name, col_name):
@@ -96,7 +97,7 @@ def parse_and_insert_sheet(df, sheet_name, col_name):
                 parsed = datetime.strptime(d, '%d.%m.%Y')
 
                 data.iat[0, col] = parsed
-            except:
+            except ValueError as _:
                 pass
 
         col += 1
@@ -257,6 +258,7 @@ def process_county_ebrake(county_id) -> None:
 
                 if ret_data[j]['val'] >= 165:
                     over165 = True
+                    break
                 elif over165 is None:
                     over165 = False
 
@@ -288,6 +290,8 @@ def process_county_ebrake(county_id) -> None:
     conn.commit()
 
 
+conn = None
+cur = None
 try:
     conn, cur = get_connection()
 
@@ -327,7 +331,7 @@ except Exception as err:
     logger.error(err)
     traceback.print_exc()
 
-    if (conn):
+    if conn:
         conn.rollback()
         cur.close()
         conn.close()
