@@ -2348,7 +2348,7 @@
       <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:19</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:36</note></notes>
       <segment state="initial">
         <source> Keine Bundesnotbremse </source>
-      <target> No federal-emergency-brake </target></segment>
+      <target> No federal emergency brake </target></segment>
     </unit><unit id="ebrakeOverviewEbrake100">
       <notes>
         
@@ -2356,7 +2356,7 @@
       <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:21</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:45</note></notes>
       <segment state="initial">
         <source> Bundesnotbremse (100) </source>
-      <target> Federal-emergency-brake (100) </target></segment>
+      <target> Federal emergency brake (100) </target></segment>
     </unit><unit id="ebrakeOverviewEbrake165">
       <notes>
         
@@ -2364,7 +2364,7 @@
       <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:23</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:54</note></notes>
       <segment state="initial">
         <source> Bundesnotbremse (165) </source>
-      <target> Federal-emergency-brake (165) </target></segment>
+      <target> Federal emergency brake (165) </target></segment>
     </unit><unit id="ebrakeOverviewEbrakeUnknown">
       <notes>
         
