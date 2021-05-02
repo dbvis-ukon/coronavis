@@ -192,8 +192,15 @@ export class TemporalOverviewChartComponent implements OnInit {
       .on('mouseenter', (evt, d) => {
         const t = this.tooltipService.openAtElementRef(EbrakeTooltipComponent, evt.target, null, this.customPositions);
         t.data = d;
+
+        select(evt.target).classed('highlighted', true);
       })
-      .on('mouseleave', () => this.tooltipService.close());
+      .on('mouseleave', () => {
+        this.tooltipService.close();
+
+        rowG.selectAll('.bg.highlighted')
+        .classed('highlighted', false);
+      });
 
     const tomorrowM = moment().add('1', 'day').startOf('day');
 
