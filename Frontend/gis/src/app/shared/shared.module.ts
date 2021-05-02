@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
 import { BedInlineLegendComponent } from './bed-inline-legend/bed-inline-legend.component';
 import { DataSourceComponent } from './data-source/data-source.component';
 import { EbrakeSnackbarComponent } from './ebrake-snackbar/ebrake-snackbar.component';
@@ -62,7 +63,8 @@ import { WithLoadingPipe } from './with-loading.pipe';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatChipsModule,
-    MatToolbarModule
+    MatToolbarModule,
+    RouterModule
   ],
   exports: [
     CommonModule,
