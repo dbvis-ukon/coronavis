@@ -25,7 +25,7 @@ spec:
               - key: deploymentName
                 operator: In
                 values:
-                - {{ .Release Name }}
+                - {{ .Release.Name }}
             topologyKey: "kubernetes.io/hostname"
       containers:
         - name: frontend
