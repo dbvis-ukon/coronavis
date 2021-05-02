@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { filter, map, mergeMap, toArray } from 'rxjs/operators';
-import { AggregationLevel } from 'src/app/map/options/aggregation-level.enum';
+import { map } from 'rxjs/operators';
 import { EbrakeData, EbrakeRepository } from 'src/app/repositories/ebrake.repository';
 import { RegionRepository } from 'src/app/repositories/region.repository';
 import { Region } from 'src/app/repositories/types/in/region';
 import { getMoment, getStrDate } from 'src/app/util/date-util';
+import { EbrakeShareDialogComponent } from '../ebrake-share-dialog/ebrake-share-dialog.component';
 
 @Component({
   selector: 'app-temporal-overview',
@@ -17,24 +18,32 @@ export class TemporalOverviewComponent implements OnInit {
   data: EbrakeData;
   activeRegions: Region[] = [];
 
+  showButtons = true;
+  showRegions = true;
+  showFooter = true;
+
   constructor(
     private ebrakeRepo: EbrakeRepository,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private regionRepo: RegionRepository) { }
+    private regionRepo: RegionRepository,
+    private matDialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.activatedRoute.data.subscribe(d => {
+      if (d.showButtons === false) {
+        this.showButtons = false;
+      }
+    });
 
     this.activatedRoute.queryParams.subscribe(p => {
+      this.showRegions = p.regions === 'false' ? false : true;
+      this.showFooter = p.footer === 'false' ? false : true;
+
       if (p.ids) {
         const r: string[] = p.ids.split(',');
 
-        this.regionRepo.getAll()
-        .pipe(
-          mergeMap(d => d),
-          filter(reg => ((reg.id.length === 2 && reg.aggLevel === AggregationLevel.state) || reg.id.length !==2) && r.find(r1 => r1 === reg.id) !== undefined),
-          toArray()
-        )
+        this.regionRepo.getByIds(r)
         .subscribe(regions => {
           this.activeRegions = regions;
           this.updateChart(regions);
@@ -58,7 +67,8 @@ export class TemporalOverviewComponent implements OnInit {
       [],
       {
         relativeTo: this.activatedRoute,
-        queryParams: params
+        queryParams: params,
+        queryParamsHandling: 'merge'
       });
   }
 
@@ -71,6 +81,10 @@ export class TemporalOverviewComponent implements OnInit {
       }),
     )
     .subscribe(d => this.data = d);
+  }
+
+  openShareDialog(): void {
+    this.matDialog.open(EbrakeShareDialogComponent, {data: {regions: JSON.parse(JSON.stringify(this.activeRegions))}});
   }
 
 }

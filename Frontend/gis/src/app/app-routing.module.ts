@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { GdprComponent } from './gdpr/gdpr.component';
 import { ImpressumComponent } from './impressum/impressum.component';
 import { MapRootComponent } from './map-root/map-root.component';
+import { TemporalOverviewComponent } from './overview/ebrake/temporal-overview/temporal-overview.component';
 import { OverviewComponent } from './overview/overview.component';
 
 const routes: Routes = [
@@ -26,6 +27,13 @@ const routes: Routes = [
   {
     path: 'lockdown',
     component: MapRootComponent
+  },
+  {
+    path: 'ebrake',
+    component: TemporalOverviewComponent,
+    data: {
+      showButtons: false
+    }
   },
   {
     path: '',

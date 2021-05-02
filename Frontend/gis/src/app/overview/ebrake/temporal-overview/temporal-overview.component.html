@@ -1,8 +1,10 @@
-<div style="padding:10px;">
-    <a mat-raised-button color="primary" routerLink="/overview/map/ebrake" i18n="@@ebrakeOverviewMapView">Kartenansicht</a>
+<div style="padding:10px;" *ngIf="showButtons">
+    <a mat-raised-button color="primary" routerLink="/overview/map/ebrake" i18n="@@ebrakeOverviewMapView">Kartenansicht</a>&nbsp;
+
+    <button mat-raised-button (click)="openShareDialog()" i18n="@@ebrakeOverviewShareDialog">Visualisierung in Webseite einbinden</button>
 </div>
 
-<div style="padding:10px;">
+<div style="padding:10px;" *ngIf="showRegions">
     <app-region-selector [selectedRegions]="activeRegions" (selectedRegionsChange)="updateRegions($event)" [maxRegions]="null"></app-region-selector>
 </div>
 
@@ -10,4 +12,4 @@
     <app-temporal-overview-chart [data]="data"></app-temporal-overview-chart>
 </div>
 
-<app-footer></app-footer>
+<app-footer *ngIf="showFooter"></app-footer>

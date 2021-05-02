@@ -898,7 +898,7 @@
     </unit><unit id="shareTitle">
       <notes>
         
-      <note category="location">src/app/share-dialog/share-dialog.component.html:3</note></notes>
+      <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:3</note><note category="location">src/app/share-dialog/share-dialog.component.html:3</note></notes>
       <segment state="initial">
         <source>
     Visualisierung Teilen
@@ -917,17 +917,17 @@
       Note, that the data is automatically updated and the visualization may change accorrdingly.</target></segment>
     </unit><unit id="shareCopy">
       <notes>
-        <note category="location">src/app/share-dialog/share-dialog.component.html:31</note>
-        <note category="location">src/app/share-dialog/share-dialog.component.html:51</note>
-      </notes>
+        
+        
+      <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:28</note><note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:45</note><note category="location">src/app/share-dialog/share-dialog.component.html:31</note><note category="location">src/app/share-dialog/share-dialog.component.html:51</note></notes>
       <segment state="initial">
         <source>Kopieren</source>
       <target>Copy</target></segment>
     </unit><unit id="shareCopied">
       <notes>
-        <note category="location">src/app/share-dialog/share-dialog.component.html:33</note>
-        <note category="location">src/app/share-dialog/share-dialog.component.html:53</note>
-      </notes>
+        
+        
+      <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:30</note><note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:47</note><note category="location">src/app/share-dialog/share-dialog.component.html:33</note><note category="location">src/app/share-dialog/share-dialog.component.html:53</note></notes>
       <segment state="initial">
         <source>Erfolgreich in die Zwischenablage kopiert</source>
       <target>Successfully copied</target></segment>
@@ -949,11 +949,60 @@
       Note, that the data is automatically updated and the visualization may change accorrdingly.</target></segment>
     </unit><unit id="shareAdditionalOptions">
       <notes>
-        <note category="location">src/app/share-dialog/share-dialog.component.html:63</note>
-      </notes>
+        
+      <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:57</note><note category="location">src/app/share-dialog/share-dialog.component.html:63</note></notes>
       <segment state="initial">
         <source>Zusätzliche Optionen</source>
       <target>Additional Options</target></segment>
+    </unit><unit id="ebrakeShareLang">
+      <notes>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:64</note>
+      </notes>
+      <segment state="initial">
+        <source>Sprache</source>
+      <target>Language</target></segment>
+    </unit><unit id="ebrakeShareLangAuto">
+      <notes>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:73</note>
+      </notes>
+      <segment state="initial">
+        <source>Automatisch</source>
+      <target>Automatic</target></segment>
+    </unit><unit id="ebrakeShareLangDe">
+      <notes>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:75,76</note>
+      </notes>
+      <segment state="initial">
+        <source>Deutsch </source>
+      <target>German </target></segment>
+    </unit><unit id="ebrakeShareLangEn">
+      <notes>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:78,79</note>
+      </notes>
+      <segment state="initial">
+        <source>Englisch </source>
+      <target>English </target></segment>
+    </unit><unit id="ebrakeShareShowHeader">
+      <notes>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:84</note>
+      </notes>
+      <segment state="initial">
+        <source>Kopfzeile anzeigen</source>
+      <target>Show header</target></segment>
+    </unit><unit id="ebrakeShareShowRegions">
+      <notes>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:88</note>
+      </notes>
+      <segment state="initial">
+        <source>Regionen-Auswahl anzeigen</source>
+      <target>Show region selector</target></segment>
+    </unit><unit id="ebrakeShareShowFooter">
+      <notes>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:92</note>
+      </notes>
+      <segment state="initial">
+        <source>Fusszeile anzeigen</source>
+      <target>Show footer</target></segment>
     </unit><unit id="shareAllowPanning">
       <notes>
         <note category="location">src/app/share-dialog/share-dialog.component.html:67</note>
@@ -2437,6 +2486,13 @@
       <segment state="initial">
         <source>Kartenansicht</source>
       <target>Map view</target></segment>
+    </unit><unit id="ebrakeOverviewShareDialog">
+      <notes>
+        <note category="location">src/app/overview/ebrake/temporal-overview/temporal-overview.component.html:4</note>
+      </notes>
+      <segment state="initial">
+        <source>Visualisierung in Webseite einbinden</source>
+      <target>Embed visualization into a website</target></segment>
     </unit><unit id="tableOverviewCurrent">
       <notes>
         
