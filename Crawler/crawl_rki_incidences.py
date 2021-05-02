@@ -108,11 +108,11 @@ def parse_and_insert_sheet(df, sheet_name, col_name):
 
     entries = []
     for r_idx in range(1, data.shape[0]):
-        for c_idx in range(3, data.shape[1]):
+        for c_idx in range(1, data.shape[1]):
             val = None if data.iloc[r_idx, c_idx] == '' else data.iloc[r_idx, c_idx]
             entry = {
                 'datenbestand': datenbestand,
-                'id': "{:05d}".format(data.iloc[r_idx, 2]),
+                'id': "{:05d}".format(data.iloc[r_idx, 0]),
                 'ts': data.iloc[0, c_idx],
                 'val': val
             }
