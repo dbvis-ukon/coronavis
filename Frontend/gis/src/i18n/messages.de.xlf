@@ -2393,6 +2393,20 @@
       <segment state="final">
         <source>Mehr Informationen zum 4. Bevölkerungsschutzgesetz <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></source>
       <target>Mehr Informationen zum 4. Bevölkerungsschutzgesetz <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></target></segment>
+    </unit><unit id="ebrakeOverviewDataLastUpdated">
+      <notes>
+        <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:81</note>
+      </notes>
+      <segment state="final">
+        <source>Datenstand: <ph id="0" equiv="INTERPOLATION" disp="{{ data.last_updated | date: 'long' }}"/></source>
+      <target>Datenstand: <ph id="0" equiv="INTERPOLATION" disp="{{ data.last_updated | date: 'long' }}"/></target></segment>
+    </unit><unit id="ebrakeOverviewDataLastChecked">
+      <notes>
+        <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:82</note>
+      </notes>
+      <segment state="final">
+        <source>Zuletzt abgerufen: <ph id="0" equiv="INTERPOLATION" disp="{{ data.last_checked| date: 'long' }}"/></source>
+      <target>Zuletzt abgerufen: <ph id="0" equiv="INTERPOLATION" disp="{{ data.last_checked| date: 'long' }}"/></target></segment>
     </unit><unit id="ebrakeOverviewMapView">
       <notes>
         

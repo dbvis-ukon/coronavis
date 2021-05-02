@@ -7,7 +7,7 @@ import { scaleBand, scaleLinear, scaleTime } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
 import { timeFormatDefaultLocale } from 'd3-time-format';
 import moment from 'moment';
-import { EbrakeItem } from 'src/app/repositories/ebrake.repository';
+import { EbrakeData, EbrakeItem } from 'src/app/repositories/ebrake.repository';
 import { I18nService } from 'src/app/services/i18n.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
 import { EbrakeTooltipComponent } from '../ebrake-tooltip/ebrake-tooltip.component';
@@ -73,16 +73,18 @@ export class TemporalOverviewChartComponent implements OnInit {
 
   private svgSel: Selection<SVGSVGElement, undefined, null, undefined>;
 
-  private _data: EbrakeItem[];
+  private _data: EbrakeData;
 
   @Input()
-  public set data(data: EbrakeItem[]) {
+  public set data(data: EbrakeData) {
     this._data = data;
 
-    this.updateChart(data);
+    if (data) {
+      this.updateChart(data.data);
+    }
   }
 
-  public get data(): EbrakeItem[] {
+  public get data(): EbrakeData {
     return this._data;
   }
 
@@ -94,7 +96,7 @@ export class TemporalOverviewChartComponent implements OnInit {
   ngOnInit(): void {
     this.svgSel = select(this.svgRef.nativeElement);
 
-    this.updateChart(this._data);
+    this.updateChart(this._data?.data);
   }
 
   private shortName(name: string): string {
@@ -106,7 +108,7 @@ export class TemporalOverviewChartComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(): void {
-    this.updateChart(this._data);
+    this.updateChart(this._data.data);
   }
 
   updateChart(data: EbrakeItem[]): void {

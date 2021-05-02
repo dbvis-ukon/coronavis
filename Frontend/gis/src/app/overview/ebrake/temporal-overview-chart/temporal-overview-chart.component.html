@@ -77,6 +77,11 @@
     </div>
 </div>
 
+<div *ngIf="data" class="datatime">
+    <span i18n="@@ebrakeOverviewDataLastUpdated">Datenstand: {{ data.last_updated | date: 'long' }}</span>; 
+    <span i18n="@@ebrakeOverviewDataLastChecked">Zuletzt abgerufen: {{ data.last_checked| date: 'long' }}</span>
+</div>
+
 <svg class="ebrake-chart" #svg>
     <defs>
         <pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="8" patternTransform="rotate(-45 2 2)">
@@ -85,3 +90,7 @@
     </defs>
 
 </svg>
+
+<div style="padding:10px;">
+    <app-data-source source="rki_incidences"></app-data-source>
+</div>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { filter, mergeMap, toArray } from 'rxjs/operators';
+import { filter, map, mergeMap, toArray } from 'rxjs/operators';
 import { AggregationLevel } from 'src/app/map/options/aggregation-level.enum';
-import { EbrakeItem, EbrakeRepository } from 'src/app/repositories/ebrake.repository';
+import { EbrakeData, EbrakeRepository } from 'src/app/repositories/ebrake.repository';
 import { RegionRepository } from 'src/app/repositories/region.repository';
 import { Region } from 'src/app/repositories/types/in/region';
 import { getMoment, getStrDate } from 'src/app/util/date-util';
@@ -14,7 +14,7 @@ import { getMoment, getStrDate } from 'src/app/util/date-util';
 })
 export class TemporalOverviewComponent implements OnInit {
 
-  data: EbrakeItem[];
+  data: EbrakeData;
   activeRegions: Region[] = [];
 
   constructor(
@@ -65,9 +65,10 @@ export class TemporalOverviewComponent implements OnInit {
   updateChart(regions?: Region[]): void {
     this.ebrakeRepo.getEbrakeData(getStrDate(getMoment('now').subtract(14, 'days')))
     .pipe(
-      mergeMap(d => d.data),
-      filter(d => (!regions || regions.length === 0) || (regions && regions.find(r => d.id.startsWith(r.id)) !== undefined)),
-      toArray()
+      map(d => {
+        const filteredData = d.data.filter(d1 => (!regions || regions.length === 0) || (regions && regions.find(r => d1.id.startsWith(r.id)) !== undefined));
+        return {...d, data: filteredData} as EbrakeData;
+      }),
     )
     .subscribe(d => this.data = d);
   }
