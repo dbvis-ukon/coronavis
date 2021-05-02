@@ -17,6 +17,16 @@ spec:
       labels:
         {{- include "lingvis.labels" . | nindent 8 }}
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: deploymentName
+                operator: In
+                values:
+                - {{ .Release Name }}
+            topologyKey: "kubernetes.io/hostname"
       containers:
         - name: backend
           image: "registry.dbvis.de/jentner/covid-19-vis/backend:{{ .Values.sha }}"
