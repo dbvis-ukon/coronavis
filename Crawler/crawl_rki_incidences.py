@@ -89,7 +89,9 @@ def parse_and_insert_sheet(df, sheet_name, col_name):
 
     datenbestand = datetime.strptime(stand, 'Stand: %d.%m.%Y %H:%M:%S')
 
-    data = df[sheet_name].iloc[4:417]
+    nan_value = float("NaN")
+    data = df[sheet_name].iloc[4:, 2:].replace("", nan_value).dropna(how='all', axis=1)
+
     col = 0
     for d in data.loc[data.index[0]]:
         if isinstance(d, str):
