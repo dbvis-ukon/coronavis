@@ -2401,7 +2401,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:19</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:36</note></notes>
+      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:19</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:45</note></notes>
       <segment state="initial">
         <source> Keine Bundesnotbremse </source>
       <target> No federal emergency brake </target></segment>
@@ -2409,7 +2409,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:21</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:45</note></notes>
+      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:21</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:54</note></notes>
       <segment state="initial">
         <source> Bundesnotbremse (100) </source>
       <target> Federal emergency brake (100) </target></segment>
@@ -2417,7 +2417,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:23</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:54</note></notes>
+      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:23</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:63</note></notes>
       <segment state="initial">
         <source> Bundesnotbremse (165) </source>
       <target> Federal emergency brake (165) </target></segment>
@@ -2425,7 +2425,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:25</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:63</note></notes>
+      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:25</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:72</note></notes>
       <segment state="initial">
         <source> Unbekannt (keine Prognose möglich) </source>
       <target> Unknown (no forecast possible) </target></segment>
@@ -2433,49 +2433,56 @@
       <notes>
         
         
-      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:31</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:72</note></notes>
+      <note category="location">src/app/overview/ebrake/ebrake-tooltip/ebrake-tooltip.component.html:31</note><note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:81</note></notes>
       <segment state="initial">
         <source>Prognose (Änderungen möglich)</source>
       <target>Forecast (subject to changes)</target></segment>
-    </unit><unit id="ebrakeOverview7DIncicenceBelow100">
+    </unit><unit id="ebrakeOverviewSunHoliday">
       <notes>
         <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:9</note>
       </notes>
+      <segment state="initial">
+        <source>Sonn- und Feiertage</source>
+      <target>Sundays and holidays</target></segment>
+    </unit><unit id="ebrakeOverview7DIncicenceBelow100">
+      <notes>
+        
+      <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:18</note></notes>
       <segment state="initial">
         <source>7-Tage-Inzidenz unter 100</source>
       <target>7-Day-Incidence below 100</target></segment>
     </unit><unit id="ebrakeOverview7DIncicenceOber100">
       <notes>
-        <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:18</note>
-      </notes>
+        
+      <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:27</note></notes>
       <segment state="initial">
         <source>7-Tage-Inzidenz über 100</source>
       <target>7-Day-Incidence over 100</target></segment>
     </unit><unit id="ebrakeOverview7DIncicenceOver165">
       <notes>
-        <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:27</note>
-      </notes>
+        
+      <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:36</note></notes>
       <segment state="initial">
         <source>7-Tage-Inzidenz über 165</source>
       <target>7-Day-Incidence over 165</target></segment>
     </unit><unit id="ebrakeOverviewEbrakeMoreInformation">
       <notes>
-        <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:76</note>
-      </notes>
+        
+      <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:85</note></notes>
       <segment state="initial">
         <source>Mehr Informationen zum 4. Bevölkerungsschutzgesetz <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></source>
       <target>More information on the 4th Protection against Infections Act <pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></target></segment>
     </unit><unit id="ebrakeOverviewDataLastUpdated">
       <notes>
-        <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:81</note>
-      </notes>
+        
+      <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:90</note></notes>
       <segment state="initial">
         <source>Datenstand: <ph id="0" equiv="INTERPOLATION" disp="{{ data.last_updated | date: 'long' }}"/></source>
       <target>Data last updated: <ph id="0" equiv="INTERPOLATION" disp="{{ data.last_updated | date: 'long' }}"/></target></segment>
     </unit><unit id="ebrakeOverviewDataLastChecked">
       <notes>
-        <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:82</note>
-      </notes>
+        
+      <note category="location">src/app/overview/ebrake/temporal-overview-chart/temporal-overview-chart.component.html:91</note></notes>
       <segment state="initial">
         <source>Zuletzt abgerufen: <ph id="0" equiv="INTERPOLATION" disp="{{ data.last_checked| date: 'long' }}"/></source>
       <target>last checked: <ph id="0" equiv="INTERPOLATION" disp="{{ data.last_checked| date: 'long' }}"/></target></segment>

@@ -211,6 +211,27 @@ export class TemporalOverviewChartComponent implements OnInit {
       .attr('width', xScale(new Date(moment(dateExt[1]).add(1, 'day').toISOString())) - xScale(new Date(tomorrowM.toISOString())))
       .attr('height', rowsScale.bandwidth());
 
+    const sunHoliday = rowG
+      .selectAll('.sunholiday')
+      .data(d => d[1].filter(d1 => d1.holiday !== null || d1.ts_parsed.getDay() === 0))
+      .enter();
+
+    sunHoliday
+      .append('line')
+      .classed('sunholiday', true)
+      .attr('x1', d => xScale(d.ts_parsed))
+      .attr('x2', d => xScale(d.ts_parsed))
+      .attr('y1', 0)
+      .attr('y2', rowsScale.bandwidth());
+
+    sunHoliday
+      .append('line')
+      .classed('sunholiday', true)
+      .attr('x1', d => xScale(d.ts_parsed) + widthOfOneDay)
+      .attr('x2', d => xScale(d.ts_parsed) + widthOfOneDay)
+      .attr('y1', 0)
+      .attr('y2', rowsScale.bandwidth());
+
     rowG
       .selectAll('.bar')
       .data(d => d[1].filter(d1 => d1['7_day_incidence']))
@@ -265,21 +286,27 @@ export class TemporalOverviewChartComponent implements OnInit {
     const today = new Date(moment().startOf('day').toISOString());
     const tomorrow = new Date(tomorrowM.toISOString());
 
-    chartG
-      .append('line')
-      .attr('class', 'today')
-      .attr('x1', xScale(today))
-      .attr('x2', xScale(today))
-      .attr('y1', 0)
-      .attr('y2', height);
+    // chartG
+    //   .append('polygon')
+    //   .attr('class', 'today')
+    //   .attr('transform', `translate(${xScale(today) + widthOfOneDay / 2}, -5)`)
+    //   .attr('points', '-2,0 2,0 0,4');
 
-      chartG
-      .append('line')
-      .attr('class', 'today')
-      .attr('x1', xScale(tomorrow))
-      .attr('x2', xScale(tomorrow))
-      .attr('y1', 0)
-      .attr('y2', height);
+    // chartG
+    //   .append('line')
+    //   .attr('class', 'today')
+    //   .attr('x1', xScale(today))
+    //   .attr('x2', xScale(today))
+    //   .attr('y1', 0)
+    //   .attr('y2', height);
+
+    //   chartG
+    //   .append('line')
+    //   .attr('class', 'today')
+    //   .attr('x1', xScale(tomorrow))
+    //   .attr('x2', xScale(tomorrow))
+    //   .attr('y1', 0)
+    //   .attr('y2', height);
   }
 
 }

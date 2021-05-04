@@ -5,7 +5,7 @@
   <table>
     <tr>
       <td i18n="@@ebrakeTooltipDate">Datum:</td>
-      <td>{{ this.data.timestamp | date:'fullDate' }}</td>
+      <td>{{ this.data.timestamp | date:'fullDate' }} <span *ngIf="data.holiday !== null">({{ data.holiday }})</span></td>
     </tr>
 
     <tr *ngIf="data['7_day_incidence']">

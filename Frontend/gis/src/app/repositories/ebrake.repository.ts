@@ -15,10 +15,12 @@ export interface EbrakeItem {
   id: string;
   name: string;
   timestamp: string;
+  holiday: string | null;
   '7_day_incidence': number;
   '7_day_cases': number;
-  ebrake100: boolean;
-  ebrake165: boolean;
+  ebrake100: boolean | null;
+  ebrake150: boolean | null;
+  ebrake165: boolean | null;
 }
 
 @Injectable({
