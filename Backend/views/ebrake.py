@@ -127,7 +127,9 @@ def get_rki_emergency_brake():
             r."7_day_cases",
             e.ebrake100,
             e.ebrake165,
-            (le.bez || ' ' || le.name) as le_name
+            (le.bez || ' ' || le.name) as le_name,
+            e.ebrake150,
+            e.holiday
         FROM unified AS u
         JOIN landkreise_extended le ON u.ags = le.ids
         LEFT OUTER JOIN rki_data AS r ON u.timestamp = r.timestamp AND u.ags = r.ags
@@ -141,9 +143,11 @@ def get_rki_emergency_brake():
         entries.append({
             'id': d[2],
             'timestamp': d[3].isoformat(),
+            'holiday': d[10],
             '7_day_incidence': float(d[4]) if isinstance(d[4], Decimal) else None,
             '7_day_cases': int(d[5]) if isinstance(d[4], Decimal) else None,
             'ebrake100': d[6],
+            'ebrake150': d[9],
             'ebrake165': d[7],
             'name': d[8]
         })
