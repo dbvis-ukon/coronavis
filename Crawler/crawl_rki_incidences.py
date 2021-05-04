@@ -168,8 +168,10 @@ def process_county_ebrake(county_id) -> None:
             'id': county_id,
             'ts': d[0],
             'val': round(d[1], 2),
-            'over100': False,
-            'over165': False
+            'ebrake100': False,
+            'ebrake150': False,
+            'ebrake165': False,
+            'holiday': state_holidays.get(d[0])
         })
 
     # nowcast
@@ -179,8 +181,10 @@ def process_county_ebrake(county_id) -> None:
             'id': county_id,
             'ts': today,
             'val': None,
-            'over100': None,
-            'over165': None
+            'ebrake100': False,
+            'ebrake150': False,
+            'ebrake165': False,
+            'holiday': state_holidays.get(d[0])
         })
 
     # forecast
@@ -190,18 +194,21 @@ def process_county_ebrake(county_id) -> None:
             'id': county_id,
             'ts': future_dt,
             'val': None,
-            'over100': None,
-            'over165': None
+            'ebrake100': False,
+            'ebrake150': False,
+            'ebrake165': False,
+            'holiday': state_holidays.get(d[0])
         })
 
-    in_e_brake100 = None
-    in_e_brake165 = None
+    # contains the idx when ebrake has started for respective threshold
+    ebrake_start = {100: None, 150: None, 165: None}
     for i in range(4, len(ret_data)):
 
         # check for date idx = i if ebrake has started
         # must be over t for 3 days
-        ret_data[i]['over100'] = True
-        ret_data[i]['over165'] = True
+        ret_data[i]['ebrake100'] = True
+        ret_data[i]['ebrake150'] = True
+        ret_data[i]['ebrake165'] = True
         skipped = False
         for j in range(i - 4, i - 1):
             if ret_data[j]['val'] is None:
@@ -209,32 +216,43 @@ def process_county_ebrake(county_id) -> None:
                 continue
 
             if ret_data[j]['val'] < 165:
-                ret_data[i]['over165'] = False
+                ret_data[i]['ebrake165'] = False
+
+            if ret_data[j]['val'] < 150:
+                ret_data[i]['ebrake150'] = False
 
             if ret_data[j]['val'] < 100:
-                ret_data[i]['over100'] = False
+                ret_data[i]['ebrake100'] = False
                 break
 
         if skipped is True:
-            ret_data[i]['over100'] = None
-            ret_data[i]['over165'] = None
+            ret_data[i]['ebrake100'] = None
+            ret_data[i]['ebrake150'] = None
+            ret_data[i]['ebrake165'] = None
 
-        if ret_data[i]['over100'] is True:
-            in_e_brake100 = True
+        if ret_data[i]['ebrake100'] is True and ebrake_start[100] is None:
+            ebrake_start[100] = i
 
-        if ret_data[i]['over165'] is True:
-            in_e_brake165 = True
+        if ret_data[i]['ebrake150'] is True and ebrake_start[150] is None:
+            ebrake_start[150] = i
+
+        if ret_data[i]['ebrake165'] is True and ebrake_start[165] is None:
+            ebrake_start[165] = i
 
         # date is still in eBrake
-        if in_e_brake100 is True:
-            ret_data[i]['over100'] = True
+        if ebrake_start[100] is not None:
+            ret_data[i]['ebrake100'] = True
 
-        if in_e_brake165 is True:
-            ret_data[i]['over165'] = True
+        if ebrake_start[150] is not None:
+            ret_data[i]['ebrake150'] = True
+
+        if ebrake_start[165] is not None:
+            ret_data[i]['ebrake165'] = True
 
         # only necessary if currently in ebrake
-        if in_e_brake100 is True or in_e_brake165 is True:
+        if ebrake_start[100] is not None:
             over100 = None
+            over150 = None
             over165 = None
             num_weekdays = 0
             # start with -2 because it only concerns the day after tomorrow
@@ -243,7 +261,7 @@ def process_county_ebrake(county_id) -> None:
             while j >= 0 and num_weekdays < 5:
                 # sunday and holidays are skipped
                 if ret_data[j]['ts'].isoweekday() == 7 \
-                        or ret_data[j]['ts'] in state_holidays:
+                        or ret_data[j]['holiday'] is not None:
                     j -= 1
                     continue
 
@@ -254,12 +272,17 @@ def process_county_ebrake(county_id) -> None:
                     num_weekdays += 1
                     continue
 
-                if ret_data[j]['val'] >= 100:
+                if ebrake_start[100] is not None and (ret_data[j]['val'] >= 100 or j < (ebrake_start[100] + 1)):
                     over100 = True
                 elif over100 is None:
                     over100 = False
 
-                if ret_data[j]['val'] >= 165:
+                if ebrake_start[150] is not None and (ret_data[j]['val'] >= 150 or j < (ebrake_start[150] + 1)):
+                    over150 = True
+                elif over150 is None:
+                    over150 = False
+
+                if ebrake_start[165] is not None and (ret_data[j]['val'] >= 165 or j < (ebrake_start[165] + 1)):
                     over165 = True
                     break
                 elif over165 is None:
@@ -269,29 +292,36 @@ def process_county_ebrake(county_id) -> None:
                 j -= 1
 
             if over165 is False:
-                ret_data[i]['over165'] = False
-                in_e_brake165 = False
+                ret_data[i]['ebrake165'] = False
+                ebrake_start[165] = None
             elif over165 is None:
-                ret_data[i]['over165'] = None
-                in_e_brake165 = None
+                ret_data[i]['ebrake165'] = None
+                ebrake_start[165] = None
+
+            if over150 is False:
+                ret_data[i]['ebrake150'] = False
+                ebrake_start[150] = None
+            elif over150 is None:
+                ret_data[i]['ebrake150'] = None
+                ebrake_start[150] = None
 
             if over100 is False:
-                ret_data[i]['over100'] = False
-                in_e_brake100 = False
+                ret_data[i]['ebrake100'] = False
+                ebrake_start[100] = None
             elif over100 is None:
-                ret_data[i]['over100'] = None
-                in_e_brake100 = None
+                ret_data[i]['ebrake100'] = None
+                ebrake_start[100] = None
 
     # write to DB:
     psycopg2.extras.execute_values(
         cur,
-        "INSERT INTO counties_ebrake (id, timestamp, ebrake100, ebrake165) VALUES %s",
+        "INSERT INTO counties_ebrake (id, timestamp, ebrake100, ebrake150, ebrake165, holiday) VALUES %s",
         ret_data,
-        template='(%(id)s, %(ts)s, %(over100)s, %(over165)s)',
+        template='(%(id)s, %(ts)s, %(ebrake100)s, %(ebrake150)s, %(ebrake165)s, %(holiday)s)',
         page_size=500
     )
     conn.commit()
-
+    return None
 
 conn = None
 cur = None
