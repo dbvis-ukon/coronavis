@@ -234,8 +234,8 @@ export-environment:
     - if [ "${CI_COMMIT_BRANCH}" == "${STAGING_BRANCH}" ]; then ENV_TYPE="staging"; fi
 
     # Determine URL, ReplicaCount, and ReleaseName based on ENV_TYPE
-    - if [ "${ENV_TYPE}" == "staging" ]; then FRONTEND_URL_TILES_PREFIX="staging."; URL_PREFIX="staging."; REPLICA_COUNT="1"; RELEASE_NAME_RAW="${ENV_TYPE}/$CI_PROJECT_NAME/${CI_COMMIT_REF_SLUG}"; CPU_REQ="50m"; CPU_LIMIT="1000m"; MEM_REQ="1Gi"; MEM_LIMIT="2Gi"; fi
-    - if [ "${ENV_TYPE}" == "review" ]; then FRONTEND_URL_TILES_PREFIX="staging."; URL_PREFIX="${SHORTENED_CI_COMMIT_REF_SLUG}."; REPLICA_COUNT="1"; RELEASE_NAME_RAW="${ENV_TYPE}/$CI_PROJECT_NAME/${CI_COMMIT_REF_SLUG}"; CPU_REQ="50m"; CPU_LIMIT="1000m"; MEM_REQ="500Mi"; MEM_LIMIT="2Gi"; fi
+    - if [ "${ENV_TYPE}" == "staging" ]; then FRONTEND_URL_TILES_PREFIX="staging."; URL_PREFIX="staging."; REPLICA_COUNT="1"; RELEASE_NAME_RAW="${ENV_TYPE}/$CI_PROJECT_NAME/${CI_COMMIT_REF_SLUG}"; CPU_REQ="50m"; CPU_LIMIT="4000m"; MEM_REQ="1Gi"; MEM_LIMIT="4Gi"; fi
+    - if [ "${ENV_TYPE}" == "review" ]; then FRONTEND_URL_TILES_PREFIX="staging."; URL_PREFIX="${SHORTENED_CI_COMMIT_REF_SLUG}."; REPLICA_COUNT="1"; RELEASE_NAME_RAW="${ENV_TYPE}/$CI_PROJECT_NAME/${CI_COMMIT_REF_SLUG}"; CPU_REQ="50m"; CPU_LIMIT="4000m"; MEM_REQ="500Mi"; MEM_LIMIT="4Gi"; fi
 
     # Build the frontend url: prefix.suffix
     - URL_FRONTEND="${URL_PREFIX}${URL_SUFFIX}"
