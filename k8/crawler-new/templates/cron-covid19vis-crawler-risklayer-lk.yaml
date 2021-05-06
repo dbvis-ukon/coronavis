@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: "PVC to store the risklayer excel sheets"
 spec:
-  storageClassName: gluster-heketi
+  storageClassName: rook-cephfs
   accessModes:
     - ReadWriteMany
   resources:
@@ -84,8 +84,6 @@ spec:
           - name: vol-risklayer-spreadsheet-archive
             persistentVolumeClaim:
               claimName: pvc-covid19vis-crawler-risklayer-lk    # this must match the name of your PVC
-          nodeSelector:                                         # this block is important because only worker 1-3 are part of the GlusterFS cluster
-            storagenode: glusterfs 
           restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server
