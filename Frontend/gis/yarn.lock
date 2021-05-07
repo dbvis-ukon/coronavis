@@ -6866,9 +6866,9 @@ karma@~6.3.0:
     yargs "^16.1.1"
 
 katex@^0.13.0:
-  version "0.13.8"
-  resolved "https://registry.yarnpkg.com/katex/-/katex-0.13.8.tgz#64b7ea956941f10d490a49f256f7defb8c02a335"
-  integrity sha512-Em4VLhPveFcD1nyqfP7RPC0xsTEd7Hi8VtQQUYUqXpZqFd8FEw9iTmYaDtcBUfGUEC9rZvpvE5egcr7yOJRmzw==
+  version "0.13.9"
+  resolved "https://registry.yarnpkg.com/katex/-/katex-0.13.9.tgz#2b40665b1d287b62df08b195689d15df7689390f"
+  integrity sha512-2rz+tCHtVvQOFfq3iv2/xFOqfQmz6MWTwZ5B34kp9CX99iOT2z6YdjyiTDFm0isXR2ePRi0gF8ERwS+IpNfgNA==
   dependencies:
     commander "^6.0.0"
 
