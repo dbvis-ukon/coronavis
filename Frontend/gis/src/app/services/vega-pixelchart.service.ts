@@ -16,24 +16,43 @@ import { ExportCsvService } from './export-csv.service';
 export interface PixelChartDataPoint {
   x: string;
   y: string;
+  /**
+   * used in pixel chart
+   */
   val: number;
+  /**
+   * used in tooltip
+   */
+  incidence: number;
+  /**
+   * used in tooltip
+   */
+  absval: number;
+  /**
+   * used in tooltip
+   */
+  population: number;
+}
+
+export interface PixelChartOptions {
+  title: string;
+  xAxisTitle: string;
+  yAxisTitle: string;
+  incidenceTitle: string;
+  absValueTitle: string;
+  populationTitle: string;
+  width: number | 'container';
+  height: number;
+  scaleType: string;
+  timeAgg: string;
+  domain?: [number, number];
+  xDomain?: [string, string];
 }
 
 export interface PixelChartDataAndOptions {
   config: CovidChartOptions;
   data: PixelChartDataPoint[];
-  chartOptions: {
-    title: string;
-    xAxisTitle: string;
-    yAxisTitle: string;
-    zAxisTitle: string;
-    width: number | 'container';
-    height: number;
-    scaleType: string;
-    timeAgg: string;
-    domain?: [number, number];
-    xDomain?: [string, string];
-  };
+  chartOptions: PixelChartOptions;
 }
 
 @Injectable({
@@ -142,10 +161,22 @@ export class VegaPixelchartService {
               "title": "Altersgruppe"
             },
             {
-              "field": "val",
+              "field": "incidence",
               "title": "7-Tages-Inzidenz",
               "type": "quantitative",
               "format": ",.2f"
+            },
+            {
+              "field": "absval",
+              "title": "Anzahl positiv getestet",
+              "type": "quantitative",
+              "format": ",.0f"
+            },
+            {
+              "field": "population",
+              "title": "Population",
+              "type": "quantitative",
+              "format": ",.0f"
             }
           ]
         }
@@ -183,10 +214,22 @@ export class VegaPixelchartService {
               "title": "Altersgruppe"
             },
             {
-              "field": "val",
+              "field": "incidence",
               "title": "7-Tages-Inzidenz",
               "type": "quantitative",
               "format": ",.2f"
+            },
+            {
+              "field": "absval",
+              "title": "Anzahl positiv getestet",
+              "type": "quantitative",
+              "format": ",.0f"
+            },
+            {
+              "field": "population",
+              "title": "Population",
+              "type": "quantitative",
+              "format": ",.0f"
             }
           ]
         }
@@ -319,6 +362,8 @@ export class VegaPixelchartService {
               diff = diff / agPop[k] * 100000;
             }
 
+            const incidence = diff / agPop[k] * 10000;
+
             if (diff > maxDiff) {
               maxDiff = diff;
             }
@@ -326,7 +371,10 @@ export class VegaPixelchartService {
             data.push({
               x: fullData.developments[i].timestamp,
               y: k,
-              val: diff
+              val: diff,
+              incidence,
+              absval: (agNow[k] - agOld[k]),
+              population: agPop[k]
             });
           }
         }
@@ -334,8 +382,6 @@ export class VegaPixelchartService {
         const yAxis = "Altersgruppe";
 
         const xAxis = "Woche";
-
-        const zAxis = "7-Tage-Inzidenz";
 
         const xDomain: [string, string] = [
           getStrDate(getMoment(data[0].x).startOf('week')),
@@ -349,7 +395,9 @@ export class VegaPixelchartService {
             title: this.caseUtils.getChartTitle(o, (fullData as AggregatedRKICaseDevelopmentProperties).name),
             xAxisTitle: xAxis,
             yAxisTitle: yAxis,
-            zAxisTitle: zAxis,
+            incidenceTitle: '7-Tage-Inzidenz',
+            absValueTitle: 'Anzahl positiv getestet',
+            populationTitle: 'Population',
             width: 'container',
             height: numberOfAgeGroups * 20,
             scaleType: o.scaleType.toString(),
@@ -367,17 +415,7 @@ export class VegaPixelchartService {
 
   compileChart(
     data: PixelChartDataPoint[],
-    chartOptions: {
-      xAxisTitle: string;
-      yAxisTitle: string;
-      zAxisTitle: string;
-      width: number | 'container';
-      height: number;
-      scaleType: string;
-      timeAgg: string;
-      domain?: [number, number];
-      xDomain?: [string, string];
-    }
+    chartOptions: PixelChartOptions
     ): any {
     if (!data) {
       return null;
@@ -397,7 +435,9 @@ export class VegaPixelchartService {
     for (const i of [0, 1]) {
       spec.layer[i].encoding.tooltip[0].title = chartOptions.xAxisTitle || '';
       spec.layer[i].encoding.tooltip[1].title = chartOptions.yAxisTitle || '';
-      spec.layer[i].encoding.tooltip[2].title = chartOptions.zAxisTitle || '';
+      spec.layer[i].encoding.tooltip[2].title = chartOptions.incidenceTitle || '';
+      spec.layer[i].encoding.tooltip[3].title = chartOptions.absValueTitle || '';
+      spec.layer[i].encoding.tooltip[4].title = chartOptions.populationTitle || '';
     }
 
     spec.layer[0].encoding.color.scale.type = chartOptions.scaleType || 'linear';

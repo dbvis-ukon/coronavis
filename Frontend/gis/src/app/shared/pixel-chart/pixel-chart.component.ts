@@ -25,6 +25,12 @@ export class PixelChartComponent implements OnInit {
   @ViewChild('i18nValDeaths', {static: true})
   i18nValDeaths: ElementRef<HTMLSpanElement>;
 
+  @ViewChild('i18nValAbs', {static: true})
+  i18nValAbs: ElementRef<HTMLSpanElement>;
+
+  @ViewChild('i18nValAbsDeaths', {static: true})
+  i18nValAbsDeaths: ElementRef<HTMLSpanElement>;
+
   _dataAndOptions: PixelChartDataAndOptions;
 
   @Input()
@@ -57,9 +63,13 @@ export class PixelChartComponent implements OnInit {
 
     this._dataAndOptions.chartOptions.xAxisTitle = this._dataAndOptions.config.timeAgg === TimeGranularity.yearweek ? this.i18nWoche.nativeElement.textContent : this.i18nDatum.nativeElement.textContent;
 
-    this._dataAndOptions.chartOptions.zAxisTitle = this._dataAndOptions.config.type === CovidNumberCaseType.cases
+    this._dataAndOptions.chartOptions.incidenceTitle = this._dataAndOptions.config.type === CovidNumberCaseType.cases
       ? this.i18nVal.nativeElement.textContent
       : this.i18nValDeaths.nativeElement.textContent;
+
+      this._dataAndOptions.chartOptions.absValueTitle = this._dataAndOptions.config.type === CovidNumberCaseType.cases
+      ? this.i18nValAbs.nativeElement.textContent
+      : this.i18nValAbsDeaths.nativeElement.textContent;
 
     this.spec = this.vegaPixelchartService.compileChart(this._dataAndOptions.data, this._dataAndOptions.chartOptions);
   }

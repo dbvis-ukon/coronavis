@@ -219,7 +219,7 @@
     </unit><unit id="agegroupChartLastWeekHint">
       <notes>
         
-      <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:17</note></notes>
+      <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:19</note></notes>
       <segment state="final">
         <source> Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden.
 </source>
@@ -1714,8 +1714,22 @@
         <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:5</note>
       </notes>
       <segment state="final">
-        <source>Neue Todesfälle /7 Tage /100k Einwohner</source>
-      <target>Neue Todesfälle /7 Tage /100k Einwohner</target></segment>
+        <source>7-Tage-Inzidenz (Todesälle)</source>
+      <target>7-Tage-Inzidenz (Todesälle)</target></segment>
+    </unit><unit id="caseDodValAbs">
+      <notes>
+        <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:6</note>
+      </notes>
+      <segment state="final">
+        <source>Anzahl positiv getestet</source>
+      <target>Anzahl positiv getestet</target></segment>
+    </unit><unit id="caseDodValAbsDeaths">
+      <notes>
+        <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:7</note>
+      </notes>
+      <segment state="final">
+        <source>Anzahl Todesfälle</source>
+      <target>Anzahl Todesfälle</target></segment>
     </unit><unit id="legendDiviAddition">
       <notes>
         
