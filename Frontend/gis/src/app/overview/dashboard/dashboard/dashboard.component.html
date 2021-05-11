@@ -1,3 +1,5 @@
+<span class="hidden-translation" #i18nPictureCopiedToClipboard i18n="@@pictureCopiedToClipboard">Screenshot in Zwischenablage kopiert</span>
+<span class="hidden-translation" #i18nPictureCopiedToClipboardButton i18n="@@pictureCopiedToClipboardButton">Stattdessen herunterladen</span>
 <div class="outer" *ngIf="dashboard">
     <mat-toolbar color="primary">
       <button (click)="openVideo()" mat-icon-button matTooltip="Video">
@@ -78,7 +80,11 @@
       
                 <button *ngIf="timelineItem.type !== 'markdown'" mat-icon-button aria-label="settings" class="icon filter" (click)="openSettings(timelineItem, idx)" matTooltip="Chart Settings">
                     <mat-icon>settings</mat-icon>
-                </button> 
+                </button>
+
+                <button *ngIf="timelineItem.type !== 'markdown'" mat-icon-button aria-label="download" class="icon filter" (click)="screenshot(idx)" matTooltip="Screenshot erstellen" i18n-matTooltip="@@takeScreenshot">
+                  <mat-icon>photo_camera</mat-icon>
+                </button>
 
                 <button *ngIf="timelineItem.type === 'multiline' || timelineItem.type === 'pixel' || timelineItem.type === 'stackedareaicu'" mat-icon-button aria-label="download" class="icon filter" (click)="downloadData(timelineItem)" matTooltip="Download data as CSV">
                   <mat-icon>download</mat-icon>
@@ -99,7 +105,7 @@
                 </div>
               </div>
       
-              <div *ngIf="timelineItem.type === 'markdown'" class="full-width">
+              <div *ngIf="timelineItem.type === 'markdown'" class="full-width" #dashboardChart>
                 <div *ngIf="timelineItem._editMode">
                   <mat-toolbar i18n="@@dashboardVorschau">Vorschau</mat-toolbar>
                   <markdown [ngStyle]="{'display': 'block', 'background-color': 'lightgrey'}" [data]="timelineItem._text" emoji></markdown>
@@ -122,19 +128,19 @@
                 <hr>
               </div>
 
-              <div *ngIf="timelineItem.type === 'pixel'" style="width: 100%;">
+              <div *ngIf="timelineItem.type === 'pixel'" style="width: 100%;" #dashboardChart>
                 <app-pixel-chart [dataAndOptions]="timelineItem._compiled"></app-pixel-chart>
               </div>
 
-              <div *ngIf="timelineItem.type === 'multiline'" style="width: 100%">
+              <div *ngIf="timelineItem.type === 'multiline'" style="width: 100%" #dashboardChart>
                 <app-multi-line-chart [dataAndOptions]="timelineItem._compiled"></app-multi-line-chart>
               </div>
 
-              <div *ngIf="timelineItem.type === 'table'" style="width: 100%">
+              <div *ngIf="timelineItem.type === 'table'" style="display: inline-block;" #dashboardChart>
                 <app-table-overview [tableData$]="timelineItem._compiled"></app-table-overview>
               </div>
 
-              <div *ngIf="timelineItem.type === 'stackedareaicu'" style="width: 100%">
+              <div *ngIf="timelineItem.type === 'stackedareaicu'" style="width: 100%" #dashboardChart>
                 <app-stacked-area-icu-chart [dataAndOptions]="timelineItem._compiled"></app-stacked-area-icu-chart>
               </div>
             </div>

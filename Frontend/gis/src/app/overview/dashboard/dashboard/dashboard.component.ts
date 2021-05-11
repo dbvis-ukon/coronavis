@@ -1,9 +1,11 @@
-import { Clipboard } from '@angular/cdk/clipboard';
+/* eslint-disable @typescript-eslint/no-misused-new */
+import { Clipboard as Clp } from '@angular/cdk/clipboard';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import html2canvas from 'html2canvas';
 import { from, Observable, timer } from 'rxjs';
 import { map, mergeMap, toArray } from 'rxjs/operators';
 import { Dashboard } from 'src/app/repositories/types/in/dashboard';
@@ -14,6 +16,31 @@ import { VegaDashboardHistoryService } from 'src/app/services/vega-dashboard-his
 import { SettingsComponent } from '../settings/settings.component';
 import { TitleEditDialogComponent } from '../title-edit-dialog/title-edit-dialog.component';
 
+interface Clipboard {
+  read(): Promise<ClipboardItem[]>;
+  write(data: ClipboardItem[]): Promise<void>;
+}
+
+type ClipboardItemDelayedCallback = () => Promise<string | Blob>;
+
+declare class ClipboardItem {
+  constructor(items: Record<string, any>, options?: ClipboardItemOptions);
+  static createDelayed(items: Record<string, any>, options?: ClipboardItemOptions): ClipboardItem;
+
+  readonly presentationStyle: PresentationStyle;
+  readonly lastModified: number;
+  readonly delayed: boolean;
+  readonly types: readonly string[];
+
+  getType(type: string): Promise<Blob>;
+}
+
+type PresentationStyle = 'unspecified' | 'inline' | 'attachment';
+
+interface ClipboardItemOptions {
+  presentationStyle?: PresentationStyle;
+};
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -23,6 +50,15 @@ export class DashboardComponent implements OnInit {
 
   @ViewChild('pleaseWait', {static: false})
   pleaseWaitDiv: ElementRef<HTMLDivElement>;
+
+  @ViewChildren('dashboardChart')
+  dashboardCharts: QueryList<ElementRef<HTMLDivElement>>;
+
+  @ViewChild('i18nPictureCopiedToClipboard', {static: true})
+  i18nPictureCopiedToClipboard: ElementRef<HTMLSpanElement>;
+
+  @ViewChild('i18nPictureCopiedToClipboardButton', {static: true})
+  i18nPictureCopiedToClipboardButton: ElementRef<HTMLSpanElement>;
 
   pleaseWait = false;
 
@@ -42,7 +78,7 @@ export class DashboardComponent implements OnInit {
     private route: ActivatedRoute,
     private dashboardService: DashboardService,
     private router: Router,
-    private clipboard: Clipboard,
+    private clipboard: Clp,
     private snackBar: MatSnackBar,
     private vegaDashboardHistoryService: VegaDashboardHistoryService
   ) { }
@@ -212,4 +248,60 @@ export class DashboardComponent implements OnInit {
   openVideo(): void {
     window.open('https://www.youtube.com/watch?v=I1ORQd9W9Ok', '_blank');
   }
+
+  screenshot(idx: number): void {
+    html2canvas(this.dashboardCharts.get(idx).nativeElement)
+    .then(canvas => {
+      try {
+        canvas.toBlob((blb) => {
+          try {
+            (navigator.clipboard as unknown as any).write([new ClipboardItem({'image/png': blb})]);
+
+            const ref = this.snackBar.open(
+              this.i18nPictureCopiedToClipboard.nativeElement.textContent,
+              this.i18nPictureCopiedToClipboardButton.nativeElement.textContent,
+              {
+              duration: 5000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center'
+            });
+
+            ref.onAction().subscribe(() => {
+              this.saveAs(canvas.toDataURL(), 'coronavis-screenshot.png');
+            });
+          } catch (e1) {
+            console.log(e1);
+            this.saveAs(canvas.toDataURL(), 'coronavis-screenshot.png');
+          }
+        });
+      } catch (e) {
+        console.error(e);
+        this.saveAs(canvas.toDataURL(), 'coronavis-screenshot.png');
+      }
+    })
+    .catch(e => {
+      console.error(e);
+    });
+  }
+
+  saveAs(uri: string, filename: string) {
+    const link = document.createElement('a');
+    if (typeof link.download === 'string') {
+      link.href = uri;
+      link.download = filename;
+
+      //Firefox requires the link to be in the body
+      document.body.appendChild(link);
+
+      //simulate click
+      link.click();
+
+      //remove the link when done
+      document.body.removeChild(link);
+    } else {
+      window.open(uri);
+    }
+  }
+
+
 }
