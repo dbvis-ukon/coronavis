@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { EbrakeData, EbrakeRepository } from 'src/app/repositories/ebrake.repository';
 import { RegionRepository } from 'src/app/repositories/region.repository';
 import { Region } from 'src/app/repositories/types/in/region';
+import { MyLocalStorageService } from 'src/app/services/my-local-storage.service';
 import { getMoment, getStrDate } from 'src/app/util/date-util';
 import { EbrakeShareDialogComponent } from '../ebrake-share-dialog/ebrake-share-dialog.component';
 
@@ -27,7 +28,8 @@ export class TemporalOverviewComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private regionRepo: RegionRepository,
-    private matDialog: MatDialog) { }
+    private matDialog: MatDialog,
+    private localStorageService: MyLocalStorageService) { }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(d => {
@@ -43,14 +45,24 @@ export class TemporalOverviewComponent implements OnInit {
       if (p.ids) {
         const r: string[] = p.ids.split(',');
 
+        this.localStorageService.store('ebrake_regions', p.ids);
+
         this.regionRepo.getByIds(r)
         .subscribe(regions => {
           this.activeRegions = regions;
           this.updateChart(regions);
         });
 
+      } else if (this.localStorageService.retrieve('ebrake_regions')) {
+        const r: string[] = this.localStorageService.retrieve('ebrake_regions').split(',');
+
+        this.regionRepo.getByIds(r)
+        .subscribe(regions => {
+          this.updateRegions(regions);
+        });
       } else {
         this.activeRegions = [];
+        this.localStorageService.clear('ebrake_regions');
         this.updateChart();
       }
     });
@@ -59,8 +71,13 @@ export class TemporalOverviewComponent implements OnInit {
   updateRegions(regions: Region[]): void {
     let params: Params = {};
 
+    const idsStr = regions.map(d => d.id).join(',');
     if (regions.length > 0) {
-      params = {ids: regions.map(d => d.id).join(',')};
+      params = {ids: idsStr};
+      this.localStorageService.store('ebrake_regions', idsStr);
+    } else {
+      this.localStorageService.clear('ebrake_regions');
+      params = {ids: null};
     }
 
     this.router.navigate(
