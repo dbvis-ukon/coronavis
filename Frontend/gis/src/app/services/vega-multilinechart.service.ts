@@ -4,7 +4,10 @@ import { Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { map, mergeMap, toArray } from 'rxjs/operators';
 import { CovidChartOptions } from '../cases-dod/covid-chart-options';
+import { AggregationLevel } from '../map/options/aggregation-level.enum';
+import { CovidNumberCaseDataSource, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
+import { EbrakeRepository } from '../repositories/ebrake.repository';
 import { Region } from '../repositories/types/in/region';
 import { getMoment, getStrDate } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
@@ -130,9 +133,103 @@ export class VegaMultiLineChartService {
   constructor(
     private caseRepo: CaseDevelopmentRepository,
     private caseUtil: CaseUtilService,
-    private exportCsv: ExportCsvService
+    private exportCsv: ExportCsvService,
+    private ebrakeRepo: EbrakeRepository
   ) {}
 
+  dataComparisonCompileToDataAndOptions(o: CovidChartOptions, dataRequest: Region): Observable<MultiLineChartDataAndOptions> {
+    const xExtent: [string, string] = [null, null];
+    const yExtent: [number, number] = [0, 0];
+
+    let manXExtent: [string, string] = null;
+    if (o.temporalExtent.type === 'manual') {
+      if (o.temporalExtent.manualLastDays > 0) {
+        manXExtent = [getStrDate(getMoment('now').subtract(o.temporalExtent.manualLastDays, 'days')), getStrDate(getMoment('now'))];
+      } else {
+        manXExtent = o.temporalExtent.manualExtent;
+      }
+    }
+
+    const dataSources = [CovidNumberCaseDataSource.rki, CovidNumberCaseDataSource.risklayer];
+    if (o.type === CovidNumberCaseType.cases && o.timeWindow === CovidNumberCaseTimeWindow.sevenDays && dataRequest.aggLevel === AggregationLevel.county) {
+      dataSources.push(CovidNumberCaseDataSource.rki_incidences);
+    }
+
+    return from(dataSources)
+    .pipe(
+      mergeMap(d => {
+        if (d !== CovidNumberCaseDataSource.rki_incidences) {
+          return this.caseRepo.getCasesDevelopmentForAggLevelSingle(d, dataRequest.aggLevel, dataRequest.id, false, true)
+          .pipe(
+            mergeMap(d1 => this.caseUtil.extractXYByOptions(d1.properties, o)),
+            map(d1 => d1.map(d2 => ({...d2, region: d2.region + '_' + d})))
+          );
+        } else {
+          return this.ebrakeRepo.getEbrakeData()
+          .pipe(
+            map(d1 => d1.data
+              .filter(d2 => d2.id === dataRequest.id)
+              .map(d2 => ({x: d2.timestamp, y: d2['7_day_incidence'], y2: null, region: dataRequest.name + '_rki-bundesnotbremse'})))
+          );
+        }
+      }),
+      map(xyArr => {
+        const data = xyArr
+        .filter((_, i) => i > 7)
+        .filter(d2 => {
+          if (manXExtent !== null && !getMoment(d2.x).isBetween(getMoment(manXExtent[0]), getMoment(manXExtent[1]), 'day', '[]')) {
+            return false;
+          }
+
+          return true;
+        })
+        .map(xy => {
+          if (xExtent[0] === null || getMoment(xExtent[0]).isAfter(getMoment(xy.x))) {
+            xExtent[0] = xy.x;
+          }
+
+          if (xExtent[1] === null || getMoment(xExtent[1]).isBefore(getMoment(xy.x))) {
+            xExtent[1] = xy.x;
+          }
+
+          if (yExtent[0] > xy.y) {
+            yExtent[0] = xy.y;
+          }
+
+          if (yExtent[1] < xy.y) {
+            yExtent[1] = xy.y;
+          }
+
+          return {
+            x: xy.x,
+            y: xy.y,
+            region: xy.region
+          } as MultiLineChartDataPoint;
+        });
+
+        return data;
+      }),
+      toArray(),
+      map(arr => {
+        const data: MultiLineChartDataPoint[] = [].concat(...arr);
+        data.sort((a, b) => a.x.localeCompare(b.x));
+        return {
+          config: o,
+          data,
+          chartOptions: {
+            title: this.caseUtil.getChartTitle(o),
+            yAxisTitle: this.caseUtil.getChartTitle(o, null, true),
+            width: 'container',
+            height: 200,
+            timeAgg: o.timeAgg,
+            scaleType: o.scaleType,
+            xDomain: xExtent,
+            yDomain: yExtent
+          }
+        } as MultiLineChartDataAndOptions;
+      })
+    );
+  }
 
   compileToDataAndOptions(o: CovidChartOptions, dataRequests: Region[]): Observable<MultiLineChartDataAndOptions> {
     const xExtent: [string, string] = [null, null];

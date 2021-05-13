@@ -43,7 +43,8 @@ export enum CovidNumberCaseDataSource {
   rki = 'rki',
   risklayer = 'risklayer',
   divi = 'divi',
-  survstat = 'survstat'
+  survstat = 'survstat',
+  rki_incidences = 'rki_incidences'
 }
 
 export interface CovidNumberCaseOptions {
