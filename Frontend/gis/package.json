@@ -80,6 +80,7 @@
     "@types/node": "^15.0.0",
     "@typescript-eslint/eslint-plugin": "4.23.0",
     "@typescript-eslint/parser": "4.23.0",
+    "ajv-formats": "^2.1.0",
     "are-you-es5": "^2.0.0",
     "babel-loader": "^8.2.0",
     "codelyzer": "^6.0.0",

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
 import { EbrakeData, EbrakeRepository } from 'src/app/repositories/ebrake.repository';
 import { RegionRepository } from 'src/app/repositories/region.repository';
 import { Region } from 'src/app/repositories/types/in/region';
@@ -90,13 +89,13 @@ export class TemporalOverviewComponent implements OnInit {
   }
 
   updateChart(regions?: Region[]): void {
-    this.ebrakeRepo.getEbrakeData(getStrDate(getMoment('now').subtract(14, 'days')))
-    .pipe(
-      map(d => {
-        const filteredData = d.data.filter(d1 => (!regions || regions.length === 0) || (regions && regions.find(r => d1.id.startsWith(r.id)) !== undefined));
-        return {...d, data: filteredData} as EbrakeData;
-      }),
-    )
+    this.ebrakeRepo.getEbrakeData(getStrDate(getMoment('now').subtract(14, 'days')), null, regions?.map(d => d.id))
+    // .pipe(
+    //   map(d => {
+    //     const filteredData = d.data.filter(d1 => (!regions || regions.length === 0) || (regions && regions.find(r => d1.id.startsWith(r.id)) !== undefined));
+    //     return {...d, data: filteredData} as EbrakeData;
+    //   }),
+    // )
     .subscribe(d => this.data = d);
   }
 
