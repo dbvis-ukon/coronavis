@@ -14,6 +14,8 @@ export class EbrakeShareDialogComponent implements OnInit {
   showButtons = false;
   showFooter = true;
   showHeader = false;
+  numPastDays = 14;
+  numFutureDays = 8;
 
   lang: 'auto' | 'de' | 'en' = 'auto';
 
@@ -62,6 +64,14 @@ export class EbrakeShareDialogComponent implements OnInit {
 
     if (!this.showFooter) {
       params.push('footer=false');
+    }
+
+    if (this.numPastDays !== 14 && this.numPastDays !== null) {
+      params.push(`numPastDays=${this.numPastDays}`);
+    }
+
+    if (this.numFutureDays !== 8 && this.numFutureDays !== null) {
+      params.push(`numFutureDays=${this.numFutureDays}`);
     }
 
     if (params.length > 0) {

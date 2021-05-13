@@ -5,6 +5,7 @@ import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { formatDefaultLocale } from 'd3-format';
 import { scaleBand, scaleLinear, scaleTime } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
+import { timeDay } from 'd3-time';
 import { timeFormatDefaultLocale } from 'd3-time-format';
 import moment from 'moment';
 import { EbrakeData, EbrakeItem } from 'src/app/repositories/ebrake.repository';
@@ -127,15 +128,17 @@ export class TemporalOverviewChartComponent implements OnInit {
 
     const dt = groups(dataParsed, d => d.name_parsed);
 
+    const maxTextWidth = dt.map(d => this.measureText(d[0])).reduce((prev, cur) => cur > prev ? cur : prev, 0);
+
     const countyIds = dt.map(d => d[0]);
 
     const rowsScale = scaleBand()
     .range([0, countyIds.length * this.ROW_HEIGHT])
     .domain(countyIds);
 
-    const margin = {top: 20, right: 170, bottom: 30, left: 170};
+    const margin = {top: 20, right: maxTextWidth + 10, bottom: 30, left: maxTextWidth + 10};
 
-    const screenWidth = max([this.legendRef.nativeElement.offsetWidth, 1000]);
+    const screenWidth = max([this.legendRef.nativeElement.offsetWidth, 300]);
 
     const width = screenWidth - margin.left - margin.right;
     const height = rowsScale.range()[1] + (rowsScale.bandwidth() * 2.5) - margin.top - margin.bottom;
@@ -270,7 +273,7 @@ export class TemporalOverviewChartComponent implements OnInit {
     chartG
       .append('g')
       .attr('transform', `translate(0, ${height})`)
-      .call(axisBottom(xScale))
+      .call(axisBottom(xScale).ticks(timeDay.every(2)))
       .call(shiftXTicks);
 
     chartG
@@ -280,7 +283,7 @@ export class TemporalOverviewChartComponent implements OnInit {
 
     chartG
       .append('g')
-      .call(axisTop(xScale))
+      .call(axisTop(xScale).ticks(timeDay.every(2)))
       .call(shiftXTicks);
 
     const today = new Date(moment().startOf('day').toISOString());
@@ -307,6 +310,18 @@ export class TemporalOverviewChartComponent implements OnInit {
     //   .attr('x2', xScale(tomorrow))
     //   .attr('y1', 0)
     //   .attr('y2', height);
+  }
+
+  /**
+   * taken from https://bl.ocks.org/tophtucker/62f93a4658387bb61e4510c37e2e97cf
+   */
+  private measureText(str: string, fontSize = 10) {
+    const widths = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.15625,0.3,0.4,0.7,0.6,0.9,0.7,0.2,0.4,0.4,0.4,0.6,0.3,0.4,0.3,0.5,0.6,0.55625,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.3,0.3,0.6,0.6,0.6,0.6,1.1,0.8,0.7,0.8,0.7234375,0.7,0.6109375,0.8,0.7234375,0.3,0.5,0.8,0.6,0.834375,0.7234375,0.8,0.7,0.8,0.8,0.7,0.8,0.7234375,0.8,1.1,0.8,0.8,0.8,0.3,0.5,0.3,0.6,0.7,0.334375,0.6,0.6,0.6,0.6,0.6,0.5,0.6,0.6,0.2234375,0.3234375,0.6,0.2234375,0.834375,0.6,0.6,0.6,0.6,0.4,0.5,0.4,0.6,0.7,0.9,0.7,0.7,0.6,0.5,0.2609375,0.5,0.6]
+    const avg = 0.5889638157894739;
+    return str
+      .split('')
+      .map(c => c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg)
+      .reduce((cur, acc) => acc + cur) * fontSize;
   }
 
 }

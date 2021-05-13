@@ -976,6 +976,20 @@
       <segment state="final">
         <source>Fusszeile anzeigen</source>
       <target>Fusszeile anzeigen</target></segment>
+    </unit><unit id="ebrakeShareNumPastDays">
+      <notes>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:97</note>
+      </notes>
+      <segment state="final">
+        <source>Anzahl Tage in die Vergangenheit</source>
+      <target>Anzahl Tage in die Vergangenheit</target></segment>
+    </unit><unit id="ebrakeShareNumFutureDays">
+      <notes>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:104</note>
+      </notes>
+      <segment state="final">
+        <source>Anzahl Tage in die Zukunft</source>
+      <target>Anzahl Tage in die Zukunft</target></segment>
     </unit><unit id="shareAllowPanning">
       <notes>
         <note category="location">src/app/share-dialog/share-dialog.component.html:67</note>

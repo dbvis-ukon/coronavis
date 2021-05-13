@@ -21,6 +21,8 @@ export class TemporalOverviewComponent implements OnInit {
   showButtons = true;
   showRegions = true;
   showFooter = true;
+  numPastDays = 14;
+  numFutureDays = 8;
 
   constructor(
     private ebrakeRepo: EbrakeRepository,
@@ -40,6 +42,8 @@ export class TemporalOverviewComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(p => {
       this.showRegions = p.regions === 'false' ? false : true;
       this.showFooter = p.footer === 'false' ? false : true;
+      this.numPastDays = p.numPastDays ? parseInt(p.numPastDays + '', 10) : 14;
+      this.numFutureDays = p.numFutureDays ? parseInt(p.numFutureDays + '', 10) : 8;
 
       if (p.ids) {
         const r: string[] = p.ids.split(',');
@@ -89,7 +93,9 @@ export class TemporalOverviewComponent implements OnInit {
   }
 
   updateChart(regions?: Region[]): void {
-    this.ebrakeRepo.getEbrakeData(getStrDate(getMoment('now').subtract(14, 'days')), null, regions?.map(d => d.id))
+    const from = getStrDate(getMoment('now').subtract(this.numPastDays, 'days'));
+    const to = getStrDate(getMoment('now').add(this.numFutureDays, 'days'));
+    this.ebrakeRepo.getEbrakeData(from, to, regions?.map(d => d.id))
     // .pipe(
     //   map(d => {
     //     const filteredData = d.data.filter(d1 => (!regions || regions.length === 0) || (regions && regions.find(r => d1.id.startsWith(r.id)) !== undefined));

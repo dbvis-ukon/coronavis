@@ -92,5 +92,19 @@
       <mat-checkbox [(ngModel)]="showFooter" (change)="update()" i18n="@@ebrakeShareShowFooter">Fusszeile anzeigen</mat-checkbox>
     </div>
 
+    <div>
+      <mat-form-field class="example-form-field">
+        <mat-label i18n="@@ebrakeShareNumPastDays">Anzahl Tage in die Vergangenheit</mat-label>
+        <input matInput type="number" [ngModel]="numPastDays"  (ngModelChange)="numPastDays = $event; update()">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="example-form-field">
+        <mat-label i18n="@@ebrakeShareNumFutureDays">Anzahl Tage in die Zukunft</mat-label>
+        <input matInput type="number" [ngModel]="numFutureDays" (ngModelChange)="numFutureDays = $event; update()">
+      </mat-form-field>
+    </div>
+
   </div>
 </div>
