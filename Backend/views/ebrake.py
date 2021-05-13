@@ -79,6 +79,10 @@ def get_rki_emergency_brake():
                     type: boolean
                     example: true
                     description: true iff the county is currently in the ebrake(100), false otherwise; may be null
+                  ebrake150:
+                    type: boolean
+                    example: true
+                    description: true iff the county is currently in the ebrake(150), false otherwise; may be null
                   ebrake165:
                     type: boolean
                     example: true
