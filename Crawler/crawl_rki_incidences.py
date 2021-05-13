@@ -354,8 +354,12 @@ try:
     for c in county_ids:
         process_county_ebrake(c[0])
 
-    logger.info('Refreshing materialized view.')
+    logger.info('Refreshing materialized view cases_per_county_and_day.')
     cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW cases_per_county_and_day;")
+    conn.commit()
+
+    logger.info('Refreshing materialized view ebrake_data.')
+    cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW ebrake_data;")
     conn.commit()
 
     logger.info('Success')
