@@ -184,7 +184,7 @@ def process_county_ebrake(county_id) -> None:
             'ebrake100': False,
             'ebrake150': False,
             'ebrake165': False,
-            'holiday': state_holidays.get(d[0])
+            'holiday': state_holidays.get(today)
         })
 
     # forecast
@@ -197,7 +197,7 @@ def process_county_ebrake(county_id) -> None:
             'ebrake100': False,
             'ebrake150': False,
             'ebrake165': False,
-            'holiday': state_holidays.get(d[0])
+            'holiday': state_holidays.get(future_dt)
         })
 
     # contains the idx when ebrake has started for respective threshold
