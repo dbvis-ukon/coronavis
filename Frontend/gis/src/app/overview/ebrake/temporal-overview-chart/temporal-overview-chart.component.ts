@@ -1,5 +1,5 @@
 import { ConnectedPosition } from '@angular/cdk/overlay';
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { extent, groups, max } from 'd3-array';
 import { axisBottom, axisLeft, axisRight, axisTop } from 'd3-axis';
 import { formatDefaultLocale } from 'd3-format';
@@ -107,10 +107,10 @@ export class TemporalOverviewChartComponent implements OnInit {
       .replace('Kreisfreie Stadt', 'KS');
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(): void {
-    this.updateChart(this._data.data);
-  }
+  // @HostListener('window:resize', ['$event'])
+  // onResize(): void {
+  //   this.updateChart(this._data.data);
+  // }
 
   updateChart(data: EbrakeItem[]): void {
     if (!this.svgSel) {
