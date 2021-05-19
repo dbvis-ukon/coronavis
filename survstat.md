@@ -12,12 +12,12 @@ Zuletzt mit dem Stand 31.12.2019.
 Öffentlich zugänglich sind dabei auf Kreisebene aber nur Bevölkerungsdaten nach Alters**gruppen** (z.B. 0-3, 3-6, ...) und nicht nach Alters**jahren**.
 [Auf Bundeslandebene sind wiederrum Populationsdaten nach Altersjahren möglich.](https://www-genesis.destatis.de/genesis//online?operation=table&code=12411-0012&bypass=true&levelindex=1&levelid=1621422228814#abreadcrumb)
 
-Das RKI mit dem Interface SurvStat veröffentlicht Inzidenzwerte (für Covid-19 und andere Krankheiten) und auch absolute Werte der Anzahl an positiv getesteten nach Altersjahren.
-Da beide Datenwerte abgefragt werden können, haben wir uns dazu entschlossen die Populationsdaten, welche dem RKI vorliegen, aus der Inzidenz und den absoluten Zahlen zurückzurechnen.
+Das [RKI](https://www.rki.de) mit dem Interface [SurvStat](https://survstat.rki.de) veröffentlicht Inzidenzwerte (für Covid-19 und andere Krankheiten) und auch absolute Werte der Anzahl an positiv getesteten nach Altersjahren.
+Da beide Datenwerte abgefragt werden können, haben wir uns dazu entschlossen die Populationsdaten, welche dem [RKI](https://www.rki.de) vorliegen, aus der Inzidenz und den absoluten Zahlen zurückzurechnen.
 Dabei erhalten wir Populationsdaten pro Altersjahr und auf Kreisebene.
 Fortlaufend fragen wir deshalb immer nur die absoluten Werte bei SurvStat ab und errechnen die Inzidenzwerte selbst.
 
-Hierbei haben nun [@icestormfr](https://twitter.com/icestormfr) und [Robert Gieseke](https://github.com/rgieseke) festgestellt, dass das RKI/SurvStat einen Mittelwert der Populationsdaten errechnet wenn man keinen expliziten Filter für die Jahre 2020 und 2021 setzt.
+Hierbei haben nun [@icestormfr](https://twitter.com/icestormfr) und [Robert Gieseke](https://github.com/rgieseke) festgestellt, dass das [RKI](https://www.rki.de)/[SurvStat](https://survstat.rki.de) einen Mittelwert der Populationsdaten errechnet wenn man keinen expliziten Filter für die Jahre 2020 und 2021 setzt.
 Hierbei werden also Bevölkerungsstände von mehreren Jahren vermischt was selbstverständlich keinen Sinn ergibt.
 Sinnvollerweise würde man die Inzidenzwerte auf die Populationsdaten des entsprechenden Jahres beziehen.
 
@@ -35,7 +35,7 @@ Inzidenzwerte nach der Behebung des Fehlers:
 Wie auch schon durch [@icestormfr](https://twitter.com/icestormfr) festgestellt sind die Inzidenzwerte durch den Fehler tendenziell erhöht.
 Dies muss allerdings nicht für alle Kreise und Altersgruppen/-jahre generell gelten.
 
-Es bleibt anzumerken, dass alle anderen Inzidenzwerte, welche in CoronaVis dargestellt werden, nicht von dem Fehler betroffen waren da wir hier bereits die aktuellsten Populationsdaten vom Statistischen Bundesamt verwendet haben und nicht auf die Populationsdaten der RKI zurückgegriffen haben.
+Es bleibt anzumerken, dass alle anderen Inzidenzwerte, welche in [CoronaVis](https://coronavis.dbvis.de) dargestellt werden, nicht von dem Fehler betroffen waren da wir hier bereits die aktuellsten Populationsdaten vom Statistischen Bundesamt verwendet haben und nicht auf die Populationsdaten der [RKI](https://www.rki.de) zurückgegriffen haben.
 
 
 > Wir bedauern den Fehler und bedanken uns nochmals herzlich bei [@icestormfr](https://twitter.com/icestormfr) und [Robert Gieseke](https://github.com/rgieseke) für die Hinweise und Erläuterungen.
