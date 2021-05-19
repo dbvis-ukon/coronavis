@@ -35,7 +35,7 @@ Inzidenzwerte nach der Behebung des Fehlers:
 Wie auch schon durch [@icestormfr](https://twitter.com/icestormfr) festgestellt sind die Inzidenzwerte durch den Fehler tendenziell erhöht.
 Dies muss allerdings nicht für alle Kreise und Altersgruppen/-jahre generell gelten.
 
-Es bleibt anzumerken, dass alle anderen Inzidenzwerte, welche in [CoronaVis](https://coronavis.dbvis.de) dargestellt werden, nicht von dem Fehler betroffen waren da wir hier bereits die aktuellsten Populationsdaten vom Statistischen Bundesamt verwendet haben und nicht auf die Populationsdaten der [RKI](https://www.rki.de) zurückgegriffen haben.
+Es bleibt anzumerken, dass alle anderen Inzidenzwerte, welche in [CoronaVis](https://coronavis.dbvis.de) dargestellt werden, nicht von dem Fehler betroffen waren da wir hier bereits die aktuellsten Populationsdaten vom Statistischen Bundesamt verwendet haben und nicht auf die Populationsdaten des [RKI](https://www.rki.de) zurückgegriffen haben.
 
 
 > Wir bedauern den Fehler und bedanken uns nochmals herzlich bei [@icestormfr](https://twitter.com/icestormfr) und [Robert Gieseke](https://github.com/rgieseke) für die Hinweise und Erläuterungen.
