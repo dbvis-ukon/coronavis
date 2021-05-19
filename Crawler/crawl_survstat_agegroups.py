@@ -555,6 +555,22 @@ def fetch_county(county):
                             ["[ReferenzDefinition].[ID].&[1]"]
                         ),
                     },
+                    # Set "Meldejahr" filter to recent one, otherwise an average
+                    # might be used.
+                    # https://twitter.com/icestormfr/status/1313855275317825537
+                    # As hinted at by https://github.com/dbvis-ukon/coronavis/issues/1
+                    {
+                        "Key": {
+                            "DimensionId": "[ReportingDate]",
+                            "HierarchyId": "[ReportingDate].[WeekYear]",
+                        },
+                        "Value": factory.FilterMemberCollection(
+                            [
+                                "[ReportingDate].[WeekYear].&[2020]",
+                                "[ReportingDate].[WeekYear].&[2021]",
+                            ]
+                        ),
+                    },
                     {
                         "Key": {
                             "DimensionId": "[DeutschlandNodes].[Kreise71Web]",
