@@ -13,6 +13,7 @@ import { getMoment, getStrDate } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 import { MultiLineChartItem } from './chart.service';
 import { ExportCsvService } from './export-csv.service';
+import { TranslationService } from './translation.service';
 
 export interface MultiLineChartDataPoint {
   /**
@@ -168,7 +169,8 @@ export class VegaMultiLineChartService {
     private caseRepo: CaseDevelopmentRepository,
     private caseUtil: CaseUtilService,
     private exportCsv: ExportCsvService,
-    private ebrakeRepo: EbrakeRepository
+    private ebrakeRepo: EbrakeRepository,
+    private translate: TranslationService
   ) {}
 
   dataComparisonCompileToDataAndOptions(o: CovidChartOptions, dataRequest: Region): Observable<MultiLineChartDataAndOptions> {
@@ -293,8 +295,8 @@ export class VegaMultiLineChartService {
         o2.type = CovidNumberCaseType.bedsTotal;
         // o3.type = CovidNumberCaseType.bedsFree;
 
-        itTemplate.push({request: d, options: o1, suffix: 'beds_occupied'});
-        itTemplate.push({request: d, options: o2, suffix: 'beds_total'});
+        itTemplate.push({request: d, options: o1, suffix: this.translate.translate('Betten') + ' ' + this.translate.translate('belegt')});
+        itTemplate.push({request: d, options: o2, suffix: this.translate.translate('Betten') + ' ' + this.translate.translate('gesamt')});
         // itTemplate.push({request: d, options: o3, suffix: 'beds_free'});
       });
     }

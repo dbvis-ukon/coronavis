@@ -152,6 +152,16 @@ If you save this dashboard, it will receive a new ID and URL.
 
         dashboard.items.push({
           type: 'multiline',
+          dataRequest: [rRegion],
+          config: this.configService.parseConfig(
+            merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.bedOccupancy}),
+            'multiline',
+            true
+          ).config
+        });
+
+        dashboard.items.push({
+          type: 'multiline',
           dataRequest: dataRequests,
           config: this.configService.parseConfig(
             merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.bedOccupancyPercent, valueExtent: {type: 'manual', manualExtent: [0, 100]}}),

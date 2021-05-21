@@ -179,6 +179,18 @@ export class TranslationService {
     {
       'de-DE': 'Datum',
       'en-US': 'Date'
+    },
+    {
+      'de-DE': 'Betten',
+      'en-US': 'Beds'
+    },
+    {
+      'de-DE': 'belegt',
+      'en-US': 'occupied'
+    },
+    {
+      'de-DE': 'gesamt',
+      'en-US': 'total'
     }
   ];
 

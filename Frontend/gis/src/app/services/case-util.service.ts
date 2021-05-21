@@ -210,7 +210,7 @@ export class CaseUtilService {
 
         let region = (data.description ? data.description + ' ' : '') + data.name;
         if (region_suffix) {
-          region += '_' + region_suffix;
+          region += ' ' + region_suffix;
         }
         return {
           x,
@@ -374,6 +374,10 @@ export class CaseUtilService {
 
       case CovidNumberCaseType.bedOccupancyPercent:
         str.push(this.translation.translate('Bettenauslastung (%)'));
+        break;
+
+      case CovidNumberCaseType.bedOccupancy:
+        str.push(this.translation.translate('Bettenauslastung'));
         break;
     }
 
