@@ -191,6 +191,21 @@ export class TranslationService {
     {
       'de-DE': 'gesamt',
       'en-US': 'total'
+    },
+    {
+      system: '#autodashboard',
+      'en-US': `# Auto-generated dashboard
+
+This is an automatically generated dashboard based on %name%. Feel free to modify anything here.
+If you save this dashboard, it will receive a new ID and URL.
+
+> With :heart: from [@dbvis](https://twitter.com/dbvis)`,
+      'de-DE': `# Automatisch generiertes Dashboard
+
+Dies ist ein automatisch generiertes Dashboard für %name%. Du kannst dieses Dashboard modifizieren und speichern.
+Wenn du das Dashboard speicherst erhält es eine neue ID und URL.
+
+> Mit :heart: von [@dbvis](https://twitter.com/dbvis)`
     }
   ];
 
