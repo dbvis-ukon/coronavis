@@ -66,7 +66,7 @@ export class VegaStackedAreaIcuCategoriesService {
               "y": {
                 "field": "numberOfHospitals",
                 "type": "quantitative",
-                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
+                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40, "orient": "left"},
                 "scale": {"domain": [0, 38], "type": "linear"},
                 "title": ["ICU Low", "# Hospitals"]
               },
@@ -141,6 +141,21 @@ export class VegaStackedAreaIcuCategoriesService {
                 }
               }
             ]
+          },
+          {
+            "mark": "point",
+            "encoding": {
+              "y": {
+                "field": "numberOfHospitals",
+                "type": "quantitative",
+                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40, "orient": "right"},
+                "scale": {"domain": [0, 6], "type": "linear"},
+                "title": ["ICU Low", "# Hospitals"]
+              },
+              "opacity": {
+                "value": 0
+              }
+            }
           }
         ]
       },
@@ -160,7 +175,7 @@ export class VegaStackedAreaIcuCategoriesService {
               "y": {
                 "field": "numberOfHospitals",
                 "type": "quantitative",
-                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
+                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40, "orient": "left"},
                 "scale": {"domain": [0, 38], "type": "linear"},
                 "title": ["ICU High", "# Hospitals"]
               },
@@ -235,6 +250,21 @@ export class VegaStackedAreaIcuCategoriesService {
                 }
               }
             ]
+          },
+          {
+            "mark": "point",
+            "encoding": {
+              "y": {
+                "field": "numberOfHospitals",
+                "type": "quantitative",
+                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40, "orient": "right"},
+                "scale": {"domain": [0, 6], "type": "linear"},
+                "title": ["ICU High", "# Hospitals"]
+              },
+              "opacity": {
+                "value": 0
+              }
+            }
           }
         ]
       },
@@ -254,7 +284,7 @@ export class VegaStackedAreaIcuCategoriesService {
               "y": {
                 "field": "numberOfHospitals",
                 "type": "quantitative",
-                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40},
+                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40, "orient": "left"},
                 "scale": {"domain": [0, 38], "type": "linear"},
                 "title": ["ECMO", "# Hospitals"]
               },
@@ -329,6 +359,21 @@ export class VegaStackedAreaIcuCategoriesService {
                 }
               }
             ]
+          },
+          {
+            "mark": "point",
+            "encoding": {
+              "y": {
+                "field": "numberOfHospitals",
+                "type": "quantitative",
+                "axis": {"tickMinStep": 1, "minExtent": 40, "maxExtent": 40, "orient": "right"},
+                "scale": {"domain": [0, 6], "type": "linear"},
+                "title": ["ECMO", "# Hospitals"]
+              },
+              "opacity": {
+                "value": 0
+              }
+            }
           }
         ]
       }
@@ -457,11 +502,13 @@ export class VegaStackedAreaIcuCategoriesService {
 
       if (chartOptions.yDomain) {
         spec.vconcat[i].layer[0].encoding.y.scale.domain = chartOptions.yDomain;
+        spec.vconcat[i].layer[2].encoding.y.scale.domain = chartOptions.yDomain;
       }
 
       spec.vconcat[i].layer[0].encoding.color.scale.domain = catTranslated;
 
       spec.vconcat[i].layer[0].encoding.y.scale.type = chartOptions.scaleType || 'linear';
+      spec.vconcat[i].layer[2].encoding.y.scale.type = chartOptions.scaleType || 'linear';
 
       const tltp = [{"field": "date", "type": "temporal", "title": this.translationServive.translate('Datum')}];
 
@@ -477,6 +524,8 @@ export class VegaStackedAreaIcuCategoriesService {
     if (chartOptions.xDomain) {
       spec.transform[0].filter.range = chartOptions.xDomain;
     }
+
+    console.log(JSON.stringify(spec));
 
     return spec;
   }
