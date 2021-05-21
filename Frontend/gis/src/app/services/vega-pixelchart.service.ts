@@ -467,8 +467,6 @@ export class VegaPixelchartService {
     const colorBreakpoint = chartOptions.domain[1] * 0.6;
     spec.layer[1].encoding.color.condition[0].test = "datum.val > " + Math.round(colorBreakpoint);
 
-    console.log(JSON.stringify(spec));
-
     return spec;
   }
 

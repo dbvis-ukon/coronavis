@@ -53,33 +53,55 @@ export class VegaMultiLineChartService {
     "width": "container",
     "background": "transparent",
     "data": {
-      "values": [
-      ]
+      "values": []
     },
     "transform": [
-      {"filter": {"field": "x", "timeUnit": "yearmonthdate", "range": []}},
-      {"filter": {"field": "y", "range": []}}
+      {
+        "filter": {
+          "field": "x",
+          "timeUnit": "yearmonthdate",
+          "range": ["2020-01-23", "2021-05-22"]
+        }
+      },
+      {"filter": {"field": "y", "range": [0, 100]}}
     ],
     "description": "A simple bar chart with rounded corners at the end of the bar.",
-    "encoding": {"x": {
-          "field": "x",
-          "type": "temporal",
-          "scale": {"domain": ["2020-01-15T00:00:00", "2021-03-26T00:00:00"]},
-          "title": "",
-          "timeUnit": "yearmonthdate"
-        }},
+    "encoding": {
+      "x": {
+        "field": "x",
+        "type": "temporal",
+        "scale": {"domain": ["2020-01-23", "2021-05-22"]},
+        "title": "",
+        "timeUnit": "yearmonthdate"
+      },
+      "y": {
+        "field": "y",
+            "type": "quantitative",
+            "title": "Bed occupancy (%)",
+            "scale": {"type": "linear", "domain": [0, 100]},
+            "axis": {"minExtent": 50, "maxExtent": 50, "orient": "left"}
+      }
+    },
     "layer": [
       {
         "encoding": {
           "color": {
             "field": "region",
             "type": "nominal",
-            "legend": {"orient": "bottom", "title": null, "symbolType": "stroke", "columns": 10}
+            "legend": {
+              "orient": "bottom",
+              "title": null,
+              "symbolType": "stroke",
+              "columns": 10
+            }
           },
-          "y": {"field": "y", "type": "quantitative", "title": "", "scale": {}, "axis": {
-            "minExtent": 50,
-            "maxExtent": 50
-          }},
+          "y": {
+            "field": "y",
+            "type": "quantitative",
+            "title": "Bed occupancy (%)",
+            "scale": {"type": "linear", "domain": [0, 100]},
+            "axis": {"minExtent": 50, "maxExtent": 50, "orient": "right"}
+          },
           "opacity": {
             "condition": {"param": "labelhover", "value": 1},
             "value": 0.1
@@ -111,7 +133,18 @@ export class VegaMultiLineChartService {
             "value": 0
           },
           "tooltip": [
-            {"field": "x", "type": "temporal", "title": "Date"}
+            {"field": "x", "type": "temporal", "title": "Date"},
+            {
+              "field": "Baden-Württemberg",
+              "type": "quantitative",
+              "format": ".2f"
+            },
+            {"field": "Deutschland", "type": "quantitative", "format": ".2f"},
+            {
+              "field": "Landkreis Konstanz",
+              "type": "quantitative",
+              "format": ".2f"
+            }
           ]
         },
         "params": [
@@ -326,6 +359,10 @@ export class VegaMultiLineChartService {
     // also overwrite the title
     spec.encoding.x.title = chartOptions.xAxisTitle || '';
 
+    spec.encoding.y.title = chartOptions.yAxisTitle || '';
+
+    spec.encoding.y.scale.type = chartOptions.scaleType || 'linear';
+
     spec.layer[0].encoding.y.title = chartOptions.yAxisTitle || '';
 
     spec.layer[0].encoding.y.scale.type = chartOptions.scaleType || 'linear';
@@ -337,6 +374,7 @@ export class VegaMultiLineChartService {
 
     if (chartOptions.yDomain) {
       spec.layer[0].encoding.y.scale.domain = chartOptions.yDomain;
+      spec.encoding.y.scale.domain = chartOptions.yDomain;
       spec.transform[1].filter.range = chartOptions.yDomain;
     }
 
@@ -356,6 +394,8 @@ export class VegaMultiLineChartService {
       type: "quantitative",
       format: ".2f"
     }));
+
+    console.log(JSON.stringify(spec));
 
     return spec;
   }
