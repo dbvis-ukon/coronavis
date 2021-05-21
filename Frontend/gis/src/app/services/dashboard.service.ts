@@ -215,11 +215,7 @@ export class DashboardService implements Resolve<Dashboard> {
 
     dashboard.items.push({
       type:'markdown',
-      text: `# We could not find this dashboard
-
-We could not find the dashboard you are looking for. You can search again or start here and add some more charts.
-
-> With :heart: from [@dbvis](https://twitter.com/dbvis)`
+      text: this.translation.translate('#dashboard404')
     } as MarkdownItem);
 
     const r: Region[] = [{id: 'de', name: 'Deutschland', aggLevel: AggregationLevel.country, description: ''}];
