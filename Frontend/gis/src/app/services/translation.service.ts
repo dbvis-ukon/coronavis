@@ -218,7 +218,7 @@ You can also have a look at https://coronavis.dbvis.de/overview/dashboards to se
 > With :heart: from [@dbvis](https://twitter.com/dbvis)`,
       'de-DE': `# Wir konnten dieses Dashboard nicht finden
 
-Wir konnten das Dashboard, welches du suchst, leider nicht finden.
+Wir konnten das Dashboard, dass du suchst, leider nicht finden.
 Du kannst zu diesem Dashboard Charts hinzufügen und speichern um eine neue ID & URL zu generieren, oder du suchst das Dashboard
 erneut unter https://coronavis.dbvis.de/overview/dashboards.
 
