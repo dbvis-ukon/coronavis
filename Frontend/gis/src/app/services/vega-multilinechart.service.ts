@@ -277,11 +277,32 @@ export class VegaMultiLineChartService {
       }
     }
 
-    return from(dataRequests)
+    let itTemplate: {request: Region; options: CovidChartOptions; suffix: string}[] = [];
+
+    // default behavior
+    if (o.type !== CovidNumberCaseType.bedOccupancy) {
+      itTemplate = dataRequests.map(d => ({request: d, options: o, suffix: null}));
+    } else {
+      itTemplate = [];
+      dataRequests.forEach(d => {
+        const o1: CovidChartOptions = JSON.parse(JSON.stringify(o));
+        const o2: CovidChartOptions = JSON.parse(JSON.stringify(o));
+        // const o3: CovidChartOptions = JSON.parse(JSON.stringify(o));
+        o1.type = CovidNumberCaseType.bedsOccupied;
+        o2.type = CovidNumberCaseType.bedsTotal;
+        // o3.type = CovidNumberCaseType.bedsFree;
+
+        itTemplate.push({request: d, options: o1, suffix: 'beds_occupied'});
+        itTemplate.push({request: d, options: o2, suffix: 'beds_total'});
+        // itTemplate.push({request: d, options: o3, suffix: 'beds_free'});
+      });
+    }
+
+    return from(itTemplate)
     .pipe(
-      mergeMap(d => this.caseRepo.getCasesDevelopmentForAggLevelSingle(o.dataSource, d.aggLevel, d.id, false, true)
+      mergeMap(d => this.caseRepo.getCasesDevelopmentForAggLevelSingle(o.dataSource, d.request.aggLevel, d.request.id, false, true)
         .pipe(
-          mergeMap(d1 => this.caseUtil.extractXYByOptions(d1.properties, o)),
+          mergeMap(d1 => this.caseUtil.extractXYByOptions(d1.properties, d.options, d.suffix)),
           map(xyArr => {
             const data = xyArr
             .filter((_, i) => i > 7)

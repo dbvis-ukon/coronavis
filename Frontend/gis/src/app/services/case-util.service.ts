@@ -178,7 +178,7 @@ export class CaseUtilService {
       unnormalizedResult / currentTimedStatus.population;
   }
 
-  public extractXYByOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): Observable<{x: string; y: number; y2: number; region: string}[]> {
+  public extractXYByOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions, region_suffix?: string): Observable<{x: string; y: number; y2: number; region: string}[]> {
     return of(data)
     .pipe(
       mergeMap(d1 => d1.developments),
@@ -208,11 +208,15 @@ export class CaseUtilService {
           y2 = y2 / d.population * 100000;
         }
 
+        let region = (data.description ? data.description + ' ' : '') + data.name;
+        if (region_suffix) {
+          region += '_' + region_suffix;
+        }
         return {
           x,
           y,
           y2,
-          region: (data.description ? data.description + ' ' : '') + data.name
+          region
         };
       }),
       toArray()
@@ -328,6 +332,21 @@ export class CaseUtilService {
       case CovidNumberCaseType.bedOccupancyPercent:
         typeAccessor = d => (d?.beds_occupied / d?.beds_total) * 100;
         break;
+
+      case CovidNumberCaseType.bedsFree:
+        typeAccessor = d => d?.beds_free;
+        break;
+
+      case CovidNumberCaseType.bedsOccupied:
+        typeAccessor = d => d?.beds_occupied;
+        break;
+
+      case CovidNumberCaseType.bedsTotal:
+        typeAccessor = d => d?.beds_total;
+        break;
+
+      default:
+        throw new Error(`unknown type ${type}`);
     }
 
     return typeAccessor;
