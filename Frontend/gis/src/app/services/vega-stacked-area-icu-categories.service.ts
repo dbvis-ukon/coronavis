@@ -525,8 +525,6 @@ export class VegaStackedAreaIcuCategoriesService {
       spec.transform[0].filter.range = chartOptions.xDomain;
     }
 
-    console.log(JSON.stringify(spec));
-
     return spec;
   }
 
