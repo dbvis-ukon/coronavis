@@ -117,7 +117,7 @@ export class DashboardComponent implements OnInit {
     return timer(300)
     .pipe(
       map(() => {
-        this.containerWidth = this.pleaseWaitDiv?.nativeElement?.offsetWidth - 100 || 400;
+        this.containerWidth = this.pleaseWaitDiv?.nativeElement?.offsetWidth - 140 || 400;
         return this.containerWidth;
       })
     );
