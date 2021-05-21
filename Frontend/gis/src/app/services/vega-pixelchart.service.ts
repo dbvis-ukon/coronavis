@@ -120,6 +120,7 @@ export class VegaPixelchartService {
         "type": "ordinal",
         "title": "Altersgruppe",
         "axis": {
+          "orient": "left",
           "minExtent": 50,
           "maxExtent": 50
         }
@@ -134,6 +135,12 @@ export class VegaPixelchartService {
           "tooltip": true
         },
         "encoding": {
+          "y": {
+            "field": "y",
+            "type": "ordinal",
+            "title": "Altersgruppe",
+            "axis": {"minExtent": 50, "maxExtent": 50, "orient": "right"}
+          },
           "color": {
             "field": "val",
             "type": "quantitative",
@@ -431,6 +438,7 @@ export class VegaPixelchartService {
     spec.encoding.x.title = '';
 
     spec.encoding.y.title = chartOptions.yAxisTitle || '';
+    spec.layer[0].encoding.y.title = chartOptions.yAxisTitle || '';
 
     for (const i of [0, 1]) {
       spec.layer[i].encoding.tooltip[0].title = chartOptions.xAxisTitle || '';

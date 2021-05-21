@@ -13,6 +13,7 @@ import { getMoment, getStrDate } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 import { MultiLineChartItem } from './chart.service';
 import { ExportCsvService } from './export-csv.service';
+import { TranslationService } from './translation.service';
 
 export interface MultiLineChartDataPoint {
   /**
@@ -53,33 +54,52 @@ export class VegaMultiLineChartService {
     "width": "container",
     "background": "transparent",
     "data": {
-      "values": [
-      ]
+      "values": []
     },
     "transform": [
-      {"filter": {"field": "x", "timeUnit": "yearmonthdate", "range": []}},
+      {
+        "filter": {
+          "field": "x",
+          "timeUnit": "yearmonthdate",
+          "range": []
+        }
+      },
       {"filter": {"field": "y", "range": []}}
     ],
     "description": "A simple bar chart with rounded corners at the end of the bar.",
-    "encoding": {"x": {
-          "field": "x",
-          "type": "temporal",
-          "scale": {"domain": ["2020-01-15T00:00:00", "2021-03-26T00:00:00"]},
-          "title": "",
-          "timeUnit": "yearmonthdate"
-        }},
+    "encoding": {
+      "x": {
+        "field": "x",
+        "type": "temporal",
+        "scale": {"domain": []},
+        "title": "",
+        "timeUnit": "yearmonthdate"
+      }
+    },
     "layer": [
       {
         "encoding": {
           "color": {
             "field": "region",
             "type": "nominal",
-            "legend": {"orient": "bottom", "title": null, "symbolType": "stroke", "columns": 10}
+            "legend": {
+              "orient": "bottom",
+              "title": null,
+              "symbolType": "stroke",
+              "columns": 10
+            }
           },
-          "y": {"field": "y", "type": "quantitative", "title": "", "scale": {}, "axis": {
-            "minExtent": 50,
-            "maxExtent": 50
-          }},
+          "y": {
+            "field": "y",
+            "type": "quantitative",
+            "title": "",
+            "scale": {},
+            "axis": {
+              "minExtent": 50,
+              "maxExtent": 50,
+              "orient": "left"
+            }
+          },
           "opacity": {
             "condition": {"param": "labelhover", "value": 1},
             "value": 0.1
@@ -126,6 +146,21 @@ export class VegaMultiLineChartService {
             }
           }
         ]
+      },
+      {
+        "mark": "point",
+        "encoding": {
+          "y": {
+            "field": "y",
+            "type": "quantitative",
+            "title": "Bed occupancy (%)",
+            "scale": {"type": "linear", "domain": [0, 100]},
+            "axis": {"minExtent": 50, "maxExtent": 50, "orient": "right"}
+          },
+          "opacity": {
+            "value": 0
+          }
+        }
       }
     ]
   };
@@ -134,7 +169,8 @@ export class VegaMultiLineChartService {
     private caseRepo: CaseDevelopmentRepository,
     private caseUtil: CaseUtilService,
     private exportCsv: ExportCsvService,
-    private ebrakeRepo: EbrakeRepository
+    private ebrakeRepo: EbrakeRepository,
+    private translate: TranslationService
   ) {}
 
   dataComparisonCompileToDataAndOptions(o: CovidChartOptions, dataRequest: Region): Observable<MultiLineChartDataAndOptions> {
@@ -244,11 +280,32 @@ export class VegaMultiLineChartService {
       }
     }
 
-    return from(dataRequests)
+    let itTemplate: {request: Region; options: CovidChartOptions; suffix: string}[] = [];
+
+    // default behavior
+    if (o.type !== CovidNumberCaseType.bedOccupancy) {
+      itTemplate = dataRequests.map(d => ({request: d, options: o, suffix: null}));
+    } else {
+      itTemplate = [];
+      dataRequests.forEach(d => {
+        const o1: CovidChartOptions = JSON.parse(JSON.stringify(o));
+        const o2: CovidChartOptions = JSON.parse(JSON.stringify(o));
+        // const o3: CovidChartOptions = JSON.parse(JSON.stringify(o));
+        o1.type = CovidNumberCaseType.bedsOccupied;
+        o2.type = CovidNumberCaseType.bedsTotal;
+        // o3.type = CovidNumberCaseType.bedsFree;
+
+        itTemplate.push({request: d, options: o1, suffix: this.translate.translate('Betten') + ' ' + this.translate.translate('belegt')});
+        itTemplate.push({request: d, options: o2, suffix: this.translate.translate('Betten') + ' ' + this.translate.translate('gesamt')});
+        // itTemplate.push({request: d, options: o3, suffix: 'beds_free'});
+      });
+    }
+
+    return from(itTemplate)
     .pipe(
-      mergeMap(d => this.caseRepo.getCasesDevelopmentForAggLevelSingle(o.dataSource, d.aggLevel, d.id, false, true)
+      mergeMap(d => this.caseRepo.getCasesDevelopmentForAggLevelSingle(o.dataSource, d.request.aggLevel, d.request.id, false, true)
         .pipe(
-          mergeMap(d1 => this.caseUtil.extractXYByOptions(d1.properties, o)),
+          mergeMap(d1 => this.caseUtil.extractXYByOptions(d1.properties, d.options, d.suffix)),
           map(xyArr => {
             const data = xyArr
             .filter((_, i) => i > 7)
@@ -327,8 +384,10 @@ export class VegaMultiLineChartService {
     spec.encoding.x.title = chartOptions.xAxisTitle || '';
 
     spec.layer[0].encoding.y.title = chartOptions.yAxisTitle || '';
+    spec.layer[2].encoding.y.title = chartOptions.yAxisTitle || '';
 
     spec.layer[0].encoding.y.scale.type = chartOptions.scaleType || 'linear';
+    spec.layer[2].encoding.y.scale.type = chartOptions.scaleType || 'linear';
 
     spec.encoding.x.timeUnit = chartOptions.timeAgg || 'yearmonthdate';
 
@@ -337,6 +396,7 @@ export class VegaMultiLineChartService {
 
     if (chartOptions.yDomain) {
       spec.layer[0].encoding.y.scale.domain = chartOptions.yDomain;
+      spec.layer[2].encoding.y.scale.domain = chartOptions.yDomain;
       spec.transform[1].filter.range = chartOptions.yDomain;
     }
 

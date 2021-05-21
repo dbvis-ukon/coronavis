@@ -27,8 +27,15 @@ export enum CovidNumberCaseType {
 
     patientsVentilated = 'patientsVentilated',
 
-    bedOccupancyPercent = 'bedOccupancyPercent'
+    bedOccupancyPercent = 'bedOccupancyPercent',
 
+    bedOccupancy = 'bedOccupancy',
+
+    bedsTotal = 'bedsTotal',
+
+    bedsFree = 'bedsFree',
+
+    bedsOccupied = 'bedsOccupied'
   }
 
 export enum CovidNumberCaseNormalization {

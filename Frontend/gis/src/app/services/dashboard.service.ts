@@ -12,6 +12,7 @@ import { Dashboard } from '../repositories/types/in/dashboard';
 import { Region } from '../repositories/types/in/region';
 import { Item, MarkdownItem, MultiLineChartItem, PixelChartItem, TableOverviewItem } from './chart.service';
 import { ConfigService } from './config.service';
+import { TranslationService } from './translation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,8 @@ export class DashboardService implements Resolve<Dashboard> {
   constructor(
     private regionRepo: RegionRepository,
     private configService: ConfigService,
-    private dashboardRepo: DashboardRepository
+    private dashboardRepo: DashboardRepository,
+    private translation: TranslationService
   ) {}
 
 
@@ -120,12 +122,7 @@ export class DashboardService implements Resolve<Dashboard> {
 
         dashboard.items.push({
           type:'markdown',
-          text: `# Auto-generated dashboard
-
-This is an automatically generated dashboard based on ${name}. Feel free to modify anything here.
-If you save this dashboard, it will receive a new ID and URL.
-
-> With :heart: from [@dbvis](https://twitter.com/dbvis)`
+          text: this.translation.translate('#autodashboard').replace('%name%', name)
         } as MarkdownItem);
 
         dashboard.items.push({
@@ -145,6 +142,16 @@ If you save this dashboard, it will receive a new ID and URL.
           dataRequest: dataRequests,
           config: this.configService.parseConfig(
             merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.patients}),
+            'multiline',
+            true
+          ).config
+        });
+
+        dashboard.items.push({
+          type: 'multiline',
+          dataRequest: [rRegion],
+          config: this.configService.parseConfig(
+            merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.bedOccupancy}),
             'multiline',
             true
           ).config
@@ -208,11 +215,7 @@ If you save this dashboard, it will receive a new ID and URL.
 
     dashboard.items.push({
       type:'markdown',
-      text: `# We could not find this dashboard
-
-We could not find the dashboard you are looking for. You can search again or start here and add some more charts.
-
-> With :heart: from [@dbvis](https://twitter.com/dbvis)`
+      text: this.translation.translate('#dashboard404')
     } as MarkdownItem);
 
     const r: Region[] = [{id: 'de', name: 'Deutschland', aggLevel: AggregationLevel.country, description: ''}];
