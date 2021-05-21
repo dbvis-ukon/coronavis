@@ -259,17 +259,20 @@ export class CaseUtilService {
     return (!opt._binHovered && !opt._binSelection) || this.isHoverBin(opt, nmbr) || this.isSelectedBin(opt, nmbr);
   }
 
-  public groupAgeStatus(input: SurvStatAgeGroups, ageGroups?: [number, number][]): any {
+  public groupAgeStatus(input: SurvStatAgeGroups, ageGroups?: [number, number][]): {[key: string]: number} | SurvStatAgeGroups {
     if (!ageGroups) {
       return input;
     }
 
-    const out = {};
+    const out: {[key: string]: number} = {};
 
+    let sumTotal = 0;
     for (const a of ageGroups) {
       let sum = 0;
       for (let i = a[0]; i <= a[1]; i++) {
-        sum += input[this.getAgeGroupKey(i)] || 0;
+        const val = input[this.getAgeGroupKey(i)] || 0;
+        sum += val;
+        sumTotal += val;
       }
       let newkey = this.getAgeGroupKey(a[0]) + '-' + this.getAgeGroupKey(a[1]).substring(1);
       if (a[0] === a[1]) {
@@ -278,6 +281,7 @@ export class CaseUtilService {
 
       out[newkey] = sum;
     }
+    out.Total = sumTotal;
 
     return out;
   }
