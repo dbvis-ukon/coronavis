@@ -203,7 +203,7 @@ If you save this dashboard, it will receive a new ID and URL.
       'de-DE': `# Automatisch generiertes Dashboard
 
 Dies ist ein automatisch generiertes Dashboard für %name%. Du kannst dieses Dashboard modifizieren und speichern.
-Wenn du das Dashboard speicherst erhält es eine neue ID und URL.
+Wenn du das Dashboard speicherst, erhält es eine neue ID und URL.
 
 > Mit :heart: von [@dbvis](https://twitter.com/dbvis)`
     }
