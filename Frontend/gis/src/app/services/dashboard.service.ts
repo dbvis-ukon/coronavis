@@ -12,6 +12,7 @@ import { Dashboard } from '../repositories/types/in/dashboard';
 import { Region } from '../repositories/types/in/region';
 import { Item, MarkdownItem, MultiLineChartItem, PixelChartItem, TableOverviewItem } from './chart.service';
 import { ConfigService } from './config.service';
+import { TranslationService } from './translation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,8 @@ export class DashboardService implements Resolve<Dashboard> {
   constructor(
     private regionRepo: RegionRepository,
     private configService: ConfigService,
-    private dashboardRepo: DashboardRepository
+    private dashboardRepo: DashboardRepository,
+    private translation: TranslationService
   ) {}
 
 
@@ -120,12 +122,7 @@ export class DashboardService implements Resolve<Dashboard> {
 
         dashboard.items.push({
           type:'markdown',
-          text: `# Auto-generated dashboard
-
-This is an automatically generated dashboard based on ${name}. Feel free to modify anything here.
-If you save this dashboard, it will receive a new ID and URL.
-
-> With :heart: from [@dbvis](https://twitter.com/dbvis)`
+          text: this.translation.translate('#autodashboard').replace('%name%', name)
         } as MarkdownItem);
 
         dashboard.items.push({
