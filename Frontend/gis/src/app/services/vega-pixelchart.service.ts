@@ -171,7 +171,7 @@ export class VegaPixelchartService {
               "field": "incidence",
               "title": "7-Tages-Inzidenz",
               "type": "quantitative",
-              "format": ",.2f"
+              "format": ",.0f"
             },
             {
               "field": "absval",
@@ -224,7 +224,7 @@ export class VegaPixelchartService {
               "field": "incidence",
               "title": "7-Tages-Inzidenz",
               "type": "quantitative",
-              "format": ",.2f"
+              "format": ",.0f"
             },
             {
               "field": "absval",
@@ -365,11 +365,11 @@ export class VegaPixelchartService {
             }
             let diff = (agNow[k] - agOld[k]);
 
+            const incidence = Math.round(diff / agPop[k] * 100000);
+
             if (o.normalization === CovidNumberCaseNormalization.per100k) {
               diff = diff / agPop[k] * 100000;
             }
-
-            const incidence = diff / agPop[k] * 10000;
 
             if (diff > maxDiff) {
               maxDiff = diff;
