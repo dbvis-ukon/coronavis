@@ -1,4 +1,5 @@
 import datetime
+import re
 from decimal import Decimal
 
 from flask import Blueprint, request
@@ -30,6 +31,11 @@ def get_rki_emergency_brake():
         description: A date in ISO format
         required: false
         example: 2021-05-20
+      - name: ids
+        type: string[]
+        description: ids (AGS) of the regions, comma separated
+        required: false
+        example: 08335,08336
     responses:
       200:
         description:
@@ -73,10 +79,18 @@ def get_rki_emergency_brake():
                     type: boolean
                     example: true
                     description: true iff the county is currently in the ebrake(100), false otherwise; may be null
+                  ebrake150:
+                    type: boolean
+                    example: true
+                    description: true iff the county is currently in the ebrake(150), false otherwise; may be null
                   ebrake165:
                     type: boolean
                     example: true
                     description: true iff the county is currently in the ebrake(165), false otherwise; may be null
+                  holiday:
+                    type: string
+                    example: Erster Mai
+                    description: The name of the holiday (German) or null iff no holiday
 
     """
     from_time = '2020-01-01'
@@ -88,53 +102,35 @@ def get_rki_emergency_brake():
     if request.args.get('to'):
         to_time = request.args.get('to')
 
-    sql_stmt = '''
-        WITH unified AS (
-        SELECT ags, timestamp
-        FROM rki_incidence_excel_berlin
-        WHERE timestamp >= :fromtime
-        AND timestamp <= :totime
+    sql_ids = ''
+    if request.args.get('ids'):
+        ids = request.args.get('ids').split(',')
+        sanitized_sql = []
+        for id in ids:
+            id = re.sub('[^0-9]+', '', id)
+            sanitized_sql.append(f"(id LIKE '{id}%')")
 
-        UNION DISTINCT
-        SELECT id, timestamp
-        FROM counties_ebrake
-        WHERE timestamp >= :fromtime
-        AND timestamp <= :totime
-     ),
-
-     rki_data AS (
-        SELECT *
-        FROM rki_incidence_excel_berlin r1
-        WHERE r1.datenbestand = (SELECT MAX(datenbestand) FROM rki_incidence_excel_berlin)
-        AND r1.timestamp >= :fromtime
-        AND r1.timestamp <= :totime
-    ),
-
-    ebrake_data AS (
-        SELECT *
-        FROM counties_ebrake e
-        WHERE e.timestamp >= :fromtime
-        AND e.timestamp <= :totime
-    )
+        sql_ids = f"AND ({' OR '.join(sanitized_sql)})"
 
 
+    sql_stmt = f'''
         SELECT
-            r.datenbestand,
-            r.updated_at,
-            coalesce(e.id, r.ags),
-            COALESCE(e.timestamp, r.timestamp),
-            r."7_day_incidence",
-            r."7_day_cases",
+            e.datenbestand,
+            e.updated_at,
+            e.id,
+            e.timestamp,
+            e."7_day_incidence",
+            e."7_day_cases",
             e.ebrake100,
             e.ebrake165,
             (le.bez || ' ' || le.name) as le_name,
             e.ebrake150,
             e.holiday
-        FROM unified AS u
-        JOIN landkreise_extended le ON u.ags = le.ids
-        LEFT OUTER JOIN rki_data AS r ON u.timestamp = r.timestamp AND u.ags = r.ags
-        LEFT OUTER JOIN ebrake_data AS e ON u.timestamp = e.timestamp AND u.ags = e.id
-        ORDER BY le.ids, coalesce(e.timestamp, r.timestamp)
+        FROM ebrake_data e
+        JOIN landkreise_extended le ON e.id = le.ids
+        WHERE e.timestamp >= :fromtime
+        AND e.timestamp <= :totime
+        {sql_ids}
     '''
     res = db.engine.execute(text(sql_stmt), fromtime=from_time, totime=to_time).fetchall()
 

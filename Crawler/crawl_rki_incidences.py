@@ -184,7 +184,7 @@ def process_county_ebrake(county_id) -> None:
             'ebrake100': False,
             'ebrake150': False,
             'ebrake165': False,
-            'holiday': state_holidays.get(d[0])
+            'holiday': state_holidays.get(today)
         })
 
     # forecast
@@ -197,7 +197,7 @@ def process_county_ebrake(county_id) -> None:
             'ebrake100': False,
             'ebrake150': False,
             'ebrake165': False,
-            'holiday': state_holidays.get(d[0])
+            'holiday': state_holidays.get(future_dt)
         })
 
     # contains the idx when ebrake has started for respective threshold
@@ -354,8 +354,12 @@ try:
     for c in county_ids:
         process_county_ebrake(c[0])
 
-    logger.info('Refreshing materialized view.')
+    logger.info('Refreshing materialized view cases_per_county_and_day.')
     cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW cases_per_county_and_day;")
+    conn.commit()
+
+    logger.info('Refreshing materialized view ebrake_data.')
+    cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW ebrake_data;")
     conn.commit()
 
     logger.info('Success')

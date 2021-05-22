@@ -41,6 +41,9 @@
         <mat-button-toggle [disabled]="disabled.has('type.bedOccupancyPercent')"
           i18n="@@chartSettingsTypeBedOccupancyPercent" [value]="eType.bedOccupancyPercent">Bettenauslastung (%)
         </mat-button-toggle>
+        <mat-button-toggle [disabled]="disabled.has('type.bedOccupancy')"
+        i18n="@@chartSettingsTypeBedOccupancy" [value]="eType.bedOccupancy">Bettenauslastung
+      </mat-button-toggle>
       </mat-button-toggle-group>
 
       <p class="hint" i18n="@@chartSettingsTypeHint">Welche Daten möchtest du gerne sehen?</p>

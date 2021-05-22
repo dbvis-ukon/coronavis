@@ -8,7 +8,11 @@
 </h4>
 
 
-<app-vega [spec]="spec"></app-vega>
+<app-vega *ngIf="spec" [spec]="spec"></app-vega>
+
+<div *ngIf="!spec" class="loading">
+    <mat-spinner diameter="40" strokeWidth="2" style="margin: 40px 80px;"></mat-spinner>
+</div>
 
 
 <div class="datasources" *ngIf="_dataAndOptions">

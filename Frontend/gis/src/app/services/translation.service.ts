@@ -179,6 +179,50 @@ export class TranslationService {
     {
       'de-DE': 'Datum',
       'en-US': 'Date'
+    },
+    {
+      'de-DE': 'Betten',
+      'en-US': 'beds'
+    },
+    {
+      'de-DE': 'belegt',
+      'en-US': 'occupied'
+    },
+    {
+      'de-DE': 'gesamt',
+      'en-US': 'total'
+    },
+    {
+      system: '#autodashboard',
+      'en-US': `# Auto-generated dashboard
+
+This is an automatically generated dashboard based on %name%. Feel free to modify anything here.
+If you save this dashboard, it will receive a new ID and URL.
+
+> With :heart: from [@dbvis](https://twitter.com/dbvis)`,
+      'de-DE': `# Automatisch generiertes Dashboard
+
+Dies ist ein automatisch generiertes Dashboard für %name%. Du kannst dieses Dashboard modifizieren und speichern.
+Wenn du das Dashboard speicherst, erhält es eine neue ID und URL.
+
+> Mit :heart: von [@dbvis](https://twitter.com/dbvis)`
+    },
+    {
+      system: '#dashboard404',
+      'en-US': `# We could not find this dashboard
+
+We could not find the dashboard you are looking for. You can search again or start here and add some more charts.
+When you save, the dashboard will receive a new ID and URL.
+You can also have a look at https://coronavis.dbvis.de/overview/dashboards to search for your dashboard.
+
+> With :heart: from [@dbvis](https://twitter.com/dbvis)`,
+      'de-DE': `# Wir konnten dieses Dashboard nicht finden
+
+Wir konnten das Dashboard, dass du suchst, leider nicht finden.
+Du kannst zu diesem Dashboard Charts hinzufügen und speichern um eine neue ID & URL zu generieren, oder du suchst das Dashboard
+erneut unter https://coronavis.dbvis.de/overview/dashboards.
+
+> Mit :heart: von [@dbvis](https://twitter.com/dbvis)`,
     }
   ];
 

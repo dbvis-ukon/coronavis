@@ -120,6 +120,7 @@ export class VegaPixelchartService {
         "type": "ordinal",
         "title": "Altersgruppe",
         "axis": {
+          "orient": "left",
           "minExtent": 50,
           "maxExtent": 50
         }
@@ -134,6 +135,12 @@ export class VegaPixelchartService {
           "tooltip": true
         },
         "encoding": {
+          "y": {
+            "field": "y",
+            "type": "ordinal",
+            "title": "Altersgruppe",
+            "axis": {"minExtent": 50, "maxExtent": 50, "orient": "right"}
+          },
           "color": {
             "field": "val",
             "type": "quantitative",
@@ -164,7 +171,7 @@ export class VegaPixelchartService {
               "field": "incidence",
               "title": "7-Tages-Inzidenz",
               "type": "quantitative",
-              "format": ",.2f"
+              "format": ",.0f"
             },
             {
               "field": "absval",
@@ -217,7 +224,7 @@ export class VegaPixelchartService {
               "field": "incidence",
               "title": "7-Tages-Inzidenz",
               "type": "quantitative",
-              "format": ",.2f"
+              "format": ",.0f"
             },
             {
               "field": "absval",
@@ -358,11 +365,11 @@ export class VegaPixelchartService {
             }
             let diff = (agNow[k] - agOld[k]);
 
+            const incidence = Math.round(diff / agPop[k] * 100000);
+
             if (o.normalization === CovidNumberCaseNormalization.per100k) {
               diff = diff / agPop[k] * 100000;
             }
-
-            const incidence = diff / agPop[k] * 10000;
 
             if (diff > maxDiff) {
               maxDiff = diff;
@@ -431,6 +438,7 @@ export class VegaPixelchartService {
     spec.encoding.x.title = '';
 
     spec.encoding.y.title = chartOptions.yAxisTitle || '';
+    spec.layer[0].encoding.y.title = chartOptions.yAxisTitle || '';
 
     for (const i of [0, 1]) {
       spec.layer[i].encoding.tooltip[0].title = chartOptions.xAxisTitle || '';

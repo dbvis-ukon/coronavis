@@ -33,14 +33,15 @@ export class EbrakeRepository {
   getEbrakeData(
     from?: string,
     to?: string,
+    ids?: string[]
   ): Observable<EbrakeData> {
     return this
       .cachedRepository
       .get<EbrakeData>(`${environment.apiUrl}federal-emergency-brake`,
-      this.prepareParams(from, to));
+      this.prepareParams(from, to, ids));
   }
 
-  private prepareParams(from?: string, to?: string): HttpParams {
+  private prepareParams(from?: string, to?: string, ids?: string[]): HttpParams {
     let params = new HttpParams();
 
     if (from) {
@@ -51,6 +52,10 @@ export class EbrakeRepository {
     if (to) {
       const toDate = getMoment(to);
       params = params.append('to', getStrDate(toDate));
+    }
+
+    if (ids && ids.length > 0) {
+      params = params.append('ids', ids.join(','));
     }
 
     return params;

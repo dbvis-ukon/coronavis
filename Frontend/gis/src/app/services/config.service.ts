@@ -273,7 +273,8 @@ export class ConfigService {
 
     if (ret.config.type === CovidNumberCaseType.patients
       || ret.config.type === CovidNumberCaseType.patientsVentilated
-      || ret.config.type === CovidNumberCaseType.bedOccupancyPercent) {
+      || ret.config.type === CovidNumberCaseType.bedOccupancyPercent
+      || ret.config.type === CovidNumberCaseType.bedOccupancy) {
       ret.config.dataSource = CovidNumberCaseDataSource.divi;
       ret.disabled.add('dataSource');
 
@@ -301,6 +302,7 @@ export class ConfigService {
       ret.disabled.add('type.patients');
       ret.disabled.add('type.patientsVentilated');
       ret.disabled.add('type.bedOccupancyPercent');
+      ret.disabled.add('type.bedOccupancy');
       ret.disabled.add('dataSource.risklayer');
       ret.disabled.add('dataSource.divi');
 
@@ -426,6 +428,17 @@ export class ConfigService {
         copy.scaleType = ScaleType.linear;
         copy.valueExtent.type = 'manual';
         copy.valueExtent.manualExtent = [0, 100];
+
+        return copy;
+      }
+
+      if (cur.type === CovidNumberCaseType.bedOccupancy) {
+        copy.dataSource = CovidNumberCaseDataSource.divi;
+        copy.normalization = CovidNumberCaseNormalization.absolut;
+        copy.timeWindow = CovidNumberCaseTimeWindow.all;
+        copy.timeAgg = TimeGranularity.yearmonthdate;
+        copy.ageGroupBinning = AgeGroupBinning.fiveyears;
+        copy.scaleType = ScaleType.linear;
 
         return copy;
       }

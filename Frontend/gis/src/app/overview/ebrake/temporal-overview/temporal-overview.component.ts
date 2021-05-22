@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
 import { EbrakeData, EbrakeRepository } from 'src/app/repositories/ebrake.repository';
 import { RegionRepository } from 'src/app/repositories/region.repository';
 import { Region } from 'src/app/repositories/types/in/region';
@@ -22,6 +22,8 @@ export class TemporalOverviewComponent implements OnInit {
   showButtons = true;
   showRegions = true;
   showFooter = true;
+  numPastDays = null;
+  numFutureDays = null;
 
   constructor(
     private ebrakeRepo: EbrakeRepository,
@@ -29,7 +31,8 @@ export class TemporalOverviewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private regionRepo: RegionRepository,
     private matDialog: MatDialog,
-    private localStorageService: MyLocalStorageService) { }
+    private localStorageService: MyLocalStorageService,
+    private observer: BreakpointObserver) { }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(d => {
@@ -41,6 +44,8 @@ export class TemporalOverviewComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(p => {
       this.showRegions = p.regions === 'false' ? false : true;
       this.showFooter = p.footer === 'false' ? false : true;
+      this.numPastDays = p.numPastDays ? parseInt(p.numPastDays + '', 10) : null;
+      this.numFutureDays = p.numFutureDays ? parseInt(p.numFutureDays + '', 10) : null;
 
       if (p.ids) {
         const r: string[] = p.ids.split(',');
@@ -90,18 +95,44 @@ export class TemporalOverviewComponent implements OnInit {
   }
 
   updateChart(regions?: Region[]): void {
-    this.ebrakeRepo.getEbrakeData(getStrDate(getMoment('now').subtract(14, 'days')))
-    .pipe(
-      map(d => {
-        const filteredData = d.data.filter(d1 => (!regions || regions.length === 0) || (regions && regions.find(r => d1.id.startsWith(r.id)) !== undefined));
-        return {...d, data: filteredData} as EbrakeData;
-      }),
-    )
+    let numPastDays: number = null;
+    if (this.numPastDays === null && this.observer.isMatched('(max-width: 300px)')) {
+      numPastDays = 5;
+    } else if (this.numPastDays === null && this.observer.isMatched('(max-width: 400px)')) {
+      numPastDays = 7;
+    } else if (this.numPastDays === null && this.observer.isMatched('(max-width: 600px)')) {
+      numPastDays = 10;
+    } else if (this.numPastDays === null) {
+      numPastDays = 14;
+    } else {
+      numPastDays = this.numPastDays;
+    }
+
+    let numFutureDays: number = null;
+    if (this.numFutureDays === null) {
+      numFutureDays = 7;
+    } else {
+      numFutureDays = this.numFutureDays;
+    }
+    const from = getStrDate(getMoment('now').subtract(numPastDays, 'days'));
+    const to = getStrDate(getMoment('now').add(numFutureDays, 'days'));
+    this.ebrakeRepo.getEbrakeData(from, to, regions?.map(d => d.id))
+    // .pipe(
+    //   map(d => {
+    //     const filteredData = d.data.filter(d1 => (!regions || regions.length === 0) || (regions && regions.find(r => d1.id.startsWith(r.id)) !== undefined));
+    //     return {...d, data: filteredData} as EbrakeData;
+    //   }),
+    // )
     .subscribe(d => this.data = d);
   }
 
   openShareDialog(): void {
     this.matDialog.open(EbrakeShareDialogComponent, {data: {regions: JSON.parse(JSON.stringify(this.activeRegions))}});
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    this.updateChart(this.activeRegions);
   }
 
 }

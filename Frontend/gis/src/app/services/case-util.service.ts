@@ -178,7 +178,7 @@ export class CaseUtilService {
       unnormalizedResult / currentTimedStatus.population;
   }
 
-  public extractXYByOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): Observable<{x: string; y: number; y2: number; region: string}[]> {
+  public extractXYByOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions, region_suffix?: string): Observable<{x: string; y: number; y2: number; region: string}[]> {
     return of(data)
     .pipe(
       mergeMap(d1 => d1.developments),
@@ -208,11 +208,15 @@ export class CaseUtilService {
           y2 = y2 / d.population * 100000;
         }
 
+        let region = (data.description ? data.description + ' ' : '') + data.name;
+        if (region_suffix) {
+          region += ' ' + region_suffix;
+        }
         return {
           x,
           y,
           y2,
-          region: (data.description ? data.description + ' ' : '') + data.name
+          region
         };
       }),
       toArray()
@@ -259,17 +263,20 @@ export class CaseUtilService {
     return (!opt._binHovered && !opt._binSelection) || this.isHoverBin(opt, nmbr) || this.isSelectedBin(opt, nmbr);
   }
 
-  public groupAgeStatus(input: SurvStatAgeGroups, ageGroups?: [number, number][]): any {
+  public groupAgeStatus(input: SurvStatAgeGroups, ageGroups?: [number, number][]): {[key: string]: number} | SurvStatAgeGroups {
     if (!ageGroups) {
       return input;
     }
 
-    const out = {};
+    const out: {[key: string]: number} = {};
 
+    let sumTotal = 0;
     for (const a of ageGroups) {
       let sum = 0;
       for (let i = a[0]; i <= a[1]; i++) {
-        sum += input[this.getAgeGroupKey(i)] || 0;
+        const val = input[this.getAgeGroupKey(i)] || 0;
+        sum += val;
+        sumTotal += val;
       }
       let newkey = this.getAgeGroupKey(a[0]) + '-' + this.getAgeGroupKey(a[1]).substring(1);
       if (a[0] === a[1]) {
@@ -278,6 +285,7 @@ export class CaseUtilService {
 
       out[newkey] = sum;
     }
+    out.Total = sumTotal;
 
     return out;
   }
@@ -324,6 +332,21 @@ export class CaseUtilService {
       case CovidNumberCaseType.bedOccupancyPercent:
         typeAccessor = d => (d?.beds_occupied / d?.beds_total) * 100;
         break;
+
+      case CovidNumberCaseType.bedsFree:
+        typeAccessor = d => d?.beds_free;
+        break;
+
+      case CovidNumberCaseType.bedsOccupied:
+        typeAccessor = d => d?.beds_occupied;
+        break;
+
+      case CovidNumberCaseType.bedsTotal:
+        typeAccessor = d => d?.beds_total;
+        break;
+
+      default:
+        throw new Error(`unknown type ${type}`);
     }
 
     return typeAccessor;
@@ -351,6 +374,10 @@ export class CaseUtilService {
 
       case CovidNumberCaseType.bedOccupancyPercent:
         str.push(this.translation.translate('Bettenauslastung (%)'));
+        break;
+
+      case CovidNumberCaseType.bedOccupancy:
+        str.push(this.translation.translate('Bettenauslastung'));
         break;
     }
 
