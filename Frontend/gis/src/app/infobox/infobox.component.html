@@ -286,7 +286,7 @@
               (change)="mo.covidNumberCaseOptions.timeWindow = $event.value; emitMapOptions()"
             >
               <mat-button-toggle i18n="@@infoboxTimeAll" [value]="eCovidNumberCaseTimeWindow.all"
-                                 [disabled]="mo.covidNumberCaseOptions.change == eCovidNumberCaseChange.relative">Alle
+                                 [disabled]="mo.covidNumberCaseOptions.change === eCovidNumberCaseChange.relative">Alle
                 Daten
               </mat-button-toggle>
               <mat-button-toggle i18n="@@infoboxTime24" onerror=" "
@@ -357,7 +357,7 @@
                 Normalisierung
               </mat-button-toggle>
               <mat-button-toggle i18n="@@infoboxNornYes" [value]="eCovidNumberCaseNormalization.per100k"
-                                 [disabled]="mo.covidNumberCaseOptions.change == eCovidNumberCaseChange.relative">Je
+                                 [disabled]="mo.covidNumberCaseOptions.change === eCovidNumberCaseChange.relative">Je
                 100.000 Einwohner
               </mat-button-toggle>
             </mat-button-toggle-group>

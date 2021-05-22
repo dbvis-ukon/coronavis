@@ -140,14 +140,12 @@
             "de": {
               "outputPath": "src/i18n/",
               "outFile": "messages.de.xlf",
-              "i18nFormat": "xlf2",
-              "i18nLocale": "de"
+              "format": "xlf2"
             },
             "en": {
               "outputPath": "src/i18n/",
               "outFile": "messages.en.xlf",
-              "i18nFormat": "xlf2",
-              "i18nLocale": "de"
+              "format": "xlf2"
             }
           }
         },

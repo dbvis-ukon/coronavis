@@ -298,7 +298,7 @@ set up sentry release:
 
 frontend-install-dependencies:
   stage: prepare
-  image: node:15
+  image: node:14
   script:
     - cd ./Frontend/gis
     - yarn config set registry https://nexus.dbvis.de/repository/npmjs/
@@ -338,7 +338,7 @@ syntax-check-crawler-scripts:
 
 frontend-lint:
   stage: test
-  image: node:15
+  image: node:14
   script:
     - cd ./Frontend/gis
     - yarn lint
@@ -405,7 +405,7 @@ frontend-code-quality:
 
 .build-frontend: &build-frontend
   stage: build:frontend
-  image: node:15
+  image: node:14
   script:
     - source var.env
     - cd ./Frontend
