@@ -36,7 +36,7 @@
                 <td>{{ row.title }}</td>
 
                 <ng-container *ngFor="let col of row.cols">
-                    <td *ngIf="!(tooltip && (col.timeWindow === eTimeWindow.twentyFourhours || col.timeWindow== eTimeWindow.seventyTwoHours))">
+                    <td *ngIf="!(tooltip && (col.timeWindow === eTimeWindow.twentyFourhours || col.timeWindow === eTimeWindow.seventyTwoHours))">
                         <div [ngClass]="{'active': col.isActive}">
                             {{ col.value }}
                         </div>

@@ -205,7 +205,7 @@
         <mat-button-toggle i18n="@@chartSettingsTemporalExtentManual" [value]="'manual'">Manuell</mat-button-toggle>
       </mat-button-toggle-group>
 
-      <div *ngIf="data.chartItem.config.temporalExtent.type == 'manual'">
+      <div *ngIf="data.chartItem.config.temporalExtent.type === 'manual'">
 
         <div>
           <mat-form-field style="width: 100%;">
@@ -258,7 +258,7 @@
         <mat-button-toggle i18n="@@chartSettingsTemporalExtentManual" [value]="'manual'">Manuell</mat-button-toggle>
       </mat-button-toggle-group>
   
-      <div *ngIf="data.chartItem.config.valueExtent.type == 'manual'">
+      <div *ngIf="data.chartItem.config.valueExtent.type === 'manual'">
   
         <div>
           <mat-form-field class="example-full-width">
