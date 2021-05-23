@@ -1504,9 +1504,9 @@
     moment ">=2.14.0"
 
 "@types/d3-array@*":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-2.12.0.tgz#b6a7a36ead1b2db27df0d7d2b47c676ef9a588fc"
-  integrity sha512-UuX3Ikw90Ey90qMdQh+CagAgl1y5p/WWvkpTenCNa4A4n6dFPbVR2RDQMbmJUD6yy+3JnxJguVJeC/dvFT7igw==
+  version "2.12.1"
+  resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-2.12.1.tgz#bee6857b812f1ecfd5e6832fd67f617b667dd024"
+  integrity sha512-kVHqB3kfLpU0WYEmx5Y2hi3LRhUGIEIQXFdGazNNWQhyhzHx8xrgLtpAOKYzpfS3a+GjFMdKsI82QUH4q5dACQ==
 
 "@types/d3-axis@*":
   version "2.1.0"
@@ -1813,9 +1813,9 @@
     "@types/leaflet" "*"
 
 "@types/marked@^2.0.0":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-2.0.2.tgz#33a15106383f6e42cd6bdd38093e6b19904e29e1"
-  integrity sha512-P4zanhCQKs4tiWPPBGpB7lHflgFCP9DFGNI5YtpW9MALKoy2qs9rHNWJ+z55cegD9uCfnmsKuaosq9FNvbxrOw==
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-2.0.3.tgz#c8ea93684e530cc3b667d3e7226556dd0844ad1f"
+  integrity sha512-lbhSN1rht/tQ+dSWxawCzGgTfxe9DB31iLgiT1ZVT5lshpam/nyOA1m3tKHRoNPctB2ukSL22JZI5Fr+WI/zYg==
 
 "@types/minimatch@*":
   version "3.0.4"
@@ -6787,9 +6787,9 @@ ng2-nouislider@^1.8.2:
   integrity sha512-Vl8tHCcJ/ioJLAs2t6FBC35sZq1P/O5ZdqdFwYxOCOMVbILGWNg+2gWZIjFstvv9pqb/mVvVUYe6qGG/mA/RBQ==
 
 ngx-markdown@^12.0.0:
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-markdown/-/ngx-markdown-12.0.0.tgz#dba1b5b02e3dbe74ddca95b936488e064cb14d4e"
-  integrity sha512-U8EeHNGVxdjn9QDsPZy6h05I39QRiBV7a5n95NDBP1nACRos31sPzVa3+NMLs0Z6HzFpnHuIR4759uveRn7KBg==
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/ngx-markdown/-/ngx-markdown-12.0.1.tgz#94345e99176533c17396f93e97ff5dc172d8ebcc"
+  integrity sha512-vMp9SyqmVQZCX374MiCV4sRR1SIv5m3xR2HZ39b3+6/BGjAb46mb4wRXKdIxYUoPba7NYZ8GAt5moUCyVZcCyA==
   dependencies:
     "@types/marked" "^2.0.0"
     emoji-toolkit "^6.5.0"
