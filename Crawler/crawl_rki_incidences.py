@@ -138,11 +138,11 @@ def parse_and_insert_sheet(df, sheet_name, col_name):
 
 
 def parse_and_insert(fp: str) -> bool:
-    df = pd.read_excel(fp, sheet_name=['LK_7-Tage-Inzidenz', 'LK_7-Tage-Fallzahlen'], header=None,
+    df = pd.read_excel(fp, sheet_name=['LK_7-Tage-Inzidenz (fixiert)', 'LK_7-Tage-Fallzahlen (fixiert)'], header=None,
                        na_filter=False, engine="openpyxl")
 
-    parse_and_insert_sheet(df=df, sheet_name='LK_7-Tage-Inzidenz', col_name='7_day_incidence')
-    parse_and_insert_sheet(df=df, sheet_name='LK_7-Tage-Fallzahlen', col_name='7_day_cases')
+    parse_and_insert_sheet(df=df, sheet_name='LK_7-Tage-Inzidenz (fixiert)', col_name='7_day_incidence')
+    parse_and_insert_sheet(df=df, sheet_name='LK_7-Tage-Fallzahlen (fixiert)', col_name='7_day_cases')
 
     return True
 
