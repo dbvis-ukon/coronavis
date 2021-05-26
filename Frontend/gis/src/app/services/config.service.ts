@@ -156,6 +156,7 @@ export class ConfigService {
         timeWindow: CovidNumberCaseTimeWindow.sevenDays,
         timeAgg: TimeGranularity.yearmonthdate,
         ageGroupBinning: null,
+        ageGroupBinningCustom: null,
         scaleType: ScaleType.linear,
         date: 'now',
         showTrendGlyphs: true,
@@ -181,6 +182,7 @@ export class ConfigService {
         timeWindow: CovidNumberCaseTimeWindow.sevenDays,
         timeAgg: TimeGranularity.yearweek,
         ageGroupBinning: AgeGroupBinning.fiveyears,
+        ageGroupBinningCustom: null,
         scaleType: ScaleType.linear,
         date: 'now',
         showTrendGlyphs: true,
@@ -206,6 +208,7 @@ export class ConfigService {
           timeWindow: CovidNumberCaseTimeWindow.sevenDays,
           timeAgg: TimeGranularity.yearweek,
           ageGroupBinning: null,
+          ageGroupBinningCustom: null,
           scaleType: ScaleType.linear,
           date: 'now',
           showTrendGlyphs: true,
@@ -231,6 +234,7 @@ export class ConfigService {
           timeWindow: CovidNumberCaseTimeWindow.all,
           timeAgg: TimeGranularity.yearmonthdate,
           ageGroupBinning: null,
+          ageGroupBinningCustom: null,
           scaleType: ScaleType.linear,
           date: 'now',
           showTrendGlyphs: true,
@@ -457,5 +461,63 @@ export class ConfigService {
     }
 
     return null;
+  }
+
+  /**
+   * Parses an age group string into age groups.
+   *
+   * @param str a string defining age groups
+   * @returns age groups
+   * @throws Parse error
+   */
+  parseCustomAgeGroups(str: string): [number,number][] {
+    if (!str) {
+      return [];
+    }
+    const lines = str.split('\n');
+    const re = /^(\d{1,2})-(\d{1,2})$/;
+
+    let linenmbr = 1;
+    const errors = [];
+    const parsed: [number, number][] = [];
+    if (!str) {
+      return parsed;
+    }
+    for(const l of lines) {
+      if (l.trim() === '' || l.trim().startsWith('#')) {
+        continue;
+      }
+      const arr = l.match(re);
+
+      if (!arr) {
+        errors.push(`Error in line ${linenmbr}: Does not match format x-y (e.g., 0-3)`);
+        continue;
+      }
+
+      const x = parseInt(arr[1], 10);
+      const y = parseInt(arr[2], 10);
+
+      if (x > y) {
+        errors.push(`Error in line ${linenmbr}: x must not be greater than y (e.g., 3-2)`);
+      }
+
+      if (x < 0 || x > 80) {
+        errors.push(`Error in line ${linenmbr}: (x-y) x must be between 0 and 80`);
+      }
+
+      if (y < 0 || y > 80) {
+        errors.push(`Error in line ${linenmbr}: (x-y) y must be between 0 and 80`);
+      }
+
+      parsed.push([x, y]);
+
+      linenmbr++;
+    }
+
+    if (errors.length > 0) {
+      throw new Error(`Parse error:\n${errors.join('\n')}`);
+    }
+
+    return parsed;
   }
 }

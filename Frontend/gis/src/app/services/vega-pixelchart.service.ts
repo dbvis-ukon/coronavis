@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CovidChartOptions, TimeGranularity } from '../cases-dod/covid-chart-options';
+import { AgeGroupBinning, CovidChartOptions, TimeGranularity } from '../cases-dod/covid-chart-options';
 import { CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { AggregatedRKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
@@ -11,6 +11,7 @@ import { Region } from '../repositories/types/in/region';
 import { getMoment, getStrDate } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 import { PixelChartItem } from './chart.service';
+import { ConfigService } from './config.service';
 import { ExportCsvService } from './export-csv.service';
 
 export interface PixelChartDataPoint {
@@ -253,7 +254,8 @@ export class VegaPixelchartService {
   constructor(
     private caseUtils: CaseUtilService,
     private caseRepo: CaseDevelopmentRepository,
-    private exportCsv: ExportCsvService
+    private exportCsv: ExportCsvService,
+    private configService: ConfigService
   ) {}
 
 
@@ -281,7 +283,12 @@ export class VegaPixelchartService {
         idxDiff = 7;
     }
 
-    const ageGroups: [number, number][] = this._ageGroups[o.ageGroupBinning];
+    let ageGroups: [number, number][];
+    if (o.ageGroupBinning !== AgeGroupBinning.manual) {
+      ageGroups = this._ageGroups[o.ageGroupBinning];
+    } else {
+      ageGroups = this.configService.parseCustomAgeGroups(o.ageGroupBinningCustom);
+    }
 
     const data: PixelChartDataPoint[] = [];
     let maxDiff = 0;

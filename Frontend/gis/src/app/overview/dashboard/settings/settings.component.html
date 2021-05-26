@@ -177,7 +177,21 @@
           [disabled]="disabled.has('ageGroupBinning.fiveyears')">5 Jahre</mat-button-toggle>
         <mat-button-toggle i18n="@@chartSettingsAgeGroupBinningRKI" [value]="eAgeGroupBinning.rki">RKI Schema
         </mat-button-toggle>
+        <mat-button-toggle i18n="@@chartSettingsAgeGroupBinningManual" [value]="eAgeGroupBinning.manual">Manuell
+        </mat-button-toggle>
       </mat-button-toggle-group>
+
+      <div *ngIf="data.chartItem.config.ageGroupBinning === eAgeGroupBinning.manual">
+        <mat-form-field style="width: 100%;">
+          <mat-label i18n="@@chartSettingsAgeGroupBinningCustom">Benutzerdefinierte Altersgruppen</mat-label>
+          <textarea matInput placeholder="0-3&#10;4-6&#10;...&#10;80-80" rows="6" [ngModel]="data.chartItem.config.ageGroupBinningCustom" (ngModelChange)="data.chartItem.config.ageGroupBinningCustom = $event; validateCustomAgeGroup()"></textarea>
+          <pre class="error small" *ngIf="ageGroupsCustomError !== null">{{ ageGroupsCustomError }}</pre>
+        </mat-form-field>
+
+        <div style="margin-bottom: 5px;">
+          <button mat-raised-button [disabled]="ageGroupsCustomError" (click)="compileChart()" i18n="@@chartSettingsUpdatePreview">Vorschau aktualisieren</button>
+        </div>
+      </div>
     </div>
 
     <div class="toggleGroup" *ngIf="!hidden.has('scaleType')">
