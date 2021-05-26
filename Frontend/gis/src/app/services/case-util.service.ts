@@ -270,13 +270,12 @@ export class CaseUtilService {
 
     const out: {[key: string]: number} = {};
 
-    let sumTotal = 0;
+
     for (const a of ageGroups) {
       let sum = 0;
       for (let i = a[0]; i <= a[1]; i++) {
         const val = input[this.getAgeGroupKey(i)] || 0;
         sum += val;
-        sumTotal += val;
       }
       let newkey = this.getAgeGroupKey(a[0]) + '-' + this.getAgeGroupKey(a[1]).substring(1);
       if (a[0] === a[1]) {
@@ -284,6 +283,11 @@ export class CaseUtilService {
       }
 
       out[newkey] = sum;
+    }
+
+    let sumTotal = 0;
+    for (const k of Object.keys(input)) {
+      sumTotal += input[k] || 0;
     }
     out.Total = sumTotal;
 

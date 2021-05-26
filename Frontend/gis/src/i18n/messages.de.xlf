@@ -128,7 +128,7 @@
     </unit><unit id="csaeDodScaling">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:82</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:184</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:82</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:198</note></notes>
       <segment state="final">
         <source>Skalierung</source>
       <target>Skalierung</target></segment>
@@ -2260,38 +2260,52 @@
       <segment state="final">
         <source>RKI Schema</source>
       <target>RKI Schema</target></segment>
+    </unit><unit id="chartSettingsAgeGroupBinningManual">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:180,181</note>
+      </notes>
+      <segment state="final">
+        <source>Manuell </source>
+      <target>Manuell </target></segment>
+    </unit><unit id="chartSettingsAgeGroupBinningCustom">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:186</note>
+      </notes>
+      <segment state="final">
+        <source>Benutzerdefinierte Altersgruppen</source>
+      <target>Benutzerdefinierte Altersgruppen</target></segment>
     </unit><unit id="chartSettingsScalingLinear">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:188</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:202</note></notes>
       <segment state="final">
         <source>Linear</source>
       <target>Linear</target></segment>
     </unit><unit id="chartSettingsScalingSqrt">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:189</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:203</note></notes>
       <segment state="final">
         <source>Quadratwurzel</source>
       <target>Quadratwurzel</target></segment>
     </unit><unit id="chartSettingsScalingLog">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:190</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:204</note></notes>
       <segment state="final">
         <source>Logarithmisch</source>
       <target>Logarithmisch</target></segment>
     </unit><unit id="chartSettingsScalingHint">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:194</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:208</note></notes>
       <segment state="final">
         <source>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</source>
       <target>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</target></segment>
     </unit><unit id="chartSettingsTemporalExtentTitle">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:199</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:213</note></notes>
       <segment state="final">
         <source>Zeitlicher Umfang</source>
       <target>Zeitlicher Umfang</target></segment>
@@ -2299,7 +2313,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:203</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:256</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:217</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:270</note></notes>
       <segment state="final">
         <source>Global</source>
       <target>Global</target></segment>
@@ -2307,7 +2321,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:204</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:257</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:218</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:271</note></notes>
       <segment state="final">
         <source>Lokal</source>
       <target>Lokal</target></segment>
@@ -2315,28 +2329,28 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:205</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:258</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:219</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:272</note></notes>
       <segment state="final">
         <source>Manuell</source>
       <target>Manuell</target></segment>
     </unit><unit id="chartSettingsLastVisibleDays">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:212</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:226</note></notes>
       <segment state="final">
         <source>Anzahl der letzen sichtbaren Tage</source>
       <target>Anzahl der letzen sichtbaren Tage</target></segment>
     </unit><unit id="chartSettingsDays">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:214</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:228</note></notes>
       <segment state="final">
         <source>Tage</source>
       <target>Tage</target></segment>
     </unit><unit id="chartSettingsOr">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:220</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:234</note></notes>
       <segment state="final">
         <source> ODER </source>
       <target> ODER </target></segment>
@@ -2344,7 +2358,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:225</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:265</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:239</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:279</note></notes>
       <segment state="final">
         <source>Von</source>
       <target>Von</target></segment>
@@ -2352,7 +2366,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:233</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:270</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:247</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:284</note></notes>
       <segment state="final">
         <source>Bis</source>
       <target>Bis</target></segment>
@@ -2360,7 +2374,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:242</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:276</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:192</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:256</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:290</note></notes>
       <segment state="final">
         <source>Vorschau aktualisieren</source>
       <target>Vorschau aktualisieren</target></segment>
@@ -2368,21 +2382,21 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:247</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:281</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:261</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:295</note></notes>
       <segment state="final">
         <source>Global macht Charts besser vergleichbar. Lokal hebt Eigenschaften in den Daten eines Charts besser hervor.</source>
       <target>Global macht Charts besser vergleichbar. Lokal hebt Eigenschaften in den Daten eines Charts besser hervor.</target></segment>
     </unit><unit id="chartSettingsValueExtentTitle">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:252</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:266</note></notes>
       <segment state="final">
         <source>Werte Umfang</source>
       <target>Werte Umfang</target></segment>
     </unit><unit id="chartSettingsHasError">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:290</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:304</note></notes>
       <segment state="final">
         <source>Es gibt einen Fehler. Bitte prüfe deine Konfiguration.</source>
       <target>Es gibt einen Fehler. Bitte prüfe deine Konfiguration.</target></segment>
@@ -2390,7 +2404,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:120</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:294</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:120</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:308</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
       <segment state="final">
         <source>Speichern</source>
       <target>Speichern</target></segment>
@@ -2398,7 +2412,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:121</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:295</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:121</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:309</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
       <segment state="final">
         <source>Abbrechen</source>
       <target>Abbrechen</target></segment>

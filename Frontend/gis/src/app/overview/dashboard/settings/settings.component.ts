@@ -39,6 +39,8 @@ export class SettingsComponent implements OnInit {
 
   hasAutoConfig = false;
 
+  ageGroupsCustomError: string = null;
+
   constructor(
     public dialogRef: MatDialogRef<SettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {chartItem: MultiLineChartItem | PixelChartItem | TableOverviewItem | StackedAreaIcuItem; arrIdx: number},
@@ -83,7 +85,7 @@ export class SettingsComponent implements OnInit {
   }
 
   hasErrorState(): boolean {
-    return this.data.chartItem.dataRequest.length === 0 || this.data.chartItem.dataRequest.length > 20;
+    return this.data.chartItem.dataRequest.length === 0 || this.data.chartItem.dataRequest.length > 20 || this.ageGroupsCustomError !== null;
   }
 
   loadAutoConfig(): void {
@@ -91,6 +93,15 @@ export class SettingsComponent implements OnInit {
     if (auto !== null) {
       this.data.chartItem.config = auto;
       this.compileChart();
+    }
+  }
+
+  validateCustomAgeGroup(): void {
+    try {
+      this.configService.parseCustomAgeGroups(this.data.chartItem.config.ageGroupBinningCustom);
+      this.ageGroupsCustomError = null;
+    } catch (e) {
+      this.ageGroupsCustomError = e.message;
     }
   }
 }
