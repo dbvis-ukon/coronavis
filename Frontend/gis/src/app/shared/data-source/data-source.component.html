@@ -1,5 +1,6 @@
-<h5 *ngIf="source === 'rki'" class="source" i18n="@@legendDatasourceRki">Datenquelle: <a href="https://rki.de">Robert
-    Koch Institut</a></h5>
+<h5 *ngIf="source === 'rki'" class="source" i18n="@@legendDatasourceRki">Datenquelle: 
+  <a href="https://rki.de">Robert Koch Institut</a>&nbsp;<a href="http://www.govdata.de/dl-de/by-2-0">(dl-de/by-2-0)</a>&nbsp;<a href="https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer">Datensatz</a>
+</h5>
 
 <h5 class="source" *ngIf="source === 'risklayer'" i18n="@@legendDatasourceRisklayer">Datenquelle:
   <a href="http://risklayer.com/">Risklayer GmbH</a> and
@@ -22,7 +23,7 @@
   </div>
 </div>
 
-<h5 *ngIf="source === 'zensus'" class="source" i18n="@@caseDodDataSourceZensus">Datenquelle der Populationsdaten: <a href="https://www.zensus2011.de/DE/Home/home_node.html">Zensus 2011</a></h5>
+<h5 *ngIf="source === 'zensus'" class="source" i18n="@@caseDodDataSourceZensus">Populationsdaten: <a href="https://www-genesis.destatis.de/genesis//online?operation=table&code=12411-0017&bypass=true&levelindex=1&levelid=1622017205004#abreadcrumb">Fortschreibung des Bevölkerungsstandes</a> (basierend auf <a href="https://www.zensus2011.de/DE/Home/home_node.html">Zensus 2011</a>), Stand 31.12.2019</h5>
 
 <h5 *ngIf="source === 'survstat'" class="source" i18n="@@caseDodDataSourceSurvstat">Robert Koch Institut: SurvStat@RKI 2.0, <a href="https://survstat.rki.de">https://survstat.rki.de</a>, Abfragedatum: {{ now | date:'shortDate' }}</h5>
 

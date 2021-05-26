@@ -272,21 +272,21 @@
     </unit><unit id="caseDodDataSourceZensus">
       <notes>
         
-      <note category="location">src/app/shared/data-source/data-source.component.html:25</note></notes>
+      <note category="location">src/app/shared/data-source/data-source.component.html:26</note></notes>
       <segment state="final">
-        <source>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.zensus2011.de/DE/Home/home_node.html&quot;>" dispEnd="&lt;/a>">Zensus 2011</pc></source>
-      <target>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.zensus2011.de/DE/Home/home_node.html&quot;>" dispEnd="&lt;/a>">Zensus 2011</pc></target></segment>
+        <source>Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www-genesis.destatis.de/genesis//online?operation=table&amp;code=12411-0017&amp;bypass=true&amp;levelindex=1&amp;levelid=1622017205004#abreadcrumb&quot;>" dispEnd="&lt;/a>">Fortschreibung des Bevölkerungsstandes</pc> (basierend auf <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.zensus2011.de/DE/Home/home_node.html&quot;>" dispEnd="&lt;/a>">Zensus 2011</pc>), Stand 31.12.2019</source>
+      <target>Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www-genesis.destatis.de/genesis//online?operation=table&amp;code=12411-0017&amp;bypass=true&amp;levelindex=1&amp;levelid=1622017205004#abreadcrumb&quot;>" dispEnd="&lt;/a>">Fortschreibung des Bevölkerungsstandes</pc> (basierend auf <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.zensus2011.de/DE/Home/home_node.html&quot;>" dispEnd="&lt;/a>">Zensus 2011</pc>), Stand 31.12.2019</target></segment>
     </unit><unit id="caseDodDataSourceSurvstat">
       <notes>
-        <note category="location">src/app/shared/data-source/data-source.component.html:27</note>
-      </notes>
+        
+      <note category="location">src/app/shared/data-source/data-source.component.html:28</note></notes>
       <segment state="final">
         <source>Robert Koch Institut: SurvStat@RKI 2.0, <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://survstat.rki.de&quot;>" dispEnd="&lt;/a>">https://survstat.rki.de</pc>, Abfragedatum: <ph id="1" equiv="INTERPOLATION" disp="{{ now | date:'shortDate' }}"/></source>
       <target>Robert Koch Institut: SurvStat@RKI 2.0, <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://survstat.rki.de&quot;>" dispEnd="&lt;/a>">https://survstat.rki.de</pc>, Abfragedatum: <ph id="1" equiv="INTERPOLATION" disp="{{ now | date:'shortDate' }}"/></target></segment>
     </unit><unit id="dataSourceRKIIncidences">
       <notes>
-        <note category="location">src/app/shared/data-source/data-source.component.html:29</note>
-      </notes>
+        
+      <note category="location">src/app/shared/data-source/data-source.component.html:30</note></notes>
       <segment state="final">
         <source>Offizielle <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.rki.de/inzidenzen&quot;>" dispEnd="&lt;/a>">RKI Inzidenzwerte</pc> zum <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.bundesgesundheitsministerium.de/service/gesetze-und-verordnungen/guv-19-lp/4-bevschg-faq.html&quot;>" dispEnd="&lt;/a>">4. Bevölkerungsschutzgesetz</pc></source>
       <target>Offizielle <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.rki.de/inzidenzen&quot;>" dispEnd="&lt;/a>">RKI Inzidenzwerte</pc> zum <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.bundesgesundheitsministerium.de/service/gesetze-und-verordnungen/guv-19-lp/4-bevschg-faq.html&quot;>" dispEnd="&lt;/a>">4. Bevölkerungsschutzgesetz</pc></target></segment>
@@ -1748,7 +1748,7 @@
       <notes>
         
         
-      <note category="location">src/app/shared/data-source/data-source.component.html:15</note><note category="location">src/app/shared/bed-inline-legend/bed-inline-legend.component.html:7</note></notes>
+      <note category="location">src/app/shared/bed-inline-legend/bed-inline-legend.component.html:7</note><note category="location">src/app/shared/data-source/data-source.component.html:16</note></notes>
       <segment state="final">
         <source>Persönliche Verfügbarkeits-Einschätzung der Krankenhäuser (inklusive Personalsituation)</source>
       <target>Persönliche Verfügbarkeits-Einschätzung der Krankenhäuser (inklusive Personalsituation)</target></segment>
@@ -2552,12 +2552,12 @@
         
       <note category="location">src/app/shared/data-source/data-source.component.html:1</note></notes>
       <segment state="final">
-        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://rki.de&quot;>" dispEnd="&lt;/a>">Robert Koch Institut</pc></source>
-      <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://rki.de&quot;>" dispEnd="&lt;/a>">Robert Koch Institut</pc></target></segment>
+        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://rki.de&quot;>" dispEnd="&lt;/a>">Robert Koch Institut</pc> <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;http://www.govdata.de/dl-de/by-2-0&quot;>" dispEnd="&lt;/a>">(dl-de/by-2-0)</pc> <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer&quot;>" dispEnd="&lt;/a>">Datensatz</pc></source>
+      <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://rki.de&quot;>" dispEnd="&lt;/a>">Robert Koch Institut</pc> <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;http://www.govdata.de/dl-de/by-2-0&quot;>" dispEnd="&lt;/a>">(dl-de/by-2-0)</pc> <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer&quot;>" dispEnd="&lt;/a>">Datensatz</pc></target></segment>
     </unit><unit id="legendDatasourceRisklayer">
       <notes>
         
-      <note category="location">src/app/shared/data-source/data-source.component.html:4</note></notes>
+      <note category="location">src/app/shared/data-source/data-source.component.html:5</note></notes>
       <segment state="final">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;http://risklayer.com/&quot;>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK_1" type="other" dispStart="&lt;a href=&quot;https://www.cedim.kit.edu/&quot;
     matTooltip=&quot;Center for Disaster Management and Risk Reduction Technology&quot;>">CEDIM</pc> at <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK_2" type="other" dispStart="&lt;a href=&quot;https://www.kit.edu/&quot; matTooltip=&quot;Karlsruhe Institute of Technology&quot;>">KIT</pc> and the <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK_3" type="other" dispStart="&lt;a href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#&quot;>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc></source>
@@ -2601,7 +2601,7 @@
     </unit><unit id="legendDatasourceDivi">
       <notes>
         
-      <note category="location">src/app/shared/data-source/data-source.component.html:20</note></notes>
+      <note category="location">src/app/shared/data-source/data-source.component.html:21</note></notes>
       <segment state="final">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://intensivregister.de&quot;>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></source>
       <target>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://intensivregister.de&quot;>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></target></segment>
