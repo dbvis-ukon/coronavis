@@ -348,7 +348,7 @@ try:
 
     logger.info('Calculate and inject ebrake data')
     # inject ebrake data
-    cur.execute("SELECT ags FROM rki_incidence_excel GROUP BY ags")
+    cur.execute("SELECT ags FROM rki_incidence_excel_berlin_current GROUP BY ags")
     county_ids = cur.fetchall()
 
     for c in county_ids:
