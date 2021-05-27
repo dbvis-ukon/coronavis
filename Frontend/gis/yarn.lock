@@ -1727,9 +1727,9 @@
     "@types/estree" "*"
 
 "@types/eslint@*":
-  version "7.2.11"
-  resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-7.2.11.tgz#180b58f5bb7d7376e39d22496e2b08901aa52fd2"
-  integrity sha512-WYhv//5K8kQtsSc9F1Kn2vHzhYor6KpwPbARH7hwYe3C3ETD0EVx/3P5qQybUoaBEuUa9f/02JjBiXFWalYUmw==
+  version "7.2.12"
+  resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-7.2.12.tgz#fefaa48a4db2415b621fe315e4baeedde525927e"
+  integrity sha512-HjikV/jX6e0Pg4DcB+rtOBKSrG6w5IaxWpmi3efL/eLxMz5lZTK+W1DKERrX5a+mNzL78axfsDNXu7JHFP4uLg==
   dependencies:
     "@types/estree" "*"
     "@types/json-schema" "*"
@@ -1765,9 +1765,9 @@
     "@types/node" "*"
 
 "@types/jasmine@*", "@types/jasmine@~3.7.0":
-  version "3.7.4"
-  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.7.4.tgz#99a49aa9a5f8dc86fc249ed13ed59552c6ce862d"
-  integrity sha512-L3FKeEwMm8e8hqGvt7cSesVmGtavpRyHV1FNDq+Pm5pS4x5eFmE70ZERXCSBWAiLQqXBcZRUrwV59FZLQl/GxQ==
+  version "3.7.5"
+  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.7.5.tgz#c0b2c3e4cf19f7f2db6ddf27d27552f6de1a264d"
+  integrity sha512-BVi20hbOxJvPGOgK7Hpsr4Hc9O4BUxq4liNl8i/8spbPsBJgRp6KhHDORFaMIdLVGdjiakrDQWRQEaQoUe3LIw==
 
 "@types/jasminewd2@~2.0.3":
   version "2.0.9"
