@@ -383,7 +383,8 @@
             </mat-button-toggle-group>
           </div>
 
-          <div class="sliderContainer">
+          <div class="sliderContainer" *ngIf="isLockDownMode()">
+            <h5>Trend Filter</h5>
             <nouislider 
               *ngIf="noUiSliderConfigTrend && mo.covidNumberCaseOptions.trendRange"
               class="trendslider" 

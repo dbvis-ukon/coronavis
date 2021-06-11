@@ -253,8 +253,6 @@ export class InfoboxComponent implements OnInit {
         }
       }
 
-      console.log(trendMinMax);
-
       this.noUiSliderConfigTrend.range.min = Math.floor(trendMinMax[0]);
       this.noUiSliderConfigTrend.range.max = Math.ceil(trendMinMax[1]);
 
@@ -499,6 +497,10 @@ export class InfoboxComponent implements OnInit {
 
   isEBreakModePossible(): boolean {
     return this.caseUtil.isEBreakModePossible(this.mo.covidNumberCaseOptions);
+  }
+
+  isLockDownMode(): boolean {
+    return this.caseUtil.isLockdownMode(this.mo.covidNumberCaseOptions);
   }
 
   trendSliderChanged(t: any) {
