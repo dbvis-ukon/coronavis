@@ -4,7 +4,6 @@ import { extent, max } from 'd3-array';
 import { scaleLinear, ScaleLinear, scalePow, ScalePower, scaleQuantize, scaleThreshold } from 'd3-scale';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import { CovidNumberCaseChange, CovidNumberCaseOptions } from '../map/options/covid-number-case-options';
-import { StatusWithCache } from '../map/overlays/case-trend-canvas.layer';
 import { RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from './case-util.service';
 
@@ -179,29 +178,11 @@ export class CaseChoroplethColormapService {
   ): string {
 
 
-    if (this.caseUtil.isLockdownMode(options)) {
-      const status = this.caseUtil.getTimedStatusWithOptions(dataPoint.properties, options) as StatusWithCache;
-      if (options.dataSource === 'risklayer' && options.showOnlyAvailableCounties === true) {
-        if (!status.last_updated) {
-          return this.unavailableColor;
-        }
-      }
-
-      if (this.caseUtil.isEBrakeMode(options) && !this.caseUtil.isEBrakeOver(dataPoint, options)) {
-        return this.unavailableColor;
-      }
-
-      if (status?._regression && options.trendRange?.length > 0 && (options.trendRange[0] > status._regression.m || options.trendRange[1] < status._regression.m)) {
-        return this.unavailableColor;
-      }
-    }
-
-
-    const nmbr = this.caseUtil.getCaseNumbers(dataPoint.properties, options);
-    if (!this.caseUtil.isHoveredOrSelectedBin(options, nmbr)) {
+    if (!this.caseUtil.isInFilter(dataPoint, options)) {
       return this.unavailableColor;
     }
 
+    const nmbr = this.getCaseNumbers(dataPoint.properties, options);
     return this.getColorMap(options)(scaleFn(nmbr));
   }
 

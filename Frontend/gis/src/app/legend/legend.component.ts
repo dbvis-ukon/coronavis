@@ -107,20 +107,7 @@ export class LegendComponent implements OnInit, OnDestroy {
     this.numCounties$ = combineLatest([this.mo$, this.choroplethLayer$])
     .pipe(
       // distinctUntilChanged(([a], [b]) => !isEqual(a?.covidNumberCaseOptions, b?.covidNumberCaseOptions)),
-      map(([mo, c]) => ({sel: c.getData().features.filter(d => {
-        const nmbr = this.caseUtil.getCaseNumbers(d.properties, mo.covidNumberCaseOptions);
-
-        if (this.caseUtil.isEBrakeMode(mo.covidNumberCaseOptions)) {
-          return this.caseUtil.isEBrakeOver(d, mo.covidNumberCaseOptions) && this.caseUtil.isHoveredOrSelectedBin(mo.covidNumberCaseOptions, nmbr);
-        }
-
-        if (mo.covidNumberCaseOptions.showOnlyAvailableCounties === true && mo.covidNumberCaseOptions.dataSource === 'risklayer') {
-          const t = this.caseUtil.getTimedStatus(d.properties, getMoment(mo.covidNumberCaseOptions.date));
-          return !!t.last_updated && this.caseUtil.isHoveredOrSelectedBin(mo.covidNumberCaseOptions, nmbr);
-        }
-
-        return this.caseUtil.isHoveredOrSelectedBin(mo.covidNumberCaseOptions, nmbr);
-      }).length,
+      map(([mo, c]) => ({sel: c.getData().features.filter(d => this.caseUtil.isInFilter(d, mo.covidNumberCaseOptions)).length,
       total: c.getData().features.length,
       aggLevel: mo.covidNumberCaseOptions.aggregationLevel} as {sel: number; total: number; aggLevel: AggregationLevel})),
     );

@@ -74,25 +74,7 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
       return null;
     }
     for(const d of this.data.features) {
-      if (this.caseUtil.isLockdownMode(opt)) {
-        const status = this.caseUtil.getTimedStatusWithOptions(d.properties, this.options$.value) as StatusWithCache;
-        if (opt.dataSource === 'risklayer' && opt.showOnlyAvailableCounties === true) {
-          if (!status.last_updated) {
-            continue;
-          }
-        }
-
-        if (this.caseUtil.isEBrakeMode(opt) && !this.caseUtil.isEBrakeOver(d, opt)) {
-          continue;
-        }
-
-        if (status?._regression && opt.trendRange?.length > 0 && (opt.trendRange[0] > status._regression.m || opt.trendRange[1] < status._regression.m)) {
-          continue;
-        }
-      }
-
-      const nmbr = this.caseUtil.getCaseNumbers(d.properties, opt);
-      if (!this.caseUtil.isHoveredOrSelectedBin(opt, nmbr)) {
+      if (!this.caseUtil.isInFilter(d, opt)) {
         continue;
       }
 
