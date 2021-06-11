@@ -53,7 +53,8 @@ export class ConfigService {
       aggregationLevel: AggregationLevel.county,
       showLabels: false,
       showTrendGlyphs: false,
-      showOnlyAvailableCounties: false
+      showOnlyAvailableCounties: false,
+      trendRange: null
     },
 
     showOsmHeliports: false,
@@ -109,7 +110,8 @@ export class ConfigService {
         timeWindow: CovidNumberCaseTimeWindow.sevenDays,
         type: CovidNumberCaseType.cases,
         showLabels: true,
-        showTrendGlyphs: true
+        showTrendGlyphs: true,
+        trendRange: null
       }
     });
   }

@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CronJob } from 'cron';
 import moment from 'moment';
-import { BehaviorSubject, forkJoin, interval, merge, Observable, of } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, forkJoin, interval, merge, Observable, of } from 'rxjs';
 import { distinct, distinctUntilChanged, filter, map, mergeMap, tap, toArray } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
 import { FlyTo } from '../map/events/fly-to';
@@ -12,6 +12,8 @@ import { BedType } from '../map/options/bed-type.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
+import { StatusWithCache } from '../map/overlays/case-trend-canvas.layer';
+import { CaseChoropleth } from '../map/overlays/casechoropleth';
 import { CachedRepository } from '../repositories/cached.repository';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
@@ -93,6 +95,9 @@ export class InfoboxComponent implements OnInit {
   @Output()
   flyTo = new EventEmitter<FlyTo>();
 
+  @Input()
+  choroplethLayer$: Observable<CaseChoropleth>;
+
   aggregateStatisticsLoading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   // ENUM MAPPING
@@ -126,6 +131,16 @@ export class InfoboxComponent implements OnInit {
 
   nextLiveUpdatePercentage: number;
   nextLiveUpdate: string;
+
+  noUiSliderConfigTrend: any = {
+    connect: true,
+    tooltips: true,
+    range: {
+      min: 0,
+      max: 1
+    },
+    step: 0.1
+  };;
 
   constructor(
     public colormapService: QualitativeColormapService,
@@ -205,6 +220,49 @@ export class InfoboxComponent implements OnInit {
 
 
     this.updateSearch();
+
+
+    this.choroplethLayer$
+    .pipe(
+      filter(l => l !== null),
+    )
+    .subscribe(async l => {
+      if (!l) {
+        return;
+      }
+      const trendMinMax: [number, number] = [10000, -10000];
+
+      for(const f of l.featureCollection.features) {
+        const t = this.caseUtil.getTimedStatusWithOptions(f.properties, this._mo.covidNumberCaseOptions) as StatusWithCache;
+        if (t?._regression?.rotation) {
+          const r = t._regression;
+          if (r.m < trendMinMax[0]) {
+            trendMinMax[0] = r.m;
+          }
+          if (r.m > trendMinMax[1]) {
+            trendMinMax[1] = r.m;
+          }
+        } else {
+          const r = await firstValueFrom(this.caseUtil.getTrendForCase7DaysPer100k(f.properties, this._mo.covidNumberCaseOptions));
+          if (r.m < trendMinMax[0]) {
+            trendMinMax[0] = r.m;
+          }
+          if (r.m > trendMinMax[1]) {
+            trendMinMax[1] = r.m;
+          }
+        }
+      }
+
+      console.log(trendMinMax);
+
+      this.noUiSliderConfigTrend.range.min = Math.floor(trendMinMax[0]);
+      this.noUiSliderConfigTrend.range.max = Math.ceil(trendMinMax[1]);
+
+      if (!this._mo.covidNumberCaseOptions.trendRange) {
+        this._mo.covidNumberCaseOptions.trendRange = [this.noUiSliderConfigTrend.range.min, this.noUiSliderConfigTrend.range.max];
+      }
+
+    });
   }
 
   updateSearch() {
@@ -441,6 +499,10 @@ export class InfoboxComponent implements OnInit {
 
   isEBreakModePossible(): boolean {
     return this.caseUtil.isEBreakModePossible(this.mo.covidNumberCaseOptions);
+  }
+
+  trendSliderChanged(t: any) {
+    this.emitMapOptions();
   }
 
   private combinedStatsOperator(): (input$: Observable<string>) => Observable<CombinedStatistics> {

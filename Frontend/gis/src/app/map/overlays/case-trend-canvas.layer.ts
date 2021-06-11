@@ -9,9 +9,11 @@ import { AggregationLevel } from '../options/aggregation-level.enum';
 import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
 import { LabelCanvasLayer, PreparedGlyph } from './label-canvas.layer';
 
-interface StatusWithCache extends RKICaseTimedStatus {
+export interface StatusWithCache extends RKICaseTimedStatus {
   _regression?: {
     rotation: number;
+    m: number;
+    b: number;
   };
 }
 
@@ -73,14 +75,18 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
     }
     for(const d of this.data.features) {
       if (this.caseUtil.isLockdownMode(opt)) {
+        const status = this.caseUtil.getTimedStatusWithOptions(d.properties, this.options$.value) as StatusWithCache;
         if (opt.dataSource === 'risklayer' && opt.showOnlyAvailableCounties === true) {
-          const status = this.caseUtil.getTimedStatusWithOptions(d.properties, this.options$.value) as StatusWithCache;
           if (!status.last_updated) {
             continue;
           }
         }
 
         if (this.caseUtil.isEBrakeMode(opt) && !this.caseUtil.isEBrakeOver(d, opt)) {
+          continue;
+        }
+
+        if (status?._regression && opt.trendRange?.length > 0 && (opt.trendRange[0] > status._regression.m || opt.trendRange[1] < status._regression.m)) {
           continue;
         }
       }
@@ -107,17 +113,19 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
 
     const status = this.caseUtil.getTimedStatusWithOptions(glyphData.properties, this.options$.value) as StatusWithCache;
 
-    let rot$: Observable<number>;
+    let rot$: Observable<{rotation: number; m: number; b: number}>;
     if (status?._regression?.rotation) {
-      rot$ = of(status._regression.rotation);
+      rot$ = of(status._regression);
     } else {
       rot$ = this.caseUtil.getTrendForCase7DaysPer100k(glyphData.properties, this.options$.value)
       .pipe(
-        map(t => this.caseUtil.getRotationForTrend(t.m)),
+        map(t => ({m: t.m, b: t.b, rotation: this.caseUtil.getRotationForTrend(t.m)})),
         tap(r => {
           if (status) {
             status._regression = {
-              rotation: r
+              rotation: r.rotation,
+              m: r.m,
+              b: r.b
             };
           }
         })
@@ -134,7 +142,7 @@ export class CaseTrendCanvasLayer extends LabelCanvasLayer<MultiPolygon, RKICase
     gl.height += this.getGlyphHeight() + 3;
     gl.textMarginTop = this.getGlyphHeight() + 3;
 
-    return {...gl, rotation} as PreparedGlyphWithRotation;
+    return {...gl, rotation: rotation.rotation} as PreparedGlyphWithRotation;
   }
 
   /**
