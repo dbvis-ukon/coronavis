@@ -6,9 +6,9 @@ import { NouiFormatter } from 'ng2-nouislider';
 import { BehaviorSubject, interval, NEVER, Observable } from 'rxjs';
 import { filter, map, reduce, repeatWhen, switchMap, takeUntil } from 'rxjs/operators';
 import { MapOptions } from '../map/options/map-options';
+import { ExtentRepository } from '../repositories/extent.repository';
 import { ConfigService } from '../services/config.service';
 import { getMoment, getStrDate } from '../util/date-util';
-import { ExtentRepository } from '../repositories/extent.repository';
 
 class TimeFormatter implements NouiFormatter {
   constructor(public startDay: Moment, private datePipe: DatePipe) {}
@@ -31,7 +31,7 @@ export class TimesliderComponent implements OnInit {
 
   timeFormatter: TimeFormatter;
 
-  nouiConfig;
+  nouiConfig: any;
 
   numTicks = 10;
 

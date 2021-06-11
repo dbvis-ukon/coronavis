@@ -7,6 +7,7 @@ import { filter, map, mergeMap, toArray } from 'rxjs/operators';
 import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
+import { StatusWithCache } from '../map/overlays/case-trend-canvas.layer';
 import { AggregatedRKICaseDevelopmentProperties, RKICaseDevelopmentProperties, RKICaseTimedStatus, SurvStatAgeGroups } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
 import { linearRegression } from '../util/regression';
@@ -28,6 +29,40 @@ export class CaseUtilService {
     return options.normalization === CovidNumberCaseNormalization.per100k
     && options.timeWindow === CovidNumberCaseTimeWindow.sevenDays
     && options.type === CovidNumberCaseType.cases;
+  }
+
+  /**
+   * Checks data across various options.
+   *
+   * @param dataPoint the feature
+   * @param options case options
+   * @returns true iff DP is in all filters; false otherwise
+   */
+  public isInFilter(dataPoint: Feature<Geometry, RKICaseDevelopmentProperties>, options: CovidNumberCaseOptions): boolean {
+    if (this.isLockdownMode(options)) {
+      const status = this.getTimedStatusWithOptions(dataPoint.properties, options) as StatusWithCache;
+      if (options.dataSource === 'risklayer' && options.showOnlyAvailableCounties === true) {
+        if (!status.last_updated) {
+          return false;
+        }
+      }
+
+      if (this.isEBrakeMode(options) && !this.isEBrakeOver(dataPoint, options)) {
+        return false;
+      }
+
+      if (status?._regression && options.trendRange?.length > 0 && (options.trendRange[0] > status._regression.m || options.trendRange[1] < status._regression.m)) {
+        return false;
+      }
+    }
+
+
+    const nmbr = this.getCaseNumbers(dataPoint.properties, options);
+    if (!this.isHoveredOrSelectedBin(options, nmbr)) {
+      return false;
+    }
+
+    return true;
   }
 
   public findHighestIdxWhereInsertedIsNotNull(data: RKICaseDevelopmentProperties | AggregatedRKICaseDevelopmentProperties): number {

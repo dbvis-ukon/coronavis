@@ -16,6 +16,7 @@
     [mapLocationSettings]="currentMapLocationSettings"
     (mapOptionsChange)="mapOptionsUpdated($event)"
     (flyTo)="flyTo = $event"
+    [choroplethLayer$]="currentCaseChoropleth$"
   ></app-infobox>
 
   <app-overlay-brand class="overlay-brand"></app-overlay-brand>

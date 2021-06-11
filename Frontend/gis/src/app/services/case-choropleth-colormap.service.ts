@@ -178,25 +178,11 @@ export class CaseChoroplethColormapService {
   ): string {
 
 
-    if (this.caseUtil.isLockdownMode(options)) {
-      if (options.dataSource === 'risklayer' && options.showOnlyAvailableCounties === true) {
-        const status = this.caseUtil.getTimedStatusWithOptions(dataPoint.properties, options);
-        if (!status.last_updated) {
-          return this.unavailableColor;
-        }
-      }
-
-      if (this.caseUtil.isEBrakeMode(options) && !this.caseUtil.isEBrakeOver(dataPoint, options)) {
-        return this.unavailableColor;
-      }
-    }
-
-
-    const nmbr = this.caseUtil.getCaseNumbers(dataPoint.properties, options);
-    if (!this.caseUtil.isHoveredOrSelectedBin(options, nmbr)) {
+    if (!this.caseUtil.isInFilter(dataPoint, options)) {
       return this.unavailableColor;
     }
 
+    const nmbr = this.getCaseNumbers(dataPoint.properties, options);
     return this.getColorMap(options)(scaleFn(nmbr));
   }
 
