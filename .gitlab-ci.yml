@@ -574,7 +574,9 @@ test-backend:
     # DEBUG
     - echo $URL_ACCESSOR
     # this will retrieve the content of the actual URL_BACKEND variable
-    - URL=${!URL_ACCESSOR}
+    # works only with bash
+    # - URL=${!URL_ACCESSOR}
+    - URL=$(eval echo \$$URL_ACCESSOR)
     # DEBUG
     - echo ${URL}
     # generates the chart name using the environment name, replace all / with -; result: review-backend-100-fancify-pipeline
