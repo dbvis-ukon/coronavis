@@ -1579,27 +1579,6 @@
               </source>
       <target>7 days
               </target></segment>
-    </unit><unit id="infoboxCaseNum">
-      <notes>
-
-      <note category="location">src/app/infobox/infobox.component.html:306</note></notes>
-      <segment state="initial">
-        <source>Fallzahlen</source>
-      <target>Case Counts</target></segment>
-    </unit><unit id="infoboxCasesAll">
-      <notes>
-
-      <note category="location">src/app/infobox/infobox.component.html:315</note></notes>
-      <segment state="initial">
-        <source>Alle erfassten Fälle </source>
-      <target>All Recorded Cases</target></segment>
-    </unit><unit id="infoboxCasesDiff">
-      <notes>
-
-      <note category="location">src/app/infobox/infobox.component.html:320</note></notes>
-      <segment state="initial">
-        <source>Veränderung im gewählten Zeitraum</source>
-      <target>Changes in the Selected Time Period</target></segment>
     </unit><unit id="infoBoxEBrake">
       <notes>
         <note category="location">src/app/infobox/infobox.component.html:367</note>
@@ -1628,6 +1607,13 @@
       <segment state="initial">
         <source>Über 165 </source>
       <target>Over 165 </target></segment>
+    </unit><unit id="infoBoxTrendFilterHint">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:397</note>
+      </notes>
+      <segment state="initial">
+        <source>Ein positiver Wertebereich filtert die Regionen in denen die Inzidenz steigt.</source>
+      <target>A positive range of values filters the regions in which the incidence increases.</target></segment>
     </unit><unit id="infoboxType">
       <notes>
 
@@ -1674,7 +1660,7 @@
     </unit><unit id="infoboxGeo">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:395</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:409</note></notes>
       <segment state="initial">
         <source>
           Geographische Verortung
@@ -1685,7 +1671,7 @@
     </unit><unit id="infoboxGeoHospital">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:409</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:423</note></notes>
       <segment state="initial">
         <source>Krankenhäuser
         </source>
@@ -1694,7 +1680,7 @@
     </unit><unit id="infoboxGeoHeli">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:417</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:431</note></notes>
       <segment state="initial">
         <source>Hubschrauberlandeplätze
         </source>
@@ -1703,7 +1689,7 @@
     </unit><unit id="infoboxData">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:426</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:440</note></notes>
       <segment state="initial">
         <source>
           Datenquellen
@@ -1714,28 +1700,28 @@
     </unit><unit id="infoboxDIVI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:433</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:38</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:447</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:38</note></notes>
       <segment state="initial">
         <source>DIVI Intensivregister</source>
       <target>DIVI ER-Register</target></segment>
     </unit><unit id="infoboxRKI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:438</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:452</note></notes>
       <segment state="initial">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institute</target></segment>
     </unit><unit id="infoboxRKICases">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:442</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:456</note></notes>
       <segment state="initial">
         <source>• Covid-19 Fallzahlen</source>
       <target>- Cases</target></segment>
     </unit><unit id="infoboxDESTATIS">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:460</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:474</note></notes>
       <segment state="initial">
         <source>Statistisches Bundesamt</source>
       <target>Statistisches Bundesamt</target></segment>
