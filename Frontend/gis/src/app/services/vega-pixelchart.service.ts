@@ -287,10 +287,16 @@ export class VegaPixelchartService {
           let agNow;
           switch (o.type) {
             case CovidNumberCaseType.cases:
-              agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+              if (o.timeAgg === TimeGranularity.yearmonthdate && o.ageGroupBinning === AgeGroupBinning.rki) {
+                agNow = fullData.developments[i].cases_by_agegroup;
+              } else {
+                agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+                o.timeAgg = TimeGranularity.yearweek;
+              }
+
               converted[i] = agNow;
 
-              o.timeAgg = TimeGranularity.yearweek;
+              // o.timeAgg = TimeGranularity.yearweek;
               idxDiff = 7;
 
               break;
@@ -312,8 +318,13 @@ export class VegaPixelchartService {
           let agPop;
           switch (o.type) {
             case CovidNumberCaseType.cases:
-              agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
-              agPop = this.caseUtils.groupAgeStatus(fullData.developments[i].population_survstat_by_agegroup, ageGroups);
+              if (o.timeAgg === TimeGranularity.yearmonthdate && o.ageGroupBinning === AgeGroupBinning.rki) {
+                agNow = fullData.developments[i].cases_by_agegroup;
+                agPop = fullData.developments[i].population_by_agegroup;
+              } else {
+                agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+                agPop = this.caseUtils.groupAgeStatus(fullData.developments[i].population_survstat_by_agegroup, ageGroups);
+              }
               break;
 
             case CovidNumberCaseType.deaths:
