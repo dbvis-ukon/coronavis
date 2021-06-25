@@ -8,7 +8,7 @@ geopy==2.1.0
 geojson==2.5.0
 SQLAlchemy==1.4.18
 GeoAlchemy2==0.9.0
-psycopg2-binary==2.8.6
+psycopg2-binary==2.9.1
 sentry_sdk==1.1.0
 python-dotenv==0.18.0
 zeep==4.0.0
