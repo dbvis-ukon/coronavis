@@ -6,7 +6,7 @@ requests==2.25.1
 shapely==1.7.1
 geopy==2.1.0
 geojson==2.5.0
-SQLAlchemy==1.4.19
+SQLAlchemy==1.4.20
 GeoAlchemy2==0.9.1
 psycopg2-binary==2.9.1
 sentry_sdk==1.1.0
