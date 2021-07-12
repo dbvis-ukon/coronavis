@@ -5519,9 +5519,9 @@ html-escaper@^2.0.0:
   integrity sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==
 
 html2canvas@^1.0.0-rc.7:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/html2canvas/-/html2canvas-1.0.0.tgz#05c1966aeab08c17d9f113921b6b82d4d56740a4"
-  integrity sha512-0d/f2Aj1Brn+EeNWkuRdtnT13qu1NdvxhBMvts3ssme7jgPU7dtuwnm1P6cXvXmnDdUUerH5XdhveWvuLfqkew==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/html2canvas/-/html2canvas-1.1.0.tgz#bd6ea55095a09d17ba1fcc579bbae31fe1dc5b1c"
+  integrity sha512-lsZVUUcgX71b0ZI1+beqyPI/6oyitqLla3ONHqErp+zv10iIHRuADp00qTmWcDPgmNy/qgcoDU+8hkPqP2cDvQ==
   dependencies:
     css-line-break "1.1.1"
 
