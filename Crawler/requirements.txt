@@ -4,7 +4,7 @@ urllib3==1.26.6
 openpyxl==3.0.7
 requests==2.25.1
 shapely==1.7.1
-geopy==2.1.0
+geopy==2.2.0
 geojson==2.5.0
 SQLAlchemy==1.4.20
 GeoAlchemy2==0.9.1
