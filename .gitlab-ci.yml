@@ -274,7 +274,7 @@ export-environment:
 set up sentry release:
   stage: prepare
   image:
-    name: getsentry/sentry-cli:1.64.2
+    name: getsentry/sentry-cli:1.67.2
     entrypoint: [""]
   variables:
     RUN_ALWAYS: "no"
@@ -574,7 +574,9 @@ test-backend:
     # DEBUG
     - echo $URL_ACCESSOR
     # this will retrieve the content of the actual URL_BACKEND variable
-    - URL=${!URL_ACCESSOR}
+    # works only with bash
+    # - URL=${!URL_ACCESSOR}
+    - URL=$(eval echo \$$URL_ACCESSOR)
     # DEBUG
     - echo ${URL}
     # generates the chart name using the environment name, replace all / with -; result: review-backend-100-fancify-pipeline

@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CovidChartOptions, TimeGranularity } from '../cases-dod/covid-chart-options';
+import { AgeGroupBinning, CovidChartOptions, TimeGranularity } from '../cases-dod/covid-chart-options';
 import { CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { AggregatedRKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
@@ -11,9 +11,11 @@ import { Region } from '../repositories/types/in/region';
 import { getMoment, getStrDate } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 import { PixelChartItem } from './chart.service';
+import { ConfigService } from './config.service';
 import { ExportCsvService } from './export-csv.service';
 
 export interface PixelChartDataPoint {
+  yearisoweek: string;
   x: string;
   y: string;
   /**
@@ -105,35 +107,23 @@ export class VegaPixelchartService {
     ],
     "encoding": {
       "x": {
-        "field": "x",
-        "timeUnit": "yearweek",
-        "type": "temporal",
-        "title": "Woche",
-        "axis": {
-          "labelAngle": 45
-        },
-        "bandPosition": 0.5,
-        "scale": {}
+        "field": "yearisoweek",
+        "type": "ordinal",
+        "title": "",
+        "axis": {"labelAngle": 45, "grid": false},
+        "bandPosition": 0.5
       },
       "y": {
         "field": "y",
         "type": "ordinal",
         "title": "Altersgruppe",
-        "axis": {
-          "orient": "left",
-          "minExtent": 50,
-          "maxExtent": 50
-        }
+        "axis": {"orient": "left", "minExtent": 50, "maxExtent": 50}
       }
     },
-    "layer": [{
-        "transform": [{
-          "filter": "day(datum.x) >= 0"
-        }],
-        "mark": {
-          "type": "rect",
-          "tooltip": true
-        },
+    "layer": [
+      {
+        "transform": [{"filter": "day(datum.x) >= 0"}],
+        "mark": {"type": "rect", "tooltip": true},
         "encoding": {
           "y": {
             "field": "y",
@@ -147,29 +137,20 @@ export class VegaPixelchartService {
             "legend": {
               "title": null,
               "orient": "bottom",
-              "gradientLength": {
-                "signal": "width * 0.35"
-              }
+              "gradientLength": {"signal": "width * 0.35"}
             },
             "scale": {
               "type": "linear",
-              "domain": [0, 579.7865331400711],
+              "domain": [0, 451.83815978640376],
               "scheme": "inferno"
             }
           },
-          "tooltip": [{
-              "field": "x",
-              "type": "temporal",
-              "title": "Woche"
-            },
-            {
-              "field": "y",
-              "type": "ordinal",
-              "title": "Altersgruppe"
-            },
+          "tooltip": [
+            {"field": "x", "type": "temporal", "title": "Woche"},
+            {"field": "y", "type": "ordinal", "title": "Altersgruppe"},
             {
               "field": "incidence",
-              "title": "7-Tages-Inzidenz",
+              "title": "7-Tage-Inzidenz",
               "type": "quantitative",
               "format": ",.0f"
             },
@@ -189,40 +170,31 @@ export class VegaPixelchartService {
         }
       },
       {
-        "transform": [{
-          "filter": "day(datum.x) == 6 || (dayofyear(peek(data('data')).x) == dayofyear(datum.x) && year(peek(data('data')).x) == year(datum.x))"
-        }],
+        "transform": [
+          {
+            "filter": "day(datum.x) == 0 || (dayofyear(peek(data('data')).x) == dayofyear(datum.x) && year(peek(data('data')).x) == year(datum.x))"
+          }
+        ],
         "mark": {
           "type": "text",
           "fontWeight": "lighter",
           "fontSize": {"expr": "datum.val < 1000 ? 9 : 8"}
         },
         "encoding": {
-          "text": {
-            "field": "val",
-            "type": "quantitative",
-            "format": ".0f"
-          },
+          "text": {"field": "val", "type": "quantitative", "format": ".0f"},
           "color": {
             "condition": [
-              {"value": "black", "test": "datum.val > 792"},
+              {"value": "black", "test": "datum.val > 271"},
               {"value": "grey", "test": "datum.val == 0"}
             ],
             "value": "lightgrey"
           },
-          "tooltip": [{
-              "field": "x",
-              "type": "temporal",
-              "title": "Woche"
-            },
-            {
-              "field": "y",
-              "type": "ordinal",
-              "title": "Altersgruppe"
-            },
+          "tooltip": [
+            {"field": "x", "type": "temporal", "title": "Woche"},
+            {"field": "y", "type": "ordinal", "title": "Altersgruppe"},
             {
               "field": "incidence",
-              "title": "7-Tages-Inzidenz",
+              "title": "7-Tage-Inzidenz",
               "type": "quantitative",
               "format": ",.0f"
             },
@@ -242,18 +214,14 @@ export class VegaPixelchartService {
         }
       }
     ],
-    "config": {
-      "axis": {
-        "grid": true,
-        "tickBand": "extent"
-      }
-    }
+    "config": {"axis": {"grid": false, "tickBand": "extent"}}
   };
 
   constructor(
     private caseUtils: CaseUtilService,
     private caseRepo: CaseDevelopmentRepository,
-    private exportCsv: ExportCsvService
+    private exportCsv: ExportCsvService,
+    private configService: ConfigService
   ) {}
 
 
@@ -281,7 +249,12 @@ export class VegaPixelchartService {
         idxDiff = 7;
     }
 
-    const ageGroups: [number, number][] = this._ageGroups[o.ageGroupBinning];
+    let ageGroups: [number, number][];
+    if (o.ageGroupBinning !== AgeGroupBinning.manual) {
+      ageGroups = this._ageGroups[o.ageGroupBinning];
+    } else {
+      ageGroups = this.configService.parseCustomAgeGroups(o.ageGroupBinningCustom);
+    }
 
     const data: PixelChartDataPoint[] = [];
     let maxDiff = 0;
@@ -314,10 +287,16 @@ export class VegaPixelchartService {
           let agNow;
           switch (o.type) {
             case CovidNumberCaseType.cases:
-              agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+              if (o.timeAgg === TimeGranularity.yearmonthdate && o.ageGroupBinning === AgeGroupBinning.rki) {
+                agNow = fullData.developments[i].cases_by_agegroup;
+              } else {
+                agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+                o.timeAgg = TimeGranularity.yearweek;
+              }
+
               converted[i] = agNow;
 
-              o.timeAgg = TimeGranularity.yearweek;
+              // o.timeAgg = TimeGranularity.yearweek;
               idxDiff = 7;
 
               break;
@@ -339,8 +318,13 @@ export class VegaPixelchartService {
           let agPop;
           switch (o.type) {
             case CovidNumberCaseType.cases:
-              agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
-              agPop = this.caseUtils.groupAgeStatus(fullData.developments[i].population_survstat_by_agegroup, ageGroups);
+              if (o.timeAgg === TimeGranularity.yearmonthdate && o.ageGroupBinning === AgeGroupBinning.rki) {
+                agNow = fullData.developments[i].cases_by_agegroup;
+                agPop = fullData.developments[i].population_by_agegroup;
+              } else {
+                agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+                agPop = this.caseUtils.groupAgeStatus(fullData.developments[i].population_survstat_by_agegroup, ageGroups);
+              }
               break;
 
             case CovidNumberCaseType.deaths:
@@ -375,7 +359,10 @@ export class VegaPixelchartService {
               maxDiff = diff;
             }
 
+            const ts = getMoment(fullData.developments[i].timestamp);
+
             data.push({
+              yearisoweek: ts.format('GGGG [W]WW'),
               x: fullData.developments[i].timestamp,
               y: k,
               val: diff,
@@ -450,7 +437,14 @@ export class VegaPixelchartService {
 
     spec.layer[0].encoding.color.scale.type = chartOptions.scaleType || 'linear';
 
-    spec.encoding.x.timeUnit = chartOptions.timeAgg || 'yearmonthdate';
+    if (chartOptions.timeAgg === 'yearweek') {
+      spec.encoding.x.field = 'yearisoweek';
+      spec.encoding.x.type = 'ordinal';
+    } else {
+      spec.encoding.x.timeUnit = chartOptions.timeAgg || 'yearmonthdate';
+      spec.encoding.x.field = 'x';
+      spec.encoding.x.type = 'temporal';
+    }
 
     spec.width = chartOptions.width;
     spec.height = chartOptions.height;
@@ -460,7 +454,6 @@ export class VegaPixelchartService {
     }
 
     if (chartOptions.xDomain) {
-      spec.encoding.x.scale.domain = chartOptions.xDomain;
       spec.transform[0].filter.range = chartOptions.xDomain;
     }
 

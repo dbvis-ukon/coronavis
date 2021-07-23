@@ -302,7 +302,7 @@
 
           <!--<mat-divider></mat-divider>-->
 
-          <div class="toggleGroup">
+          <!-- <div class="toggleGroup">
             <h5 i18n="@@infoboxCaseNum">Fallzahlen</h5>
 
             <mat-button-toggle-group
@@ -320,7 +320,7 @@
                 Veränderung im gewählten Zeitraum
               </mat-button-toggle>
             </mat-button-toggle-group>
-          </div>
+          </div> -->
 
           <!--<mat-divider></mat-divider>-->
 
@@ -381,6 +381,20 @@
                                  >Über 165
               </mat-button-toggle>
             </mat-button-toggle-group>
+          </div>
+
+          <div class="sliderContainer" *ngIf="isLockDownMode()">
+            <h5>Trend Filter</h5>
+            <nouislider 
+              *ngIf="noUiSliderConfigTrend && mo.covidNumberCaseOptions.trendRange"
+              class="trendslider" 
+              [config]="noUiSliderConfigTrend"
+              [(ngModel)]="mo.covidNumberCaseOptions.trendRange"
+              [ngModelOptions]="{standalone: true}"
+              (change)="trendSliderChanged($event)"
+              ></nouislider>
+
+              <p class="hint" i18n="@@infoBoxTrendFilterHint">Ein positiver Wertebereich filtert die Regionen in denen die Inzidenz steigt.</p>
           </div>
         </div>
 

@@ -102,4 +102,6 @@ export interface CovidNumberCaseOptions {
 
     _binSelection?: [number, number][];
 
+    trendRange?: number[];
+
   }

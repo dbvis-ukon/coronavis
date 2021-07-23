@@ -15,7 +15,8 @@ export enum ScaleType {
 export enum AgeGroupBinning {
     all = 'all',
     fiveyears = 'fiveyears',
-    rki = 'rki'
+    rki = 'rki',
+    manual = 'manual'
 }
 
 export interface TemporalExtentOptions {
@@ -36,6 +37,7 @@ export interface CovidChartOptions extends CovidNumberCaseOptions {
     scaleType: ScaleType;
 
     ageGroupBinning: AgeGroupBinning;
+    ageGroupBinningCustom: string | null;
 
     temporalExtent: TemporalExtentOptions;
 

@@ -128,7 +128,7 @@
     </unit><unit id="csaeDodScaling">
       <notes>
         
-      <note category="location">src/app/cases-dod/case-info/case-info.component.html:82</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:184</note></notes>
+      <note category="location">src/app/cases-dod/case-info/case-info.component.html:82</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:198</note></notes>
       <segment state="initial">
         <source>Skalierung</source>
       <target>Scaling</target></segment>
@@ -272,21 +272,21 @@
     </unit><unit id="caseDodDataSourceZensus">
       <notes>
         
-      <note category="location">src/app/shared/data-source/data-source.component.html:25</note></notes>
+      <note category="location">src/app/shared/data-source/data-source.component.html:26</note></notes>
       <segment state="initial">
-        <source>Datenquelle der Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.zensus2011.de/DE/Home/home_node.html&quot;>" dispEnd="&lt;/a>">Zensus 2011</pc></source>
-      <target>Data source of the population data: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">German Census 2011</pc></target></segment>
+        <source>Populationsdaten: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www-genesis.destatis.de/genesis//online?operation=table&amp;code=12411-0017&amp;bypass=true&amp;levelindex=1&amp;levelid=1622017205004#abreadcrumb&quot;>" dispEnd="&lt;/a>">Fortschreibung des Bevölkerungsstandes</pc> (basierend auf <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.zensus2011.de/DE/Home/home_node.html&quot;>" dispEnd="&lt;/a>">Zensus 2011</pc>), Stand 31.12.2019</source>
+      <target>Population data: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www-genesis.destatis.de/genesis//online?operation=table&amp;code=12411-0017&amp;bypass=true&amp;levelindex=1&amp;levelid=1622017205004#abreadcrumb&quot;>" dispEnd="&lt;/a>">Update of the population</pc> (based on <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.zensus2011.de/DE/Home/home_node.html&quot;>" dispEnd="&lt;/a>">German Census 2011</pc>), update 12/31/2019</target></segment>
     </unit><unit id="caseDodDataSourceSurvstat">
       <notes>
-        <note category="location">src/app/shared/data-source/data-source.component.html:27</note>
-      </notes>
+        
+      <note category="location">src/app/shared/data-source/data-source.component.html:28</note></notes>
       <segment state="initial">
         <source>Robert Koch Institut: SurvStat@RKI 2.0, <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://survstat.rki.de&quot;>" dispEnd="&lt;/a>">https://survstat.rki.de</pc>, Abfragedatum: <ph id="1" equiv="INTERPOLATION" disp="{{ now | date:'shortDate' }}"/></source>
       <target>Robert Koch Institute: SurvStat@RKI 2.0, <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://survstat.rki.de&quot;>" dispEnd="&lt;/a>">https://survstat.rki.de</pc>, query date: <ph id="1" equiv="INTERPOLATION" disp="{{ now | date:'shortDate' }}"/></target></segment>
     </unit><unit id="dataSourceRKIIncidences">
       <notes>
-        <note category="location">src/app/shared/data-source/data-source.component.html:29</note>
-      </notes>
+        
+      <note category="location">src/app/shared/data-source/data-source.component.html:30</note></notes>
       <segment state="initial">
         <source>Offizielle <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.rki.de/inzidenzen&quot;>" dispEnd="&lt;/a>">RKI Inzidenzwerte</pc> zum <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.bundesgesundheitsministerium.de/service/gesetze-und-verordnungen/guv-19-lp/4-bevschg-faq.html&quot;>" dispEnd="&lt;/a>">4. Bevölkerungsschutzgesetz</pc></source>
       <target>Official <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.rki.de/inzidenzen&quot;>" dispEnd="&lt;/a>">RKI Incidence values</pc> for the <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.bundesgesundheitsministerium.de/service/gesetze-und-verordnungen/guv-19-lp/4-bevschg-faq.html&quot;>" dispEnd="&lt;/a>">4th Protection against Infections Act</pc></target></segment>
@@ -1579,27 +1579,6 @@
               </source>
       <target>7 days
               </target></segment>
-    </unit><unit id="infoboxCaseNum">
-      <notes>
-
-      <note category="location">src/app/infobox/infobox.component.html:306</note></notes>
-      <segment state="initial">
-        <source>Fallzahlen</source>
-      <target>Case Counts</target></segment>
-    </unit><unit id="infoboxCasesAll">
-      <notes>
-
-      <note category="location">src/app/infobox/infobox.component.html:315</note></notes>
-      <segment state="initial">
-        <source>Alle erfassten Fälle </source>
-      <target>All Recorded Cases</target></segment>
-    </unit><unit id="infoboxCasesDiff">
-      <notes>
-
-      <note category="location">src/app/infobox/infobox.component.html:320</note></notes>
-      <segment state="initial">
-        <source>Veränderung im gewählten Zeitraum</source>
-      <target>Changes in the Selected Time Period</target></segment>
     </unit><unit id="infoBoxEBrake">
       <notes>
         <note category="location">src/app/infobox/infobox.component.html:367</note>
@@ -1628,6 +1607,13 @@
       <segment state="initial">
         <source>Über 165 </source>
       <target>Over 165 </target></segment>
+    </unit><unit id="infoBoxTrendFilterHint">
+      <notes>
+        <note category="location">src/app/infobox/infobox.component.html:397</note>
+      </notes>
+      <segment state="initial">
+        <source>Ein positiver Wertebereich filtert die Regionen in denen die Inzidenz steigt.</source>
+      <target>A positive range of values filters the regions in which the incidence increases.</target></segment>
     </unit><unit id="infoboxType">
       <notes>
 
@@ -1674,7 +1660,7 @@
     </unit><unit id="infoboxGeo">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:395</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:409</note></notes>
       <segment state="initial">
         <source>
           Geographische Verortung
@@ -1685,7 +1671,7 @@
     </unit><unit id="infoboxGeoHospital">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:409</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:423</note></notes>
       <segment state="initial">
         <source>Krankenhäuser
         </source>
@@ -1694,7 +1680,7 @@
     </unit><unit id="infoboxGeoHeli">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:417</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:431</note></notes>
       <segment state="initial">
         <source>Hubschrauberlandeplätze
         </source>
@@ -1703,7 +1689,7 @@
     </unit><unit id="infoboxData">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:426</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:440</note></notes>
       <segment state="initial">
         <source>
           Datenquellen
@@ -1714,28 +1700,28 @@
     </unit><unit id="infoboxDIVI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:433</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:38</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:447</note><note category="location">src/app/overview/overview-bed/overview-bed.component.html:38</note></notes>
       <segment state="initial">
         <source>DIVI Intensivregister</source>
       <target>DIVI ER-Register</target></segment>
     </unit><unit id="infoboxRKI">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:438</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:452</note></notes>
       <segment state="initial">
         <source>Robert Koch Institut</source>
       <target>Robert Koch Institute</target></segment>
     </unit><unit id="infoboxRKICases">
       <notes>
 
-      <note category="location">src/app/infobox/infobox.component.html:442</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:456</note></notes>
       <segment state="initial">
         <source>• Covid-19 Fallzahlen</source>
       <target>- Cases</target></segment>
     </unit><unit id="infoboxDESTATIS">
       <notes>
         
-      <note category="location">src/app/infobox/infobox.component.html:460</note></notes>
+      <note category="location">src/app/infobox/infobox.component.html:474</note></notes>
       <segment state="initial">
         <source>Statistisches Bundesamt</source>
       <target>Statistisches Bundesamt</target></segment>
@@ -1773,7 +1759,7 @@
       <notes>
         
         
-      <note category="location">src/app/shared/data-source/data-source.component.html:15</note><note category="location">src/app/shared/bed-inline-legend/bed-inline-legend.component.html:7</note></notes>
+      <note category="location">src/app/shared/bed-inline-legend/bed-inline-legend.component.html:7</note><note category="location">src/app/shared/data-source/data-source.component.html:16</note></notes>
       <segment state="initial">
         <source>Persönliche Verfügbarkeits-Einschätzung der Krankenhäuser (inklusive Personalsituation)</source>
       <target>Personal availability assessment of hospitals (including personnel situation)</target></segment>
@@ -2283,38 +2269,52 @@
       <segment state="initial">
         <source>RKI Schema</source>
       <target>RKI Scheme</target></segment>
+    </unit><unit id="chartSettingsAgeGroupBinningManual">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:180,181</note>
+      </notes>
+      <segment state="initial">
+        <source>Manuell </source>
+      <target>Manual </target></segment>
+    </unit><unit id="chartSettingsAgeGroupBinningCustom">
+      <notes>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:186</note>
+      </notes>
+      <segment state="initial">
+        <source>Benutzerdefinierte Altersgruppen</source>
+      <target>Custom age groups</target></segment>
     </unit><unit id="chartSettingsScalingLinear">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:188</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:202</note></notes>
       <segment state="initial">
         <source>Linear</source>
       <target>Linear</target></segment>
     </unit><unit id="chartSettingsScalingSqrt">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:189</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:203</note></notes>
       <segment state="initial">
         <source>Quadratwurzel</source>
       <target>Square Root</target></segment>
     </unit><unit id="chartSettingsScalingLog">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:190</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:204</note></notes>
       <segment state="initial">
         <source>Logarithmisch</source>
       <target>Logarithmic</target></segment>
     </unit><unit id="chartSettingsScalingHint">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:194</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:208</note></notes>
       <segment state="initial">
         <source>Eine nicht-lineare Skalierung hebt niedrige Werte besser hervor.</source>
       <target>A non-linear scaling emphasizes low values better.</target></segment>
     </unit><unit id="chartSettingsTemporalExtentTitle">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:199</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:213</note></notes>
       <segment state="initial">
         <source>Zeitlicher Umfang</source>
       <target>Temporal Extent</target></segment>
@@ -2322,7 +2322,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:203</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:256</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:217</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:270</note></notes>
       <segment state="initial">
         <source>Global</source>
       <target>Global</target></segment>
@@ -2330,7 +2330,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:204</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:257</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:218</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:271</note></notes>
       <segment state="initial">
         <source>Lokal</source>
       <target>Local</target></segment>
@@ -2338,28 +2338,28 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:205</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:258</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:219</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:272</note></notes>
       <segment state="initial">
         <source>Manuell</source>
       <target>Manual</target></segment>
     </unit><unit id="chartSettingsLastVisibleDays">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:212</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:226</note></notes>
       <segment state="initial">
         <source>Anzahl der letzen sichtbaren Tage</source>
       <target>Number of past visible days</target></segment>
     </unit><unit id="chartSettingsDays">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:214</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:228</note></notes>
       <segment state="initial">
         <source>Tage</source>
       <target>Days</target></segment>
     </unit><unit id="chartSettingsOr">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:220</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:234</note></notes>
       <segment state="initial">
         <source> ODER </source>
       <target> OR </target></segment>
@@ -2367,7 +2367,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:225</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:265</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:239</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:279</note></notes>
       <segment state="initial">
         <source>Von</source>
       <target>From</target></segment>
@@ -2375,7 +2375,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:233</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:270</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:247</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:284</note></notes>
       <segment state="initial">
         <source>Bis</source>
       <target>Until</target></segment>
@@ -2383,7 +2383,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:242</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:276</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:192</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:256</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:290</note></notes>
       <segment state="initial">
         <source>Vorschau aktualisieren</source>
       <target>Refresh preview</target></segment>
@@ -2391,21 +2391,21 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:247</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:281</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:261</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:295</note></notes>
       <segment state="initial">
         <source>Global macht Charts besser vergleichbar. Lokal hebt Eigenschaften in den Daten eines Charts besser hervor.</source>
       <target>Global makes the comparison of charts easier. Local highlights features of the data of one chart.</target></segment>
     </unit><unit id="chartSettingsValueExtentTitle">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:252</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:266</note></notes>
       <segment state="initial">
         <source>Werte Umfang</source>
       <target>Value Extent</target></segment>
     </unit><unit id="chartSettingsHasError">
       <notes>
         
-      <note category="location">src/app/overview/dashboard/settings/settings.component.html:290</note></notes>
+      <note category="location">src/app/overview/dashboard/settings/settings.component.html:304</note></notes>
       <segment state="initial">
         <source>Es gibt einen Fehler. Bitte prüfe deine Konfiguration.</source>
       <target>There is an error. Please check your configuration.</target></segment>
@@ -2413,7 +2413,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:120</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:294</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:120</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:308</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:12</note></notes>
       <segment state="initial">
         <source>Speichern</source>
       <target>Save</target></segment>
@@ -2421,7 +2421,7 @@
       <notes>
         
         
-      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:121</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:295</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
+      <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:121</note><note category="location">src/app/overview/dashboard/settings/settings.component.html:309</note><note category="location">src/app/overview/dashboard/title-edit-dialog/title-edit-dialog.component.html:13</note></notes>
       <segment state="initial">
         <source>Abbrechen</source>
       <target>Cancel</target></segment>
@@ -2575,12 +2575,12 @@
         
       <note category="location">src/app/shared/data-source/data-source.component.html:1</note></notes>
       <segment state="initial">
-        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://rki.de&quot;>" dispEnd="&lt;/a>">Robert Koch Institut</pc></source>
-      <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institute</pc></target></segment>
+        <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://rki.de&quot;>" dispEnd="&lt;/a>">Robert Koch Institut</pc> <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;http://www.govdata.de/dl-de/by-2-0&quot;>" dispEnd="&lt;/a>">(dl-de/by-2-0)</pc> <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer&quot;>" dispEnd="&lt;/a>">Datensatz</pc></source>
+      <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">Robert Koch Institute</pc> <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;http://www.govdata.de/dl-de/by-2-0&quot;>" dispEnd="&lt;/a>">(dl-de/by-2-0)</pc> <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer&quot;>" dispEnd="&lt;/a>">data record</pc></target></segment>
     </unit><unit id="legendDatasourceRisklayer">
       <notes>
         
-      <note category="location">src/app/shared/data-source/data-source.component.html:4</note></notes>
+      <note category="location">src/app/shared/data-source/data-source.component.html:5</note></notes>
       <segment state="initial">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;http://risklayer.com/&quot;>" dispEnd="&lt;/a>">Risklayer GmbH</pc> and <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK_1" type="other" dispStart="&lt;a href=&quot;https://www.cedim.kit.edu/&quot;
     matTooltip=&quot;Center for Disaster Management and Risk Reduction Technology&quot;>">CEDIM</pc> at <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK_2" type="other" dispStart="&lt;a href=&quot;https://www.kit.edu/&quot; matTooltip=&quot;Karlsruhe Institute of Technology&quot;>">KIT</pc> and the <pc id="3" equivStart="START_LINK_3" equivEnd="CLOSE_LINK_3" type="other" dispStart="&lt;a href=&quot;https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/htmlview#&quot;>">Risklayer-CEDIM-Tagesspiegel SARS-CoV-2 Crowdsourcing Contributors</pc></source>
@@ -2629,7 +2629,7 @@
     </unit><unit id="legendDatasourceDivi">
       <notes>
         
-      <note category="location">src/app/shared/data-source/data-source.component.html:20</note></notes>
+      <note category="location">src/app/shared/data-source/data-source.component.html:21</note></notes>
       <segment state="initial">
         <source>Datenquelle: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://intensivregister.de&quot;>" dispEnd="&lt;/a>">DIVI Intensivregister</pc></source>
       <target>Data Source: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a>" dispEnd="&lt;/a>">DIVI ICU Registry</pc></target></segment>

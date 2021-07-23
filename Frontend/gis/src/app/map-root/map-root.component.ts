@@ -203,7 +203,7 @@ export class MapRootComponent implements OnInit {
       // merge with default as basis is necessary when new options are added in further releases
       this.mapOptions = this.configService.overrideMapOptions(
         storedMapOptions,
-        { hideInfobox: false, showHelpOnStart: true, bedGlyphOptions: {date: 'now'}, bedBackgroundOptions: {date: 'now'}, covidNumberCaseOptions: {date: 'now'} }
+        { hideInfobox: false, showHelpOnStart: true, bedGlyphOptions: {date: 'now'}, bedBackgroundOptions: {date: 'now'}, covidNumberCaseOptions: {date: 'now', trendRange: null} }
       );
       restored = true;
 
