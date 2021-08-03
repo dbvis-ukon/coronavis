@@ -109,11 +109,15 @@ def parse_and_insert_sheet(df, sheet_name, col_name):
 
     entries = []
     for r_idx in range(1, data.shape[0]):
+        lknr = data.iloc[r_idx, 0]
+        if lknr is nan_value or lknr is None:
+            continue
+        lknr_formatted = "{:05d}".format(lknr)
         for c_idx in range(1, data.shape[1]):
             val = None if data.iloc[r_idx, c_idx] == '' or math.isnan(data.iloc[r_idx, c_idx]) else data.iloc[r_idx, c_idx]
             entry = {
                 'datenbestand': datenbestand,
-                'id': "{:05d}".format(data.iloc[r_idx, 0]),
+                'id': lknr_formatted,
                 'ts': data.iloc[0, c_idx],
                 'val': val
             }
