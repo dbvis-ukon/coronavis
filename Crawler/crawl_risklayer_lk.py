@@ -116,6 +116,7 @@ def get_prognosis(df) -> float:
 def get_county_data(df_data):
     df = df_data['Haupt'].iloc[5:406, [2, 0, 0, 10, 3, 47, 48, 49, 15, 39, 23]]
     # AGS, Name, Name (->update-status) Today, -1d, -2d, -3d, -4d, death today, death -1d, verified (0|1)
+    df[2] = df[2].astype(int) # calls cannot be chained
     df[2] = df[2].astype(str)
     df[2] = df[2].apply(lambda x: x.zfill(5))
     db_array = df.to_numpy()
@@ -188,11 +189,7 @@ def get_county_data(df_data):
 
             # pandas 1.3+ changes the parsing behaviour, we now sometimes get floats back, even the value should be int
             # to mitigate, we explicitly cast back to int
-            for name in ['ags', 'cases', 'deaths']:
-                # cast to float first, if string
-                if isinstance(entry[name], str):
-                    entry[name] = float(entry[name])
-                # finally cast to int
+            for name in ['cases', 'deaths']:
                 if isinstance(entry[name], float):
                     entry[name] = int(entry[name])
 
