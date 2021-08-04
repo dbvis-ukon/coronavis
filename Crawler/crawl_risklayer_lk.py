@@ -188,12 +188,13 @@ def get_county_data(df_data):
 
             # pandas 1.3+ changes the parsing behaviour, we now sometimes get floats back, even the value should be int
             # to mitigate, we explicitly cast back to int
-            if isinstance(entry['ags'], float):
-                entry['ags'] = int(entry['ags'])
-            if isinstance(entry['cases'], float):
-                entry['cases'] = int(entry['cases'])
-            if isinstance(entry['deaths'], float):
-                entry['deaths'] = int(entry['deaths'])
+            for name in ['ags', 'cases', 'deaths']:
+                # cast to float first, if string
+                if isinstance(entry[name], str):
+                    entry[name] = float(entry[name])
+                # finally cast to int
+                if isinstance(entry[name], float):
+                    entry[name] = int(entry[name])
 
             if (history['datenbestand'] == current_update) and row[2]:
                 updated_today_count += 1
