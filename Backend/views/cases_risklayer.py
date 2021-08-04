@@ -164,7 +164,7 @@ def download_xlsx():
     """
     rkfolder = current_app.root_path + '/data-risklayer'
     filtered = get_latest_xlsx(rkfolder)
-    return send_file(filename_or_fp= rkfolder + '/' + filtered,
+    return send_file(path_or_file=rkfolder + '/' + filtered,
                      attachment_filename='risklayer-' + filtered,
                      as_attachment=True,
                      cache_timeout=60,
