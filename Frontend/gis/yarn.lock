@@ -3308,9 +3308,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001032, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001248:
-  version "1.0.30001248"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001248.tgz#26ab45e340f155ea5da2920dadb76a533cb8ebce"
-  integrity sha512-NwlQbJkxUFJ8nMErnGtT0QTM2TJ33xgz4KXJSMIrjXIbDVdaYueGyjOrLKRtJC+rTiWfi6j5cnZN1NBiSBJGNw==
+  version "1.0.30001249"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001249.tgz#90a330057f8ff75bfe97a94d047d5e14fabb2ee8"
+  integrity sha512-vcX4U8lwVXPdqzPWi6cAJ3FnQaqXbBqy/GZseKNQzRj37J7qZdGcBtxq/QLFNLLlfsoXLUdHw8Iwenri86Tagw==
 
 canonical-path@1.0.0:
   version "1.0.0"
@@ -5824,9 +5824,9 @@ html-escaper@^2.0.0:
   integrity sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==
 
 html2canvas@^1.0.0-rc.7:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/html2canvas/-/html2canvas-1.2.0.tgz#7abbe96000e70e75f3441a0acafe83faae33f059"
-  integrity sha512-YbLsyDzgLPQ4U4uftUui9FaUrUZMrkV4pTlnDctZhbIT6IHNaPxKeJ7MUuNJlIKljV1+6o8fFsyyU6sofUNcAg==
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/html2canvas/-/html2canvas-1.2.1.tgz#43fd7026bae0850a91c878de239ba49d9bddf26a"
+  integrity sha512-XoP12gER5pvxBADy4KKTMinZ69PP/+EZbILEk+WDCJFPIkhbREwMy2nhuMBFWPUDGWCw1DCrhDlbADJ5m8dC5g==
   dependencies:
     css-line-break "2.0.1"
 
