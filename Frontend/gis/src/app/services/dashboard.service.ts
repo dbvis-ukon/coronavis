@@ -149,6 +149,16 @@ export class DashboardService implements Resolve<Dashboard> {
 
         dashboard.items.push({
           type: 'multiline',
+          dataRequest: dataRequests,
+          config: this.configService.parseConfig(
+            merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.deaths}),
+            'multiline',
+            true
+          ).config
+        });
+
+        dashboard.items.push({
+          type: 'multiline',
           dataRequest: [rRegion],
           config: this.configService.parseConfig(
             merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.bedOccupancy}),
@@ -182,6 +192,16 @@ export class DashboardService implements Resolve<Dashboard> {
           dataRequest: [rRegion],
           config: this.configService.parseConfig(
             merge(this.configService.getDefaultChartConfig('pixel'), {type: CovidNumberCaseType.cases, dataSource: CovidNumberCaseDataSource.survstat, ageGroupBinning: AgeGroupBinning.fiveyears}),
+            'pixel',
+            true
+          ).config
+        });
+
+        dashboard.items.push({
+          type: 'pixel',
+          dataRequest: [rRegion],
+          config: this.configService.parseConfig(
+            merge(this.configService.getDefaultChartConfig('pixel'), {type: CovidNumberCaseType.deaths, dataSource: CovidNumberCaseDataSource.rki, ageGroupBinning: AgeGroupBinning.rki}),
             'pixel',
             true
           ).config
