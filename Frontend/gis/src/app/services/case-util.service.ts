@@ -404,11 +404,11 @@ export class CaseUtilService {
         break;
 
       case CovidNumberCaseType.patients:
-        str.push(this.translation.translate('Covid-19 Patienten'));
+        str.push(this.translation.translate('Covid-19 Intensivpatient:innen'));
         break;
 
       case CovidNumberCaseType.patientsVentilated:
-        str.push(this.translation.translate('Covid-19 Patienten (beatmet)'));
+        str.push(this.translation.translate('Covid-19 Intensivpatient:innen (invasiv beatmet)'));
         break;
 
       case CovidNumberCaseType.bedOccupancyPercent:

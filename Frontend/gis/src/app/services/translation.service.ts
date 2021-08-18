@@ -121,8 +121,8 @@ export class TranslationService {
       'en-US': 'ECMO'
     },
     {
-      'de-DE': 'Covid-19 Patienten',
-      'en-US': 'Covid-19 patients'
+      'de-DE': 'Covid-19 Intensivpatient:innen',
+      'en-US': 'Covid-19 ICU patients'
     },
     {
       'de-DE': 'Positiv getestete',
@@ -161,8 +161,8 @@ export class TranslationService {
       'en-US': 'Deaths'
     },
     {
-      'de-DE': 'Covid-19 Patienten (beatmet)',
-      'en-US': 'Covid-19 patients (ventilated)'
+      'de-DE': 'Covid-19 Intensivpatient:innen (invasiv beatmet)',
+      'en-US': 'Covid-19 ICU patients (invasive ventilation)'
     },
     {
       'de-DE': 'Bettenauslastung',

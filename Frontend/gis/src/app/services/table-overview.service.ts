@@ -92,12 +92,12 @@ export class TableOverviewService {
           },
           {
             type: CovidNumberCaseType.patients,
-            title: this.translation.translate('Covid-19 Patienten'),
+            title: this.translation.translate('Covid-19 Intensivpatient:innen'),
             cols: []
           },
           {
             type: CovidNumberCaseType.patientsVentilated,
-            title: this.translation.translate('Covid-19 Patienten (beatmet)'),
+            title: this.translation.translate('Covid-19 Intensivpatient:innen (invasiv beatmet)'),
             cols: []
           },
           {
