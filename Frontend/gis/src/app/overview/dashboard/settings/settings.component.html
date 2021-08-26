@@ -60,7 +60,7 @@
     <app-pixel-chart *ngIf="data.chartItem.type === 'pixel'" [dataAndOptions]="data.chartItem._compiled">
     </app-pixel-chart>
 
-    <app-table-overview *ngIf="data.chartItem.type === 'table'" [tableData$]="data.chartItem._compiled">
+    <app-table-overview *ngIf="data.chartItem.type === 'table'" [tableData]="data.chartItem._compiled">
     </app-table-overview>
 
     <app-stacked-area-icu-chart *ngIf="data.chartItem.type === 'stackedareaicu'"

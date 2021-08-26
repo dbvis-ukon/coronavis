@@ -36,7 +36,7 @@ export interface TableOverviewItem {
   type: 'table';
   dataRequest: Region[];
   config: CovidChartOptions;
-  _compiled?: Observable<TableOverviewDataAndOptions>;
+  _compiled?: TableOverviewDataAndOptions;
 }
 
 export interface StackedAreaIcuItem {
@@ -141,9 +141,13 @@ export class ChartService {
     }
 
     if (d.type === 'table') {
-      d._compiled = this.tableOverviewService.compileToDataAndOptions(parsedCfg.config, d.dataRequest);
-
-      return of(d);
+      return this.tableOverviewService.compileToDataAndOptions(parsedCfg.config, d.dataRequest)
+      .pipe(
+        map(d1 => {
+          d._compiled = d1;
+          return d;
+        })
+      );
     }
 
     if (d.type === 'stackedareaicu') {

@@ -1,4 +1,4 @@
-<div *ngIf="tableData$ | async as t; else loadBlock">
+<div *ngIf="tableData as t; else loadBlock">
 
     <h4 class="title" *ngIf="showTitle">
         {{t.data.title}}

@@ -3,7 +3,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { merge } from 'lodash-es';
-import { Observable } from 'rxjs';
 import { Region } from 'src/app/repositories/types/in/region';
 import { ConfigService } from 'src/app/services/config.service';
 import { TableOverviewDataAndOptions, TableOverviewService } from 'src/app/services/table-overview.service';
@@ -63,7 +62,7 @@ export class CaseInfoComponent implements OnInit {
   eScaleType = ScaleType;
 
   pixelChartDataAndOptions: PixelChartDataAndOptions;
-  tableData$: Observable<TableOverviewDataAndOptions>;
+  tableData: TableOverviewDataAndOptions;
 
   constructor(
     private router: Router,
@@ -88,7 +87,8 @@ export class CaseInfoComponent implements OnInit {
       aggLevel: this.chartOptions.aggregationLevel
     };
 
-    this.tableData$ = this.tableOverviewService.compileToDataAndOptions(this.configService.parseConfig(this.chartOptions, 'table', auto).config, [region]);
+    this.tableOverviewService.compileToDataAndOptions(this.configService.parseConfig(this.chartOptions, 'table', auto).config, [region])
+    .subscribe(d => this.tableData = d);
 
     this.vegaPixelchartService.compileToDataAndOptions(this.configService.parseConfig(this.chartOptions, 'pixel', false).config, [region], auto)
     .subscribe(d => this.pixelChartDataAndOptions = d);

@@ -147,6 +147,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  duplicate(chart: Item, arrIdx: number) {
+    const copy: Item = JSON.parse(JSON.stringify(chart));
+    this.dashboard.items.splice(arrIdx+1, 0, copy);
+  }
+
   openEditTitleDialog() {
     const dialogRef = this.dialog.open(TitleEditDialogComponent, {
       width: '80vw',

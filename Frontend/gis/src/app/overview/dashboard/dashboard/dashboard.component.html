@@ -82,6 +82,10 @@
                     <mat-icon>settings</mat-icon>
                 </button>
 
+                <button mat-icon-button aria-label="duplicate" class="icon filter" (click)="duplicate(timelineItem, idx)" matTooltip="Duplicate chart">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+
                 <button *ngIf="timelineItem.type !== 'markdown'" mat-icon-button aria-label="download" class="icon filter" (click)="screenshot(idx)" matTooltip="Screenshot erstellen" i18n-matTooltip="@@takeScreenshot">
                   <mat-icon>photo_camera</mat-icon>
                 </button>
@@ -137,7 +141,7 @@
               </div>
 
               <div *ngIf="timelineItem.type === 'table'" style="display: inline-block;" #dashboardChart>
-                <app-table-overview [tableData$]="timelineItem._compiled"></app-table-overview>
+                <app-table-overview [tableData]="timelineItem._compiled"></app-table-overview>
               </div>
 
               <div *ngIf="timelineItem.type === 'stackedareaicu'" style="width: 100%" #dashboardChart>
