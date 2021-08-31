@@ -167,11 +167,10 @@ def get_connection():
     cur = conn.cursor()
     return conn, cur
 
+conn, cur = get_connection()
 
 # noinspection PyShadowingNames
 def insert_data(data):
-    conn, cur = get_connection()
-
     query_krankenhaus_standorte = f'INSERT INTO divi_krankenhaus_standorte ' \
                                   f'(id, bezeichnung, strasse, hausnummer, plz, ort, bundesland, iknummer, ' \
                                   f'position, intensivmedizinischeplanbetten, ' \
@@ -310,7 +309,16 @@ def insert_data(data):
 #         data = json.load(file_content)
 #         insert_data(data)
 
-# load the newest data into the DB to overwrite the latest data
-insert_data(data)
+try:
+    # load the newest data into the DB to overwrite the latest data
+    insert_data(data)
 
-exit(0)
+    cur.close()
+    conn.close()
+    logger.info('Done. Exiting...')
+except Exception as e:
+    if cur:
+        cur.close()
+    if conn:
+        conn.close()
+    raise e

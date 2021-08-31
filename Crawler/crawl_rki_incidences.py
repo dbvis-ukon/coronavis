@@ -64,6 +64,8 @@ AGS_TO_ISO = {
 
 URL = 'https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Fallzahlen_Kum_Tab.xlsx?__blob=publicationFile'
 
+THRESHOLDS = [100, 150, 165]
+
 logger.info('Crawler for RKI incidences excel sheet')
 
 
@@ -168,96 +170,83 @@ def process_county_ebrake(county_id) -> None:
 
     ret_data = []
     for d in c_data:
-        ret_data.append({
+        e = {
             'id': county_id,
             'ts': d[0],
             'val': round(d[1], 2),
-            'ebrake100': False,
-            'ebrake150': False,
-            'ebrake165': False,
             'holiday': state_holidays.get(d[0])
-        })
+        }
+        for t in THRESHOLDS:
+            e['ebrake'+str(t)] = False
+        ret_data.append(e)
 
     # nowcast
     today = datetime.combine(datetime.today(), datetime.min.time())
     if ret_data[-1]['ts'] < today:
-        ret_data.append({
+        e = {
             'id': county_id,
             'ts': today,
             'val': None,
-            'ebrake100': False,
-            'ebrake150': False,
-            'ebrake165': False,
             'holiday': state_holidays.get(today)
-        })
+        }
+        for t in THRESHOLDS:
+            e['ebrake'+str(t)] = False
+        ret_data.append(e)
 
     # forecast
     for i in range(1, 8):
         future_dt = today + timedelta(days=i)
-        ret_data.append({
+        e = {
             'id': county_id,
             'ts': future_dt,
             'val': None,
-            'ebrake100': False,
-            'ebrake150': False,
-            'ebrake165': False,
             'holiday': state_holidays.get(future_dt)
-        })
+        }
+        for t in THRESHOLDS:
+            e['ebrake'+str(t)] = False
+        ret_data.append(e)
 
     # contains the idx when ebrake has started for respective threshold
-    ebrake_start = {100: None, 150: None, 165: None}
+    ebrake_start = {}
+    for t in THRESHOLDS:
+        ebrake_start[t] = None
+
     for i in range(4, len(ret_data)):
 
         # check for date idx = i if ebrake has started
         # must be over t for 3 days
-        ret_data[i]['ebrake100'] = True
-        ret_data[i]['ebrake150'] = True
-        ret_data[i]['ebrake165'] = True
+        for t in THRESHOLDS:
+            ret_data[i]['ebrake'+str(t)] = True
         skipped = False
         for j in range(i - 4, i - 1):
             if ret_data[j]['val'] is None:
                 skipped = True
                 continue
 
-            if ret_data[j]['val'] < 165:
-                ret_data[i]['ebrake165'] = False
-
-            if ret_data[j]['val'] < 150:
-                ret_data[i]['ebrake150'] = False
-
-            if ret_data[j]['val'] < 100:
-                ret_data[i]['ebrake100'] = False
-                break
+            for t in THRESHOLDS[::-1]:
+                if ret_data[j]['val'] < t:
+                    ret_data[i]['ebrake' + str(t)] = False
+                    if t == THRESHOLDS[0]:
+                        break
 
         if skipped is True:
-            ret_data[i]['ebrake100'] = None
-            ret_data[i]['ebrake150'] = None
-            ret_data[i]['ebrake165'] = None
+            for t in THRESHOLDS:
+                ret_data[i]['ebrake' + str(t)] = None
 
-        if ret_data[i]['ebrake100'] is True and ebrake_start[100] is None:
-            ebrake_start[100] = i
-
-        if ret_data[i]['ebrake150'] is True and ebrake_start[150] is None:
-            ebrake_start[150] = i
-
-        if ret_data[i]['ebrake165'] is True and ebrake_start[165] is None:
-            ebrake_start[165] = i
+        for t in THRESHOLDS:
+            if ret_data[i]['ebrake' + str(t)] is True and ebrake_start[t] is None:
+                ebrake_start[t] = i
 
         # date is still in eBrake
-        if ebrake_start[100] is not None:
-            ret_data[i]['ebrake100'] = True
-
-        if ebrake_start[150] is not None:
-            ret_data[i]['ebrake150'] = True
-
-        if ebrake_start[165] is not None:
-            ret_data[i]['ebrake165'] = True
+        for t in THRESHOLDS:
+            if ebrake_start[t] is not None:
+                ret_data[i]['ebrake' + str(t)] = True
 
         # only necessary if currently in ebrake
         if ebrake_start[100] is not None:
-            over100 = None
-            over150 = None
-            over165 = None
+            over = {}
+            for t in THRESHOLDS:
+                over[t] = None
             num_weekdays = 0
             # start with -2 because it only concerns the day after tomorrow
             j = i - 2
@@ -276,45 +265,24 @@ def process_county_ebrake(county_id) -> None:
                     num_weekdays += 1
                     continue
 
-                if ebrake_start[100] is not None and (ret_data[j]['val'] >= 100 or j < (ebrake_start[100] + 1)):
-                    over100 = True
-                elif over100 is None:
-                    over100 = False
-
-                if ebrake_start[150] is not None and (ret_data[j]['val'] >= 150 or j < (ebrake_start[150] + 1)):
-                    over150 = True
-                elif over150 is None:
-                    over150 = False
-
-                if ebrake_start[165] is not None and (ret_data[j]['val'] >= 165 or j < (ebrake_start[165] + 1)):
-                    over165 = True
-                    break
-                elif over165 is None:
-                    over165 = False
+                for t in THRESHOLDS:
+                    if ebrake_start[t] is not None and (ret_data[j]['val'] >= t or j < (ebrake_start[t] + 1)):
+                        over[t] = True
+                        if t == THRESHOLDS[-1]:
+                            break
+                    elif over[t] is None:
+                        over[t] = False
 
                 num_weekdays += 1
                 j -= 1
 
-            if over165 is False:
-                ret_data[i]['ebrake165'] = False
-                ebrake_start[165] = None
-            elif over165 is None:
-                ret_data[i]['ebrake165'] = None
-                ebrake_start[165] = None
-
-            if over150 is False:
-                ret_data[i]['ebrake150'] = False
-                ebrake_start[150] = None
-            elif over150 is None:
-                ret_data[i]['ebrake150'] = None
-                ebrake_start[150] = None
-
-            if over100 is False:
-                ret_data[i]['ebrake100'] = False
-                ebrake_start[100] = None
-            elif over100 is None:
-                ret_data[i]['ebrake100'] = None
-                ebrake_start[100] = None
+            for t in THRESHOLDS[::-1]:
+                if over[t] is False:
+                    ret_data[i]['ebrake' + str(t)] = False
+                    ebrake_start[t] = None
+                elif over[t] is None:
+                    ret_data[i]['ebrake' + str(t)] = None
+                    ebrake_start[t] = None
 
     # write to DB:
     psycopg2.extras.execute_values(
@@ -366,8 +334,9 @@ try:
     cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW ebrake_data;")
     conn.commit()
 
+    cur.close()
+    conn.close()
     logger.info('Success')
-
 except Exception as err:
     logger.error(err)
     traceback.print_exc()

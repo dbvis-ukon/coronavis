@@ -171,13 +171,20 @@ def insert_data(data):
     conn.commit()
 
 
-# load the newest data into the DB to overwrite the latest data
-insert_data(data)
+try:
+    # load the newest data into the DB to overwrite the latest data
+    insert_data(data)
 
-logger.info('Refreshing materialized view')
-cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW filled_hospital_timeseries_with_fix;')
-conn.commit()
+    logger.info('Refreshing materialized view')
+    cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW filled_hospital_timeseries_with_fix;')
+    conn.commit()
 
-logger.info('Done. Exiting...')
-
-exit(0)
+    cur.close()
+    conn.close()
+    logger.info('Done. Exiting...')
+except Exception as e:
+    if cur:
+        cur.close()
+    if conn:
+        conn.close()
+    raise e
