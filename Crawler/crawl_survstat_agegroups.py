@@ -10,7 +10,7 @@ import psycopg2.extensions
 import psycopg2.extras
 # noinspection PyUnresolvedReferences
 import loadenv
-from db_config import SQLALCHEMY_DATABASE_URI
+from db_config import SQLALCHEMY_DATABASE_URI, get_connection
 
 logging.getLogger("zeep").setLevel(logging.INFO)
 
@@ -513,14 +513,7 @@ QUERY = f'INSERT INTO survstat_cases_agegroup ("year", "week", ags, {ages} "A80+
         f'Unbekannt = EXCLUDED.Unbekannt;'
 
 
-def get_connection():
-    conn = pg.connect(SQLALCHEMY_DATABASE_URI)
-    conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
-    cur = conn.cursor()
-    return conn, cur
-
-
-conn, cur = get_connection()
+conn, cur = get_connection('crawl_survstat_agegroups')
 
 
 def fetch_county(county):

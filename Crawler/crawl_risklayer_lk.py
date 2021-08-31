@@ -17,7 +17,7 @@ import psycopg2.extras
 import requests
 import pandas as pd
 
-from db_config import SQLALCHEMY_DATABASE_URI
+from db_config import SQLALCHEMY_DATABASE_URI, get_connection
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -34,7 +34,7 @@ QUERY = f'INSERT INTO cases_lk_risklayer ("date", datenbestand, ags, cases, deat
         f'deaths = case when EXCLUDED.deaths IS NOT NULL then EXCLUDED.deaths else cases_lk_risklayer.deaths end, ' \
         f'updated_today = EXCLUDED.updated_today;'
 URL = "https://docs.google.com/spreadsheets/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/export?format=xlsx"
-#URL = "https://docs.google.com/spreadsheets/d/10HiCpVWvD-WMvxUS33ItJg5V-WUHmjPMZzHHJnuFgPc/export?format=xlsx"
+# URL = "https://docs.google.com/spreadsheets/d/10HiCpVWvD-WMvxUS33ItJg5V-WUHmjPMZzHHJnuFgPc/export?format=xlsx"
 STORAGE_PATH = "/var/risklayer_spreadsheets/"
 NUM_RETRIES = 5
 WAIT_MS_RETRY = 5000
@@ -52,21 +52,12 @@ def parse_cookies():
                 lineFields = line.strip().split('\t')
                 cookies[lineFields[5]] = lineFields[6]
     else:
-        with open ('./google.com_cookies.txt', 'r') as fp:
+        with open('./google.com_cookies.txt', 'r') as fp:
             for line in fp:
                 if not re.match(r'^\#', line):
                     lineFields = line.strip().split('\t')
                     cookies[lineFields[5]] = lineFields[6]
     return cookies
-
-#
-# DB help
-#
-def get_connection():
-    conn = pg.connect(SQLALCHEMY_DATABASE_URI)
-    conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
-    cur = conn.cursor()
-    return conn, cur
 
 
 def download_file(fp: str) -> bool:
@@ -116,7 +107,7 @@ def get_prognosis(df) -> float:
 def get_county_data(df_data):
     df = df_data['Haupt'].iloc[5:406, [2, 0, 0, 10, 3, 47, 48, 49, 15, 39, 23]]
     # AGS, Name, Name (->update-status) Today, -1d, -2d, -3d, -4d, death today, death -1d, verified (0|1)
-    df[2] = df[2].astype(int) # calls cannot be chained
+    df[2] = df[2].astype(int)  # calls cannot be chained
     df[2] = df[2].astype(str)
     df[2] = df[2].apply(lambda x: x.zfill(5))
     db_array = df.to_numpy()
@@ -262,7 +253,7 @@ def insert_into_db(prognosis_today, data_entries, updated_today_count):
 
             exit(0)
     except (Exception, pg.DatabaseError) as error:
-        conn, cur = get_connection()
+        conn, cur = get_connection('crawl_risklayer_lk')
 
         logger.error(error)
         logger.error("Error in transaction - Reverting all other operations of a transaction")

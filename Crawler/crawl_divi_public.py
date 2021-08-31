@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 import loadenv
 
 # logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-from db_config import SQLALCHEMY_DATABASE_URI
+from db_config import SQLALCHEMY_DATABASE_URI, get_connection
 
 logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 logger = logging.getLogger(__name__)
@@ -85,14 +85,7 @@ logger.info(f'Loading the data into the database')
 
 # logger.debug(data)
 
-def get_connection():
-    conn = pg.connect(SQLALCHEMY_DATABASE_URI)
-    conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
-    cur = conn.cursor()
-    return conn, cur
-
-
-conn, cur = get_connection()
+conn, cur = get_connection('crawl_divi_public')
 
 
 # noinspection PyShadowingNames

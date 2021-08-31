@@ -44,8 +44,11 @@ except KeyError as e:
     raise e
     exit(1)
 
-def get_connection():
-    conn = pg.connect(SQLALCHEMY_DATABASE_URI)
+
+def get_connection(application_name=None):
+    conn = psycopg2.connect(SQLALCHEMY_DATABASE_URI)
     conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
     cur = conn.cursor()
+    if application_name is not None:
+        cur.execute(f"set application_name = {application_name}")
     return conn, cur

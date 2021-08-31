@@ -11,15 +11,13 @@ from datetime import datetime, timezone, timedelta
 
 import holidays
 import pandas as pd
-import psycopg2 as pg
 import psycopg2.extensions
 import psycopg2.extras
 import requests
 
 # noinspection PyUnresolvedReferences
 import loadenv
-
-from db_config import SQLALCHEMY_DATABASE_URI
+from db_config import get_connection
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -76,13 +74,6 @@ def download_file(fp: str) -> bool:
         file.close()
         logger.info(f'Downloaded file.')
         return True
-
-
-def get_connection():
-    _conn = pg.connect(SQLALCHEMY_DATABASE_URI)
-    _conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
-    _cur = _conn.cursor()
-    return _conn, _cur
 
 
 def parse_and_insert_sheet(df, sheet_name, col_name):
@@ -298,7 +289,7 @@ def process_county_ebrake(county_id) -> None:
 conn = None
 cur = None
 try:
-    conn, cur = get_connection()
+    conn, cur = get_connection('crawl_rki_incidences')
 
     STORAGE_PATH = "/data/"
     if os.name == 'nt':  # debug only

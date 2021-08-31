@@ -10,11 +10,10 @@ import json
 from datetime import date
 
 import psycopg2 as pg
-import psycopg2.extensions
 import psycopg2.extras
 import requests
 
-from db_config import SQLALCHEMY_DATABASE_URI
+from db_config import get_connection
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -22,13 +21,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 logger.info('Crawler for RKI bed capacity per LK')
 
 
-def get_connection():
-    conn = pg.connect(SQLALCHEMY_DATABASE_URI)
-    conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
-    cur = conn.cursor()
-    return conn, cur
-
-conn, cur = get_connection()
+conn, cur = get_connection('crawl_rki_bed_capacity')
 
 cur.execute("select max(datenbestand)::date from bed_capacity")
 last_update = cur.fetchone()[0]
