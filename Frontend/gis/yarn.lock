@@ -4673,9 +4673,9 @@ es-to-primitive@^1.2.1:
     is-symbol "^1.0.2"
 
 es5-shim@^4.5.14:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/es5-shim/-/es5-shim-4.6.0.tgz#3cfe26efc8fa59af9e2edffb4e4a4d8f28599675"
-  integrity sha512-SPTmaZX3d+n7T42qKTWbtb05CL+F1Oa6Fd776ADnf6pB7vjli4O/2z2ZANhXBv1ymDKCHAzco/+gr7h05KCGaw==
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/es5-shim/-/es5-shim-4.6.1.tgz#b5bd089b2c260c0d6e3613dbb5397d36a3d10ff3"
+  integrity sha512-nCQCqErA3XF7R0fEBPg0rR2Ln7yuxqiC+GDGPIA0p0I/OV/mgipwAkCq/dUzgsOhvByR9fSdugbFil2aRLPb8w==
 
 es6-promise@^4.0.3:
   version "4.2.8"
