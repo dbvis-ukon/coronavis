@@ -9,11 +9,10 @@ import logging
 from datetime import date
 
 import psycopg2 as pg
-import psycopg2.extensions
 import psycopg2.extras
 import requests
 
-from db_config import SQLALCHEMY_DATABASE_URI, get_connection
+from db_config import get_connection
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -88,8 +87,6 @@ logger.debug('current entries: %s', len(entries))
 
 aquery = 'INSERT INTO cases(datenbestand, idbundesland, bundesland, landkreis, idlandkreis, objectid, meldedatum, gender, agegroup, casetype) VALUES %s'
 try:
-    conn, cur = get_connection()
-
     cur.execute("Select Max(datenbestand) from cases")
     last_update = cur.fetchone()[0]
 
@@ -131,21 +128,19 @@ try:
 
         logger.info('Success')
 
-        if (conn):
+        if conn:
             cur.close()
             conn.close()
 
         exit(0)
 except (Exception, pg.DatabaseError) as error:
-    conn, cur = get_connection()
-
     logger.error(error)
     logger.error("Error in transction - Reverting all other operations of a transction")
     logger.error("Most likely a simultanious update was applied faster.")
 
     conn.rollback()
 
-    if (conn):
+    if conn:
         cur.close()
         conn.close()
 

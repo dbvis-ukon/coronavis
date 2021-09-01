@@ -643,4 +643,7 @@ conn.commit()
 if ex:
     exit(1)
 
+cur.close()
+conn.close()
+
 exit(0)

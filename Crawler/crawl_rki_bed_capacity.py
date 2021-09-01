@@ -71,9 +71,7 @@ for el in data:
 logger.debug('current LK count for bed capacity data: %s', len(entries))
 
 aquery = 'INSERT INTO bed_capacity(datenbestand, BL, BL_ID, county, anzahl_standorte, anzahl_meldebereiche, betten_frei, betten_belegt, betten_gesamt, Anteil_betten_frei, faelle_covid_aktuell, faelle_covid_aktuell_beatmet, Anteil_covid_beatmet, Anteil_COVID_betten) VALUES %s'
-try:  
-    conn, cur = get_connection()
-
+try:
     cur.execute("Select Max(datenbestand) from bed_capacity")
     last_update = cur.fetchone()[0]
 
@@ -104,28 +102,26 @@ try:
 
         logger.info('Refreshing materialized view.')
 
-        # TODO Wolfgang: Which view needs updating?
-        #cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
+        cur.execute('REFRESH MATERIALIZED VIEW cases_per_county_and_day')
+        cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW cases_per_county_and_day_risklayer;')
         conn.commit()
 
 
         logger.info('Success')
 
-        if(conn):
+        if conn:
             cur.close()
             conn.close()
 
         exit(0)    
 except (Exception, pg.DatabaseError) as error:
-    conn, cur = get_connection()
-
     logger.error(error)
     logger.error("Error in transaction - Reverting all other operations of a transaction")
     logger.error("Most likely a simultaneous update was applied faster.")
 
     conn.rollback()
 
-    if(conn):
+    if conn:
         cur.close()
         conn.close()   
 

@@ -17,11 +17,13 @@ import psycopg2.extras
 import requests
 import pandas as pd
 
-from db_config import SQLALCHEMY_DATABASE_URI, get_connection
+from db_config import get_connection
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 logger.info('Crawler for Risklayer spreadsheet and case data')
+
+conn, cur = get_connection('crawl_risklayer_lk')
 
 #
 # Parameters
@@ -196,8 +198,6 @@ def get_county_data(df_data):
 
 def insert_into_db(prognosis_today, data_entries, updated_today_count):
     try:
-        conn, cur = get_connection()
-
         cur.execute(f"Select Max(datenbestand) from cases_lk_risklayer_current")
         last_update = cur.fetchone()[0]
 
@@ -253,8 +253,6 @@ def insert_into_db(prognosis_today, data_entries, updated_today_count):
 
             exit(0)
     except (Exception, pg.DatabaseError) as error:
-        conn, cur = get_connection('crawl_risklayer_lk')
-
         logger.error(error)
         logger.error("Error in transaction - Reverting all other operations of a transaction")
         logger.error("Most likely a simultaneous update was applied faster.")
