@@ -103,7 +103,7 @@ def parse_file(fp: str):
 
 
 def get_prognosis(df) -> float:
-    return df['Statistik Überblick'].iloc[17, 6]
+    return df['Statistik Überblick'].iloc[18, 6]
 
 
 def get_county_data(df_data):
