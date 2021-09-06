@@ -121,8 +121,10 @@ def get_county_data(df_data):
     db_help_array = dfhelp.to_numpy()
     db_help_array = db_help_array[db_help_array[:, 0].argsort()]  # sort like the main table
 
+    intersected = np.intersect1d(db_help_array[:, 1], db_array[:, 1])
+
     # check if alignment fits
-    equal_positions = (db_help_array[:, 1] == db_array[:, 1]).sum()
+    equal_positions = len(intersected)
     if equal_positions >= 357:
         pass  # perfect, we expect that based on incorrect RK naming
     elif equal_positions >= 320:
