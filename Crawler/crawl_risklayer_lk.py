@@ -112,6 +112,10 @@ def get_county_data(df_data):
     df[2] = df[2].astype(int)  # calls cannot be chained
     df[2] = df[2].astype(str)
     df[2] = df[2].apply(lambda x: x.zfill(5))
+
+    # remove Eisenach from Haupt data as it is now included into Wartburgkreis
+    df = df[df[10] != '']
+
     db_array = df.to_numpy()
 
     # get update status via hack (because RK calc is complex)
