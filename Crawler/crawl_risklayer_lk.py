@@ -15,6 +15,7 @@ import psycopg2 as pg
 import psycopg2.extensions
 import psycopg2.extras
 import requests
+import numpy as np
 import pandas as pd
 
 from db_config import get_connection
