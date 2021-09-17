@@ -24,6 +24,7 @@ export class ExportCsvService {
    * @param fileType File type to save as.
    */
    private saveAsFile(buffer: any, fileName: string, fileType: string): void {
+    fileName = fileName.replace(/[^-._A-Za-z0-9]/ig, '');
     const data: Blob = new Blob([buffer], { type: fileType });
     FileSaver.saveAs(data, fileName);
   }
