@@ -19,6 +19,6 @@ marshmallow-sqlalchemy==0.26.1
 bcrypt==3.2.0
 alembic==1.7.3
 tzdata==2021.1
-tzlocal==2.1
+tzlocal==3.0
 prometheus-flask-exporter==0.18.2
 flasgger==0.9.5
