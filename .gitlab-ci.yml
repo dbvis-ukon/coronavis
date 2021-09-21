@@ -120,17 +120,20 @@ variables:
     changes:
     - "Tiles/**/*"
     - "k8/tiles-new/**/*"
+    - .gitlab-ci.yml
     when: manual
   - if: $RUN_ON_MAIN == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     changes:
       - "Tiles/**/*"
       - "k8/tiles-new/**/*"
+      - .gitlab-ci.yml
     when: manual
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
     changes:
      - "Tiles/**/*"
      - "k8/tiles-new/**/*"
+     - .gitlab-ci.yml
     when: manual
   # default is on_success, so explicitly set job not to run if none of the above rules matched
   - when: never
