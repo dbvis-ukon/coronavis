@@ -521,6 +521,8 @@ dockerize-tiles:
     GIT_SUBMODULE_STRATEGY: "recursive"
   <<: *dockerize-template
   <<: *rules-tiles
+  tags:
+    - docker-build
   needs:
     - export-environment
   dependencies:
