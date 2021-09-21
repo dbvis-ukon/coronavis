@@ -8,7 +8,7 @@ stages:
 
 variables:
   K8_NAMESPACE: covid-19-vis
-  STAGING_BRANCH: master
+  STAGING_BRANCH: main
   URL_SUFFIX: coronavis.dbvis.de
 
 ###########################################
@@ -28,7 +28,7 @@ variables:
   - if: $RUN_ALWAYS == "yes"
     when: on_success
   # run if files changed
-  # and if it should run on a feature branch or it should run on master
+  # and if it should run on a feature branch or it should run on main
   # - changes:
   #     # - Backend/**/*
   #     # - k8/Backend/**/*
@@ -39,7 +39,7 @@ variables:
   #     - Backend/**/*
   #     - k8/Backend/**/*
   #     - .gitlab-ci.yml
-  - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+  - if: $RUN_ON_MAIN == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: on_success
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -56,7 +56,7 @@ variables:
   - if: $RUN_ALWAYS == "yes"
     when: on_success
   # run if files changed
-  # and if it should run on a feature branch or it should run on master
+  # and if it should run on a feature branch or it should run on main
   # - changes:
   #     - Frontend/**/*
   #     - k8/Frontend/**/*
@@ -67,7 +67,7 @@ variables:
   #     - Frontend/**/*
   #     - k8/Frontend/**/*
   #     - .gitlab-ci.yml
-  - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+  - if: $RUN_ON_MAIN == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: on_success
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -84,7 +84,7 @@ variables:
   - if: $RUN_ALWAYS == "yes"
     when: on_success
   # run if files changed
-  # and if it should run on a feature branch or it should run on master
+  # and if it should run on a feature branch or it should run on main
   # - changes:
   #     - Crawler/**/*
   #     - k8/Crawler/**/*
@@ -97,7 +97,7 @@ variables:
   #     - k8/Crawler/**/*
   #     - k8/crawler-new/**/*
   #     - .gitlab-ci.yml
-  - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+  - if: $RUN_ON_MAIN == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     when: on_success
   # run if tagged
   - if: $RUN_ON_TAG == "yes" && $CI_COMMIT_TAG =~ /^v.*/
@@ -115,13 +115,13 @@ variables:
   - if: $RUN_ALWAYS == "yes"
     when: on_success
   # run if files changed
-  # and if it should run on a feature branch or it should run on master
+  # and if it should run on a feature branch or it should run on main
   - if: $RUN_ON_FB == "yes" && $CI_COMMIT_BRANCH != $STAGING_BRANCH && $CI_COMMIT_TAG == null
     changes:
     - "Tiles/**/*"
     - "k8/tiles-new/**/*"
     when: manual
-  - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+  - if: $RUN_ON_MAIN == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
     changes:
       - "Tiles/**/*"
       - "k8/tiles-new/**/*"
@@ -149,7 +149,7 @@ variables:
     - if: $RUN_ALWAYS == "yes"
       when: manual
     # run if files changed
-    # and if it should run on a feature branch or it should run on master
+    # and if it should run on a feature branch or it should run on main
     # - changes:
     #     - Backend/**/*
     #     - k8/Backend/**/*
@@ -161,7 +161,7 @@ variables:
     #     - Backend/**/*
     #     - k8/Backend/**/*
     #     - .gitlab-ci.yml
-    - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    - if: $RUN_ON_MAIN == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
       when: manual
       allow_failure: true
     # default is on_success, so explicitly set job not to run if none of the above rules matched
@@ -176,7 +176,7 @@ variables:
     - if: $RUN_ALWAYS == "yes"
       when: manual
     # run if files changed
-    # and if it should run on a feature branch or it should run on master
+    # and if it should run on a feature branch or it should run on main
     # - changes:
     #     - Frontend/**/*
     #     - k8/Frontend/**/*
@@ -188,7 +188,7 @@ variables:
     #     - Frontend/**/*
     #     - k8/Frontend/**/*
     #     - .gitlab-ci.yml
-    - if: $RUN_ON_MASTER == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
+    - if: $RUN_ON_MAIN == "yes" && $CI_COMMIT_BRANCH == $STAGING_BRANCH
       when: manual
       allow_failure: true
     # default is on_success, so explicitly set job not to run if none of the above rules matched
@@ -222,12 +222,12 @@ export-environment:
     # multiple things happen here:
     # URL_PREFIX:
     # if tag => ""
-    # if master => "staging."
+    # if main => "staging."
     # if fb => "${CI_COMMIT_REF_SLUG}."
     # Furthermore, the FRONTEND_URL_TILES_PREFIX is set because the tile server will not be deployed on a per fb-basis
     # FRONTEND_URL_TILES_PREFIX:
     # if tag => ""
-    # if master => "staging."
+    # if main => "staging."
     # if fb => "staging."
     # Determine what ENV_TYPE it is (production, staging or review)
     - if [[ "${CI_COMMIT_TAG}" =~ ^v[0-9]+.[0-9]+.[0-9]+ ]]; then ENV_TYPE="production"; fi
@@ -279,7 +279,7 @@ set up sentry release:
   variables:
     RUN_ALWAYS: "no"
     RUN_ON_FB: "yes"
-    RUN_ON_MASTER: "yes"
+    RUN_ON_MAIN: "yes"
     RUN_ON_TAG: "yes"
   script:
     - export SENTRY_AUTH_TOKEN=${SENTRY_AUTH}
@@ -467,7 +467,7 @@ dockerize-backend:
     # we build and deploy always to keep backend and frontend in sync
     RUN_ALWAYS: "yes"
     RUN_ON_FB: "yes"
-    RUN_ON_MASTER: "yes"
+    RUN_ON_MAIN: "yes"
     RUN_ON_TAG: "yes"
   <<: *dockerize-template
   <<: *rules-backend
@@ -482,7 +482,7 @@ dockerize-frontend:
     # we build and deploy always to keep backend and frontend in sync
     RUN_ALWAYS: "yes"
     RUN_ON_FB: "yes"
-    RUN_ON_MASTER: "yes"
+    RUN_ON_MAIN: "yes"
     RUN_ON_TAG: "yes"
   <<: *dockerize-template
   <<: *rules-frontend
@@ -499,7 +499,7 @@ dockerize-crawler:
     RUN_ALWAYS: "yes"
     # Yes? In case the build image fails this could help with MR?
     RUN_ON_FB: "yes"
-    RUN_ON_MASTER: "yes"
+    RUN_ON_MAIN: "yes"
     RUN_ON_TAG: "yes"
   <<: *dockerize-template
   <<: *rules-crawler
@@ -513,7 +513,7 @@ dockerize-tiles:
     FOLDER: Tiles
     RUN_ALWAYS: "no"
     RUN_ON_FB: "no"
-    RUN_ON_MASTER: "yes"
+    RUN_ON_MAIN: "yes"
     RUN_ON_TAG: "yes"
     GIT_SUBMODULE_STRATEGY: "recursive"
   <<: *dockerize-template
@@ -544,7 +544,7 @@ test-backend:
     # we build and deploy always to keep backend and frontend in sync
     RUN_ALWAYS: "yes"
     RUN_ON_FB: "yes"
-    RUN_ON_MASTER: "yes"
+    RUN_ON_MAIN: "yes"
     RUN_ON_TAG: "yes"
   needs:
     - export-environment
@@ -610,7 +610,7 @@ test-backend:
   variables:
     APP: backend
     RUN_ON_FB: "no"
-    RUN_ON_MASTER: "no"
+    RUN_ON_MAIN: "no"
     RUN_ON_TAG: "no"
   environment:
     url: $URL_PROTOCOL://$URL
@@ -642,7 +642,7 @@ deploy-backend-staging-new:
     - export KUBECONFIG=$KUBECONFIG_STAGING
   variables:
     ENV_TYPE: staging
-    RUN_ON_MASTER: "yes"
+    RUN_ON_MAIN: "yes"
     K8_NAMESPACE: covid-19-vis-staging
 
 deploy-backend-production-new:
@@ -669,7 +669,7 @@ deploy-backend-production-new:
   variables:
     APP: frontend
     RUN_ON_FB: "no"
-    RUN_ON_MASTER: "no"
+    RUN_ON_MAIN: "no"
     RUN_ON_TAG: "no"
   environment:
     url: $URL_PROTOCOL://$URL
@@ -701,7 +701,7 @@ deploy-frontend-staging-new:
     - export KUBECONFIG=$KUBECONFIG_STAGING
   variables:
     ENV_TYPE: staging
-    RUN_ON_MASTER: "yes"
+    RUN_ON_MAIN: "yes"
     K8_NAMESPACE: covid-19-vis-staging
 
 deploy-frontend-production-new:
@@ -727,7 +727,7 @@ deploy-frontend-production-new:
   variables:
     APP: crawler
     RUN_ON_FB: "no"
-    RUN_ON_MASTER: "no"
+    RUN_ON_MAIN: "no"
     RUN_ON_TAG: "no"
   environment:
     # url: $URL_PROTOCOL://$URL
@@ -756,7 +756,7 @@ deploy-frontend-production-new:
 #     - export KUBECONFIG=$KUBECONFIG_STAGING
 #   variables:
 #     ENV_TYPE: staging
-#     RUN_ON_MASTER: "yes"
+#     RUN_ON_MAIN: "yes"
 #     K8_NAMESPACE: covid-19-vis-staging
 
 deploy-crawler-production-new:
@@ -782,7 +782,7 @@ deploy-crawler-production-new:
   variables:
     APP: tiles
     RUN_ON_FB: "no"
-    RUN_ON_MASTER: "no"
+    RUN_ON_MAIN: "no"
     RUN_ON_TAG: "no"
   environment:
     url: $URL_PROTOCOL://$URL
@@ -811,7 +811,7 @@ deploy-tiles-staging-new:
     - export KUBECONFIG=$KUBECONFIG_STAGING
   variables:
     ENV_TYPE: staging
-    RUN_ON_MASTER: "yes"
+    RUN_ON_MAIN: "yes"
     K8_NAMESPACE: covid-19-vis-staging
 
 deploy-tiles-production-new:
@@ -837,7 +837,7 @@ deploy-tiles-production-new:
   variables:
     GIT_STRATEGY: none
     RUN_ON_FB: "no"
-    RUN_ON_MASTER: "no"
+    RUN_ON_MAIN: "no"
     RUN_ON_TAG: "no"
   script:
     - export KUBECONFIG=$KUBECONFIG_NEW
