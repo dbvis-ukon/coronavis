@@ -1,0 +1,109 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "array",
+    "additionalItems": false,
+    "items": {
+        "$id": "#/items",
+        "anyOf": [
+            {
+                "$id": "#/items/anyOf/0",
+                "type": "object",
+                "required": [
+                    "IdBundesland",
+                    "Bundesland",
+                    "Landkreis",
+                    "Altersgruppe",
+                    "Geschlecht",
+                    "AnzahlFall",
+                    "AnzahlTodesfall",
+                    "ObjectId",
+                    "Meldedatum",
+                    "IdLandkreis",
+                    "Datenstand",
+                    "NeuerFall",
+                    "NeuerTodesfall",
+                    "Refdatum",
+                    "NeuGenesen",
+                    "AnzahlGenesen",
+                    "IstErkrankungsbeginn",
+                    "Altersgruppe2"
+                ],
+                "properties": {
+                    "IdBundesland": {
+                        "$id": "#/items/anyOf/0/properties/IdBundesland",
+                        "type": "number"
+                    },
+                    "Bundesland": {
+                        "$id": "#/items/anyOf/0/properties/Bundesland",
+                        "type": "string"
+                    },
+                    "Landkreis": {
+                        "$id": "#/items/anyOf/0/properties/Landkreis",
+                        "type": "string"
+                    },
+                    "Altersgruppe": {
+                        "$id": "#/items/anyOf/0/properties/Altersgruppe",
+                        "type": "string"
+                    },
+                    "Geschlecht": {
+                        "$id": "#/items/anyOf/0/properties/Geschlecht",
+                        "type": "string"
+                    },
+                    "AnzahlFall": {
+                        "$id": "#/items/anyOf/0/properties/AnzahlFall",
+                        "type": "number"
+                    },
+                    "AnzahlTodesfall": {
+                        "$id": "#/items/anyOf/0/properties/AnzahlTodesfall",
+                        "type": "number"
+                    },
+                    "ObjectId": {
+                        "$id": "#/items/anyOf/0/properties/ObjectId",
+                        "type": "number"
+                    },
+                    "Meldedatum": {
+                        "$id": "#/items/anyOf/0/properties/Meldedatum",
+                        "type": "number"
+                    },
+                    "IdLandkreis": {
+                        "$id": "#/items/anyOf/0/properties/IdLandkreis",
+                        "type": "string"
+                    },
+                    "Datenstand": {
+                        "$id": "#/items/anyOf/0/properties/Datenstand",
+                        "type": "string"
+                    },
+                    "NeuerFall": {
+                        "$id": "#/items/anyOf/0/properties/NeuerFall",
+                        "type": "number"
+                    },
+                    "NeuerTodesfall": {
+                        "$id": "#/items/anyOf/0/properties/NeuerTodesfall",
+                        "type": "number"
+                    },
+                    "Refdatum": {
+                        "$id": "#/items/anyOf/0/properties/Refdatum",
+                        "type": "number"
+                    },
+                    "NeuGenesen": {
+                        "$id": "#/items/anyOf/0/properties/NeuGenesen",
+                        "type": "number"
+                    },
+                    "AnzahlGenesen": {
+                        "$id": "#/items/anyOf/0/properties/AnzahlGenesen",
+                        "type": "number"
+                    },
+                    "IstErkrankungsbeginn": {
+                        "$id": "#/items/anyOf/0/properties/IstErkrankungsbeginn",
+                        "type": "number"
+                    },
+                    "Altersgruppe2": {
+                        "$id": "#/items/anyOf/0/properties/Altersgruppe2",
+                        "type": "string"
+                    }
+                }
+            }
+        ]
+    }
+}

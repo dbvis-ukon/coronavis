@@ -1,0 +1,108 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "array",
+    "items": {
+        "$id": "#/items",
+        "anyOf": [
+            {
+                "$id": "#/items/anyOf/0",
+                "type": "object",
+                "required": [
+                    "OBJECTID",
+                    "AGS",
+                    "BL",
+                    "BL_ID",
+                    "county",
+                    "anzahl_standorte",
+                    "anzahl_meldebereiche",
+                    "betten_frei",
+                    "betten_belegt",
+                    "betten_gesamt",
+                    "Anteil_betten_frei",
+                    "faelle_covid_aktuell",
+                    "faelle_covid_aktuell_beatmet",
+                    "Anteil_covid_beatmet",
+                    "Anteil_COVID_betten",
+                    "daten_stand",
+                    "Shape__Area",
+                    "Shape__Length"
+                ],
+                "properties": {
+                    "OBJECTID": {
+                        "$id": "#/items/anyOf/0/properties/OBJECTID",
+                        "type": "number"
+                    },
+                    "AGS": {
+                        "$id": "#/items/anyOf/0/properties/AGS",
+                        "type": "string"
+                    },
+                    "BL": {
+                        "$id": "#/items/anyOf/0/properties/BL",
+                        "type": "string"
+                    },
+                    "BL_ID": {
+                        "$id": "#/items/anyOf/0/properties/BL_ID",
+                        "type": "string"
+                    },
+                    "county": {
+                        "$id": "#/items/anyOf/0/properties/county",
+                        "type": "string"
+                    },
+                    "anzahl_standorte": {
+                        "$id": "#/items/anyOf/0/properties/anzahl_standorte",
+                        "type": ["number", "null"]
+                    },
+                    "anzahl_meldebereiche": {
+                        "$id": "#/items/anyOf/0/properties/anzahl_meldebereiche",
+                        "type": ["number", "null"]
+                    },
+                    "betten_frei": {
+                        "$id": "#/items/anyOf/0/properties/betten_frei",
+                        "type": ["number", "null"]
+                    },
+                    "betten_belegt": {
+                        "$id": "#/items/anyOf/0/properties/betten_belegt",
+                        "type": ["number", "null"]
+                    },
+                    "betten_gesamt": {
+                        "$id": "#/items/anyOf/0/properties/betten_gesamt",
+                        "type": ["number", "null"]
+                    },
+                    "Anteil_betten_frei": {
+                        "$id": "#/items/anyOf/0/properties/Anteil_betten_frei",
+                        "type": ["number", "null"]
+                    },
+                    "faelle_covid_aktuell": {
+                        "$id": "#/items/anyOf/0/properties/faelle_covid_aktuell",
+                        "type":  ["number", "null"]
+                    },
+                    "faelle_covid_aktuell_beatmet": {
+                        "$id": "#/items/anyOf/0/properties/faelle_covid_aktuell_beatmet",
+                        "type":  ["number", "null"]
+                    },
+                    "Anteil_covid_beatmet": {
+                        "$id": "#/items/anyOf/0/properties/Anteil_covid_beatmet",
+                        "type":  ["number", "null"]
+                    },
+                    "Anteil_COVID_betten": {
+                        "$id": "#/items/anyOf/0/properties/Anteil_COVID_betten",
+                        "type":  ["number", "null"]
+                    },
+                    "daten_stand": {
+                        "$id": "#/items/anyOf/0/properties/daten_stand",
+                        "type": ["string", "null"]
+                    },
+                    "Shape__Area": {
+                        "$id": "#/items/anyOf/0/properties/Shape__Area",
+                        "type": "number"
+                    },
+                    "Shape__Length": {
+                        "$id": "#/items/anyOf/0/properties/Shape__Length",
+                        "type": "number"
+                    }
+                }
+            }
+        ]
+    }
+}

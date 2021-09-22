@@ -9,10 +9,12 @@ import logging
 import json
 from datetime import date
 
+import jsonschema
 import psycopg2 as pg
 import psycopg2.extras
 import requests
 
+import loadenv
 from db_config import get_connection
 
 logger = logging.getLogger(__name__)
@@ -57,6 +59,9 @@ while has_data:
     logger.debug('Offset: %s', offset)
 data = [d['properties'] for d in data['features']]
 
+with open('./rki_bed_capacity.schema.json') as schema:
+    logger.info('Validate json data with schema')
+    jsonschema.validate(data, json.load(schema))
 
 logger.info('Parse data')
 

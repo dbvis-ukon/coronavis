@@ -1,17 +1,19 @@
 #!/usr/bin/env python
 # coding: utf-8
 # author: Max Fischer
-
+import json
 import sys
 import time
 import datetime
 import logging
 from datetime import date
 
+import jsonschema
 import psycopg2 as pg
 import psycopg2.extras
 import requests
 
+import loadenv
 from db_config import get_connection
 
 logger = logging.getLogger(__name__)
@@ -62,6 +64,11 @@ while has_data:
     offset += LIMIT
     logger.debug('Offset: %s', offset)
 data = [d['attributes'] for d in data['features']]
+
+
+with open('./rki_cases.schema.json') as schema:
+    logger.info('Validate json data with schema')
+    jsonschema.validate(data, json.load(schema))
 
 logger.info('Parse data')
 

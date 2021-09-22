@@ -4,6 +4,7 @@
 import os
 import logging
 
+import jsonschema as jsonschema
 import psycopg2 as pg
 import psycopg2.extensions
 import psycopg2.extras
@@ -74,11 +75,17 @@ if not os.path.isdir(STORAGE_PATH):
     logger.error(f"Storage path {STORAGE_PATH} does not appear to be a valid directory")
     exit(1)
 current_update = datetime.now(timezone.utc)
-filepath = STORAGE_PATH + current_update.strftime("divi-%Y-%m-%dT%H-%M-%S") + '.json'
+filepath = STORAGE_PATH + current_update.strftime("divi-public-%Y-%m-%dT%H-%M-%S") + '.json'
 
 logger.info(f'Storing data on pvc: {filepath}')
 with open(filepath, 'w') as outfile:
     json.dump(data, outfile)
+
+
+with open('./divi_public.schema.json') as schema:
+    logger.info('Validate json data with schema')
+    jsonschema.validate(data, json.load(schema))
+
 
 logger.info(f'Loading the data into the database')
 
