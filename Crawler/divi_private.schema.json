@@ -1,0 +1,410 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "required": [
+        "rowCount",
+        "data",
+        "sum"
+    ],
+    "properties": {
+        "rowCount": {
+            "$id": "#/properties/rowCount",
+            "type": "number"
+        },
+        "data": {
+            "$id": "#/properties/data",
+            "type": "array",
+            "additionalItems": false,
+            "items": {
+                "$id": "#/properties/data/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/data/items/anyOf/0",
+                        "type": "object",
+                        "required": [
+                            "krankenhausStandort",
+                            "letzteMeldezeitpunkt",
+                            "oldestMeldezeitpunkt",
+                            "meldebereiche",
+                            "faelleCovidGenesen",
+                            "faelleCovidVerstorben",
+                            "faelleCovidAktuell",
+                            "faelleCovidAktuellBeatmet",
+                            "faelleCovidAktuellNichtInvasivBeatmet",
+                            "faelleCovidAktuellEcmo",
+                            "intensivBettenBelegt",
+                            "intensivBettenFrei",
+                            "intensivBettenGesamt",
+                            "freieIvKapazitaet",
+                            "freieEcmoKapazitaet",
+                            "covidKapazitaetFrei",
+                            "covidKapazitaetFreiIv",
+                            "covidKapazitaetFreiEcmo",
+                            "patientenIvBeatmet",
+                            "patientenEcmoBeatmet",
+                            "standortAggregates",
+                            "intensivBettenNotfall7d",
+                            "maxBettenStatusEinschaetzungEcmo",
+                            "maxBettenStatusEinschaetzungHighCare",
+                            "maxBettenStatusEinschaetzungLowCare",
+                            "maxBettenStatusEinschaetzungDialyse",
+                            "bestBetriebssituation"
+                        ],
+                        "properties": {
+                            "krankenhausStandort": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort",
+                                "type": "object",
+                                "required": [
+                                    "id",
+                                    "bezeichnung",
+                                    "strasse",
+                                    "hausnummer",
+                                    "plz",
+                                    "ort",
+                                    "bundesland",
+                                    "ikNummer",
+                                    "position",
+                                    "gemeindeschluessel"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/id",
+                                        "type": "string"
+                                    },
+                                    "bezeichnung": {
+                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/bezeichnung",
+                                        "type": "string"
+                                    },
+                                    "strasse": {
+                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/strasse",
+                                        "type": "string"
+                                    },
+                                    "hausnummer": {
+                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/hausnummer",
+                                        "type": "string"
+                                    },
+                                    "plz": {
+                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/plz",
+                                        "type": "string"
+                                    },
+                                    "ort": {
+                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/ort",
+                                        "type": "string"
+                                    },
+                                    "bundesland": {
+                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/bundesland",
+                                        "type": "string"
+                                    },
+                                    "ikNummer": {
+                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/ikNummer",
+                                        "type": "string"
+                                    },
+                                    "position": {
+                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/position",
+                                        "type": "object",
+                                        "required": [
+                                            "latitude",
+                                            "longitude"
+                                        ],
+                                        "properties": {
+                                            "latitude": {
+                                                "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/position/properties/latitude",
+                                                "type": "number"
+                                            },
+                                            "longitude": {
+                                                "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/position/properties/longitude",
+                                                "type": "number"
+                                            }
+                                        }
+                                    },
+                                    "gemeindeschluessel": {
+                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/gemeindeschluessel",
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "letzteMeldezeitpunkt": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/letzteMeldezeitpunkt",
+                                "type": "string"
+                            },
+                            "oldestMeldezeitpunkt": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/oldestMeldezeitpunkt",
+                                "type": "string"
+                            },
+                            "meldebereiche": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche",
+                                "type": "array",
+                                "additionalItems": false,
+                                "items": {
+                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items",
+                                    "anyOf": [
+                                        {
+                                            "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0",
+                                            "type": "object",
+                                            "required": [
+                                                "meldebereichId",
+                                                "ardsNetzwerkMitglied",
+                                                "meldebereichBezeichnung",
+                                                "behandlungsschwerpunktL1",
+                                                "behandlungsschwerpunktL2",
+                                                "behandlungsschwerpunktL3"
+                                            ],
+                                            "properties": {
+                                                "meldebereichId": {
+                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/meldebereichId",
+                                                    "type": "string"
+                                                },
+                                                "ardsNetzwerkMitglied": {
+                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/ardsNetzwerkMitglied",
+                                                    "type": "string"
+                                                },
+                                                "meldebereichBezeichnung": {
+                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/meldebereichBezeichnung",
+                                                    "type": "string"
+                                                },
+                                                "behandlungsschwerpunktL1": {
+                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/behandlungsschwerpunktL1",
+                                                    "type": ["string", "null"]
+                                                },
+                                                "behandlungsschwerpunktL2": {
+                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/behandlungsschwerpunktL2",
+                                                    "type": "null"
+                                                },
+                                                "behandlungsschwerpunktL3": {
+                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/behandlungsschwerpunktL3",
+                                                    "type": "null"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            "faelleCovidGenesen": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidGenesen",
+                                "type": "number"
+                            },
+                            "faelleCovidVerstorben": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidVerstorben",
+                                "type": "number"
+                            },
+                            "faelleCovidAktuell": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidAktuell",
+                                "type": ["number", "null"]
+                            },
+                            "faelleCovidAktuellBeatmet": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidAktuellBeatmet",
+                                "type": ["number", "null"]
+                            },
+                            "faelleCovidAktuellNichtInvasivBeatmet": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidAktuellNichtInvasivBeatmet",
+                                "type": ["number", "null"]
+                            },
+                            "faelleCovidAktuellEcmo": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidAktuellEcmo",
+                                "type": ["number", "null"]
+                            },
+                            "intensivBettenBelegt": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/intensivBettenBelegt",
+                                "type": "number"
+                            },
+                            "intensivBettenFrei": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/intensivBettenFrei",
+                                "type": "number"
+                            },
+                            "intensivBettenGesamt": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/intensivBettenGesamt",
+                                "type": "number"
+                            },
+                            "freieIvKapazitaet": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/freieIvKapazitaet",
+                                "type": ["number", "null"]
+                            },
+                            "freieEcmoKapazitaet": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/freieEcmoKapazitaet",
+                                "type": ["number", "null"]
+                            },
+                            "covidKapazitaetFrei": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/covidKapazitaetFrei",
+                                "type": ["number", "null"]
+                            },
+                            "covidKapazitaetFreiIv": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/covidKapazitaetFreiIv",
+                                "type": ["number", "null"]
+                            },
+                            "covidKapazitaetFreiEcmo": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/covidKapazitaetFreiEcmo",
+                                "type": ["number", "null"]
+                            },
+                            "patientenIvBeatmet": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/patientenIvBeatmet",
+                                "type": ["number", "null"]
+                            },
+                            "patientenEcmoBeatmet": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/patientenEcmoBeatmet",
+                                "type": ["number", "null"]
+                            },
+                            "standortAggregates": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/standortAggregates",
+                                "type": "object",
+                                "required": []
+                            },
+                            "intensivBettenNotfall7d": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/intensivBettenNotfall7d",
+                                "type": "number"
+                            },
+                            "maxBettenStatusEinschaetzungEcmo": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/maxBettenStatusEinschaetzungEcmo",
+                                "type": "string"
+                            },
+                            "maxBettenStatusEinschaetzungHighCare": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/maxBettenStatusEinschaetzungHighCare",
+                                "type": "string"
+                            },
+                            "maxBettenStatusEinschaetzungLowCare": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/maxBettenStatusEinschaetzungLowCare",
+                                "type": "string"
+                            },
+                            "maxBettenStatusEinschaetzungDialyse": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/maxBettenStatusEinschaetzungDialyse",
+                                "type": "string"
+                            },
+                            "bestBetriebssituation": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/bestBetriebssituation",
+                                "type": "string"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "sum": {
+            "$id": "#/properties/sum",
+            "type": "object",
+            "required": [
+                "letzteMeldezeitpunkt",
+                "oldestMeldezeitpunkt",
+                "faelleCovidGenesen",
+                "faelleCovidVerstorben",
+                "faelleCovidAktuell",
+                "faelleCovidAktuellBeatmet",
+                "faelleCovidAktuellNichtInvasivBeatmet",
+                "faelleCovidAktuellEcmo",
+                "intensivBettenBelegt",
+                "intensivBettenFrei",
+                "intensivBettenGesamt",
+                "freieIvKapazitaet",
+                "freieEcmoKapazitaet",
+                "covidKapazitaetFrei",
+                "covidKapazitaetFreiIv",
+                "covidKapazitaetFreiEcmo",
+                "patientenIvBeatmet",
+                "patientenEcmoBeatmet",
+                "intensivBettenNotfall7d",
+                "maxBettenStatusEinschaetzungEcmo",
+                "maxBettenStatusEinschaetzungHighCare",
+                "maxBettenStatusEinschaetzungLowCare",
+                "maxBettenStatusEinschaetzungDialyse",
+                "bestBetriebssituation"
+            ],
+            "properties": {
+                "letzteMeldezeitpunkt": {
+                    "$id": "#/properties/sum/properties/letzteMeldezeitpunkt",
+                    "type": "string"
+                },
+                "oldestMeldezeitpunkt": {
+                    "$id": "#/properties/sum/properties/oldestMeldezeitpunkt",
+                    "type": "string"
+                },
+                "faelleCovidGenesen": {
+                    "$id": "#/properties/sum/properties/faelleCovidGenesen",
+                    "type": "number"
+                },
+                "faelleCovidVerstorben": {
+                    "$id": "#/properties/sum/properties/faelleCovidVerstorben",
+                    "type": "number"
+                },
+                "faelleCovidAktuell": {
+                    "$id": "#/properties/sum/properties/faelleCovidAktuell",
+                    "type": "number"
+                },
+                "faelleCovidAktuellBeatmet": {
+                    "$id": "#/properties/sum/properties/faelleCovidAktuellBeatmet",
+                    "type": "number"
+                },
+                "faelleCovidAktuellNichtInvasivBeatmet": {
+                    "$id": "#/properties/sum/properties/faelleCovidAktuellNichtInvasivBeatmet",
+                    "type": ["number", "null"]
+                },
+                "faelleCovidAktuellEcmo": {
+                    "$id": "#/properties/sum/properties/faelleCovidAktuellEcmo",
+                    "type": "number"
+                },
+                "intensivBettenBelegt": {
+                    "$id": "#/properties/sum/properties/intensivBettenBelegt",
+                    "type": "number"
+                },
+                "intensivBettenFrei": {
+                    "$id": "#/properties/sum/properties/intensivBettenFrei",
+                    "type": "number"
+                },
+                "intensivBettenGesamt": {
+                    "$id": "#/properties/sum/properties/intensivBettenGesamt",
+                    "type": "number"
+                },
+                "freieIvKapazitaet": {
+                    "$id": "#/properties/sum/properties/freieIvKapazitaet",
+                    "type": "number"
+                },
+                "freieEcmoKapazitaet": {
+                    "$id": "#/properties/sum/properties/freieEcmoKapazitaet",
+                    "type": "number"
+                },
+                "covidKapazitaetFrei": {
+                    "$id": "#/properties/sum/properties/covidKapazitaetFrei",
+                    "type": "number"
+                },
+                "covidKapazitaetFreiIv": {
+                    "$id": "#/properties/sum/properties/covidKapazitaetFreiIv",
+                    "type": "number"
+                },
+                "covidKapazitaetFreiEcmo": {
+                    "$id": "#/properties/sum/properties/covidKapazitaetFreiEcmo",
+                    "type": "number"
+                },
+                "patientenIvBeatmet": {
+                    "$id": "#/properties/sum/properties/patientenIvBeatmet",
+                    "type": "number"
+                },
+                "patientenEcmoBeatmet": {
+                    "$id": "#/properties/sum/properties/patientenEcmoBeatmet",
+                    "type": "number"
+                },
+                "intensivBettenNotfall7d": {
+                    "$id": "#/properties/sum/properties/intensivBettenNotfall7d",
+                    "type": "number"
+                },
+                "maxBettenStatusEinschaetzungEcmo": {
+                    "$id": "#/properties/sum/properties/maxBettenStatusEinschaetzungEcmo",
+                    "type": "string"
+                },
+                "maxBettenStatusEinschaetzungHighCare": {
+                    "$id": "#/properties/sum/properties/maxBettenStatusEinschaetzungHighCare",
+                    "type": "string"
+                },
+                "maxBettenStatusEinschaetzungLowCare": {
+                    "$id": "#/properties/sum/properties/maxBettenStatusEinschaetzungLowCare",
+                    "type": "string"
+                },
+                "maxBettenStatusEinschaetzungDialyse": {
+                    "$id": "#/properties/sum/properties/maxBettenStatusEinschaetzungDialyse",
+                    "type": "string"
+                },
+                "bestBetriebssituation": {
+                    "$id": "#/properties/sum/properties/bestBetriebssituation",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
