@@ -1,6 +1,9 @@
+import datetime
 import logging
+import math
 
 import pandas as pd
+import pandas.io.sql as sqlio
 from zeep import Client
 
 # code from https://github.com/rgieseke/opencoviddata/blob/main/scripts/fetch-county.py
@@ -12,9 +15,13 @@ import psycopg2.extras
 import loadenv
 from db_config import SQLALCHEMY_DATABASE_URI, get_connection
 
+start = datetime.datetime.now()
+
 logging.getLogger("zeep").setLevel(logging.INFO)
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logging.getLogger('urllib3.connectionpool').setLevel(logging.INFO)
 
 state_ids = {
     "Baden-Württemberg": "08",
@@ -512,21 +519,31 @@ QUERY = f'INSERT INTO survstat_cases_agegroup ("year", "week", ags, {ages} "A80+
         f'"A80+" = EXCLUDED."A80+", ' \
         f'Unbekannt = EXCLUDED.Unbekannt;'
 
-
 conn, cur = get_connection('crawl_survstat_agegroups')
 
 
-def fetch_county(county):
-    logger.info(f"Fetching: {county} {counties[county]}")
+def download_survstat_data_for_county(county, years, incidence, cumulated):
+    logger.debug(f"Fetching: {county} {counties[county]} with incidences {incidence} and cumulated {cumulated}")
+    if incidence and cumulated:
+        raise Exception('Invalid arguments with incidence and cumulated true')
+
+    measures = {"Count": 0}
+    if incidence is True:
+        measures = {"Incidence": 1}
+
+    reporting_dates = []
+    for year in years:
+        reporting_dates.append(f"[ReportingDate].[WeekYear].&[{year}]")
+
     res = client.service.GetOlapData(
         {
             "Language": "German",
-            "Measures": {"Count": 0},
+            "Measures": measures,
             "Cube": "SurvStat",
             # Totals still included, setting `true` yields duplicates
             "IncludeTotalColumn": False,
             "IncludeTotalRow": False,
-            "IncludeNullRows": True,
+            "IncludeNullRows": False,
             "IncludeNullColumns": True,
             "HierarchyFilters": factory.FilterCollection(
                 [
@@ -558,10 +575,7 @@ def fetch_county(county):
                             "HierarchyId": "[ReportingDate].[WeekYear]",
                         },
                         "Value": factory.FilterMemberCollection(
-                            [
-                                "[ReportingDate].[WeekYear].&[2020]",
-                                "[ReportingDate].[WeekYear].&[2021]",
-                            ]
+                            reporting_dates
                         ),
                     },
                     {
@@ -578,32 +592,99 @@ def fetch_county(county):
                 ]
             ),
             "RowHierarchy": "[ReportingDate].[YearWeek]",
-            "ColumnHierarchy": "[AlterPerson80].[AgeGroupName8]",
+            "ColumnHierarchy": "[AlterPerson80].[AgeGroupName8]"
         }
     )
-    columns = [i["Caption"] for i in res.Columns.QueryResultColumn]
 
-    ags = counties[county]['County']
+    columns = [i["Caption"] for i in res.Columns.QueryResultColumn]
 
     df = pd.DataFrame(
         [
             [i["Caption"]]
-            + [int(c) if c is not None else None for c in i["Values"]["string"]]
+            + [float(c.replace(".", "").replace(",", ".")) if c is not None else None for c in
+               i["Values"]["string"]]
             for i in res.QueryResults.QueryResultRow
         ],
         columns=["KW"] + columns,
     )
     df = df.set_index("KW")
-    df = df.astype("Int64")  # Allow for None values
+    df = df.astype("Float64")  # Allow for None values
     df = df.drop("Gesamt")
     df = df.drop("Gesamt", axis=1)
+    df = df.rename(lambda s: s[0:3], axis='columns')
+    df = df.fillna(0)
 
-    agg = df.fillna(0).cumsum()
-    agg = agg.rename(lambda s: s[0:3], axis='columns')
+    if cumulated:
+        df = df.cumsum()
 
+    return df
+
+
+def download_db_data_for_county(county, incidence):
+    ags = counties[county]['County']
+    if incidence:
+
+        age_diff_cols = []
+        age_inc_cols = []
+        for i in range(0, 81):
+            col = "a{:02d}".format(i)
+            if i == 80:
+                col = '"A80+"'
+            age_diff_cols.append(f'((surv.{col} - lag(surv.{col}) over (order by surv.year, surv.week))) as {col}')
+            age_inc_cols.append(f'round((diff.{col} / p.{col}::decimal) * 100000, 2) as {col}')
+
+        query = f'''
+            WITH diff as (
+                SELECT surv.year || \'-KW\' || lpad(surv.week::text, 2, \'0\') AS yearweek,
+                surv.ags,
+                surv.year,
+                surv.week,
+                {','.join(age_diff_cols)}
+                FROM survstat_cases_agegroup surv
+                WHERE surv.ags = %(ags)s ORDER BY surv.year, surv.week
+            )
+            SELECT
+                yearweek,
+                {','.join(age_inc_cols)}
+            FROM diff
+            JOIN population_survstat_agegroup2 p ON diff.ags = p.ags AND diff.year = p.year 
+        '''
+        df = sqlio.read_sql_query(query, con=conn, params={'ags': ags}, index_col=['yearweek'])
+        df = df.fillna(0)
+    else:
+        df = sqlio.read_sql_query('''
+            SELECT *, year || \'-KW\' || lpad(week::text, 2, \'0\') AS yearweek 
+            FROM survstat_cases_agegroup 
+            WHERE ags = %(ags)s ORDER BY year, week''', con=conn, params={'ags': ags}, index_col=['yearweek'])
+
+    df = df.rename(lambda s: s.replace('a', 'A') if s[0] == 'a' and s != 'ags' else s, axis='columns')
+    df = df.rename(lambda s: s.replace('+', ''), axis='columns')
+    df = df.rename(lambda s: s.replace('unbekannt', 'Unb') if s == 'unbekannt' else s, axis='columns')
+    return df
+
+
+def has_difference(survstat, db):
+    age_cols = []
+    for i in range(0, 81):
+        age_cols.append("A{:02d}".format(i))
+
+    diff = False
+    for index, row in survstat.iterrows():
+        for col in age_cols:
+            survstat_value = row[col]
+            db_value = db.loc[index, col] if index in db.index else None
+
+            if survstat_value != db_value:
+                logger.warning(f'Values of {index}:{col} not correct (survstat) {survstat_value} != {db_value} (db)')
+                diff = True
+
+    return diff
+
+
+def update_case_values(county, df):
+    ags = counties[county]['County']
     entries = []
-
-    for rowName, row in agg.iterrows():
+    for rowName, row in df.iterrows():
         year = int(rowName[0:4])
         if year < 2020:
             continue
@@ -624,26 +705,120 @@ def fetch_county(county):
     )
     conn.commit()
 
-    return df
+
+def estimate_pop(v_count, v_incidence):
+    res = []
+    for i in range(0, min(len(v_count), len(v_incidence))):
+        if v_count[i] is not None and v_incidence[i] is not None and v_incidence[i] > 0:
+            res.append((v_count[i] * 100000) / v_incidence[i])
+
+    if float(len(res)) == 0:
+        return None
+
+    return round(sum(res) / float(len(res)))
+
+
+def update_population_values(county, year, df_abs, df_inc):
+    updates = []
+    ags = counties[county]['County']
+
+    for colName, col in df_abs.iteritems():
+        if colName == "Unb":
+            continue
+        v_count = df_abs[colName].nlargest(3).to_list()
+        v_incidence = df_inc[colName].nlargest(3).to_list()
+
+        pop = estimate_pop(v_count, v_incidence)
+        if pop is None:
+            logger.warning(f"{county} for {colName} is None!")
+            pop = 'null'
+
+        age = int(colName[1:3])
+
+        if age == 0:
+            cur.execute(
+                f"SELECT COUNT(*) AS c FROM population_survstat_agegroup2 WHERE ags = '{'{:05d}'.format(int(ags))}' AND year = {year}")
+            if cur.fetchone()[0] == 0:
+                cur.execute(
+                    f"INSERT INTO population_survstat_agegroup2 (ags, a00, year) VALUES ('{'{:05d}'.format(int(ags))}', {pop}, {year})")
+                conn.commit()
+
+        if 0 <= age < 80:
+            updates.append(f"{'a{:02d}'.format(int(age))} = {pop}")
+        else:
+            updates.append(f"\"A80+\" = {pop}")
+
+    allupdates = ', '.join(updates)
+    query = f"UPDATE population_survstat_agegroup2 SET {allupdates} WHERE ags = '{'{:05d}'.format(int(ags))}' AND year = {year}"
+    cur.execute(query)
+
+    conn.commit()
+
+
+def process_county(county):
+    ags = counties[county]['County']
+    logger.info(f'[{county} ({ags})] process county')
+
+    current_year = datetime.datetime.now().year
+    all_years = range(2020, current_year + 1)
+
+    # download the absolute values for all years
+    df_survstat_abs = download_survstat_data_for_county(county=county, years=all_years, incidence=False, cumulated=True)
+    df_db_abs = download_db_data_for_county(county=county, incidence=False)
+
+    # if there is a difference in the absolute values (e.g. new data or corrections) update our DB
+    if has_difference(df_survstat_abs, df_db_abs):
+        logger.info(f'[{county} ({ags})] update case data')
+        update_case_values(county, df_survstat_abs)
+    else:
+        logger.info(f'[{county} ({ags})] case data up to date')
+
+    # to check the population data via survstat each year has to be processed individually,
+    # otherwise survstat averages the population numbers
+    df_db_inc = download_db_data_for_county(county, True)
+
+    for year in all_years:
+        df_survstat_inc = download_survstat_data_for_county(county=county, years=[year], incidence=True,
+                                                            cumulated=False)
+        # check incidence values
+        if has_difference(df_survstat_inc, df_db_inc):
+            # non-accumulated case values
+            df_survstat_abs = download_survstat_data_for_county(county=county, years=[year], incidence=False,
+                                                                cumulated=False)
+            logger.info(f'[{county} ({ags})] update population data for {year}')
+            update_population_values(county=county, year=year, df_abs=df_survstat_abs, df_inc=df_survstat_inc)
+        else:
+            logger.info(f'[{county} ({ags})] population data up to date for {year}')
+
+    logger.info(f'[{county} ({ags})] done.')
+
 
 
 ex = False
 
-for c in counties.keys():
+for county_to_process in counties.keys():
     try:
-        fetch_county(c)
+        process_county(county_to_process)
     except Exception as e:
         ex = True
         logger.exception("Something went wrong fetching the data", exc_info=e)
 
-logger.info('Refreshing materialized view')
-cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW cases_per_county_and_day;')
-conn.commit()
-
-if ex:
-    exit(1)
+try:
+    logger.info('Refreshing materialized view')
+    cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW cases_per_county_and_day;')
+    conn.commit()
+except Exception as e:
+    ex = True
+    logger.exception('Exception while updating materialized view', exc_info=e)
 
 cur.close()
 conn.close()
 
+if ex:
+    delta = datetime.datetime.now() - start
+    logger.info(f'Survstat crawler had an error. Took {math.floor(delta.seconds / 60)} minutes {delta.seconds % 60} seconds')
+    exit(1)
+
+delta = datetime.datetime.now() - start
+logger.info(f'Survstat crawler done. Took {math.floor(delta.seconds / 60)} minutes {delta.seconds % 60} seconds')
 exit(0)
