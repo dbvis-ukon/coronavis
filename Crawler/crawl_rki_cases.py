@@ -28,7 +28,13 @@ last_update = cur.fetchone()[0]
 
 if last_update is not None and last_update >= date.today():
     logger.info('Data seems to be up to date (Database: %s, Today: %s). Won\'t fetch.', last_update, date.today())
+    cur.close()
+    conn.close()
     exit(0)
+
+# close db connection here because data downloading and parsing takes too long
+cur.close()
+conn.close()
 
 LIMIT = 5000
 
@@ -94,6 +100,9 @@ logger.debug('current entries: %s', len(entries))
 
 aquery = 'INSERT INTO cases(datenbestand, idbundesland, bundesland, landkreis, idlandkreis, objectid, meldedatum, gender, agegroup, casetype) VALUES %s'
 try:
+    # reconnect to DB here
+    conn, cur = get_connection('crawl_rki_cases')
+
     cur.execute("Select Max(datenbestand) from cases")
     last_update = cur.fetchone()[0]
 
