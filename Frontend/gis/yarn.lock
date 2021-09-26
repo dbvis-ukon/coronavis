@@ -2074,9 +2074,9 @@
   integrity sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==
 
 "@types/node@*", "@types/node@>=10.0.0", "@types/node@^16.0.0":
-  version "16.9.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.9.6.tgz#040a64d7faf9e5d9e940357125f0963012e66f04"
-  integrity sha512-YHUZhBOMTM3mjFkXVcK+WwAcYmyhe1wL4lfqNtzI0b3qAy7yuSetnM7QJazgE5PFmgVTNGiLOgRFfJMqW7XpSQ==
+  version "16.10.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.10.1.tgz#f3647623199ca920960006b3dccf633ea905f243"
+  integrity sha512-4/Z9DMPKFexZj/Gn3LylFgamNKHm4K3QDi0gz9B26Uk0c8izYf97B5fxfpspMNkWlFupblKM/nV8+NA9Ffvr+w==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -6403,9 +6403,9 @@ jasminewd2@^2.1.0:
   integrity sha1-43zwsX8ZnM4jvqcbIDk5Uka07E4=
 
 jest-worker@^27.0.2, jest-worker@^27.0.6:
-  version "27.2.0"
-  resolved "https://registry.yarnpkg.com/jest-worker/-/jest-worker-27.2.0.tgz#11eef39f1c88f41384ca235c2f48fe50bc229bc0"
-  integrity sha512-laB0ZVIBz+voh/QQy9dmUuuDsadixeerrKqyVpgPz+CCWiOYjOBabUXHIXZhsdvkWbLqSHbgkAHWl5cg24Q6RA==
+  version "27.2.2"
+  resolved "https://registry.yarnpkg.com/jest-worker/-/jest-worker-27.2.2.tgz#636deeae8068abbf2b34b4eb9505f8d4e5bd625c"
+  integrity sha512-aG1xq9KgWB2CPC8YdMIlI8uZgga2LFNcGbHJxO8ctfXAydSaThR4EewKQGg3tBOC+kS3vhPGgymsBdi9VINjPw==
   dependencies:
     "@types/node" "*"
     merge-stream "^2.0.0"
@@ -7239,6 +7239,11 @@ nanocolors@^0.1.0, nanocolors@^0.1.12, nanocolors@^0.1.5:
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/nanocolors/-/nanocolors-0.1.12.tgz#8577482c58cbd7b5bb1681db4cf48f11a87fd5f6"
   integrity sha512-2nMHqg1x5PU+unxX7PGY7AuYxl2qDx7PSrTRjizr8sxdd3l/3hBuWWaki62qmtYm2U5i4Z5E7GbjlyDFhs9/EQ==
+
+nanocolors@^0.2.2:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/nanocolors/-/nanocolors-0.2.6.tgz#2e7815d25c04aaa43e54b9f0d6d21060172e5831"
+  integrity sha512-lP8hjPSXTQ7qpYl5hFPVTBXGdd7+Rn3oi8GqIPNZP63L09tewRzWYFxAy26B1BYOOYaPWgmVF/BFIhDAHihwUQ==
 
 nanoid@^3.1.23, nanoid@^3.1.25:
   version "3.1.25"
@@ -8549,20 +8554,19 @@ postcss@8.3.6:
     source-map-js "^0.6.2"
 
 postcss@^7.0.14, postcss@^7.0.17, postcss@^7.0.2, postcss@^7.0.32, postcss@^7.0.35, postcss@^7.0.5, postcss@^7.0.6:
-  version "7.0.36"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.36.tgz#056f8cffa939662a8f5905950c07d5285644dfcb"
-  integrity sha512-BebJSIUMwJHRH0HAQoxN4u1CN86glsrwsW0q7T+/m44eXOUAxSNdHRkNZPYz5vVUbg17hFgOQDE7fZk7li3pZw==
+  version "7.0.38"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.38.tgz#5365a9c5126643d977046ad239f60eadda2491d6"
+  integrity sha512-wNrSHWjHDQJR/IZL5IKGxRtFgrYNaAA/UrkW2WqbtZO6uxSLMxMN+s2iqUMwnAWm3fMROlDYZB41dr0Mt7vBwQ==
   dependencies:
-    chalk "^2.4.2"
+    nanocolors "^0.2.2"
     source-map "^0.6.1"
-    supports-color "^6.1.0"
 
 postcss@^8.2.15, postcss@^8.3.5:
-  version "8.3.7"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.3.7.tgz#ec88563588c8da8e58e7226f7633b51ae221eeda"
-  integrity sha512-9SaY7nnyQ63/WittqZYAvkkYPyKxchMKH71UDzeTmWuLSvxTRpeEeABZAzlCi55cuGcoFyoV/amX2BdsafQidQ==
+  version "8.3.8"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.3.8.tgz#9ebe2a127396b4b4570ae9f7770e7fb83db2bac1"
+  integrity sha512-GT5bTjjZnwDifajzczOC+r3FI3Cu+PgPvrsjhQdRqa2kTJ4968/X9CUce9xttIB0xOs5c6xf0TCWZo/y9lF6bA==
   dependencies:
-    nanocolors "^0.1.5"
+    nanocolors "^0.2.2"
     nanoid "^3.1.25"
     source-map-js "^0.6.2"
 
@@ -11144,9 +11148,9 @@ yargs@^16.1.1, yargs@~16.2.0:
     yargs-parser "^20.2.2"
 
 yargs@^17.0.0:
-  version "17.2.0"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.2.0.tgz#ec529632b2cb9044f3927f4b45f9cc4ae2535653"
-  integrity sha512-UPeZv4h9Xv510ibpt5rdsUNzgD78nMa1rhxxCgvkKiq06hlKCEHJLiJ6Ub8zDg/wR6hedEI6ovnd2vCvJ4nusA==
+  version "17.2.1"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.2.1.tgz#e2c95b9796a0e1f7f3bf4427863b42e0418191ea"
+  integrity sha512-XfR8du6ua4K6uLGm5S6fA+FIJom/MdJcFNVY8geLlp2v8GYbOXD4EB1tPNZsRn4vBzKGMgb5DRZMeWuFc2GO8Q==
   dependencies:
     cliui "^7.0.2"
     escalade "^3.1.1"
