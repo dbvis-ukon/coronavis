@@ -413,7 +413,7 @@ counties = {
     "SK Dresden": {"State": "14", "Region": "DED2", "County": "14612"},
     "SK Duisburg": {"State": "05", "Region": "DEA1", "County": "05112"},
     "SK Düsseldorf": {"State": "05", "Region": "DEA1", "County": "05111"},
-    "SK Eisenach": {"State": "16", "Region": "DEG0", "County": "16056"},
+    # "SK Eisenach": {"State": "16", "Region": "DEG0", "County": "16056"},
     "SK Emden": {"State": "03", "Region": "DE94", "County": "03402"},
     "SK Erfurt": {"State": "16", "Region": "DEG0", "County": "16051"},
     "SK Erlangen": {"State": "09", "Region": "DE25", "County": "09562"},
