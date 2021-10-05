@@ -272,7 +272,7 @@ export-environment:
     expire_in: 3000 days
   retry: 2
   tags:
-    - docker
+    - no-cache
 
 set up sentry release:
   stage: prepare
@@ -293,7 +293,7 @@ set up sentry release:
     - sentry-cli releases deploys "$CI_COMMIT_SHA" new -e ${CI_COMMIT_REF_NAME}
   dependencies: []
   tags:
-    - docker
+    - no-cache
   <<: *rules-frontend
   interruptible: true
   allow_failure: true
@@ -337,7 +337,7 @@ syntax-check-crawler-scripts:
     - export-environment
   retry: 2
   tags:
-    - docker
+    - no-cache
 
 frontend-lint:
   stage: test
@@ -351,7 +351,7 @@ frontend-lint:
     - frontend-install-dependencies
   retry: 2
   tags:
-    - docker
+    - no-cache
 
 frontend-code-quality:
   stage: test
@@ -433,7 +433,7 @@ frontend-code-quality:
     - frontend-install-dependencies
   retry: 2
   tags:
-    - docker
+    - no-cache
 
 build-frontend:
   extends: .build-frontend
@@ -461,7 +461,7 @@ build-frontend:
     # build and push :)
     - /kaniko/executor --context . --dockerfile ./Dockerfile --registry-mirror registry-mirror.dbvis.de --build-arg VERSION=${VERSION} --destination $IMG --destination $IMG2 --cache=true
   tags:
-    - docker
+    - no-cache
   retry: 2
 
 dockerize-backend:
@@ -558,7 +558,7 @@ test-backend:
     - export-environment
   retry: 2
   tags:
-    - docker
+    - no-cache
 
 ###########################################
 # DEPLOY NEW CLUSTER
@@ -601,7 +601,7 @@ test-backend:
     - helm upgrade --namespace=${K8_NAMESPACE} --install --set sha="${VERSION}" --set url=${URL} --set urlProtocol=${URL_PROTOCOL} --set environment=${ENV_TYPE} --set replicaCount=${REPLICA_COUNT} --set cpu.req=${CPU_REQ} --set cpu.limit=${CPU_LIMIT} --set mem.req=${MEM_REQ} --set mem.limit=${MEM_LIMIT} ${CHART_NAME} ./k8/${APP}-new
   retry: 2
   tags:
-    - docker
+    - no-cache
 
 #--------------------
 # BACKEND
@@ -856,7 +856,7 @@ deploy-tiles-production-new:
   allow_failure: true
   retry: 2
   tags:
-    - docker
+    - no-cache
 
 remove-deployment-backend-review-new:
   extends: .remove-deployment-new
