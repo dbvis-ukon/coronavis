@@ -80,7 +80,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # noinspection PyUnboundLocalVariable
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONNECTION_STRING
 app.config['SQLALCHEMY_ECHO'] = os.getenv('DEBUG') == 'true'
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_size": SQL_POOL_SIZE, "max_overflow": SQL_MAX_OVERFLOW, "pool_recycle": 550, 'pool_reset_on_return': None}
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_size": SQL_POOL_SIZE, "max_overflow": SQL_MAX_OVERFLOW, 'pool_reset_on_return': None}
 app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
 app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
 app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS').lower() == 'true'
