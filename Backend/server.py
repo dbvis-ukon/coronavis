@@ -69,8 +69,8 @@ except KeyError as e:
     exit(1)
     # DB_CONNECTION_STRING = config.SQLALCHEMY_DATABASE_URI
 
-SQL_POOL_SIZE = 5
-SQL_MAX_OVERFLOW = 20
+SQL_POOL_SIZE = 2
+SQL_MAX_OVERFLOW = 8
 
 if ENVIRONMENT == 'production':
     SQL_POOL_SIZE = 10
