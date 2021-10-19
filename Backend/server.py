@@ -33,14 +33,15 @@ app.url_map.strict_slashes = False
 swagger = Swagger(app)
 # app.config['SWAGGER']['openapi'] = '3.0.2'
 
+VERSION = os.environ.get('VERSION').replace('\n', '') if os.environ.get('VERSION') else ''
+ENVIRONMENT = os.environ.get('ENVIRONMENT').replace('\n', '') if os.environ.get('ENVIRONMENT') else 'development'
+
 if os.environ.get('SENTRY_DSN') is not None:
     import sentry_sdk
     from sentry_sdk.integrations.flask import FlaskIntegration
     from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
     SENTRY_DSN = os.environ.get('SENTRY_DSN').replace('\n', '')
-    VERSION = os.environ.get('VERSION').replace('\n', '')
-    ENVIRONMENT = os.environ.get('ENVIRONMENT').replace('\n', '')
     sentry_sdk.init(
         environment=ENVIRONMENT,
         release=VERSION,
@@ -61,7 +62,7 @@ try:
     else:
         # why? i don't know but its necessary
         DB_PASS = DB_PASS.replace('\n', '').replace('\r', '')
-        DB_CONNECTION_STRING = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}?application_name=coronavis_backend"
+        DB_CONNECTION_STRING = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}?application_name=coronavis_backend_{ENVIRONMENT}_{VERSION}"
 
 except KeyError as e:
     app.logger.warning('One or multiple necessary environment variables not set, using config.py file as backup')
