@@ -72,7 +72,7 @@ except KeyError as e:
 SQL_POOL_SIZE = 5
 SQL_MAX_OVERFLOW = 20
 
-if ENVIRONMENT === 'production':
+if ENVIRONMENT == 'production':
     SQL_POOL_SIZE = 10
     SQL_MAX_OVERFLOW = 50
 
