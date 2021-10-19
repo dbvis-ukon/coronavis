@@ -61,7 +61,7 @@ try:
     else:
         # why? i don't know but its necessary
         DB_PASS = DB_PASS.replace('\n', '').replace('\r', '')
-        DB_CONNECTION_STRING = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+        DB_CONNECTION_STRING = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}?application_name=coronavis_backend"
 
 except KeyError as e:
     app.logger.warning('One or multiple necessary environment variables not set, using config.py file as backup')
