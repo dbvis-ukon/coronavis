@@ -11,7 +11,7 @@ if ENVIRONMENT == 'production':
     threads = multiprocessing.cpu_count() * 2 + 1
 else:
     workers = 1
-    threads = 1
+    threads = 5
 
 print(f'launching server with {workers} workers and {threads} threads')
 
