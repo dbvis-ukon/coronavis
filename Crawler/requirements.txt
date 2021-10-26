@@ -3,7 +3,7 @@ numpy==1.21.3
 urllib3==1.26.7
 openpyxl==3.0.9
 requests==2.26.0
-shapely==1.7.1
+shapely==1.8.0
 geopy==2.2.0
 geojson==2.5.0
 SQLAlchemy==1.4.26
