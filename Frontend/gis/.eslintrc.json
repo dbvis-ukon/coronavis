@@ -60,6 +60,14 @@
         "plugin:@angular-eslint/template/recommended"
       ],
       "rules": {}
+    },
+    {
+      "files": [
+        "*.json"
+      ],
+      "extends": [
+        "plugin:json/recommended"
+      ]
     }
   ]
 }
