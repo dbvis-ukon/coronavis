@@ -288,7 +288,7 @@ set up sentry release:
     - export SENTRY_AUTH_TOKEN=${SENTRY_AUTH}
     - export SENTRY_ORG=lingvisio
     - sentry-cli releases new -p server "$CI_COMMIT_SHA"
-    - sentry-cli releases set-commits "$CI_COMMIT_SHA" --auto --log-level=debug --ignore-missing
+    - sentry-cli releases set-commits "$CI_COMMIT_SHA" --auto --log-level=debug --ignore-missing --ignore-empty
     - sentry-cli releases finalize "$CI_COMMIT_SHA"
     - sentry-cli releases deploys "$CI_COMMIT_SHA" new -e ${CI_COMMIT_REF_NAME}
   dependencies: []
