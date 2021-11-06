@@ -2,7 +2,7 @@ import { ErrorHandler, Injectable } from '@angular/core';
 import * as Sentry from '@sentry/browser';
 import { EventHint } from '@sentry/browser';
 // If taking advantage of automatic instrumentation (highly recommended)
-import { Integrations as TracingIntegrations } from "@sentry/tracing";
+import { Integrations as TracingIntegrations } from '@sentry/tracing';
 import { environment } from '../environments/environment';
 
 
