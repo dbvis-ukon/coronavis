@@ -61,6 +61,11 @@ const routes: Routes = [
                 component: DashboardComponent
             },
             {
+                path: 'dashboard/:id/:datasource',
+                resolve: {dashboard: DashboardService},
+                component: DashboardComponent
+            },
+            {
                 path: 'dashboards',
                 component: DashboardsOverviewComponent
             },

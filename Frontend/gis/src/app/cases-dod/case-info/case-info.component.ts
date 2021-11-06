@@ -7,7 +7,7 @@ import { Region } from 'src/app/repositories/types/in/region';
 import { ConfigService } from 'src/app/services/config.service';
 import { TableOverviewDataAndOptions, TableOverviewService } from 'src/app/services/table-overview.service';
 import { PixelChartDataAndOptions, VegaPixelchartService } from 'src/app/services/vega-pixelchart.service';
-import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../../map/options/covid-number-case-options';
+import { CovidNumberCaseChange, CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../../map/options/covid-number-case-options';
 import { RKICaseDevelopmentProperties } from '../../repositories/types/in/quantitative-rki-case-development';
 import { AgeGroupBinning, CovidChartOptions, ScaleType, TimeGranularity } from '../covid-chart-options';
 
@@ -96,7 +96,11 @@ export class CaseInfoComponent implements OnInit {
 
   openAsDashboard() {
     this.dialogService.closeAll();
-    this.router.navigate(['/', 'overview', 'dashboard', this.data.id]);
+    const params = ['/', 'overview', 'dashboard', this.data.id];
+    if (this._options.dataSource === CovidNumberCaseDataSource.risklayer) {
+      params.push(CovidNumberCaseDataSource.risklayer);
+    }
+    this.router.navigate(params);
   }
 
 }
