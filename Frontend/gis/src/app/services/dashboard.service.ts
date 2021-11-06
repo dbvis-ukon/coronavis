@@ -31,13 +31,14 @@ export class DashboardService implements Resolve<Dashboard> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Dashboard | Observable<Dashboard> | Promise<Dashboard> {
     const id = route.paramMap.get('id');
+    const datasource = route.paramMap.get('datasource') as CovidNumberCaseDataSource;
 
-    return this.resolveDashboard(id);
+    return this.resolveDashboard(id, datasource);
   }
 
-  public resolveDashboard(idOrAgs: string): Observable<Dashboard> {
+  public resolveDashboard(idOrAgs: string, dataSource: CovidNumberCaseDataSource): Observable<Dashboard> {
     if (idOrAgs.length <= 5) {
-      return this.createFromAgs(idOrAgs).pipe(
+      return this.createFromAgs(idOrAgs, dataSource).pipe(
         catchError(() => this.get404())
       );
     } else {
@@ -47,8 +48,10 @@ export class DashboardService implements Resolve<Dashboard> {
     }
   }
 
-  public createFromAgs(ags: string): Observable<Dashboard> {
+  public createFromAgs(ags: string, dataSource?: CovidNumberCaseDataSource): Observable<Dashboard> {
     const regions: Region[] = [];
+
+    dataSource = dataSource === CovidNumberCaseDataSource.risklayer ? CovidNumberCaseDataSource.risklayer : CovidNumberCaseDataSource.rki;
 
     if (ags === 'de') {
       regions.push({
@@ -128,13 +131,13 @@ export class DashboardService implements Resolve<Dashboard> {
         dashboard.items.push({
           type: 'table',
           dataRequest: [rRegion],
-          config: this.configService.getDefaultChartConfig('table')
+          config: merge(this.configService.getDefaultChartConfig('table'), {dataSource})
         } as TableOverviewItem);
 
         dashboard.items.push({
           type: 'multiline',
           dataRequest: dataRequests,
-          config: this.configService.getDefaultChartConfig('multiline')
+          config: merge(this.configService.getDefaultChartConfig('multiline'), {dataSource})
         } as MultiLineChartItem);
 
         dashboard.items.push({
@@ -151,9 +154,9 @@ export class DashboardService implements Resolve<Dashboard> {
           type: 'multiline',
           dataRequest: dataRequests,
           config: this.configService.parseConfig(
-            merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.deaths}),
+            merge(this.configService.getDefaultChartConfig('multiline'), {type: CovidNumberCaseType.deaths, dataSource}),
             'multiline',
-            true
+            false
           ).config
         });
 
