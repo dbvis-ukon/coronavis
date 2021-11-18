@@ -4,6 +4,7 @@
 import glob
 import os
 import logging
+import subprocess
 
 import jsonschema
 import psycopg2 as pg
@@ -314,6 +315,9 @@ try:
 
     cur.close()
     conn.close()
+
+    subprocess.run(['fdupes', '-dN', '-o name', STORAGE_PATH], capture_output=True)
+
     logger.info('Done. Exiting...')
 except Exception as e:
     if cur:

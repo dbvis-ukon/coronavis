@@ -4,6 +4,7 @@
 
 import os
 import re
+import subprocess
 import sys
 import traceback
 import logging
@@ -251,6 +252,8 @@ def insert_into_db(prognosis_today, data_entries, updated_today_count):
             # notification_result = requests.post('http://localhost:5000/sub/send-notifications',
             #                                     headers={'X-API-KEY': os.getenv('API_KEY')})
             logger.info(notification_result.text)
+
+            subprocess.run(['fdupes', '-dN', '-o name', STORAGE_PATH], capture_output=True)
 
             logger.info('Success')
 

@@ -3,6 +3,7 @@
 # author: Wolfgang Jentner
 import math
 import os
+import subprocess
 import sys
 import datetime
 import logging
@@ -327,6 +328,9 @@ try:
 
     cur.close()
     conn.close()
+
+    subprocess.run(['fdupes', '-dN', '-o name', STORAGE_PATH], capture_output=True)
+
     logger.info('Success')
 except Exception as err:
     logger.error(err)
