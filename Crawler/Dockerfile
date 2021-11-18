@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-RUN apt update && apt instally -y fdupes
+RUN apt-get update && apt-get install -y fdupes
 
 WORKDIR /app
 
