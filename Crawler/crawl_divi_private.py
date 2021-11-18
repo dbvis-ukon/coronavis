@@ -316,7 +316,7 @@ try:
     cur.close()
     conn.close()
 
-    subprocess.run(['fdupes', '-dN', '-o name', STORAGE_PATH], capture_output=True)
+    print(subprocess.run(['fdupes', '-dN', '-o name', STORAGE_PATH], capture_output=True))
 
     logger.info('Done. Exiting...')
 except Exception as e:

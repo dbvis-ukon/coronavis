@@ -253,7 +253,7 @@ def insert_into_db(prognosis_today, data_entries, updated_today_count):
             #                                     headers={'X-API-KEY': os.getenv('API_KEY')})
             logger.info(notification_result.text)
 
-            subprocess.run(['fdupes', '-dN', '-o name', STORAGE_PATH], capture_output=True)
+            print(subprocess.run(['fdupes', '-dN', '-o name', STORAGE_PATH], capture_output=True))
 
             logger.info('Success')
 
