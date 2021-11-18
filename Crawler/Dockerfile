@@ -1,5 +1,7 @@
 FROM python:3.10-slim
 
+RUN apt update && apt instally -y fdupes
+
 WORKDIR /app
 
 COPY . /app/.
