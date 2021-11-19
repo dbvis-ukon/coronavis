@@ -329,7 +329,7 @@ try:
     cur.close()
     conn.close()
 
-    print(subprocess.run(['fdupes', '-dN', '-o name', STORAGE_PATH], capture_output=True))
+    print(subprocess.run(['fdupes', '-dN', '-o', 'name', STORAGE_PATH], capture_output=True))
 
     logger.info('Success')
 except Exception as err:
