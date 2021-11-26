@@ -80,9 +80,10 @@ def download_file(fp: str) -> bool:
 def parse_and_insert_sheet(df, sheet_name, col_name):
     logger.info(f"Parse sheet {sheet_name}")
 
-    stand = df[sheet_name].iloc[1, 0]
+    # stand = df[sheet_name].iloc[1, 0]
 
-    datenbestand = datetime.strptime(stand, 'Stand: %d.%m.%Y %H:%M:%S')
+    # datenbestand = datetime.strptime(stand, 'Stand: %d.%m.%Y %H:%M:%S')
+    datenbestand = datetime.now()
 
     nan_value = float("NaN")
     data = df[sheet_name].iloc[4:, 2:].replace("", nan_value).dropna(how='all', axis=1)
