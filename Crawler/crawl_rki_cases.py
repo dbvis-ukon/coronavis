@@ -36,7 +36,7 @@ if last_update is not None and last_update >= date.today():
 cur.close()
 conn.close()
 
-LIMIT = 5000
+LIMIT = 25000
 
 URL = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset={offset}&resultRecordCount={limit}&cacheHint=true"
 MAX_RETRIES = 5
