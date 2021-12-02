@@ -168,6 +168,9 @@ def process_county_ebrake(county_id) -> None:
 
     ret_data = []
     for d in c_data:
+        if d[1] is None:
+            logger.warning(f'Value is none for {d} and county {county_id}')
+            continue
         e = {
             'id': county_id,
             'ts': d[0],
@@ -180,7 +183,7 @@ def process_county_ebrake(county_id) -> None:
 
     # nowcast
     today = datetime.combine(datetime.today(), datetime.min.time())
-    if ret_data[-1]['ts'] < today:
+    if len(ret_data) == 0 or ret_data[-1]['ts'] < today:
         e = {
             'id': county_id,
             'ts': today,
