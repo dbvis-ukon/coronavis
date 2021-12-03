@@ -15,19 +15,19 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: cron-covid19vis-crawler-divi-public
+  name: crawler-divi-public
   annotations:
     description: "Divi public json download and data extraction"
 spec:
   # run every hour 
-  schedule: "0 5-21 * * *"
+  schedule: "0 * * * *"
   jobTemplate:
     spec:
       backoffLimit: 3
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-divi-public
+          - name: crawler-divi-public
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
