@@ -1,37 +1,23 @@
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: pvc-covid19vis-crawler-rki-incidences
-  annotations:
-    description: "PVC for RKI incidence excel sheet"
-spec:
-  storageClassName: rook-cephfs
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 20Gi
----
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: cron-covid19vis-crawler-rki-incidences
+  name: crawler-rki-cases
   annotations:
-    description: "Crawler to download and parse the incidence excel sheet"
+    description: "RKI individual cases including statistical information per patient"
 spec:
   # run every hour (performs database check before actually fetching data from RKI)
-  schedule: "0,30 5-21 * * *"
+  schedule: "0 * * * *"
   jobTemplate:
     spec:
-      backoffLimit: 3
+      backoffLimit: 2
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-rki-incidences
+          - name: crawler-rki-cases
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
-            args: ['crawl_rki_incidences.py']
+            args: ['crawl_rki_cases.py']
             env:
             - name: DB_HOST
               valueFrom:
@@ -63,22 +49,17 @@ spec:
                 secretKeyRef:
                   name: sentry
                   key: SENTRY_DSN
-            - name: API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: database-info
-                  key: API_KEY
             - name: VERSION
               value: {{ .Values.sha | quote }}
             - name: ENVIRONMENT
               value: {{ .Values.environment | quote }}
-            volumeMounts:                                  
-            - mountPath: "/data"  
-              name: vol-rki-incidences-archive
-          volumes:
-          - name: vol-rki-incidences-archive
-            persistentVolumeClaim:
-              claimName: pvc-covid19vis-crawler-rki-incidences    # this must match the name of your PVC
+            resources:
+              requests:
+                cpu: 1000m
+                memory: 5Gi
+              limits:
+                cpu: 2000m
+                memory: 10Gi
           restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server

@@ -1,19 +1,19 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: covid19vis-crawler-survstat-agegroups
+  name: crawler-survstat-agegroups
   annotations:
     description: "Crawler that gets agegroup data from survstat"
 spec:
   # run every hour (performs database check before actually fetching data from RKI)
-  schedule: "0 6,9,12,15,18,21 * * *"
+  schedule: "0 * * * *"
   jobTemplate:
     spec:
       backoffLimit: 2
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-survstat-agegroups
+          - name: crawler-survstat-agegroups
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
