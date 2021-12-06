@@ -1,9 +1,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pvc-covid19vis-crawler-divi-public
+  name: pvc-covid19vis-crawler-divi-private
   annotations:
-    description: "PVC to store the divi public json data"
+    description: "PVC to store the divi private json data"
 spec:
   storageClassName: rook-cephfs
   accessModes:
@@ -15,23 +15,23 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: cron-covid19vis-crawler-divi-public
+  name: crawler-divi-private
   annotations:
-    description: "Divi public json download and data extraction"
+    description: "Divi priavte json download and data extraction"
 spec:
   # run every hour 
-  schedule: "0 5-21 * * *"
+  schedule: "0 * * * *"
   jobTemplate:
     spec:
       backoffLimit: 3
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-divi-public
+          - name: crawler-divi-private
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
-            args: ['crawl_divi_public.py']
+            args: ['crawl_divi_private.py']
             env:
             - name: DB_HOST
               valueFrom:
@@ -63,17 +63,27 @@ spec:
                 secretKeyRef:
                   name: sentry
                   key: SENTRY_DSN
+            - name: DIVI_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: divi-credentials
+                  key: DIVI_USERNAME
+            - name: DIVI_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: divi-credentials
+                  key: DIVI_PASSWORD
             - name: VERSION
               value: {{ .Values.sha | quote }}
             - name: ENVIRONMENT
               value: {{ .Values.environment | quote }}
             volumeMounts:                                  
-            - mountPath: "/var/divi_public"  
-              name: vol-divi-public-archive 
+            - mountPath: "/var/divi_private"  
+              name: vol-divi-private-archive 
           volumes:
-          - name: vol-divi-public-archive
+          - name: vol-divi-private-archive
             persistentVolumeClaim:
-              claimName: pvc-covid19vis-crawler-divi-public    # this must match the name of your PVC 
+              claimName: pvc-covid19vis-crawler-divi-private    # this must match the name of your PVC
           restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server

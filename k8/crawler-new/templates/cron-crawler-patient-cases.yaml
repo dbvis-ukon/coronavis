@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: covid19vis-crawler-patient-cases
+  name: crawler-rki-cases
   annotations:
     description: "RKI individual cases including statistical information per patient"
 spec:
@@ -13,7 +13,7 @@ spec:
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-patient-cases
+          - name: crawler-rki-cases
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
@@ -53,6 +53,13 @@ spec:
               value: {{ .Values.sha | quote }}
             - name: ENVIRONMENT
               value: {{ .Values.environment | quote }}
+            resources:
+              requests:
+                cpu: 1000m
+                memory: 5Gi
+              limits:
+                cpu: 2000m
+                memory: 10Gi
           restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server

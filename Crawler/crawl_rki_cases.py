@@ -36,7 +36,7 @@ if last_update is not None and last_update >= date.today():
 cur.close()
 conn.close()
 
-LIMIT = 5000
+LIMIT = 25000
 
 URL = "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_COVID19/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset={offset}&resultRecordCount={limit}&cacheHint=true"
 MAX_RETRIES = 5
@@ -122,8 +122,8 @@ try:
         # when we have less entries fetched than we already have in the DB the RKI API probably did not return all cases
         logger.error("RKI API data blob is incomplete. Will fail this job and try again at next crawl time.")
         exit(2)
-    elif (len(entries) - num_cases_in_db) > 100000:
-        logger.error("{} new entries in a single update (> 100k). Seems RKI API data blob is errornous. Will fail this job and try again at next crawl time.".format((len(entries) - num_cases_in_db)))
+    elif (len(entries) - num_cases_in_db) > 200000:
+        logger.error("{} new entries in a single update (> 200k). Seems RKI API data blob is errornous. Will fail this job and try again at next crawl time.".format((len(entries) - num_cases_in_db)))
         exit(2)
     else:
         logger.info('Insert new data into DB (takes 2-5 seconds)...')

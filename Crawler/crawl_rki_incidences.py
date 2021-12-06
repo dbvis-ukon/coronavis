@@ -17,6 +17,8 @@ import psycopg2.extras
 import requests
 
 # noinspection PyUnresolvedReferences
+from openpyxl import load_workbook
+
 import loadenv
 from db_config import get_connection
 
@@ -77,12 +79,16 @@ def download_file(fp: str) -> bool:
         return True
 
 
-def parse_and_insert_sheet(df, sheet_name, col_name):
+def parse_and_insert_sheet(filename, df, sheet_name, col_name):
     logger.info(f"Parse sheet {sheet_name}")
 
-    stand = df[sheet_name].iloc[1, 0]
+    # stand = df[sheet_name].iloc[1, 0]
 
-    datenbestand = datetime.strptime(stand, 'Stand: %d.%m.%Y %H:%M:%S')
+    # datenbestand = datetime.strptime(stand, 'Stand: %d.%m.%Y %H:%M:%S')
+    datenbestand = datetime.now()
+    wb = load_workbook(filename=filename)
+    datenbestand = wb.properties.modified
+    wb.close()
 
     nan_value = float("NaN")
     data = df[sheet_name].iloc[4:, 2:].replace("", nan_value).dropna(how='all', axis=1)
@@ -139,8 +145,8 @@ def parse_and_insert(fp: str) -> bool:
     df = pd.read_excel(fp, sheet_name=['LK_7-Tage-Inzidenz (fixiert)', 'LK_7-Tage-Fallzahlen (fixiert)'], header=None,
                        na_filter=False, engine="openpyxl")
 
-    parse_and_insert_sheet(df=df, sheet_name='LK_7-Tage-Inzidenz (fixiert)', col_name='7_day_incidence')
-    parse_and_insert_sheet(df=df, sheet_name='LK_7-Tage-Fallzahlen (fixiert)', col_name='7_day_cases')
+    parse_and_insert_sheet(filename=fp, df=df, sheet_name='LK_7-Tage-Inzidenz (fixiert)', col_name='7_day_incidence')
+    parse_and_insert_sheet(filename=fp, df=df, sheet_name='LK_7-Tage-Fallzahlen (fixiert)', col_name='7_day_cases')
 
     return True
 
@@ -162,6 +168,9 @@ def process_county_ebrake(county_id) -> None:
 
     ret_data = []
     for d in c_data:
+        if d[1] is None:
+            logger.warning(f'Value is none for {d} and county {county_id}')
+            continue
         e = {
             'id': county_id,
             'ts': d[0],
@@ -174,7 +183,7 @@ def process_county_ebrake(county_id) -> None:
 
     # nowcast
     today = datetime.combine(datetime.today(), datetime.min.time())
-    if ret_data[-1]['ts'] < today:
+    if len(ret_data) == 0 or ret_data[-1]['ts'] < today:
         e = {
             'id': county_id,
             'ts': today,

@@ -15,7 +15,7 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: cron-covid19vis-crawler-risklayer-lk
+  name: crawler-risklayer-lk
   annotations:
     description: "Risklayer spreadhseet download and LK case data extraction"
 spec:
@@ -27,7 +27,7 @@ spec:
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-risklayer-lk
+          - name: crawler-risklayer-lk
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']

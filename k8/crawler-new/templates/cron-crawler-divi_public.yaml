@@ -1,9 +1,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pvc-covid19vis-crawler-rki-incidences
+  name: pvc-covid19vis-crawler-divi-public
   annotations:
-    description: "PVC for RKI incidence excel sheet"
+    description: "PVC to store the divi public json data"
 spec:
   storageClassName: rook-cephfs
   accessModes:
@@ -15,23 +15,23 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: cron-covid19vis-crawler-rki-incidences
+  name: crawler-divi-public
   annotations:
-    description: "Crawler to download and parse the incidence excel sheet"
+    description: "Divi public json download and data extraction"
 spec:
-  # run every hour (performs database check before actually fetching data from RKI)
-  schedule: "0,30 5-21 * * *"
+  # run every hour 
+  schedule: "0 * * * *"
   jobTemplate:
     spec:
       backoffLimit: 3
       template:
         spec:
           containers:
-          - name: covid19vis-crawler-rki-incidences
+          - name: crawler-divi-public
             image: registry.dbvis.de/jentner/covid-19-vis/crawler:{{ .Values.sha }}
             imagePullPolicy: Always
             command: ['python']
-            args: ['crawl_rki_incidences.py']
+            args: ['crawl_divi_public.py']
             env:
             - name: DB_HOST
               valueFrom:
@@ -63,22 +63,17 @@ spec:
                 secretKeyRef:
                   name: sentry
                   key: SENTRY_DSN
-            - name: API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: database-info
-                  key: API_KEY
             - name: VERSION
               value: {{ .Values.sha | quote }}
             - name: ENVIRONMENT
               value: {{ .Values.environment | quote }}
             volumeMounts:                                  
-            - mountPath: "/data"  
-              name: vol-rki-incidences-archive
+            - mountPath: "/var/divi_public"  
+              name: vol-divi-public-archive 
           volumes:
-          - name: vol-rki-incidences-archive
+          - name: vol-divi-public-archive
             persistentVolumeClaim:
-              claimName: pvc-covid19vis-crawler-rki-incidences    # this must match the name of your PVC
+              claimName: pvc-covid19vis-crawler-divi-public    # this must match the name of your PVC 
           restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server
