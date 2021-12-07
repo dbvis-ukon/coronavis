@@ -84,7 +84,6 @@
     "ajv-formats": "^2.1.0",
     "are-you-es5": "^2.0.0",
     "babel-loader": "^8.2.0",
-    "codelyzer": "^6.0.0",
     "eslint": "^8.2.0",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-jsdoc": "37.1.0",
