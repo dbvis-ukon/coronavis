@@ -426,8 +426,9 @@ frontend-code-quality:
     paths:
       - ./Frontend/gis/dist
   cache:
+    key: coronavis-angular-cache
     paths:
-      - ./Frontend/gis/.angular
+      - ./Frontend/gis/.angular/
   dependencies:
     - export-environment
     - frontend-install-dependencies
