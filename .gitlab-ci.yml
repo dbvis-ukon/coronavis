@@ -425,6 +425,9 @@ frontend-code-quality:
     expire_in: 1 day
     paths:
       - ./Frontend/gis/dist
+  cache:
+    paths:
+      - ./Frontend/gis/.angular
   dependencies:
     - export-environment
     - frontend-install-dependencies
@@ -433,7 +436,7 @@ frontend-code-quality:
     - frontend-install-dependencies
   retry: 2
   tags:
-    - no-cache
+    - docker
 
 build-frontend:
   extends: .build-frontend
