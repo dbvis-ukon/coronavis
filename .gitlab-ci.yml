@@ -400,6 +400,28 @@ frontend-code-quality:
   retry: 2
   tags:
     - docker-build
+
+check-missing-translations:
+  stage: test
+  image: node:16
+  script:
+    - cd ./Frontend/gis
+    - yarn extract-i18n
+    - |
+      if [ -z "$(git status --porcelain)" ]; then 
+        # Working directory clean
+        exit 0
+      else 
+        # Uncommitted changes
+        exit 1
+      fi
+  dependencies:
+    - frontend-install-dependencies
+  needs:
+    - frontend-install-dependencies
+  retry: 2
+  tags:
+    - no-cache
     
 
 ###########################################
