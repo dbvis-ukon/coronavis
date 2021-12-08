@@ -7,6 +7,7 @@ metadata:
 spec:
   # run at 9am (7 utc)
   schedule: "0 7 * * *"
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       backoffLimit: 2

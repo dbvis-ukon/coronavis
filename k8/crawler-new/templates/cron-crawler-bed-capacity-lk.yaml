@@ -7,6 +7,7 @@ metadata:
 spec:
   # run every hour (performs database check before actually fetching data from RKI)
   schedule: "0 * * * *"
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       backoffLimit: 2
