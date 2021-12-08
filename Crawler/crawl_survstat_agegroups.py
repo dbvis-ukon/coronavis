@@ -805,7 +805,11 @@ for county_to_process in counties.keys():
 
 try:
     logger.info('Refreshing materialized view')
-    cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW cases_per_county_and_day;')
+    cur.execute('''
+    set time zone \'UTC\';
+    REFRESH MATERIALIZED VIEW cases_per_county_and_day;
+    REFRESH MATERIALIZED VIEW v2_survstat;
+    ''')
     conn.commit()
 except Exception as e:
     ex = True
