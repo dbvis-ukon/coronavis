@@ -400,6 +400,28 @@ frontend-code-quality:
   retry: 2
   tags:
     - docker-build
+
+check-missing-translations:
+  stage: test
+  image: node:16
+  script:
+    - cd ./Frontend/gis
+    - yarn extract-i18n
+    - |
+      if [ -z "$(git status --porcelain)" ]; then 
+        # Working directory clean
+        exit 0
+      else 
+        # Uncommitted changes
+        exit 1
+      fi
+  dependencies:
+    - frontend-install-dependencies
+  needs:
+    - frontend-install-dependencies
+  retry: 2
+  tags:
+    - no-cache
     
 
 ###########################################
@@ -425,6 +447,10 @@ frontend-code-quality:
     expire_in: 1 day
     paths:
       - ./Frontend/gis/dist
+  cache:
+    key: coronavis-angular-cache
+    paths:
+      - ./Frontend/gis/.angular/
   dependencies:
     - export-environment
     - frontend-install-dependencies
@@ -433,7 +459,7 @@ frontend-code-quality:
     - frontend-install-dependencies
   retry: 2
   tags:
-    - no-cache
+    - docker
 
 build-frontend:
   extends: .build-frontend
