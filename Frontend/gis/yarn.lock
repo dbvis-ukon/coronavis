@@ -1509,35 +1509,6 @@
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-13.0.4.tgz#9389c95fdbefb48fe061a30d81aab2f83bbf2081"
   integrity sha512-kH0kYOQvbv6SnVdcdi21AbJo17H1HSGlCy/8C1ujLdgtT6enKMnx9onYIoZSmb5U98GqYc+DV/W0HwpHwRcOoQ==
 
-"@ngx-i18nsupport/ngx-i18nsupport-lib@^1.12.1":
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/@ngx-i18nsupport/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-1.12.1.tgz#4ecb2227c576dac51d75b3ef82b9962be7d87ef5"
-  integrity sha512-6HSv4lPZLYSkghprg4k0kKCaAGbsppK6vlAVswDkPHO659WnIkNpZYSloQPziFt6NqL9WpZJ3V1gBbVx9tKV0g==
-  dependencies:
-    "@types/xmldom" "^0.1.29"
-    tokenizr "^1.3.10"
-    tslib "^1.9.0"
-    xmldom "^0.1.27"
-
-"@ngx-i18nsupport/ngx-i18nsupport@^1.1.6":
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/@ngx-i18nsupport/ngx-i18nsupport/-/ngx-i18nsupport-1.1.6.tgz#d53ffd7e7b54cb8ba404db151bca3b68034a84eb"
-  integrity sha512-YQDOsz2FOdALOoQEQtsYZVnNuxi3qFKJ+n+lDm8uFjRIYegHXKD6m1i7nTGX+NEIr/0ICnWS3yPCyCy5x+6+hg==
-  dependencies:
-    "@ngx-i18nsupport/ngx-i18nsupport-lib" "^1.12.1"
-    chalk "^2.4.1"
-    he "^1.1.1"
-    request "^2.85.0"
-    tslib "^1.9.0"
-
-"@ngx-i18nsupport/tooling@^8.0.3":
-  version "8.0.3"
-  resolved "https://registry.yarnpkg.com/@ngx-i18nsupport/tooling/-/tooling-8.0.3.tgz#be3454eaa06ad8518ddda7a6bfbc57b95dffbfce"
-  integrity sha512-AAsjwklil2HKEHLreAEAOHB71WDqHtYxWinP+B/YWQH8UlVyZwvXXQigrsaiQyKIKdTueKGQ8ThS24GRiE1R/g==
-  dependencies:
-    "@ngx-i18nsupport/ngx-i18nsupport" "^1.1.6"
-    tslib "^1.9.0"
-
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -3267,7 +3238,7 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@2, commander@^2.19.0, commander@^2.20.0:
+commander@2, commander@^2.15.1, commander@^2.19.0, commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -6680,6 +6651,27 @@ ng2-nouislider@^1.8.2:
   resolved "https://registry.yarnpkg.com/ng2-nouislider/-/ng2-nouislider-1.8.3.tgz#c9c1ec77b6b5a909f87368ba799914208baa13a6"
   integrity sha512-Vl8tHCcJ/ioJLAs2t6FBC35sZq1P/O5ZdqdFwYxOCOMVbILGWNg+2gWZIjFstvv9pqb/mVvVUYe6qGG/mA/RBQ==
 
+ngx-i18nsupport-lib@^1.10.2:
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-1.10.2.tgz#a890e9f1ad645419640dbb126e8c0d326685a9e7"
+  integrity sha512-Z81I2/HUtZ/7X7C3sioJj/Zr/M0iQs0aR5EhYsrWTzdEy7fZWFVYabzzZs+8h6lhQ/4yIl+3sVOCBkI9BiUUEQ==
+  dependencies:
+    "@types/xmldom" "^0.1.29"
+    tokenizr "^1.3.4"
+    xmldom "^0.1.27"
+
+ngx-i18nsupport@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/ngx-i18nsupport/-/ngx-i18nsupport-0.17.1.tgz#dff3b989e513b14dff99097ed98778c12e4883fc"
+  integrity sha512-d8OCQs/XYBEI9qvztQyEkd8gEPFEBmyRg8UcriGQV8Ew1ujvrIieHxmX8YpDpFZKQ4ePextQGUSvjpGd2NauEQ==
+  dependencies:
+    chalk "^2.4.1"
+    commander "^2.15.1"
+    he "^1.1.1"
+    ngx-i18nsupport-lib "^1.10.2"
+    request "^2.85.0"
+    rxjs "^6.0.0"
+
 ngx-markdown@13.0.0:
   version "13.0.0"
   resolved "https://registry.yarnpkg.com/ngx-markdown/-/ngx-markdown-13.0.0.tgz#07c9ef46db6827290fc533c0ee64d3856e964bfd"
@@ -8058,7 +8050,7 @@ rxjs-for-await@0.0.2:
   resolved "https://registry.yarnpkg.com/rxjs-for-await/-/rxjs-for-await-0.0.2.tgz#26598a1d6167147cc192172970e7eed4e620384b"
   integrity sha512-IJ8R/ZCFMHOcDIqoABs82jal00VrZx8Xkgfe7TOKoaRPAW5nH/VFlG23bXpeGdrmtqI9UobFPgUKgCuFc7Lncw==
 
-rxjs@6.6.7, rxjs@^6.5.4:
+rxjs@6.6.7, rxjs@^6.0.0, rxjs@^6.5.4:
   version "6.6.7"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.7.tgz#90ac018acabf491bf65044235d5863c4dab804c9"
   integrity sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==
@@ -8798,7 +8790,7 @@ toidentifier@1.0.0:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
   integrity sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==
 
-tokenizr@^1.3.10:
+tokenizr@^1.3.4:
   version "1.6.4"
   resolved "https://registry.yarnpkg.com/tokenizr/-/tokenizr-1.6.4.tgz#bc0c85c1fe1c6dfbfe15c237ddbccca3bd46fb70"
   integrity sha512-p4fMt6Ki9c3U00fTMK7Ao2kFPgniqHfYHGHikjoMHjFnNt+ZaF30mb+w1B0zPhZ4HYTRL+9BoypOZ0dWz7fKQw==
