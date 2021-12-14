@@ -554,7 +554,7 @@ export class VegaLinechartService {
       });
 
       if (!chartOptions.incidenceRules) {
-        spec.vconcat[0].layer[1].layer.splice(0, 2);
+        spec.vconcat[0].layer[1].layer.splice(0, 4);
         delete spec.vconcat[0].layer[1].layer[1].encoding.color;
       }
 
