@@ -1572,12 +1572,12 @@
     node-gyp "^8.2.0"
     read-package-json-fast "^2.0.1"
 
-"@nrwl/cli@*", "@nrwl/cli@13.3.7":
-  version "13.3.7"
-  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-13.3.7.tgz#f236c0c53118fe94adaba1fcf19b735cc7d59d07"
-  integrity sha512-z8XF4NfVHRyJ4N4+36gkuDyLJHgEas8xvXc/ByvWq14jiCZuFHVGfOAcyUxAb7UlZWUHRj9Ns7dXSJyCxbRE4g==
+"@nrwl/cli@*", "@nrwl/cli@13.3.8":
+  version "13.3.8"
+  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-13.3.8.tgz#21d2d8437515997966060fc1b1a5a89a0544a06b"
+  integrity sha512-6uRXGjqtObTnyzNCMRl51WRAFyREkWPrX5ipt7jMkRHkbyVhThBYfYK9BRdL2BZrofHM41c3tXXCmWCt/j4a6A==
   dependencies:
-    "@nrwl/tao" "13.3.7"
+    "@nrwl/tao" "13.3.8"
     chalk "4.1.0"
     enquirer "~2.3.6"
     v8-compile-cache "2.3.0"
@@ -1613,10 +1613,10 @@
     tslib "^2.0.0"
     yargs-parser "20.0.0"
 
-"@nrwl/tao@13.3.7":
-  version "13.3.7"
-  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-13.3.7.tgz#9f9745d6d79fbacd102d116ca45873e62e4539c7"
-  integrity sha512-8q72qo85bU2Ckw9jnd9j/8KkP91aDWIEksPlhj75CjcWFYF0Qi6E9vU7DTMvfvEKqskaovJyiPQF6f7q19/ldQ==
+"@nrwl/tao@13.3.8":
+  version "13.3.8"
+  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-13.3.8.tgz#7a659512810c49892ee900b471b547f38258340b"
+  integrity sha512-2YTOp1d1oOrzAMHsIMuOXJfbjORwsE/OVBIivcQCkTbrc7wiG+IRZWPgEc4di7bhsergCMxXlSFt1dmR8UZIZw==
   dependencies:
     chalk "4.1.0"
     enquirer "~2.3.6"
@@ -1624,7 +1624,7 @@
     fs-extra "^9.1.0"
     ignore "^5.0.4"
     jsonc-parser "3.0.0"
-    nx "13.3.7"
+    nx "13.3.8"
     rxjs "^6.5.4"
     rxjs-for-await "0.0.2"
     semver "7.3.4"
@@ -4171,9 +4171,9 @@ ejs@^3.1.5:
     jake "^10.6.1"
 
 electron-to-chromium@^1.4.17:
-  version "1.4.21"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.21.tgz#edf7d9477980079d840570c34ab4c4a5bef4c2bd"
-  integrity sha512-T04U2ciApGbm+dESFEBbewi2Xt0Dgyww8M4n4sOt9lnmFuYbaHEDWCROkx4jvAZDUWWry9YOdnAs+7468q80Qg==
+  version "1.4.22"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.22.tgz#57b7deee38b812e8b5f8f530709cfdb62a8e0bcc"
+  integrity sha512-IiW8cV8eyjMhuWqk9wwHRPOVN+5Fa7NHOTjogrwg2H9TNiLVA8ywjOJnVKoywaqUHryDUOpK7Mg6P1FETisi0g==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -6825,12 +6825,12 @@ nx@13.1.3:
   dependencies:
     "@nrwl/cli" "*"
 
-nx@13.3.7:
-  version "13.3.7"
-  resolved "https://registry.yarnpkg.com/nx/-/nx-13.3.7.tgz#2044c1c523cc4f5d913298f12226ccba5355c53e"
-  integrity sha512-20Hfb2M5O4uQjwqXzL2FGRjuT/xq9LKDXBR9h/fO5e1Ob+0ahPESo1xHwovH3KyYKIKqTtwzfW8ysF05Q1VBuA==
+nx@13.3.8:
+  version "13.3.8"
+  resolved "https://registry.yarnpkg.com/nx/-/nx-13.3.8.tgz#14475c47e21b4d487a7a29bbd73eef48a725dd88"
+  integrity sha512-cN3KNSpk+5xsRkh3nZoeggoAK2UnUNJr5ges62TggEclsWgdY7XADW5DL3un5+Cfk+DAseu6kTE7tKSpjd+aFA==
   dependencies:
-    "@nrwl/cli" "13.3.7"
+    "@nrwl/cli" "13.3.8"
 
 oauth-sign@~0.9.0:
   version "0.9.0"
