@@ -177,7 +177,7 @@ try:
     insert_data(data)
 
     logger.info('Refreshing materialized view')
-    cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW filled_hospital_timeseries_with_fix;')
+    cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW CONCURRENTLY filled_hospital_timeseries_with_fix;')
     conn.commit()
 
     cur.close()

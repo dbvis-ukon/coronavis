@@ -242,7 +242,7 @@ def insert_into_db(prognosis_today, data_entries, updated_today_count):
             logger.info('Prognosis data inserted.')
 
             logger.info('Refreshing materialized view')
-            cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW cases_per_county_and_day_risklayer;')
+            cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day_risklayer;')
             conn.commit()
 
             logger.info('Send notification emails')

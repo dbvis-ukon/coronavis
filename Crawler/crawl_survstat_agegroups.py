@@ -807,8 +807,13 @@ try:
     logger.info('Refreshing materialized view')
     cur.execute('''
     set time zone \'UTC\';
-    REFRESH MATERIALIZED VIEW cases_per_county_and_day;
-    REFRESH MATERIALIZED VIEW v2_survstat;
+    REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day;
+    ''')
+    conn.commit()
+
+    cur.execute('''
+    set time zone \'UTC\';
+    REFRESH MATERIALIZED VIEW CONCURRENTLY v2_survstat;
     ''')
     conn.commit()
 except Exception as e:

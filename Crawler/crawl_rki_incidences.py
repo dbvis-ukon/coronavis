@@ -5,7 +5,6 @@ import math
 import os
 import subprocess
 import sys
-import datetime
 import logging
 import traceback
 from datetime import datetime, timezone, timedelta
@@ -19,6 +18,7 @@ import requests
 # noinspection PyUnresolvedReferences
 from openpyxl import load_workbook
 
+# noinspection PyUnresolvedReferences
 import loadenv
 from db_config import get_connection
 
@@ -85,7 +85,7 @@ def parse_and_insert_sheet(filename, df, sheet_name, col_name):
     # stand = df[sheet_name].iloc[1, 0]
 
     # datenbestand = datetime.strptime(stand, 'Stand: %d.%m.%Y %H:%M:%S')
-    datenbestand = datetime.now()
+    # datenbestand = datetime.now()
     wb = load_workbook(filename=filename)
     datenbestand = wb.properties.modified
     wb.close()
@@ -97,9 +97,12 @@ def parse_and_insert_sheet(filename, df, sheet_name, col_name):
     for d in data.loc[data.index[0]]:
         if isinstance(d, str):
             try:
-                parsed = datetime.strptime(d, '%d.%m.%Y')
+                if d == 'Inzidenz' and col > 0:
+                    dt = data.iat[0, col-1] + timedelta(days=1)
+                else:
+                    dt = datetime.strptime(d, '%d.%m.%Y')
 
-                data.iat[0, col] = parsed
+                data.iat[0, col] = dt
             except ValueError as _:
                 pass
 
@@ -328,11 +331,11 @@ try:
         process_county_ebrake(c[0])
 
     logger.info('Refreshing materialized view cases_per_county_and_day.')
-    cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW cases_per_county_and_day;")
+    cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day;")
     conn.commit()
 
     logger.info('Refreshing materialized view ebrake_data.')
-    cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW ebrake_data;")
+    cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW CONCURRENTLY ebrake_data;")
     conn.commit()
 
     cur.close()

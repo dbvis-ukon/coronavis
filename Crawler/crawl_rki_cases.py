@@ -139,7 +139,7 @@ try:
 
         logger.info('Refreshing materialized view.')
 
-        cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW cases_per_county_and_day;")
+        cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day;")
         conn.commit()
 
         logger.info('Success')
