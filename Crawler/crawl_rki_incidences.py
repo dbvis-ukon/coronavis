@@ -79,7 +79,7 @@ def download_file(fp: str) -> bool:
         return True
 
 
-def parse_and_insert_sheet(filename, df, sheet_name, col_name):
+def parse_and_insert_sheet(filename: str, df: pd.DataFrame, sheet_name: str, col_name: str) -> bool:
     logger.info(f"Parse sheet {sheet_name}")
 
     # stand = df[sheet_name].iloc[1, 0]
@@ -98,7 +98,7 @@ def parse_and_insert_sheet(filename, df, sheet_name, col_name):
         if isinstance(d, str):
             try:
                 if d == 'Inzidenz' and col > 0:
-                    dt = data.iat[0, col-1] + timedelta(days=1)
+                    dt = data.iat[0, col - 1] + timedelta(days=1)
                 else:
                     dt = datetime.strptime(d, '%d.%m.%Y')
 
@@ -117,7 +117,8 @@ def parse_and_insert_sheet(filename, df, sheet_name, col_name):
             continue
         lknr_formatted = "{:05d}".format(lknr)
         for c_idx in range(1, data.shape[1]):
-            val = None if data.iloc[r_idx, c_idx] == '' or math.isnan(data.iloc[r_idx, c_idx]) else data.iloc[r_idx, c_idx]
+            val = None if data.iloc[r_idx, c_idx] == '' or math.isnan(data.iloc[r_idx, c_idx]) else data.iloc[
+                r_idx, c_idx]
             entry = {
                 'datenbestand': datenbestand,
                 'id': lknr_formatted,
@@ -126,6 +127,7 @@ def parse_and_insert_sheet(filename, df, sheet_name, col_name):
             }
             entries.append(entry)
 
+    # noinspection SqlResolve
     psycopg2.extras.execute_values(
         cur,
         f"""INSERT INTO 
@@ -154,7 +156,7 @@ def parse_and_insert(fp: str) -> bool:
     return True
 
 
-def process_county_ebrake(county_id) -> None:
+def process_county_ebrake(county_id: str) -> None:
     cur.execute(f"""
         SELECT timestamp, \"7_day_incidence\" 
         FROM rki_incidence_excel_berlin 
@@ -181,7 +183,7 @@ def process_county_ebrake(county_id) -> None:
             'holiday': state_holidays.get(d[0])
         }
         for t in THRESHOLDS:
-            e['ebrake'+str(t)] = False
+            e['ebrake' + str(t)] = False
         ret_data.append(e)
 
     # nowcast
@@ -194,7 +196,7 @@ def process_county_ebrake(county_id) -> None:
             'holiday': state_holidays.get(today)
         }
         for t in THRESHOLDS:
-            e['ebrake'+str(t)] = False
+            e['ebrake' + str(t)] = False
         ret_data.append(e)
 
     # forecast
@@ -207,7 +209,7 @@ def process_county_ebrake(county_id) -> None:
             'holiday': state_holidays.get(future_dt)
         }
         for t in THRESHOLDS:
-            e['ebrake'+str(t)] = False
+            e['ebrake' + str(t)] = False
         ret_data.append(e)
 
     # contains the idx when ebrake has started for respective threshold
@@ -220,7 +222,7 @@ def process_county_ebrake(county_id) -> None:
         # check for date idx = i if ebrake has started
         # must be over t for 3 days
         for t in THRESHOLDS:
-            ret_data[i]['ebrake'+str(t)] = True
+            ret_data[i]['ebrake' + str(t)] = True
         skipped = False
         for j in range(i - 4, i - 1):
             if ret_data[j]['val'] is None:
@@ -298,6 +300,7 @@ def process_county_ebrake(county_id) -> None:
     )
     conn.commit()
     return None
+
 
 conn = None
 cur = None

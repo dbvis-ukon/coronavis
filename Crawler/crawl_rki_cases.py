@@ -13,6 +13,7 @@ import psycopg2 as pg
 import psycopg2.extras
 import requests
 
+# noinspection PyUnresolvedReferences
 import loadenv
 from db_config import get_connection
 

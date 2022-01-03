@@ -6,7 +6,6 @@ import logging
 import subprocess
 
 import jsonschema as jsonschema
-import psycopg2 as pg
 import psycopg2.extensions
 import psycopg2.extras
 import requests
@@ -16,7 +15,7 @@ from datetime import datetime, timezone
 import loadenv
 
 # logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-from db_config import SQLALCHEMY_DATABASE_URI, get_connection
+from db_config import get_connection
 
 logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 logger = logging.getLogger(__name__)
@@ -44,17 +43,17 @@ session.headers.update(headers)
 JSONPAYLOAD = {"criteria":
                    {"bundesland": None,
                     "standortId": None,
-                    "standortBezeichnung":"",
-                    "bettenStatus":[],
-                    "bettenKategorie":[],
+                    "standortBezeichnung": "",
+                    "bettenStatus": [],
+                    "bettenKategorie": [],
                     # only look for beds for adults since otherwise it always uses the best possible status
                     # i.e., there are beds for kids available but none for adults: overall status is still available
                     # this request is also the default on the DIVI website
-                    "behandlungsschwerpunktL1":["ERWACHSENE"],
-                    "behandlungsschwerpunktL2":[],
-                    "behandlungsschwerpunktL3":[]
+                    "behandlungsschwerpunktL1": ["ERWACHSENE"],
+                    "behandlungsschwerpunktL2": [],
+                    "behandlungsschwerpunktL3": []
                     },
-               "pageNumber":0,
+               "pageNumber": 0,
                "pageSize": 3000
                }
 
@@ -64,6 +63,7 @@ x = session.post(URL_API, json=JSONPAYLOAD)
 data = x.json()
 
 # infos
+# noinspection DuplicatedCode
 count = data['rowCount']
 logger.info(f'Downloaded data from {count} hospitals.')
 
@@ -82,14 +82,11 @@ logger.info(f'Storing data on pvc: {filepath}')
 with open(filepath, 'w') as outfile:
     json.dump(data, outfile)
 
-
 with open('./divi_public.schema.json') as schema:
     logger.info('Validate json data with schema')
     jsonschema.validate(data, json.load(schema))
 
-
 logger.info(f'Loading the data into the database')
-
 
 # logger.debug(data)
 

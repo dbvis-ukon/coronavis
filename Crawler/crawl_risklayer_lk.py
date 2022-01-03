@@ -6,8 +6,10 @@ import os
 import re
 import subprocess
 import sys
-import traceback
 import logging
+from typing import Dict, Optional, List, Any
+
+# noinspection PyUnresolvedReferences
 import loadenv
 from datetime import datetime, timezone, timedelta, time
 from time import sleep
@@ -45,22 +47,22 @@ WAIT_MS_RETRY = 5000
 BACKOFF_BASE_TIME = 10  # sec
 
 
-def parse_cookies():
+def parse_cookies() -> Dict[str, str]:
     """Parse a cookies.txt file and return a dictionary of key value pairs
     compatible with requests."""
 
     cookies = {}
     if os.environ.get('GOOGLE_COOKIES') is not None:
         for line in os.environ.get('GOOGLE_COOKIES').splitlines():
-            if not re.match(r'^\#', line):
-                lineFields = line.strip().split('\t')
-                cookies[lineFields[5]] = lineFields[6]
+            if not re.match(r'^#', line):
+                line_fields = line.strip().split('\t')
+                cookies[line_fields[5]] = line_fields[6]
     else:
         with open('./google.com_cookies.txt', 'r') as fp:
             for line in fp:
-                if not re.match(r'^\#', line):
-                    lineFields = line.strip().split('\t')
-                    cookies[lineFields[5]] = lineFields[6]
+                if not re.match(r'^#', line):
+                    line_fields = line.strip().split('\t')
+                    cookies[line_fields[5]] = line_fields[6]
     return cookies
 
 
@@ -92,7 +94,7 @@ def download_file(fp: str) -> bool:
         return True
 
 
-def parse_file(fp: str):
+def parse_file(fp: str) -> Optional[pd.DataFrame]:
     try:
         logger.info('Parse data')
         df = pd.read_excel(fp, sheet_name=['Statistik Überblick', 'Haupt', 'Kreise'], header=None,
@@ -104,11 +106,11 @@ def parse_file(fp: str):
         return None
 
 
-def get_prognosis(df) -> float:
+def get_prognosis(df: pd.DataFrame) -> float:
     return df['Statistik Überblick'].iloc[18, 6]
 
 
-def get_county_data(df_data):
+def get_county_data(df_data: pd.DataFrame) -> (List[Dict[str, Any]], int):
     df = df_data['Haupt'].iloc[5:406, [2, 0, 0, 10, 3, 47, 48, 49, 15, 39, 23]]
     # AGS, Name, Name (->update-status) Today, -1d, -2d, -3d, -4d, death today, death -1d, verified (0|1)
     df[2] = df[2].astype(int)  # calls cannot be chained
@@ -176,7 +178,7 @@ def get_county_data(df_data):
                 # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=13), time_23_59).replace(
                 # tzinfo=timezone.utc), 'row_id_cases': 19, 'row_id_deaths': None}
                 ]
-    data_entries = []
+    data_entries: List[Dict[str, Any]] = []
     for row in db_array:
         for history in date_arr:
             entry = {
@@ -204,7 +206,7 @@ def get_county_data(df_data):
     return data_entries, updated_today_count
 
 
-def insert_into_db(prognosis_today, data_entries, updated_today_count):
+def insert_into_db(prognosis_today: float, data_entries: List[Dict[str, Any]], updated_today_count: int):
     try:
         cur.execute(f"Select Max(datenbestand) from cases_lk_risklayer_current")
         last_update = cur.fetchone()[0]
@@ -269,7 +271,7 @@ def insert_into_db(prognosis_today, data_entries, updated_today_count):
 
         conn.rollback()
 
-        if (conn):
+        if conn:
             cur.close()
             conn.close()
 

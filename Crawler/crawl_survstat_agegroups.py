@@ -1,6 +1,7 @@
 import datetime
 import logging
 import math
+from typing import List, Optional
 
 import pandas as pd
 import pandas.io.sql as sqlio
@@ -8,12 +9,11 @@ from zeep import Client
 
 # code from https://github.com/rgieseke/opencoviddata/blob/main/scripts/fetch-county.py
 # and adapted by Maximilian Fischer and Wolfgang Jentner
-import psycopg2 as pg
 import psycopg2.extensions
 import psycopg2.extras
 # noinspection PyUnresolvedReferences
 import loadenv
-from db_config import SQLALCHEMY_DATABASE_URI, get_connection
+from db_config import get_connection
 
 start = datetime.datetime.now()
 
@@ -512,6 +512,7 @@ for a in range(0, 80):
 
 template_str += '%(A80)s, %(Unb)s)'
 
+# noinspection SqlInsertValues
 QUERY = f'INSERT INTO survstat_cases_agegroup ("year", "week", ags, {ages} "A80+", Unbekannt) ' \
         f'VALUES %s ON CONFLICT ON CONSTRAINT survstat_cases_agegroup_pk DO ' \
         f'UPDATE SET ' \
@@ -522,7 +523,8 @@ QUERY = f'INSERT INTO survstat_cases_agegroup ("year", "week", ags, {ages} "A80+
 conn, cur = get_connection('crawl_survstat_agegroups')
 
 
-def download_survstat_data_for_county(county, years, incidence, cumulated):
+def download_survstat_data_for_county(county: str, years: List[int], incidence: bool, cumulated: bool) \
+        -> Optional[pd.DataFrame]:
     logger.debug(f"Fetching: {county} {counties[county]} with incidences {incidence} and cumulated {cumulated}")
     if incidence and cumulated:
         raise Exception('Invalid arguments with incidence and cumulated true')
@@ -598,6 +600,11 @@ def download_survstat_data_for_county(county, years, incidence, cumulated):
 
     columns = [i["Caption"] for i in res.Columns.QueryResultColumn]
 
+    if res.QueryResults is None:
+        #logger.warning(
+        #    f'[{county} ({counties[county]["County"]})] empty result for years: {years}, incidence: {incidence}, cumulated: {cumulated}')
+        return None
+
     df = pd.DataFrame(
         [
             [i["Caption"]]
@@ -620,7 +627,7 @@ def download_survstat_data_for_county(county, years, incidence, cumulated):
     return df
 
 
-def download_db_data_for_county(county, incidence):
+def download_db_data_for_county(county: str, incidence: bool) -> pd.DataFrame:
     ags = counties[county]['County']
     if incidence:
 
@@ -663,7 +670,7 @@ def download_db_data_for_county(county, incidence):
     return df
 
 
-def has_difference(survstat, db):
+def has_difference(survstat: pd.DataFrame, db: pd.DataFrame) -> bool:
     age_cols = []
     for i in range(0, 81):
         age_cols.append("A{:02d}".format(i))
@@ -681,7 +688,7 @@ def has_difference(survstat, db):
     return diff
 
 
-def update_case_values(county, df):
+def update_case_values(county: str, df) -> None:
     ags = counties[county]['County']
     entries = []
     for rowName, row in df.iterrows():
@@ -706,7 +713,7 @@ def update_case_values(county, df):
     conn.commit()
 
 
-def estimate_pop(v_count, v_incidence):
+def estimate_pop(v_count: List[int], v_incidence: List[float]) -> Optional[int]:
     res = []
     for i in range(0, min(len(v_count), len(v_incidence))):
         if v_count[i] is not None and v_incidence[i] is not None and v_incidence[i] > 0:
@@ -718,15 +725,15 @@ def estimate_pop(v_count, v_incidence):
     return round(sum(res) / float(len(res)))
 
 
-def update_population_values(county, year, df_abs, df_inc):
+def update_population_values(county: str, year: int, df_abs: pd.DataFrame, df_inc: pd.DataFrame) -> None:
     updates = []
     ags = counties[county]['County']
 
     for colName, col in df_abs.iteritems():
         if colName == "Unb":
             continue
-        v_count = df_abs[colName].nlargest(3).to_list()
-        v_incidence = df_inc[colName].nlargest(3).to_list()
+        v_count: List[int] = df_abs[colName].nlargest(3).to_list()
+        v_incidence: List[float] = df_inc[colName].nlargest(3).to_list()
 
         pop = estimate_pop(v_count, v_incidence)
         if pop is None:
@@ -755,12 +762,12 @@ def update_population_values(county, year, df_abs, df_inc):
     conn.commit()
 
 
-def process_county(county):
+def process_county(county: str) -> None:
     ags = counties[county]['County']
     logger.info(f'[{county} ({ags})] process county')
 
     current_year = datetime.datetime.now().year
-    all_years = range(2020, current_year + 1)
+    all_years = list(range(2020, current_year + 1))
 
     # download the absolute values for all years
     df_survstat_abs = download_survstat_data_for_county(county=county, years=all_years, incidence=False, cumulated=True)
@@ -780,6 +787,10 @@ def process_county(county):
     for year in all_years:
         df_survstat_inc = download_survstat_data_for_county(county=county, years=[year], incidence=True,
                                                             cumulated=False)
+        if df_survstat_inc is None:
+            logger.warning(f'[{county} ({ags})] empty result set for year {year}. Will continue.')
+            continue
+
         # check incidence values
         if has_difference(df_survstat_inc, df_db_inc):
             # non-accumulated case values
@@ -791,7 +802,6 @@ def process_county(county):
             logger.info(f'[{county} ({ags})] population data up to date for {year}')
 
     logger.info(f'[{county} ({ags})] done.')
-
 
 
 ex = False
@@ -825,7 +835,8 @@ conn.close()
 
 if ex:
     delta = datetime.datetime.now() - start
-    logger.info(f'Survstat crawler had an error. Took {math.floor(delta.seconds / 60)} minutes {delta.seconds % 60} seconds')
+    logger.info(
+        f'Survstat crawler had an error. Took {math.floor(delta.seconds / 60)} minutes {delta.seconds % 60} seconds')
     exit(1)
 
 delta = datetime.datetime.now() - start
