@@ -131,6 +131,7 @@ def get_rki_emergency_brake():
         WHERE e.timestamp >= :fromtime
         AND e.timestamp <= :totime
         {sql_ids}
+        ORDER BY e.id, e.timestamp
     '''
     res = db.engine.execute(text(sql_stmt), fromtime=from_time, totime=to_time).fetchall()
 
