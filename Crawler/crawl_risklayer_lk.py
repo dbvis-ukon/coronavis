@@ -97,7 +97,7 @@ def download_file(fp: str) -> bool:
 def parse_file(fp: str) -> Optional[pd.DataFrame]:
     try:
         logger.info('Parse data')
-        df = pd.read_excel(fp, sheet_name=['Statistik Überblick', 'Haupt', 'Kreise'], header=None,
+        df = pd.read_excel(fp, sheet_name=['Überblick', 'Haupt', 'Kreise'], header=None,
                            na_filter=False, engine="openpyxl")
         return df
     except Exception as e:
@@ -107,7 +107,7 @@ def parse_file(fp: str) -> Optional[pd.DataFrame]:
 
 
 def get_prognosis(df: pd.DataFrame) -> float:
-    return df['Statistik Überblick'].iloc[18, 6]
+    return df['Überblick'].iloc[18, 6]
 
 
 def get_county_data(df_data: pd.DataFrame) -> (List[Dict[str, Any]], int):
