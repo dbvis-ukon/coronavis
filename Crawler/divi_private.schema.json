@@ -374,7 +374,7 @@
                 },
                 "patientenIvBeatmet": {
                     "$id": "#/properties/sum/properties/patientenIvBeatmet",
-                    "type": "number"
+                    "type": ["number", "null"]
                 },
                 "patientenEcmoBeatmet": {
                     "$id": "#/properties/sum/properties/patientenEcmoBeatmet",
