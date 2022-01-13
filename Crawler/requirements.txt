@@ -13,4 +13,4 @@ sentry_sdk==1.5.2
 python-dotenv==0.19.2
 zeep==4.1.0
 holidays==0.12
-jsonschema==4.3.3
+jsonschema==4.4.0
