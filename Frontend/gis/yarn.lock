@@ -3216,7 +3216,7 @@ colorette@^2.0.10, colorette@^2.0.16:
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.16.tgz#713b9af84fdb000139f04546bd4a93f62a5085da"
   integrity sha512-hUewv7oMjCp+wkBv5Rm0v87eJhq4woh5rSR+42YSQJKecCqgIqNkZ6lAlQms/BwHPJA5NKMRlpxPRv0n8HQW6g==
 
-colors@1.4.0, colors@^1.4.0:
+colors@1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.4.0.tgz#c50491479d4c1bdaed2c9ced32cf7c7dc2360f78"
   integrity sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
@@ -4185,9 +4185,9 @@ ejs@^3.1.5:
     jake "^10.6.1"
 
 electron-to-chromium@^1.4.17:
-  version "1.4.44"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.44.tgz#8a41923afdd6ef5ddabe001626036ba5d1d64ae6"
-  integrity sha512-tHGWiUUmY7GABK8+DNcr474cnZDTzD8x1736SlDosVH8+/vRJeqfaIBAEHFtMjddz/0T4rKKYsxEc8BwQRdBpw==
+  version "1.4.45"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.45.tgz#cf1144091d6683cbd45a231954a745f02fb24598"
+  integrity sha512-czF9eYVuOmlY/vxyMQz2rGlNSjZpxNQYBe1gmQv7al171qOIhgyO9k7D5AKlgeTCSPKk+LHhj5ZyIdmEub9oNg==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -6074,14 +6074,14 @@ karma-source-map-support@1.4.0:
     source-map-support "^0.5.5"
 
 karma@~6.3.0:
-  version "6.3.10"
-  resolved "https://registry.yarnpkg.com/karma/-/karma-6.3.10.tgz#dfaeae8ef79e6dd3bc95701b3b9d37e79140f8be"
-  integrity sha512-Ofv+sgrkT8Czo6bzzQCvrwVyRSG8/3e7RbawEuxjfsINony+IR/S2csNRUFgPNfmWvju+dqi/MzQGOJ2LnlmfQ==
+  version "6.3.11"
+  resolved "https://registry.yarnpkg.com/karma/-/karma-6.3.11.tgz#2c2fb09f1a9f52e1a0739adeedace2a68d4c0d34"
+  integrity sha512-QGUh4yXgizzDNPLB5nWTvP+wysKexngbyLVWFOyikB661hpa2RZLf5anZQzqliWtAQuYVep0ot0D1U7UQKpsxQ==
   dependencies:
     body-parser "^1.19.0"
     braces "^3.0.2"
     chokidar "^3.5.1"
-    colors "^1.4.0"
+    colors "1.4.0"
     connect "^3.7.0"
     di "^0.0.1"
     dom-serialize "^2.2.1"
@@ -7810,9 +7810,9 @@ regex-parser@^2.2.11:
   integrity sha512-jbD/FT0+9MBU2XAZluI7w2OBs1RBi6p9M83nkoZayQXXU9e8Robt69FcZc7wU4eJD/YFTjn1JdCk3rbMJajz8Q==
 
 regexp.prototype.flags@^1.2.0:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/regexp.prototype.flags/-/regexp.prototype.flags-1.3.1.tgz#7ef352ae8d159e758c0eadca6f8fcb4eef07be26"
-  integrity sha512-JiBdRBq91WlY7uRJ0ds7R+dU02i6LKi8r3BuQhNXn+kmeLN+EfHhfjqMRis1zJxnlu88hq/4dx0P2OP3APRTOA==
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/regexp.prototype.flags/-/regexp.prototype.flags-1.3.2.tgz#ea664a0cf7fecf6bf811a84a06ba88c52b38a5a6"
+  integrity sha512-uaro52GSI5be7+ssxjxxnLlleDBN3VHIWQHvBhfeeSXRQkuV/0Jo/hBU+omYH6NUkM+LYpTHnRRf2W/v+x7LzQ==
   dependencies:
     call-bind "^1.0.2"
     define-properties "^1.1.3"
@@ -9273,9 +9273,9 @@ vega-transforms@~4.9.4:
     vega-util "^1.16.1"
 
 vega-typings@~0.22.0:
-  version "0.22.1"
-  resolved "https://registry.yarnpkg.com/vega-typings/-/vega-typings-0.22.1.tgz#287c646cfa93b1822d0fb6ea11d5543632f8b56e"
-  integrity sha512-88cIrjmoTxo/0nWTf+GuitkFhirHWVWCfymADiCUXt6s9arpQ6XPP5xjrN5KDc0LZd9xr7p4FIiEgADghgLTgw==
+  version "0.22.2"
+  resolved "https://registry.yarnpkg.com/vega-typings/-/vega-typings-0.22.2.tgz#c5f5037680778664f5246c19a56e4cfffeb0d90b"
+  integrity sha512-op4bNiyS150V7gnuIdjwFYB1belYB8qnapqLQQ+ZBJQ+r7a+IbvXphEUf8AkBlOoGPN1ITNdhlIsq9WWiuxu8Q==
   dependencies:
     vega-event-selector "^3.0.0"
     vega-expression "^5.0.0"
@@ -9685,9 +9685,9 @@ wrappy@1:
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
 ws@^8.1.0:
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.4.0.tgz#f05e982a0a88c604080e8581576e2a063802bed6"
-  integrity sha512-IHVsKe2pjajSUIl4KYMQOdlyliovpEPquKkqbwswulszzI7r0SfQrxnXdWAEqOlDCLrVSJzo+O1hAwdog2sKSQ==
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.4.1.tgz#ce1a17e553d2b794e017fa94887808db5c67f614"
+  integrity sha512-6eqQ4yN2y2xv8b+BgbkUzPPyfo/PDl3VOWb06ZE0jIFYwuHMsMQN6F7o84yxJYCblfCRAxzpU59We4Rr4w0Luw==
 
 ws@~8.2.3:
   version "8.2.3"
