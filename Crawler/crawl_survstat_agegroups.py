@@ -1,7 +1,7 @@
 import datetime
 import logging
 import math
-from typing import List, Optional
+from typing import List, Optional, NamedTuple
 
 import pandas as pd
 import pandas.io.sql as sqlio
@@ -523,6 +523,18 @@ QUERY = f'INSERT INTO survstat_cases_agegroup ("year", "week", ags, {ages} "A80+
 conn, cur = get_connection('crawl_survstat_agegroups')
 
 
+class YearWeek(NamedTuple):
+    year: int
+    week: int
+
+
+def get_year_week_from_row(rowidx: str) -> YearWeek:
+    return YearWeek(
+        year=int(rowidx[0:4]),
+        week=int(rowidx[7:11])
+    )
+
+
 def download_survstat_data_for_county(county: str, years: List[int], incidence: bool, cumulated: bool) \
         -> Optional[pd.DataFrame]:
     logger.debug(f"Fetching: {county} {counties[county]} with incidences {incidence} and cumulated {cumulated}")
@@ -545,7 +557,7 @@ def download_survstat_data_for_county(county: str, years: List[int], incidence: 
             # Totals still included, setting `true` yields duplicates
             "IncludeTotalColumn": False,
             "IncludeTotalRow": False,
-            "IncludeNullRows": False,
+            "IncludeNullRows": True,
             "IncludeNullColumns": True,
             "HierarchyFilters": factory.FilterCollection(
                 [
@@ -601,7 +613,7 @@ def download_survstat_data_for_county(county: str, years: List[int], incidence: 
     columns = [i["Caption"] for i in res.Columns.QueryResultColumn]
 
     if res.QueryResults is None:
-        #logger.warning(
+        # logger.warning(
         #    f'[{county} ({counties[county]["County"]})] empty result for years: {years}, incidence: {incidence}, cumulated: {cumulated}')
         return None
 
@@ -620,6 +632,15 @@ def download_survstat_data_for_county(county: str, years: List[int], incidence: 
     df = df.drop("Gesamt", axis=1)
     df = df.rename(lambda s: s[0:3], axis='columns')
     df = df.fillna(0)
+
+    cur_year = datetime.datetime.now().isocalendar().year
+    cur_week = datetime.datetime.now().isocalendar().week
+
+    for idx, row in df.iterrows():
+        yearweek = get_year_week_from_row(idx)
+        if yearweek.year < 2020 or (yearweek.year >= cur_year and yearweek.week > cur_week):
+            logger.debug(f'drop row {idx}')
+            df.drop([idx], inplace=True)
 
     if cumulated:
         df = df.cumsum()
@@ -692,15 +713,11 @@ def update_case_values(county: str, df) -> None:
     ags = counties[county]['County']
     entries = []
     for rowName, row in df.iterrows():
-        year = int(rowName[0:4])
-        if year < 2020:
-            continue
-
-        kw = rowName[7:10]
+        yearweek = get_year_week_from_row(rowName)
 
         entry = row.to_dict()
-        entry['year'] = year
-        entry['week'] = kw
+        entry['year'] = yearweek.year
+        entry['week'] = yearweek.week
         entry['ags'] = ags
 
         entries.append(entry)
