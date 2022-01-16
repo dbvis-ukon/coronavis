@@ -834,9 +834,6 @@ def process_county(county: str) -> None:
 
 ex = False
 
-process_county("SK Wilhelmshaven")
-exit(0)
-
 for county_to_process in counties.keys():
     try:
         process_county(county_to_process)
