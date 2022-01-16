@@ -537,7 +537,7 @@ def get_year_week_from_row(rowidx: str) -> YearWeek:
 
 def download_survstat_data_for_county(county: str, years: List[int], incidence: bool, cumulated: bool) \
         -> Optional[pd.DataFrame]:
-    logger.debug(f"Fetching: {county} {counties[county]} with incidences {incidence} and cumulated {cumulated}")
+    logger.debug(f"[{county} ({counties[county]['County']})] Fetching: {county} {counties[county]} with incidences {incidence} and cumulated {cumulated}")
     if incidence and cumulated:
         raise Exception('Invalid arguments with incidence and cumulated true')
 
@@ -639,7 +639,7 @@ def download_survstat_data_for_county(county: str, years: List[int], incidence: 
     for idx, row in df.iterrows():
         yearweek = get_year_week_from_row(idx)
         if yearweek.year < 2020 or (yearweek.year >= cur_year and yearweek.week > cur_week):
-            logger.debug(f'drop row {idx}')
+            logger.debug(f'[{county} ({counties[county]["County"]})] drop row {idx}')
             df.drop([idx], inplace=True)
 
     if cumulated:
@@ -742,6 +742,13 @@ def estimate_pop(v_count: List[int], v_incidence: List[float]) -> Optional[int]:
     return round(sum(res) / float(len(res)))
 
 
+def get_age_col(age: int) -> str:
+    if 0 <= age < 80:
+        return f"{'a{:02d}'.format(int(age))}"
+    else:
+        return f"\"A80+\""
+
+
 def update_population_values(county: str, year: int, df_abs: pd.DataFrame, df_inc: pd.DataFrame) -> None:
     updates = []
     ags = counties[county]['County']
@@ -753,11 +760,18 @@ def update_population_values(county: str, year: int, df_abs: pd.DataFrame, df_in
         v_incidence: List[float] = df_inc[colName].nlargest(3).to_list()
 
         pop = estimate_pop(v_count, v_incidence)
-        if pop is None:
-            logger.warning(f"{county} for {colName} is None!")
-            pop = 'null'
-
         age = int(colName[1:3])
+        if pop is None:
+            logger.warning(
+                f'[{county} ({ags})] population of {colName} is None! Fallback to population data of previous year')
+            cur.execute(f"""
+            SELECT {get_age_col(age)} as pop
+            FROM population_survstat_agegroup2
+            WHERE
+            ags = '{'{:05d}'.format(int(ags))}' AND year = {year - 1}
+            """)
+            r = cur.fetchone()
+            pop = r[0]
 
         if age == 0:
             cur.execute(
@@ -767,10 +781,7 @@ def update_population_values(county: str, year: int, df_abs: pd.DataFrame, df_in
                     f"INSERT INTO population_survstat_agegroup2 (ags, a00, year) VALUES ('{'{:05d}'.format(int(ags))}', {pop}, {year})")
                 conn.commit()
 
-        if 0 <= age < 80:
-            updates.append(f"{'a{:02d}'.format(int(age))} = {pop}")
-        else:
-            updates.append(f"\"A80+\" = {pop}")
+        updates.append(f"{get_age_col(age)} = {pop}")
 
     allupdates = ', '.join(updates)
     query = f"UPDATE population_survstat_agegroup2 SET {allupdates} WHERE ags = '{'{:05d}'.format(int(ags))}' AND year = {year}"
@@ -822,6 +833,9 @@ def process_county(county: str) -> None:
 
 
 ex = False
+
+process_county("SK Wilhelmshaven")
+exit(0)
 
 for county_to_process in counties.keys():
     try:
