@@ -8,7 +8,7 @@ import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { StatusWithCache } from '../map/overlays/case-trend-canvas.layer';
-import { AggregatedRKICaseDevelopmentProperties, RKICaseDevelopmentProperties, RKICaseTimedStatus, SurvStatAgeGroups } from '../repositories/types/in/quantitative-rki-case-development';
+import { AggregatedRKICaseDevelopmentProperties, RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus, SurvStatAgeGroups } from '../repositories/types/in/quantitative-rki-case-development';
 import { getMoment, getStrDate } from '../util/date-util';
 import { linearRegression } from '../util/regression';
 import { TranslationService } from './translation.service';
@@ -298,9 +298,19 @@ export class CaseUtilService {
     return (!opt._binHovered && !opt._binSelection) || this.isHoverBin(opt, nmbr) || this.isSelectedBin(opt, nmbr);
   }
 
+  public addTotalRow(input: RKIAgeGroups): RKIAgeGroups {
+    const total = Object.entries(input).reduce((agg, val) => agg + val[1], 0);
+    const out = {...input};
+    out.Total = total;
+    return out;
+  }
+
   public groupAgeStatus(input: SurvStatAgeGroups, ageGroups?: [number, number][]): {[key: string]: number} | SurvStatAgeGroups {
     if (!ageGroups) {
-      return input;
+      const total = Object.entries(input).reduce((agg, val) => agg + val[1], 0);
+      const output = {...input};
+      output.Total = total;
+      return output;
     }
 
     const out: {[key: string]: number} = {};

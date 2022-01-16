@@ -288,7 +288,7 @@ export class VegaPixelchartService {
           switch (o.type) {
             case CovidNumberCaseType.cases:
               if (o.timeAgg === TimeGranularity.yearmonthdate && o.ageGroupBinning === AgeGroupBinning.rki) {
-                agNow = fullData.developments[i].cases_by_agegroup;
+                agNow = this.caseUtils.addTotalRow(fullData.developments[i].cases_by_agegroup);
               } else {
                 agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
                 o.timeAgg = TimeGranularity.yearweek;
@@ -302,7 +302,7 @@ export class VegaPixelchartService {
               break;
 
             case CovidNumberCaseType.deaths:
-              agNow = fullData.developments[i].deaths_by_agegroup;
+              agNow = this.caseUtils.addTotalRow(fullData.developments[i].deaths_by_agegroup);
               break;
           }
           converted[i] = agNow;
@@ -319,8 +319,8 @@ export class VegaPixelchartService {
           switch (o.type) {
             case CovidNumberCaseType.cases:
               if (o.timeAgg === TimeGranularity.yearmonthdate && o.ageGroupBinning === AgeGroupBinning.rki) {
-                agNow = fullData.developments[i].cases_by_agegroup;
-                agPop = fullData.developments[i].population_by_agegroup;
+                agNow = this.caseUtils.addTotalRow(fullData.developments[i].cases_by_agegroup);
+                agPop = this.caseUtils.addTotalRow(fullData.developments[i].population_by_agegroup);
               } else {
                 agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
                 agPop = this.caseUtils.groupAgeStatus(fullData.developments[i].population_survstat_by_agegroup, ageGroups);
@@ -328,8 +328,8 @@ export class VegaPixelchartService {
               break;
 
             case CovidNumberCaseType.deaths:
-              agNow = fullData.developments[i].deaths_by_agegroup;
-              agPop = fullData.developments[i].population_by_agegroup;
+              agNow = this.caseUtils.addTotalRow(fullData.developments[i].deaths_by_agegroup);
+              agPop = this.caseUtils.addTotalRow(fullData.developments[i].population_by_agegroup);
               break;
           }
 

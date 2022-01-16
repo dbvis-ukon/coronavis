@@ -51,6 +51,7 @@ export interface RKIAgeGroups {
   A60_A79: number;
   A80plus: number;
   Aunknown?: number;
+  Total?: number;
 }
 
 export interface SurvStatAgeGroups {
@@ -136,6 +137,7 @@ export interface SurvStatAgeGroups {
   A79: number;
   A80plus: number;
   Aunknown?: number;
+  Total?: number;
 }
 
 
