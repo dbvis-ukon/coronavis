@@ -772,6 +772,8 @@ def update_population_values(county: str, year: int, df_abs: pd.DataFrame, df_in
             """)
             r = cur.fetchone()
             pop = r[0]
+            if pop is None:
+                pop = 'null'
 
         if age == 0:
             cur.execute(
