@@ -3,7 +3,7 @@ from typing import Optional
 import psycopg2
 
 DATABASE_FILE = 'corona_app'
-SQLALCHEMY_DATABASE_URI = 'postgresql://' # Fallback to Zero
+SQLALCHEMY_DATABASE_URI = 'postgresql://'  # Fallback to Zero
 SQLALCHEMY_ECHO = True
 
 import logging
@@ -37,7 +37,7 @@ try:
     sentry_sdk.init(
         environment=ENVIRONMENT,
         release=VERSION,
-        dsn=SENTRY_DSN, 
+        dsn=SENTRY_DSN,
         integrations=[SqlalchemyIntegration()]
     )
 
@@ -46,10 +46,11 @@ except KeyError as e:
     raise e
 
 
-def get_connection(application_name: Optional[str] = None):
-    conn = psycopg2.connect(SQLALCHEMY_DATABASE_URI)
+def get_connection(application_name: Optional[str] = None) -> tuple[
+    psycopg2.extensions.connection, psycopg2.extensions.cursor]:
+    conn: psycopg2.extensions.connection = psycopg2.connect(SQLALCHEMY_DATABASE_URI)
     conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
-    cur = conn.cursor()
+    cur: psycopg2.extensions.cursor = conn.cursor()
     if application_name is not None:
         cur.execute(f"set application_name = {application_name}")
     return conn, cur

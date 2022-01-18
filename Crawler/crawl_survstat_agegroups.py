@@ -520,8 +520,6 @@ QUERY = f'INSERT INTO survstat_cases_agegroup ("year", "week", ags, {ages} "A80+
         f'"A80+" = EXCLUDED."A80+", ' \
         f'Unbekannt = EXCLUDED.Unbekannt;'
 
-conn, cur = get_connection('crawl_survstat_agegroups')
-
 
 class YearWeek(NamedTuple):
     year: int
@@ -537,7 +535,8 @@ def get_year_week_from_row(rowidx: str) -> YearWeek:
 
 def download_survstat_data_for_county(county: str, years: List[int], incidence: bool, cumulated: bool) \
         -> Optional[pd.DataFrame]:
-    logger.debug(f"[{county} ({counties[county]['County']})] Fetching: {county} {counties[county]} with incidences {incidence} and cumulated {cumulated}")
+    logger.debug(
+        f"[{county} ({counties[county]['County']})] Fetching: {county} {counties[county]} with incidences {incidence} and cumulated {cumulated}")
     if incidence and cumulated:
         raise Exception('Invalid arguments with incidence and cumulated true')
 
@@ -648,7 +647,7 @@ def download_survstat_data_for_county(county: str, years: List[int], incidence: 
     return df
 
 
-def download_db_data_for_county(county: str, incidence: bool) -> pd.DataFrame:
+def download_db_data_for_county(county: str, incidence: bool, conn: psycopg2.extensions.connection) -> pd.DataFrame:
     ags = counties[county]['County']
     if incidence:
 
@@ -709,7 +708,7 @@ def has_difference(survstat: pd.DataFrame, db: pd.DataFrame) -> bool:
     return diff
 
 
-def update_case_values(county: str, df) -> None:
+def update_case_values(county: str, df, conn: psycopg2.extensions.connection, cur: psycopg2.extensions.cursor) -> None:
     ags = counties[county]['County']
     entries = []
     for rowName, row in df.iterrows():
@@ -749,7 +748,8 @@ def get_age_col(age: int) -> str:
         return f"\"A80+\""
 
 
-def update_population_values(county: str, year: int, df_abs: pd.DataFrame, df_inc: pd.DataFrame) -> None:
+def update_population_values(county: str, year: int, df_abs: pd.DataFrame, df_inc: pd.DataFrame,
+                             conn: psycopg2.extensions.connection, cur: psycopg2.extensions.cursor) -> None:
     updates = []
     ags = counties[county]['County']
 
@@ -793,6 +793,7 @@ def update_population_values(county: str, year: int, df_abs: pd.DataFrame, df_in
 
 
 def process_county(county: str) -> None:
+    conn, cur = get_connection('crawl_survstat_agegroups')
     ags = counties[county]['County']
     logger.info(f'[{county} ({ags})] process county')
 
@@ -801,18 +802,18 @@ def process_county(county: str) -> None:
 
     # download the absolute values for all years
     df_survstat_abs = download_survstat_data_for_county(county=county, years=all_years, incidence=False, cumulated=True)
-    df_db_abs = download_db_data_for_county(county=county, incidence=False)
+    df_db_abs = download_db_data_for_county(county=county, incidence=False, conn=conn)
 
     # if there is a difference in the absolute values (e.g. new data or corrections) update our DB
     if has_difference(df_survstat_abs, df_db_abs):
         logger.info(f'[{county} ({ags})] update case data')
-        update_case_values(county, df_survstat_abs)
+        update_case_values(county, df_survstat_abs, conn=conn, cur=cur)
     else:
         logger.info(f'[{county} ({ags})] case data up to date')
 
     # to check the population data via survstat each year has to be processed individually,
     # otherwise survstat averages the population numbers
-    df_db_inc = download_db_data_for_county(county, True)
+    df_db_inc = download_db_data_for_county(county=county, incidence=True, conn=conn)
 
     for year in all_years:
         df_survstat_inc = download_survstat_data_for_county(county=county, years=[year], incidence=True,
@@ -827,11 +828,21 @@ def process_county(county: str) -> None:
             df_survstat_abs = download_survstat_data_for_county(county=county, years=[year], incidence=False,
                                                                 cumulated=False)
             logger.info(f'[{county} ({ags})] update population data for {year}')
-            update_population_values(county=county, year=year, df_abs=df_survstat_abs, df_inc=df_survstat_inc)
+            update_population_values(
+                county=county,
+                year=year,
+                df_abs=df_survstat_abs,
+                df_inc=df_survstat_inc,
+                conn=conn,
+                cur=cur
+            )
         else:
             logger.info(f'[{county} ({ags})] population data up to date for {year}')
 
     logger.info(f'[{county} ({ags})] done.')
+
+    cur.close()
+    conn.close()
 
 
 ex = False
@@ -843,25 +854,27 @@ for county_to_process in counties.keys():
         ex = True
         logger.exception("Something went wrong fetching the data", exc_info=e)
 
+conn2, cur2 = get_connection('crawl_survstat_agegroupts_refresh_MV')
+
 try:
     logger.info('Refreshing materialized view')
-    cur.execute('''
+    cur2.execute('''
     set time zone \'UTC\';
     REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day;
     ''')
-    conn.commit()
+    conn2.commit()
 
-    cur.execute('''
+    cur2.execute('''
     set time zone \'UTC\';
     REFRESH MATERIALIZED VIEW CONCURRENTLY v2_survstat;
     ''')
-    conn.commit()
+    conn2.commit()
 except Exception as e:
     ex = True
     logger.exception('Exception while updating materialized view', exc_info=e)
 
-cur.close()
-conn.close()
+cur2.close()
+conn2.close()
 
 if ex:
     delta = datetime.datetime.now() - start
