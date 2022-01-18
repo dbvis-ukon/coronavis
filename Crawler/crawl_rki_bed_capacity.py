@@ -75,7 +75,23 @@ for el in data:
 
 logger.debug('current LK count for bed capacity data: %s', len(entries))
 
-aquery = 'INSERT INTO bed_capacity(datenbestand, BL, BL_ID, county, anzahl_standorte, anzahl_meldebereiche, betten_frei, betten_belegt, betten_gesamt, Anteil_betten_frei, faelle_covid_aktuell, faelle_covid_aktuell_beatmet, Anteil_covid_beatmet, Anteil_COVID_betten) VALUES %s'
+aquery = '''
+INSERT INTO bed_capacity(datenbestand, BL, BL_ID, county, anzahl_standorte, anzahl_meldebereiche, betten_frei, betten_belegt, betten_gesamt, Anteil_betten_frei, faelle_covid_aktuell, faelle_covid_aktuell_beatmet, Anteil_covid_beatmet, Anteil_COVID_betten) 
+VALUES %s
+ON CONFLICT (datenbestand, county) DO
+UPDATE SET
+BL = EXCLUDED.BL,
+BL_ID = EXCLUDED.BL_ID,
+anzahl_standorte = EXCLUDED.anzahl_standorte,
+anzahl_meldebereiche = EXCLUDED.anzahl_meldebereiche,
+betten_frei = EXCLUDED.betten_frei,
+betten_belegt = EXCLUDED.betten_belegt,
+betten_gesamt = EXCLUDED.betten_gesamt,
+faelle_covid_aktuell = EXCLUDED.faelle_covid_aktuell,
+faelle_covid_aktuell_beatmet = EXCLUDED.faelle_covid_aktuell_beatmet,
+anteil_covid_beatmet = EXCLUDED.anteil_covid_beatmet,
+anteil_covid_betten = EXCLUDED.anteil_covid_betten;
+'''
 try:
     cur.execute("Select Max(datenbestand) from bed_capacity")
     last_update = cur.fetchone()[0]
