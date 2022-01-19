@@ -298,19 +298,27 @@ export class CaseUtilService {
     return (!opt._binHovered && !opt._binSelection) || this.isHoverBin(opt, nmbr) || this.isSelectedBin(opt, nmbr);
   }
 
-  public addTotalRow(input: RKIAgeGroups): RKIAgeGroups {
-    const total = Object.entries(input).reduce((agg, val) => agg + val[1], 0);
-    const out = {...input};
-    out.Total = total;
-    return out;
+  public addTotalRow(input: RKIAgeGroups, normalization: CovidNumberCaseNormalization): RKIAgeGroups {
+    if (normalization === CovidNumberCaseNormalization.per100k) {
+      const total = Object.entries(input).reduce((agg, val) => agg + val[1], 0);
+      const out = {...input};
+      out.Total = total;
+      return out;
+    } else {
+      return {...input};
+    }
   }
 
-  public groupAgeStatus(input: SurvStatAgeGroups, ageGroups?: [number, number][]): {[key: string]: number} | SurvStatAgeGroups {
+  public groupAgeStatus(input: SurvStatAgeGroups, ageGroups?: [number, number][], normalization?: CovidNumberCaseNormalization): {[key: string]: number} | SurvStatAgeGroups {
     if (!ageGroups) {
-      const total = Object.entries(input).reduce((agg, val) => agg + val[1], 0);
-      const output = {...input};
-      output.Total = total;
-      return output;
+      if (normalization === CovidNumberCaseNormalization.per100k) {
+        const total = Object.entries(input).reduce((agg, val) => agg + val[1], 0);
+        const output = {...input};
+        output.Total = total;
+        return output;
+      } else {
+        return input;
+      }
     }
 
     const out: {[key: string]: number} = {};
@@ -334,7 +342,9 @@ export class CaseUtilService {
     for (const k of Object.keys(input)) {
       sumTotal += input[k] || 0;
     }
-    out.Total = sumTotal;
+    if (normalization === CovidNumberCaseNormalization.per100k) {
+      out.Total = sumTotal;
+    }
 
     return out;
   }

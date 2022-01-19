@@ -288,9 +288,9 @@ export class VegaPixelchartService {
           switch (o.type) {
             case CovidNumberCaseType.cases:
               if (o.timeAgg === TimeGranularity.yearmonthdate && o.ageGroupBinning === AgeGroupBinning.rki) {
-                agNow = this.caseUtils.addTotalRow(fullData.developments[i].cases_by_agegroup);
+                agNow = this.caseUtils.addTotalRow(fullData.developments[i].cases_by_agegroup, o.normalization);
               } else {
-                agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
+                agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups, o.normalization);
                 o.timeAgg = TimeGranularity.yearweek;
               }
 
@@ -302,7 +302,7 @@ export class VegaPixelchartService {
               break;
 
             case CovidNumberCaseType.deaths:
-              agNow = this.caseUtils.addTotalRow(fullData.developments[i].deaths_by_agegroup);
+              agNow = this.caseUtils.addTotalRow(fullData.developments[i].deaths_by_agegroup, o.normalization);
               break;
           }
           converted[i] = agNow;
@@ -319,17 +319,17 @@ export class VegaPixelchartService {
           switch (o.type) {
             case CovidNumberCaseType.cases:
               if (o.timeAgg === TimeGranularity.yearmonthdate && o.ageGroupBinning === AgeGroupBinning.rki) {
-                agNow = this.caseUtils.addTotalRow(fullData.developments[i].cases_by_agegroup);
-                agPop = this.caseUtils.addTotalRow(fullData.developments[i].population_by_agegroup);
+                agNow = this.caseUtils.addTotalRow(fullData.developments[i].cases_by_agegroup, o.normalization);
+                agPop = this.caseUtils.addTotalRow(fullData.developments[i].population_by_agegroup, o.normalization);
               } else {
-                agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups);
-                agPop = this.caseUtils.groupAgeStatus(fullData.developments[i].population_survstat_by_agegroup, ageGroups);
+                agNow = this.caseUtils.groupAgeStatus(fullData.developments[i].cases_survstat_by_agegroup, ageGroups, o.normalization);
+                agPop = this.caseUtils.groupAgeStatus(fullData.developments[i].population_survstat_by_agegroup, ageGroups, o.normalization);
               }
               break;
 
             case CovidNumberCaseType.deaths:
-              agNow = this.caseUtils.addTotalRow(fullData.developments[i].deaths_by_agegroup);
-              agPop = this.caseUtils.addTotalRow(fullData.developments[i].population_by_agegroup);
+              agNow = this.caseUtils.addTotalRow(fullData.developments[i].deaths_by_agegroup, o.normalization);
+              agPop = this.caseUtils.addTotalRow(fullData.developments[i].population_by_agegroup, o.normalization);
               break;
           }
 
