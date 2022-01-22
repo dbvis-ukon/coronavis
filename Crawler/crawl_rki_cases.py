@@ -15,7 +15,7 @@ import requests
 
 # noinspection PyUnresolvedReferences
 import loadenv
-from db_config import get_connection
+from db_config import get_connection, retry_refresh
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -140,8 +140,11 @@ try:
 
         logger.info('Refreshing materialized view.')
 
-        cur.execute("SET TIME ZONE 'UTC'; REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day;")
-        conn.commit()
+        retry_refresh(
+            conn=conn,
+            cur=cur,
+            query='set time zone \'UTC\'; REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day;'
+        )
 
         logger.info('Success')
 

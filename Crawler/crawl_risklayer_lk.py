@@ -21,7 +21,7 @@ import requests
 import numpy as np
 import pandas as pd
 
-from db_config import get_connection
+from db_config import get_connection, retry_refresh
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -244,8 +244,11 @@ def insert_into_db(prognosis_today: float, data_entries: List[Dict[str, Any]], u
             logger.info('Prognosis data inserted.')
 
             logger.info('Refreshing materialized view')
-            cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day_risklayer;')
-            conn.commit()
+            retry_refresh(
+                conn=conn,
+                cur=cur,
+                query='set time zone \'UTC\'; REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day_risklayer;'
+            )
 
             logger.info('Send notification emails')
 

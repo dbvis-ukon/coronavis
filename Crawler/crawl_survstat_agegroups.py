@@ -13,7 +13,7 @@ import psycopg2.extensions
 import psycopg2.extras
 # noinspection PyUnresolvedReferences
 import loadenv
-from db_config import get_connection
+from db_config import get_connection, retry_refresh
 
 start = datetime.datetime.now()
 
@@ -858,17 +858,17 @@ conn2, cur2 = get_connection('crawl_survstat_agegroupts_refresh_MV')
 
 try:
     logger.info('Refreshing materialized view')
-    cur2.execute('''
-    set time zone \'UTC\';
-    REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day;
-    ''')
-    conn2.commit()
+    retry_refresh(
+        conn=conn2,
+        cur=cur2,
+        query='set time zone \'UTC\'; REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day;'
+    )
 
-    cur2.execute('''
-    set time zone \'UTC\';
-    REFRESH MATERIALIZED VIEW CONCURRENTLY v2_survstat;
-    ''')
-    conn2.commit()
+    retry_refresh(
+        conn=conn2,
+        cur=cur2,
+        query='set time zone \'UTC\'; REFRESH MATERIALIZED VIEW CONCURRENTLY v2_survstat;'
+    )
 except Exception as e:
     ex = True
     logger.exception('Exception while updating materialized view', exc_info=e)

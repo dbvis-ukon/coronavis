@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 import loadenv
 
 # logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-from db_config import get_connection
+from db_config import get_connection, retry_refresh
 
 logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 logger = logging.getLogger(__name__)
@@ -174,8 +174,11 @@ try:
     insert_data(data)
 
     logger.info('Refreshing materialized view')
-    cur.execute('set time zone \'UTC\'; REFRESH MATERIALIZED VIEW CONCURRENTLY filled_hospital_timeseries_with_fix;')
-    conn.commit()
+    retry_refresh(
+        conn=conn,
+        cur=cur,
+        query='set time zone \'UTC\'; REFRESH MATERIALIZED VIEW CONCURRENTLY filled_hospital_timeseries_with_fix;'
+    )
 
     cur.close()
     conn.close()

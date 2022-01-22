@@ -1,6 +1,8 @@
+import time
 from typing import Optional
 
 import psycopg2
+from psycopg2 import connection
 
 DATABASE_FILE = 'corona_app'
 SQLALCHEMY_DATABASE_URI = 'postgresql://'  # Fallback to Zero
@@ -54,3 +56,23 @@ def get_connection(application_name: Optional[str] = None) -> tuple[
     if application_name is not None:
         cur.execute(f"set application_name = {application_name}")
     return conn, cur
+
+
+def retry_refresh(conn: psycopg2.extensions.connection, cur: psycopg2.extensions.cursor, query: str, retry: int = 5):
+    num_try = 1
+    while num_try <= retry:
+        try:
+            cur.execute(query)
+            conn.commit()
+        except Exception as ex:
+            conn.rollback()
+            if "could not serialize access due to concurrent" in str(ex):
+                logger.warning(f'{type(ex)}: {ex}Will retry in {num_try * 60} seconds')
+                time.sleep(num_try * 60)
+                num_try += 1
+                continue
+            else:
+                raise ex
+
+    if num_try >= retry:
+        raise Exception(f'Query "{query}" failed after {retry} retries')
