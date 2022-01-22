@@ -2,11 +2,6 @@ import time
 from typing import Optional
 
 import psycopg2
-from psycopg2 import connection
-
-DATABASE_FILE = 'corona_app'
-SQLALCHEMY_DATABASE_URI = 'postgresql://'  # Fallback to Zero
-SQLALCHEMY_ECHO = True
 
 import logging
 import os
@@ -14,6 +9,10 @@ from urllib.parse import quote
 
 import sentry_sdk
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
+
+DATABASE_FILE = 'corona_app'
+SQLALCHEMY_DATABASE_URI = 'postgresql://'  # Fallback to Zero
+SQLALCHEMY_ECHO = True
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -48,8 +47,7 @@ except KeyError as e:
     raise e
 
 
-def get_connection(application_name: Optional[str] = None) -> tuple[
-    psycopg2.extensions.connection, psycopg2.extensions.cursor]:
+def get_connection(application_name: Optional[str] = None) -> tuple[psycopg2.extensions.connection, psycopg2.extensions.cursor]:
     conn: psycopg2.extensions.connection = psycopg2.connect(SQLALCHEMY_DATABASE_URI)
     conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
     cur: psycopg2.extensions.cursor = conn.cursor()
