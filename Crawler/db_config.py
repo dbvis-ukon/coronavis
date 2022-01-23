@@ -62,6 +62,7 @@ def retry_refresh(conn: psycopg2.extensions.connection, cur: psycopg2.extensions
         try:
             cur.execute(query)
             conn.commit()
+            break
         except Exception as ex:
             conn.rollback()
             if "could not serialize access due to concurrent" in str(ex):
@@ -74,3 +75,5 @@ def retry_refresh(conn: psycopg2.extensions.connection, cur: psycopg2.extensions
 
     if num_try >= retry:
         raise Exception(f'Query "{query}" failed after {retry} retries')
+
+    logger.info(f'Query successfully executed after {num_try} tries')
