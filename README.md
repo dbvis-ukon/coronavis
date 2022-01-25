@@ -1,5 +1,7 @@
 ![image](./Frontend/gis/src/assets/coronavislogo300.png)
 
+![GitHub](https://img.shields.io/github/license/dbvis-ukon/coronavis) ![Uptime Robot ratio (30 days)](https://img.shields.io/uptimerobot/ratio/m784675612-c290b0bf43644b369cea86a6?label=api) ![Uptime Robot ratio (30 days)](https://img.shields.io/uptimerobot/ratio/m784675610-30c23e9406482a846081720c) ![GitHub last commit](https://img.shields.io/github/last-commit/dbvis-ukon/coronavis) ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/dbvis-ukon/coronavis) ![Twitter Follow](https://img.shields.io/twitter/follow/dbvis?style=social)
+
 This is a volunteer project by members of the [Data Analysis and Visualization Group](http://vis.uni.kn) and the [Visual Computing Group](https://www.cgmi.uni-konstanz.de/en/) at the [University of Konstanz](http://uni.kn).
 
 The live version is available at [https://coronavis.dbvis.de](https://coronavis.dbvis.de).
