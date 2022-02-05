@@ -1,5 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    "local>dbvis-k8/renovate-bot"
+  ],
   "assignees": ["@jentner"],
   "assigneesSampleSize": 1,
   "gitLabAutomerge": true,
