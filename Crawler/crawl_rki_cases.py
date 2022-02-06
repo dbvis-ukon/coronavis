@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 # author: Max Fischer
+import getopt
 import json
 import sys
 import time
@@ -27,7 +28,13 @@ conn, cur = get_connection('crawl_rki_cases')
 cur.execute("select max(datenbestand)::date from cases")
 last_update = cur.fetchone()[0]
 
-if last_update is not None and last_update >= date.today():
+opts, _ = getopt.getopt(sys.argv[1:], 'o', ['override'])
+override = False
+for opt, arg in opts:
+    if opt in ("-o", "--override"):
+        override = True
+
+if last_update is not None and last_update >= date.today() and override is False:
     logger.info('Data seems to be up to date (Database: %s, Today: %s). Won\'t fetch.', last_update, date.today())
     cur.close()
     conn.close()
@@ -72,7 +79,6 @@ while has_data:
     logger.debug('Offset: %s', offset)
 data = [d['attributes'] for d in data['features']]
 
-
 with open('./rki_cases.schema.json') as schema:
     logger.info('Validate json data with schema')
     jsonschema.validate(data, json.load(schema))
@@ -91,6 +97,7 @@ for el in data:
         'idlandkreis': el['IdLandkreis'],
         'objectid': el['ObjectId'],
         'meldedatum': datetime.datetime.utcfromtimestamp(el['Meldedatum'] / 1000),
+        'refdatum': datetime.datetime.utcfromtimestamp(el['Refdatum'] / 1000),
         'gender': el['Geschlecht'],
         'agegroup': el['Altersgruppe'],
         'casetype': casetype
@@ -99,7 +106,7 @@ for el in data:
 
 logger.debug('current entries: %s', len(entries))
 
-aquery = 'INSERT INTO cases(datenbestand, idbundesland, bundesland, landkreis, idlandkreis, objectid, meldedatum, gender, agegroup, casetype) VALUES %s'
+aquery = 'INSERT INTO cases(datenbestand, idbundesland, bundesland, landkreis, idlandkreis, objectid, meldedatum, gender, agegroup, casetype, refdatum) VALUES %s'
 try:
     # reconnect to DB here
     conn, cur = get_connection('crawl_rki_cases')
@@ -116,7 +123,7 @@ try:
     logger.info("fetched data version: %s", current_update)
     logger.info("Num entries in DB %s, num entries fetched %s", num_cases_in_db, len(entries))
 
-    if last_update is not None and abs((current_update - last_update).total_seconds()) <= 2 * 60 * 60:
+    if last_update is not None and abs((current_update - last_update).total_seconds()) <= 2 * 60 * 60 and override is False:
         logger.info("No new data available (+/- 2h), skip update")
         exit(0)
     elif len(entries) < (num_cases_in_db - 1000):
@@ -124,14 +131,16 @@ try:
         logger.error("RKI API data blob is incomplete. Will fail this job and try again at next crawl time.")
         exit(2)
     elif (len(entries) - num_cases_in_db) > 500000:
-        logger.error("{} new entries in a single update (> 500k). Seems RKI API data blob is errornous. Will fail this job and try again at next crawl time.".format((len(entries) - num_cases_in_db)))
+        logger.error(
+            "{} new entries in a single update (> 500k). Seems RKI API data blob is errornous. Will fail this job and try again at next crawl time.".format(
+                (len(entries) - num_cases_in_db)))
         exit(2)
     else:
         logger.info('Insert new data into DB (takes 2-5 seconds)...')
 
         psycopg2.extras.execute_values(
             cur, aquery, entries,
-            template='(%(datenbestand)s, %(idbundesland)s, %(bundesland)s, %(landkreis)s, %(idlandkreis)s, %(objectid)s, %(meldedatum)s, %(gender)s, %(agegroup)s, %(casetype)s)',
+            template='(%(datenbestand)s, %(idbundesland)s, %(bundesland)s, %(landkreis)s, %(idlandkreis)s, %(objectid)s, %(meldedatum)s, %(gender)s, %(agegroup)s, %(casetype)s, %(refdatum)s)',
             page_size=500
         )
         conn.commit()
