@@ -63,7 +63,7 @@ AGS_TO_ISO = {
     '16': 'TH'
 }
 
-URL = 'https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Fallzahlen_Kum_Tab.xlsx?__blob=publicationFile'
+URL = 'https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Fallzahlen_Kum_Tab_Archiv.xlsx?__blob=publicationFile'
 
 THRESHOLDS = [100, 150, 165]
 
