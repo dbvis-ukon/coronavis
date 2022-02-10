@@ -4316,10 +4316,10 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
-es5-shim@4.6.4:
-  version "4.6.4"
-  resolved "https://registry.yarnpkg.com/es5-shim/-/es5-shim-4.6.4.tgz#10ce5f06c7bccfdd60b4e08edf95c7e2fbc1dc2a"
-  integrity sha512-Z0f7OUYZ8JfqT12d3Tgh2ErxIH5Shaz97GE8qyDG9quxb2Hmh2vvFHlOFjx6lzyD0CRgvJfnNYcisjdbRp7MPw==
+es5-shim@4.6.5:
+  version "4.6.5"
+  resolved "https://registry.yarnpkg.com/es5-shim/-/es5-shim-4.6.5.tgz#2124bb073b7cede2ed23b122a1fd87bb7b0bb724"
+  integrity sha512-vfQ4UAai8szn0sAubCy97xnZ4sJVDD1gt/Grn736hg8D7540wemIb1YPrYZSTqlM2H69EQX1or4HU/tSwRTI3w==
 
 es6-promise@^4.0.3:
   version "4.2.8"
