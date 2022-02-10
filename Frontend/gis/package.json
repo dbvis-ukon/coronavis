@@ -34,7 +34,7 @@
     "cron": "1.8.2",
     "css-element-queries": "1.2.3",
     "d3": "7.3.0",
-    "es5-shim": "4.6.4",
+    "es5-shim": "4.6.5",
     "es6-shim": "0.35.6",
     "file-saver": "2.0.5",
     "html2canvas": "1.4.1",
