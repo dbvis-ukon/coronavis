@@ -8886,10 +8886,10 @@ vega-dataflow@^5.7.3, vega-dataflow@^5.7.4, vega-dataflow@~5.7.4:
     vega-loader "^4.3.2"
     vega-util "^1.16.1"
 
-vega-embed@6.20.6:
-  version "6.20.6"
-  resolved "https://registry.yarnpkg.com/vega-embed/-/vega-embed-6.20.6.tgz#a3081586c876d6a5f7e1696fc7632dd62886d9a9"
-  integrity sha512-r+K/+6F6kO/uGM9nFgOk2FUnuOrexVsGow3TU4x/Qapvcr4bjq5eiPqhFCxJTthqRaxu0mlsQ2SBnv6G1cSL+A==
+vega-embed@6.20.7:
+  version "6.20.7"
+  resolved "https://registry.yarnpkg.com/vega-embed/-/vega-embed-6.20.7.tgz#9b9aba406972a3439335998dea3ab5903d4b9ab8"
+  integrity sha512-KnL4x/p8jVMkscTHWF6TakVP/Gftrt/zB7IZ9UO2cjOC5tYuFxJ7KY0zKhTVuT0KHX8LJdn4gUWQaRh0mtqj8A==
   dependencies:
     fast-json-patch "^3.1.0"
     json-stringify-pretty-compact "^3.0.0"
