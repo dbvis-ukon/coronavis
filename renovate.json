@@ -22,6 +22,11 @@
     {
       "updateTypes": ["lockFileMaintenance"],
       "automerge": true
+    },
+    {
+      "matchPackagePatterns": ["sentry"],
+      "automerge": true,
+      "groupName": "sentry"
     }
   ],
   "vulnerabilityAlerts": {
