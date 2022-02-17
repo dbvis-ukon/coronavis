@@ -70,7 +70,7 @@ def download_data(url: str) -> Tuple[List[Dict[str, int | str]], datetime.dateti
     data = []
     max_meldedatum: datetime.datetime = datetime.datetime.now() - datetime.timedelta(days=365)
     for row in csv.DictReader(buff, skipinitialspace=True):
-        row = {k: try_parse_int(v) if k != 'IdLandkreis' else v for k, v in row.items()}
+        row = {k: try_parse_int(v) if k != 'IdLandkreis' else '{:05d}'.format(int(v)) for k, v in row.items()}
         m = datetime.datetime.fromisoformat(row['Meldedatum'])
         if max_meldedatum is None or m > max_meldedatum:
             max_meldedatum = m
