@@ -1,5 +1,5 @@
 import time
-from typing import Optional
+from typing import Optional, Any
 
 import psycopg2
 
@@ -8,6 +8,7 @@ import os
 from urllib.parse import quote
 
 import sentry_sdk
+from psycopg2.extras import execute_values
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
 DATABASE_FILE = 'corona_app'
@@ -61,6 +62,42 @@ def retry_refresh(conn: psycopg2.extensions.connection, cur: psycopg2.extensions
     while num_try <= retry:
         try:
             cur.execute(query)
+            conn.commit()
+            break
+        except Exception as ex:
+            conn.rollback()
+            if "could not serialize access due to concurrent" in str(ex):
+                logger.warning(f'{type(ex)}: {ex}Will retry in {num_try * 60} seconds')
+                time.sleep(num_try * 60)
+                num_try += 1
+                continue
+            else:
+                raise ex
+
+    if num_try >= retry:
+        raise Exception(f'Query "{query}" failed after {retry} retries')
+
+    logger.info(f'Query successfully executed after {num_try} tries')
+
+
+def retry_execute_values(
+        conn: psycopg2.extensions.connection,
+        cur: psycopg2.extensions.cursor,
+        query: str,
+        template: str,
+        entries: Any,
+        page_size: int = 500,
+        retry: int = 5) -> None:
+    num_try = 1
+    while num_try <= retry:
+        try:
+            execute_values(
+                cur=cur,
+                sql=query,
+                template=template,
+                argslist=entries,
+                page_size=page_size
+            )
             conn.commit()
             break
         except Exception as ex:

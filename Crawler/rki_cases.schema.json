@@ -10,24 +10,18 @@
                 "$id": "#/items/anyOf/0",
                 "type": "object",
                 "required": [
-                    "IdBundesland",
-                    "Bundesland",
-                    "Landkreis",
                     "Altersgruppe",
                     "Geschlecht",
                     "AnzahlFall",
                     "AnzahlTodesfall",
-                    "ObjectId",
                     "Meldedatum",
                     "IdLandkreis",
-                    "Datenstand",
                     "NeuerFall",
                     "NeuerTodesfall",
                     "Refdatum",
                     "NeuGenesen",
                     "AnzahlGenesen",
-                    "IstErkrankungsbeginn",
-                    "Altersgruppe2"
+                    "IstErkrankungsbeginn"
                 ],
                 "properties": {
                     "IdBundesland": {
@@ -64,7 +58,8 @@
                     },
                     "Meldedatum": {
                         "$id": "#/items/anyOf/0/properties/Meldedatum",
-                        "type": "number"
+                        "type": "string",
+                        "format": "date"
                     },
                     "IdLandkreis": {
                         "$id": "#/items/anyOf/0/properties/IdLandkreis",
@@ -84,7 +79,8 @@
                     },
                     "Refdatum": {
                         "$id": "#/items/anyOf/0/properties/Refdatum",
-                        "type": "number"
+                        "type": "string",
+                        "format": "date"
                     },
                     "NeuGenesen": {
                         "$id": "#/items/anyOf/0/properties/NeuGenesen",
