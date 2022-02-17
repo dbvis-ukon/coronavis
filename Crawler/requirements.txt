@@ -1,4 +1,4 @@
-pandas==1.4.0
+pandas==1.4.1
 numpy==1.22.2
 urllib3==1.26.8
 openpyxl==3.0.9
