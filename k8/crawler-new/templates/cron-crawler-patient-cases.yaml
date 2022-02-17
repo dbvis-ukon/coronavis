@@ -60,8 +60,8 @@ spec:
                 cpu: 1000m
                 memory: 5Gi
               limits:
-                cpu: 2000m
-                memory: 10Gi
+                cpu: 4000m
+                memory: 20Gi
           restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server
