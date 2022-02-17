@@ -28,8 +28,10 @@ logger.info('Crawler for RKI detailed case data')
 
 conn, cur = get_connection('crawl_rki_cases')
 
-cur.execute("select max(datenbestand) from cases")
-last_update: datetime.datetime = cur.fetchone()[0]
+cur.execute("SELECT MAX(datenbestand), COUNT(*) as c FROM cases WHERE datenbestand = (SELECT MAX(datenbestand) FROM cases)")
+r = cur.fetchone()
+last_update: datetime.datetime = r[0]
+num_cases_in_db: int = r[1]
 
 today = datetime.datetime.now(tz=pytz.timezone('Europe/Berlin')).replace(hour=0, minute=0, second=0, microsecond=0)
 
@@ -127,9 +129,6 @@ def load_data_into_db(entries: List[Dict[str, int | str | datetime.datetime]]):
     try:
         # reconnect to DB here
         conn2, cur2 = get_connection('crawl_rki_cases')
-
-        cur2.execute("SELECT COUNT(*) FROM cases WHERE datenbestand = (SELECT MAX(datenbestand) FROM cases)")
-        num_cases_in_db = cur2.fetchone()[0]
 
         current_update: datetime.datetime = entries[0]['datenbestand'].replace(tzinfo=pytz.timezone('Europe/Berlin'))
 
