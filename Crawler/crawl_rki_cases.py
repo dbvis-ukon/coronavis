@@ -28,7 +28,8 @@ logger.info('Crawler for RKI detailed case data')
 
 conn, cur = get_connection('crawl_rki_cases')
 
-cur.execute("SELECT MAX(datenbestand), COUNT(*) as c FROM cases WHERE datenbestand = (SELECT MAX(datenbestand) FROM cases)")
+cur.execute(
+    "SELECT MAX(datenbestand), COUNT(*) as c FROM cases WHERE datenbestand = (SELECT MAX(datenbestand) FROM cases)")
 r = cur.fetchone()
 last_update: datetime.datetime = r[0]
 num_cases_in_db: int = r[1]
@@ -59,13 +60,19 @@ def try_parse_int(s: str) -> int | str:
         return s
 
 
-URL = 'https://media.githubusercontent.com/media/robert-koch-institut/SARS-CoV-2_Infektionen_in_Deutschland/master/Aktuell_Deutschland_SarsCov2_Infektionen.csv'
+URL = 'https://github.com/robert-koch-institut/SARS-CoV-2_Infektionen_in_Deutschland/blob/%TODAY%/Aktuell_Deutschland_SarsCov2_Infektionen.csv?raw=true'
 
 
-def download_data(url: str) -> Tuple[List[Dict[str, int | str]], datetime.datetime]:
-    logger.info('download data')
+def download_data() -> Tuple[List[Dict[str, int | str]], datetime.datetime] | None:
+    today_str = today.strftime('%Y-%m-%d')
+    url = URL.replace('%TODAY%', today_str)
+    logger.info(f'download data {url}')
     start = get_start()
     response = requests.get(url)
+    if response.status_code == 404:
+        logger.warning(f'No data available for {today_str}')
+        exit(0)
+
     # some weird tokens at the beginning of the file, this gets rid of it
     buff = StringIO(response.text[3:])
     # lines = [line.decode('utf-8') for line in response.readlines()]
@@ -81,8 +88,8 @@ def download_data(url: str) -> Tuple[List[Dict[str, int | str]], datetime.dateti
     with open('./rki-test.csv', mode='w', newline='') as f:  # You will need 'wb' mode in Python 2.x
         w = csv.DictWriter(f, data[0].keys())
         w.writeheader()
-        for r in data:
-            w.writerow(r)
+        for row in data:
+            w.writerow(row)
 
     logger.info(f'took {get_execution_time(start)}')
     return data, max_meldedatum
@@ -97,7 +104,7 @@ def validate_data(data: List[Dict[str, int | str]]) -> bool:
         return True
 
 
-def parse_data(data: List[Dict[str, int | str]], max_meldedatum: datetime) -> \
+def parse_data(data: List[Dict[str, int | str]]) -> \
         List[Dict[str, int | str | datetime.datetime]]:
     start = get_start()
     logger.info('parse data')
@@ -106,7 +113,7 @@ def parse_data(data: List[Dict[str, int | str]], max_meldedatum: datetime) -> \
         cc = ['case' for _ in range(el['AnzahlFall'])]
         cc.extend(['death' for _ in range(el['AnzahlTodesfall'])])
         entry = [{
-            'datenbestand': max_meldedatum,
+            'datenbestand': today,
             'idlandkreis': el['IdLandkreis'],
             # 'meldedatum': datetime.datetime.utcfromtimestamp(el['Meldedatum'] / 1000),
             'meldedatum': datetime.datetime.fromisoformat(el['Meldedatum']),
@@ -134,7 +141,8 @@ def load_data_into_db(entries: List[Dict[str, int | str | datetime.datetime]]):
 
         logger.info("db data version: %s", last_update)
         logger.info("fetched data version: %s", current_update)
-        logger.info("Num entries in DB %s, num entries fetched %s, diff %s", num_cases_in_db, len(entries), len(entries) - num_cases_in_db)
+        logger.info("Num entries in DB %s, num entries fetched %s, diff %s", num_cases_in_db, len(entries),
+                    len(entries) - num_cases_in_db)
 
         if last_update is not None and abs(
                 (current_update - last_update).total_seconds()) <= 2 * 60 * 60 and override is False:
@@ -195,7 +203,7 @@ def load_data_into_db(entries: List[Dict[str, int | str | datetime.datetime]]):
         exit(1)
 
 
-d, max_md = download_data(URL)
+d, max_md = download_data()
 validate_data(d)
-e = parse_data(d, max_md)
+e = parse_data(d)
 load_data_into_db(e)
