@@ -106,5 +106,9 @@
 
 
 <div *ngIf="!tooltip" class="greyblock">
-  <app-pixel-chart [dataAndOptions]="pixelChartDataAndOptions"></app-pixel-chart>
+  <div class="pixel-outer">
+    <div class="pixel-inner">
+      <app-pixel-chart [dataAndOptions]="pixelChartDataAndOptions"></app-pixel-chart>
+    </div>
+  </div>
 </div>
