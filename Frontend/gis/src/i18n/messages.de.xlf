@@ -66,7 +66,7 @@
     </unit>
     <unit id="clickForMoreInformation">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:99</note>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:103</note>
       </notes>
       <segment state="final">
         <source> Klicken Sie um mehr Informationen zu erhalten.

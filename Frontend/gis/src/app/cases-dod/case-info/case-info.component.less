@@ -53,9 +53,21 @@
 
 .greyblock {
   display: block;
-  min-width: 850px;
-  max-width: 90vw;
+  min-width: 750px;
+  max-width: 80vw;
   border: 1px solid lightgray;
   margin-top: 2px;
   margin-bottom: 2px;
+}
+
+.outer {
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  .inner {
+
+    &.pixel {
+      min-width: 2000px;
+    }
+  }
 }
