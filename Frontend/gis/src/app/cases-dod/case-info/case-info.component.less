@@ -60,11 +60,14 @@
   margin-bottom: 2px;
 }
 
-.pixel-outer {
+.outer {
   overflow-x: auto;
   overflow-y: hidden;
 
-  .pixel-inner {
-    min-width: 2000px;
+  .inner {
+
+    &.pixel {
+      min-width: 2000px;
+    }
   }
 }

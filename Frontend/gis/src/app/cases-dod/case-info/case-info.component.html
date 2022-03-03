@@ -92,7 +92,11 @@
 </div>
 
 <div [ngClass]="{'greyblock': !tooltip}">
-  <app-table-overview [tableData]="tableData"  [tooltip]="tooltip" [showTitle]="false"></app-table-overview>
+  <div class="outer">
+    <div class="inner">
+      <app-table-overview [tableData]="tableData"  [tooltip]="tooltip" [showTitle]="false"></app-table-overview>
+    </div>
+  </div>
 </div>
 
 
@@ -101,13 +105,17 @@
 </h5>
 
 <div *ngIf="!tooltip" class="greyblock">
-  <app-case-line-chart [data]="data" [options]="chartOptions"></app-case-line-chart>
+  <div class="outer">
+    <div class="inner">
+      <app-case-line-chart [data]="data" [options]="chartOptions"></app-case-line-chart>
+    </div>
+  </div>
 </div>
 
 
 <div *ngIf="!tooltip" class="greyblock">
-  <div class="pixel-outer">
-    <div class="pixel-inner">
+  <div class="outer">
+    <div class="inner pixel">
       <app-pixel-chart [dataAndOptions]="pixelChartDataAndOptions"></app-pixel-chart>
     </div>
   </div>
