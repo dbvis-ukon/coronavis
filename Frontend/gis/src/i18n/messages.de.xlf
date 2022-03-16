@@ -2255,6 +2255,15 @@
         <target>Selektion aufheben</target>
       </segment>
     </unit>
+    <unit id="risklayerWarning">
+      <notes>
+        <note category="location">src/app/map-root/map-root.component.html:1</note>
+      </notes>
+      <segment state="final">
+        <source>Seit dem 08.03.2022 hat Risklayer die Datenerhebung beendet. Wir bedanken uns bei Risklayer für die fantastische Datengrundlage und die unermüdliche Arbeit. Die Daten des RKI stehen weiterhin tagesaktuell zur Verfügung.</source>
+        <target>Seit dem 08.03.2022 hat Risklayer die Datenerhebung beendet. Wir bedanken uns bei Risklayer für die fantastische Datengrundlage und die unermüdliche Arbeit. Die Daten des RKI stehen weiterhin tagesaktuell zur Verfügung.</target>
+      </segment>
+    </unit>
     <unit id="pictureCopiedToClipboard">
       <notes>
         <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:1</note>

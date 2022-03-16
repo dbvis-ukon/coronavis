@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { APP_CONFIG_KEY, APP_CONFIG_URL_KEY, APP_HELP_SEEN, MAP_LOCATION_SETTINGS_KEY, MAP_LOCATION_SETTINGS_URL_KEY } from '../../constants';
 import { HelpDialogComponent } from '../help/help-dialog/help-dialog.component';
 import { FlyTo } from '../map/events/fly-to';
+import { CovidNumberCaseDataSource } from '../map/options/covid-number-case-options';
 import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { CaseChoropleth } from '../map/overlays/casechoropleth';
@@ -52,6 +53,9 @@ export class MapRootComponent implements OnInit {
 
   flyTo: FlyTo = null;
 
+  @ViewChild('risklayerWarning', {static: true})
+  risklayerWarning: ElementRef<HTMLSpanElement>;
+
   // constructor is here only used to inject services
   constructor(
     private configService: ConfigService,
@@ -62,6 +66,7 @@ export class MapRootComponent implements OnInit {
     private urlHandlerService: UrlHandlerService,
     private route: ActivatedRoute,
     private storage: MyLocalStorageService,
+    private matSnackBar: MatSnackBar
               ) {
   }
 
@@ -121,6 +126,15 @@ export class MapRootComponent implements OnInit {
 
     this.mapOptions = newOptions;
 
+    if (this.mapOptions.covidNumberCaseOptions.dataSource === CovidNumberCaseDataSource.risklayer) {
+      this.matSnackBar.open(this.risklayerWarning.nativeElement.textContent, 'OK', {
+        duration: 120000,
+        verticalPosition: 'top',
+        horizontalPosition: 'center',
+        panelClass: 'snackbar-warning'
+      });
+    }
+
     this.mapOptions$.next(newOptions);
   }
 
@@ -171,6 +185,13 @@ export class MapRootComponent implements OnInit {
       this.mapOptions = lockdownMlo;
 
       this.mapOptions$.next(lockdownMlo);
+
+      this.matSnackBar.open(this.risklayerWarning.nativeElement.textContent, 'OK', {
+        duration: 120000,
+        verticalPosition: 'top',
+        horizontalPosition: 'center',
+        panelClass: 'snackbar-warning'
+      });
     } else if ((urlSegments && urlSegments[0] && urlSegments[0].path === 'ebrake') || paramMap && paramMap.get('flavor') === 'ebrake') {
 
       const lockdownMlo = this.configService.getLockDownMapOptions(false);

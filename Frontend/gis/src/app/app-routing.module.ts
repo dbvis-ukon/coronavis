@@ -38,7 +38,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/overview/map/lockdown-live'
+    redirectTo: '/overview/map/lockdown'
   },
   { // default to MapRootComponent, don't throw 404
     path: '**',
