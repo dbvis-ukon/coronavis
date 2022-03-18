@@ -4189,9 +4189,9 @@ ejs@^3.1.5:
     jake "^10.6.1"
 
 electron-to-chromium@^1.4.84:
-  version "1.4.86"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.86.tgz#90fe4a9787f48d6522957213408e08a8126b2ebc"
-  integrity sha512-EVTZ+igi8x63pK4bPuA95PXIs2b2Cowi3WQwI9f9qManLiZJOD1Lash1J3W4TvvcUCcIR4o/rgi9o8UicXSO+w==
+  version "1.4.87"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.87.tgz#1aeacfa50b2fbf3ecf50a78fbebd8f259d4fe208"
+  integrity sha512-EXXTtDHFUKdFVkCnhauU7Xp8wmFC1ZG6GK9a1BeI2vvNhy61IwfNPo/CRexhf7mh4ajxAHJPind62BzpzVUeuQ==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -6297,9 +6297,9 @@ lru-cache@^6.0.0:
     yallist "^4.0.0"
 
 lru-cache@^7.5.1:
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.7.0.tgz#8ce6eeb1b553660a99edb3ff832cecceaeeece17"
-  integrity sha512-3W9Irr9YR2ZHJbfRr/hj8VtzqH7DugwWyHONyDByP6PLS/YJV7GTX5dDYS+qFe/LkVfnCjtk6vkVsxxKGol6jQ==
+  version "7.7.1"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.7.1.tgz#03d2846b1ad2dcc7931a9340b8711d9798fcb0c6"
+  integrity sha512-cRffBiTW8s73eH4aTXqBcTLU0xQnwGV3/imttRHGWCrbergmnK4D6JXQd8qin5z43HnDwRI+o7mVW0LEB+tpAw==
 
 lz-string@^1.4.4:
   version "1.4.4"
