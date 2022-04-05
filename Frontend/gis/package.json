@@ -41,7 +41,7 @@
     "json-url": "3.0.0",
     "leaflet": "github:dbvis-ukon/Leaflet#aa2095232c4c0b5b2f5435f1594084c1f97a7b90",
     "lodash-es": "4.17.21",
-    "moment": "2.29.1",
+    "moment": "2.29.2",
     "ng2-nouislider": "1.8.3",
     "ngx-markdown": "13.1.0",
     "nouislider": "15.5.1",
