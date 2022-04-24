@@ -1509,12 +1509,12 @@
     node-gyp "^8.2.0"
     read-package-json-fast "^2.0.1"
 
-"@nrwl/cli@*", "@nrwl/cli@14.0.1":
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.0.1.tgz#7751167c746ecdc93ce624d38c04fed142b908cc"
-  integrity sha512-+tsQdHyVlgolmHrRVEUkybOcOucbh9Q6zQCsHw6qlIApk/a9kNE9meTGvZTo9W0njoeWhtJAnCaXB1l7fmqBQg==
+"@nrwl/cli@*", "@nrwl/cli@14.0.2":
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.0.2.tgz#e16dd7ca3fad98455207c75ff6e91147ff31417a"
+  integrity sha512-Mzs2fys/LRV6dhZmBe9ZirNc/93lTaXH3YDNtnfJCYRLUXxQCN/67HdP8eCORgTQ9odR7NJd+2pMUai7sla/0g==
   dependencies:
-    nx "14.0.1"
+    nx "14.0.2"
 
 "@nrwl/devkit@13.1.3":
   version "13.1.3"
@@ -1545,12 +1545,12 @@
     tslib "^2.0.0"
     yargs-parser "20.0.0"
 
-"@nrwl/tao@14.0.1":
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.0.1.tgz#32f9af09b405856728e9103b7d9aed1f512e2490"
-  integrity sha512-xvNvkqRDAlreZc9FFMm0C+Fup4uCrZAp4w+KMzdibM0tJJBKC37rEdCJnXl0HWFV79aCJIwqW3BlDxHxMeVMBg==
+"@nrwl/tao@14.0.2":
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.0.2.tgz#18a2b2048ac6c7ecbae373b1d5ece327ae5141bc"
+  integrity sha512-KMGNB1FKOQ+AwEJD5Nqg/NX0kUtexdj2+cEHJin8th3i/ZD9hnaLHU3AlErGR1RfD++l3pGJC3x2z6iKfPmfUA==
   dependencies:
-    nx "14.0.1"
+    nx "14.0.2"
 
 "@parcel/watcher@2.0.4":
   version "2.0.4"
@@ -2865,12 +2865,12 @@ atob@^2.1.2:
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
 autoprefixer@^10.4.2:
-  version "10.4.4"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.4.4.tgz#3e85a245b32da876a893d3ac2ea19f01e7ea5a1e"
-  integrity sha512-Tm8JxsB286VweiZ5F0anmbyGiNI3v3wGv3mz9W+cxEDYB/6jbnj6GM9H9mK3wIL8ftgl+C07Lcwb8PG5PCCPzA==
+  version "10.4.5"
+  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.4.5.tgz#662193c744094b53d3637f39be477e07bd904998"
+  integrity sha512-Fvd8yCoA7lNX/OUllvS+aS1I7WRBclGXsepbvT8ZaPgrH24rgXpZzF0/6Hh3ZEkwg+0AES/Osd196VZmYoEFtw==
   dependencies:
     browserslist "^4.20.2"
-    caniuse-lite "^1.0.30001317"
+    caniuse-lite "^1.0.30001332"
     fraction.js "^4.2.0"
     normalize-range "^0.1.2"
     picocolors "^1.0.0"
@@ -3214,7 +3214,7 @@ camelcase@^5.0.0, camelcase@^5.3.1:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-5.3.1.tgz#e3c9b31569e106811df242f715725a1f4c494320"
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
-caniuse-lite@^1.0.30001299, caniuse-lite@^1.0.30001317:
+caniuse-lite@^1.0.30001299, caniuse-lite@^1.0.30001317, caniuse-lite@^1.0.30001332:
   version "1.0.30001332"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001332.tgz#39476d3aa8d83ea76359c70302eafdd4a1d727dd"
   integrity sha512-10T30NYOEQtN6C11YGg411yebhvpnC6Z102+B95eAsN0oB6KUs01ivE8u+G6FMIRtIrVlYXhL+LUwQ3/hXwDWw==
@@ -4314,10 +4314,10 @@ engine.io-parser@~5.0.3:
   dependencies:
     "@socket.io/base64-arraybuffer" "~1.0.2"
 
-engine.io@~6.1.0:
-  version "6.1.3"
-  resolved "https://registry.yarnpkg.com/engine.io/-/engine.io-6.1.3.tgz#f156293d011d99a3df5691ac29d63737c3302e6f"
-  integrity sha512-rqs60YwkvWTLLnfazqgZqLa/aKo+9cueVfEi/dZ8PyGyaf8TLOxj++4QMIgeG3Gn0AhrWiFXvghsoY9L9h25GA==
+engine.io@~6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/engine.io/-/engine.io-6.2.0.tgz#003bec48f6815926f2b1b17873e576acd54f41d0"
+  integrity sha512-4KzwW3F3bk+KlzSOY57fj/Jx6LyRQ1nbcyIadehl+AnXjKT7gDO0ORdRi/84ixvMKTym6ZKuxvbzN62HDDU1Lg==
   dependencies:
     "@types/cookie" "^0.4.1"
     "@types/cors" "^2.8.12"
@@ -7030,13 +7030,13 @@ nx@13.1.3:
   dependencies:
     "@nrwl/cli" "*"
 
-nx@14.0.1:
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/nx/-/nx-14.0.1.tgz#d8cec87e7716d5b8cfe0e226b22759c9d12494a6"
-  integrity sha512-m/td2BGYnUgRtxyhDAFssjKQt2FYfhAV14Igrnyvaleo0385yQIjzkcfJh9XAyvMvuhq6uzlvMqOd85EL6aTwg==
+nx@14.0.2:
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/nx/-/nx-14.0.2.tgz#ed6ccf1f02644e1a96a5a6086af7f28c96a7d3cb"
+  integrity sha512-kJgxPctxKtXZ+LZbKzFSP2cdDIyHrfNWyPY29yhVxfSOn0SIMKXUHHAYMIioARXZ0IAdU4uZTRZMmn38yaEJJw==
   dependencies:
-    "@nrwl/cli" "14.0.1"
-    "@nrwl/tao" "14.0.1"
+    "@nrwl/cli" "14.0.2"
+    "@nrwl/tao" "14.0.2"
     "@parcel/watcher" "2.0.4"
     "@swc-node/register" "^1.4.2"
     "@swc/core" "^1.2.152"
@@ -7044,6 +7044,7 @@ nx@14.0.1:
     chokidar "^3.5.1"
     cli-cursor "3.1.0"
     cli-spinners "2.6.1"
+    cliui "^7.0.2"
     dotenv "~10.0.0"
     enquirer "~2.3.6"
     fast-glob "3.2.7"
@@ -7059,6 +7060,7 @@ nx@14.0.1:
     rxjs "^6.5.4"
     rxjs-for-await "0.0.2"
     semver "7.3.4"
+    string-width "^4.2.3"
     tar-stream "~2.2.0"
     tmp "~0.2.1"
     tsconfig-paths "^3.9.0"
@@ -8430,10 +8432,10 @@ smart-buffer@^4.2.0:
   resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-4.2.0.tgz#6e1d71fa4f18c05f7d0ff216dd16a481d0e8d9ae"
   integrity sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==
 
-socket.io-adapter@~2.3.3:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-2.3.3.tgz#4d6111e4d42e9f7646e365b4f578269821f13486"
-  integrity sha512-Qd/iwn3VskrpNO60BeRyCyr8ZWw9CPZyitW4AQwmRZ8zCiyDiL+znRnWX6tDHXnWn1sJrM1+b6Mn6wEDJJ4aYQ==
+socket.io-adapter@~2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-2.4.0.tgz#b50a4a9ecdd00c34d4c8c808224daa1a786152a6"
+  integrity sha512-W4N+o69rkMEGVuk2D/cvca3uYsvGlMwsySWV447y99gUPghxq42BxqLNMndb+a1mm/5/7NeXVQS7RLa2XyXvYg==
 
 socket.io-parser@~4.0.4:
   version "4.0.4"
@@ -8445,15 +8447,15 @@ socket.io-parser@~4.0.4:
     debug "~4.3.1"
 
 socket.io@^4.4.1:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/socket.io/-/socket.io-4.4.1.tgz#cd6de29e277a161d176832bb24f64ee045c56ab8"
-  integrity sha512-s04vrBswdQBUmuWJuuNTmXUVJhP0cVky8bBDhdkf8y0Ptsu7fKU2LuLbts9g+pdmAdyMMn8F/9Mf1/wbtUN0fg==
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/socket.io/-/socket.io-4.5.0.tgz#78ae2e84784c29267086a416620c18ef95b37186"
+  integrity sha512-slTYqU2jCgMjXwresG8grhUi/cC6GjzmcfqArzaH3BN/9I/42eZk9yamNvZJdBfTubkjEdKAKs12NEztId+bUA==
   dependencies:
     accepts "~1.3.4"
     base64id "~2.0.0"
     debug "~4.3.2"
-    engine.io "~6.1.0"
-    socket.io-adapter "~2.3.3"
+    engine.io "~6.2.0"
+    socket.io-adapter "~2.4.0"
     socket.io-parser "~4.0.4"
 
 sockjs@^0.3.21:
