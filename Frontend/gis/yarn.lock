@@ -4488,10 +4488,10 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
-es5-shim@4.6.6:
-  version "4.6.6"
-  resolved "https://registry.yarnpkg.com/es5-shim/-/es5-shim-4.6.6.tgz#1e0e95bedfdcd933a2d4931a3ac6c79164f18de6"
-  integrity sha512-Ay5QQE78I2WKUoZVZjL0AIuiIjsmXwZGkyCTH9+n6J1anPbb0ymDA27ASa2Lt0rhOpAlEKy2W0d17gJ1XOQ5eQ==
+es5-shim@4.6.7:
+  version "4.6.7"
+  resolved "https://registry.yarnpkg.com/es5-shim/-/es5-shim-4.6.7.tgz#bc67ae0fc3dd520636e0a1601cc73b450ad3e955"
+  integrity sha512-jg21/dmlrNQI7JyyA2w7n+yifSxBng0ZralnSfVZjoCawgNTCnS+yBCyVM9DL5itm7SUnDGgv7hcq2XCZX4iRQ==
 
 es6-promise@^4.0.3:
   version "4.2.8"
