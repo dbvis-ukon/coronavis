@@ -100,7 +100,7 @@
     "protractor": "7.0.0",
     "ts-node": "10.7.0",
     "typescript": "4.6.4",
-    "webpack": "5.72.0"
+    "webpack": "5.72.1"
   },
   "lint-staged": {
     "*.{js,json,css,scss,md,ts,html}": [
