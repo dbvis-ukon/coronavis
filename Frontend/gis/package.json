@@ -68,7 +68,7 @@
     "@babel/plugin-proposal-object-rest-spread": "7.18.0",
     "@babel/preset-env": "7.18.0",
     "@types/cron": "1.7.3",
-    "@types/d3": "7.1.0",
+    "@types/d3": "7.4.0",
     "@types/file-saver": "2.0.5",
     "@types/geojson": "7946.0.8",
     "@types/jasmine": "4.0.3",
