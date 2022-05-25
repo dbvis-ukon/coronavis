@@ -1640,12 +1640,12 @@
     node-gyp "^8.2.0"
     read-package-json-fast "^2.0.1"
 
-"@nrwl/cli@*", "@nrwl/cli@14.1.8":
-  version "14.1.8"
-  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.1.8.tgz#e3b7b0bd8d6e659877d94f648b68dacaf45bb180"
-  integrity sha512-Ocf8u6ORFFkw3EkLi2/4MeICfDHhB+g5gq3VxlSntJLQ06c4ejCJDV4tJuNL+FMDzIRL079VGXhtXkhM4gi8dA==
+"@nrwl/cli@*", "@nrwl/cli@14.1.9":
+  version "14.1.9"
+  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.1.9.tgz#b54c539ebd72ec8fab3de070cd0bf81ffee8704c"
+  integrity sha512-7T03yVUNxXXR478L9TRRYlg1gsxvERpikSa1dppW+YjL0K4L2PLkZEPJqDMbrPmyAryeZpUCn9vLVOIThW47rA==
   dependencies:
-    nx "14.1.8"
+    nx "14.1.9"
 
 "@nrwl/devkit@13.1.3":
   version "13.1.3"
@@ -1676,12 +1676,12 @@
     tslib "^2.0.0"
     yargs-parser "20.0.0"
 
-"@nrwl/tao@14.1.8":
-  version "14.1.8"
-  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.1.8.tgz#11b65d9e46dfc0f87f6e7adbe67f963b527fc88d"
-  integrity sha512-hWbpJ+u9HsC/BMdLBQMB1H6KbJTW66sgDW/A/wyB65sfDKmbJICEKWdPgUXFttur2KglUCfHGuN/L7WsPYc/YA==
+"@nrwl/tao@14.1.9":
+  version "14.1.9"
+  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.1.9.tgz#116d2e23cb4bc28b3a41e5208b9274a60015a6a8"
+  integrity sha512-XUmnYJIrLd2Lui94LsVbXteFhWpNHTjIDDlt/krysEJD8lqE8uoD44uvjKaqIMZXTH8AOH1M4leWraqBSVU0ig==
   dependencies:
-    nx "14.1.8"
+    nx "14.1.9"
 
 "@parcel/watcher@2.0.4":
   version "2.0.4"
@@ -7153,13 +7153,13 @@ nx@13.1.3:
   dependencies:
     "@nrwl/cli" "*"
 
-nx@14.1.8:
-  version "14.1.8"
-  resolved "https://registry.yarnpkg.com/nx/-/nx-14.1.8.tgz#37a3ba428f21551f6e5f54dd6c9daef3531f9fa6"
-  integrity sha512-ZYLpZWAMr1mb+uU0OSPzEtNvti0hZTW4T8LV+KDZTWa+/vNS9N5r/6YChTst+bEtNsmuy5/w720rMxUJ3gyaPQ==
+nx@14.1.9:
+  version "14.1.9"
+  resolved "https://registry.yarnpkg.com/nx/-/nx-14.1.9.tgz#3de911ca250f2188f319addddde4ce5152576322"
+  integrity sha512-O+zpqtGrJkiTNqh4qK4MwXN1OLgWXCm7YWNO+F7y9kKGfOlGC/krx2lmSSGbMEOPgIP4Z2MMTXGlVULqZyRVHw==
   dependencies:
-    "@nrwl/cli" "14.1.8"
-    "@nrwl/tao" "14.1.8"
+    "@nrwl/cli" "14.1.9"
+    "@nrwl/tao" "14.1.9"
     "@parcel/watcher" "2.0.4"
     "@swc-node/register" "^1.4.2"
     "@swc/core" "^1.2.173"
