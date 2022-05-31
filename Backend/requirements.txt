@@ -17,7 +17,7 @@ psycopg2-binary==2.9.3
 python-dotenv==0.20.0
 marshmallow-sqlalchemy==0.28.0
 bcrypt==3.2.2
-alembic==1.7.7
+alembic==1.8.0
 tzdata==2022.1
 tzlocal==4.2
 prometheus-flask-exporter==0.20.1
