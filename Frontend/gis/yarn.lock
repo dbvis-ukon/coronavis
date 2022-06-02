@@ -4091,9 +4091,9 @@ dashdash@^1.12.0:
     assert-plus "^1.0.0"
 
 date-format@^4.0.10:
-  version "4.0.10"
-  resolved "https://registry.yarnpkg.com/date-format/-/date-format-4.0.10.tgz#7aa4bc0ad0c79f4ba858290e5dbb47f27d602e79"
-  integrity sha512-RuMIHocrVjF84bUSTcd1uokIsLsOsk1Awb7TexNOI3f48ukCu39mjslWquDTA08VaDMF2umr3MB9ow5EyJTWyA==
+  version "4.0.11"
+  resolved "https://registry.yarnpkg.com/date-format/-/date-format-4.0.11.tgz#ae0d1e069d7f0687938fd06f98c12f3a6276e526"
+  integrity sha512-VS20KRyorrbMCQmpdl2hg5KaOUsda1RbnsJg461FfrcyCUg+pkd0b40BSW4niQyTheww4DBXQnS7HwSrKkipLw==
 
 debug@2.6.9, debug@^2.6.9:
   version "2.6.9"
@@ -7930,12 +7930,12 @@ punycode@^2.1.0, punycode@^2.1.1:
 q@1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.4.1.tgz#55705bcd93c5f3673530c2c2cbc0c2b3addc286e"
-  integrity sha1-VXBbzZPF82c1MMLCy8DCs63cKG4=
+  integrity sha512-/CdEdaw49VZVmyIDGUQKDDT53c7qBkO6g5CefWz91Ae+l4+cRtcDYwMTXh6me4O8TMldeGHG3N2Bl84V78Ywbg==
 
 q@^1.4.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
-  integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
+  integrity sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==
 
 qjobs@^1.2.0:
   version "1.2.0"
