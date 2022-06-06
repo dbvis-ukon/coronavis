@@ -6,7 +6,7 @@
   ],
   "assignees": ["@jentner"],
   "assigneesSampleSize": 1,
-  "gitLabAutomerge": true,
+  "platformAutomerge": true,
   "packageRules": [
     {
       "packagePatterns": ["^@angular"],
@@ -27,6 +27,11 @@
       "matchPackagePatterns": ["sentry"],
       "automerge": true,
       "groupName": "sentry"
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
     }
   ],
   "vulnerabilityAlerts": {
