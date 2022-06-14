@@ -3389,9 +3389,9 @@ color-support@^1.1.3:
   integrity sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==
 
 colorette@^2.0.10, colorette@^2.0.16, colorette@^2.0.17:
-  version "2.0.17"
-  resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.17.tgz#5dd4c0d15e2984b7433cb4a9f2ead45063b80c47"
-  integrity sha512-hJo+3Bkn0NCHybn9Tu35fIeoOKGOk5OCC32y4Hz2It+qlCO2Q3DeQ1hRn/tDDMQKRYUEzqsl7jbF6dYKjlE60g==
+  version "2.0.18"
+  resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.18.tgz#4c260bcf86437ce94fa58e2e49a83b623f3c4d66"
+  integrity sha512-rHDY1i4V4JBCXHnHwaVyA202CKSj2kUrjI5cSJQbTdnFeI4ShV3e19Fe7EQfzL2tjSrvYyWugdGAtEc1lLvGDg==
 
 colors@1.4.0:
   version "1.4.0"
@@ -4258,9 +4258,9 @@ ejs@^3.1.5:
     jake "^10.8.5"
 
 electron-to-chromium@^1.4.147:
-  version "1.4.153"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.153.tgz#7ed324c039745629041169221ba8dec653146f37"
-  integrity sha512-57AV9DNW1R52HjOqnGOCCTLHMHItLTGu/WjB1KYIa4BQ7p0u8J0j8N78akPcOBStKE801xcMjTpmbAylflfIYQ==
+  version "1.4.154"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.154.tgz#d69c60499fc467a6c59591d29183e520afbc78a1"
+  integrity sha512-GbV9djOkrnj6xmW+YYVVEI3VCQnJ0pnSTu7TW2JyjKd5cakoiSaG5R4RbEtfaD92GsY10DzbU3GYRe+IOA9kqA==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
