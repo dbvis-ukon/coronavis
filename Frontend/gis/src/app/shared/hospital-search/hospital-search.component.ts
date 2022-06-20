@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Feature, Point } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
@@ -33,7 +33,7 @@ export interface Searchable {
 })
 export class HospitalSearchComponent implements OnInit {
 
-  myControl = new FormControl();
+  myControl = new UntypedFormControl();
 
 
   // eslint-disable-next-line @angular-eslint/no-input-rename

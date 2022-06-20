@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -13,7 +13,7 @@ import { Searchable } from 'src/app/shared/hospital-search/hospital-search.compo
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(control: UntypedFormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
@@ -40,11 +40,11 @@ export class SubscriptionComponent implements OnInit {
 
   matcher = new MyErrorStateMatcher();
 
-  checkoutForm: FormGroup;
+  checkoutForm: UntypedFormGroup;
 
   counties$: Observable<Searchable[]>;
 
-  selectedCounty: FormControl;
+  selectedCounty: UntypedFormControl;
 
   resetSearch: number;
 
@@ -58,7 +58,7 @@ export class SubscriptionComponent implements OnInit {
 
   constructor(
     private emailRepo: EmailSubscriptionRepository,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private countyRepo: CountyRepository,
     private route: ActivatedRoute,
     private router: Router
@@ -66,14 +66,14 @@ export class SubscriptionComponent implements OnInit {
     this.selectedCounty = this.formBuilder.control('');
 
     this.checkoutForm = this.formBuilder.group({
-      email: new FormControl('', [
+      email: new UntypedFormControl('', [
         Validators.required,
         Validators.email,
       ]),
       lang: 'de',
       counties: this.formBuilder.array([], Validators.required),
-      terms: new FormControl(false, [Validators.requiredTrue]),
-      terms2: new FormControl(false, [Validators.requiredTrue])
+      terms: new UntypedFormControl(false, [Validators.requiredTrue]),
+      terms2: new UntypedFormControl(false, [Validators.requiredTrue])
     });
   }
 
@@ -164,7 +164,7 @@ export class SubscriptionComponent implements OnInit {
   }
 
   get counties() {
-    return this.checkoutForm.get('counties') as FormArray;
+    return this.checkoutForm.get('counties') as UntypedFormArray;
   }
 
   addCounty(c: County): void {
