@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
 import { filter, mergeMap, startWith, switchMap, toArray } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { Region } from 'src/app/repositories/types/in/region';
 })
 export class RegionSelectorComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  fruitCtrl = new FormControl();
+  fruitCtrl = new UntypedFormControl();
 
   allRegions: Observable<Region[]>;
   filteredRegions: Observable<Region[]>;

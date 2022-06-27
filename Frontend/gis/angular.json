@@ -213,5 +213,7 @@
       }
     }
   },
-  "defaultProject": "gis"
+  "cli": {
+    "analytics": false
+  }
 }
