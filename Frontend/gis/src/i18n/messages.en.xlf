@@ -96,7 +96,7 @@
 &lt;/div>
 
 &lt;div>
-    &lt;p c"/> pro Tag</source>
+    &lt;p class=&quot;"/> pro Tag</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> per day</target>
       </segment>
     </unit>
@@ -1085,7 +1085,7 @@
       </notes>
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="&lt;/button>
-        &lt;butt"/></source>
+        &lt;butto"/></source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ (isSmallScreen$ | async).matches ? 'Next' : 'Next to the Live View' }}"/></target>
       </segment>
     </unit>
@@ -1503,7 +1503,7 @@
       </notes>
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Einrichtungen&lt;/p>
-          &lt;p cl"/> bundesweit gemeldete Einrichtungen</source>
+          &lt;p cla"/> bundesweit gemeldete Einrichtungen</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.numberOfHospitals }}"/> nationally reported facilities</target>
       </segment>
     </unit>
@@ -1744,7 +1744,7 @@
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Covid-19 Fälle&lt;/p>
 
-          &lt;p class=&quot;stats&quot; *ngI"/> bundesweit gemeldete Covid-19 Fälle</source>
+          &lt;p class=&quot;stats&quot; *ngIf="/> bundesweit gemeldete Covid-19 Fälle</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.cases | number }}"/> nationally reported Covid-19 cases</target>
       </segment>
     </unit>
@@ -1781,7 +1781,7 @@
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Covid-19 Todesfälle&lt;/p>
 
-          &lt;p class=&quot;stats&quot;"/> bundesweit gemeldete Covid-19 Todesfälle</source>
+          &lt;p class=&quot;stats&quot; *"/> bundesweit gemeldete Covid-19 Todesfälle</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> nationally reported Covid-19 deaths</target>
       </segment>
     </unit>
@@ -1975,7 +1975,7 @@
     </unit>
     <unit id="infoboxEBrakeOver100">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:378,379</note>
+        <note category="location">src/app/infobox/infobox.component.html:379</note>
       </notes>
       <segment state="initial">
         <source>Über 100 </source>
@@ -1984,7 +1984,7 @@
     </unit>
     <unit id="infoboxEBrakeOver165">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:381,382</note>
+        <note category="location">src/app/infobox/infobox.component.html:382</note>
       </notes>
       <segment state="initial">
         <source>Über 165 </source>
@@ -2003,7 +2003,7 @@
     <unit id="infoboxType">
       <notes>
         <note category="location">src/app/cases-dod/case-info/case-info.component.html:19</note>
-        <note category="location">src/app/infobox/infobox.component.html:328</note>
+        <note category="location">src/app/infobox/infobox.component.html:329</note>
       </notes>
       <segment state="initial">
         <source>Art</source>
