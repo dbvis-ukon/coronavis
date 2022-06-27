@@ -408,6 +408,7 @@ check-missing-translations:
     - cd ./Frontend/gis
     - yarn extract-i18n
     - git status
+    - git diff
     - |
       if [ -z "$(git status --porcelain)" ]; then 
         # Working directory clean
