@@ -94,7 +94,7 @@ def download_file(fp: str) -> bool:
         return True
 
 
-def parse_file(fp: str) -> Optional[pd.DataFrame]:
+def parse_file(fp: str) -> Optional[dict[str, pd.DataFrame]]:
     try:
         logger.info('Parse data')
         df = pd.read_excel(fp, sheet_name=['Überblick', 'Haupt', 'Kreise'], header=None,
@@ -106,12 +106,12 @@ def parse_file(fp: str) -> Optional[pd.DataFrame]:
         return None
 
 
-def get_prognosis(df: pd.DataFrame) -> float:
+def get_prognosis(df: dict[str, pd.DataFrame]) -> float:
     return df['Überblick'].iloc[18, 6]
 
 
-def get_county_data(df_data: pd.DataFrame) -> (List[Dict[str, Any]], int):
-    df = df_data['Haupt'].iloc[5:406, [2, 0, 0, 10, 3, 47, 48, 49, 15, 39, 23]]
+def get_county_data(df_data: dict[str, pd.DataFrame]) -> (List[Dict[str, Any]], int):
+    df = df_data['Haupt'].iloc[5:406, [2, 0, 0, 10, 3, 47, 48, 49, 15, 39, 23, 9]]
     # AGS, Name, Name (->update-status) Today, -1d, -2d, -3d, -4d, death today, death -1d, verified (0|1)
     df[2] = df[2].astype(int)  # calls cannot be chained
     df[2] = df[2].astype(str)
@@ -150,15 +150,11 @@ def get_county_data(df_data: pd.DataFrame) -> (List[Dict[str, Any]], int):
     # reformat
     updated_today_count = 0
     time_23_59 = time(21, 59)
-    date_arr = [{'datenbestand': current_update, 'row_id_cases': 3, 'row_id_deaths': 8},
-                {'datenbestand': datetime.combine(current_update.date() - timedelta(days=1), time_23_59).replace(
-                    tzinfo=timezone.utc), 'row_id_cases': 4, 'row_id_deaths': 9},
-                {'datenbestand': datetime.combine(current_update.date() - timedelta(days=2), time_23_59).replace(
-                    tzinfo=timezone.utc), 'row_id_cases': 5, 'row_id_deaths': None},
-                {'datenbestand': datetime.combine(current_update.date() - timedelta(days=3), time_23_59).replace(
-                    tzinfo=timezone.utc), 'row_id_cases': 6, 'row_id_deaths': None},
-                {'datenbestand': datetime.combine(current_update.date() - timedelta(days=4), time_23_59).replace(
-                    tzinfo=timezone.utc), 'row_id_cases': 7, 'row_id_deaths': None},
+    date_arr = [{'delta': 0, 'row_id_cases': 3, 'row_id_deaths': 8},
+                {'delta': 1, 'row_id_cases': 4, 'row_id_deaths': 9},
+                {'delta': 2, 'row_id_cases': 5, 'row_id_deaths': None},
+                {'delta': 3, 'row_id_cases': 6, 'row_id_deaths': None},
+                {'delta': 4, 'row_id_cases': 7, 'row_id_deaths': None},
                 # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=5), time_23_59).replace(
                 # tzinfo=timezone.utc), 'row_id_cases': 9, 'row_id_deaths': None},
                 # {'datenbestand': datetime.combine(current_update.date() - timedelta(days=6), time_23_59).replace(
@@ -179,14 +175,18 @@ def get_county_data(df_data: pd.DataFrame) -> (List[Dict[str, Any]], int):
                 # tzinfo=timezone.utc), 'row_id_cases': 19, 'row_id_deaths': None}
                 ]
     data_entries: List[Dict[str, Any]] = []
+    today: datetime = datetime.combine(datetime.now(timezone.utc), time(0, 0)).replace(tzinfo=timezone.utc)
     for row in db_array:
         for history in date_arr:
+            datenbestand: datetime = datetime.combine(row[11].date() -
+                                                      timedelta(days=history['delta']), time_23_59)\
+                .replace(tzinfo=timezone.utc)
             entry = {
-                'datenbestand': history['datenbestand'],
+                'datenbestand': datenbestand,
                 'ags': row[0],
                 'cases': row[history['row_id_cases']],
                 'deaths': row[history['row_id_deaths']] if history['row_id_deaths'] is not None else None,
-                'updated_today': row[2] or (history['datenbestand'] != current_update),
+                'updated_today': row[2] or (datenbestand > today),
                 'verified': row[10] == 1
             }
 
@@ -196,7 +196,7 @@ def get_county_data(df_data: pd.DataFrame) -> (List[Dict[str, Any]], int):
                 if isinstance(entry[name], float):
                     entry[name] = int(entry[name])
 
-            if (history['datenbestand'] == current_update) and row[2]:
+            if (datenbestand >= today) and row[2]:
                 updated_today_count += 1
             if (isinstance(entry['cases'], int) or entry['cases'] is None) and (
                     isinstance(entry['deaths'], int) or entry['deaths'] is None):
@@ -214,8 +214,13 @@ def insert_into_db(prognosis_today: float, data_entries: List[Dict[str, Any]], u
         cur.execute(f"SELECT COUNT(*) FROM cases_lk_risklayer_current WHERE updated_today = True")
         num_cases_updated_today = cur.fetchone()[0]
 
+        max_datenbestand: datetime = datetime(1990, 1, 1).replace(tzinfo=timezone.utc)
+        for e in data_entries:
+            if e['datenbestand'] > max_datenbestand:
+                max_datenbestand = e['datenbestand']
+
         logger.info(f"db data version: {last_update}")
-        logger.info(f"fetched data version: {current_update}")
+        logger.info(f"fetched data version: {max_datenbestand}")
         logger.info(f"Number of LK publications for today in DB: {num_cases_updated_today}")
         logger.info(
             f"Number of LK publications for today in this update: "
@@ -223,7 +228,7 @@ def insert_into_db(prognosis_today: float, data_entries: List[Dict[str, Any]], u
         )
         logger.info(f"Prognosis number of cases for today: {prognosis_today}")
 
-        if last_update is not None and abs((current_update - last_update).total_seconds()) <= 5:
+        if last_update is not None and abs((max_datenbestand - last_update).total_seconds()) <= 5:
             logger.info("Apply throttling (+/- 5min) and skip update")
             exit(0)
         else:
@@ -239,7 +244,7 @@ def insert_into_db(prognosis_today: float, data_entries: List[Dict[str, Any]], u
             logger.info('Data inserted.')
 
             cur.execute("INSERT INTO risklayer_prognosis (datenbestand, prognosis) VALUES(%s, %s)",
-                        (current_update, prognosis_today))
+                        (max_datenbestand, prognosis_today))
             conn.commit()
             logger.info('Prognosis data inserted.')
 
@@ -247,7 +252,8 @@ def insert_into_db(prognosis_today: float, data_entries: List[Dict[str, Any]], u
             retry_refresh(
                 conn=conn,
                 cur=cur,
-                query='set time zone \'UTC\'; REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day_risklayer;'
+                query='set time zone \'UTC\'; '
+                      'REFRESH MATERIALIZED VIEW CONCURRENTLY cases_per_county_and_day_risklayer;'
             )
 
             logger.info('Send notification emails')
