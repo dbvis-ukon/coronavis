@@ -70,7 +70,7 @@
     "@types/cron": "1.7.3",
     "@types/d3": "7.4.0",
     "@types/file-saver": "2.0.5",
-    "@types/geojson": "7946.0.8",
+    "@types/geojson": "7946.0.9",
     "@types/jasmine": "4.0.3",
     "@types/jasminewd2": "2.0.10",
     "@types/leaflet": "1.7.11",
