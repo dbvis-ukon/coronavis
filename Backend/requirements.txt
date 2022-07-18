@@ -1,4 +1,4 @@
-blinker==1.4
+blinker==1.5
 cryptography==37.0.4
 Flask==2.1.2
 Flask-Caching==2.0.0
