@@ -9499,10 +9499,10 @@ vega-label@~1.2.0:
     vega-scenegraph "^4.9.2"
     vega-util "^1.15.2"
 
-vega-lite@5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/vega-lite/-/vega-lite-5.3.0.tgz#b9b9ecd80e869e823e6848c67d0a8ad94954bdee"
-  integrity sha512-6giodZ/bJnWyLq6Gj4OyiDt7EndoGyC9f5xDQjo82yPpUiO4MuG9iiPMqR1SPKmG9/qPBf+klWQR0v/7Mgju0Q==
+vega-lite@5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/vega-lite/-/vega-lite-5.4.0.tgz#d09331e2a1c87843d5865de0fa7704919796ab56"
+  integrity sha512-e/P5iOtBE62WEWZhKP7sLcBd92YS9prfUQafelxoOeloooSSrkUwM/ZDmN5Q5ffByEZTiKfODtnwD6/xKDYUmw==
   dependencies:
     "@types/clone" "~2.1.1"
     array-flat-polyfill "^1.0.1"
@@ -10083,7 +10083,7 @@ y18n@^5.0.5:
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-5.0.8.tgz#7f4934d0f7ca8c56f95314939ddcd2dd91ce1d55"
   integrity sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==
 
-yallist@*, yallist@^4.0.0:
+yallist@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
