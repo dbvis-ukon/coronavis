@@ -1675,30 +1675,29 @@
     read-package-json-fast "^2.0.3"
     which "^2.0.2"
 
-"@nrwl/cli@14.4.3":
-  version "14.4.3"
-  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.4.3.tgz#3d949e0da32e3af9f285ec376ec4f06314339716"
-  integrity sha512-9WzOOXgdf9YJxqte5e8KNkM3NWOuBgM7hz9jEOyw53Ht1Y2H8xLDPVkqDTS9kROgcyMQxHIjIcw80wZNaZL8Mw==
+"@nrwl/cli@14.5.1":
+  version "14.5.1"
+  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.5.1.tgz#60b7ed1386601a56bedb04d7e8fdb6c2407a4cbe"
+  integrity sha512-CWYAK5Oz/hZw82aeReKI0kPKKA0nCgtmf3fw4wVMNfTySW5Umt+08D5ZXG8xshtd4JODa4Lvvqtd7ig2mLh9sw==
   dependencies:
-    nx "14.4.3"
+    nx "14.5.1"
 
 "@nrwl/devkit@^14.2.4":
-  version "14.4.3"
-  resolved "https://registry.yarnpkg.com/@nrwl/devkit/-/devkit-14.4.3.tgz#4f8ed59bc1e0188e2fe6e4b59b03f783ddca33a0"
-  integrity sha512-CFGWQyzrqs4q7YUk37E5Ca+HDj9qbhfw6oI/Omf42MitEpoEnWxVKy/h1pua6ykHn8ZDVvS7sp6nrmg+r6OmDA==
+  version "14.5.1"
+  resolved "https://registry.yarnpkg.com/@nrwl/devkit/-/devkit-14.5.1.tgz#cc8c4b82c5ea3d0ee6164389749059232127a99d"
+  integrity sha512-j/m9F5W/nLF/f/AlmbJU85DWQ8g9SOAxkFHz85i2QOUbThLzCYub890tRCms41n/Z07SRpKaWd6YS3skotpGqw==
   dependencies:
     ejs "^3.1.7"
     ignore "^5.0.4"
-    rxjs "^6.5.4"
     semver "7.3.4"
     tslib "^2.3.0"
 
-"@nrwl/tao@14.4.3":
-  version "14.4.3"
-  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.4.3.tgz#08b86a81cb71574f491e9254104eaea1f7c6c5fd"
-  integrity sha512-sHlnqTlJ/XEc/lv0MIKYI1R643CWFvYL6QyZD7f38FvP1RblZ6eVqvOJcrkpwcvRWcZNEY+GrQpb1Io1ZvMEmQ==
+"@nrwl/tao@14.5.1":
+  version "14.5.1"
+  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.5.1.tgz#aa58abfcf8cf981256ac7982caee72d252d60095"
+  integrity sha512-7A35jJ89Y9W64wLsq1WZfduEIG9Iz1Alb8OWBXB9tpt4ZOuQw2o0LphbxpCPv039c5xQQGMtkD2owd3Xi73bvQ==
   dependencies:
-    nx "14.4.3"
+    nx "14.5.1"
 
 "@parcel/watcher@2.0.4":
   version "2.0.4"
@@ -3143,9 +3142,9 @@ camelcase@^5.0.0, camelcase@^5.3.1:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30001335, caniuse-lite@^1.0.30001370:
-  version "1.0.30001370"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001370.tgz#0a30d4f20d38b9e108cc5ae7cc62df9fe66cd5ba"
-  integrity sha512-3PDmaP56wz/qz7G508xzjx8C+MC2qEm4SYhSEzC9IBROo+dGXFWRuaXkWti0A9tuI00g+toiriVqxtWMgl350g==
+  version "1.0.30001373"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001373.tgz#2dc3bc3bfcb5d5a929bec11300883040d7b4b4be"
+  integrity sha512-pJYArGHrPp3TUqQzFYRmP/lwJlj8RCbVe3Gd3eJQkAV8SAC6b19XS9BjMvRdvaS8RMkaTN8ZhoHP6S1y8zzwEQ==
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -4431,9 +4430,9 @@ ejs@^3.1.7:
     jake "^10.8.5"
 
 electron-to-chromium@^1.4.202:
-  version "1.4.204"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.204.tgz#aae069adea642c066ea95faf5121262b0842e262"
-  integrity sha512-5Ojjtw9/c9HCXtMVE6SXVSHSNjmbFOXpKprl6mY/5moLSxLeWatuYA7KTD+RzJMxLRH6yNNQrqGz9p6IoNBMgw==
+  version "1.4.205"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.205.tgz#1e5180945c1415f66b2143c5a5eb983fffb2e30f"
+  integrity sha512-sSHlbfqn6CgQqD9muogEwWrw1wi2tHEQ+sunW7ex/kJ9ICucE85JW0E9ekbRDDgLP7NlpoNVUl+el0556RhFIg==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -7206,13 +7205,13 @@ nth-check@^2.0.1:
   dependencies:
     boolbase "^1.0.0"
 
-nx@14.4.3, nx@^14.2.4:
-  version "14.4.3"
-  resolved "https://registry.yarnpkg.com/nx/-/nx-14.4.3.tgz#27a1aea9ffaf143800c20006ed20f9a26f4610a3"
-  integrity sha512-XPaoEAfJI9056qdwTvkutQSwwA3iihqNDwhvk3dmgpT35j8Uzm/y67goACaCUBCjP2dIQqXfNfJVWQIpcG3MTw==
+nx@14.5.1, nx@^14.2.4:
+  version "14.5.1"
+  resolved "https://registry.yarnpkg.com/nx/-/nx-14.5.1.tgz#4725d260e02a891a16ddf886f80f197373d9b3f1"
+  integrity sha512-0QimStCyaw4HpgiJYpdH7NWMEVULKMcXEgPG/Mu3XDQtda/+8plDJ+ftfVo3MfjXIzQ6T7+zo//xESUez0pZ5w==
   dependencies:
-    "@nrwl/cli" "14.4.3"
-    "@nrwl/tao" "14.4.3"
+    "@nrwl/cli" "14.5.1"
+    "@nrwl/tao" "14.5.1"
     "@parcel/watcher" "2.0.4"
     chalk "4.1.0"
     chokidar "^3.5.1"
@@ -8327,7 +8326,7 @@ rw@1:
   resolved "https://registry.yarnpkg.com/rw/-/rw-1.3.3.tgz#3f862dfa91ab766b14885ef4d01124bfda074fb4"
   integrity sha512-PdhdWy89SiZogBLaw42zdeqtRJ//zFd2PgQavcICDUgJT5oW10QCRKbJ6bg4r0/UY2M6BWd5tkxuGFRvCkgfHQ==
 
-rxjs@6.6.7, rxjs@^6.0.0, rxjs@^6.5.4:
+rxjs@6.6.7, rxjs@^6.0.0:
   version "6.6.7"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.7.tgz#90ac018acabf491bf65044235d5863c4dab804c9"
   integrity sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==
