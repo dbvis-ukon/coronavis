@@ -82,7 +82,7 @@
     "ajv-formats": "2.1.1",
     "are-you-es5": "2.1.2",
     "babel-loader": "8.2.5",
-    "eslint": "8.20.0",
+    "eslint": "8.21.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jsdoc": "39.3.4",
     "eslint-plugin-json": "3.1.0",
