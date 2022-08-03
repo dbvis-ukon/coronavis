@@ -221,7 +221,7 @@ export-environment:
     - CPU_REQ="200m"
     - CPU_LIMIT="4000m"
     - MEM_REQ="3Gi"
-    - MEM_LIMIT="5Gi"
+    - MEM_LIMIT="10Gi"
     # multiple things happen here:
     # URL_PREFIX:
     # if tag => ""
