@@ -15,7 +15,7 @@ export class RegionRepository {
   }
 
   getAll(): Observable<Region[]> {
-    return this.http.get<Region[]>(`${environment.apiUrl}regions`);
+    return this.http.get<Region[]>(`${environment.apiUrl}regions/`);
   }
 
   getByIds(ids: string[]): Observable<Region[]> {
