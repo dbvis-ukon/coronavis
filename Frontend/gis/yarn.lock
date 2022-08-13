@@ -1625,7 +1625,7 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@jridgewell/trace-mapping@^0.3.7", "@jridgewell/trace-mapping@^0.3.9":
+"@jridgewell/trace-mapping@^0.3.14", "@jridgewell/trace-mapping@^0.3.9":
   version "0.3.15"
   resolved "https://registry.yarnpkg.com/@jridgewell/trace-mapping/-/trace-mapping-0.3.15.tgz#aba35c48a38d3fd84b37e66c9c0423f9744f9774"
   integrity sha512-oWZNOULl+UbhsgB51uuZzglikfIKSUBO/M9W2OfEjn7cmqoAiCgmv9lyACTUacZwBz0ITnJ2NqjU8Tx0DHL88g==
@@ -1726,29 +1726,30 @@
     read-package-json-fast "^2.0.3"
     which "^2.0.2"
 
-"@nrwl/cli@14.5.4":
-  version "14.5.4"
-  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.5.4.tgz#86ac4fbcd1bf079b67c420376cf696b68fcc1200"
-  integrity sha512-UYr14hxeYV8p/zt6D6z33hljZJQROJAVxSC+mm72fyVvy88Gt0sQNLfMmOARXur0p/73PSLM0jJ2Sr7Ftsuu+A==
+"@nrwl/cli@14.5.5":
+  version "14.5.5"
+  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.5.5.tgz#af297ea2cd35fcda9f5ffe1b306d7fe04149a370"
+  integrity sha512-3zxZ5gbgN3DI8aV5AfvWBVgiQk2cdfmRkRUFNFzzzFtlbYsSjRpVXTfxbajV2k3B/Hw+LlKXgCywttNAU/tmcQ==
   dependencies:
-    nx "14.5.4"
+    nx "14.5.5"
 
 "@nrwl/devkit@^14.2.4":
-  version "14.5.4"
-  resolved "https://registry.yarnpkg.com/@nrwl/devkit/-/devkit-14.5.4.tgz#f6e5d1b9cc998f231a8ea0a149793dd11bd3b9e6"
-  integrity sha512-9UFoQb6HdEkvZlOZIZgTAPR5oagc1V72OdBgtiM0ZK5cHm9sSSTv7FrVlyxy+WWYZhy/orUm5eSChO/yNM/pZg==
+  version "14.5.5"
+  resolved "https://registry.yarnpkg.com/@nrwl/devkit/-/devkit-14.5.5.tgz#fff5f91bb75231e98cca2cb6e12030cd882b192c"
+  integrity sha512-n8B5OWoAT/vSVRUzqefLwYRrmIQAcp7b8x5an8t3rHSeWZ2Y/DjPrsWh36qpYE0rDMsC+bohvzo5YievN34L7A==
   dependencies:
+    "@phenomnomnominal/tsquery" "4.1.1"
     ejs "^3.1.7"
     ignore "^5.0.4"
     semver "7.3.4"
     tslib "^2.3.0"
 
-"@nrwl/tao@14.5.4":
-  version "14.5.4"
-  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.5.4.tgz#a67097d424bcbf7073a1944ea1a0209c4f4f859c"
-  integrity sha512-a2GCuSE8WghjehuU3GVO63KZEnZXXQiqEg137yN/Na+PxwSu68XeaX53SLyzRskTV120YwBBy1YCTNzAZxxsjg==
+"@nrwl/tao@14.5.5":
+  version "14.5.5"
+  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.5.5.tgz#afe79f5fa8ada6186a82b6d72327b7856714ca57"
+  integrity sha512-SKYrkdPaZW8lybfhdF1E0S8jPugIn/4lAZjgpeYZ4mhDFo3BTGxseUYjFZ8AEpxxBiyove7RnPBEjCGCAVx6Jg==
   dependencies:
-    nx "14.5.4"
+    nx "14.5.5"
 
 "@parcel/watcher@2.0.4":
   version "2.0.4"
@@ -1757,6 +1758,13 @@
   dependencies:
     node-addon-api "^3.2.1"
     node-gyp-build "^4.3.0"
+
+"@phenomnomnominal/tsquery@4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@phenomnomnominal/tsquery/-/tsquery-4.1.1.tgz#42971b83590e9d853d024ddb04a18085a36518df"
+  integrity sha512-jjMmK1tnZbm1Jq5a7fBliM4gQwjxMU7TFoRNwIyzwlO+eHPRCFv/Nv+H/Gi1jc3WR7QURG8D5d0Tn12YGrUqBQ==
+  dependencies:
+    esquery "^1.0.1"
 
 "@schematics/angular@14.1.2":
   version "14.1.2"
@@ -2238,9 +2246,9 @@
   integrity sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==
 
 "@types/node@*", "@types/node@>=10.0.0":
-  version "18.7.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.7.1.tgz#352bee64f93117d867d05f7406642a52685cbca6"
-  integrity sha512-GKX1Qnqxo4S+Z/+Z8KKPLpH282LD7jLHWJcVryOflnsnH+BtSDfieR6ObwBMwpnNws0bUK8GI7z0unQf9bARNQ==
+  version "18.7.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.7.2.tgz#22306626110c459aedd2cdf131c749ec781e3b34"
+  integrity sha512-ce7MIiaYWCFv6A83oEultwhBXb22fxwNOQf5DIxWA4WXvDQ7K+L0fbWl/YOfCzlR5B/uFkSnVBhPcOfOECcWvA==
 
 "@types/node@16.11.32":
   version "16.11.32"
@@ -4488,9 +4496,9 @@ ejs@^3.1.7:
     jake "^10.8.5"
 
 electron-to-chromium@^1.4.202:
-  version "1.4.216"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.216.tgz#e1b56d3dc81333fbfd74a967b45a03d822e67af8"
-  integrity sha512-jDkyyqIy2n+dtl3isE0Y8znnN936BGobE8SDnwErubJ3zOophPDFPMr7rCoIH+EUae6T7+t1cbBggGtvVf3ZtQ==
+  version "1.4.218"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.218.tgz#d6b817b5454499a92c85888b42dc2ad075e4493a"
+  integrity sha512-INDylKH//YIf2w67D+IjkfVnGVrZ/D94DAU/FPPm6T4jEPbEDQvo9r2wTj0ncFdtJH8+V8BggZTaN8Rzk5wkgw==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -4976,7 +4984,7 @@ esprima@^4.0.0:
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
   integrity sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==
 
-esquery@^1.4.0:
+esquery@^1.0.1, esquery@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/esquery/-/esquery-1.4.0.tgz#2148ffc38b82e8c7057dfed48425b3e61f0f24a5"
   integrity sha512-cCDispWt5vHHtwMY2YrAQ4ibFkAL8RbH5YGBnZBc90MolvvfkkQcJro/aZiAQUlQ3qgrYS6D6v8Gc5G5CQsc9w==
@@ -7271,13 +7279,13 @@ nth-check@^2.0.1:
   dependencies:
     boolbase "^1.0.0"
 
-nx@14.5.4, nx@^14.2.4:
-  version "14.5.4"
-  resolved "https://registry.yarnpkg.com/nx/-/nx-14.5.4.tgz#58b6e8ee798733a6ab9aff2a19180c371482fa10"
-  integrity sha512-xv1nTaQP6kqVDE4PXcB1tLlgzNAPUHE/2vlqSLgxjNb6colKf0vrEZhVTjhnbqBeJiTb33gUx50bBXkurCkN5w==
+nx@14.5.5, nx@^14.2.4:
+  version "14.5.5"
+  resolved "https://registry.yarnpkg.com/nx/-/nx-14.5.5.tgz#5adda9408bf3aab5b2d24c7f89fca95922351240"
+  integrity sha512-wIamIK3JIDYnlcnJdSB9YI59xbOYL6MubgK6xvtmtKOpZVUTEWd7wXtEb1DbE/7upAwtBxI+fu7gnXJ2qTxsFA==
   dependencies:
-    "@nrwl/cli" "14.5.4"
-    "@nrwl/tao" "14.5.4"
+    "@nrwl/cli" "14.5.5"
+    "@nrwl/tao" "14.5.5"
     "@parcel/watcher" "2.0.4"
     chalk "4.1.0"
     chokidar "^3.5.1"
@@ -9066,17 +9074,17 @@ tar@^6.1.11, tar@^6.1.2:
     yallist "^4.0.0"
 
 terser-webpack-plugin@^5.1.3:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/terser-webpack-plugin/-/terser-webpack-plugin-5.3.3.tgz#8033db876dd5875487213e87c627bca323e5ed90"
-  integrity sha512-Fx60G5HNYknNTNQnzQ1VePRuu89ZVYWfjRAeT5rITuCY/1b08s49e5kSQwHDirKZWuoKOBRFS98EUUoZ9kLEwQ==
+  version "5.3.4"
+  resolved "https://registry.yarnpkg.com/terser-webpack-plugin/-/terser-webpack-plugin-5.3.4.tgz#f4d31e265883d20fda3ca9c0fc6a53f173ae62e3"
+  integrity sha512-SmnkUhBxLDcBfTIeaq+ZqJXLVEyXxSaNcCeSezECdKjfkMrTTnPvapBILylYwyEvHFZAn2cJ8dtiXel5XnfOfQ==
   dependencies:
-    "@jridgewell/trace-mapping" "^0.3.7"
+    "@jridgewell/trace-mapping" "^0.3.14"
     jest-worker "^27.4.5"
     schema-utils "^3.1.1"
     serialize-javascript "^6.0.0"
-    terser "^5.7.2"
+    terser "^5.14.1"
 
-terser@5.14.2, terser@^5.7.2:
+terser@5.14.2, terser@^5.14.1:
   version "5.14.2"
   resolved "https://registry.yarnpkg.com/terser/-/terser-5.14.2.tgz#9ac9f22b06994d736174f4091aa368db896f1c10"
   integrity sha512-oL0rGeM/WFQCUd0y2QrWxYnq7tfSuKBiqTjRPWrRgB46WD/kiwHwF8T23z78H6Q6kGCuuHcPB+KULHRdxvVGQA==
@@ -9673,9 +9681,9 @@ vega-statistics@^1.7.9, vega-statistics@^1.8.0, vega-statistics@~1.8.0:
     d3-array "^3.1.1"
 
 vega-themes@^2.10.0:
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/vega-themes/-/vega-themes-2.10.0.tgz#82768b14686e3fbfbdab0e77cb63e12c62b4911e"
-  integrity sha512-prePRUKFUFGWniuZsJOfkdb+27Gwrrm82yAlVuU+912kcknsx1DVmMSg2yF79f4jdtqnAFIGycZgxoj13SEIuQ==
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/vega-themes/-/vega-themes-2.12.0.tgz#1005f67d64795ce239becc1005a605ee07a52e71"
+  integrity sha512-gHNYCzDgexSQDmGzQsxH57OYgFVbAOmvhIYN3MPOvVucyI+zhbUawBVIVNzG9ftucRp0MaaMVXi6ctC5HLnBsg==
 
 vega-time@^2.0.3, vega-time@^2.1.0, vega-time@~2.1.0:
   version "2.1.0"
