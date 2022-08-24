@@ -1726,17 +1726,17 @@
     read-package-json-fast "^2.0.3"
     which "^2.0.2"
 
-"@nrwl/cli@14.5.9":
-  version "14.5.9"
-  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.5.9.tgz#02941db1381c6d5109bb339dae59f08e197e06e0"
-  integrity sha512-03uPNFz6DwaPGNelxI/pG8PE9MUSmEtTVOHeohu7Plq5gSSAhFw9Yd1cyTGDFVh6+16bpsleXJmv2zgC/BvAiA==
+"@nrwl/cli@14.5.10":
+  version "14.5.10"
+  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.5.10.tgz#826c06a9a272523424f0c5690f5d745260ed1ea1"
+  integrity sha512-GpnnKGO3+HwlMmZSStbq1MOyoDJg2I0HN4nBqM3ltaQkfxGZv3erwRMOAT+8mba2MWbJJ2QQgASAYvTscNYjOQ==
   dependencies:
-    nx "14.5.9"
+    nx "14.5.10"
 
 "@nrwl/devkit@^14.5.9":
-  version "14.5.9"
-  resolved "https://registry.yarnpkg.com/@nrwl/devkit/-/devkit-14.5.9.tgz#d92c3e405f0346a67ff1ca09bd56947a93ecf902"
-  integrity sha512-DISeVcn6YeTN2LFniX0MgjpVNvNcsNDGB8+AXj611xidySw9OkZW63ICvjjZxX2dmYTEJX8LooL8fzz2dQP/Rg==
+  version "14.5.10"
+  resolved "https://registry.yarnpkg.com/@nrwl/devkit/-/devkit-14.5.10.tgz#b87bc3dad8e6d019c76adf7f65a56af19df70283"
+  integrity sha512-YVT0MRvyXwe0uczUZK4XUi1f2iLAqklFMfAoqwfgcgWToH8xN06NSlyUphD4eLHFgem3Sd0kimAJVsnse/PTlA==
   dependencies:
     "@phenomnomnominal/tsquery" "4.1.1"
     ejs "^3.1.7"
@@ -1744,12 +1744,12 @@
     semver "7.3.4"
     tslib "^2.3.0"
 
-"@nrwl/tao@14.5.9":
-  version "14.5.9"
-  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.5.9.tgz#101d4c7fcde5c73424b27ba8075c5111d9bd15f9"
-  integrity sha512-88+0wVoNUV5QuJRVPjrAxLrEBlr4RmMVo4Ak8EjwP0gJ+Go419ejBsb57x9p9BZeXga/JVYTZDGB5B/L0eFhcw==
+"@nrwl/tao@14.5.10":
+  version "14.5.10"
+  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.5.10.tgz#69c90f8b6e13f2bb521840a5903f7eb4884285ff"
+  integrity sha512-eWORRba0HlTNmOQFUxHqki0Z5yiRIq1Hl0taprmZpz2lgDXuzPIjGfAi5/ETy5+G5gkEyxFnCq7+SiMilPokwA==
   dependencies:
-    nx "14.5.9"
+    nx "14.5.10"
 
 "@parcel/watcher@2.0.4":
   version "2.0.4"
@@ -3190,9 +3190,9 @@ cacache@16.1.1:
     unique-filename "^1.1.1"
 
 cacache@^16.0.0, cacache@^16.1.0:
-  version "16.1.2"
-  resolved "https://registry.yarnpkg.com/cacache/-/cacache-16.1.2.tgz#a519519e9fc9e5e904575dcd3b77660cbf03f749"
-  integrity sha512-Xx+xPlfCZIUHagysjjOAje9nRo8pRDczQCcXb4J2O0BLtH+xeVue6ba4y1kfJfQMAnM2mkcoMIAyOctlaRGWYA==
+  version "16.1.3"
+  resolved "https://registry.yarnpkg.com/cacache/-/cacache-16.1.3.tgz#a02b9f34ecfaf9a78c9f4bc16fceb94d5d67a38e"
+  integrity sha512-/+Emcj9DAXxX4cwlLmRI9c166RuL3w30zp4R7Joiv2cQTtTtA+jeuCAjH3ZlGnYS3tKENSrKhAzVVP9GVyzeYQ==
   dependencies:
     "@npmcli/fs" "^2.1.0"
     "@npmcli/move-file" "^2.0.0"
@@ -3211,7 +3211,7 @@ cacache@^16.0.0, cacache@^16.1.0:
     rimraf "^3.0.2"
     ssri "^9.0.0"
     tar "^6.1.11"
-    unique-filename "^1.1.1"
+    unique-filename "^2.0.0"
 
 call-bind@^1.0.0, call-bind@^1.0.2:
   version "1.0.2"
@@ -4520,9 +4520,9 @@ ejs@^3.1.7:
     jake "^10.8.5"
 
 electron-to-chromium@^1.4.202:
-  version "1.4.227"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.227.tgz#28e46e2a701fed3188db3ca7bf0a3a475e484046"
-  integrity sha512-I9VVajA3oswIJOUFg2PSBqrHLF5Y+ahIfjOV9+v6uYyBqFZutmPxA6fxocDUUmgwYevRWFu1VjLyVG3w45qa/g==
+  version "1.4.228"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.228.tgz#3baff13cf54198c2045f9bdd8b64db93aafd7f33"
+  integrity sha512-XfDHCvou7CsDMlFwb0WZ1tWmW48e7Sn7VBRyPfZsZZila9esRsJl1trO+OqDNV97GggFSt0ISbWslKXfQkG//g==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -7229,6 +7229,11 @@ npm-normalize-package-bin@^1.0.1:
   resolved "https://registry.yarnpkg.com/npm-normalize-package-bin/-/npm-normalize-package-bin-1.0.1.tgz#6e79a41f23fd235c0623218228da7d9c23b8f6e2"
   integrity sha512-EPfafl6JL5/rU+ot6P3gRSCpPDW5VmIzX959Ob1+ySFUuuYHWHekXpwdUZcKP5C+DS4GEtdJluwBjnsNDl+fSA==
 
+npm-normalize-package-bin@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/npm-normalize-package-bin/-/npm-normalize-package-bin-2.0.0.tgz#9447a1adaaf89d8ad0abe24c6c84ad614a675fff"
+  integrity sha512-awzfKUO7v0FscrSpRoogyNm0sajikhBWpU0QMrW09AMi9n1PoKU6WaIqUzuJSQnpciZZmJ/jMZ2Egfmb/9LiWQ==
+
 npm-package-arg@9.1.0, npm-package-arg@^9.0.0, npm-package-arg@^9.0.1:
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/npm-package-arg/-/npm-package-arg-9.1.0.tgz#a60e9f1e7c03e4e3e4e994ea87fff8b90b522987"
@@ -7240,14 +7245,14 @@ npm-package-arg@9.1.0, npm-package-arg@^9.0.0, npm-package-arg@^9.0.1:
     validate-npm-package-name "^4.0.0"
 
 npm-packlist@^5.1.0:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/npm-packlist/-/npm-packlist-5.1.1.tgz#79bcaf22a26b6c30aa4dd66b976d69cc286800e0"
-  integrity sha512-UfpSvQ5YKwctmodvPPkK6Fwk603aoVsf8AEbmVKAEECrfvL8SSe1A2YIwrJ6xmTHAITKPwwZsWo7WwEbNk0kxw==
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/npm-packlist/-/npm-packlist-5.1.2.tgz#bbca5715020696953fd2862cbc89cbf2d7ee4875"
+  integrity sha512-rQiBDNmt1H1jNhFEo9ilTD7ZJXd6cvHSmBK+waIBu886v6OyLWjZqb1RD9viR7rgG0AAe29FYnOXcO26TRxT/Q==
   dependencies:
     glob "^8.0.1"
     ignore-walk "^5.0.1"
     npm-bundled "^1.1.2"
-    npm-normalize-package-bin "^1.0.1"
+    npm-normalize-package-bin "^2.0.0"
 
 npm-pick-manifest@7.0.1, npm-pick-manifest@^7.0.0:
   version "7.0.1"
@@ -7303,13 +7308,13 @@ nth-check@^2.0.1:
   dependencies:
     boolbase "^1.0.0"
 
-nx@14.5.9, nx@^14.5.9:
-  version "14.5.9"
-  resolved "https://registry.yarnpkg.com/nx/-/nx-14.5.9.tgz#08c8bfbdec00506de34aba8f59922c2fd2070901"
-  integrity sha512-EWl0bCK2lyTOd+aG87nCSkQNHDBnXKul6IVLmoN0qA/xu/088Z2d55dKwvOV6wLUxrFqh/qtpc8mMNKn3ACDsA==
+nx@14.5.10, nx@^14.5.9:
+  version "14.5.10"
+  resolved "https://registry.yarnpkg.com/nx/-/nx-14.5.10.tgz#cc950bcc2d867f0aa4e86a508842a9299650fbb9"
+  integrity sha512-dqiV+zY32k98mfKFTgiQyYd9HYZmB1zoJj6gYniEuqzs6CKp8ZSpeRDaVQRxR6wEMvW9MSTA9kBg8sJ78W/NZg==
   dependencies:
-    "@nrwl/cli" "14.5.9"
-    "@nrwl/tao" "14.5.9"
+    "@nrwl/cli" "14.5.10"
+    "@nrwl/tao" "14.5.10"
     "@parcel/watcher" "2.0.4"
     chalk "4.1.0"
     chokidar "^3.5.1"
@@ -8173,14 +8178,14 @@ read-package-json-fast@^2.0.3:
     npm-normalize-package-bin "^1.0.1"
 
 read-package-json@^5.0.0:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/read-package-json/-/read-package-json-5.0.1.tgz#1ed685d95ce258954596b13e2e0e76c7d0ab4c26"
-  integrity sha512-MALHuNgYWdGW3gKzuNMuYtcSSZbGQm94fAp16xt8VsYTLBjUSc55bLMKe6gzpWue0Tfi6CBgwCSdDAqutGDhMg==
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/read-package-json/-/read-package-json-5.0.2.tgz#b8779ccfd169f523b67208a89cc912e3f663f3fa"
+  integrity sha512-BSzugrt4kQ/Z0krro8zhTwV1Kd79ue25IhNN/VtHFy1mG/6Tluyi+msc0UpwaoQzxSHa28mntAjIZY6kEgfR9Q==
   dependencies:
     glob "^8.0.1"
     json-parse-even-better-errors "^2.3.1"
     normalize-package-data "^4.0.0"
-    npm-normalize-package-bin "^1.0.1"
+    npm-normalize-package-bin "^2.0.0"
 
 readable-stream@^2.0.1, readable-stream@^2.3.5, readable-stream@^2.3.6, readable-stream@~2.3.6:
   version "2.3.7"
@@ -9108,10 +9113,20 @@ terser-webpack-plugin@^5.1.3:
     serialize-javascript "^6.0.0"
     terser "^5.14.1"
 
-terser@5.14.2, terser@^5.14.1:
+terser@5.14.2:
   version "5.14.2"
   resolved "https://registry.yarnpkg.com/terser/-/terser-5.14.2.tgz#9ac9f22b06994d736174f4091aa368db896f1c10"
   integrity sha512-oL0rGeM/WFQCUd0y2QrWxYnq7tfSuKBiqTjRPWrRgB46WD/kiwHwF8T23z78H6Q6kGCuuHcPB+KULHRdxvVGQA==
+  dependencies:
+    "@jridgewell/source-map" "^0.3.2"
+    acorn "^8.5.0"
+    commander "^2.20.0"
+    source-map-support "~0.5.20"
+
+terser@^5.14.1:
+  version "5.15.0"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-5.15.0.tgz#e16967894eeba6e1091509ec83f0c60e179f2425"
+  integrity sha512-L1BJiXVmheAQQy+as0oF3Pwtlo4s3Wi1X2zNZ2NxOB4wx9bdS9Vk67XQENLFdLYGCK/Z2di53mTj/hBafR+dTA==
   dependencies:
     "@jridgewell/source-map" "^0.3.2"
     acorn "^8.5.0"
@@ -9360,7 +9375,14 @@ unique-filename@^1.1.1:
   dependencies:
     unique-slug "^2.0.0"
 
-unique-slug@^2.0.0:
+unique-filename@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/unique-filename/-/unique-filename-2.0.0.tgz#c844c84c3b22e92038b0c53950f9dc34d2b55490"
+  integrity sha512-tpzoz2RpZ//6Zt4GPpOFTyrnfZuSvjIfe8lvx6Thp4yTQwJtAFwPlssEBE62VhGA2We5/COyNpcIu+OABu3/Yg==
+  dependencies:
+    unique-slug "^2.0.2"
+
+unique-slug@^2.0.0, unique-slug@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/unique-slug/-/unique-slug-2.0.2.tgz#baabce91083fc64e945b0f3ad613e264f7cd4e6c"
   integrity sha512-zoWr9ObaxALD3DOPfjPSqxt4fnZiWblxHIgeWqW8x7UqDzEtHEQLzji2cuJYQFCU6KmoJikOYAZlrTHHebjx2w==
