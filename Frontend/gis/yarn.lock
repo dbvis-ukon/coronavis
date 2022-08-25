@@ -2246,9 +2246,9 @@
   integrity sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==
 
 "@types/node@*", "@types/node@>=10.0.0":
-  version "18.7.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.7.11.tgz#486e72cfccde88da24e1f23ff1b7d8bfb64e6250"
-  integrity sha512-KZhFpSLlmK/sdocfSAjqPETTMd0ug6HIMIAwkwUpU79olnZdQtMxpQP+G1wDzCH7na+FltSIhbaZuKdwZ8RDrw==
+  version "18.7.13"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.7.13.tgz#23e6c5168333480d454243378b69e861ab5c011a"
+  integrity sha512-46yIhxSe5xEaJZXWdIBP7GU4HDTG8/eo0qd9atdiL+lFpA03y8KS+lkTN834TWJj5767GbWv4n/P6efyTFt1Dw==
 
 "@types/node@16.11.32":
   version "16.11.32"
@@ -3576,9 +3576,9 @@ copy-webpack-plugin@11.0.0:
     serialize-javascript "^6.0.0"
 
 core-js-compat@^3.21.0, core-js-compat@^3.22.1:
-  version "3.24.1"
-  resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.24.1.tgz#d1af84a17e18dfdd401ee39da9996f9a7ba887de"
-  integrity sha512-XhdNAGeRnTpp8xbD+sR/HFDK9CbeeeqXT6TuofXh3urqEevzkWmLRgrVoykodsw8okqo2pu1BOmuCKrHx63zdw==
+  version "3.25.0"
+  resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.25.0.tgz#489affbfbf9cb3fa56192fe2dd9ebaee985a66c5"
+  integrity sha512-extKQM0g8/3GjFx9US12FAgx8KJawB7RCQ5y8ipYLbmfzEzmFRWdDjIlxDx82g7ygcNG85qMVUSRyABouELdow==
   dependencies:
     browserslist "^4.21.3"
     semver "7.0.0"
@@ -4520,9 +4520,9 @@ ejs@^3.1.7:
     jake "^10.8.5"
 
 electron-to-chromium@^1.4.202:
-  version "1.4.228"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.228.tgz#3baff13cf54198c2045f9bdd8b64db93aafd7f33"
-  integrity sha512-XfDHCvou7CsDMlFwb0WZ1tWmW48e7Sn7VBRyPfZsZZila9esRsJl1trO+OqDNV97GggFSt0ISbWslKXfQkG//g==
+  version "1.4.229"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.229.tgz#506107e357a59e3241f69cdd1a179626164ddd86"
+  integrity sha512-kdye32s/padLGpiLzhrMraBBs/M5hDspB8PCdCP6L11AJ6dw3Gg3xdvT4b4pqWaW5tc5oAwCfKCS+PAsZM3ipw==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -10201,7 +10201,7 @@ y18n@^5.0.5:
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-5.0.8.tgz#7f4934d0f7ca8c56f95314939ddcd2dd91ce1d55"
   integrity sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==
 
-yallist@^4.0.0:
+yallist@*, yallist@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
