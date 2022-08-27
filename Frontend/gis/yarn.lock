@@ -36,12 +36,12 @@
     "@angular-devkit/core" "14.1.3"
     rxjs "6.6.7"
 
-"@angular-devkit/architect@0.1402.0", "@angular-devkit/architect@>=0.1400.0 < 0.1500.0":
-  version "0.1402.0"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.1402.0.tgz#099c97891943c11deaed3d066e206b8cca1ceddc"
-  integrity sha512-hnesEEWD4L/k0hT7j69wXD3rz4pKidLH0TNhuYEHozlLawCfqT1zGAJPaq55qZhpl5sHThB+dQ32Ck3sD2KVGw==
+"@angular-devkit/architect@0.1402.1", "@angular-devkit/architect@>=0.1400.0 < 0.1500.0":
+  version "0.1402.1"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.1402.1.tgz#3588269ebe44628a56d72b8c1ebf346c6cd9c6eb"
+  integrity sha512-OZ5mkVHSrk5WX6wIfvkxJUCqJRtfQh1S476qHIi80llhJufFTwoOwJrcz7XtNRvbZMLRMztf0aIhEDaUtEBRZQ==
   dependencies:
-    "@angular-devkit/core" "14.2.0"
+    "@angular-devkit/core" "14.2.1"
     rxjs "6.6.7"
 
 "@angular-devkit/build-angular@14.1.3":
@@ -115,14 +115,14 @@
     esbuild "0.14.49"
 
 "@angular-devkit/build-angular@^14.0.0":
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-angular/-/build-angular-14.2.0.tgz#ca8a296c59b80c9e68d4b865ecc59e986405eb79"
-  integrity sha512-5NhBgwY/LzwMBpEX6v5PuWRCvF0QnKj0G8NcrN04hImqPrGNkM8KpVFYKsGknZQQnZrDrwfLxo+k7ArPyWdSxA==
+  version "14.2.1"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/build-angular/-/build-angular-14.2.1.tgz#d4b5ac1fa81a0e41f2b0f7b282a9b2d17227408b"
+  integrity sha512-6FeIe2nsNH/fslZmTfbo+RCjLk3HuCQa5rb/SFf3w0mwzWCrhV0/SqnQ4+YYgkKrohmTX+q5JmJPwWnkqgdIgQ==
   dependencies:
     "@ampproject/remapping" "2.2.0"
-    "@angular-devkit/architect" "0.1402.0"
-    "@angular-devkit/build-webpack" "0.1402.0"
-    "@angular-devkit/core" "14.2.0"
+    "@angular-devkit/architect" "0.1402.1"
+    "@angular-devkit/build-webpack" "0.1402.1"
+    "@angular-devkit/core" "14.2.1"
     "@babel/core" "7.18.10"
     "@babel/generator" "7.18.12"
     "@babel/helper-annotate-as-pure" "7.18.6"
@@ -133,7 +133,7 @@
     "@babel/runtime" "7.18.9"
     "@babel/template" "7.18.10"
     "@discoveryjs/json-ext" "0.5.7"
-    "@ngtools/webpack" "14.2.0"
+    "@ngtools/webpack" "14.2.1"
     ansi-colors "4.1.3"
     babel-loader "8.2.5"
     babel-plugin-istanbul "6.1.1"
@@ -192,12 +192,12 @@
     "@angular-devkit/architect" "0.1401.3"
     rxjs "6.6.7"
 
-"@angular-devkit/build-webpack@0.1402.0":
-  version "0.1402.0"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-webpack/-/build-webpack-0.1402.0.tgz#3f76700fdf2c3a475ca655a6ca004011756e81ba"
-  integrity sha512-lJoySTDm9olLeIV82CifZfuh0VKB0/wTvRQY3zlgeQ3I9ADx/cFy3/ohTK0AZNBJ006y8dUTOVIIRLSsW2Cd7A==
+"@angular-devkit/build-webpack@0.1402.1":
+  version "0.1402.1"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/build-webpack/-/build-webpack-0.1402.1.tgz#8f19a70b8105ac548f8cec38db9dc51f3b6f0162"
+  integrity sha512-S9WvNKrHVgOWNqGCytJNPBEMojB9j6cgl5XlUMEQ+4NV5geOlDNiZltQ/gbC1jz19OU5N+Ky374mPI5IeIBqZg==
   dependencies:
-    "@angular-devkit/architect" "0.1402.0"
+    "@angular-devkit/architect" "0.1402.1"
     rxjs "6.6.7"
 
 "@angular-devkit/core@14.1.3":
@@ -211,10 +211,10 @@
     rxjs "6.6.7"
     source-map "0.7.4"
 
-"@angular-devkit/core@14.2.0", "@angular-devkit/core@^14.0.0":
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-14.2.0.tgz#20b84e76ddef3c2c85dc7ec2d92fc0844431a431"
-  integrity sha512-IwiS6uDs3drR4i3nuqVinh5jtI1SHIyn/OaoWL6t3V7Y6b65BdJN1liyd+WBUEZmEwGCkY2/FjnLx1G8Dflc8A==
+"@angular-devkit/core@14.2.1", "@angular-devkit/core@^14.0.0":
+  version "14.2.1"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-14.2.1.tgz#7ce14efdb5fce687bb4f13bef03d4b67e971b22e"
+  integrity sha512-lW8oNGuJqr4r31FWBjfWQYkSXdiOHBGOThIEtHvUVBKfPF/oVrupLueCUgBPel+NvxENXdo93uPsqHN7bZbmsQ==
   dependencies:
     ajv "8.11.0"
     ajv-formats "2.1.1"
@@ -1811,10 +1811,10 @@
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-14.1.3.tgz#5ab26ce86f3ccc358c1dde4f9186ea058379e4bc"
   integrity sha512-tP2aiWKezhOVcR/PhVHcxKohO4ShKrhD42wgbJPbcqHeenOv1Hf5nW1nyUviqeF8QbVmPdBPF/ZOB8hIq5o6sw==
 
-"@ngtools/webpack@14.2.0":
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-14.2.0.tgz#af61918cf902af4b6110868f811c4b8226ce474b"
-  integrity sha512-lG5z/9IPb37b2cA3Aa6Pq7yaP5nZNeZM3DuQEsbp+pKngV/7rYDHwHzNXWEjcgm+WUPzqUxhhiyWJkAmdppW0g==
+"@ngtools/webpack@14.2.1":
+  version "14.2.1"
+  resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-14.2.1.tgz#c88e23d4f1828467fc644d05e077671914e1cc7b"
+  integrity sha512-9tsfx2ZQscnpszVkdoJIIxZZDwitgmbPNrsQmyfHhwqPeJ8UUnAk6RNTfHjtX31VCmIM+qdGJsX7vDR9ye3/uA==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -4722,9 +4722,9 @@ ejs@^3.1.7:
     jake "^10.8.5"
 
 electron-to-chromium@^1.4.202:
-  version "1.4.230"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.230.tgz#666909fdf5765acb1348b69752ee9955dc1664b7"
-  integrity sha512-3pwjAK0qHSDN9+YAF4fJknsSruP7mpjdWzUSruIJD/JCH77pEh0SorEyb3xVaKkfwk2tzjOt2D8scJ0KAdfXLA==
+  version "1.4.232"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.232.tgz#67a0a874b0057662244230d18d3a9847c135a9d9"
+  integrity sha512-nd+FW8xHjM+PxNWG44nKnwHaBDdVpJUZuI2sS2JJPt/QpdombnmoCRWEEQNnzaktdIQhsNWdD+dlqxwO8Bn99g==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -10669,7 +10669,7 @@ y18n@^5.0.5:
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-5.0.8.tgz#7f4934d0f7ca8c56f95314939ddcd2dd91ce1d55"
   integrity sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==
 
-yallist@^4.0.0:
+yallist@*, yallist@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
