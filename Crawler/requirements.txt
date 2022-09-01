@@ -13,6 +13,6 @@ sentry_sdk==1.9.7
 python-dotenv==0.20.0
 zeep==4.1.0
 holidays==0.15
-jsonschema==4.14.0
+jsonschema==4.15.0
 types-psycopg2==2.9.21
 pytz==2022.2.1
