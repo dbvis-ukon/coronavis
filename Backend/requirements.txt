@@ -1,5 +1,5 @@
 blinker==1.5
-cryptography==37.0.4
+cryptography==38.0.1
 Flask==2.2.2
 Flask-Caching==2.0.1
 Flask-Compress==1.12
