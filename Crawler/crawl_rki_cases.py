@@ -171,6 +171,17 @@ def load_data_into_db(entries: List[Dict[str, int | str | datetime.datetime]]):
             logger.info('Data inserted.')
             logger.info(f'took {get_execution_time(start)}')
 
+
+            logger.info('remove old data')
+            retry_refresh(
+                conn=conn2,
+                cur=cur2,
+                query=f'DELETE FROM cases WHERE datenbestand < \'{current_update}\'::date;'
+            )
+            logger.info('old data removed.')
+            logger.info(f'took {get_execution_time(start)}')
+
+
             start = get_start()
             logger.info('Refreshing materialized view.')
 
