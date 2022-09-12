@@ -1748,17 +1748,17 @@
     read-package-json-fast "^2.0.3"
     which "^2.0.2"
 
-"@nrwl/cli@14.7.3":
-  version "14.7.3"
-  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.7.3.tgz#d692105530336dda2cfb1199b5706e137c035baf"
-  integrity sha512-mWZ0XidXp7YDJmVLWXQ/MRKwFhV75hQUk9VX+ysCRwptx+vuBVZYUfwuD/Jt8x1EkVYNhPjKwUPVteU8LzA/GA==
+"@nrwl/cli@14.7.4":
+  version "14.7.4"
+  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.7.4.tgz#9bb3207f69cbfbb356da64eb06fb1648a1839994"
+  integrity sha512-MPNat54T2GvIV44QrvZDMhmyVdgnfNGfKg0kuQ0bNrlz59AwI/m2BjSo4SKQZd+sl3rFyZBr9V2DywmG58+aJQ==
   dependencies:
-    nx "14.7.3"
+    nx "14.7.4"
 
 "@nrwl/devkit@^14.6.5":
-  version "14.7.3"
-  resolved "https://registry.yarnpkg.com/@nrwl/devkit/-/devkit-14.7.3.tgz#aceb726d527a5ece1a97548dc7eb22f85083a391"
-  integrity sha512-0KcMSCoMo9ybB+riPT2d5H1mSthitWe+GM9+UhVk2nYYVX5urNgy1UOKs4apMHuNDIuFjPq1QHrOS+I1icgYeQ==
+  version "14.7.4"
+  resolved "https://registry.yarnpkg.com/@nrwl/devkit/-/devkit-14.7.4.tgz#ceb98205efbfe2fa0dae4911d98f6e2baf32ec45"
+  integrity sha512-YtQNcx13U24VRBVGz0YhmGwjTzCizK7BimBbsJdujOrwUwGaYFELkDXTXgrSvDtqqrLHOzR70vzZJURgKcvAbA==
   dependencies:
     "@phenomnomnominal/tsquery" "4.1.1"
     ejs "^3.1.7"
@@ -1766,12 +1766,12 @@
     semver "7.3.4"
     tslib "^2.3.0"
 
-"@nrwl/tao@14.7.3":
-  version "14.7.3"
-  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.7.3.tgz#55ae1ca44582941868296e03533a8a22be072370"
-  integrity sha512-QnfYgtEwJ1Q+8vMHKYcLNfhkMGlbx2JbEMni41GXOE8hRn+ZEe2UWORJ8p+eUjdjaqtaU24SlNrbju1hh9XpUQ==
+"@nrwl/tao@14.7.4":
+  version "14.7.4"
+  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.7.4.tgz#fcf004a8e0174df3c6161a389c6c0aa2f8b9745f"
+  integrity sha512-ZprEakBsS+SaVagER59xeC7Z1Q5WAx3vN65BJxsqKjs99T4v0fd2BSlAKyhRD4BcLryRykL+gU42EkvoC5YrEw==
   dependencies:
-    nx "14.7.3"
+    nx "14.7.4"
 
 "@parcel/watcher@2.0.4":
   version "2.0.4"
@@ -7283,13 +7283,13 @@ nth-check@^2.0.1:
   dependencies:
     boolbase "^1.0.0"
 
-nx@14.7.3, nx@^14.6.5:
-  version "14.7.3"
-  resolved "https://registry.yarnpkg.com/nx/-/nx-14.7.3.tgz#cd54740a1c7e8d01de41e9fe4a191e3d931a8aad"
-  integrity sha512-+MreZAg9M/9Z2QW3tkWj2tokDZTNxlUDp//ECPOPCW8Auk5re3IEyhSMgQLHVNtIxcCy/bPXldd0KIpdusCYJA==
+nx@14.7.4, nx@^14.6.5:
+  version "14.7.4"
+  resolved "https://registry.yarnpkg.com/nx/-/nx-14.7.4.tgz#198be0ae60f504c57b1b4cab0513e2e282acc72c"
+  integrity sha512-GG6qOw+Td34jd0ItKWmVtOQRKUPOsagGXXFfa1VSUt3iz1V7BXS1ovViQDlSnOyZ3GEWuKxtDU+1C0hIE6UCsA==
   dependencies:
-    "@nrwl/cli" "14.7.3"
-    "@nrwl/tao" "14.7.3"
+    "@nrwl/cli" "14.7.4"
+    "@nrwl/tao" "14.7.4"
     "@parcel/watcher" "2.0.4"
     chalk "4.1.0"
     chokidar "^3.5.1"
