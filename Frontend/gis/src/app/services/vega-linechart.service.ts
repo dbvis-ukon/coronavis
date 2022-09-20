@@ -4,7 +4,7 @@ import {
   Injectable
 } from '@angular/core';
 import {
-  getMoment
+  getDateTime
 } from '../util/date-util';
 
 @Injectable({
@@ -516,8 +516,8 @@ export class VegaLinechartService {
     spec.vconcat[1].encoding.y.scale = {type: chartOptions.scaleType};
 
     if (chartOptions.regression) {
-      const from = getMoment(chartOptions.regression.from).valueOf();
-      const to = getMoment(chartOptions.regression.to).valueOf();
+      const from = getDateTime(chartOptions.regression.from).valueOf();
+      const to = getDateTime(chartOptions.regression.to).valueOf();
       spec.vconcat[0].layer[1].layer.push({
         "mark": {
           "type": "line",
@@ -554,6 +554,7 @@ export class VegaLinechartService {
       });
 
       if (!chartOptions.incidenceRules) {
+        // removes the horizontal rules from the chart
         spec.vconcat[0].layer[1].layer.splice(0, 4);
         delete spec.vconcat[0].layer[1].layer[1].encoding.color;
       }

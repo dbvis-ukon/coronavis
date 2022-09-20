@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { Region } from '../repositories/types/in/region';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate } from '../util/date-util';
 import { ConfigService } from './config.service';
 import { TableOverviewDataAndOptions, TableOverviewService } from './table-overview.service';
 import { MultiLineChartDataAndOptions, VegaMultiLineChartService } from './vega-multilinechart.service';
@@ -84,11 +84,11 @@ export class ChartService {
           map(d1 => {
             d._compiled = d1;
 
-            if (this.tExtent[0] === null || getMoment(this.tExtent[0]).isAfter(getMoment(d._compiled.chartOptions.xDomain[0]))) {
+            if (this.tExtent[0] === null || getDateTime(this.tExtent[0]) > getDateTime(d._compiled.chartOptions.xDomain[0])) {
               this.tExtent[0] = d._compiled.chartOptions.xDomain[0];
             }
 
-            if (this.tExtent[1] === null || getMoment(this.tExtent[1]).isBefore(getMoment(d._compiled.chartOptions.xDomain[1]))) {
+            if (this.tExtent[1] === null || getDateTime(this.tExtent[1]) < getDateTime(d._compiled.chartOptions.xDomain[1])) {
               this.tExtent[1] = d._compiled.chartOptions.xDomain[1];
             }
 
@@ -113,11 +113,11 @@ export class ChartService {
       return this.vegaMultiLineChartService.compileToDataAndOptions(parsedCfg.config, d.dataRequest)
       .pipe(
         map(d1 => {
-          if (this.tExtent[0] === null || getMoment(this.tExtent[0]).isAfter(getMoment(d1.chartOptions.xDomain[0]))) {
+          if (this.tExtent[0] === null || getDateTime(this.tExtent[0]) > getDateTime(d1.chartOptions.xDomain[0])) {
             this.tExtent[0] = d1.chartOptions.xDomain[0];
           }
 
-          if (this.tExtent[1] === null || getMoment(this.tExtent[1]).isBefore(getMoment(d1.chartOptions.xDomain[1]))) {
+          if (this.tExtent[1] === null || getDateTime(this.tExtent[1]) < getDateTime(d1.chartOptions.xDomain[1])) {
             this.tExtent[1] = d1.chartOptions.xDomain[1];
           }
 
@@ -154,11 +154,11 @@ export class ChartService {
       return this.vegaStackedAreaIcuService.compileToDataAndOptions(parsedCfg.config, d.dataRequest)
       .pipe(
         map(d1 => {
-          if (this.tExtent[0] === null || getMoment(this.tExtent[0]).isAfter(getMoment(d1.chartOptions.xDomain[0]))) {
+          if (this.tExtent[0] === null || getDateTime(this.tExtent[0]) > getDateTime(d1.chartOptions.xDomain[0])) {
             this.tExtent[0] = d1.chartOptions.xDomain[0];
           }
 
-          if (this.tExtent[1] === null || getMoment(this.tExtent[1]).isBefore(getMoment(d1.chartOptions.xDomain[1]))) {
+          if (this.tExtent[1] === null || getDateTime(this.tExtent[1]) < getDateTime(d1.chartOptions.xDomain[1])) {
             this.tExtent[1] = d1.chartOptions.xDomain[1];
           }
 
@@ -192,7 +192,7 @@ export class ChartService {
         newTExtent = this.tExtent;
       } else if (cfg && cfg.temporalExtent.type === 'manual') {
         if (cfg.temporalExtent.manualLastDays > 0) {
-          newTExtent = [getMoment(this.tExtent[1]).subtract(cfg.temporalExtent.manualLastDays, 'days').toISOString(), this.tExtent[1]];
+          newTExtent = [getDateTime(this.tExtent[1]).minus({days: cfg.temporalExtent.manualLastDays}).toISO(), this.tExtent[1]];
         } else {
           newTExtent = cfg.temporalExtent.manualExtent;
         }
@@ -209,8 +209,8 @@ export class ChartService {
 
       if (item.type === 'pixel') {
         if (newTExtent) {
-          item._compiled.chartOptions.xDomain[0] = getStrDate(getMoment(newTExtent[0]).startOf('week'));
-          item._compiled.chartOptions.xDomain[1] = getStrDate(getMoment(newTExtent[1]).endOf('week'));
+          item._compiled.chartOptions.xDomain[0] = getStrDate(getDateTime(newTExtent[0]).startOf('week'));
+          item._compiled.chartOptions.xDomain[1] = getStrDate(getDateTime(newTExtent[1]).endOf('week'));
         }
 
         if (newVExtent) {

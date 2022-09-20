@@ -1,7 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { EbrakeItem } from 'src/app/repositories/ebrake.repository';
-import { getMoment } from 'src/app/util/date-util';
+import { getDateTime } from 'src/app/util/date-util';
 
 @Component({
   selector: 'app-ebrake-tooltip',
@@ -30,7 +30,7 @@ export class EbrakeTooltipComponent implements OnInit {
   }
 
   isPrognosis(): boolean {
-    return getMoment(this.data.timestamp).isAfter(getMoment('now'));
+    return getDateTime(this.data.timestamp) > getDateTime('now');
   }
 
 }

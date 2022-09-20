@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { CovidNumberCaseDataSource } from '../map/options/covid-number-case-options';
 import { aggLevelToEndpointSingle } from '../util/aggregation-level';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate } from '../util/date-util';
 import { CachedRepository } from './cached.repository';
 import { AggregatedRKICaseDevelopmentProperties, RKICaseDevelopmentProperties } from './types/in/quantitative-rki-case-development';
 import { Region } from './types/in/region';
@@ -75,12 +75,12 @@ export class CaseDevelopmentRepository {
     let params = new HttpParams();
 
     if (from) {
-      const fromDate = getMoment(from);
+      const fromDate = getDateTime(from);
       params = params.append('from', getStrDate(fromDate));
     }
 
     if (to) {
-      const toDate = getMoment(to);
+      const toDate = getDateTime(to);
       params = params.append('to', getStrDate(toDate));
     }
 

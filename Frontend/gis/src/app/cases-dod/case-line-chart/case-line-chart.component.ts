@@ -6,7 +6,7 @@ import { CaseDevelopmentRepository } from 'src/app/repositories/case-development
 import { RKICaseDevelopmentProperties } from 'src/app/repositories/types/in/quantitative-rki-case-development';
 import { CaseUtilService } from 'src/app/services/case-util.service';
 import { VegaLinechartService } from 'src/app/services/vega-linechart.service';
-import { getMoment } from 'src/app/util/date-util';
+import { getDateTime } from 'src/app/util/date-util';
 import { CovidChartOptions } from '../covid-chart-options';
 
 @Component({
@@ -117,8 +117,8 @@ export class CaseLineChartComponent implements OnInit {
             width: wrapperWidth,
             height: 150,
             regression: {
-              to: getMoment(this.options.date).toISOString(),
-              from: getMoment(this.options.date).subtract(this.options.daysForTrend, 'days').toISOString()
+              to: getDateTime(this.options.date).toISO(),
+              from: getDateTime(this.options.date).minus({days: this.options.daysForTrend}).toISO()
             },
             incidenceRules: this.caseUtil.isLockdownMode(this.options),
             tempGranularity: this.options.timeAgg,

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { aggLevelToEndpointSingle } from '../util/aggregation-level';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate } from '../util/date-util';
 import { CachedRepository } from './cached.repository';
 import { QualitativeAggregatedHospitalProperties, QualitativeSingleHospitalProperties, QualitativeTimedStatus } from './types/in/qualitative-hospitals-development';
 import { Region } from './types/in/region';
@@ -70,7 +70,7 @@ export class QualitativeDiviDevelopmentRepository {
 
 
     if (from) {
-      const fromDate = getMoment(from);
+      const fromDate = getDateTime(from);
       params = params.append('from', getStrDate(fromDate));
     }
 
@@ -78,7 +78,7 @@ export class QualitativeDiviDevelopmentRepository {
 
 
     if (to) {
-      const toDate = getMoment(to);
+      const toDate = getDateTime(to);
       params = params.append('to', getStrDate(toDate));
     }
 

@@ -1,24 +1,24 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
-import moment, { Moment } from 'moment';
+import { DateTime } from 'luxon';
 import { NouiFormatter } from 'ng2-nouislider';
 import { BehaviorSubject, interval, NEVER, Observable } from 'rxjs';
 import { filter, map, reduce, repeatWhen, switchMap, takeUntil } from 'rxjs/operators';
 import { MapOptions } from '../map/options/map-options';
 import { ExtentRepository } from '../repositories/extent.repository';
 import { ConfigService } from '../services/config.service';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate } from '../util/date-util';
 
 class TimeFormatter implements NouiFormatter {
-  constructor(public startDay: Moment, private datePipe: DatePipe) {}
+  constructor(public startDay: DateTime, private datePipe: DatePipe) {}
 
   to(value: number): string {
-    return this.datePipe.transform(this.startDay.clone().add(value, 'days').toDate(), 'shortDate');
+    return this.datePipe.transform(this.startDay.plus({days: value}).toISODate(), 'shortDate');
   }
 
   from(value: string): number {
-    return getMoment(value).diff(this.startDay, 'days');
+    return getDateTime(value).diff(this.startDay, 'days').days;
   }
 }
 
@@ -67,7 +67,7 @@ export class TimesliderComponent implements OnInit {
   ngOnInit(): void {
     this.extentRepo.getExtent()
     .pipe(
-      map<[string, string], [Moment, Moment]>(d => [getMoment(d[0]), getMoment(d[1])]),
+      map<[string, string], [DateTime, DateTime]>(d => [getDateTime(d[0]), getDateTime(d[1])]),
       reduce((acc, val) => {
         if (!acc[0] || acc[0] > val[0]) {
           acc[0] = val[0];
@@ -83,7 +83,7 @@ export class TimesliderComponent implements OnInit {
         const firstDay = extent[0].startOf('day');
         const lastDay = extent[1].startOf('day');
 
-        this.timeExtent = [0, lastDay.diff(firstDay, 'days')];
+        this.timeExtent = [0, lastDay.diff(firstDay, 'days').days];
 
         this.timeFormatter = new TimeFormatter(firstDay, this.datePipe);
 
@@ -97,7 +97,7 @@ export class TimesliderComponent implements OnInit {
         };
 
         if (this._mo) {
-          this.currentTime = this.timeFormatter.from(getStrDate(getMoment(this._mo.bedGlyphOptions.date)));
+          this.currentTime = this.timeFormatter.from(getStrDate(getDateTime(this._mo.bedGlyphOptions.date)));
         }
 
         this.numTicks = this.timeExtent[1] - this.timeExtent[0];
@@ -178,8 +178,8 @@ export class TimesliderComponent implements OnInit {
     // workaround to get to the correct date
     numDays++;
 
-    let date = getStrDate(this.sliderValueToMoment(numDays));
-    if (date === getStrDate(moment())) {
+    let date = getStrDate(this.sliderValueToDateTime(numDays));
+    if (date === getStrDate(getDateTime('now'))) {
       date = 'now';
     }
 
@@ -196,12 +196,12 @@ export class TimesliderComponent implements OnInit {
     }));
   }
 
-  sliderValueToMoment(val: number): Moment {
-    return this.timeFormatter.startDay.clone().add(val, 'days');
+  sliderValueToDateTime(val: number): DateTime {
+    return this.timeFormatter.startDay.plus({days: val});
   }
 
-  momentToSliderValue(mom: Moment): number {
-    return mom.diff(this.timeFormatter.startDay, 'days');
+  dateTimeToSliderValue(mom: DateTime): number {
+    return mom.diff(this.timeFormatter.startDay, 'days').days;
   }
 
 }

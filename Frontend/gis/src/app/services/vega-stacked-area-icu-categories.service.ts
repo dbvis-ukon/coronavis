@@ -7,7 +7,7 @@ import { CovidChartOptions } from '../cases-dod/covid-chart-options';
 import { BedType } from '../map/options/bed-type.enum';
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { Region } from '../repositories/types/in/region';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate, isBetweenDaysInclusive } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 import { StackedAreaIcuItem } from './chart.service';
 import { ExportCsvService } from './export-csv.service';
@@ -395,7 +395,7 @@ export class VegaStackedAreaIcuCategoriesService {
     let manXExtent: [string, string] = null;
     if (o.temporalExtent.type === 'manual') {
       if (o.temporalExtent.manualLastDays > 0) {
-        manXExtent = [getStrDate(getMoment('now').subtract(o.temporalExtent.manualLastDays, 'days')), getStrDate(getMoment('now'))];
+        manXExtent = [getStrDate(getDateTime('now').minus({days: o.temporalExtent.manualLastDays})), getStrDate(getDateTime('now'))];
       } else {
         manXExtent = o.temporalExtent.manualExtent;
       }
@@ -406,18 +406,18 @@ export class VegaStackedAreaIcuCategoriesService {
           map(d => {
             const data = d.properties.developments
             .filter(d1 => {
-              if (manXExtent !== null && !getMoment(d1.timestamp).isBetween(getMoment(manXExtent[0]), getMoment(manXExtent[1]), 'day', '[]')) {
+              if (manXExtent !== null && !isBetweenDaysInclusive(d1.timestamp, manXExtent[0], manXExtent[1])) {
                 return false;
               }
 
               return true;
             })
             .map(d1 => {
-              if (xExtent[0] === null || getMoment(xExtent[0]).isAfter(getMoment(d1.timestamp))) {
+              if (xExtent[0] === null || getDateTime(xExtent[0]) > getDateTime(d1.timestamp)) {
                 xExtent[0] = d1.timestamp;
               }
 
-              if (xExtent[1] === null || getMoment(xExtent[1]).isBefore(getMoment(d1.timestamp))) {
+              if (xExtent[1] === null || getDateTime(xExtent[1]) < getDateTime(d1.timestamp)) {
                 xExtent[1] = d1.timestamp;
               }
 
