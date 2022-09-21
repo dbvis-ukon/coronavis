@@ -60,8 +60,7 @@ def try_parse_int(s: str) -> int | str:
         return s
 
 
-URL = 'https://github.com/robert-koch-institut/SARS-CoV-2_Infektionen_in_Deutschland/blob/%TODAY%/Aktuell_Deutschland_SarsCov2_Infektionen.csv?raw=true'
-
+URL = 'https://github.com/robert-koch-institut/SARS-CoV-2-Infektionen_in_Deutschland_Archiv/blob/master/Archiv/%TODAY%_Deutschland_SarsCov2_Infektionen.csv?raw=true'
 
 def download_data() -> Tuple[List[Dict[str, int | str]], datetime.datetime] | None:
     today_str = today.strftime('%Y-%m-%d')
