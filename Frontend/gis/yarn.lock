@@ -2734,9 +2734,9 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
     color-convert "^2.0.1"
 
 ansi-styles@^6.0.0:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.1.1.tgz#63cd61c72283a71cb30bd881dbb60adada74bc70"
-  integrity sha512-qDOv24WjnYuL+wbwHdlsYZFy+cgPtrYw0Tn7GLORicQp9BkQLzrgI3Pm4VyR9ERZ41YTn7KlMPuL1n05WdZvmg==
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.2.0.tgz#24b0517e8156e12520f389a8ddf938f337f03143"
+  integrity sha512-3MWBO/XxbkDtc/qpECaUwDM0DQ++ujBjdjs0ElZvChUoPv/P7GOnl3x+R2RF2My5UJHEW5R87q556MiR8U3PLw==
 
 anymatch@~3.1.2:
   version "3.1.2"
@@ -4448,9 +4448,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.251:
-  version "1.4.276"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.276.tgz#17837b19dafcc43aba885c4689358b298c19b520"
-  integrity sha512-EpuHPqu8YhonqLBXHoU6hDJCD98FCe6KDoet3/gY1qsQ6usjJoHqBH2YIVs8FXaAtHwVL8Uqa/fsYao/vq9VWQ==
+  version "1.4.278"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.278.tgz#b527a64df8a23dd46a8c751a81c6648d528c5e1d"
+  integrity sha512-i+0+t/UVCqp9khP+hswZQbG31LnsYWGwyI9zhqZkyPok7k57W0UhMaxODMp3TeoNFhyUtB5OI4ppO/OSD9gaYg==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -7000,9 +7000,9 @@ node-gyp-build@^4.2.2:
   integrity sha512-2iGbaQBV+ITgCz76ZEjmhUKAKVf7xfY1sRl4UiKQspfZMH2h06SyhNsnSVy50cwkFQDGLyif6m/6uFXHkOZ6rg==
 
 node-gyp@^9.0.0:
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-9.2.0.tgz#b3b56144828a98018a4cfb3033095e0f5b874d72"
-  integrity sha512-/+/YxGfIJOh/fnMsr4Ep0v6oOIjnO1BgLd2dcDspBX1spTkQU7xSIox5RdRE/2/Uq3ZwK8Z5swRIbMUmPlslmg==
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-9.3.0.tgz#f8eefe77f0ad8edb3b3b898409b53e697642b319"
+  integrity sha512-A6rJWfXFz7TQNjpldJ915WFb1LnhO4lIve3ANPbWreuEoLoKlFT3sxIepPBkLhM27crW8YmN+pjlgbasH6cH/Q==
   dependencies:
     env-paths "^2.2.0"
     glob "^7.1.4"
