@@ -1,5 +1,5 @@
 pandas==1.5.0
-numpy==1.23.3
+numpy==1.23.4
 urllib3==1.26.12
 openpyxl==3.0.10
 requests==2.28.1
