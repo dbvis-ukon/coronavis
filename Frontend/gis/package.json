@@ -84,7 +84,7 @@
     "babel-loader": "8.2.5",
     "eslint": "8.26.0",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-jsdoc": "39.3.14",
+    "eslint-plugin-jsdoc": "39.3.15",
     "eslint-plugin-json": "3.1.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "husky": "8.0.1",
