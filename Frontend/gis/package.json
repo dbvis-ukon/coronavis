@@ -81,7 +81,7 @@
     "@typescript-eslint/parser": "5.41.0",
     "ajv-formats": "2.1.1",
     "are-you-es5": "2.1.2",
-    "babel-loader": "8.2.5",
+    "babel-loader": "9.0.0",
     "eslint": "8.26.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jsdoc": "39.3.25",
