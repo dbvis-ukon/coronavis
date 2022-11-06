@@ -178,7 +178,7 @@ export class VegaPixelchartService {
         "mark": {
           "type": "text",
           "fontWeight": "lighter",
-          "fontSize": {"expr": "datum.val < 1000 ? 9 : 8"}
+          "fontSize": {"expr": "datum.val < 1000 ? 6 : 5"}
         },
         "encoding": {
           "text": {"field": "val", "type": "quantitative", "format": ".0f"},
@@ -362,7 +362,7 @@ export class VegaPixelchartService {
             const ts = getDateTime(this.caseUtils.getTimedStatusByIdx(fullData, i).timestamp);
 
             data.push({
-              yearisoweek: ts.toFormat('GGGG \'W\'WW'),
+              yearisoweek: ts.toFormat('kkkk \'W\'WW'),
               x: fullData.developments[i].timestamp,
               y: k,
               val: diff,
