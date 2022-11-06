@@ -11,7 +11,7 @@ GeoAlchemy2==0.12.5
 psycopg2-binary==2.9.5
 sentry_sdk==1.10.1
 python-dotenv==0.21.0
-zeep==4.1.0
+zeep==4.2.0
 holidays==0.16
 jsonschema==4.17.0
 types-psycopg2==2.9.21.1
