@@ -58,10 +58,10 @@ spec:
             resources:
               requests:
                 cpu: 1000m
-                memory: 5Gi
+                memory: 20Gi
               limits:
                 cpu: 4000m
-                memory: 20Gi
+                memory: 40Gi
           restartPolicy: Never
           imagePullSecrets:
             - name: regcred-server
