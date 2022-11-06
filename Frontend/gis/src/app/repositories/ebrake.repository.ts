@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate } from '../util/date-util';
 import { CachedRepository } from './cached.repository';
 
 export interface EbrakeData {
@@ -45,12 +45,12 @@ export class EbrakeRepository {
     let params = new HttpParams();
 
     if (from) {
-      const fromDate = getMoment(from);
+      const fromDate = getDateTime(from);
       params = params.append('from', getStrDate(fromDate));
     }
 
     if (to) {
-      const toDate = getMoment(to);
+      const toDate = getDateTime(to);
       params = params.append('to', getStrDate(toDate));
     }
 

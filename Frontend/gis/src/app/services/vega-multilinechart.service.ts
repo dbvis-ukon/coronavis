@@ -9,7 +9,7 @@ import { CovidNumberCaseDataSource, CovidNumberCaseTimeWindow, CovidNumberCaseTy
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { EbrakeRepository } from '../repositories/ebrake.repository';
 import { Region } from '../repositories/types/in/region';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate, isBetweenDaysInclusive } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 import { MultiLineChartItem } from './chart.service';
 import { ExportCsvService } from './export-csv.service';
@@ -180,7 +180,7 @@ export class VegaMultiLineChartService {
     let manXExtent: [string, string] = null;
     if (o.temporalExtent.type === 'manual') {
       if (o.temporalExtent.manualLastDays > 0) {
-        manXExtent = [getStrDate(getMoment('now').subtract(o.temporalExtent.manualLastDays, 'days')), getStrDate(getMoment('now'))];
+        manXExtent = [getStrDate(getDateTime('now').minus({days: o.temporalExtent.manualLastDays})), getStrDate(getDateTime('now'))];
       } else {
         manXExtent = o.temporalExtent.manualExtent;
       }
@@ -213,18 +213,18 @@ export class VegaMultiLineChartService {
         const data = xyArr
         .filter((_, i) => i > 7)
         .filter(d2 => {
-          if (manXExtent !== null && !getMoment(d2.x).isBetween(getMoment(manXExtent[0]), getMoment(manXExtent[1]), 'day', '[]')) {
+          if (manXExtent !== null && !isBetweenDaysInclusive(d2.x, manXExtent[0], manXExtent[1])) {
             return false;
           }
 
           return true;
         })
         .map(xy => {
-          if (xExtent[0] === null || getMoment(xExtent[0]).isAfter(getMoment(xy.x))) {
+          if (xExtent[0] === null || getDateTime(xExtent[0]) > getDateTime(xy.x)) {
             xExtent[0] = xy.x;
           }
 
-          if (xExtent[1] === null || getMoment(xExtent[1]).isBefore(getMoment(xy.x))) {
+          if (xExtent[1] === null || getDateTime(xExtent[1]) < getDateTime(xy.x)) {
             xExtent[1] = xy.x;
           }
 
@@ -274,7 +274,7 @@ export class VegaMultiLineChartService {
     let manXExtent: [string, string] = null;
     if (o.temporalExtent.type === 'manual') {
       if (o.temporalExtent.manualLastDays > 0) {
-        manXExtent = [getStrDate(getMoment('now').subtract(o.temporalExtent.manualLastDays, 'days')), getStrDate(getMoment('now'))];
+        manXExtent = [getStrDate(getDateTime('now').minus({days: o.temporalExtent.manualLastDays})), getStrDate(getDateTime('now'))];
       } else {
         manXExtent = o.temporalExtent.manualExtent;
       }
@@ -310,18 +310,18 @@ export class VegaMultiLineChartService {
             const data = xyArr
             .filter((_, i) => i > 7)
             .filter(d2 => {
-              if (manXExtent !== null && !getMoment(d2.x).isBetween(getMoment(manXExtent[0]), getMoment(manXExtent[1]), 'day', '[]')) {
+              if (manXExtent !== null && !isBetweenDaysInclusive(d2.x, manXExtent[0], manXExtent[1])) {
                 return false;
               }
 
               return true;
             })
             .map(xy => {
-              if (xExtent[0] === null || getMoment(xExtent[0]).isAfter(getMoment(xy.x))) {
+              if (xExtent[0] === null || getDateTime(xExtent[0]) > getDateTime(xy.x)) {
                 xExtent[0] = xy.x;
               }
 
-              if (xExtent[1] === null || getMoment(xExtent[1]).isBefore(getMoment(xy.x))) {
+              if (xExtent[1] === null || getDateTime(xExtent[1]) < getDateTime(xy.x)) {
                 xExtent[1] = xy.x;
               }
 

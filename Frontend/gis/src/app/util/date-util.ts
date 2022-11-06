@@ -1,32 +1,56 @@
-import moment, { Moment } from 'moment';
+import { isString } from 'lodash';
+import { DateTime } from 'luxon';
 
 
-export function getMoment(strDate: string): Moment {
-  let res: Moment;
-  if (!strDate || strDate === 'now') {
-    res = moment.utc();
-  } else if (strDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
-    res = moment.utc(strDate, 'YYYY-MM-DD', true);
-  } else if (strDate.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/)) {
-    res = moment.utc(strDate, 'YYYY-MM-DD[T]HH:mm:ss', true);
-  } else if (strDate.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)) { // 2020-05-03T16:39:00.353Z
-    res = moment.utc(strDate, 'YYYY-MM-DD[T]HH:mm:ss[.]SSSZ', true);
-  } else if (strDate.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|((\+|\-)\d{1,2}:\d{1,2}))?$/)) { // 2020-05-03T16:39:00+02:00
-    res = moment(strDate, 'YYYY-MM-DD[T]HH:mm:ssZZ', true);
-  } else if (strDate.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{6})?\+\d{1,2}:\d{1,2}$/)) { // 2020-05-03T16:39:00.123353+02:00
-    res = moment(strDate, 'YYYY-MM-DD[T]HH:mm:ss[.]SSSSSSZZ', true);
+export function getDateTime(strDate: string): DateTime {
+  let res: DateTime;
+  if (strDate !== 'now') {
+    res = DateTime.fromISO(strDate);
   } else {
-    console.warn('unknown date time format', strDate);
-    res = moment.utc(strDate);
-  }
-
-  if (!res || !res.isValid()) {
-    throw new Error('invalid date ' + res);
+    res = DateTime.now();
   }
 
   return res;
 }
 
-export function getStrDate(date: Moment): string {
-  return date.utc().format('YYYY-MM-DD');
+export function getStrDate(date: DateTime): string {
+  return date.toISODate();
+}
+
+/**
+ * This is a replacement for the momentjs.isBetween(min, max, 'day', '[]') function.
+ *
+ * @param query the date time to query, may be a string in ISO format
+ * @param min the min extent date time, may be a string in ISO format
+ * @param max the max extent date time, may be a string in ISO format
+ * @returns true iff the query is in between (inclusive) the query based on the `day`
+ */
+export function isBetweenDaysInclusive(query: DateTime | string, min: DateTime | string, max: DateTime | string): boolean {
+  if (isString(query)) {
+    query = getDateTime(query);
+  }
+  if (isString(min)) {
+    min = getDateTime(min);
+  }
+  if (isString(max)) {
+    max = getDateTime(max);
+  }
+  return query.startOf('day') >= min.startOf('day') && query.startOf('day') <= max.startOf('day');
+}
+
+/**
+ * A convenience function to replace moment.max
+ *
+ * @param a a datetime or iso formatted string
+ * @param b a datetime or iso formatted string
+ * @returns the maximum of both datetimes
+ */
+export function maxDateTime(a: DateTime | string, b: DateTime | string): DateTime {
+  if (isString(a)) {
+    a = getDateTime(a);
+  }
+  if (isString(b)) {
+    b = getDateTime(b);
+  }
+  return a > b ? a : b;
 }

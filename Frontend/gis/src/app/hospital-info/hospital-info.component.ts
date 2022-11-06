@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/quotes, quote-props */
 
 import { Component, Input, OnInit } from '@angular/core';
-import moment, { Moment } from 'moment';
+import { DateTime } from 'luxon';
 import { Observable, of } from 'rxjs';
 import { map, max, mergeMap } from 'rxjs/operators';
 import { BedBackgroundOptions } from '../map/options/bed-background-options';
@@ -16,7 +16,7 @@ import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { TranslationService } from '../services/translation.service';
 import { VegaBarchartService } from '../services/vega-barchart.service';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate, maxDateTime } from '../util/date-util';
 
 @Component({
   selector: 'app-hospital-info',
@@ -106,7 +106,7 @@ export class HospitalInfoComponent implements OnInit {
 
   lastUpdate: Date;
 
-  firstTimestamp: Moment;
+  firstTimestamp: DateTime;
 
   warnOfOutdatedData: boolean;
 
@@ -137,7 +137,7 @@ export class HospitalInfoComponent implements OnInit {
     // eslint-disable-next-line prefer-const
     let [from, to] = this.hospitalUtil.getFromToTupleFromOptions(this.options);
 
-    from = getStrDate(getMoment(to).subtract(11, 'days'));
+    from = getStrDate(getDateTime(to).minus({days: 11}));
 
     if (this.hospitalUtil.isSingleHospital(this.data)) {
       this.isSingleHospital = true;
@@ -154,13 +154,13 @@ export class HospitalInfoComponent implements OnInit {
       this.totalNumberOfHospitals = this.latestDevelopment.num_hospitals;
 
 
-      const lastUpdateM = getMoment(this.latestDevelopment.last_updated);
-      this.lastUpdate = lastUpdateM.toDate();
+      const lastUpdateM = getDateTime(this.latestDevelopment.last_updated);
+      this.lastUpdate = lastUpdateM.toJSDate();
 
-      const tenDaysAgo = moment().subtract(10, 'day');
-      this.firstTimestamp = moment.max(getMoment(this.fullData.developments[0].timestamp), tenDaysAgo);
+      const tenDaysAgo = getDateTime('now').minus({days: 10});
+      this.firstTimestamp = maxDateTime(this.fullData.developments[0].timestamp, tenDaysAgo);
 
-      this.warnOfOutdatedData = moment().subtract(1, 'day').isAfter(lastUpdateM);
+      this.warnOfOutdatedData = getDateTime('now').minus({days: 1}) > lastUpdateM;
     }
 
     this.tempChartSpecs$ = this.getTemporalCharts();
@@ -259,9 +259,9 @@ export class HospitalInfoComponent implements OnInit {
     }
   }
 
-  private existsInDataValues(date: Moment, category, dataValues){
+  private existsInDataValues(date: DateTime, category, dataValues){
     for (let i = dataValues.length - 1; i >= 0; i--) {
-      if (moment(dataValues[i].Datum).isSame(date) && dataValues[i].Kategorie === category){
+      if (getDateTime(dataValues[i].Datum).startOf('day').equals(date.startOf('day')) && dataValues[i].Kategorie === category){
         return true;
       }
     }
@@ -289,13 +289,12 @@ export class HospitalInfoComponent implements OnInit {
           return null;
         }
 
-        const tenDaysAgo = moment().subtract(10, 'day');
-        // const data = this.fullData.developments.filter(d => tenDaysAgo.isBefore(moment(d.timestamp)));
+        const tenDaysAgo = getDateTime('now').minus({days: 10});
         for (const bedAccessor of this.bedAccessors) {
           let summedbedcounts = 0;
           const dataValues = [];
 
-          if (this.firstTimestamp.isSameOrAfter(tenDaysAgo)) {
+          if (this.firstTimestamp >= tenDaysAgo) {
               dataValues.push(
                 {
                   Kategorie: "Keine Information",
@@ -318,13 +317,13 @@ export class HospitalInfoComponent implements OnInit {
 
               sumOfOneSlice += v;
 
-              if (!this.existsInDataValues(moment.max(getMoment(d.timestamp), tenDaysAgo), bedStatus, dataValues)) {
+              if (!this.existsInDataValues(maxDateTime(d.timestamp, tenDaysAgo), bedStatus, dataValues)) {
                 dataValues.push(
                   {
                     Kategorie: bedStatus,
                     num: v,
                     color: this.getCapacityStateColor(bedStatus),
-                    Datum: moment.max(getMoment(d.timestamp), tenDaysAgo).toDate()
+                    Datum: maxDateTime(d.timestamp, tenDaysAgo).toJSDate()
                   }
                 );
                 if (v > maxNum) {
@@ -339,7 +338,7 @@ export class HospitalInfoComponent implements OnInit {
                     Kategorie: bedStatus,
                     num: v,
                     color: this.getCapacityStateColor(bedStatus),
-                    Datum: moment()
+                    Datum: getDateTime('now')
                   }
                 );
               }

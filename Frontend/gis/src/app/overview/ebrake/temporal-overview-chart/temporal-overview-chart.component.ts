@@ -7,10 +7,11 @@ import { scaleBand, scaleLinear, scaleTime } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
 import { timeDay } from 'd3-time';
 import { timeFormatDefaultLocale } from 'd3-time-format';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { EbrakeData, EbrakeItem } from 'src/app/repositories/ebrake.repository';
 import { I18nService } from 'src/app/services/i18n.service';
 import { TooltipService } from 'src/app/services/tooltip.service';
+import { getDateTime } from 'src/app/util/date-util';
 import { EbrakeTooltipComponent } from '../ebrake-tooltip/ebrake-tooltip.component';
 
 @Component({
@@ -147,7 +148,7 @@ export class TemporalOverviewChartComponent implements OnInit {
     const dateExt: [Date, Date] = extent(dataParsed, d => d.ts_parsed);
 
     const xScale = scaleTime()
-      .domain([dateExt[0], moment(dateExt[1]).add(1, 'day').toDate()])
+      .domain([dateExt[0], DateTime.fromJSDate(dateExt[1]).plus({days: 1}).toJSDate()])
       .range([0, width]);
 
     const yScale = scaleLinear()
@@ -205,13 +206,13 @@ export class TemporalOverviewChartComponent implements OnInit {
         .classed('highlighted', false);
       });
 
-    const tomorrowM = moment().add('1', 'day').startOf('day');
+    const tomorrowM = getDateTime('now').plus({days: 1}).startOf('day');
 
     rowG
       .append('rect')
       .attr('class', 'prognosis')
-      .attr('x', xScale(new Date(tomorrowM.toISOString())))
-      .attr('width', xScale(new Date(moment(dateExt[1]).add(1, 'day').toISOString())) - xScale(new Date(tomorrowM.toISOString())))
+      .attr('x', xScale(tomorrowM.toJSDate()))
+      .attr('width', xScale(DateTime.fromJSDate(dateExt[1]).plus({days: 1}).toJSDate()) - xScale(tomorrowM.toJSDate()))
       .attr('height', rowsScale.bandwidth());
 
     const sunHoliday = rowG
@@ -286,8 +287,8 @@ export class TemporalOverviewChartComponent implements OnInit {
       .call(axisTop(xScale).ticks(timeDay.every(2)))
       .call(shiftXTicks);
 
-    const today = new Date(moment().startOf('day').toISOString());
-    const tomorrow = new Date(tomorrowM.toISOString());
+    // const today = getDateTime('now').startOf('day').toJSDate();
+    // const tomorrow = tomorrowM.toJSDate();
 
     // chartG
     //   .append('polygon')

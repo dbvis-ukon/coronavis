@@ -14,7 +14,7 @@ import { I18nService, SupportedLocales } from '../services/i18n.service';
 import { QualitativeColormapService } from '../services/qualitative-colormap.service';
 import { QuantitativeColormapService } from '../services/quantitative-colormap.service';
 import { PlusminusPipe } from '../shared/plusminus.pipe';
-import { getMoment } from '../util/date-util';
+import { getDateTime } from '../util/date-util';
 
 interface LegendColorMapBin extends ColorMapBin {
   minStr: string;
@@ -304,7 +304,7 @@ export class LegendComponent implements OnInit, OnDestroy {
 
     title += ' on ';
 
-    title += this.datePipe.transform(getMoment(mo.bedBackgroundOptions.date).toDate(), 'shortDate');
+    title += this.datePipe.transform(getDateTime(mo.bedBackgroundOptions.date).toJSDate(), 'shortDate');
 
     return title;
   }
@@ -354,7 +354,7 @@ export class LegendComponent implements OnInit, OnDestroy {
 
     title += ' am ';
 
-    title += this.datePipe.transform(getMoment(mo.bedBackgroundOptions.date).toDate(), 'shortDate');
+    title += this.datePipe.transform(getDateTime(mo.bedBackgroundOptions.date).toJSDate(), 'shortDate');
 
     return title;
   }
@@ -411,7 +411,7 @@ export class LegendComponent implements OnInit, OnDestroy {
       title += ' on ';
     }
 
-    title += this.datePipe.transform(getMoment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
+    title += this.datePipe.transform(getDateTime(mo.covidNumberCaseOptions.date).toJSDate(), 'shortDate');
 
     return title;
   }
@@ -464,7 +464,7 @@ export class LegendComponent implements OnInit, OnDestroy {
       title += ' am ';
     }
 
-    title += this.datePipe.transform(getMoment(mo.covidNumberCaseOptions.date).toDate(), 'shortDate');
+    title += this.datePipe.transform(getDateTime(mo.covidNumberCaseOptions.date).toJSDate(), 'shortDate');
 
     return title;
   }

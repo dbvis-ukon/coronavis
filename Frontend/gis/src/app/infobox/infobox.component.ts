@@ -2,7 +2,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CronJob } from 'cron';
-import moment from 'moment';
+import { DateTime, Duration } from 'luxon';
 import { BehaviorSubject, firstValueFrom, forkJoin, interval, merge, Observable, of } from 'rxjs';
 import { distinct, distinctUntilChanged, filter, map, mergeMap, tap, toArray } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
@@ -31,7 +31,7 @@ import { QualitativeColormapService } from '../services/qualitative-colormap.ser
 import { TooltipService } from '../services/tooltip.service';
 import { TranslationService } from '../services/translation.service';
 import { Searchable } from '../shared/hospital-search/hospital-search.component';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate } from '../util/date-util';
 
 interface GlyphEntity {
   name: string;
@@ -177,11 +177,11 @@ export class InfoboxComponent implements OnInit {
       }, 30000);
     }, null, true, 'UTC');
 
-    const initTime = getMoment('now');
+    const initTime = getDateTime('now');
 
     interval(5000)
       .subscribe(() => {
-        let nextDate = getMoment('now').add(30, 'minutes');
+        let nextDate = getDateTime('now').plus({minutes: 30});
 
         try {
           nextDate = cron.nextDate();
@@ -189,11 +189,11 @@ export class InfoboxComponent implements OnInit {
           console.warn('Could not determine next cron. Fall back to now + 30 min.');
         }
 
-        const diffNext = nextDate.diff(getMoment('now').utc()) + 30000;
+        const diffNext = nextDate.diff(getDateTime('now')).milliseconds + 30000;
 
-        const diffTotal = nextDate.diff(initTime);
+        const diffTotal = nextDate.diff(initTime).milliseconds;
 
-        this.nextLiveUpdate = moment.duration(diffNext).humanize();
+        this.nextLiveUpdate = Duration.fromMillis(diffNext).minutes + ' minutes';
 
         this.nextLiveUpdatePercentage = ((diffNext / diffTotal)) * 100;
       });
@@ -510,7 +510,7 @@ export class InfoboxComponent implements OnInit {
   private combinedStatsOperator(): (input$: Observable<string>) => Observable<CombinedStatistics> {
     return (input$: Observable<string>) => input$.pipe(
       tap(() => this.aggregateStatisticsLoading$.next(true)),
-      map(s => getStrDate(getMoment(s).endOf('day'))),
+      map(s => getStrDate(getDateTime(s).endOf('day'))),
       mergeMap(refDate => {
         const filtered = this.countryAggregatorService.diviAggregationForCountry(refDate);
         const unfiltered = this.countryAggregatorService.diviAggregationForCountryUnfiltered(refDate);
@@ -527,7 +527,7 @@ export class InfoboxComponent implements OnInit {
         let rkiOutdated: boolean;
 
         if (rki) {
-          rkiOutdated = getMoment(refDate).endOf('day').subtract(1, 'day').isAfter(getMoment(rki.timestamp));
+          rkiOutdated = getDateTime(refDate).endOf('day').minus({days: 1}) > getDateTime(rki.timestamp);
         }
 
         const combinedStats = {

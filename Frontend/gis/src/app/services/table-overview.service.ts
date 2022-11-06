@@ -9,7 +9,7 @@ import { CaseDevelopmentRepository } from '../repositories/case-development.repo
 import { RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
 import { Region } from '../repositories/types/in/region';
 import { PlusminusPipe } from '../shared/plusminus.pipe';
-import { getMoment } from '../util/date-util';
+import { getDateTime } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 import { TranslationService } from './translation.service';
 
@@ -77,7 +77,7 @@ export class TableOverviewService {
 
         const lastUpdated = slice ? slice.inserted : (states[0].last_updated || states[0].timestamp);
 
-        const dataOutdated = !(getMoment(lastUpdated).isSame(getMoment('now'), 'day'));
+        const dataOutdated = !(getDateTime(lastUpdated).hasSame(getDateTime('now'), 'day'));
 
         const rowsTemplate = [
           {

@@ -7,7 +7,7 @@ import { CaseDevelopmentRepository } from '../repositories/case-development.repo
 import { QualitativeDiviDevelopmentRepository } from '../repositories/qualitative-divi-development.respository';
 import { QualitativeTimedStatus } from '../repositories/types/in/qualitative-hospitals-development';
 import { RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 
 @Injectable({
@@ -23,8 +23,8 @@ export class CountryAggregatorService {
   }
 
   public rkiAggregationForCountry(dataSource: CovidNumberCaseDataSource, refDate: string): Observable<RKICaseTimedStatus | undefined> {
-    const from = getStrDate(getMoment(refDate).subtract(1, 'day'));
-    const to = getStrDate(getMoment(refDate).add(1, 'day'));
+    const from = getStrDate(getDateTime(refDate).minus({days: 1}));
+    const to = getStrDate(getDateTime(refDate).plus({days: 1}));
 
     return this.caseRepository.getCasesDevelopmentForAggLevel(dataSource, AggregationLevel.country, from, to, false, true)
     .pipe(
@@ -32,7 +32,7 @@ export class CountryAggregatorService {
         if (fc.features.length === 0 || !fc.features[0]?.properties) {
           return undefined;
         }
-        return this.caseUtilService.getTimedStatus(fc.features[0].properties, getMoment(refDate));
+        return this.caseUtilService.getTimedStatus(fc.features[0].properties, getDateTime(refDate));
       })
     );
   }
@@ -46,8 +46,8 @@ export class CountryAggregatorService {
   }
 
   private fetchDivi(refDate: string, lastNumberOfDays: number): Observable<QualitativeTimedStatus> {
-    const from = getStrDate(getMoment(refDate).subtract(1, 'day'));
-    const to = getStrDate(getMoment(refDate).add(2, 'day'));
+    const from = getStrDate(getDateTime(refDate).minus({days: 1}));
+    const to = getStrDate(getDateTime(refDate).plus({days: 1}));
 
     return this.diviDevelopmentRepository.getDiviDevelopmentForAggLevel(AggregationLevel.country, from, to, true, lastNumberOfDays)
     .pipe(

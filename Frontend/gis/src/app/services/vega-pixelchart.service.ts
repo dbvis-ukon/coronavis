@@ -8,7 +8,7 @@ import { CovidNumberCaseDataSource, CovidNumberCaseNormalization, CovidNumberCas
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
 import { AggregatedRKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
 import { Region } from '../repositories/types/in/region';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate, isBetweenDaysInclusive } from '../util/date-util';
 import { CaseUtilService } from './case-util.service';
 import { PixelChartItem } from './chart.service';
 import { ConfigService } from './config.service';
@@ -178,7 +178,7 @@ export class VegaPixelchartService {
         "mark": {
           "type": "text",
           "fontWeight": "lighter",
-          "fontSize": {"expr": "datum.val < 1000 ? 9 : 8"}
+          "fontSize": {"expr": "datum.val < 1000 ? 6 : 5"}
         },
         "encoding": {
           "text": {"field": "val", "type": "quantitative", "format": ".0f"},
@@ -263,13 +263,13 @@ export class VegaPixelchartService {
     let manXExtent: [string, string] = null;
     if (o.temporalExtent.type === 'manual') {
       if (o.temporalExtent.manualLastDays > 0) {
-        manXExtent = [getStrDate(getMoment('now')
-          .subtract(o.temporalExtent.manualLastDays, 'days')
+        manXExtent = [getStrDate(getDateTime('now')
+          .minus({days: o.temporalExtent.manualLastDays})
           .startOf('week')
           ),
-          getStrDate(getMoment('now').endOf('week'))];
+          getStrDate(getDateTime('now').endOf('week'))];
       } else {
-        manXExtent = [getStrDate(getMoment(o.temporalExtent.manualExtent[0]).startOf('week')), getStrDate(getMoment(o.temporalExtent.manualExtent[1]).endOf('week'))];
+        manXExtent = [getStrDate(getDateTime(o.temporalExtent.manualExtent[0]).startOf('week')), getStrDate(getDateTime(o.temporalExtent.manualExtent[1]).endOf('week'))];
       }
     }
 
@@ -310,7 +310,7 @@ export class VegaPixelchartService {
 
         for (let i = idxDiff; i < fullData.developments.length; i++) {
 
-          if (manXExtent !== null && !getMoment(fullData.developments[i].timestamp).isBetween(getMoment(manXExtent[0]), getMoment(manXExtent[1]), 'day', '[]')) {
+          if (manXExtent !== null && !isBetweenDaysInclusive(this.caseUtils.getTimedStatusByIdx(fullData, i).timestamp, manXExtent[0], manXExtent[1])) {
             continue;
           }
 
@@ -359,10 +359,10 @@ export class VegaPixelchartService {
               maxDiff = diff;
             }
 
-            const ts = getMoment(fullData.developments[i].timestamp);
+            const ts = getDateTime(this.caseUtils.getTimedStatusByIdx(fullData, i).timestamp);
 
             data.push({
-              yearisoweek: ts.format('GGGG [W]WW'),
+              yearisoweek: ts.toFormat('kkkk \'W\'WW'),
               x: fullData.developments[i].timestamp,
               y: k,
               val: diff,
@@ -378,8 +378,8 @@ export class VegaPixelchartService {
         const xAxis = "Woche";
 
         const xDomain: [string, string] = [
-          getStrDate(getMoment(data[0].x).startOf('week')),
-          getStrDate(getMoment(data[data.length - 1].x).endOf('week'))
+          getStrDate(getDateTime(data[0].x).startOf('week')),
+          getStrDate(getDateTime(data[data.length - 1].x).endOf('week'))
         ];
 
         const ret: PixelChartDataAndOptions = {

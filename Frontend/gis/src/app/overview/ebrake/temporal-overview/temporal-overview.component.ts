@@ -6,7 +6,7 @@ import { EbrakeData, EbrakeRepository } from 'src/app/repositories/ebrake.reposi
 import { RegionRepository } from 'src/app/repositories/region.repository';
 import { Region } from 'src/app/repositories/types/in/region';
 import { MyLocalStorageService } from 'src/app/services/my-local-storage.service';
-import { getMoment, getStrDate } from 'src/app/util/date-util';
+import { getDateTime, getStrDate } from 'src/app/util/date-util';
 import { EbrakeShareDialogComponent } from '../ebrake-share-dialog/ebrake-share-dialog.component';
 
 @Component({
@@ -114,8 +114,8 @@ export class TemporalOverviewComponent implements OnInit {
     } else {
       numFutureDays = this.numFutureDays;
     }
-    const from = getStrDate(getMoment('now').subtract(numPastDays, 'days'));
-    const to = getStrDate(getMoment('now').add(numFutureDays, 'days'));
+    const from = getStrDate(getDateTime('now').minus({days: numPastDays}));
+    const to = getStrDate(getDateTime('now').plus({days: numFutureDays}));
     this.ebrakeRepo.getEbrakeData(from, to, regions?.map(d => d.id))
     // .pipe(
     //   map(d => {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Feature, FeatureCollection, Geometry, MultiPolygon, Point } from 'geojson';
-import { Moment } from 'moment';
+import { DateTime } from 'luxon';
 import { filter } from 'rxjs/operators';
 import { BedBackgroundOptions } from '../map/options/bed-background-options';
 import { BedGlyphOptions } from '../map/options/bed-glyph-options';
@@ -10,7 +10,7 @@ import { AbstractHospitalOut } from '../repositories/types/out/abstract-hospital
 import { AggregatedHospitalOut } from '../repositories/types/out/aggregated-hospital-out';
 import { QuantitativeTimedStatus } from '../repositories/types/out/quantitative-timed-status';
 import { SingleHospitalOut } from '../repositories/types/out/single-hospital-out';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate } from '../util/date-util';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class HospitalUtilService {
 
   constructor() { }
 
-  public filterByDate(date: Moment) {
+  public filterByDate(date: DateTime) {
     return filter<Feature<Geometry, AbstractHospitalOut<AbstractTimedStatus>>>(h => this.getLatestTimedStatus(h.properties.developments, date) !== null);
   }
 
@@ -36,9 +36,9 @@ export class HospitalUtilService {
   }
 
   public getFromToTupleFromOptions(mo: BedGlyphOptions | BedBackgroundOptions): [string, string] {
-    const to = getStrDate(getMoment(mo.date).add(1, 'day'));
+    const to = getStrDate(getDateTime(mo.date).plus({days: 1}));
 
-    const from = getStrDate(getMoment(mo.date));
+    const from = getStrDate(getDateTime(mo.date));
 
 
     return [from, to];
@@ -65,7 +65,7 @@ export class HospitalUtilService {
     ];
   }
 
-  public getLatestTimedStatus<T extends AbstractTimedStatus>(entries: Array<T>, beforeDate?: Moment): T | null {
+  public getLatestTimedStatus<T extends AbstractTimedStatus>(entries: Array<T>, beforeDate?: DateTime): T | null {
     if (!entries) {
       return null;
     }
@@ -76,9 +76,9 @@ export class HospitalUtilService {
       const filtered = [];
       for (let i = entries.length - 1; i >= 0; i--) {
         const d = entries[i];
-        const t = getMoment(d.timestamp).startOf('day');
+        const t = getDateTime(d.timestamp).startOf('day');
 
-        if (t.isSameOrBefore(mDate)) {
+        if (t <= mDate) {
           filtered.push(d);
           break;
         }

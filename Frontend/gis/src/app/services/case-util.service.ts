@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ScaleLinear, scaleLinear } from 'd3-scale';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
-import { Moment } from 'moment';
+import { DateTime } from 'luxon';
 import { Observable, of } from 'rxjs';
 import { filter, map, mergeMap, toArray } from 'rxjs/operators';
 import { CovidChartOptions } from '../cases-dod/covid-chart-options';
@@ -9,7 +9,7 @@ import { AggregationLevel } from '../map/options/aggregation-level.enum';
 import { CovidNumberCaseChange, CovidNumberCaseNormalization, CovidNumberCaseOptions, CovidNumberCaseTimeWindow, CovidNumberCaseType } from '../map/options/covid-number-case-options';
 import { StatusWithCache } from '../map/overlays/case-trend-canvas.layer';
 import { AggregatedRKICaseDevelopmentProperties, RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus, SurvStatAgeGroups } from '../repositories/types/in/quantitative-rki-case-development';
-import { getMoment, getStrDate } from '../util/date-util';
+import { getDateTime, getStrDate } from '../util/date-util';
 import { linearRegression } from '../util/regression';
 import { TranslationService } from './translation.service';
 
@@ -83,7 +83,7 @@ export class CaseUtilService {
     return data?.developments[idx];
   }
 
-  public getTimedStatus(data: RKICaseDevelopmentProperties, date: Moment, exact?: boolean): RKICaseTimedStatus | undefined {
+  public getTimedStatus(data: RKICaseDevelopmentProperties, date: DateTime, exact?: boolean): RKICaseTimedStatus | undefined {
     const dateKey = getStrDate(date);
 
     const timedStatus = data.developmentDays[dateKey];
@@ -101,11 +101,11 @@ export class CaseUtilService {
   }
 
   public getTimedStatusWithOptions(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): RKICaseTimedStatus | undefined {
-    return this.getTimedStatus(data, getMoment(options.date));
+    return this.getTimedStatus(data, getDateTime(options.date));
   }
 
   public getNowPrevTimedStatusTuple(data: RKICaseDevelopmentProperties, refDateStr: string, timeWindow: CovidNumberCaseTimeWindow): [RKICaseTimedStatus | undefined, RKICaseTimedStatus | undefined] {
-    const dateRef = getMoment(refDateStr);
+    const dateRef = getDateTime(refDateStr);
     let currentTimedStatus = this.getTimedStatus(data, dateRef);
 
     if (currentTimedStatus.inserted === undefined || currentTimedStatus.inserted === null) {
@@ -119,13 +119,13 @@ export class CaseUtilService {
         prevTimedStatus = undefined;
         break;
       case CovidNumberCaseTimeWindow.twentyFourhours:
-        prevTimedStatus = this.getTimedStatus(data, dateRef.subtract(1, 'day'));
+        prevTimedStatus = this.getTimedStatus(data, dateRef.minus({days: 1}));
         break;
       case CovidNumberCaseTimeWindow.seventyTwoHours:
-        prevTimedStatus = this.getTimedStatus(data, dateRef.subtract(3, 'days'));
+        prevTimedStatus = this.getTimedStatus(data, dateRef.minus({days: 3}));
         break;
       case CovidNumberCaseTimeWindow.sevenDays:
-        prevTimedStatus = this.getTimedStatus(data, dateRef.subtract(7, 'days'));
+        prevTimedStatus = this.getTimedStatus(data, dateRef.minus({days: 7}));
         break;
     }
 
@@ -149,7 +149,7 @@ export class CaseUtilService {
       throw new Error(`Invalid threshold ${options.eBrakeOver}`);
     }
 
-    const t = this.getTimedStatus(f.properties, getMoment(options.date));
+    const t = this.getTimedStatus(f.properties, getDateTime(options.date));
 
     switch(options.eBrakeOver) {
       case 100:
@@ -219,7 +219,7 @@ export class CaseUtilService {
       mergeMap(d1 => d1.developments),
       filter(d => d.inserted !== null && d.inserted !== undefined),
       map(d => {
-        const x = getStrDate(getMoment(d.timestamp));
+        const x = getStrDate(getDateTime(d.timestamp));
         let y: number = null;
 
         if (
@@ -259,13 +259,13 @@ export class CaseUtilService {
   }
 
   public getTrendForCase7DaysPer100k(data: RKICaseDevelopmentProperties, options: CovidNumberCaseOptions): Observable<{m: number; b: number}> {
-    const refDate = getMoment(options.date);
+    const refDate = getDateTime(options.date);
 
     return this.extractXYByOptions(data, options)
     .pipe(
       map(d => {
         const myXY = d
-          .filter(d1 => getMoment(d1.x).isSameOrBefore(refDate))
+          .filter(d1 => getDateTime(d1.x).startOf('day') <= refDate.startOf('day') && d1.y !== null && d1.y !== undefined)
           .filter((_, i, n) => i >= (n.length - options.daysForTrend))
           .map((d1, i) => ({x: i, y: d1.y}));
 
@@ -278,10 +278,20 @@ export class CaseUtilService {
     return this.rotationScale(m);
   }
 
-  public getFromToTupleFromOptions(mo: CovidNumberCaseOptions): [string, string] {
-    const to = getStrDate(getMoment(mo.date).add(1, 'day'));
+  /**
+   * This function calculates the from, to parameters for the API based on the options.
+   * For example: If the reference date from the options is 2021-09-19 the to parameter will be 2021-09-20.
+   * The from parameter will be calculated by 2021-09-19 - daysForTrend - daysThreshold - fromAdditionalThreshold
+   *
+   * @param mo the options
+   * @returns an array with two strings representing the from and to date
+   */
+   public getFromToTupleFromOptions(mo: CovidNumberCaseOptions): [string, string] {
+    const refDate = getDateTime(mo.date);
 
-    const from = getStrDate(getMoment(to).subtract(mo.daysForTrend + 2, 'days'));
+    const to = getStrDate(refDate.plus({days: 1}));
+
+    const from = getStrDate(refDate.minus({days: this.timeWindowToNumberOfDays(mo.timeWindow) + mo.daysForTrend + 2}));
 
     return [from, to];
   }
@@ -348,6 +358,31 @@ export class CaseUtilService {
 
     return out;
   }
+
+    /**
+     * Translates the timeWindow option to the number of days that need to be looked into the past to calculate differences.
+     *
+     * @param timeWindow the time window option
+     * @returns the number of days that need to be looked into the past
+     */
+    public timeWindowToNumberOfDays(timeWindow: CovidNumberCaseTimeWindow): number {
+      switch(timeWindow) {
+        case CovidNumberCaseTimeWindow.all:
+          return 0;
+
+        case CovidNumberCaseTimeWindow.twentyFourhours:
+          return 1;
+
+        case CovidNumberCaseTimeWindow.seventyTwoHours:
+          return 3;
+
+        case CovidNumberCaseTimeWindow.sevenDays:
+          return 7;
+
+        default:
+          throw Error(`${timeWindow} is not known`);
+      }
+    }
 
   private getAgeGroupKey(age: number): string {
     if (age < 0) {
