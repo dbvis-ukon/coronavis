@@ -487,7 +487,7 @@ build-frontend:
     - IMG="${CI_REGISTRY_IMAGE}/${IMGNAME}:${VERSION}"
     - IMG2="${CI_REGISTRY_IMAGE}/${IMGNAME}:${CI_COMMIT_SHORT_SHA}"
     # build and push :)
-    - /kaniko/executor --context . --dockerfile ./Dockerfile --registry-mirror registry-mirror.dbvis.de --build-arg VERSION=${VERSION} --destination $IMG --destination $IMG2 --cache=${KANIKO_CACHE} --force
+    - /kaniko/executor --context . --dockerfile ./Dockerfile --registry-mirror registry-mirror.dbvis.de --build-arg VERSION=${VERSION} --destination $IMG --destination $IMG2 --cache=${KANIKO_CACHE} --force --use-new-run
   tags:
     - no-cache
   retry: 2
