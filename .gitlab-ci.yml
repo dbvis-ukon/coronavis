@@ -487,7 +487,7 @@ build-frontend:
     - IMG="${CI_REGISTRY_IMAGE}/${IMGNAME}:${VERSION}"
     - IMG2="${CI_REGISTRY_IMAGE}/${IMGNAME}:${CI_COMMIT_SHORT_SHA}"
     # build and push :)
-    - /kaniko/executor --context . --dockerfile ./Dockerfile --registry-mirror registry-mirror.dbvis.de --build-arg VERSION=${VERSION} --destination $IMG --destination $IMG2 --cache=true --force
+    - /kaniko/executor --context . --dockerfile ./Dockerfile --registry-mirror registry-mirror.dbvis.de --build-arg VERSION=${VERSION} --destination $IMG --destination $IMG2 --cache=${KANIKO_CACHE} --force
   tags:
     - no-cache
   retry: 2
@@ -500,6 +500,7 @@ dockerize-backend:
     RUN_ON_FB: "yes"
     RUN_ON_MAIN: "yes"
     RUN_ON_TAG: "yes"
+    KANIKO_CACHE: "true"
   <<: *dockerize-template
   <<: *rules-backend
   needs:
@@ -515,6 +516,7 @@ dockerize-frontend:
     RUN_ON_FB: "yes"
     RUN_ON_MAIN: "yes"
     RUN_ON_TAG: "yes"
+    KANIKO_CACHE: "true"
   <<: *dockerize-template
   <<: *rules-frontend
   needs:
@@ -532,6 +534,7 @@ dockerize-crawler:
     RUN_ON_FB: "yes"
     RUN_ON_MAIN: "yes"
     RUN_ON_TAG: "yes"
+    KANIKO_CACHE: "true"
   <<: *dockerize-template
   <<: *rules-crawler
   needs:
@@ -547,6 +550,7 @@ dockerize-tiles:
     RUN_ON_MAIN: "yes"
     RUN_ON_TAG: "yes"
     GIT_SUBMODULE_STRATEGY: "recursive"
+    KANIKO_CACHE: "false"
   <<: *dockerize-template
   <<: *rules-tiles
   tags:
