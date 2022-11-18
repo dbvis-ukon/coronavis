@@ -550,7 +550,7 @@ dockerize-tiles:
   <<: *dockerize-template
   <<: *rules-tiles
   tags:
-    - docker-build
+    - large-data
   needs:
     - export-environment
   dependencies:
