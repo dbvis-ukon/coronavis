@@ -20,11 +20,8 @@ RUN nginx -T
 # Copy and extract tileset to nginx web dir
 COPY ./tiles/*.tar.gz /tmp/tiles/
 
-# unpack the tiles with multiple cores
-RUN for file in /tmp/tiles/*.tar.gz ; do pigz -dc $file | tar -x --overwrite -C /usr/share/nginx/html/ ; done
-
-# remove archives to reduce image size
-RUN rm -r /tmp/tiles
+# unpack the tiles with multiple cores and remove temp archives
+RUN for file in /tmp/tiles/*.tar.gz ; do pigz -dc $file | tar -x --overwrite -C /usr/share/nginx/html/ ; done ; rm -r /tmp/tiles
 
 # Check if files are correctly placed in nginx web dir 
 RUN ls -la /usr/share/nginx/html/
