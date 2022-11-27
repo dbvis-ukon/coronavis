@@ -50,7 +50,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [],
   imports: [
-    RouterModule.forRoot(routes, { enableTracing: environment.env === 'review' || environment.env === 'development', relativeLinkResolution: 'legacy' })
+    RouterModule.forRoot(routes, { enableTracing: environment.env === 'review' || environment.env === 'development' })
   ],
   exports: [
     RouterModule
