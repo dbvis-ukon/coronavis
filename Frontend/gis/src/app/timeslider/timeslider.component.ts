@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatSliderChange } from '@angular/material/slider';
+import { MatLegacySliderChange as MatSliderChange } from '@angular/material/legacy-slider';
 import { DateTime } from 'luxon';
 import { NouiFormatter } from 'ng2-nouislider';
 import { BehaviorSubject, interval, NEVER, Observable } from 'rxjs';

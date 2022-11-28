@@ -1,4 +1,4 @@
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Feature, FeatureCollection, Point } from 'geojson';
 import { Bounds } from 'leaflet';
 import { MyLocalStorageService } from '../../services/my-local-storage.service';

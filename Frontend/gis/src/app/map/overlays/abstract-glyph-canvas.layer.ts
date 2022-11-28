@@ -1,4 +1,4 @@
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Selection } from 'd3-selection';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import L, { Bounds, DomUtil, LeafletMouseEvent, Point } from 'leaflet';

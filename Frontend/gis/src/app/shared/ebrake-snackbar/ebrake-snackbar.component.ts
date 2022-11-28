@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar, MAT_LEGACY_SNACK_BAR_DATA as MAT_SNACK_BAR_DATA } from '@angular/material/legacy-snack-bar';
 
 @Component({
   selector: 'app-ebrake-snackbar',
