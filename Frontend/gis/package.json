@@ -46,7 +46,7 @@
     "ngx-markdown": "14.0.1",
     "nouislider": "15.6.1",
     "quadtree-lib": "1.0.9",
-    "rxjs": "7.5.7",
+    "rxjs": "7.6.0",
     "tslib": "2.4.1",
     "vega": "5.22.1",
     "vega-embed": "6.21.0",
