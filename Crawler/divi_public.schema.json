@@ -23,7 +23,6 @@
           "krankenhausStandort",
           "letzteMeldezeitpunkt",
           "oldestMeldezeitpunkt",
-          "meldebereiche",
           "maxBettenStatusEinschaetzungEcmo",
           "maxBettenStatusEinschaetzungHighCare",
           "maxBettenStatusEinschaetzungLowCare"

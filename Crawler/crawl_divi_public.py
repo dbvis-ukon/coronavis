@@ -79,7 +79,8 @@ def store_data(data, behandlungsschwerpunkt):
         logger.error(f"Storage path {STORAGE_PATH} does not appear to be a valid directory")
         exit(1)
     current_update = datetime.now(timezone.utc)
-    filepath = STORAGE_PATH + current_update.strftime("divi-public-%Y-%m-%dT%H-%M-%S") + '-' + behandlungsschwerpunkt + '.json'
+    filepath = STORAGE_PATH + current_update.strftime(
+        "divi-public-%Y-%m-%dT%H-%M-%S") + '-' + behandlungsschwerpunkt + '.json'
 
     logger.info(f'Storing data on pvc: {filepath}')
     with open(filepath, 'w') as outfile:
@@ -92,12 +93,8 @@ def validate_data(data):
         jsonschema.validate(data, json.load(schema))
 
 
-
-
-
-
 # noinspection PyShadowingNames
-def insert_data(conn: connection, cur: cursor, data):
+def insert_data(conn: connection, cur: cursor, data, type: str):
     logger.info(f'Loading the data into the database')
 
     query_krankenhaus_standorte = f'INSERT INTO divi_krankenhaus_standorte ' \
@@ -154,10 +151,11 @@ def insert_data(conn: connection, cur: cursor, data):
              'statusEinschaetzungLowcare': d['maxBettenStatusEinschaetzungLowCare'],
              'statusEinschaetzungHighcare': d['maxBettenStatusEinschaetzungHighCare'],
              'statusEinschaetzungEcmo': d['maxBettenStatusEinschaetzungEcmo'],
-             'meldebereiche': list(map(lambda x: x['meldebereichBezeichnung'], d['meldebereiche'])),
-             'behandlungsschwerpunktL1': list(map(lambda x: x['behandlungsschwerpunktL1'], d['meldebereiche'])),
-             'behandlungsschwerpunktL2': list(map(lambda x: x['behandlungsschwerpunktL2'], d['meldebereiche'])),
-             'behandlungsschwerpunktL3': list(map(lambda x: x['behandlungsschwerpunktL3'], d['meldebereiche']))}
+             'meldebereiche': [],
+             'behandlungsschwerpunktL1': [type],
+             'behandlungsschwerpunktL2': [],
+             'behandlungsschwerpunktL3': []
+             }
         if d['krankenhausStandort']['id'] == '773017':
             print(e)
         entries_meldunden.append(e)
@@ -182,7 +180,7 @@ try:
         store_data(data, b)
         validate_data(data)
         # load the newest data into the DB to overwrite the latest data
-        insert_data(conn, cur, data)
+        insert_data(conn, cur, data, b)
 
     logger.info('Refreshing materialized view')
     retry_refresh(

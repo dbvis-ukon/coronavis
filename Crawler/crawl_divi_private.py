@@ -272,8 +272,8 @@ def insert_data(data):
              'statusEinschaetzungHighcare': d['maxBettenStatusEinschaetzungHighCare'],
              'statusEinschaetzungEcmo': d['maxBettenStatusEinschaetzungEcmo'],
              'behandlungsschwerpunktL1': list(map(lambda x: x['behandlungsschwerpunktL1'], d['meldebereiche'])),
-             'behandlungsschwerpunktL2': list(map(lambda x: x['behandlungsschwerpunktL2'], d['meldebereiche'])),
-             'behandlungsschwerpunktL3': list(map(lambda x: x['behandlungsschwerpunktL3'], d['meldebereiche'])),
+             'behandlungsschwerpunktL2': [],
+             'behandlungsschwerpunktL3': [],
              'faelleCovidAktuellNichtInvasivBeatmet': d['faelleCovidAktuellNichtInvasivBeatmet'],
              'faelleCovidAktuellEcmo': d['faelleCovidAktuellEcmo']}
         entries_meldunden.append(e)
