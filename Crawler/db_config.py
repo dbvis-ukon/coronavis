@@ -1,7 +1,9 @@
 import time
 from typing import Optional, Any
 
-import psycopg2
+# import psycopg2
+from psycopg2 import connect
+from psycopg2.extensions import cursor, connection, ISOLATION_LEVEL_SERIALIZABLE
 
 import logging
 import os
@@ -48,16 +50,16 @@ except KeyError as e:
     raise e
 
 
-def get_connection(application_name: Optional[str] = None) -> tuple[psycopg2.extensions.connection, psycopg2.extensions.cursor]:
-    conn: psycopg2.extensions.connection = psycopg2.connect(SQLALCHEMY_DATABASE_URI)
-    conn.set_session(autocommit=False, isolation_level=psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE)
-    cur: psycopg2.extensions.cursor = conn.cursor()
+def get_connection(application_name: Optional[str] = None) -> tuple[connection, cursor]:
+    conn: connection = connect(SQLALCHEMY_DATABASE_URI)
+    conn.set_session(autocommit=False, isolation_level=ISOLATION_LEVEL_SERIALIZABLE)
+    cur: cursor = conn.cursor()
     if application_name is not None:
         cur.execute(f"set application_name = {application_name}")
     return conn, cur
 
 
-def retry_refresh(conn: psycopg2.extensions.connection, cur: psycopg2.extensions.cursor, query: str, retry: int = 5):
+def retry_refresh(conn: connection, cur: cursor, query: str, retry: int = 5):
     num_try = 1
     while num_try <= retry:
         try:
@@ -81,8 +83,8 @@ def retry_refresh(conn: psycopg2.extensions.connection, cur: psycopg2.extensions
 
 
 def retry_execute_values(
-        conn: psycopg2.extensions.connection,
-        cur: psycopg2.extensions.cursor,
+        conn: connection,
+        cur: cursor,
         query: str,
         template: str,
         entries: Any,
