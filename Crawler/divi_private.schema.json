@@ -1,7 +1,9 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
     "$id": "http://example.com/example.json",
     "type": "object",
+    "default": {},
+    "title": "Root Schema",
     "required": [
         "rowCount",
         "data",
@@ -9,278 +11,828 @@
     ],
     "properties": {
         "rowCount": {
-            "$id": "#/properties/rowCount",
-            "type": "number"
+            "type": "integer",
+            "default": 0,
+            "title": "The rowCount Schema",
+            "examples": [
+                1210
+            ]
         },
         "data": {
-            "$id": "#/properties/data",
             "type": "array",
-            "additionalItems": false,
+            "default": [],
+            "title": "The data Schema",
             "items": {
-                "$id": "#/properties/data/items",
-                "anyOf": [
-                    {
-                        "$id": "#/properties/data/items/anyOf/0",
+                "type": "object",
+                "title": "A Schema",
+                "required": [
+                    "krankenhausStandort",
+                    "letzteMeldezeitpunkt",
+                    "oldestMeldezeitpunkt",
+                    "meldebereiche",
+                    "faelleCovidGenesen",
+                    "faelleCovidVerstorben",
+                    "faelleCovidAktuell",
+                    "faelleCovidAktuellBeatmet",
+                    "faelleCovidAktuellNichtInvasivBeatmet",
+                    "faelleCovidAktuellEcmo",
+                    "intensivBettenBelegt",
+                    "intensivBettenFrei",
+                    "intensivBettenGesamt",
+                    "freieIvKapazitaet",
+                    "freieEcmoKapazitaet",
+                    "covidKapazitaetFrei",
+                    "covidKapazitaetFreiIv",
+                    "covidKapazitaetFreiEcmo",
+                    "patientenIvBeatmet",
+                    "patientenEcmoBeatmet",
+                    "faellePimsAktuell",
+                    "kapazitaetFreiIsolationspflichtig",
+                    "standortAggregates",
+                    "intensivBettenNotfall7d",
+                    "maxBettenStatusEinschaetzungEcmo",
+                    "maxBettenStatusEinschaetzungHighCare",
+                    "maxBettenStatusEinschaetzungLowCare",
+                    "maxBettenStatusEinschaetzungDialyse",
+                    "bestBetriebssituation"
+                ],
+                "properties": {
+                    "krankenhausStandort": {
                         "type": "object",
+                        "title": "The krankenhausStandort Schema",
                         "required": [
-                            "krankenhausStandort",
-                            "letzteMeldezeitpunkt",
-                            "oldestMeldezeitpunkt",
-                            "meldebereiche",
-                            "faelleCovidGenesen",
-                            "faelleCovidVerstorben",
-                            "faelleCovidAktuell",
-                            "faelleCovidAktuellBeatmet",
-                            "faelleCovidAktuellNichtInvasivBeatmet",
-                            "faelleCovidAktuellEcmo",
-                            "intensivBettenBelegt",
-                            "intensivBettenFrei",
-                            "intensivBettenGesamt",
-                            "freieIvKapazitaet",
-                            "freieEcmoKapazitaet",
-                            "covidKapazitaetFrei",
-                            "covidKapazitaetFreiIv",
-                            "covidKapazitaetFreiEcmo",
-                            "patientenIvBeatmet",
-                            "patientenEcmoBeatmet",
-                            "standortAggregates",
-                            "intensivBettenNotfall7d",
-                            "maxBettenStatusEinschaetzungEcmo",
-                            "maxBettenStatusEinschaetzungHighCare",
-                            "maxBettenStatusEinschaetzungLowCare",
-                            "maxBettenStatusEinschaetzungDialyse",
-                            "bestBetriebssituation"
+                            "id",
+                            "bezeichnung",
+                            "strasse",
+                            "hausnummer",
+                            "plz",
+                            "ort",
+                            "bundesland",
+                            "ikNummer",
+                            "position",
+                            "gemeindeschluessel"
                         ],
                         "properties": {
-                            "krankenhausStandort": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort",
+                            "id": {
+                                "type": "string",
+                                "title": "The id Schema",
+                                "examples": [
+                                    "771236",
+                                    "772954",
+                                    "771235"
+                                ]
+                            },
+                            "bezeichnung": {
+                                "type": "string",
+                                "title": "The bezeichnung Schema",
+                                "examples": [
+                                    "Hufeland Klinikum GmbH, Bad Langensalza",
+                                    "MEDIAN Klinik Bad Tennstedt, Hauptstandort",
+                                    "Hufeland Klinikum GmbH, Mühlhausen"
+                                ]
+                            },
+                            "strasse": {
+                                "type": "string",
+                                "title": "The strasse Schema",
+                                "examples": [
+                                    "Rudolf-Weiß-Straße",
+                                    "Badeweg",
+                                    "Langensalzaer Landstraße"
+                                ]
+                            },
+                            "hausnummer": {
+                                "type": "string",
+                                "title": "The hausnummer Schema",
+                                "examples": [
+                                    "1-5",
+                                    "2",
+                                    "1"
+                                ]
+                            },
+                            "plz": {
+                                "type": "string",
+                                "title": "The plz Schema",
+                                "examples": [
+                                    "99947",
+                                    "99955",
+                                    "99974"
+                                ]
+                            },
+                            "ort": {
+                                "type": "string",
+                                "title": "The ort Schema",
+                                "examples": [
+                                    "Bad Langensalza",
+                                    "Bad Tennstedt",
+                                    "Mühlhausen/Thüringen"
+                                ]
+                            },
+                            "bundesland": {
+                                "type": "string",
+                                "title": "The bundesland Schema",
+                                "examples": [
+                                    "THUERINGEN"
+                                ]
+                            },
+                            "ikNummer": {
+                                "type": "string",
+                                "title": "The ikNummer Schema",
+                                "examples": [
+                                    "261600521",
+                                    "261600996"
+                                ]
+                            },
+                            "position": {
                                 "type": "object",
+                                "title": "The position Schema",
                                 "required": [
-                                    "id",
-                                    "bezeichnung",
-                                    "strasse",
-                                    "hausnummer",
-                                    "plz",
-                                    "ort",
-                                    "bundesland",
-                                    "ikNummer",
-                                    "position",
-                                    "gemeindeschluessel"
+                                    "latitude",
+                                    "longitude"
                                 ],
                                 "properties": {
-                                    "id": {
-                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/id",
-                                        "type": "string"
+                                    "latitude": {
+                                        "type": "number",
+                                        "title": "The latitude Schema",
+                                        "examples": [
+                                            51.105295370836,
+                                            51.155795604281,
+                                            51.201241841669
+                                        ]
                                     },
-                                    "bezeichnung": {
-                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/bezeichnung",
-                                        "type": "string"
-                                    },
-                                    "strasse": {
-                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/strasse",
-                                        "type": "string"
-                                    },
-                                    "hausnummer": {
-                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/hausnummer",
-                                        "type": "string"
-                                    },
-                                    "plz": {
-                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/plz",
-                                        "type": "string"
-                                    },
-                                    "ort": {
-                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/ort",
-                                        "type": "string"
-                                    },
-                                    "bundesland": {
-                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/bundesland",
-                                        "type": "string"
-                                    },
-                                    "ikNummer": {
-                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/ikNummer",
-                                        "type": "string"
-                                    },
-                                    "position": {
-                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/position",
-                                        "type": "object",
-                                        "required": [
-                                            "latitude",
-                                            "longitude"
-                                        ],
-                                        "properties": {
-                                            "latitude": {
-                                                "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/position/properties/latitude",
-                                                "type": "number"
-                                            },
-                                            "longitude": {
-                                                "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/position/properties/longitude",
-                                                "type": "number"
-                                            }
-                                        }
-                                    },
-                                    "gemeindeschluessel": {
-                                        "$id": "#/properties/data/items/anyOf/0/properties/krankenhausStandort/properties/gemeindeschluessel",
-                                        "type": "string"
+                                    "longitude": {
+                                        "type": "number",
+                                        "title": "The longitude Schema",
+                                        "examples": [
+                                            10.649081647421,
+                                            10.841630597133,
+                                            10.467689216162
+                                        ]
                                     }
-                                }
+                                },
+                                "examples": [{
+                                    "latitude": 51.105295370836,
+                                    "longitude": 10.649081647421
+                                },
+                                {
+                                    "latitude": 51.155795604281,
+                                    "longitude": 10.841630597133
+                                },
+                                {
+                                    "latitude": 51.201241841669,
+                                    "longitude": 10.467689216162
+                                }]
                             },
-                            "letzteMeldezeitpunkt": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/letzteMeldezeitpunkt",
-                                "type": "string"
+                            "gemeindeschluessel": {
+                                "type": "string",
+                                "title": "The gemeindeschluessel Schema",
+                                "examples": [
+                                    "16064003",
+                                    "16064004",
+                                    "16064046"
+                                ]
+                            }
+                        },
+                        "examples": [{
+                            "id": "771236",
+                            "bezeichnung": "Hufeland Klinikum GmbH, Bad Langensalza",
+                            "strasse": "Rudolf-Weiß-Straße",
+                            "hausnummer": "1-5",
+                            "plz": "99947",
+                            "ort": "Bad Langensalza",
+                            "bundesland": "THUERINGEN",
+                            "ikNummer": "261600521",
+                            "position": {
+                                "latitude": 51.105295370836,
+                                "longitude": 10.649081647421
                             },
-                            "oldestMeldezeitpunkt": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/oldestMeldezeitpunkt",
-                                "type": "string"
+                            "gemeindeschluessel": "16064003"
+                        },
+                        {
+                            "id": "772954",
+                            "bezeichnung": "MEDIAN Klinik Bad Tennstedt, Hauptstandort",
+                            "strasse": "Badeweg",
+                            "hausnummer": "2",
+                            "plz": "99955",
+                            "ort": "Bad Tennstedt",
+                            "bundesland": "THUERINGEN",
+                            "ikNummer": "261600996",
+                            "position": {
+                                "latitude": 51.155795604281,
+                                "longitude": 10.841630597133
                             },
-                            "meldebereiche": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche",
-                                "type": "array",
-                                "additionalItems": false,
-                                "items": {
-                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items",
-                                    "anyOf": [
-                                        {
-                                            "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0",
-                                            "type": "object",
-                                            "required": [
-                                                "meldebereichId",
-                                                "ardsNetzwerkMitglied",
-                                                "meldebereichBezeichnung",
-                                                "behandlungsschwerpunktL1",
-                                                "behandlungsschwerpunktL2",
-                                                "behandlungsschwerpunktL3"
-                                            ],
-                                            "properties": {
-                                                "meldebereichId": {
-                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/meldebereichId",
-                                                    "type": "string"
-                                                },
-                                                "ardsNetzwerkMitglied": {
-                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/ardsNetzwerkMitglied",
-                                                    "type": "string"
-                                                },
-                                                "meldebereichBezeichnung": {
-                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/meldebereichBezeichnung",
-                                                    "type": "string"
-                                                },
-                                                "behandlungsschwerpunktL1": {
-                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/behandlungsschwerpunktL1",
-                                                    "type": ["string", "null"]
-                                                },
-                                                "behandlungsschwerpunktL2": {
-                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/behandlungsschwerpunktL2",
-                                                    "type": "null"
-                                                },
-                                                "behandlungsschwerpunktL3": {
-                                                    "$id": "#/properties/data/items/anyOf/0/properties/meldebereiche/items/anyOf/0/properties/behandlungsschwerpunktL3",
-                                                    "type": "null"
-                                                }
-                                            }
-                                        }
+                            "gemeindeschluessel": "16064004"
+                        },
+                        {
+                            "id": "771235",
+                            "bezeichnung": "Hufeland Klinikum GmbH, Mühlhausen",
+                            "strasse": "Langensalzaer Landstraße",
+                            "hausnummer": "1",
+                            "plz": "99974",
+                            "ort": "Mühlhausen/Thüringen",
+                            "bundesland": "THUERINGEN",
+                            "ikNummer": "261600521",
+                            "position": {
+                                "latitude": 51.201241841669,
+                                "longitude": 10.467689216162
+                            },
+                            "gemeindeschluessel": "16064046"
+                        }]
+                    },
+                    "letzteMeldezeitpunkt": {
+                        "type": "string",
+                        "title": "The letzteMeldezeitpunkt Schema",
+                        "examples": [
+                            "2023-01-18T06:14:40Z",
+                            "2023-01-18T06:40:03Z",
+                            "2023-01-18T06:14:10Z"
+                        ]
+                    },
+                    "oldestMeldezeitpunkt": {
+                        "type": "string",
+                        "title": "The oldestMeldezeitpunkt Schema",
+                        "examples": [
+                            "2023-01-18T06:14:40Z",
+                            "2023-01-18T06:40:03Z",
+                            "2023-01-18T06:14:10Z"
+                        ]
+                    },
+                    "meldebereiche": {
+                        "type": "array",
+                        "title": "The meldebereiche Schema",
+                        "items": {
+                            "type": "object",
+                            "title": "A Schema",
+                            "required": [
+                                "meldebereichId",
+                                "meldebereichBezeichnung",
+                                "behandlungsschwerpunktL1"
+                            ],
+                            "properties": {
+                                "meldebereichId": {
+                                    "type": "string",
+                                    "title": "The meldebereichId Schema",
+                                    "examples": [
+                                        "a5a2490c-b1f8-4826-af4e-82fa15c89545",
+                                        "5e4a804a-800a-43a3-a977-7ebf49f54685",
+                                        "e2e3b72e-466e-485f-a29e-ea7a2e668829"
+                                    ]
+                                },
+                                "meldebereichBezeichnung": {
+                                    "type": "string",
+                                    "title": "The meldebereichBezeichnung Schema",
+                                    "examples": [
+                                        "Hufeland Klinikum GmbH Standort Bad Langensalza,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
+                                        "MEDIAN Klinik Bad Tennstedt",
+                                        "Hufeland Klinikum GmbH Standort Mühlhausen,Klinik für Anästhesie und Intensivmedizin,Intensivstation"
+                                    ]
+                                },
+                                "behandlungsschwerpunktL1": {
+                                    "type": ["string", "null"],
+                                    "title": "The behandlungsschwerpunktL1 Schema",
+                                    "examples": [
+                                        "ERWACHSENE"
                                     ]
                                 }
                             },
-                            "faelleCovidGenesen": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidGenesen",
-                                "type": "number"
+                            "examples": [{
+                                "meldebereichId": "a5a2490c-b1f8-4826-af4e-82fa15c89545",
+                                "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Bad Langensalza,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
+                                "behandlungsschwerpunktL1": "ERWACHSENE"
                             },
-                            "faelleCovidVerstorben": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidVerstorben",
-                                "type": "number"
+                            {
+                                "meldebereichId": "5e4a804a-800a-43a3-a977-7ebf49f54685",
+                                "meldebereichBezeichnung": "MEDIAN Klinik Bad Tennstedt",
+                                "behandlungsschwerpunktL1": "ERWACHSENE"
                             },
-                            "faelleCovidAktuell": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidAktuell",
-                                "type": ["number", "null"]
-                            },
-                            "faelleCovidAktuellBeatmet": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidAktuellBeatmet",
-                                "type": ["number", "null"]
-                            },
-                            "faelleCovidAktuellNichtInvasivBeatmet": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidAktuellNichtInvasivBeatmet",
-                                "type": ["number", "null"]
-                            },
-                            "faelleCovidAktuellEcmo": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/faelleCovidAktuellEcmo",
-                                "type": ["number", "null"]
-                            },
-                            "intensivBettenBelegt": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/intensivBettenBelegt",
-                                "type": "number"
-                            },
-                            "intensivBettenFrei": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/intensivBettenFrei",
-                                "type": "number"
-                            },
-                            "intensivBettenGesamt": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/intensivBettenGesamt",
-                                "type": "number"
-                            },
-                            "freieIvKapazitaet": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/freieIvKapazitaet",
-                                "type": ["number", "null"]
-                            },
-                            "freieEcmoKapazitaet": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/freieEcmoKapazitaet",
-                                "type": ["number", "null"]
-                            },
-                            "covidKapazitaetFrei": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/covidKapazitaetFrei",
-                                "type": ["number", "null"]
-                            },
-                            "covidKapazitaetFreiIv": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/covidKapazitaetFreiIv",
-                                "type": ["number", "null"]
-                            },
-                            "covidKapazitaetFreiEcmo": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/covidKapazitaetFreiEcmo",
-                                "type": ["number", "null"]
-                            },
-                            "patientenIvBeatmet": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/patientenIvBeatmet",
-                                "type": ["number", "null"]
-                            },
-                            "patientenEcmoBeatmet": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/patientenEcmoBeatmet",
-                                "type": ["number", "null"]
-                            },
-                            "standortAggregates": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/standortAggregates",
-                                "type": "object",
-                                "required": []
-                            },
-                            "intensivBettenNotfall7d": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/intensivBettenNotfall7d",
-                                "type": "number"
-                            },
-                            "maxBettenStatusEinschaetzungEcmo": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/maxBettenStatusEinschaetzungEcmo",
-                                "type": "string"
-                            },
-                            "maxBettenStatusEinschaetzungHighCare": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/maxBettenStatusEinschaetzungHighCare",
-                                "type": "string"
-                            },
-                            "maxBettenStatusEinschaetzungLowCare": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/maxBettenStatusEinschaetzungLowCare",
-                                "type": "string"
-                            },
-                            "maxBettenStatusEinschaetzungDialyse": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/maxBettenStatusEinschaetzungDialyse",
-                                "type": "string"
-                            },
-                            "bestBetriebssituation": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/bestBetriebssituation",
-                                "type": "string"
-                            }
-                        }
+                            {
+                                "meldebereichId": "e2e3b72e-466e-485f-a29e-ea7a2e668829",
+                                "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Mühlhausen,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
+                                "behandlungsschwerpunktL1": "ERWACHSENE"
+                            }]
+                        },
+                        "examples": [
+                            [{
+                                "meldebereichId": "a5a2490c-b1f8-4826-af4e-82fa15c89545",
+                                "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Bad Langensalza,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
+                                "behandlungsschwerpunktL1": "ERWACHSENE"
+                            }],
+                            [{
+                                "meldebereichId": "5e4a804a-800a-43a3-a977-7ebf49f54685",
+                                "meldebereichBezeichnung": "MEDIAN Klinik Bad Tennstedt",
+                                "behandlungsschwerpunktL1": "ERWACHSENE"
+                            }],
+                            [{
+                                "meldebereichId": "e2e3b72e-466e-485f-a29e-ea7a2e668829",
+                                "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Mühlhausen,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
+                                "behandlungsschwerpunktL1": "ERWACHSENE"
+                            }]
+                        ]
+                    },
+                    "faelleCovidGenesen": {
+                        "type": "integer",
+                        "title": "The faelleCovidGenesen Schema",
+                        "examples": [
+                            1294,
+                            1,
+                            1104
+                        ]
+                    },
+                    "faelleCovidVerstorben": {
+                        "type": "integer",
+                        "title": "The faelleCovidVerstorben Schema",
+                        "examples": [
+                            183,
+                            2,
+                            124
+                        ]
+                    },
+                    "faelleCovidAktuell": {
+                        "type": ["integer", "null"],
+                        "title": "The faelleCovidAktuell Schema",
+                        "examples": [
+                            0
+                        ]
+                    },
+                    "faelleCovidAktuellBeatmet": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "title": "The faelleCovidAktuellBeatmet Schema",
+                        "examples": [
+                            0,
+                            null
+                        ]
+                    },
+                    "faelleCovidAktuellNichtInvasivBeatmet": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "title": "The faelleCovidAktuellNichtInvasivBeatmet Schema",
+                        "examples": [
+                            0,
+                            null
+                        ]
+                    },
+                    "faelleCovidAktuellEcmo": {
+                        "type": ["number", "null"],
+                        "title": "The faelleCovidAktuellEcmo Schema",
+                        "examples": [
+                            null
+                        ]
+                    },
+                    "intensivBettenBelegt": {
+                        "type": "integer",
+                        "title": "The intensivBettenBelegt Schema",
+                        "examples": [
+                            4,
+                            0,
+                            9
+                        ]
+                    },
+                    "intensivBettenFrei": {
+                        "type": "integer",
+                        "title": "The intensivBettenFrei Schema",
+                        "examples": [
+                            1,
+                            0
+                        ]
+                    },
+                    "intensivBettenGesamt": {
+                        "type": "integer",
+                        "title": "The intensivBettenGesamt Schema",
+                        "examples": [
+                            5,
+                            0,
+                            10
+                        ]
+                    },
+                    "freieIvKapazitaet": {
+                        "type": ["integer", "null"],
+                        "title": "The freieIvKapazitaet Schema",
+                        "examples": [
+                            1,
+                            0
+                        ]
+                    },
+                    "freieEcmoKapazitaet": {
+                        "type": ["integer", "null"],
+                        "title": "The freieEcmoKapazitaet Schema",
+                        "examples": [
+                            null
+                        ]
+                    },
+                    "covidKapazitaetFrei": {
+                        "type": ["integer", "null"],
+                        "title": "The covidKapazitaetFrei Schema",
+                        "examples": [
+                            1,
+                            0
+                        ]
+                    },
+                    "covidKapazitaetFreiIv": {
+                        "type": ["integer", "null"],
+                        "title": "The covidKapazitaetFreiIv Schema",
+                        "examples": [
+                            1,
+                            0
+                        ]
+                    },
+                    "covidKapazitaetFreiEcmo": {
+                        "type": ["integer", "null"],
+                        "title": "The covidKapazitaetFreiEcmo Schema",
+                        "examples": [
+                            null
+                        ]
+                    },
+                    "patientenIvBeatmet": {
+                        "type": ["integer", "null"],
+                        "title": "The patientenIvBeatmet Schema",
+                        "examples": [
+                            0,
+                            5
+                        ]
+                    },
+                    "patientenEcmoBeatmet": {
+                        "type": ["integer", "null"],
+                        "title": "The patientenEcmoBeatmet Schema",
+                        "examples": [
+                            null
+                        ]
+                    },
+                    "faellePimsAktuell": {
+                        "type": "null",
+                        "title": "The faellePimsAktuell Schema",
+                        "examples": [
+                            null
+                        ]
+                    },
+                    "kapazitaetFreiIsolationspflichtig": {
+                        "type": "null",
+                        "title": "The kapazitaetFreiIsolationspflichtig Schema",
+                        "examples": [
+                            null
+                        ]
+                    },
+                    "standortAggregates": {
+                        "type": "object",
+                        "title": "The standortAggregates Schema",
+                        "required": [],
+                        "properties": {},
+                        "examples": [{},
+                        {},
+                        {}]
+                    },
+                    "intensivBettenNotfall7d": {
+                        "type": "integer",
+                        "title": "The intensivBettenNotfall7d Schema",
+                        "examples": [
+                            6,
+                            0
+                        ]
+                    },
+                    "maxBettenStatusEinschaetzungEcmo": {
+                        "type": "string",
+                        "title": "The maxBettenStatusEinschaetzungEcmo Schema",
+                        "examples": [
+                            "KEINE_ANGABE"
+                        ]
+                    },
+                    "maxBettenStatusEinschaetzungHighCare": {
+                        "type": "string",
+                        "title": "The maxBettenStatusEinschaetzungHighCare Schema",
+                        "examples": [
+                            "NICHT_VERFUEGBAR",
+                            "KEINE_ANGABE"
+                        ]
+                    },
+                    "maxBettenStatusEinschaetzungLowCare": {
+                        "type": "string",
+                        "title": "The maxBettenStatusEinschaetzungLowCare Schema",
+                        "examples": [
+                            "KEINE_ANGABE"
+                        ]
+                    },
+                    "maxBettenStatusEinschaetzungDialyse": {
+                        "type": "string",
+                        "title": "The maxBettenStatusEinschaetzungDialyse Schema",
+                        "examples": [
+                            "NICHT_VERFUEGBAR",
+                            "KEINE_ANGABE"
+                        ]
+                    },
+                    "bestBetriebssituation": {
+                        "type": "string",
+                        "title": "The bestBetriebssituation Schema",
+                        "examples": [
+                            "KEINE_ANGABE",
+                            "EINGESCHRAENKT"
+                        ]
                     }
-                ]
-            }
+                },
+                "examples": [{
+                    "krankenhausStandort": {
+                        "id": "771236",
+                        "bezeichnung": "Hufeland Klinikum GmbH, Bad Langensalza",
+                        "strasse": "Rudolf-Weiß-Straße",
+                        "hausnummer": "1-5",
+                        "plz": "99947",
+                        "ort": "Bad Langensalza",
+                        "bundesland": "THUERINGEN",
+                        "ikNummer": "261600521",
+                        "position": {
+                            "latitude": 51.105295370836,
+                            "longitude": 10.649081647421
+                        },
+                        "gemeindeschluessel": "16064003"
+                    },
+                    "letzteMeldezeitpunkt": "2023-01-18T06:14:40Z",
+                    "oldestMeldezeitpunkt": "2023-01-18T06:14:40Z",
+                    "meldebereiche": [{
+                        "meldebereichId": "a5a2490c-b1f8-4826-af4e-82fa15c89545",
+                        "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Bad Langensalza,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
+                        "behandlungsschwerpunktL1": "ERWACHSENE"
+                    }],
+                    "faelleCovidGenesen": 1294,
+                    "faelleCovidVerstorben": 183,
+                    "faelleCovidAktuell": 0,
+                    "faelleCovidAktuellBeatmet": 0,
+                    "faelleCovidAktuellNichtInvasivBeatmet": 0,
+                    "faelleCovidAktuellEcmo": null,
+                    "intensivBettenBelegt": 4,
+                    "intensivBettenFrei": 1,
+                    "intensivBettenGesamt": 5,
+                    "freieIvKapazitaet": 1,
+                    "freieEcmoKapazitaet": null,
+                    "covidKapazitaetFrei": 1,
+                    "covidKapazitaetFreiIv": 1,
+                    "covidKapazitaetFreiEcmo": null,
+                    "patientenIvBeatmet": 0,
+                    "patientenEcmoBeatmet": null,
+                    "faellePimsAktuell": null,
+                    "kapazitaetFreiIsolationspflichtig": null,
+                    "standortAggregates": {},
+                    "intensivBettenNotfall7d": 6,
+                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
+                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
+                    "bestBetriebssituation": "KEINE_ANGABE"
+                },
+                {
+                    "krankenhausStandort": {
+                        "id": "772954",
+                        "bezeichnung": "MEDIAN Klinik Bad Tennstedt, Hauptstandort",
+                        "strasse": "Badeweg",
+                        "hausnummer": "2",
+                        "plz": "99955",
+                        "ort": "Bad Tennstedt",
+                        "bundesland": "THUERINGEN",
+                        "ikNummer": "261600996",
+                        "position": {
+                            "latitude": 51.155795604281,
+                            "longitude": 10.841630597133
+                        },
+                        "gemeindeschluessel": "16064004"
+                    },
+                    "letzteMeldezeitpunkt": "2023-01-18T06:40:03Z",
+                    "oldestMeldezeitpunkt": "2023-01-18T06:40:03Z",
+                    "meldebereiche": [{
+                        "meldebereichId": "5e4a804a-800a-43a3-a977-7ebf49f54685",
+                        "meldebereichBezeichnung": "MEDIAN Klinik Bad Tennstedt",
+                        "behandlungsschwerpunktL1": "ERWACHSENE"
+                    }],
+                    "faelleCovidGenesen": 1,
+                    "faelleCovidVerstorben": 2,
+                    "faelleCovidAktuell": 0,
+                    "faelleCovidAktuellBeatmet": 0,
+                    "faelleCovidAktuellNichtInvasivBeatmet": 0,
+                    "faelleCovidAktuellEcmo": null,
+                    "intensivBettenBelegt": 0,
+                    "intensivBettenFrei": 0,
+                    "intensivBettenGesamt": 0,
+                    "freieIvKapazitaet": 0,
+                    "freieEcmoKapazitaet": null,
+                    "covidKapazitaetFrei": 0,
+                    "covidKapazitaetFreiIv": 0,
+                    "covidKapazitaetFreiEcmo": null,
+                    "patientenIvBeatmet": 0,
+                    "patientenEcmoBeatmet": null,
+                    "faellePimsAktuell": null,
+                    "kapazitaetFreiIsolationspflichtig": null,
+                    "standortAggregates": {},
+                    "intensivBettenNotfall7d": 0,
+                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungHighCare": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungDialyse": "KEINE_ANGABE",
+                    "bestBetriebssituation": "KEINE_ANGABE"
+                },
+                {
+                    "krankenhausStandort": {
+                        "id": "771235",
+                        "bezeichnung": "Hufeland Klinikum GmbH, Mühlhausen",
+                        "strasse": "Langensalzaer Landstraße",
+                        "hausnummer": "1",
+                        "plz": "99974",
+                        "ort": "Mühlhausen/Thüringen",
+                        "bundesland": "THUERINGEN",
+                        "ikNummer": "261600521",
+                        "position": {
+                            "latitude": 51.201241841669,
+                            "longitude": 10.467689216162
+                        },
+                        "gemeindeschluessel": "16064046"
+                    },
+                    "letzteMeldezeitpunkt": "2023-01-18T06:14:10Z",
+                    "oldestMeldezeitpunkt": "2023-01-18T06:14:10Z",
+                    "meldebereiche": [{
+                        "meldebereichId": "e2e3b72e-466e-485f-a29e-ea7a2e668829",
+                        "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Mühlhausen,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
+                        "behandlungsschwerpunktL1": "ERWACHSENE"
+                    }],
+                    "faelleCovidGenesen": 1104,
+                    "faelleCovidVerstorben": 124,
+                    "faelleCovidAktuell": 0,
+                    "faelleCovidAktuellBeatmet": null,
+                    "faelleCovidAktuellNichtInvasivBeatmet": null,
+                    "faelleCovidAktuellEcmo": null,
+                    "intensivBettenBelegt": 9,
+                    "intensivBettenFrei": 1,
+                    "intensivBettenGesamt": 10,
+                    "freieIvKapazitaet": 1,
+                    "freieEcmoKapazitaet": null,
+                    "covidKapazitaetFrei": 1,
+                    "covidKapazitaetFreiIv": 1,
+                    "covidKapazitaetFreiEcmo": null,
+                    "patientenIvBeatmet": 5,
+                    "patientenEcmoBeatmet": null,
+                    "faellePimsAktuell": null,
+                    "kapazitaetFreiIsolationspflichtig": null,
+                    "standortAggregates": {},
+                    "intensivBettenNotfall7d": 6,
+                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
+                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
+                    "bestBetriebssituation": "EINGESCHRAENKT"
+                }]
+            },
+            "examples": [
+                [{
+                    "krankenhausStandort": {
+                        "id": "771236",
+                        "bezeichnung": "Hufeland Klinikum GmbH, Bad Langensalza",
+                        "strasse": "Rudolf-Weiß-Straße",
+                        "hausnummer": "1-5",
+                        "plz": "99947",
+                        "ort": "Bad Langensalza",
+                        "bundesland": "THUERINGEN",
+                        "ikNummer": "261600521",
+                        "position": {
+                            "latitude": 51.105295370836,
+                            "longitude": 10.649081647421
+                        },
+                        "gemeindeschluessel": "16064003"
+                    },
+                    "letzteMeldezeitpunkt": "2023-01-18T06:14:40Z",
+                    "oldestMeldezeitpunkt": "2023-01-18T06:14:40Z",
+                    "meldebereiche": [{
+                        "meldebereichId": "a5a2490c-b1f8-4826-af4e-82fa15c89545",
+                        "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Bad Langensalza,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
+                        "behandlungsschwerpunktL1": "ERWACHSENE"
+                    }],
+                    "faelleCovidGenesen": 1294,
+                    "faelleCovidVerstorben": 183,
+                    "faelleCovidAktuell": 0,
+                    "faelleCovidAktuellBeatmet": 0,
+                    "faelleCovidAktuellNichtInvasivBeatmet": 0,
+                    "faelleCovidAktuellEcmo": null,
+                    "intensivBettenBelegt": 4,
+                    "intensivBettenFrei": 1,
+                    "intensivBettenGesamt": 5,
+                    "freieIvKapazitaet": 1,
+                    "freieEcmoKapazitaet": null,
+                    "covidKapazitaetFrei": 1,
+                    "covidKapazitaetFreiIv": 1,
+                    "covidKapazitaetFreiEcmo": null,
+                    "patientenIvBeatmet": 0,
+                    "patientenEcmoBeatmet": null,
+                    "faellePimsAktuell": null,
+                    "kapazitaetFreiIsolationspflichtig": null,
+                    "standortAggregates": {},
+                    "intensivBettenNotfall7d": 6,
+                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
+                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
+                    "bestBetriebssituation": "KEINE_ANGABE"
+                },
+                {
+                    "krankenhausStandort": {
+                        "id": "772954",
+                        "bezeichnung": "MEDIAN Klinik Bad Tennstedt, Hauptstandort",
+                        "strasse": "Badeweg",
+                        "hausnummer": "2",
+                        "plz": "99955",
+                        "ort": "Bad Tennstedt",
+                        "bundesland": "THUERINGEN",
+                        "ikNummer": "261600996",
+                        "position": {
+                            "latitude": 51.155795604281,
+                            "longitude": 10.841630597133
+                        },
+                        "gemeindeschluessel": "16064004"
+                    },
+                    "letzteMeldezeitpunkt": "2023-01-18T06:40:03Z",
+                    "oldestMeldezeitpunkt": "2023-01-18T06:40:03Z",
+                    "meldebereiche": [{
+                        "meldebereichId": "5e4a804a-800a-43a3-a977-7ebf49f54685",
+                        "meldebereichBezeichnung": "MEDIAN Klinik Bad Tennstedt",
+                        "behandlungsschwerpunktL1": "ERWACHSENE"
+                    }],
+                    "faelleCovidGenesen": 1,
+                    "faelleCovidVerstorben": 2,
+                    "faelleCovidAktuell": 0,
+                    "faelleCovidAktuellBeatmet": 0,
+                    "faelleCovidAktuellNichtInvasivBeatmet": 0,
+                    "faelleCovidAktuellEcmo": null,
+                    "intensivBettenBelegt": 0,
+                    "intensivBettenFrei": 0,
+                    "intensivBettenGesamt": 0,
+                    "freieIvKapazitaet": 0,
+                    "freieEcmoKapazitaet": null,
+                    "covidKapazitaetFrei": 0,
+                    "covidKapazitaetFreiIv": 0,
+                    "covidKapazitaetFreiEcmo": null,
+                    "patientenIvBeatmet": 0,
+                    "patientenEcmoBeatmet": null,
+                    "faellePimsAktuell": null,
+                    "kapazitaetFreiIsolationspflichtig": null,
+                    "standortAggregates": {},
+                    "intensivBettenNotfall7d": 0,
+                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungHighCare": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungDialyse": "KEINE_ANGABE",
+                    "bestBetriebssituation": "KEINE_ANGABE"
+                },
+                {
+                    "krankenhausStandort": {
+                        "id": "771235",
+                        "bezeichnung": "Hufeland Klinikum GmbH, Mühlhausen",
+                        "strasse": "Langensalzaer Landstraße",
+                        "hausnummer": "1",
+                        "plz": "99974",
+                        "ort": "Mühlhausen/Thüringen",
+                        "bundesland": "THUERINGEN",
+                        "ikNummer": "261600521",
+                        "position": {
+                            "latitude": 51.201241841669,
+                            "longitude": 10.467689216162
+                        },
+                        "gemeindeschluessel": "16064046"
+                    },
+                    "letzteMeldezeitpunkt": "2023-01-18T06:14:10Z",
+                    "oldestMeldezeitpunkt": "2023-01-18T06:14:10Z",
+                    "meldebereiche": [{
+                        "meldebereichId": "e2e3b72e-466e-485f-a29e-ea7a2e668829",
+                        "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Mühlhausen,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
+                        "behandlungsschwerpunktL1": "ERWACHSENE"
+                    }],
+                    "faelleCovidGenesen": 1104,
+                    "faelleCovidVerstorben": 124,
+                    "faelleCovidAktuell": 0,
+                    "faelleCovidAktuellBeatmet": null,
+                    "faelleCovidAktuellNichtInvasivBeatmet": null,
+                    "faelleCovidAktuellEcmo": null,
+                    "intensivBettenBelegt": 9,
+                    "intensivBettenFrei": 1,
+                    "intensivBettenGesamt": 10,
+                    "freieIvKapazitaet": 1,
+                    "freieEcmoKapazitaet": null,
+                    "covidKapazitaetFrei": 1,
+                    "covidKapazitaetFreiIv": 1,
+                    "covidKapazitaetFreiEcmo": null,
+                    "patientenIvBeatmet": 5,
+                    "patientenEcmoBeatmet": null,
+                    "faellePimsAktuell": null,
+                    "kapazitaetFreiIsolationspflichtig": null,
+                    "standortAggregates": {},
+                    "intensivBettenNotfall7d": 6,
+                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
+                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
+                    "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
+                    "bestBetriebssituation": "EINGESCHRAENKT"
+                }]
+            ]
         },
         "sum": {
-            "$id": "#/properties/sum",
             "type": "object",
+            "default": {},
+            "title": "The sum Schema",
             "required": [
                 "letzteMeldezeitpunkt",
                 "oldestMeldezeitpunkt",
@@ -300,6 +852,8 @@
                 "covidKapazitaetFreiEcmo",
                 "patientenIvBeatmet",
                 "patientenEcmoBeatmet",
+                "faellePimsAktuell",
+                "kapazitaetFreiIsolationspflichtig",
                 "intensivBettenNotfall7d",
                 "maxBettenStatusEinschaetzungEcmo",
                 "maxBettenStatusEinschaetzungHighCare",
@@ -309,102 +863,420 @@
             ],
             "properties": {
                 "letzteMeldezeitpunkt": {
-                    "$id": "#/properties/sum/properties/letzteMeldezeitpunkt",
-                    "type": "string"
+                    "type": "string",
+                    "default": "",
+                    "title": "The letzteMeldezeitpunkt Schema",
+                    "examples": [
+                        "2023-01-18T19:12:12Z"
+                    ]
                 },
                 "oldestMeldezeitpunkt": {
-                    "$id": "#/properties/sum/properties/oldestMeldezeitpunkt",
-                    "type": "string"
+                    "type": "string",
+                    "default": "",
+                    "title": "The oldestMeldezeitpunkt Schema",
+                    "examples": [
+                        "2023-01-12T05:48:42Z"
+                    ]
                 },
                 "faelleCovidGenesen": {
-                    "$id": "#/properties/sum/properties/faelleCovidGenesen",
-                    "type": "number"
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The faelleCovidGenesen Schema",
+                    "examples": [
+                        174087
+                    ]
                 },
                 "faelleCovidVerstorben": {
-                    "$id": "#/properties/sum/properties/faelleCovidVerstorben",
-                    "type": "number"
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The faelleCovidVerstorben Schema",
+                    "examples": [
+                        56496
+                    ]
                 },
                 "faelleCovidAktuell": {
-                    "$id": "#/properties/sum/properties/faelleCovidAktuell",
-                    "type": "number"
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The faelleCovidAktuell Schema",
+                    "examples": [
+                        837
+                    ]
                 },
                 "faelleCovidAktuellBeatmet": {
-                    "$id": "#/properties/sum/properties/faelleCovidAktuellBeatmet",
-                    "type": "number"
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The faelleCovidAktuellBeatmet Schema",
+                    "examples": [
+                        337
+                    ]
                 },
                 "faelleCovidAktuellNichtInvasivBeatmet": {
-                    "$id": "#/properties/sum/properties/faelleCovidAktuellNichtInvasivBeatmet",
-                    "type": ["number", "null"]
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The faelleCovidAktuellNichtInvasivBeatmet Schema",
+                    "examples": [
+                        106
+                    ]
                 },
                 "faelleCovidAktuellEcmo": {
-                    "$id": "#/properties/sum/properties/faelleCovidAktuellEcmo",
-                    "type": "number"
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The faelleCovidAktuellEcmo Schema",
+                    "examples": [
+                        12
+                    ]
                 },
                 "intensivBettenBelegt": {
-                    "$id": "#/properties/sum/properties/intensivBettenBelegt",
-                    "type": "number"
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The intensivBettenBelegt Schema",
+                    "examples": [
+                        18884
+                    ]
                 },
                 "intensivBettenFrei": {
-                    "$id": "#/properties/sum/properties/intensivBettenFrei",
-                    "type": "number"
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The intensivBettenFrei Schema",
+                    "examples": [
+                        2157
+                    ]
                 },
                 "intensivBettenGesamt": {
-                    "$id": "#/properties/sum/properties/intensivBettenGesamt",
-                    "type": "number"
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The intensivBettenGesamt Schema",
+                    "examples": [
+                        21041
+                    ]
                 },
                 "freieIvKapazitaet": {
-                    "$id": "#/properties/sum/properties/freieIvKapazitaet",
-                    "type": "number"
+                    "type": ["integer", "null"],
+                    "default": 0,
+                    "title": "The freieIvKapazitaet Schema",
+                    "examples": [
+                        1879
+                    ]
                 },
                 "freieEcmoKapazitaet": {
-                    "$id": "#/properties/sum/properties/freieEcmoKapazitaet",
-                    "type": "number"
+                    "type": ["integer", "null"],
+                    "default": 0,
+                    "title": "The freieEcmoKapazitaet Schema",
+                    "examples": [
+                        434
+                    ]
                 },
                 "covidKapazitaetFrei": {
-                    "$id": "#/properties/sum/properties/covidKapazitaetFrei",
-                    "type": "number"
+                    "type": ["integer", "null", "None"],
+                    "default": 0,
+                    "title": "The covidKapazitaetFrei Schema",
+                    "examples": [
+                        787
+                    ]
                 },
                 "covidKapazitaetFreiIv": {
-                    "$id": "#/properties/sum/properties/covidKapazitaetFreiIv",
-                    "type": "number"
+                    "type": ["integer", "null"],
+                    "default": 0,
+                    "title": "The covidKapazitaetFreiIv Schema",
+                    "examples": [
+                        682
+                    ]
                 },
                 "covidKapazitaetFreiEcmo": {
-                    "$id": "#/properties/sum/properties/covidKapazitaetFreiEcmo",
-                    "type": "number"
+                    "type": ["integer", "null"],
+                    "default": 0,
+                    "title": "The covidKapazitaetFreiEcmo Schema",
+                    "examples": [
+                        233
+                    ]
                 },
                 "patientenIvBeatmet": {
-                    "$id": "#/properties/sum/properties/patientenIvBeatmet",
-                    "type": ["number", "null"]
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The patientenIvBeatmet Schema",
+                    "examples": [
+                        6490
+                    ]
                 },
                 "patientenEcmoBeatmet": {
-                    "$id": "#/properties/sum/properties/patientenEcmoBeatmet",
-                    "type": "number"
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The patientenEcmoBeatmet Schema",
+                    "examples": [
+                        148
+                    ]
+                },
+                "faellePimsAktuell": {
+                    "type": "null",
+                    "default": null,
+                    "title": "The faellePimsAktuell Schema",
+                    "examples": [
+                        null
+                    ]
+                },
+                "kapazitaetFreiIsolationspflichtig": {
+                    "type": "null",
+                    "default": null,
+                    "title": "The kapazitaetFreiIsolationspflichtig Schema",
+                    "examples": [
+                        null
+                    ]
                 },
                 "intensivBettenNotfall7d": {
-                    "$id": "#/properties/sum/properties/intensivBettenNotfall7d",
-                    "type": "number"
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The intensivBettenNotfall7d Schema",
+                    "examples": [
+                        7625
+                    ]
                 },
                 "maxBettenStatusEinschaetzungEcmo": {
-                    "$id": "#/properties/sum/properties/maxBettenStatusEinschaetzungEcmo",
-                    "type": "string"
+                    "type": "string",
+                    "default": "",
+                    "title": "The maxBettenStatusEinschaetzungEcmo Schema",
+                    "examples": [
+                        "VERFUEGBAR"
+                    ]
                 },
                 "maxBettenStatusEinschaetzungHighCare": {
-                    "$id": "#/properties/sum/properties/maxBettenStatusEinschaetzungHighCare",
-                    "type": "string"
+                    "type": "string",
+                    "default": "",
+                    "title": "The maxBettenStatusEinschaetzungHighCare Schema",
+                    "examples": [
+                        "VERFUEGBAR"
+                    ]
                 },
                 "maxBettenStatusEinschaetzungLowCare": {
-                    "$id": "#/properties/sum/properties/maxBettenStatusEinschaetzungLowCare",
-                    "type": "string"
+                    "type": "string",
+                    "default": "",
+                    "title": "The maxBettenStatusEinschaetzungLowCare Schema",
+                    "examples": [
+                        "VERFUEGBAR"
+                    ]
                 },
                 "maxBettenStatusEinschaetzungDialyse": {
-                    "$id": "#/properties/sum/properties/maxBettenStatusEinschaetzungDialyse",
-                    "type": "string"
+                    "type": "string",
+                    "default": "",
+                    "title": "The maxBettenStatusEinschaetzungDialyse Schema",
+                    "examples": [
+                        "VERFUEGBAR"
+                    ]
                 },
                 "bestBetriebssituation": {
-                    "$id": "#/properties/sum/properties/bestBetriebssituation",
-                    "type": "string"
+                    "type": "string",
+                    "default": "",
+                    "title": "The bestBetriebssituation Schema",
+                    "examples": [
+                        "REGULAERER_BETRIEB"
+                    ]
                 }
-            }
+            },
+            "examples": [{
+                "letzteMeldezeitpunkt": "2023-01-18T19:12:12Z",
+                "oldestMeldezeitpunkt": "2023-01-12T05:48:42Z",
+                "faelleCovidGenesen": 174087,
+                "faelleCovidVerstorben": 56496,
+                "faelleCovidAktuell": 837,
+                "faelleCovidAktuellBeatmet": 337,
+                "faelleCovidAktuellNichtInvasivBeatmet": 106,
+                "faelleCovidAktuellEcmo": 12,
+                "intensivBettenBelegt": 18884,
+                "intensivBettenFrei": 2157,
+                "intensivBettenGesamt": 21041,
+                "freieIvKapazitaet": 1879,
+                "freieEcmoKapazitaet": 434,
+                "covidKapazitaetFrei": 787,
+                "covidKapazitaetFreiIv": 682,
+                "covidKapazitaetFreiEcmo": 233,
+                "patientenIvBeatmet": 6490,
+                "patientenEcmoBeatmet": 148,
+                "faellePimsAktuell": null,
+                "kapazitaetFreiIsolationspflichtig": null,
+                "intensivBettenNotfall7d": 7625,
+                "maxBettenStatusEinschaetzungEcmo": "VERFUEGBAR",
+                "maxBettenStatusEinschaetzungHighCare": "VERFUEGBAR",
+                "maxBettenStatusEinschaetzungLowCare": "VERFUEGBAR",
+                "maxBettenStatusEinschaetzungDialyse": "VERFUEGBAR",
+                "bestBetriebssituation": "REGULAERER_BETRIEB"
+            }]
         }
-    }
+    },
+    "examples": [{
+        "rowCount": 1210,
+        "data": [{
+            "krankenhausStandort": {
+                "id": "771236",
+                "bezeichnung": "Hufeland Klinikum GmbH, Bad Langensalza",
+                "strasse": "Rudolf-Weiß-Straße",
+                "hausnummer": "1-5",
+                "plz": "99947",
+                "ort": "Bad Langensalza",
+                "bundesland": "THUERINGEN",
+                "ikNummer": "261600521",
+                "position": {
+                    "latitude": 51.105295370836,
+                    "longitude": 10.649081647421
+                },
+                "gemeindeschluessel": "16064003"
+            },
+            "letzteMeldezeitpunkt": "2023-01-18T06:14:40Z",
+            "oldestMeldezeitpunkt": "2023-01-18T06:14:40Z",
+            "meldebereiche": [{
+                "meldebereichId": "a5a2490c-b1f8-4826-af4e-82fa15c89545",
+                "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Bad Langensalza,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
+                "behandlungsschwerpunktL1": "ERWACHSENE"
+            }],
+            "faelleCovidGenesen": 1294,
+            "faelleCovidVerstorben": 183,
+            "faelleCovidAktuell": 0,
+            "faelleCovidAktuellBeatmet": 0,
+            "faelleCovidAktuellNichtInvasivBeatmet": 0,
+            "faelleCovidAktuellEcmo": null,
+            "intensivBettenBelegt": 4,
+            "intensivBettenFrei": 1,
+            "intensivBettenGesamt": 5,
+            "freieIvKapazitaet": 1,
+            "freieEcmoKapazitaet": null,
+            "covidKapazitaetFrei": 1,
+            "covidKapazitaetFreiIv": 1,
+            "covidKapazitaetFreiEcmo": null,
+            "patientenIvBeatmet": 0,
+            "patientenEcmoBeatmet": null,
+            "faellePimsAktuell": null,
+            "kapazitaetFreiIsolationspflichtig": null,
+            "standortAggregates": {},
+            "intensivBettenNotfall7d": 6,
+            "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
+            "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
+            "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
+            "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
+            "bestBetriebssituation": "KEINE_ANGABE"
+        },
+        {
+            "krankenhausStandort": {
+                "id": "772954",
+                "bezeichnung": "MEDIAN Klinik Bad Tennstedt, Hauptstandort",
+                "strasse": "Badeweg",
+                "hausnummer": "2",
+                "plz": "99955",
+                "ort": "Bad Tennstedt",
+                "bundesland": "THUERINGEN",
+                "ikNummer": "261600996",
+                "position": {
+                    "latitude": 51.155795604281,
+                    "longitude": 10.841630597133
+                },
+                "gemeindeschluessel": "16064004"
+            },
+            "letzteMeldezeitpunkt": "2023-01-18T06:40:03Z",
+            "oldestMeldezeitpunkt": "2023-01-18T06:40:03Z",
+            "meldebereiche": [{
+                "meldebereichId": "5e4a804a-800a-43a3-a977-7ebf49f54685",
+                "meldebereichBezeichnung": "MEDIAN Klinik Bad Tennstedt",
+                "behandlungsschwerpunktL1": "ERWACHSENE"
+            }],
+            "faelleCovidGenesen": 1,
+            "faelleCovidVerstorben": 2,
+            "faelleCovidAktuell": 0,
+            "faelleCovidAktuellBeatmet": 0,
+            "faelleCovidAktuellNichtInvasivBeatmet": 0,
+            "faelleCovidAktuellEcmo": null,
+            "intensivBettenBelegt": 0,
+            "intensivBettenFrei": 0,
+            "intensivBettenGesamt": 0,
+            "freieIvKapazitaet": 0,
+            "freieEcmoKapazitaet": null,
+            "covidKapazitaetFrei": 0,
+            "covidKapazitaetFreiIv": 0,
+            "covidKapazitaetFreiEcmo": null,
+            "patientenIvBeatmet": 0,
+            "patientenEcmoBeatmet": null,
+            "faellePimsAktuell": null,
+            "kapazitaetFreiIsolationspflichtig": null,
+            "standortAggregates": {},
+            "intensivBettenNotfall7d": 0,
+            "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
+            "maxBettenStatusEinschaetzungHighCare": "KEINE_ANGABE",
+            "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
+            "maxBettenStatusEinschaetzungDialyse": "KEINE_ANGABE",
+            "bestBetriebssituation": "KEINE_ANGABE"
+        },
+        {
+            "krankenhausStandort": {
+                "id": "771235",
+                "bezeichnung": "Hufeland Klinikum GmbH, Mühlhausen",
+                "strasse": "Langensalzaer Landstraße",
+                "hausnummer": "1",
+                "plz": "99974",
+                "ort": "Mühlhausen/Thüringen",
+                "bundesland": "THUERINGEN",
+                "ikNummer": "261600521",
+                "position": {
+                    "latitude": 51.201241841669,
+                    "longitude": 10.467689216162
+                },
+                "gemeindeschluessel": "16064046"
+            },
+            "letzteMeldezeitpunkt": "2023-01-18T06:14:10Z",
+            "oldestMeldezeitpunkt": "2023-01-18T06:14:10Z",
+            "meldebereiche": [{
+                "meldebereichId": "e2e3b72e-466e-485f-a29e-ea7a2e668829",
+                "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Mühlhausen,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
+                "behandlungsschwerpunktL1": "ERWACHSENE"
+            }],
+            "faelleCovidGenesen": 1104,
+            "faelleCovidVerstorben": 124,
+            "faelleCovidAktuell": 0,
+            "faelleCovidAktuellBeatmet": null,
+            "faelleCovidAktuellNichtInvasivBeatmet": null,
+            "faelleCovidAktuellEcmo": null,
+            "intensivBettenBelegt": 9,
+            "intensivBettenFrei": 1,
+            "intensivBettenGesamt": 10,
+            "freieIvKapazitaet": 1,
+            "freieEcmoKapazitaet": null,
+            "covidKapazitaetFrei": 1,
+            "covidKapazitaetFreiIv": 1,
+            "covidKapazitaetFreiEcmo": null,
+            "patientenIvBeatmet": 5,
+            "patientenEcmoBeatmet": null,
+            "faellePimsAktuell": null,
+            "kapazitaetFreiIsolationspflichtig": null,
+            "standortAggregates": {},
+            "intensivBettenNotfall7d": 6,
+            "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
+            "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
+            "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
+            "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
+            "bestBetriebssituation": "EINGESCHRAENKT"
+        }],
+        "sum": {
+            "letzteMeldezeitpunkt": "2023-01-18T19:12:12Z",
+            "oldestMeldezeitpunkt": "2023-01-12T05:48:42Z",
+            "faelleCovidGenesen": 174087,
+            "faelleCovidVerstorben": 56496,
+            "faelleCovidAktuell": 837,
+            "faelleCovidAktuellBeatmet": 337,
+            "faelleCovidAktuellNichtInvasivBeatmet": 106,
+            "faelleCovidAktuellEcmo": 12,
+            "intensivBettenBelegt": 18884,
+            "intensivBettenFrei": 2157,
+            "intensivBettenGesamt": 21041,
+            "freieIvKapazitaet": 1879,
+            "freieEcmoKapazitaet": 434,
+            "covidKapazitaetFrei": 787,
+            "covidKapazitaetFreiIv": 682,
+            "covidKapazitaetFreiEcmo": 233,
+            "patientenIvBeatmet": 6490,
+            "patientenEcmoBeatmet": 148,
+            "faellePimsAktuell": null,
+            "kapazitaetFreiIsolationspflichtig": null,
+            "intensivBettenNotfall7d": 7625,
+            "maxBettenStatusEinschaetzungEcmo": "VERFUEGBAR",
+            "maxBettenStatusEinschaetzungHighCare": "VERFUEGBAR",
+            "maxBettenStatusEinschaetzungLowCare": "VERFUEGBAR",
+            "maxBettenStatusEinschaetzungDialyse": "VERFUEGBAR",
+            "bestBetriebssituation": "REGULAERER_BETRIEB"
+        }
+    }]
 }

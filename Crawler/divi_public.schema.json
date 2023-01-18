@@ -23,7 +23,6 @@
           "krankenhausStandort",
           "letzteMeldezeitpunkt",
           "oldestMeldezeitpunkt",
-          "meldebereiche",
           "maxBettenStatusEinschaetzungEcmo",
           "maxBettenStatusEinschaetzungHighCare",
           "maxBettenStatusEinschaetzungLowCare"
@@ -143,11 +142,11 @@
                 },
                 "behandlungsschwerpunktL2": {
                   "$id": "#/properties/data/items/properties/meldebereiche/items/properties/behandlungsschwerpunktL2",
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "behandlungsschwerpunktL3": {
                   "$id": "#/properties/data/items/properties/meldebereiche/items/properties/behandlungsschwerpunktL3",
-                  "type": "null"
+                  "type": ["string", "null"]
                 }
               }
             }
