@@ -22,8 +22,6 @@ logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 logger = logging.getLogger(__name__)
 logger.info('Crawler for divi public data')
 
-STORAGE_PATH = "/var/divi_public/"
-
 URL_API = "https://www.intensivregister.de/api/public/intensivregister"
 
 header_base = {
@@ -74,12 +72,14 @@ def download_data(behandlungsschwerpunkt: str):
 
 def store_data(data, behandlungsschwerpunkt):
     if os.name == 'nt':  # debug only
-        STORAGE_PATH = './'
-    if not os.path.isdir(STORAGE_PATH):
-        logger.error(f"Storage path {STORAGE_PATH} does not appear to be a valid directory")
+        storage_path = './'
+    else:
+        storage_path = '/var/divi_public/'
+    if not os.path.isdir(storage_path):
+        logger.error(f"Storage path {storage_path} does not appear to be a valid directory")
         exit(1)
     current_update = datetime.now(timezone.utc)
-    filepath = STORAGE_PATH + current_update.strftime(
+    filepath = storage_path + current_update.strftime(
         "divi-public-%Y-%m-%dT%H-%M-%S") + '-' + behandlungsschwerpunkt + '.json'
 
     logger.info(f'Storing data on pvc: {filepath}')
