@@ -57,6 +57,17 @@ JSONPAYLOAD = {"criteria":
                }
 
 
+def get_storage_path() -> str:
+    if os.name == 'nt':  # debug only
+        storage_path = './'
+    else:
+        storage_path = '/var/divi_public/'
+    if not os.path.isdir(storage_path):
+        logger.error(f"Storage path {storage_path} does not appear to be a valid directory")
+        exit(1)
+    return storage_path
+
+
 def download_data(behandlungsschwerpunkt: str):
     logger.info(f'Assembling bearer and downloading data for {behandlungsschwerpunkt}...')
     JSONPAYLOAD['criteria']['behandlungsschwerpunktL1'] = [behandlungsschwerpunkt]
@@ -71,13 +82,7 @@ def download_data(behandlungsschwerpunkt: str):
 
 
 def store_data(data, behandlungsschwerpunkt):
-    if os.name == 'nt':  # debug only
-        storage_path = './'
-    else:
-        storage_path = '/var/divi_public/'
-    if not os.path.isdir(storage_path):
-        logger.error(f"Storage path {storage_path} does not appear to be a valid directory")
-        exit(1)
+    storage_path = get_storage_path()
     current_update = datetime.now(timezone.utc)
     filepath = storage_path + current_update.strftime(
         "divi-public-%Y-%m-%dT%H-%M-%S") + '-' + behandlungsschwerpunkt + '.json'
@@ -192,7 +197,7 @@ try:
     cur.close()
     conn.close()
 
-    print(subprocess.run(['fdupes', '-dN', '-o', 'name', STORAGE_PATH], capture_output=True))
+    print(subprocess.run(['fdupes', '-dN', '-o', 'name', get_storage_path()], capture_output=True))
 
     logger.info('Done. Exiting...')
 except Exception as e:
