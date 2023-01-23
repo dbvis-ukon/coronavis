@@ -7,7 +7,7 @@ shapely==2.0.0
 geopy==2.3.0
 geojson==2.5.0
 SQLAlchemy==1.4.46
-GeoAlchemy2==0.13.0
+GeoAlchemy2==0.13.1
 psycopg2-binary==2.9.5
 sentry_sdk==1.14.0
 python-dotenv==0.21.1
