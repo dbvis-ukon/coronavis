@@ -10,7 +10,7 @@ SQLAlchemy==1.4.46
 GeoAlchemy2==0.13.1
 psycopg2-binary==2.9.5
 sentry_sdk==1.15.0
-python-dotenv==0.21.1
+python-dotenv==1.0.0
 zeep==4.2.1
 holidays==0.20
 jsonschema==4.17.3
