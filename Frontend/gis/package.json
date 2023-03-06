@@ -48,7 +48,7 @@
     "quadtree-lib": "1.0.9",
     "rxjs": "7.8.0",
     "tslib": "2.5.0",
-    "vega": "5.22.1",
+    "vega": "5.23.0",
     "vega-embed": "6.21.3",
     "vega-lite": "5.6.1",
     "zone.js": "0.12.0"
