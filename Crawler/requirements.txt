@@ -14,5 +14,5 @@ python-dotenv==1.0.0
 zeep==4.2.1
 holidays==0.21.13
 jsonschema==4.17.3
-types-psycopg2==2.9.21.8
+types-psycopg2==2.9.21.9
 pytz==2023.2
