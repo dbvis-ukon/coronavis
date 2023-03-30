@@ -9,6 +9,7 @@ import logging
 import sys
 from datetime import date
 from io import StringIO
+from lzma import LZMADecompressor, FORMAT_AUTO, LZMAError
 from typing import List, Dict, Tuple
 
 import jsonschema
@@ -60,28 +61,55 @@ def try_parse_int(s: str) -> int | str:
         return s
 
 
-URL = 'https://github.com/robert-koch-institut/SARS-CoV-2-Infektionen_in_Deutschland_Archiv/blob/master/Archiv/%TODAY%_Deutschland_SarsCov2_Infektionen.csv?raw=true'
+URL = 'https://github.com/robert-koch-institut/SARS-CoV-2-Infektionen_in_Deutschland_Archiv/blob/main/Archiv/%TODAY%_Deutschland_SarsCov2_Infektionen.csv.xz?raw=true'
+
+def decompress_lzma(data: bytes) -> bytes:
+    """
+    Taken from: https://stackoverflow.com/a/37400585/1986417
+    """
+    results = []
+    while True:
+        decomp = LZMADecompressor(FORMAT_AUTO, None, None)
+        try:
+            res = decomp.decompress(data)
+        except LZMAError:
+            if results:
+                break  # Leftover data is not a valid LZMA/XZ stream; ignore it.
+            else:
+                raise  # Error on the first iteration; bail out.
+        results.append(res)
+        data = decomp.unused_data
+        if not data:
+            break
+        if not decomp.eof:
+            raise LZMAError("Compressed data ended before the end-of-stream marker was reached")
+    return b"".join(results)
 
 def download_data() -> Tuple[List[Dict[str, int | str]], datetime.datetime] | None:
     today_str = today.strftime('%Y-%m-%d')
     url = URL.replace('%TODAY%', today_str)
     logger.info(f'download data {url}')
+    # urllib.request.urlretrieve(url, './rki_cases.csv.xz')
     start = get_start()
     response = requests.get(url)
     if response.status_code == 404:
         logger.warning(f'No data available for {today_str}')
         exit(0)
 
+    decompressed_bytes = decompress_lzma(response.content)
+
     # some weird tokens at the beginning of the file, this gets rid of it
-    buff = StringIO(response.text[3:])
+    buff = StringIO(decompressed_bytes.decode('utf-8')[3:])
     # lines = [line.decode('utf-8') for line in response.readlines()]
     data = []
     max_meldedatum: datetime.datetime = datetime.datetime.now() - datetime.timedelta(days=365)
     for row in csv.DictReader(buff, skipinitialspace=True):
-        row = {k: try_parse_int(v) if k != 'IdLandkreis' else '{:05d}'.format(int(v)) for k, v in row.items()}
+        # print(row)
+        row = {k: try_parse_int(v) if k != 'Landkreis' else '{:05d}'.format(int(v)) for k, v in row.items()}
         m = datetime.datetime.fromisoformat(row['Meldedatum'])
         if max_meldedatum is None or m > max_meldedatum:
             max_meldedatum = m
+        row['IdLandkreis'] = row['Landkreis']
         data.append(row)
 
     with open('./rki-test.csv', mode='w', newline='') as f:  # You will need 'wb' mode in Python 2.x
