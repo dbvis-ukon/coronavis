@@ -94,13 +94,15 @@
     &lt;/div>
 &lt;/div>
 
-&lt;div>"/> pro Tag</source>
+&lt;div>
+    &lt;"/> pro Tag</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="pro Tag&lt;/p>
         &lt;/div>
     &lt;/div>
 &lt;/div>
 
-&lt;div>"/> pro Tag</target>
+&lt;div>
+    &lt;"/> pro Tag</target>
       </segment>
     </unit>
     <unit id="caseDodGranularity">
@@ -1700,10 +1702,10 @@
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Covid-19 Fälle&lt;/p>
 
-          &lt;p class=&quot;st"/> bundesweit gemeldete Covid-19 Fälle</source>
+          &lt;p class=&quot;stat"/> bundesweit gemeldete Covid-19 Fälle</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Covid-19 Fälle&lt;/p>
 
-          &lt;p class=&quot;st"/> bundesweit gemeldete Covid-19 Fälle</target>
+          &lt;p class=&quot;stat"/> bundesweit gemeldete Covid-19 Fälle</target>
       </segment>
     </unit>
     <unit id="infoboxPrognosis">
@@ -1740,10 +1742,10 @@
       <segment state="final">
         <source><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Covid-19 Todesfälle&lt;/p>
 
-          &lt;p clas"/> bundesweit gemeldete Covid-19 Todesfälle</source>
+          &lt;p class="/> bundesweit gemeldete Covid-19 Todesfälle</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Covid-19 Todesfälle&lt;/p>
 
-          &lt;p clas"/> bundesweit gemeldete Covid-19 Todesfälle</target>
+          &lt;p class="/> bundesweit gemeldete Covid-19 Todesfälle</target>
       </segment>
     </unit>
     <unit id="infoboxCountiesAvailable">

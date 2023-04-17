@@ -95,7 +95,8 @@
     &lt;/div>
 &lt;/div>
 
-&lt;div>"/> pro Tag</source>
+&lt;div>
+    &lt;"/> pro Tag</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> per day</target>
       </segment>
     </unit>
@@ -1741,7 +1742,7 @@
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Covid-19 Fälle&lt;/p>
 
-          &lt;p class=&quot;st"/> bundesweit gemeldete Covid-19 Fälle</source>
+          &lt;p class=&quot;stat"/> bundesweit gemeldete Covid-19 Fälle</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.cases | number }}"/> nationally reported Covid-19 cases</target>
       </segment>
     </unit>
@@ -1778,7 +1779,7 @@
       <segment state="initial">
         <source><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Covid-19 Todesfälle&lt;/p>
 
-          &lt;p clas"/> bundesweit gemeldete Covid-19 Todesfälle</source>
+          &lt;p class="/> bundesweit gemeldete Covid-19 Todesfälle</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> nationally reported Covid-19 deaths</target>
       </segment>
     </unit>
