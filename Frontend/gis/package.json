@@ -107,5 +107,6 @@
     "*.{js,json,css,scss,md,ts,html}": [
       "eslint --fix"
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.19"
 }
