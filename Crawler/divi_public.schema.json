@@ -24,8 +24,7 @@
           "letzteMeldezeitpunkt",
           "oldestMeldezeitpunkt",
           "maxBettenStatusEinschaetzungEcmo",
-          "maxBettenStatusEinschaetzungHighCare",
-          "maxBettenStatusEinschaetzungLowCare"
+          "maxBettenStatusEinschaetzungHighCare"
         ],
         "properties": {
           "krankenhausStandort": {
@@ -191,8 +190,7 @@
         "letzteMeldezeitpunkt",
         "oldestMeldezeitpunkt",
         "maxBettenStatusEinschaetzungEcmo",
-        "maxBettenStatusEinschaetzungHighCare",
-        "maxBettenStatusEinschaetzungLowCare"
+        "maxBettenStatusEinschaetzungHighCare"
       ],
       "properties": {
         "letzteMeldezeitpunkt": {
