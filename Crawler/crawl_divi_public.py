@@ -153,7 +153,7 @@ def insert_data(conn: connection, cur: cursor, data, type: str):
 
     for d in data['data']:
         e = {'id': d['krankenhausStandort']['id'], 'meldezeitpunkt': d['letzteMeldezeitpunkt'],
-             'statusEinschaetzungLowcare': d['maxBettenStatusEinschaetzungLowCare'],
+             'statusEinschaetzungLowcare': d.get('maxBettenStatusEinschaetzungLowCare', 'KEINE_ANGABE'),
              'statusEinschaetzungHighcare': d['maxBettenStatusEinschaetzungHighCare'],
              'statusEinschaetzungEcmo': d['maxBettenStatusEinschaetzungEcmo'],
              'meldebereiche': [],
