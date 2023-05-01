@@ -50,7 +50,6 @@
                     "intensivBettenNotfall7d",
                     "maxBettenStatusEinschaetzungEcmo",
                     "maxBettenStatusEinschaetzungHighCare",
-                    "maxBettenStatusEinschaetzungLowCare",
                     "maxBettenStatusEinschaetzungDialyse",
                     "bestBetriebssituation"
                 ],
@@ -853,7 +852,6 @@
                 "intensivBettenNotfall7d",
                 "maxBettenStatusEinschaetzungEcmo",
                 "maxBettenStatusEinschaetzungHighCare",
-                "maxBettenStatusEinschaetzungLowCare",
                 "maxBettenStatusEinschaetzungDialyse",
                 "bestBetriebssituation"
             ],
