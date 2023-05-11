@@ -30,28 +30,21 @@
                     "letzteMeldezeitpunkt",
                     "oldestMeldezeitpunkt",
                     "meldebereiche",
-                    "faelleCovidGenesen",
-                    "faelleCovidVerstorben",
-                    "faelleCovidAktuell",
-                    "faelleCovidAktuellBeatmet",
-                    "faelleCovidAktuellNichtInvasivBeatmet",
-                    "faelleCovidAktuellEcmo",
+                    "faelleCovidAktuellMitManifestation",
+                    "faelleCovidAktuellMitManifestationBeatmet",
+                    "faelleCovidAktuellMitManifestationNichtInvasivBeatmet",
+                    "faelleCovidAktuellMitManifestationEcmo",
                     "intensivBettenBelegt",
                     "intensivBettenFrei",
                     "intensivBettenGesamt",
                     "freieIvKapazitaet",
                     "freieEcmoKapazitaet",
-                    "covidKapazitaetFrei",
-                    "covidKapazitaetFreiIv",
-                    "covidKapazitaetFreiEcmo",
                     "patientenIvBeatmet",
                     "patientenEcmoBeatmet",
                     "standortAggregates",
                     "intensivBettenNotfall7d",
                     "maxBettenStatusEinschaetzungEcmo",
-                    "maxBettenStatusEinschaetzungHighCare",
-                    "maxBettenStatusEinschaetzungDialyse",
-                    "bestBetriebssituation"
+                    "maxBettenStatusEinschaetzungHighCare"
                 ],
                 "properties": {
                     "krankenhausStandort": {
@@ -420,29 +413,6 @@
                             null
                         ]
                     },
-                    "covidKapazitaetFrei": {
-                        "type": ["integer", "null"],
-                        "title": "The covidKapazitaetFrei Schema",
-                        "examples": [
-                            1,
-                            0
-                        ]
-                    },
-                    "covidKapazitaetFreiIv": {
-                        "type": ["integer", "null"],
-                        "title": "The covidKapazitaetFreiIv Schema",
-                        "examples": [
-                            1,
-                            0
-                        ]
-                    },
-                    "covidKapazitaetFreiEcmo": {
-                        "type": ["integer", "null"],
-                        "title": "The covidKapazitaetFreiEcmo Schema",
-                        "examples": [
-                            null
-                        ]
-                    },
                     "patientenIvBeatmet": {
                         "type": ["integer", "null"],
                         "title": "The patientenIvBeatmet Schema",
@@ -527,304 +497,8 @@
                             "EINGESCHRAENKT"
                         ]
                     }
-                },
-                "examples": [{
-                    "krankenhausStandort": {
-                        "id": "771236",
-                        "bezeichnung": "Hufeland Klinikum GmbH, Bad Langensalza",
-                        "strasse": "Rudolf-Weiß-Straße",
-                        "hausnummer": "1-5",
-                        "plz": "99947",
-                        "ort": "Bad Langensalza",
-                        "bundesland": "THUERINGEN",
-                        "ikNummer": "261600521",
-                        "position": {
-                            "latitude": 51.105295370836,
-                            "longitude": 10.649081647421
-                        },
-                        "gemeindeschluessel": "16064003"
-                    },
-                    "letzteMeldezeitpunkt": "2023-01-18T06:14:40Z",
-                    "oldestMeldezeitpunkt": "2023-01-18T06:14:40Z",
-                    "meldebereiche": [{
-                        "meldebereichId": "a5a2490c-b1f8-4826-af4e-82fa15c89545",
-                        "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Bad Langensalza,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
-                        "behandlungsschwerpunktL1": "ERWACHSENE"
-                    }],
-                    "faelleCovidGenesen": 1294,
-                    "faelleCovidVerstorben": 183,
-                    "faelleCovidAktuell": 0,
-                    "faelleCovidAktuellBeatmet": 0,
-                    "faelleCovidAktuellNichtInvasivBeatmet": 0,
-                    "faelleCovidAktuellEcmo": null,
-                    "intensivBettenBelegt": 4,
-                    "intensivBettenFrei": 1,
-                    "intensivBettenGesamt": 5,
-                    "freieIvKapazitaet": 1,
-                    "freieEcmoKapazitaet": null,
-                    "covidKapazitaetFrei": 1,
-                    "covidKapazitaetFreiIv": 1,
-                    "covidKapazitaetFreiEcmo": null,
-                    "patientenIvBeatmet": 0,
-                    "patientenEcmoBeatmet": null,
-                    "faellePimsAktuell": null,
-                    "kapazitaetFreiIsolationspflichtig": null,
-                    "standortAggregates": {},
-                    "intensivBettenNotfall7d": 6,
-                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
-                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
-                    "bestBetriebssituation": "KEINE_ANGABE"
-                },
-                {
-                    "krankenhausStandort": {
-                        "id": "772954",
-                        "bezeichnung": "MEDIAN Klinik Bad Tennstedt, Hauptstandort",
-                        "strasse": "Badeweg",
-                        "hausnummer": "2",
-                        "plz": "99955",
-                        "ort": "Bad Tennstedt",
-                        "bundesland": "THUERINGEN",
-                        "ikNummer": "261600996",
-                        "position": {
-                            "latitude": 51.155795604281,
-                            "longitude": 10.841630597133
-                        },
-                        "gemeindeschluessel": "16064004"
-                    },
-                    "letzteMeldezeitpunkt": "2023-01-18T06:40:03Z",
-                    "oldestMeldezeitpunkt": "2023-01-18T06:40:03Z",
-                    "meldebereiche": [{
-                        "meldebereichId": "5e4a804a-800a-43a3-a977-7ebf49f54685",
-                        "meldebereichBezeichnung": "MEDIAN Klinik Bad Tennstedt",
-                        "behandlungsschwerpunktL1": "ERWACHSENE"
-                    }],
-                    "faelleCovidGenesen": 1,
-                    "faelleCovidVerstorben": 2,
-                    "faelleCovidAktuell": 0,
-                    "faelleCovidAktuellBeatmet": 0,
-                    "faelleCovidAktuellNichtInvasivBeatmet": 0,
-                    "faelleCovidAktuellEcmo": null,
-                    "intensivBettenBelegt": 0,
-                    "intensivBettenFrei": 0,
-                    "intensivBettenGesamt": 0,
-                    "freieIvKapazitaet": 0,
-                    "freieEcmoKapazitaet": null,
-                    "covidKapazitaetFrei": 0,
-                    "covidKapazitaetFreiIv": 0,
-                    "covidKapazitaetFreiEcmo": null,
-                    "patientenIvBeatmet": 0,
-                    "patientenEcmoBeatmet": null,
-                    "faellePimsAktuell": null,
-                    "kapazitaetFreiIsolationspflichtig": null,
-                    "standortAggregates": {},
-                    "intensivBettenNotfall7d": 0,
-                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungHighCare": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungDialyse": "KEINE_ANGABE",
-                    "bestBetriebssituation": "KEINE_ANGABE"
-                },
-                {
-                    "krankenhausStandort": {
-                        "id": "771235",
-                        "bezeichnung": "Hufeland Klinikum GmbH, Mühlhausen",
-                        "strasse": "Langensalzaer Landstraße",
-                        "hausnummer": "1",
-                        "plz": "99974",
-                        "ort": "Mühlhausen/Thüringen",
-                        "bundesland": "THUERINGEN",
-                        "ikNummer": "261600521",
-                        "position": {
-                            "latitude": 51.201241841669,
-                            "longitude": 10.467689216162
-                        },
-                        "gemeindeschluessel": "16064046"
-                    },
-                    "letzteMeldezeitpunkt": "2023-01-18T06:14:10Z",
-                    "oldestMeldezeitpunkt": "2023-01-18T06:14:10Z",
-                    "meldebereiche": [{
-                        "meldebereichId": "e2e3b72e-466e-485f-a29e-ea7a2e668829",
-                        "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Mühlhausen,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
-                        "behandlungsschwerpunktL1": "ERWACHSENE"
-                    }],
-                    "faelleCovidGenesen": 1104,
-                    "faelleCovidVerstorben": 124,
-                    "faelleCovidAktuell": 0,
-                    "faelleCovidAktuellBeatmet": null,
-                    "faelleCovidAktuellNichtInvasivBeatmet": null,
-                    "faelleCovidAktuellEcmo": null,
-                    "intensivBettenBelegt": 9,
-                    "intensivBettenFrei": 1,
-                    "intensivBettenGesamt": 10,
-                    "freieIvKapazitaet": 1,
-                    "freieEcmoKapazitaet": null,
-                    "covidKapazitaetFrei": 1,
-                    "covidKapazitaetFreiIv": 1,
-                    "covidKapazitaetFreiEcmo": null,
-                    "patientenIvBeatmet": 5,
-                    "patientenEcmoBeatmet": null,
-                    "faellePimsAktuell": null,
-                    "kapazitaetFreiIsolationspflichtig": null,
-                    "standortAggregates": {},
-                    "intensivBettenNotfall7d": 6,
-                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
-                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
-                    "bestBetriebssituation": "EINGESCHRAENKT"
-                }]
-            },
-            "examples": [
-                [{
-                    "krankenhausStandort": {
-                        "id": "771236",
-                        "bezeichnung": "Hufeland Klinikum GmbH, Bad Langensalza",
-                        "strasse": "Rudolf-Weiß-Straße",
-                        "hausnummer": "1-5",
-                        "plz": "99947",
-                        "ort": "Bad Langensalza",
-                        "bundesland": "THUERINGEN",
-                        "ikNummer": "261600521",
-                        "position": {
-                            "latitude": 51.105295370836,
-                            "longitude": 10.649081647421
-                        },
-                        "gemeindeschluessel": "16064003"
-                    },
-                    "letzteMeldezeitpunkt": "2023-01-18T06:14:40Z",
-                    "oldestMeldezeitpunkt": "2023-01-18T06:14:40Z",
-                    "meldebereiche": [{
-                        "meldebereichId": "a5a2490c-b1f8-4826-af4e-82fa15c89545",
-                        "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Bad Langensalza,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
-                        "behandlungsschwerpunktL1": "ERWACHSENE"
-                    }],
-                    "faelleCovidGenesen": 1294,
-                    "faelleCovidVerstorben": 183,
-                    "faelleCovidAktuell": 0,
-                    "faelleCovidAktuellBeatmet": 0,
-                    "faelleCovidAktuellNichtInvasivBeatmet": 0,
-                    "faelleCovidAktuellEcmo": null,
-                    "intensivBettenBelegt": 4,
-                    "intensivBettenFrei": 1,
-                    "intensivBettenGesamt": 5,
-                    "freieIvKapazitaet": 1,
-                    "freieEcmoKapazitaet": null,
-                    "covidKapazitaetFrei": 1,
-                    "covidKapazitaetFreiIv": 1,
-                    "covidKapazitaetFreiEcmo": null,
-                    "patientenIvBeatmet": 0,
-                    "patientenEcmoBeatmet": null,
-                    "faellePimsAktuell": null,
-                    "kapazitaetFreiIsolationspflichtig": null,
-                    "standortAggregates": {},
-                    "intensivBettenNotfall7d": 6,
-                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
-                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
-                    "bestBetriebssituation": "KEINE_ANGABE"
-                },
-                {
-                    "krankenhausStandort": {
-                        "id": "772954",
-                        "bezeichnung": "MEDIAN Klinik Bad Tennstedt, Hauptstandort",
-                        "strasse": "Badeweg",
-                        "hausnummer": "2",
-                        "plz": "99955",
-                        "ort": "Bad Tennstedt",
-                        "bundesland": "THUERINGEN",
-                        "ikNummer": "261600996",
-                        "position": {
-                            "latitude": 51.155795604281,
-                            "longitude": 10.841630597133
-                        },
-                        "gemeindeschluessel": "16064004"
-                    },
-                    "letzteMeldezeitpunkt": "2023-01-18T06:40:03Z",
-                    "oldestMeldezeitpunkt": "2023-01-18T06:40:03Z",
-                    "meldebereiche": [{
-                        "meldebereichId": "5e4a804a-800a-43a3-a977-7ebf49f54685",
-                        "meldebereichBezeichnung": "MEDIAN Klinik Bad Tennstedt",
-                        "behandlungsschwerpunktL1": "ERWACHSENE"
-                    }],
-                    "faelleCovidGenesen": 1,
-                    "faelleCovidVerstorben": 2,
-                    "faelleCovidAktuell": 0,
-                    "faelleCovidAktuellBeatmet": 0,
-                    "faelleCovidAktuellNichtInvasivBeatmet": 0,
-                    "faelleCovidAktuellEcmo": null,
-                    "intensivBettenBelegt": 0,
-                    "intensivBettenFrei": 0,
-                    "intensivBettenGesamt": 0,
-                    "freieIvKapazitaet": 0,
-                    "freieEcmoKapazitaet": null,
-                    "covidKapazitaetFrei": 0,
-                    "covidKapazitaetFreiIv": 0,
-                    "covidKapazitaetFreiEcmo": null,
-                    "patientenIvBeatmet": 0,
-                    "patientenEcmoBeatmet": null,
-                    "faellePimsAktuell": null,
-                    "kapazitaetFreiIsolationspflichtig": null,
-                    "standortAggregates": {},
-                    "intensivBettenNotfall7d": 0,
-                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungHighCare": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungDialyse": "KEINE_ANGABE",
-                    "bestBetriebssituation": "KEINE_ANGABE"
-                },
-                {
-                    "krankenhausStandort": {
-                        "id": "771235",
-                        "bezeichnung": "Hufeland Klinikum GmbH, Mühlhausen",
-                        "strasse": "Langensalzaer Landstraße",
-                        "hausnummer": "1",
-                        "plz": "99974",
-                        "ort": "Mühlhausen/Thüringen",
-                        "bundesland": "THUERINGEN",
-                        "ikNummer": "261600521",
-                        "position": {
-                            "latitude": 51.201241841669,
-                            "longitude": 10.467689216162
-                        },
-                        "gemeindeschluessel": "16064046"
-                    },
-                    "letzteMeldezeitpunkt": "2023-01-18T06:14:10Z",
-                    "oldestMeldezeitpunkt": "2023-01-18T06:14:10Z",
-                    "meldebereiche": [{
-                        "meldebereichId": "e2e3b72e-466e-485f-a29e-ea7a2e668829",
-                        "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Mühlhausen,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
-                        "behandlungsschwerpunktL1": "ERWACHSENE"
-                    }],
-                    "faelleCovidGenesen": 1104,
-                    "faelleCovidVerstorben": 124,
-                    "faelleCovidAktuell": 0,
-                    "faelleCovidAktuellBeatmet": null,
-                    "faelleCovidAktuellNichtInvasivBeatmet": null,
-                    "faelleCovidAktuellEcmo": null,
-                    "intensivBettenBelegt": 9,
-                    "intensivBettenFrei": 1,
-                    "intensivBettenGesamt": 10,
-                    "freieIvKapazitaet": 1,
-                    "freieEcmoKapazitaet": null,
-                    "covidKapazitaetFrei": 1,
-                    "covidKapazitaetFreiIv": 1,
-                    "covidKapazitaetFreiEcmo": null,
-                    "patientenIvBeatmet": 5,
-                    "patientenEcmoBeatmet": null,
-                    "faellePimsAktuell": null,
-                    "kapazitaetFreiIsolationspflichtig": null,
-                    "standortAggregates": {},
-                    "intensivBettenNotfall7d": 6,
-                    "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
-                    "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
-                    "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
-                    "bestBetriebssituation": "EINGESCHRAENKT"
-                }]
-            ]
+                }
+            }
         },
         "sum": {
             "type": "object",
@@ -833,27 +507,20 @@
             "required": [
                 "letzteMeldezeitpunkt",
                 "oldestMeldezeitpunkt",
-                "faelleCovidGenesen",
-                "faelleCovidVerstorben",
-                "faelleCovidAktuell",
-                "faelleCovidAktuellBeatmet",
-                "faelleCovidAktuellNichtInvasivBeatmet",
-                "faelleCovidAktuellEcmo",
+                "faelleCovidAktuellMitManifestation",
+                "faelleCovidAktuellMitManifestationBeatmet",
+                "faelleCovidAktuellMitManifestationNichtInvasivBeatmet",
+                "faelleCovidAktuellMitManifestationEcmo",
                 "intensivBettenBelegt",
                 "intensivBettenFrei",
                 "intensivBettenGesamt",
                 "freieIvKapazitaet",
                 "freieEcmoKapazitaet",
-                "covidKapazitaetFrei",
-                "covidKapazitaetFreiIv",
-                "covidKapazitaetFreiEcmo",
                 "patientenIvBeatmet",
                 "patientenEcmoBeatmet",
                 "intensivBettenNotfall7d",
                 "maxBettenStatusEinschaetzungEcmo",
-                "maxBettenStatusEinschaetzungHighCare",
-                "maxBettenStatusEinschaetzungDialyse",
-                "bestBetriebssituation"
+                "maxBettenStatusEinschaetzungHighCare"
             ],
             "properties": {
                 "letzteMeldezeitpunkt": {
@@ -1064,213 +731,7 @@
                         "REGULAERER_BETRIEB"
                     ]
                 }
-            },
-            "examples": [{
-                "letzteMeldezeitpunkt": "2023-01-18T19:12:12Z",
-                "oldestMeldezeitpunkt": "2023-01-12T05:48:42Z",
-                "faelleCovidGenesen": 174087,
-                "faelleCovidVerstorben": 56496,
-                "faelleCovidAktuell": 837,
-                "faelleCovidAktuellBeatmet": 337,
-                "faelleCovidAktuellNichtInvasivBeatmet": 106,
-                "faelleCovidAktuellEcmo": 12,
-                "intensivBettenBelegt": 18884,
-                "intensivBettenFrei": 2157,
-                "intensivBettenGesamt": 21041,
-                "freieIvKapazitaet": 1879,
-                "freieEcmoKapazitaet": 434,
-                "covidKapazitaetFrei": 787,
-                "covidKapazitaetFreiIv": 682,
-                "covidKapazitaetFreiEcmo": 233,
-                "patientenIvBeatmet": 6490,
-                "patientenEcmoBeatmet": 148,
-                "faellePimsAktuell": null,
-                "kapazitaetFreiIsolationspflichtig": null,
-                "intensivBettenNotfall7d": 7625,
-                "maxBettenStatusEinschaetzungEcmo": "VERFUEGBAR",
-                "maxBettenStatusEinschaetzungHighCare": "VERFUEGBAR",
-                "maxBettenStatusEinschaetzungLowCare": "VERFUEGBAR",
-                "maxBettenStatusEinschaetzungDialyse": "VERFUEGBAR",
-                "bestBetriebssituation": "REGULAERER_BETRIEB"
-            }]
+            }
         }
-    },
-    "examples": [{
-        "rowCount": 1210,
-        "data": [{
-            "krankenhausStandort": {
-                "id": "771236",
-                "bezeichnung": "Hufeland Klinikum GmbH, Bad Langensalza",
-                "strasse": "Rudolf-Weiß-Straße",
-                "hausnummer": "1-5",
-                "plz": "99947",
-                "ort": "Bad Langensalza",
-                "bundesland": "THUERINGEN",
-                "ikNummer": "261600521",
-                "position": {
-                    "latitude": 51.105295370836,
-                    "longitude": 10.649081647421
-                },
-                "gemeindeschluessel": "16064003"
-            },
-            "letzteMeldezeitpunkt": "2023-01-18T06:14:40Z",
-            "oldestMeldezeitpunkt": "2023-01-18T06:14:40Z",
-            "meldebereiche": [{
-                "meldebereichId": "a5a2490c-b1f8-4826-af4e-82fa15c89545",
-                "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Bad Langensalza,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
-                "behandlungsschwerpunktL1": "ERWACHSENE"
-            }],
-            "faelleCovidGenesen": 1294,
-            "faelleCovidVerstorben": 183,
-            "faelleCovidAktuell": 0,
-            "faelleCovidAktuellBeatmet": 0,
-            "faelleCovidAktuellNichtInvasivBeatmet": 0,
-            "faelleCovidAktuellEcmo": null,
-            "intensivBettenBelegt": 4,
-            "intensivBettenFrei": 1,
-            "intensivBettenGesamt": 5,
-            "freieIvKapazitaet": 1,
-            "freieEcmoKapazitaet": null,
-            "covidKapazitaetFrei": 1,
-            "covidKapazitaetFreiIv": 1,
-            "covidKapazitaetFreiEcmo": null,
-            "patientenIvBeatmet": 0,
-            "patientenEcmoBeatmet": null,
-            "faellePimsAktuell": null,
-            "kapazitaetFreiIsolationspflichtig": null,
-            "standortAggregates": {},
-            "intensivBettenNotfall7d": 6,
-            "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
-            "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
-            "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
-            "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
-            "bestBetriebssituation": "KEINE_ANGABE"
-        },
-        {
-            "krankenhausStandort": {
-                "id": "772954",
-                "bezeichnung": "MEDIAN Klinik Bad Tennstedt, Hauptstandort",
-                "strasse": "Badeweg",
-                "hausnummer": "2",
-                "plz": "99955",
-                "ort": "Bad Tennstedt",
-                "bundesland": "THUERINGEN",
-                "ikNummer": "261600996",
-                "position": {
-                    "latitude": 51.155795604281,
-                    "longitude": 10.841630597133
-                },
-                "gemeindeschluessel": "16064004"
-            },
-            "letzteMeldezeitpunkt": "2023-01-18T06:40:03Z",
-            "oldestMeldezeitpunkt": "2023-01-18T06:40:03Z",
-            "meldebereiche": [{
-                "meldebereichId": "5e4a804a-800a-43a3-a977-7ebf49f54685",
-                "meldebereichBezeichnung": "MEDIAN Klinik Bad Tennstedt",
-                "behandlungsschwerpunktL1": "ERWACHSENE"
-            }],
-            "faelleCovidGenesen": 1,
-            "faelleCovidVerstorben": 2,
-            "faelleCovidAktuell": 0,
-            "faelleCovidAktuellBeatmet": 0,
-            "faelleCovidAktuellNichtInvasivBeatmet": 0,
-            "faelleCovidAktuellEcmo": null,
-            "intensivBettenBelegt": 0,
-            "intensivBettenFrei": 0,
-            "intensivBettenGesamt": 0,
-            "freieIvKapazitaet": 0,
-            "freieEcmoKapazitaet": null,
-            "covidKapazitaetFrei": 0,
-            "covidKapazitaetFreiIv": 0,
-            "covidKapazitaetFreiEcmo": null,
-            "patientenIvBeatmet": 0,
-            "patientenEcmoBeatmet": null,
-            "faellePimsAktuell": null,
-            "kapazitaetFreiIsolationspflichtig": null,
-            "standortAggregates": {},
-            "intensivBettenNotfall7d": 0,
-            "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
-            "maxBettenStatusEinschaetzungHighCare": "KEINE_ANGABE",
-            "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
-            "maxBettenStatusEinschaetzungDialyse": "KEINE_ANGABE",
-            "bestBetriebssituation": "KEINE_ANGABE"
-        },
-        {
-            "krankenhausStandort": {
-                "id": "771235",
-                "bezeichnung": "Hufeland Klinikum GmbH, Mühlhausen",
-                "strasse": "Langensalzaer Landstraße",
-                "hausnummer": "1",
-                "plz": "99974",
-                "ort": "Mühlhausen/Thüringen",
-                "bundesland": "THUERINGEN",
-                "ikNummer": "261600521",
-                "position": {
-                    "latitude": 51.201241841669,
-                    "longitude": 10.467689216162
-                },
-                "gemeindeschluessel": "16064046"
-            },
-            "letzteMeldezeitpunkt": "2023-01-18T06:14:10Z",
-            "oldestMeldezeitpunkt": "2023-01-18T06:14:10Z",
-            "meldebereiche": [{
-                "meldebereichId": "e2e3b72e-466e-485f-a29e-ea7a2e668829",
-                "meldebereichBezeichnung": "Hufeland Klinikum GmbH Standort Mühlhausen,Klinik für Anästhesie und Intensivmedizin,Intensivstation",
-                "behandlungsschwerpunktL1": "ERWACHSENE"
-            }],
-            "faelleCovidGenesen": 1104,
-            "faelleCovidVerstorben": 124,
-            "faelleCovidAktuell": 0,
-            "faelleCovidAktuellBeatmet": null,
-            "faelleCovidAktuellNichtInvasivBeatmet": null,
-            "faelleCovidAktuellEcmo": null,
-            "intensivBettenBelegt": 9,
-            "intensivBettenFrei": 1,
-            "intensivBettenGesamt": 10,
-            "freieIvKapazitaet": 1,
-            "freieEcmoKapazitaet": null,
-            "covidKapazitaetFrei": 1,
-            "covidKapazitaetFreiIv": 1,
-            "covidKapazitaetFreiEcmo": null,
-            "patientenIvBeatmet": 5,
-            "patientenEcmoBeatmet": null,
-            "faellePimsAktuell": null,
-            "kapazitaetFreiIsolationspflichtig": null,
-            "standortAggregates": {},
-            "intensivBettenNotfall7d": 6,
-            "maxBettenStatusEinschaetzungEcmo": "KEINE_ANGABE",
-            "maxBettenStatusEinschaetzungHighCare": "NICHT_VERFUEGBAR",
-            "maxBettenStatusEinschaetzungLowCare": "KEINE_ANGABE",
-            "maxBettenStatusEinschaetzungDialyse": "NICHT_VERFUEGBAR",
-            "bestBetriebssituation": "EINGESCHRAENKT"
-        }],
-        "sum": {
-            "letzteMeldezeitpunkt": "2023-01-18T19:12:12Z",
-            "oldestMeldezeitpunkt": "2023-01-12T05:48:42Z",
-            "faelleCovidGenesen": 174087,
-            "faelleCovidVerstorben": 56496,
-            "faelleCovidAktuell": 837,
-            "faelleCovidAktuellBeatmet": 337,
-            "faelleCovidAktuellNichtInvasivBeatmet": 106,
-            "faelleCovidAktuellEcmo": 12,
-            "intensivBettenBelegt": 18884,
-            "intensivBettenFrei": 2157,
-            "intensivBettenGesamt": 21041,
-            "freieIvKapazitaet": 1879,
-            "freieEcmoKapazitaet": 434,
-            "covidKapazitaetFrei": 787,
-            "covidKapazitaetFreiIv": 682,
-            "covidKapazitaetFreiEcmo": 233,
-            "patientenIvBeatmet": 6490,
-            "patientenEcmoBeatmet": 148,
-            "faellePimsAktuell": null,
-            "kapazitaetFreiIsolationspflichtig": null,
-            "intensivBettenNotfall7d": 7625,
-            "maxBettenStatusEinschaetzungEcmo": "VERFUEGBAR",
-            "maxBettenStatusEinschaetzungHighCare": "VERFUEGBAR",
-            "maxBettenStatusEinschaetzungLowCare": "VERFUEGBAR",
-            "maxBettenStatusEinschaetzungDialyse": "VERFUEGBAR",
-            "bestBetriebssituation": "REGULAERER_BETRIEB"
-        }
-    }]
+    }
 }

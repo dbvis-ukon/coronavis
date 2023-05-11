@@ -256,26 +256,38 @@ def insert_data(data):
     entries_meldunden = []
 
     for d in data['data']:
-        e = {'meldezeitpunkt': d['letzteMeldezeitpunkt'], 'id': d['krankenhausStandort']['id'],
-             'bettenmeldungECMO': None, 'bettenmeldungLowCare': None, 'bettenmeldungHighCare': None,
-             'faelleCovidAktuell': d['faelleCovidAktuell'], 'faelleCovidAktuellBeatmet': d['faelleCovidAktuellBeatmet'],
-             'faelleCovidGenesen': d['faelleCovidGenesen'], 'faelleCovidVerstorben': d['faelleCovidVerstorben'],
-             'betriebssituation': d['bestBetriebssituation'], 'betriebseinschraenkungPersonal': None,
-             'betriebseinschraenkungRaum': None, 'betriebseinschraenkungBeatmungsgeraet': None,
+        e = {'meldezeitpunkt': d['letzteMeldezeitpunkt'],
+             'id': d['krankenhausStandort']['id'],
+             'bettenmeldungECMO': None,
+             'bettenmeldungLowCare': None,
+             'bettenmeldungHighCare': None,
+             'faelleCovidAktuell': d['faelleCovidAktuellMitManifestation'],
+             'faelleCovidAktuellBeatmet': d['faelleCovidAktuellMitManifestationBeatmet'],
+             'faelleCovidAktuellNichtInvasivBeatmet': d['faelleCovidAktuellMitManifestationNichtInvasivBeatmet'],
+             'faelleCovidAktuellEcmo': d['faelleCovidAktuellMitManifestationEcmo'],
+             'faelleCovidGenesen': None,
+             'faelleCovidVerstorben': None,
+             'betriebssituation': None,
+             'betriebseinschraenkungPersonal': None,
+             'betriebseinschraenkungRaum': None,
+             'betriebseinschraenkungBeatmungsgeraet': None,
              'betriebseinschraenkungVerbrauchsmaterial': None,
              'meldebereiche': list(map(lambda x: x['meldebereichBezeichnung'], d['meldebereiche'])),
-             'ardsNetzwerkMitglied': None, 'intensivBetten': d['intensivBettenGesamt'],
-             'intensivBettenBelegt': d['intensivBettenBelegt'], 'patientenInvasivBeatmet': d['patientenIvBeatmet'],
-             'patientenEcmo': d['patientenEcmoBeatmet'], 'freieIvKapazitaet': d['freieIvKapazitaet'],
-             'freieEcmoKapazitaet': d['freieEcmoKapazitaet'], 'intensivBettenNotfall7d': d['intensivBettenNotfall7d'],
-             'statusEinschaetzungLowcare': d['maxBettenStatusEinschaetzungLowCare'],
+             'ardsNetzwerkMitglied': None,
+             'intensivBetten': d['intensivBettenGesamt'],
+             'intensivBettenBelegt': d['intensivBettenBelegt'],
+             'patientenInvasivBeatmet': d['patientenIvBeatmet'],
+             'patientenEcmo': d['patientenEcmoBeatmet'],
+             'freieIvKapazitaet': d['freieIvKapazitaet'],
+             'freieEcmoKapazitaet': d['freieEcmoKapazitaet'],
+             'intensivBettenNotfall7d': d['intensivBettenNotfall7d'],
+             'statusEinschaetzungLowcare': None,
              'statusEinschaetzungHighcare': d['maxBettenStatusEinschaetzungHighCare'],
              'statusEinschaetzungEcmo': d['maxBettenStatusEinschaetzungEcmo'],
              'behandlungsschwerpunktL1': list(map(lambda x: x['behandlungsschwerpunktL1'], d['meldebereiche'])),
              'behandlungsschwerpunktL2': [],
-             'behandlungsschwerpunktL3': [],
-             'faelleCovidAktuellNichtInvasivBeatmet': d['faelleCovidAktuellNichtInvasivBeatmet'],
-             'faelleCovidAktuellEcmo': d['faelleCovidAktuellEcmo']}
+             'behandlungsschwerpunktL3': []
+            }
         entries_meldunden.append(e)
 
     psycopg2.extras.execute_values(
