@@ -8,6 +8,7 @@ import subprocess
 import jsonschema as jsonschema
 import psycopg2.extensions
 import psycopg2.extras
+from psycopg2.extensions import cursor, connection
 import requests
 import json
 from datetime import datetime, timezone
@@ -20,8 +21,6 @@ from db_config import get_connection, retry_refresh
 logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 logger = logging.getLogger(__name__)
 logger.info('Crawler for divi public data')
-
-STORAGE_PATH = "/var/divi_public/"
 
 URL_API = "https://www.intensivregister.de/api/public/intensivregister"
 
@@ -57,44 +56,52 @@ JSONPAYLOAD = {"criteria":
                "pageSize": 3000
                }
 
-logger.info('Assembling bearer and downloading data...')
-# get private api data
-x = session.post(URL_API, json=JSONPAYLOAD)
-data = x.json()
 
-# infos
-# noinspection DuplicatedCode
-count = data['rowCount']
-logger.info(f'Downloaded data from {count} hospitals.')
+def get_storage_path() -> str:
+    if os.name == 'nt':  # debug only
+        storage_path = './'
+    else:
+        storage_path = '/var/divi_public/'
+    if not os.path.isdir(storage_path):
+        logger.error(f"Storage path {storage_path} does not appear to be a valid directory")
+        exit(1)
+    return storage_path
 
-#
-# store data
-# 
-if os.name == 'nt':  # debug only
-    STORAGE_PATH = './'
-if not os.path.isdir(STORAGE_PATH):
-    logger.error(f"Storage path {STORAGE_PATH} does not appear to be a valid directory")
-    exit(1)
-current_update = datetime.now(timezone.utc)
-filepath = STORAGE_PATH + current_update.strftime("divi-public-%Y-%m-%dT%H-%M-%S") + '.json'
 
-logger.info(f'Storing data on pvc: {filepath}')
-with open(filepath, 'w') as outfile:
-    json.dump(data, outfile)
+def download_data(behandlungsschwerpunkt: str):
+    logger.info(f'Assembling bearer and downloading data for {behandlungsschwerpunkt}...')
+    JSONPAYLOAD['criteria']['behandlungsschwerpunktL1'] = [behandlungsschwerpunkt]
+    # get private api data
+    x = session.post(URL_API, json=JSONPAYLOAD)
+    data = x.json()
+    # infos
+    # noinspection DuplicatedCode
+    count = data['rowCount']
+    logger.info(f'Downloaded data from {count} hospitals.')
+    return data
 
-with open('./divi_public.schema.json') as schema:
-    logger.info('Validate json data with schema')
-    jsonschema.validate(data, json.load(schema))
 
-logger.info(f'Loading the data into the database')
+def store_data(data, behandlungsschwerpunkt):
+    storage_path = get_storage_path()
+    current_update = datetime.now(timezone.utc)
+    filepath = storage_path + current_update.strftime(
+        "divi-public-%Y-%m-%dT%H-%M-%S") + '-' + behandlungsschwerpunkt + '.json'
 
-# logger.debug(data)
+    logger.info(f'Storing data on pvc: {filepath}')
+    with open(filepath, 'w') as outfile:
+        json.dump(data, outfile)
 
-conn, cur = get_connection('crawl_divi_public')
+
+def validate_data(data):
+    with open('./divi_public.schema.json') as schema:
+        logger.info('Validate json data with schema')
+        jsonschema.validate(data, json.load(schema))
 
 
 # noinspection PyShadowingNames
-def insert_data(data):
+def insert_data(conn: connection, cur: cursor, data, type: str):
+    logger.info(f'Loading the data into the database')
+
     query_krankenhaus_standorte = f'INSERT INTO divi_krankenhaus_standorte ' \
                                   f'(id, bezeichnung, strasse, hausnummer, plz, ort, bundesland, iknummer, ' \
                                   f'position) ' \
@@ -146,13 +153,14 @@ def insert_data(data):
 
     for d in data['data']:
         e = {'id': d['krankenhausStandort']['id'], 'meldezeitpunkt': d['letzteMeldezeitpunkt'],
-             'statusEinschaetzungLowcare': d['maxBettenStatusEinschaetzungLowCare'],
+             'statusEinschaetzungLowcare': d.get('maxBettenStatusEinschaetzungLowCare', 'KEINE_ANGABE'),
              'statusEinschaetzungHighcare': d['maxBettenStatusEinschaetzungHighCare'],
              'statusEinschaetzungEcmo': d['maxBettenStatusEinschaetzungEcmo'],
-             'meldebereiche': list(map(lambda x: x['meldebereichBezeichnung'], d['meldebereiche'])),
-             'behandlungsschwerpunktL1': list(map(lambda x: x['behandlungsschwerpunktL1'], d['meldebereiche'])),
-             'behandlungsschwerpunktL2': list(map(lambda x: x['behandlungsschwerpunktL2'], d['meldebereiche'])),
-             'behandlungsschwerpunktL3': list(map(lambda x: x['behandlungsschwerpunktL3'], d['meldebereiche']))}
+             'meldebereiche': [],
+             'behandlungsschwerpunktL1': [type],
+             'behandlungsschwerpunktL2': [],
+             'behandlungsschwerpunktL3': []
+             }
         if d['krankenhausStandort']['id'] == '773017':
             print(e)
         entries_meldunden.append(e)
@@ -170,8 +178,14 @@ def insert_data(data):
 
 
 try:
-    # load the newest data into the DB to overwrite the latest data
-    insert_data(data)
+    conn, cur = get_connection('crawl_divi_public')
+
+    for b in ["ERWACHSENE", "KINDER"]:
+        data = download_data(b)
+        store_data(data, b)
+        validate_data(data)
+        # load the newest data into the DB to overwrite the latest data
+        insert_data(conn, cur, data, b)
 
     logger.info('Refreshing materialized view')
     retry_refresh(
@@ -183,7 +197,7 @@ try:
     cur.close()
     conn.close()
 
-    print(subprocess.run(['fdupes', '-dN', '-o', 'name', STORAGE_PATH], capture_output=True))
+    print(subprocess.run(['fdupes', '-dN', '-o', 'name', get_storage_path()], capture_output=True))
 
     logger.info('Done. Exiting...')
 except Exception as e:
