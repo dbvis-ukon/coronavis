@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 
 @Component({
@@ -19,17 +19,10 @@ import { Component, OnInit } from '@angular/core';
   ],
 })
 
-export class OsmTooltipComponent implements OnInit {
+export class OsmTooltipComponent {
 
   public name: string;
   public type: string;
-
-  constructor() { }
-
-
-  ngOnInit(): void {
-
-  }
 
   getOsmObjectName(){
     return this.name == null ? 'Name Unbekannt' : this.name;

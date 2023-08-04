@@ -226,7 +226,7 @@ export class TableOverviewService {
     return `${change > 0 ? '+' : ''}${this.decimalPipe.transform(change, '1.0-1')}%`;
   }
 
-  private getCasesPer100kInhabitants(count: number, population: number, addPlus: boolean = false): string {
+  private getCasesPer100kInhabitants(count: number, population: number, addPlus = false): string {
     const v = ((count / population) * 100000);
 
     return `${v > 0 && addPlus ? '+' : ''}${this.decimalPipe.transform(v, '1.0-2')}`;

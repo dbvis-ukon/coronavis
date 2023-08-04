@@ -17,8 +17,6 @@ import { getDateTime, getStrDate } from '../util/date-util';
 })
 export class HospitalUtilService {
 
-  constructor() { }
-
   public filterByDate(date: DateTime) {
     return filter<Feature<Geometry, AbstractHospitalOut<AbstractTimedStatus>>>(h => this.getLatestTimedStatus(h.properties.developments, date) !== null);
   }

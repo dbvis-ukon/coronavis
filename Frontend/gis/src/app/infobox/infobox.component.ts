@@ -2,7 +2,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CronJob } from 'cron';
-import { DateTime, Duration } from 'luxon';
+import { Duration } from 'luxon';
 import { BehaviorSubject, firstValueFrom, forkJoin, interval, merge, Observable, of } from 'rxjs';
 import { distinct, distinctUntilChanged, filter, map, mergeMap, tap, toArray } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
@@ -67,10 +67,10 @@ export class InfoboxComponent implements OnInit {
 
   glyphLegendColors = QualitativeColormapService.bedStati;
 
-  private _mo: MapOptions;
+  _mo: MapOptions;
 
-  @Input('mapOptions')
-  set mo(mo: MapOptions) {
+  @Input()
+  set mapOptions(mo: MapOptions) {
     this._mo = mo;
 
     if (!mo) {
@@ -80,7 +80,7 @@ export class InfoboxComponent implements OnInit {
     this.refDay$.next(mo.bedGlyphOptions.date);
   }
 
-  get mo(): MapOptions {
+  get mapOptions(): MapOptions {
     return this._mo;
   }
 
@@ -140,7 +140,7 @@ export class InfoboxComponent implements OnInit {
       max: 1
     },
     step: 0.1
-  };;
+  };
 
   constructor(
     public colormapService: QualitativeColormapService,
@@ -202,7 +202,7 @@ export class InfoboxComponent implements OnInit {
     // close info box if mobile
     const isSmallScreen = this.breakPointObserver.isMatched('(max-width: 500px)');
     if (isSmallScreen){
-      this.mo.extendInfobox = false;
+      this._mo.extendInfobox = false;
     }
 
     this.glyphLayerService.loading$.subscribe(l => this.glyphLoading = l);
@@ -285,7 +285,7 @@ export class InfoboxComponent implements OnInit {
   }
 
   private hospitalSearchResult(): Observable<Searchable> {
-    const zoom = this.getZoomForAggLevel(this._mo.bedGlyphOptions.aggregationLevel);
+    const zoom = this.getZoomForAggLevel();
 
     const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(this._mo.bedGlyphOptions);
 
@@ -306,7 +306,7 @@ export class InfoboxComponent implements OnInit {
       );
     } else if (this._mo.bedGlyphOptions.enabled && this._mo.bedGlyphOptions.aggregationLevel !== AggregationLevel.none) {
       return this.hospitalRepo
-      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to, true)
+      .getDiviDevelopmentForAggLevel(this._mo.bedBackgroundOptions.aggregationLevel, from, to, true)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
@@ -324,11 +324,11 @@ export class InfoboxComponent implements OnInit {
   }
 
   private bedBackgroundSearchResult(): Observable<Searchable> {
-    const zoom = this.getZoomForAggLevel(this._mo.bedBackgroundOptions.aggregationLevel);
+    const zoom = this.getZoomForAggLevel();
     if (this._mo.bedBackgroundOptions.enabled && this._mo.bedBackgroundOptions.aggregationLevel !== AggregationLevel.none) {
       const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(this._mo.bedBackgroundOptions);
       return this.hospitalRepo
-      .getDiviDevelopmentForAggLevel(this.mo.bedBackgroundOptions.aggregationLevel, from, to, true)
+      .getDiviDevelopmentForAggLevel(this._mo.bedBackgroundOptions.aggregationLevel, from, to, true)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
@@ -346,12 +346,12 @@ export class InfoboxComponent implements OnInit {
   }
 
   private caseSearchResult(): Observable<Searchable> {
-    const zoom = this.getZoomForAggLevel(this.mo.covidNumberCaseOptions.aggregationLevel);
+    const zoom = this.getZoomForAggLevel();
     if (this._mo.covidNumberCaseOptions.enabled) {
       const [from, to] = this.caseUtil.getFromToTupleFromOptions(this._mo.covidNumberCaseOptions);
 
       return this.caseRepo
-      .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this.mo.covidNumberCaseOptions.aggregationLevel, from, to, false, true)
+      .getCasesDevelopmentForAggLevel(this._mo.covidNumberCaseOptions.dataSource, this._mo.covidNumberCaseOptions.aggregationLevel, from, to, false, true)
       .pipe(
         mergeMap(d => d.features),
         map(d => ({
@@ -369,10 +369,10 @@ export class InfoboxComponent implements OnInit {
     return of();
   }
 
-  private getZoomForAggLevel(lvl: AggregationLevel): number {
+  private getZoomForAggLevel(): number {
     let zoom: number;
 
-    switch (this.mo.bedGlyphOptions.aggregationLevel){
+    switch (this._mo.bedGlyphOptions.aggregationLevel){
       case AggregationLevel.county:
         zoom = 11;
         break;
@@ -416,11 +416,11 @@ export class InfoboxComponent implements OnInit {
 
   emitCaseChoroplethOptions() {
 
-    if (this.mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
-      this.mo.covidNumberCaseOptions.normalization = CovidNumberCaseNormalization.absolut;
+    if (this._mo.covidNumberCaseOptions.change === CovidNumberCaseChange.relative) {
+      this._mo.covidNumberCaseOptions.normalization = CovidNumberCaseNormalization.absolut;
 
-      if (this.mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
-        this.mo.covidNumberCaseOptions.timeWindow = CovidNumberCaseTimeWindow.twentyFourhours;
+      if (this._mo.covidNumberCaseOptions.timeWindow === CovidNumberCaseTimeWindow.all) {
+        this._mo.covidNumberCaseOptions.timeWindow = CovidNumberCaseTimeWindow.twentyFourhours;
       }
     }
 
@@ -428,60 +428,60 @@ export class InfoboxComponent implements OnInit {
   }
 
   updateBedBackgroundBedType(state: BedType) {
-    if (this.mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
+    if (this._mo.bedGlyphOptions.aggregationLevel === AggregationLevel.none) {
       return;
     }
 
-    this.mo.bedBackgroundOptions.bedType = state;
+    this._mo.bedBackgroundOptions.bedType = state;
 
     this.emitMapOptions();
   }
 
   updateBedGlyphAggregationLevel(lvl: AggregationLevel) {
-    this.mo.bedGlyphOptions.aggregationLevel = lvl;
+    this._mo.bedGlyphOptions.aggregationLevel = lvl;
 
     if (lvl === AggregationLevel.none) {
-      this.mo.bedBackgroundOptions.enabled = false;
+      this._mo.bedBackgroundOptions.enabled = false;
     } else {
-      this.mo.bedBackgroundOptions.aggregationLevel = lvl;
+      this._mo.bedBackgroundOptions.aggregationLevel = lvl;
     }
 
     this.emitMapOptions();
   }
 
   updateCovidNumberCaseOptionsEnabled(enabled: boolean) {
-    this.mo.covidNumberCaseOptions.enabled = enabled;
+    this._mo.covidNumberCaseOptions.enabled = enabled;
 
     if (enabled) {
-      this.mo.bedBackgroundOptions.enabled = false;
+      this._mo.bedBackgroundOptions.enabled = false;
     }
 
     this.emitMapOptions();
   }
 
   updateBedBackgroundOptionsEnabled(enabled: boolean) {
-    this.mo.bedBackgroundOptions.enabled = enabled;
+    this._mo.bedBackgroundOptions.enabled = enabled;
 
     if (enabled) {
-      this.mo.covidNumberCaseOptions.enabled = false;
+      this._mo.covidNumberCaseOptions.enabled = false;
     }
 
     this.emitMapOptions();
   }
 
   emitMapOptions() {
-    if (this.mo.bedGlyphOptions.enabled) {
-      this.mo.bedBackgroundOptions.showLabels = false;
-      this.mo.covidNumberCaseOptions.showLabels = false;
-      this.mo.covidNumberCaseOptions.showTrendGlyphs = false;
+    if (this._mo.bedGlyphOptions.enabled) {
+      this._mo.bedBackgroundOptions.showLabels = false;
+      this._mo.covidNumberCaseOptions.showLabels = false;
+      this._mo.covidNumberCaseOptions.showTrendGlyphs = false;
     } else {
-      this.mo.bedBackgroundOptions.showLabels = true;
-      this.mo.covidNumberCaseOptions.showLabels = true;
-      this.mo.covidNumberCaseOptions.showTrendGlyphs = true;
+      this._mo.bedBackgroundOptions.showLabels = true;
+      this._mo.covidNumberCaseOptions.showLabels = true;
+      this._mo.covidNumberCaseOptions.showTrendGlyphs = true;
     }
 
     this.updateSearch();
-    this.mapOptionsChange.emit({...this.mo});
+    this.mapOptionsChange.emit({...this._mo});
   }
 
   searchSelected(h: Searchable) {
@@ -496,14 +496,14 @@ export class InfoboxComponent implements OnInit {
   }
 
   isEBreakModePossible(): boolean {
-    return this.caseUtil.isEBreakModePossible(this.mo.covidNumberCaseOptions);
+    return this.caseUtil.isEBreakModePossible(this._mo.covidNumberCaseOptions);
   }
 
   isLockDownMode(): boolean {
-    return this.caseUtil.isLockdownMode(this.mo.covidNumberCaseOptions);
+    return this.caseUtil.isLockdownMode(this._mo.covidNumberCaseOptions);
   }
 
-  trendSliderChanged(t: any) {
+  trendSliderChanged() {
     this.emitMapOptions();
   }
 

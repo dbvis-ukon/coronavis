@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { merge } from 'lodash-es';
 import { Observable, of } from 'rxjs';
 import { catchError, filter, map, mergeMap, toArray } from 'rxjs/operators';
@@ -29,7 +29,7 @@ export class DashboardService  {
   ) {}
 
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Dashboard | Observable<Dashboard> | Promise<Dashboard> {
+  resolve(route: ActivatedRouteSnapshot): Dashboard | Observable<Dashboard> | Promise<Dashboard> {
     const id = route.paramMap.get('id');
     const datasource = route.paramMap.get('datasource') as CovidNumberCaseDataSource;
 

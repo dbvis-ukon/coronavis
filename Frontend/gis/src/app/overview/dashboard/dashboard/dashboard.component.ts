@@ -16,12 +16,12 @@ import { VegaDashboardHistoryService } from 'src/app/services/vega-dashboard-his
 import { SettingsComponent } from '../settings/settings.component';
 import { TitleEditDialogComponent } from '../title-edit-dialog/title-edit-dialog.component';
 
-interface Clipboard {
-  read(): Promise<ClipboardItem[]>;
-  write(data: ClipboardItem[]): Promise<void>;
-}
+// interface Clipboard {
+//   read(): Promise<ClipboardItem[]>;
+//   write(data: ClipboardItem[]): Promise<void>;
+// }
 
-type ClipboardItemDelayedCallback = () => Promise<string | Blob>;
+// type ClipboardItemDelayedCallback = () => Promise<string | Blob>;
 
 declare class ClipboardItem {
   constructor(items: Record<string, any>, options?: ClipboardItemOptions);
@@ -39,7 +39,7 @@ type PresentationStyle = 'unspecified' | 'inline' | 'attachment';
 
 interface ClipboardItemOptions {
   presentationStyle?: PresentationStyle;
-};
+}
 
 @Component({
   selector: 'app-dashboard',

@@ -106,7 +106,7 @@ export class OverviewBedComponent implements OnInit {
         });
 
         const blob: BedDataBlob = {
-            data: this.d3ChoroplethService.get(mo, mls),
+            data: this.d3ChoroplethService.get(mo),
 
             mo,
 

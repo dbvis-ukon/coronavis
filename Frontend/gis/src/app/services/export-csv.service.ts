@@ -14,8 +14,6 @@ const CSV_TYPE = 'text/plain;charset=utf-8';
 })
 export class ExportCsvService {
 
-  constructor() { }
-
   /**
    * Saves the file on the client's machine via FileSaver library.
    *

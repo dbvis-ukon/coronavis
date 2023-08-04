@@ -39,7 +39,7 @@ export class ResizedDirective implements OnInit {
 
   ngOnInit() {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    new ResizeSensor(this.element.nativeElement, _ => this.onResized());
+    new ResizeSensor(this.element.nativeElement, () => this.onResized());
 
     this.debouncer
       .pipe(debounceTime(this.debounceTime || 100))

@@ -256,7 +256,7 @@ export class ChartService {
 
   updateChartAndThenRefreshAll(d: Item, allItems: Item[], containerWidth: number) {
     this.updateChartFull(d)
-    .subscribe(_ => this.updateChartsShallow(allItems, containerWidth));
+    .subscribe(() => this.updateChartsShallow(allItems, containerWidth));
   }
 
   downloadDataAsCsv(item: Item): void {

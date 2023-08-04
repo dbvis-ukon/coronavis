@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Feature, MultiPolygon } from 'geojson';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MapLocationSettings } from '../map/options/map-location-settings';
 import { MapOptions } from '../map/options/map-options';
 import { D3ChoroplethMapData } from '../overview/d3-choropleth-map/d3-choropleth-map.component';
 import { CaseDevelopmentRepository } from '../repositories/case-development.repository';
@@ -30,7 +29,7 @@ export class D3ChoroplethDataService {
   ) { }
 
 
-  public get(mo: MapOptions, mls: MapLocationSettings): Observable<D3ChoroplethMapData> {
+  public get(mo: MapOptions): Observable<D3ChoroplethMapData> {
     let ret: Observable<D3ChoroplethMapData>;
     if (mo.bedBackgroundOptions.enabled) {
       const [from, to] = this.hospitalUtil.getFromToTupleFromOptions(mo.bedGlyphOptions);

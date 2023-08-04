@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
 import { HelpDialogComponent } from '../help/help-dialog/help-dialog.component';
@@ -12,7 +12,7 @@ import { ShareDialogComponent } from '../share-dialog/share-dialog.component';
   templateUrl: './button-panel.component.html',
   styleUrls: ['./button-panel.component.less']
 })
-export class ButtonPanelComponent implements OnInit {
+export class ButtonPanelComponent {
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('mapOptions')
@@ -31,9 +31,6 @@ export class ButtonPanelComponent implements OnInit {
   ) {
   }
 
-
-  ngOnInit(): void {
-  }
 
   openAbout() {
     this.dialogService.open(AboutComponent, {

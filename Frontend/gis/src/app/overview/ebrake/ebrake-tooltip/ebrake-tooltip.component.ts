@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { EbrakeItem } from 'src/app/repositories/ebrake.repository';
 import { getDateTime } from 'src/app/util/date-util';
 
@@ -19,15 +19,10 @@ import { getDateTime } from 'src/app/util/date-util';
     ]),
   ],
 })
-export class EbrakeTooltipComponent implements OnInit {
+export class EbrakeTooltipComponent {
 
   @Input()
   public data: EbrakeItem & {ts_parsed: Date};
-
-  constructor() {}
-
-  ngOnInit(): void {
-  }
 
   isPrognosis(): boolean {
     return getDateTime(this.data.timestamp) > getDateTime('now');

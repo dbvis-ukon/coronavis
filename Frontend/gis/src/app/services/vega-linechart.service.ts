@@ -451,9 +451,6 @@ export class VegaLinechartService {
     ]
   };
 
-  constructor() {}
-
-
   compileChart(
     data: {
       x: string;y: number;

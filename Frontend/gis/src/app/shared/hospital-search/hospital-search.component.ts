@@ -60,9 +60,6 @@ export class HospitalSearchComponent implements OnInit {
   }
 
 
-  constructor(
-  ) { }
-
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
