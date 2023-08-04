@@ -444,6 +444,7 @@ check-missing-translations:
     - export SENTRY_DSN
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
+    - yarn ng version
     - yarn build
   artifacts:
     expire_in: 1 day
