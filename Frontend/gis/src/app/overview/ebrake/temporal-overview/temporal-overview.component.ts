@@ -1,6 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { EbrakeData, EbrakeRepository } from 'src/app/repositories/ebrake.repository';
 import { RegionRepository } from 'src/app/repositories/region.repository';

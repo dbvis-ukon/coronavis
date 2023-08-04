@@ -1,4 +1,4 @@
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Feature, FeatureCollection, Geometry } from 'geojson';
 import * as L from 'leaflet';
 import { CaseDialogComponent } from 'src/app/cases-dod/case-dialog/case-dialog.component';
