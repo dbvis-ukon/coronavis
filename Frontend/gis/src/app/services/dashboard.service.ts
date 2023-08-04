@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { merge } from 'lodash-es';
 import { Observable, of } from 'rxjs';
 import { catchError, filter, map, mergeMap, toArray } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { TranslationService } from './translation.service';
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardService implements Resolve<Dashboard> {
+export class DashboardService  {
 
   private alreadyUpvoted: Set<string> = new Set();
 
