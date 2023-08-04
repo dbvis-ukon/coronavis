@@ -69,7 +69,10 @@
         "plugin:json/recommended"
       ],
       "rules": {
-        "json/*": ["error", "allowComments"]
+        "json/*": [
+          "error",
+          "allowComments"
+        ]
       }
     }
   ]
