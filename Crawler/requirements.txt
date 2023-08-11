@@ -8,11 +8,11 @@ geopy==2.3.0
 geojson==3.0.1
 SQLAlchemy==1.4.49
 GeoAlchemy2==0.14.1
-psycopg2-binary==2.9.6
+psycopg2-binary==2.9.7
 sentry_sdk==1.29.2
 python-dotenv==1.0.0
 zeep==4.2.1
-holidays==0.29
-jsonschema==4.18.6
+holidays==0.30
+jsonschema==4.19.0
 types-psycopg2==2.9.21.11
 pytz==2023.3
