@@ -13,8 +13,6 @@ interface ExplicitBBox {
 })
 export class GeojsonUtilService {
 
-  constructor() { }
-
   public isFeatureInBBox<T extends Feature>(f: T, latAcc: (d: T) => number, lngAcc: (d: T) => number, bbox: ExplicitBBox) {
     return this.isPointInBBox({lat: latAcc(f), lng: lngAcc(f)}, bbox);
   }

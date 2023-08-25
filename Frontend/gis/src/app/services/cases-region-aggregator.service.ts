@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Feature, MultiPolygon } from 'geojson';
-import { forkJoin, of } from 'rxjs';
-import { RKIAgeGroups, RKICaseDevelopmentProperties, RKICaseTimedStatus } from '../repositories/types/in/quantitative-rki-case-development';
+import { RKIAgeGroups, RKICaseDevelopmentProperties } from '../repositories/types/in/quantitative-rki-case-development';
 
 export interface AggRKICaseTimedStatus {
   cases_sum: number;
@@ -53,8 +52,6 @@ export interface AggRKICaseDevelopmentProperties {
 })
 export class CasesRegionAggregatorService {
 
-  constructor() { }
-
   public aggregate(data: Feature<MultiPolygon, RKICaseDevelopmentProperties>[]): AggRKICaseDevelopmentProperties {
 
     const ret: AggRKICaseDevelopmentProperties = {
@@ -68,46 +65,46 @@ export class CasesRegionAggregatorService {
     return ret;
   }
 
-  private _aggregateDevelopments(data: Feature<MultiPolygon, RKICaseDevelopmentProperties>[]): AggRKICaseTimedStatus[] {
-    const maxLength = data.map(d => d.properties.developments.length).reduce((prev, now) => Math.max(prev, now), 0);
-    for(let i = 0; i < maxLength; i++) {
+  // private _aggregateDevelopments(data: Feature<MultiPolygon, RKICaseDevelopmentProperties>[]): AggRKICaseTimedStatus[] {
+  //   const maxLength = data.map(d => d.properties.developments.length).reduce((prev, now) => Math.max(prev, now), 0);
+  //   for(let i = 0; i < maxLength; i++) {
 
-    }
-  }
+  //   }
+  // }
 
-  private _aggregateDevelopment(data: RKICaseTimedStatus[]): AggRKICaseTimedStatus {
-    return {
-      cases_sum: data.map(d => d.cases).reduce((p, n) => p + n, 0),
-      deaths_sum: data.map(d => d.deaths).reduce((p, n) => p + n, 0),
-      population_sum: data.map(d => d.population).reduce((p, n) => p + n, 0),
-      timestamps: data.map(d => d.timestamp),
-      inserted: data.map(d => d.inserted),
-      last_updated: data.map(d => d.last_updated),
-      cases_by_agegroup_sum: this._aggregateAgeGroups(data.map(d => d.cases_by_agegroup)),
-      deaths_by_agegroup_sum: this._aggregateAgeGroups(data.map(d => d.deaths_by_agegroup)),
-      population_by_agegroup_sum: this._aggregateAgeGroups(data.map(d => d.population_by_agegroup)),
-    };
-  }
+  // private _aggregateDevelopment(data: RKICaseTimedStatus[]): AggRKICaseTimedStatus {
+  //   return {
+  //     cases_sum: data.map(d => d.cases).reduce((p, n) => p + n, 0),
+  //     deaths_sum: data.map(d => d.deaths).reduce((p, n) => p + n, 0),
+  //     population_sum: data.map(d => d.population).reduce((p, n) => p + n, 0),
+  //     timestamps: data.map(d => d.timestamp),
+  //     inserted: data.map(d => d.inserted),
+  //     last_updated: data.map(d => d.last_updated),
+  //     cases_by_agegroup_sum: this._aggregateAgeGroups(data.map(d => d.cases_by_agegroup)),
+  //     deaths_by_agegroup_sum: this._aggregateAgeGroups(data.map(d => d.deaths_by_agegroup)),
+  //     population_by_agegroup_sum: this._aggregateAgeGroups(data.map(d => d.population_by_agegroup)),
+  //   };
+  // }
 
-  private _aggregateAgeGroups(data: RKIAgeGroups[]): RKIAgeGroups {
-    const ret: RKIAgeGroups = {
-      A00_A04: 0,
-      A05_A14: 0,
-      A15_A34: 0,
-      A35_A59: 0,
-      A60_A79: 0,
-      A80plus: 0
-    };
+  // private _aggregateAgeGroups(data: RKIAgeGroups[]): RKIAgeGroups {
+  //   const ret: RKIAgeGroups = {
+  //     A00_A04: 0,
+  //     A05_A14: 0,
+  //     A15_A34: 0,
+  //     A35_A59: 0,
+  //     A60_A79: 0,
+  //     A80plus: 0
+  //   };
 
-    data.forEach(d => {
-      for (const key of Object.keys(d)) {
-        if(!ret[key]) {
-          ret[key] = 0;
-        }
-        ret[key] += d[key];
-      }
-    });
+  //   data.forEach(d => {
+  //     for (const key of Object.keys(d)) {
+  //       if(!ret[key]) {
+  //         ret[key] = 0;
+  //       }
+  //       ret[key] += d[key];
+  //     }
+  //   });
 
-    return ret;
-  }
+  //   return ret;
+  // }
 }

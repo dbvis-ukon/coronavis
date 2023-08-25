@@ -75,8 +75,6 @@ export class D3ChoroplethMapComponent implements OnInit {
     return this._data;
   }
 
-  constructor() {}
-
   ngOnInit(): void {
     this.projection = geoMercator();
       // .scale(1500)

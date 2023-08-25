@@ -115,7 +115,7 @@ export class TimesliderComponent implements OnInit {
           takeUntil(ons$),
           repeatWhen(() => offs$)
         )
-      .subscribe(d => {
+      .subscribe(() => {
         this.onTimer();
       });
   }

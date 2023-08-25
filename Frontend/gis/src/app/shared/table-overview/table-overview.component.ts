@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CovidNumberCaseTimeWindow } from 'src/app/map/options/covid-number-case-options';
 import { TableOverviewDataAndOptions } from 'src/app/services/table-overview.service';
 
@@ -7,7 +7,7 @@ import { TableOverviewDataAndOptions } from 'src/app/services/table-overview.ser
   templateUrl: './table-overview.component.html',
   styleUrls: ['./table-overview.component.less']
 })
-export class TableOverviewComponent implements OnInit {
+export class TableOverviewComponent {
 
   @Input()
   tableData: TableOverviewDataAndOptions;
@@ -21,7 +21,4 @@ export class TableOverviewComponent implements OnInit {
 
   eTimeWindow = CovidNumberCaseTimeWindow;
 
-  constructor() { }
-
-  ngOnInit(): void {}
 }

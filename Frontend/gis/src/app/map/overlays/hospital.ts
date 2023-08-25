@@ -39,7 +39,7 @@ export class HospitalLayer extends Overlay < OSMHospitalProperties > {
           click: (e: L.LeafletMouseEvent) => onAction(e, feature, hospitalLayer),
           mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, hospitalLayer),
           // on mouseover hide tooltip and reset county to normal sytle
-          mouseout: (e: L.LeafletMouseEvent) => {
+          mouseout: () => {
             this.tooltipService.close();
           }
         });

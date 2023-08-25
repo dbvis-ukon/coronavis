@@ -82,7 +82,7 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
       onEachFeature: (feature, layer) => {
         layer.on({
           // on mouseover update tooltip and highlight county
-          click: (e) => {
+          click: () => {
             this.tooltipService.close();
             this.matDialog.open(CaseDialogComponent, {
               maxWidth: '90vw',
@@ -94,7 +94,7 @@ export class CaseChoropleth extends Overlay<RKICaseDevelopmentProperties> {
           },
           mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, aggregationLayer, layer),
           // on mouseover hide tooltip and reset county to normal sytle
-          mouseout: (e: L.LeafletMouseEvent) => {
+          mouseout: () => {
             this.tooltipService.close();
           }
         });

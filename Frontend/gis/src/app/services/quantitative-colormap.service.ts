@@ -9,9 +9,6 @@ import { QuantitativeBedStatusSummary } from './types/bed-status-summary';
   providedIn: 'root'
 })
 export class QuantitativeColormapService {
-  constructor() {
-  }
-
   public static bedStatusColors = ['rgb(113,167,133)', 'rgb(230,181,72)', 'rgb(198,106,75)'];
   public static bedStati = ['Verfügbar', 'Begrenzt', 'Ausgelastet', 'Nicht verfügbar', 'Keine Information'];
 

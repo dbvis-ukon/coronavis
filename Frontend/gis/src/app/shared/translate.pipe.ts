@@ -10,7 +10,7 @@ export class TranslatePipe implements PipeTransform {
     private translationService: TranslationService
   ) {}
 
-  transform(value: string, ...args: unknown[]): unknown {
+  transform(value: string): unknown {
     return this.translationService.translate(value);
   }
 

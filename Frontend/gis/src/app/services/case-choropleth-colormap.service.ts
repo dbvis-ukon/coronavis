@@ -156,7 +156,7 @@ export class CaseChoroplethColormapService {
   getColorMapBins(
     options: CovidNumberCaseOptions,
     scaleFn?: ScaleLinear<number, number> | ScalePower<number, number>,
-    onlyFullNumbers: boolean = false,
+    onlyFullNumbers = false,
     dataExtent: [number, number] = null
   ): ColorMapBin[] {
     return this.getColorMap(options).range()
@@ -268,7 +268,7 @@ export class CaseChoroplethColormapService {
   public getDomainExtent(
     fc: FeatureCollection<Geometry, RKICaseDevelopmentProperties>,
     options: CovidNumberCaseOptions,
-    actualExtent: boolean = false
+    actualExtent = false
   ): [number, number] {
     const cases: number[] = this.caseUtil.getCaseNumbersArray(fc, options);
 

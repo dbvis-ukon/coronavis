@@ -37,7 +37,7 @@ export class HelipadLayer extends Overlay < OSMHelipadProperties > {
           click: (e: L.LeafletMouseEvent) => onAction(e, feature, helipadLayer),
           mouseover: (e: L.LeafletMouseEvent) => onAction(e, feature, helipadLayer),
           // on mouseover hide tooltip and reset county to normal sytle
-          mouseout: (e: L.LeafletMouseEvent) => {
+          mouseout: () => {
             this.tooltipService.close();
           }
         });

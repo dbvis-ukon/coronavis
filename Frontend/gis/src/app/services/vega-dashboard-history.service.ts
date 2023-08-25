@@ -96,8 +96,6 @@ export class VegaDashboardHistoryService {
   }
   ;
 
-  constructor() {}
-
   compileChart(data: Dashboard[], width: number, height: number): any {
     if (!data) {
       return null;

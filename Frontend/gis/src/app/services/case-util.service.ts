@@ -446,7 +446,7 @@ export class CaseUtilService {
     return typeAccessor;
   }
 
-  getChartTitle(c: CovidChartOptions, titleRegions?: string[], short: boolean = false): string {
+  getChartTitle(c: CovidChartOptions, titleRegions?: string[], short = false): string {
     const str = [];
 
     switch(c.type) {
@@ -493,7 +493,7 @@ export class CaseUtilService {
         str.push(this.translation.translate(short ? '24h' : '24 Std'));
         break;
 
-      case CovidNumberCaseTimeWindow.twentyFourhours:
+      case CovidNumberCaseTimeWindow.seventyTwoHours:
         str.push(this.translation.translate(short ? '72h' : '72 Std'));
         break;
 

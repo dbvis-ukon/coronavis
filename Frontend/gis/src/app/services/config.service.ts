@@ -76,9 +76,6 @@ export class ConfigService {
     allowZooming: true
   };
 
-  constructor() { }
-
-
   getDefaultMapOptions(): MapOptions {
     return JSON.parse(JSON.stringify(this.defaultMapOptions));
   }

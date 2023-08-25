@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-help-dialog-theproject',
@@ -6,11 +6,6 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   styleUrls: ['./help-dialog-theproject.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HelpDialogTheprojectComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class HelpDialogTheprojectComponent {
 
 }

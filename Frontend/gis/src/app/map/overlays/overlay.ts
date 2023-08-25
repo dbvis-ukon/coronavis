@@ -18,7 +18,7 @@ export class Overlay<P> {
         return this.featureCollection;
     }
 
-    createOverlay(map: L.Map): L.GeoJSON<any> | L.SVGOverlay {
+    createOverlay(): L.GeoJSON<any> | L.SVGOverlay {
         return L.geoJSON(this.featureCollection);
     }
 }

@@ -153,7 +153,7 @@ export class MapRootComponent implements OnInit {
     const helpSeen = JSON.parse(this.storage.retrieve(APP_HELP_SEEN)) || false;
     if (this.mapOptions?.showHelpOnStart && !helpSeen) {
       this.dialog.open(HelpDialogComponent)
-        .afterClosed().subscribe(d => {
+        .afterClosed().subscribe(() => {
         this.storage.store(APP_HELP_SEEN, JSON.stringify(true));
       });
     }

@@ -11,13 +11,13 @@ import { BedBackgroundOptions } from '../options/bed-background-options';
 import { CovidNumberCaseOptions } from '../options/covid-number-case-options';
 import { GlyphLayer } from './GlyphLayer';
 
-interface MyQuadTreeItem < Payload > {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  payload: Payload;
-}
+// interface MyQuadTreeItem < Payload > {
+//   x: number;
+//   y: number;
+//   width: number;
+//   height: number;
+//   payload: Payload;
+// }
 
 // contains x,y coordinates in pixel space
 // containes wrapped text
@@ -281,7 +281,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
 
     //  this.ctx.strokeRect(g.x - g.width / 2, g.y, g.width, g.height);
 
-    const cb = (d: PreparedGlyph, i: number, ds: PreparedGlyph[]) => ([
+    const cb = (d: PreparedGlyph) => ([
       [d.x - d.width / 2, d.y],
       [d.x + d.width / 2, d.y + d.height]]);
 
@@ -345,7 +345,7 @@ export class LabelCanvasLayer < G extends Geometry, P extends ForceLayoutPropert
       const wText = this.getWrappedText(text, this.getGlyphWidth() * 4, fontSizeAndHeight);
       const widthOfWrappedText = wText.map(m => m.width).reduce((agg, val) => Math.max(agg || 0, val));
 
-      wrappedText = wText.map((w, i) => ({text: w.line, fontSize: fontSizeAndHeight}));
+      wrappedText = wText.map((w) => ({text: w.line, fontSize: fontSizeAndHeight}));
 
 
       const heightOfWrappedText = belowGlyhY + fontSizeAndHeight * wrappedText.length;

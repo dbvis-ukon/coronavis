@@ -163,7 +163,7 @@ export class OverviewCaseComponent implements OnInit {
 
           mlsUrl: await this.urlHandler.convertMLSToUrl(mls),
 
-          data: this.d3ChoroplethService.get(conf, mls),
+          data: this.d3ChoroplethService.get(conf),
 
           aggLevelFriendly: aggLevel,
 
