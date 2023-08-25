@@ -1,6 +1,6 @@
 blinker==1.6.2
 cryptography==41.0.3
-Flask==2.3.2
+Flask==2.3.3
 Flask-Caching==2.0.2
 Flask-Compress==1.13
 Flask-Cors==4.0.0
@@ -11,13 +11,13 @@ SQLAlchemy==1.4.49
 geojson==3.0.1
 GeoAlchemy2==0.14.1
 gunicorn==21.2.0
-Werkzeug==2.3.6
+Werkzeug==2.3.7
 sentry-sdk==1.29.2
 psycopg2-binary==2.9.7
 python-dotenv==1.0.0
 marshmallow-sqlalchemy==0.29.0
 bcrypt==4.0.1
-alembic==1.11.2
+alembic==1.11.3
 tzdata==2023.3
 tzlocal==5.0.1
 prometheus-flask-exporter==0.22.4
