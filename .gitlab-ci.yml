@@ -301,7 +301,7 @@ set up sentry release:
 
 frontend-install-dependencies:
   stage: prepare
-  image: node:19
+  image: node:20
   script:
     - cd ./Frontend/gis
     - yarn config set registry https://nexus.dbvis.de/repository/npmjs/
