@@ -74,7 +74,7 @@
     "@types/geojson": "7946.0.10",
     "@types/jasmine": "4.3.5",
     "@types/jasminewd2": "2.0.10",
-    "@types/leaflet": "1.9.3",
+    "@types/leaflet": "1.9.4",
     "@types/lodash-es": "4.17.8",
     "@types/luxon": "3.3.2",
     "@types/marked": "5.0.1",
