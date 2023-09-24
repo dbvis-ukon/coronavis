@@ -3128,9 +3128,9 @@
     "@types/d3-selection" "*"
 
 "@types/d3-dsv@*":
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/@types/d3-dsv/-/d3-dsv-3.0.3.tgz#fd7e33950d1a1074d9561710b607b9a00ee5bea1"
-  integrity sha512-kEHH4lY2Oem/LpGg6Y5wFaFOpiEa1CaQUIpuiFC3SJ59OW8jQSlCPV43ooLzxUPCO6CoEo0oQAZzwnr8IyXVbQ==
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@types/d3-dsv/-/d3-dsv-3.0.4.tgz#f2706ed90f72e8c16d3858b3c3060dfd47b7f161"
+  integrity sha512-YxfUVJ55HxR8oq88136w09mBMPNhgH7PZjteq72onWXWOohGif/cLQnQv8V4A5lEGjXF04LhwSTpmzpY9wyVyA==
 
 "@types/d3-ease@*":
   version "3.0.0"
