@@ -3424,10 +3424,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.8.0.tgz#10ddf0119cf20028781c06d7115562934e53f745"
   integrity sha512-LzcWltT83s1bthcvjBmiBvGJiiUe84NWRHkw+ZV6Fr41z2FbIzvc815dk2nQ3RAKMuN2fkenM/z3Xv2QzEpYxQ==
 
-"@types/node@18.18.1":
-  version "18.18.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.18.1.tgz#80b22f3df719f15c9736207980e95f35d01ec1aa"
-  integrity sha512-3G42sxmm0fF2+Vtb9TJQpnjmP+uKlWvFa8KoEGquh4gqRmoUG/N0ufuhikw6HEsdG2G2oIKhog1GCTfz9v5NdQ==
+"@types/node@18.18.2":
+  version "18.18.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.18.2.tgz#7abacb27a49afa8ea86873d81d7940ae098279eb"
+  integrity sha512-u1cis+7wLZMPI62EozwsqvgMZyauczyiqRRu/vcqZKI5N5yidrJHqOFxEg5seT8adc96Q6Yczg1c0DlqGtMJMw==
 
 "@types/q@^0.0.32":
   version "0.0.32"
