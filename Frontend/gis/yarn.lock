@@ -3387,10 +3387,10 @@
   dependencies:
     "@types/geojson" "*"
 
-"@types/lodash-es@4.17.9":
-  version "4.17.9"
-  resolved "https://registry.yarnpkg.com/@types/lodash-es/-/lodash-es-4.17.9.tgz#49dbe5112e23c54f2b387d860b7d03028ce170c2"
-  integrity sha512-ZTcmhiI3NNU7dEvWLZJkzG6ao49zOIjEgIE0RgV7wbPxU0f2xT3VSAHw2gmst8swH6V0YkLRGp4qPlX/6I90MQ==
+"@types/lodash-es@4.17.10":
+  version "4.17.10"
+  resolved "https://registry.yarnpkg.com/@types/lodash-es/-/lodash-es-4.17.10.tgz#1b36a76ca9eda20c0263e19bbe1a3adb1b317707"
+  integrity sha512-YJP+w/2khSBwbUSFdGsSqmDvmnN3cCKoPOL7Zjle6s30ZtemkkqhjVfFqGwPN7ASil5VyjE2GtyU/yqYY6mC0A==
   dependencies:
     "@types/lodash" "*"
 
