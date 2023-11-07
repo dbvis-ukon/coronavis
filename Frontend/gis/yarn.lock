@@ -3407,10 +3407,10 @@
   resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-3.3.3.tgz#b2e20a9536f91ab3e6e7895c91883e1a7ad49a6e"
   integrity sha512-/BJF3NT0pRMuxrenr42emRUF67sXwcZCd+S1ksG/Fcf9O7C3kKCY4uJSbKBE4KDUIYr3WMsvfmWD8hRjXExBJQ==
 
-"@types/mapbox-gl-leaflet@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@types/mapbox-gl-leaflet/-/mapbox-gl-leaflet-0.0.3.tgz#3854b07b0614188e2f75abeee965f9ad5741350b"
-  integrity sha512-YnxAsKsPRcboA3Duwa5bTGFvTUf/J59/dHgBMaK0dH/riZMWR2kC26JhO/vNyz94EMSpbJNndc+LKqlfgBqfIg==
+"@types/mapbox-gl-leaflet@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@types/mapbox-gl-leaflet/-/mapbox-gl-leaflet-0.0.4.tgz#fc120d24ed980b21e0598edead3547f69d8037f9"
+  integrity sha512-jDZKeq6J5etzyLz546S94tMzyP+ALaFIlyJ1mvpgo2AtaYZpSf52EDg9kVJhAzkIpPlZjmYG3N7HvQ+lKclgQA==
   dependencies:
     "@types/leaflet" "*"
 
