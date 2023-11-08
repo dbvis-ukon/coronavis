@@ -5,7 +5,7 @@ openpyxl==3.1.2
 requests==2.31.0
 shapely==2.0.2
 geopy==2.4.0
-geojson==3.0.1
+geojson==3.1.0
 SQLAlchemy==1.4.50
 GeoAlchemy2==0.14.2
 psycopg2-binary==2.9.9
