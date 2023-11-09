@@ -20,5 +20,5 @@ bcrypt==4.0.1
 alembic==1.12.1
 tzdata==2023.3
 tzlocal==5.2
-prometheus-flask-exporter==0.22.4
+prometheus-flask-exporter==0.23.0
 flasgger==0.9.7.1
