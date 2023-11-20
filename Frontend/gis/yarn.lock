@@ -8805,10 +8805,10 @@ ngx-i18nsupport@0.17.1:
     request "^2.85.0"
     rxjs "^6.0.0"
 
-ngx-markdown@17.0.0:
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-markdown/-/ngx-markdown-17.0.0.tgz#7a02af2365a0f4e82c5bc76dcef0da50a84e936a"
-  integrity sha512-nbkI10cn+yaDjMcSu6CDT4Wqe4nxL4EE5RUHUjb5KfYBDrfyyJ86UyauMWFJuNbnkf5mlxIpVs884iYnW4fe8g==
+ngx-markdown@17.1.1:
+  version "17.1.1"
+  resolved "https://registry.yarnpkg.com/ngx-markdown/-/ngx-markdown-17.1.1.tgz#6e9c34fe8d470621b4609d68e8a403efb72b4e66"
+  integrity sha512-BGNWGJ6tmfPx+ScZFq5qeGLgWJwsakjScZ2e+oUzm+97DAHpIHSl8gptNZvZgRhOiFdjLcKBcuY2Rz8WB6J6UQ==
   dependencies:
     tslib "^2.3.0"
   optionalDependencies:
