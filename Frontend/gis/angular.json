@@ -137,10 +137,10 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "gis:build",
             "format": "xlf2",
             "outFile": "messages.xlf",
-            "outputPath": "src/i18n/"
+            "outputPath": "src/i18n/",
+            "buildTarget": "gis:build"
           },
           "configurations": {
             "de": {
