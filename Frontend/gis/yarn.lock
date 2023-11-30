@@ -28,20 +28,20 @@
     tsconfig-paths "^4.1.0"
     webpack-merge "^5.7.3"
 
-"@angular-devkit/architect@0.1700.3", "@angular-devkit/architect@>=0.1700.0 < 0.1800.0":
-  version "0.1700.3"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.1700.3.tgz#da4ea29ace15f54306e9b9d1b6216300e9693f93"
-  integrity sha512-HUjx7vD16paWXHKHYc2LsSn/kaYbFr2YNnlzuSr9C0kauKS1e7sRpRvtGwQzXfohzgyKi81AAU5uA2KLRGq83w==
-  dependencies:
-    "@angular-devkit/core" "17.0.3"
-    rxjs "7.8.1"
-
 "@angular-devkit/architect@0.1700.4":
   version "0.1700.4"
   resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.1700.4.tgz#3668bd5ac4821f7c3bc880eb041962219b2c7b91"
   integrity sha512-6xvZ75ZId/fJket/g23APxtmhxuXTz6AMPhsyZpLgqYWGL2AN3JtUMrZDKe8pWmtWOMTOCpWB7/siJJu46REsg==
   dependencies:
     "@angular-devkit/core" "17.0.4"
+    rxjs "7.8.1"
+
+"@angular-devkit/architect@0.1700.5", "@angular-devkit/architect@>=0.1700.0 < 0.1800.0":
+  version "0.1700.5"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.1700.5.tgz#5afec59a4d15d23d73b246a05d8624781937173c"
+  integrity sha512-kPGiPzystxyLDj79Wy+wCZs5vzx6iUy6fjZ9dKFNS3M9T9UXoo8CZLJS0dWrgO/97M25MSgufyIEDmi+HvwZ7w==
+  dependencies:
+    "@angular-devkit/core" "17.0.5"
     rxjs "7.8.1"
 
 "@angular-devkit/build-angular@17.0.4":
@@ -118,14 +118,14 @@
     esbuild "0.19.5"
 
 "@angular-devkit/build-angular@^17.0.0":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-angular/-/build-angular-17.0.3.tgz#d0e284d22363e780e97bc9f7de3fb41b4af9115f"
-  integrity sha512-1lx0mERC1eTHX4vf8q7kUHZNHS0jwZxbwYHAISOplwHjkzRociX0W6rx04yMXn2NCSNhK+w3xbWyAIgyYbP9nA==
+  version "17.0.5"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/build-angular/-/build-angular-17.0.5.tgz#d7d91cda070b4222f4312750b1540fc3b1f343e2"
+  integrity sha512-45+DTM3F8OFlMFRxQRgTBXnfndysgiZXiqItiKmFFau7wENZiTijUuFMFjOIHlLXFDI1qs130hYE4YkPNFffxg==
   dependencies:
     "@ampproject/remapping" "2.2.1"
-    "@angular-devkit/architect" "0.1700.3"
-    "@angular-devkit/build-webpack" "0.1700.3"
-    "@angular-devkit/core" "17.0.3"
+    "@angular-devkit/architect" "0.1700.5"
+    "@angular-devkit/build-webpack" "0.1700.5"
+    "@angular-devkit/core" "17.0.5"
     "@babel/core" "7.23.2"
     "@babel/generator" "7.23.0"
     "@babel/helper-annotate-as-pure" "7.22.5"
@@ -136,7 +136,7 @@
     "@babel/preset-env" "7.23.2"
     "@babel/runtime" "7.23.2"
     "@discoveryjs/json-ext" "0.5.7"
-    "@ngtools/webpack" "17.0.3"
+    "@ngtools/webpack" "17.0.5"
     "@vitejs/plugin-basic-ssl" "1.0.1"
     ansi-colors "4.1.3"
     autoprefixer "10.4.16"
@@ -190,14 +190,6 @@
   optionalDependencies:
     esbuild "0.19.5"
 
-"@angular-devkit/build-webpack@0.1700.3":
-  version "0.1700.3"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-webpack/-/build-webpack-0.1700.3.tgz#17ae76a0666d9df612e3727f3a617c86a7daf668"
-  integrity sha512-r8nVakAnwV5Yy2AjWDpdcGUjHRQBcPljZDhX5tX2H7M3bxD6zG5owXDy8XmG64A7U1jd6D7dQv7zoW/tZwpYvw==
-  dependencies:
-    "@angular-devkit/architect" "0.1700.3"
-    rxjs "7.8.1"
-
 "@angular-devkit/build-webpack@0.1700.4":
   version "0.1700.4"
   resolved "https://registry.yarnpkg.com/@angular-devkit/build-webpack/-/build-webpack-0.1700.4.tgz#c2566dce6e46d8f54d93e688cc29e5b3e9ea7d0c"
@@ -206,10 +198,18 @@
     "@angular-devkit/architect" "0.1700.4"
     rxjs "7.8.1"
 
-"@angular-devkit/core@17.0.3", "@angular-devkit/core@^17.0.0":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-17.0.3.tgz#c89af851efb52698827d005b223bf74364144aad"
-  integrity sha512-SOngD3rKnwZWhhUV68AYlH8M3LRGvF69jnDrYKwtRy1ESqSH7tt+1vexGC290gKvqH7bNMgYv8f5BS1AASRfzw==
+"@angular-devkit/build-webpack@0.1700.5":
+  version "0.1700.5"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/build-webpack/-/build-webpack-0.1700.5.tgz#449c6a1397934f6e1b42314ad08ab9bde35b9b4c"
+  integrity sha512-rLtDIK6je7JxhWG76aM8smfX13XHv+LlepwdK4lQqPEnz5BnkTfNFBnqwIWHA2eNUNTnVgeS356PxckZI3YL1g==
+  dependencies:
+    "@angular-devkit/architect" "0.1700.5"
+    rxjs "7.8.1"
+
+"@angular-devkit/core@17.0.4":
+  version "17.0.4"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-17.0.4.tgz#c92dbc620a3021af8ff47b60d17d2214b389f52b"
+  integrity sha512-KlPxbtva4fpDFulXHqhPIMp4hnXsp6d4z0Odz2027LNSCZ5Sk1oFltmb+VMVvGD4Q7NkC7FCtCUbjrLAFON3PQ==
   dependencies:
     ajv "8.12.0"
     ajv-formats "2.1.1"
@@ -218,10 +218,10 @@
     rxjs "7.8.1"
     source-map "0.7.4"
 
-"@angular-devkit/core@17.0.4":
-  version "17.0.4"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-17.0.4.tgz#c92dbc620a3021af8ff47b60d17d2214b389f52b"
-  integrity sha512-KlPxbtva4fpDFulXHqhPIMp4hnXsp6d4z0Odz2027LNSCZ5Sk1oFltmb+VMVvGD4Q7NkC7FCtCUbjrLAFON3PQ==
+"@angular-devkit/core@17.0.5", "@angular-devkit/core@^17.0.0":
+  version "17.0.5"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-17.0.5.tgz#247a4779d5c9c5bc9f2ebbfc10962a057d5a9c5c"
+  integrity sha512-e1evgRabAfOZBnmFCe8E0oufcu+FzBe5hBzS94Dm42GlxdX965/M4yVKQxIMpjivQTmjl+AWb6cF1ltBdSGZeQ==
   dependencies:
     ajv "8.12.0"
     ajv-formats "2.1.1"
@@ -2696,15 +2696,15 @@
     "@material/theme" "15.0.0-canary.a246a4439.0"
     tslib "^2.1.0"
 
-"@ngtools/webpack@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-17.0.3.tgz#3be3358353df2cad8daad089187a6bcc2e59d0e7"
-  integrity sha512-H39WQ/tM6kOErfiyU6QkPasMtuOZHbm6INkirSR3ol4e93o6gLJ0ptwg3IQlyGtZK2QexWagPC6jzsdGIaN3iw==
-
 "@ngtools/webpack@17.0.4":
   version "17.0.4"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-17.0.4.tgz#0c797adf15108ad1e78b23cec7a49e9475c46f1d"
   integrity sha512-OC5FNGiKX2LXb12B1Iex894iWGkPORvN++JUXgocPoZiRStYwuP8gIx7+G3qnsPwbbXEqxmsOmHeLXsWr/5aGA==
+
+"@ngtools/webpack@17.0.5":
+  version "17.0.5"
+  resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-17.0.5.tgz#74b3f5ed3543a6f0bd3878488d165f480b2beb71"
+  integrity sha512-r82k7mxErJHtd6dzq0PKHQNhOuEjUZn95f2adJpO5mP/R/ms8LUk1ILvP3EocxkisYU8ET2EeGj3wQZC2g3RcA==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -3434,14 +3434,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@>=10.0.0":
-  version "20.10.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.10.0.tgz#16ddf9c0a72b832ec4fcce35b8249cf149214617"
-  integrity sha512-D0WfRmU9TQ8I9PFx9Yc+EBHw+vSpIub4IDvQivcp26PtPrdMGAq5SDcpXEo/epqa/DXotVpekHiLNTg3iaKXBQ==
-  dependencies:
-    undici-types "~5.26.4"
-
-"@types/node@20.10.1":
+"@types/node@*", "@types/node@20.10.1", "@types/node@>=10.0.0":
   version "20.10.1"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.10.1.tgz#d2c96f356c3125fedc983d74c424910c3767141c"
   integrity sha512-T2qwhjWwGH81vUEx4EXmBKsTJRXFXNZTL4v0gi01+zyBmCwzE6TyHszqX01m+QHTEq+EZNo13NeJIdEqf+Myrg==
@@ -5711,9 +5704,9 @@ ejs@^3.1.7:
     jake "^10.8.5"
 
 electron-to-chromium@^1.4.535:
-  version "1.4.596"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.596.tgz#6752d1aa795d942d49dfc5d3764d6ea283fab1d7"
-  integrity sha512-zW3zbZ40Icb2BCWjm47nxwcFGYlIgdXkAx85XDO7cyky9J4QQfq8t0W19/TLZqq3JPQXtlv8BPIGmfa9Jb4scg==
+  version "1.4.597"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.597.tgz#9848b9aa52749bf35be88013bab52be232889d94"
+  integrity sha512-0XOQNqHhg2YgRVRUrS4M4vWjFCFIP2ETXcXe/0KIQBjXE9Cpy+tgzzYfuq6HGai3hWq0YywtG+5XK8fyG08EjA==
 
 elkjs@^0.8.2:
   version "0.8.2"
@@ -7101,9 +7094,9 @@ ieee754@^1.1.13:
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
 
 ignore-walk@^6.0.0:
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/ignore-walk/-/ignore-walk-6.0.3.tgz#0fcdb6decaccda35e308a7b0948645dd9523b7bb"
-  integrity sha512-C7FfFoTA+bI10qfeydT8aZbvr91vAEU+2W5BZUlzPec47oNb07SsOfwYrtxuvOYdUApPP/Qlh4DtAO51Ekk2QA==
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/ignore-walk/-/ignore-walk-6.0.4.tgz#89950be94b4f522225eb63a13c56badb639190e9"
+  integrity sha512-t7sv42WkwFkyKbivUCglsQW5YWMskWtbEf4MNKX5u/CCWHKSPzN4FtBQGsQZgCLbxOzpVlcbWVK5KB3auIOjSw==
   dependencies:
     minimatch "^9.0.0"
 
