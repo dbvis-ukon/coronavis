@@ -101,7 +101,7 @@
     "lint-staged": "15.2.0",
     "ngx-i18nsupport": "0.17.1",
     "protractor": "7.0.0",
-    "ts-node": "10.9.1",
+    "ts-node": "10.9.2",
     "typescript": "5.2.2",
     "webpack": "5.89.0"
   },
