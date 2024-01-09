@@ -79,7 +79,7 @@
     "@types/luxon": "3.3.5",
     "@types/marked": "6.0.0",
     "@types/mapbox-gl-leaflet": "0.0.4",
-    "@types/node": "20.10.7",
+    "@types/node": "20.10.8",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
     "ajv-formats": "2.1.1",
