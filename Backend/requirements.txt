@@ -1,6 +1,6 @@
 blinker==1.7.0
 cryptography==41.0.7
-Flask==3.0.0
+Flask==3.0.1
 Flask-Caching==2.1.0
 Flask-Compress==1.14
 Flask-Cors==4.0.0
