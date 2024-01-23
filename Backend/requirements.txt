@@ -14,7 +14,7 @@ gunicorn==21.2.0
 Werkzeug==3.0.1
 sentry-sdk==1.39.2
 psycopg2-binary==2.9.9
-python-dotenv==1.0.0
+python-dotenv==1.0.1
 marshmallow-sqlalchemy==0.30.0
 bcrypt==4.1.2
 alembic==1.13.1
