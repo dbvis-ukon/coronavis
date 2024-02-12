@@ -18,7 +18,7 @@ python-dotenv==1.0.1
 marshmallow-sqlalchemy==1.0.0
 bcrypt==4.1.2
 alembic==1.13.1
-tzdata==2023.4
+tzdata==2024.1
 tzlocal==5.2
 prometheus-flask-exporter==0.23.0
 flasgger==0.9.7.1
