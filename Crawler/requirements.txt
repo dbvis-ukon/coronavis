@@ -12,7 +12,7 @@ psycopg2-binary==2.9.9
 sentry_sdk==1.40.5
 python-dotenv==1.0.1
 zeep==4.2.1
-holidays==0.42
+holidays==0.43
 jsonschema==4.21.1
 types-psycopg2==2.9.21.20240201
 pytz==2024.1
