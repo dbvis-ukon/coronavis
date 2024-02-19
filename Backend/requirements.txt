@@ -12,7 +12,7 @@ geojson==3.1.0
 GeoAlchemy2==0.14.4
 gunicorn==21.2.0
 Werkzeug==3.0.1
-sentry-sdk==1.40.4
+sentry-sdk==1.40.5
 psycopg2-binary==2.9.9
 python-dotenv==1.0.1
 marshmallow-sqlalchemy==1.0.0
