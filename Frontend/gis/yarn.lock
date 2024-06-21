@@ -10873,10 +10873,10 @@ normalize-range@^0.1.2:
   resolved "https://registry.yarnpkg.com/normalize-range/-/normalize-range-0.1.2.tgz#2d10c06bdfd312ea9777695a4d28439456b75942"
   integrity sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==
 
-nouislider@15.8.0:
-  version "15.8.0"
-  resolved "https://registry.yarnpkg.com/nouislider/-/nouislider-15.8.0.tgz#ca3c18710d8926775b58459e42a89b826530c811"
-  integrity sha512-E7Rvt2Uc5IIl7Hv7+mO8XH8uFyqe3ofxi5j2QMi2B7w8JHVLAEzTpgDBk0oYZBaplsk60QOso3qrq8qk3JPHEQ==
+nouislider@15.8.1:
+  version "15.8.1"
+  resolved "https://registry.yarnpkg.com/nouislider/-/nouislider-15.8.1.tgz#18729ed29738d2d328a1b5e0429d38eb8be8a696"
+  integrity sha512-93TweAi8kqntHJSPiSWQ1o/uZ29VWOmal9YKb6KKGGlCkugaNfAupT7o1qTHqdJvNQ7S0su5rO6qRFCjP8fxtw==
 
 npm-bundled@^3.0.0:
   version "3.0.0"
