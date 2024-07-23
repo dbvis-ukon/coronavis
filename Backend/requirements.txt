@@ -9,7 +9,7 @@ Flask-Mail==0.10.0
 Flask-Marshmallow==1.2.1
 SQLAlchemy==1.4.52
 geojson==3.1.0
-GeoAlchemy2==0.15.1
+GeoAlchemy2==0.15.2
 gunicorn==21.2.0
 Werkzeug==3.0.3
 sentry-sdk==1.45.0
