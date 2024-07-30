@@ -7,7 +7,7 @@ Flask-Cors==4.0.1
 Flask-SQLAlchemy==3.0.5
 Flask-Mail==0.10.0
 Flask-Marshmallow==1.2.1
-SQLAlchemy==1.4.52
+SQLAlchemy==1.4.53
 geojson==3.1.0
 GeoAlchemy2==0.15.2
 gunicorn==22.0.0
