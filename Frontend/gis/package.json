@@ -42,7 +42,7 @@
     "leaflet": "github:dbvis-ukon/Leaflet#aa2095232c4c0b5b2f5435f1594084c1f97a7b90",
     "lodash-es": "4.17.21",
     "luxon": "3.4.4",
-    "marked": "13.0.2",
+    "marked": "13.0.3",
     "ng2-nouislider": "2.0.0",
     "ngx-markdown": "17.2.1",
     "nouislider": "15.8.1",
