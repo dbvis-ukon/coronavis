@@ -1,4 +1,4 @@
-FROM bitnami/postgresql:14.13.0-debian-12-r6
+FROM bitnami/postgresql:14.13.0-debian-12-r8
 
 USER root
 
