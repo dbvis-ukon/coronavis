@@ -179,7 +179,7 @@ def load_data_into_db(entries: List[Dict[str, int | str | datetime.datetime]]):
             # when we have less entries fetched than we already have in the DB the RKI API probably did not return all cases
             logger.error("RKI API data blob is incomplete. Will fail this job and try again at next crawl time.")
             exit(2)
-        elif (len(entries) - num_cases_in_db) > 500000 and override is False:
+        elif num_cases_in_db > 0 and (len(entries) - num_cases_in_db) > 500000 and override is False:
             logger.error(
                 "{} new entries in a single update (> 500k). Seems RKI API data blob is errornous. Will fail this job and try again at next crawl time.".format(
                     (len(entries) - num_cases_in_db)))
