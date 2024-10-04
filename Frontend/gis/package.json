@@ -28,7 +28,7 @@
     "@angular/platform-browser": "17.3.12",
     "@angular/platform-browser-dynamic": "17.3.12",
     "@angular/router": "17.3.12",
-    "@sentry/browser": "7.119.0",
+    "@sentry/browser": "7.119.1",
     "@sentry/tracing": "7.114.0",
     "core-js": "3.38.1",
     "cron": "2.4.4",
