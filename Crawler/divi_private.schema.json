@@ -628,7 +628,7 @@
                     ]
                 },
                 "covidKapazitaetFrei": {
-                    "type": ["integer", "null", "None"],
+                    "type": ["integer", "null"],
                     "default": 0,
                     "title": "The covidKapazitaetFrei Schema",
                     "examples": [
