@@ -753,7 +753,7 @@ def update_population_values(county: str, year: int, df_abs: pd.DataFrame, df_in
     updates = []
     ags = counties[county]['County']
 
-    for colName, col in df_abs.iteritems():
+    for colName, col in df_abs.items():
         if colName == "Unb":
             continue
         v_count: List[int] = df_abs[colName].nlargest(3).to_list()
