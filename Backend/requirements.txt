@@ -8,7 +8,7 @@ Flask-SQLAlchemy==3.0.5
 Flask-Mail==0.10.0
 Flask-Marshmallow==1.2.1
 SQLAlchemy==1.4.54
-geojson==3.1.0
+geojson==3.2.0
 GeoAlchemy2==0.16.0
 gunicorn==23.0.0
 Werkzeug==3.1.3
