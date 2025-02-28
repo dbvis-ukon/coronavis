@@ -16,7 +16,7 @@ sentry-sdk==1.45.1
 psycopg2-binary==2.9.10
 python-dotenv==1.0.1
 marshmallow-sqlalchemy==1.4.1
-bcrypt==4.2.1
+bcrypt==4.3.0
 alembic==1.14.1
 tzdata==2025.1
 tzlocal==5.3
