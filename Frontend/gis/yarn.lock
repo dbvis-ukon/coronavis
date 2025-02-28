@@ -5026,10 +5026,10 @@
   dependencies:
     undici-types "~5.26.4"
 
-"@types/node@20.17.19":
-  version "20.17.19"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.17.19.tgz#0f2869555719bef266ca6e1827fcdca903c1a697"
-  integrity sha512-LEwC7o1ifqg/6r2gn9Dns0f1rhK+fPFDoMiceTJ6kWmVk6bgXBI/9IOWfVan4WiAavK9pIVWdX0/e3J+eEUh5A==
+"@types/node@20.17.20":
+  version "20.17.20"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.17.20.tgz#b40fc757432bf2fa6316dddf97b0bd99d2af4d05"
+  integrity sha512-kznqACh6lD8RcRddN9YYwd1xG+3Tb5PaL5GVKwKsjw8OtffI6Xz2xxC7ePv8Jza2F+oNBLnFdJf1d6ypQFA9pA==
   dependencies:
     undici-types "~6.19.2"
 
