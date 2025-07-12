@@ -277,7 +277,7 @@ export-environment:
 set up sentry release:
   stage: prepare
   image:
-    name: getsentry/sentry-cli:2.46.0
+    name: getsentry/sentry-cli:2.47.0
     entrypoint: [""]
   variables:
     RUN_ALWAYS: "no"
