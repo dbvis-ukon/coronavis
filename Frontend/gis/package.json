@@ -30,7 +30,7 @@
     "@angular/router": "17.3.12",
     "@sentry/browser": "7.120.4",
     "@sentry/tracing": "7.120.4",
-    "core-js": "3.45.0",
+    "core-js": "3.45.1",
     "cron": "2.4.4",
     "css-element-queries": "1.2.3",
     "d3": "7.9.0",
