@@ -65,7 +65,7 @@
     "@angular/cli": "17.3.17",
     "@angular/compiler-cli": "17.3.12",
     "@angular/language-service": "17.3.12",
-    "@babel/core": "7.28.3",
+    "@babel/core": "7.28.4",
     "@babel/plugin-proposal-object-rest-spread": "7.20.7",
     "@babel/preset-env": "7.28.3",
     "@types/cron": "2.4.3",
