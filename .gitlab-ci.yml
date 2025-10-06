@@ -304,7 +304,7 @@ frontend-install-dependencies:
   image: node:22
   script:
     - cd ./Frontend/gis
-    - npm set registry https://nexus.dbvis.de/repository/npmjs/
+    # - npm set registry https://nexus.dbvis.de/repository/npmjs/
     # if node_modules does not exist use npm to create it
     - test -d ./node_modules || npm ci
   artifacts:
