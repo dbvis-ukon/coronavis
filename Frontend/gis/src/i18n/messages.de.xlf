@@ -1138,7 +1138,7 @@
     </unit>
     <unit id="ebrakeShareLangEn">
       <notes>
-        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:78,79</note>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:78</note>
       </notes>
       <segment state="final">
         <source>Englisch </source>
@@ -1892,7 +1892,7 @@
     </unit>
     <unit id="infoboxEBrakeOver100">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:378</note>
+        <note category="location">src/app/infobox/infobox.component.html:379</note>
       </notes>
       <segment state="final">
         <source>Über 100 </source>
@@ -1901,7 +1901,7 @@
     </unit>
     <unit id="infoboxEBrakeOver165">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:381</note>
+        <note category="location">src/app/infobox/infobox.component.html:382</note>
       </notes>
       <segment state="final">
         <source>Über 165 </source>
@@ -1919,8 +1919,8 @@
     </unit>
     <unit id="infoboxType">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:19</note>
-        <note category="location">src/app/infobox/infobox.component.html:328</note>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:20</note>
+        <note category="location">src/app/infobox/infobox.component.html:329</note>
       </notes>
       <segment state="final">
         <source>Art</source>
@@ -2499,7 +2499,7 @@
     </unit>
     <unit id="chartSettingsType">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:26</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:27</note>
       </notes>
       <segment state="final">
         <source>Art</source>
