@@ -66,7 +66,7 @@
     </unit>
     <unit id="clickForMoreInformation">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:103</note>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:104</note>
       </notes>
       <segment state="initial">
         <source> Klicken Sie um mehr Informationen zu erhalten.
@@ -90,13 +90,7 @@
         <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:23</note>
       </notes>
       <segment state="initial">
-        <source><ph id="0" equiv="INTERPOLATION" disp="pro Tag&lt;/p>
-        &lt;/div>
-    &lt;/div>
-&lt;/div>
-
-&lt;div>
-    &lt;"/> pro Tag</source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus:'1.0-1' }}"/> pro Tag</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ t.m | plusminus }}"/> per day</target>
       </segment>
     </unit>
@@ -291,7 +285,7 @@
     </unit>
     <unit id="agegroupChartLastWeekHint">
       <notes>
-        <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:18</note>
+        <note category="location">src/app/shared/pixel-chart/pixel-chart.component.html:19</note>
       </notes>
       <segment state="initial">
         <source> Inzidenzen der aktuellen Kalenderwoche sind niedriger und enthalten Unsicherheiten. Ab Mitte der Woche können Tendenzen sichtbar werden. </source>
@@ -301,7 +295,7 @@
     </unit>
     <unit id="stackedAreaChartTitle">
       <notes>
-        <note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:6,8</note>
+        <note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:7</note>
       </notes>
       <segment state="initial">
         <source> Anzahl Krankenhäuser und deren Auslastung pro Bettenkategorie für <ph id="0" equiv="INTERPOLATION" disp="{{ _dataAndOptions.chartOptions.titleRegions }}"/>
@@ -312,7 +306,7 @@
     </unit>
     <unit id="stackedAreaChartHint">
       <notes>
-        <note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:15</note>
+        <note category="location">src/app/shared/stacked-area-icu-chart/stacked-area-icu-chart.component.html:16</note>
       </notes>
       <segment state="initial">
         <source> ICU Low = Nicht-invasive Beatmung; ICU High = Invsive Beatmung; ECMO = <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://de.wikipedia.org/wiki/Extrakorporale_Membranoxygenierung&quot;>" dispEnd="&lt;/a>">Extrakorporale Membranoxygenierung</pc></source>
@@ -348,7 +342,7 @@
     </unit>
     <unit id="caseInfoBrushingHint">
       <notes>
-        <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:29</note>
+        <note category="location">src/app/cases-dod/case-line-chart/case-line-chart.component.html:30</note>
       </notes>
       <segment state="initial">
         <source> Ziehen Sie hier mit der Maus, um das obere Diagramm zu vergrößern. </source>
@@ -384,7 +378,7 @@
     </unit>
     <unit id="snackBarEBrake">
       <notes>
-        <note category="location">src/app/shared/ebrake-snackbar/ebrake-snackbar.component.ts:7</note>
+        <note category="location">src/app/shared/ebrake-snackbar/ebrake-snackbar.component.ts:8</note>
       </notes>
       <segment state="initial">
         <source> Seit dem 23.04.2021 gilt das 4. Bevölkerungsschutzgesetz. In der Karte werden alle Kreise dargestellt für die die "Bundesnotbremse" gilt. <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://www.bundesgesundheitsministerium.de/service/gesetze-und-verordnungen/guv-19-lp/4-bevschg-faq.html#c21101&quot;>" dispEnd="&lt;/a>">Mehr Informationen gibt es beim Bundesgesundheitsministerium. <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon inline=&quot;true&quot;>" dispEnd="&lt;/mat-icon>">launch</pc></pc></source>
@@ -398,7 +392,7 @@
         <note category="location">src/app/help/help-dialog/help-dialog.component.html:18</note>
       </notes>
       <segment state="initial">
-        <source><ph id="0" equiv="INTERPOLATION" disp="ellung' }}"/></source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ (isSmallScreen$ | async).matches ? 'Weiter' : 'Zur Beschreibung der Kapazitätsdarstellung' }}"/></source>
         <target>Next to the Depiction of the Bed Capacities</target>
       </segment>
     </unit>
@@ -614,7 +608,7 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help/help-dialog-beds/help-dialog-beds.component.html:38</note>
+        <note category="location">src/app/help/help-dialog-beds/help-dialog-beds.component.html:39</note>
       </notes>
       <segment state="initial">
         <source> Wenn Sie mit der Maus über die Karte fahren, werden Ihnen für den jeweiligen gewählten Ort die entsprechenden Zahlen angezeigt (E, F). </source>
@@ -641,7 +635,7 @@
         <note category="location">src/app/help/help-dialog/help-dialog.component.html:26</note>
       </notes>
       <segment state="initial">
-        <source><ph id="0" equiv="INTERPOLATION" disp="n' }}"/></source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ (isSmallScreen$ | async).matches ? 'Weiter' : 'Weiter zur Darstellung der Fallzahlen' }}"/></source>
         <target>Next to the Depiction of Case Numbers</target>
       </segment>
     </unit>
@@ -660,7 +654,7 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:1</note>
+        <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:2</note>
       </notes>
       <segment state="initial">
         <source> Beschreibung der Darstellung der Fallzahlen
@@ -681,7 +675,7 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:9</note>
+        <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:10</note>
       </notes>
       <segment state="initial">
         <source> So wählen Sie die Darstellung der Positiv Getesteten- und Todesfälle (Fallzahlen): </source>
@@ -694,7 +688,7 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:12</note>
+        <note category="location">src/app/help/help-dialog-cases/help-dialog-cases.component.html:13</note>
       </notes>
       <segment state="initial">
         <source> Die Fallzahlen basieren auf den offiziellen Daten des Robert-Koch-Institutes (RKI; <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;esri.de/corona&quot;>" dispEnd="&lt;/a>">RKI-Datensätze</pc>). </source>
@@ -905,7 +899,7 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:3</note>
+        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:4</note>
       </notes>
       <segment state="initial">
         <source> Freie und belegte Betten für Covid-19-Patienten in Deutschland: CoronaVIS- Interaktive Darstellung und Analyse </source>
@@ -918,7 +912,7 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:7</note>
+        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:8</note>
       </notes>
       <segment state="initial">
         <source> Hier finden Sie eine aktuelle Übersicht über die Bettenkapazitäten in Deutschland. Anhand der Information können Sie aktuelle Entwicklungen deutschlandweit verfolgen. Ziel des CoronaVIS-Tools ist es, dass mögliche Engpässe früh erkannt und die Verteilung von Patienten optimiert und freie Betten zeitnah genutzt werden können. </source>
@@ -931,7 +925,7 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:11</note>
+        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:12</note>
       </notes>
       <segment state="initial">
         <source> Die aktuellen Kapazitäten werden für die Darstellungen geladen. Der Vorgang kann einige Sekunden dauern. Die Darstellung funktioniert am Besten im Chrome-Browser. </source>
@@ -944,7 +938,7 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:16</note>
+        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:17</note>
       </notes>
       <segment state="initial">
         <source> CoronaVIS - die visuelle Darstellung von freien und belegten Betten für Covid-19-Patienten wird von der <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a
@@ -958,7 +952,7 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:21</note>
+        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:22</note>
       </notes>
       <segment state="initial">
         <source> Die Darstellungen der Bettenkapazität in CoronaVIS basiert derzeit auf den öffentlichen Daten der Deutschen Interdisziplinären Vereinigung für Intensiv- und Notfallmedizin (DIVI) (<pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a
@@ -972,7 +966,7 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:30</note>
+        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:31</note>
       </notes>
       <segment state="initial">
         <source> CoronaVIS ist kurzfristig einsatzfähig und nicht nur ein Forschungsprototyp. Es wird in Zusammenarbeit mit Experten kontinuierlich weiterentwickelt, um bestmögliche Unterstützung leisten zu können. Einen kurzen Videoüberblick finden Sie unter <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot;
@@ -986,7 +980,7 @@
       <notes>
         <note category="description"> help</note>
         <note category="meaning">help</note>
-        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:36</note>
+        <note category="location">src/app/help/help-dialog-theproject/help-dialog-theproject.component.html:37</note>
       </notes>
       <segment state="initial">
         <source> Auf den folgenden Seiten stellen wir Ihnen die Funktionalitäten von CoronaVIS vor. Wenn Sie direkt CoronaVIS nutzen möchten, schließen Sie bitte dieses Fenster. </source>
@@ -997,7 +991,7 @@
     </unit>
     <unit id="helpLiveView">
       <notes>
-        <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:1</note>
+        <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:2</note>
       </notes>
       <segment state="initial">
         <source> Live Ansicht
@@ -1009,7 +1003,7 @@
     </unit>
     <unit id="helpLiveViewIntro">
       <notes>
-        <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:6</note>
+        <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:7</note>
       </notes>
       <segment state="initial">
         <source> Die Live Ansicht wird durch die Firma <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;http://risklayer.com/&quot;>" dispEnd="&lt;/a>">Risklayer GmbH</pc> und das <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://www.cedim.kit.edu/&quot;
@@ -1025,7 +1019,7 @@
     </unit>
     <unit id="helpLiveViewSheet">
       <notes>
-        <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:15</note>
+        <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:16</note>
       </notes>
       <segment state="initial">
         <source> Mit der Hilfe von freiwilligen Personen wird ein <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a
@@ -1043,7 +1037,7 @@
     </unit>
     <unit id="helpLiveViewPrognosis">
       <notes>
-        <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:29</note>
+        <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:30</note>
       </notes>
       <segment state="initial">
         <source> In dem Menu wird eine Hochrechnung für die neu erwarteten gemeldeten Covid-19 Fälle für den aktuellen Tag dargestellt. Die Hochrechnung basiert auf den aktuellen Zahlen der Landkreise die bereits Daten veröffentlicht haben bzw. auf deren vorläufigen Daten. </source>
@@ -1055,7 +1049,7 @@
     </unit>
     <unit id="helpLiveViewAutoload">
       <notes>
-        <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:34</note>
+        <note category="location">src/app/help/help-dialog-live-view/help-dialog-live-view.component.html:35</note>
       </notes>
       <segment state="initial">
         <source> Die Live Ansicht wird automatisch alle 30 Minuten aktualisiert. Von 12 Uhr bis 6 Uhr morgens findet keine Aktualisierung statt da in diesem Zeitraum der Google Sheet für den nächsten Tag vorbereitet wird. </source>
@@ -1084,7 +1078,7 @@
         <note category="location">src/app/help/help-dialog/help-dialog.component.html:34</note>
       </notes>
       <segment state="initial">
-        <source><ph id="0" equiv="INTERPOLATION" disp="&lt;/button>"/></source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ (isSmallScreen$ | async).matches ? 'Weiter' : 'Weiter zur Live Ansicht' }}"/></source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ (isSmallScreen$ | async).matches ? 'Next' : 'Next to the Live View' }}"/></target>
       </segment>
     </unit>
@@ -1102,25 +1096,14 @@
     </unit>
     <unit id="shareTitle">
       <notes>
-        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:2</note>
-        <note category="location">src/app/share-dialog/share-dialog.component.html:2</note>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:3</note>
+        <note category="location">src/app/share-dialog/share-dialog.component.html:3</note>
       </notes>
       <segment state="initial">
         <source> Visualisierung Teilen </source>
         <target>
     Share the Visualization
   </target>
-      </segment>
-    </unit>
-    <unit id="5550616062642526829">
-      <notes>
-        <note category="description">@shareExplUrl</note>
-        <note category="location">src/app/share-dialog/share-dialog.component.html:20,21</note>
-      </notes>
-      <segment state="initial">
-        <source>Mit der untenstehenden URL können Sie die Visualisierung mit ihren gewählten Einstellungen und dem momentanen Kartenausschnitt teilen. Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</source>
-        <target>With the URL below you can share the visualization with your current settings and your selected map section.
-      Note, that the data is automatically updated and the visualization may change accorrdingly.</target>
       </segment>
     </unit>
     <unit id="shareCopy">
@@ -1156,17 +1139,6 @@
         <target>Current incidence statistics are too low due to fewer reports from public health departments during the holidays and tend to be less meaningful.</target>
       </segment>
     </unit>
-    <unit id="1687905935286624851">
-      <notes>
-        <note category="description">@shareExplIframe</note>
-        <note category="location">src/app/share-dialog/share-dialog.component.html:40,41</note>
-      </notes>
-      <segment state="initial">
-        <source>Mit dem IFrame können Sie die Visualisierung mit ihren gewählten Einstellungen und dem momentanen Kartenausschnitt in ihre Webseite einbetten. Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</source>
-        <target>You can embed this visualization with your current settings and your selected map section in your website.
-      Note, that the data is automatically updated and the visualization may change accorrdingly.</target>
-      </segment>
-    </unit>
     <unit id="shareAdditionalOptions">
       <notes>
         <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:57</note>
@@ -1197,7 +1169,7 @@
     </unit>
     <unit id="ebrakeShareLangDe">
       <notes>
-        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:75,76</note>
+        <note category="location">src/app/overview/ebrake/ebrake-share-dialog/ebrake-share-dialog.component.html:76</note>
       </notes>
       <segment state="initial">
         <source>Deutsch </source>
@@ -1501,7 +1473,7 @@
         <note category="location">src/app/overview/overview-bed/overview-bed.component.html:28</note>
       </notes>
       <segment state="initial">
-        <source><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Einrichtungen&lt;/p>"/> bundesweit gemeldete Einrichtungen</source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ c.diviUnfiltered.num_hospitals | number }}"/> bundesweit gemeldete Einrichtungen</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedDiviStatistics.numberOfHospitals }}"/> nationally reported facilities</target>
       </segment>
     </unit>
@@ -1558,8 +1530,8 @@
     </unit>
     <unit id="infoboxStates">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:63</note>
-        <note category="location">src/app/infobox/infobox.component.html:263</note>
+        <note category="location">src/app/infobox/infobox.component.html:64</note>
+        <note category="location">src/app/infobox/infobox.component.html:264</note>
       </notes>
       <segment state="initial">
         <source>Länder </source>
@@ -1578,8 +1550,8 @@
     </unit>
     <unit id="infoboxRegions">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:66</note>
-        <note category="location">src/app/infobox/infobox.component.html:266</note>
+        <note category="location">src/app/infobox/infobox.component.html:67</note>
+        <note category="location">src/app/infobox/infobox.component.html:267</note>
       </notes>
       <segment state="initial">
         <source>Bezirke </source>
@@ -1598,8 +1570,8 @@
     </unit>
     <unit id="infoboxCounties">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:69</note>
-        <note category="location">src/app/infobox/infobox.component.html:269</note>
+        <note category="location">src/app/infobox/infobox.component.html:70</note>
+        <note category="location">src/app/infobox/infobox.component.html:270</note>
       </notes>
       <segment state="initial">
         <source>Kreise </source>
@@ -1618,7 +1590,7 @@
     </unit>
     <unit id="infoboxNone">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:72</note>
+        <note category="location">src/app/infobox/infobox.component.html:73</note>
       </notes>
       <segment state="initial">
         <source>Keine </source>
@@ -1740,15 +1712,13 @@
         <note category="location">src/app/overview/overview-case/overview-case.component.html:27</note>
       </notes>
       <segment state="initial">
-        <source><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Covid-19 Fälle&lt;/p>
-
-          &lt;p class=&quot;stat"/> bundesweit gemeldete Covid-19 Fälle</source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ c.rki?.cases | number }}"/> bundesweit gemeldete Covid-19 Fälle</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.cases | number }}"/> nationally reported Covid-19 cases</target>
       </segment>
     </unit>
     <unit id="infoboxPrognosis">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:174</note>
+        <note category="location">src/app/infobox/infobox.component.html:175</note>
       </notes>
       <segment state="initial">
         <source> Hochrechnung: <ph id="0" equiv="INTERPOLATION" disp="{{ c.risklayerPrognosis | number }}"/> neue Covid-19 Fälle heute <pc id="1" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon
@@ -1777,9 +1747,7 @@
         <note category="location">src/app/overview/overview-case/overview-case.component.html:28</note>
       </notes>
       <segment state="initial">
-        <source><ph id="0" equiv="INTERPOLATION" disp="bundesweit gemeldete Covid-19 Todesfälle&lt;/p>
-
-          &lt;p class="/> bundesweit gemeldete Covid-19 Todesfälle</source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ c.rki?.deaths | number }}"/> bundesweit gemeldete Covid-19 Todesfälle</source>
         <target><ph id="0" equiv="INTERPOLATION" disp="{{ this.aggregatedRkiStatistics.deaths | number }}"/> nationally reported Covid-19 deaths</target>
       </segment>
     </unit>
@@ -1803,7 +1771,7 @@
     </unit>
     <unit id="infoboxShowOnlyAvailableCounties">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:192</note>
+        <note category="location">src/app/infobox/infobox.component.html:193</note>
       </notes>
       <segment state="initial">
         <source> nur Landkreise mit aktuellen Daten anzeigen </source>
@@ -1915,7 +1883,7 @@
     </unit>
     <unit id="infoboxTimeAll">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:289</note>
+        <note category="location">src/app/infobox/infobox.component.html:290</note>
       </notes>
       <segment state="initial">
         <source>Alle Daten </source>
@@ -1924,8 +1892,8 @@
     </unit>
     <unit id="infoboxTime24">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:49</note>
-        <note category="location">src/app/infobox/infobox.component.html:293</note>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:50</note>
+        <note category="location">src/app/infobox/infobox.component.html:294</note>
       </notes>
       <segment state="initial">
         <source>24 Std. </source>
@@ -1934,8 +1902,8 @@
     </unit>
     <unit id="infoboxTime72">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:51</note>
-        <note category="location">src/app/infobox/infobox.component.html:295</note>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:52</note>
+        <note category="location">src/app/infobox/infobox.component.html:296</note>
       </notes>
       <segment state="initial">
         <source>72 Std. </source>
@@ -1944,8 +1912,8 @@
     </unit>
     <unit id="infoboxTime7Days">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:54</note>
-        <note category="location">src/app/infobox/infobox.component.html:298</note>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:55</note>
+        <note category="location">src/app/infobox/infobox.component.html:299</note>
       </notes>
       <segment state="initial">
         <source>7 Tage </source>
@@ -2040,8 +2008,8 @@
     </unit>
     <unit id="infoboxNornNone">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:35</note>
-        <note category="location">src/app/infobox/infobox.component.html:356</note>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:36</note>
+        <note category="location">src/app/infobox/infobox.component.html:357</note>
       </notes>
       <segment state="initial">
         <source>Keine Normalisierung </source>
@@ -2050,8 +2018,8 @@
     </unit>
     <unit id="infoboxNornYes">
       <notes>
-        <note category="location">src/app/cases-dod/case-info/case-info.component.html:38</note>
-        <note category="location">src/app/infobox/infobox.component.html:360</note>
+        <note category="location">src/app/cases-dod/case-info/case-info.component.html:39</note>
+        <note category="location">src/app/infobox/infobox.component.html:361</note>
       </notes>
       <segment state="initial">
         <source>Je 100.000 Einwohner </source>
@@ -2091,7 +2059,7 @@
     </unit>
     <unit id="infoboxData">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:439</note>
+        <note category="location">src/app/infobox/infobox.component.html:440</note>
       </notes>
       <segment state="initial">
         <source> Datenquellen </source>
@@ -2102,7 +2070,7 @@
     </unit>
     <unit id="infoboxDIVI">
       <notes>
-        <note category="location">src/app/infobox/infobox.component.html:447</note>
+        <note category="location">src/app/infobox/infobox.component.html:448</note>
         <note category="location">src/app/overview/overview-bed/overview-bed.component.html:38</note>
       </notes>
       <segment state="initial">
@@ -2288,25 +2256,25 @@
     </unit>
     <unit id="legendSelectedRegions">
       <notes>
-        <note category="location">src/app/legend/legend.component.html:12</note>
+        <note category="location">src/app/legend/legend.component.html:13</note>
       </notes>
       <segment state="initial">
         <source> <ph id="0" equiv="INTERPOLATION" disp="{{num.sel}}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="{{num.total}}"/> <ph id="2" equiv="ICU" disp="{num.aggLevel, select, landkreise {Kreise} regierungsbezirke {Regierungsbezirke} bundeslaender {Bundesländer} laender {Länder} other {Regionen}}"/> </source>
         <target> <ph id="0" equiv="INTERPOLATION" disp="{{num.sel}"/>/<ph id="1" equiv="INTERPOLATION_1" disp="/{{num.total}"/> <ph id="2" equiv="ICU" disp="{num.aggLevel, select, landkreise {Kreise} regierungsbezirke {Regierungsbezirke} bundeslaender {Bundesländer} laender {Länder} other {Regionen}}"/> </target>
       </segment>
     </unit>
-    <unit id="710907318874673007">
+    <unit id="3882358654180975312">
       <notes>
-        <note category="location">src/app/legend/legend.component.html:13</note>
+        <note category="location">src/app/legend/legend.component.html:13,18</note>
       </notes>
       <segment state="initial">
         <source>{VAR_SELECT, select, landkreise {Kreise} regierungsbezirke {Regierungsbezirke} bundeslaender {Bundesländer} laender {Länder} other {Regionen}}</source>
-        <target>{VAR_SELECT, select, landkreise {counties} regierungsbezirke {government districts} bundeslaender {states} laender {countries} other {regions}}</target>
+        <target>{VAR_SELECT, select, landkreise {Kreise} regierungsbezirke {Regierungsbezirke} bundeslaender {Bundesländer} laender {Länder} other {Regionen}}</target>
       </segment>
     </unit>
     <unit id="legendNotAvailable">
       <notes>
-        <note category="location">src/app/legend/legend.component.html:37</note>
+        <note category="location">src/app/legend/legend.component.html:38</note>
       </notes>
       <segment state="initial">
         <source> nicht verfügbar </source>
@@ -2353,7 +2321,7 @@
     </unit>
     <unit id="dashboardVersionHistory">
       <notes>
-        <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:38</note>
+        <note category="location">src/app/overview/dashboard/dashboard/dashboard.component.html:39</note>
       </notes>
       <segment state="initial">
         <source> Versions Verlauf </source>
@@ -2470,7 +2438,7 @@
     </unit>
     <unit id="chartSettingsViewTable">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:11</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:12</note>
       </notes>
       <segment state="initial">
         <source>Tabelle </source>
@@ -2597,7 +2565,7 @@
     </unit>
     <unit id="chartSettingsTypeSick">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:29</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:30</note>
       </notes>
       <segment state="initial">
         <source> Positiv Getestet </source>
@@ -2669,7 +2637,7 @@
     </unit>
     <unit id="chartSettingsDataSourceRKI">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:101</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:102</note>
       </notes>
       <segment state="initial">
         <source>RKI </source>
@@ -2696,7 +2664,7 @@
     </unit>
     <unit id="chartSettingsDataSourceDivi">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:110</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:111</note>
       </notes>
       <segment state="initial">
         <source>DIVI </source>
@@ -2723,7 +2691,7 @@
     </unit>
     <unit id="chartSettingsNornNone">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:128</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:129</note>
       </notes>
       <segment state="initial">
         <source>Keine Normalisierung </source>
@@ -2732,7 +2700,7 @@
     </unit>
     <unit id="chartSettingsNornYes">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:132</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:133</note>
       </notes>
       <segment state="initial">
         <source>Je 100.000 Einwohner </source>
@@ -2759,7 +2727,7 @@
     </unit>
     <unit id="chartSettingsTime24">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:147</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:148</note>
       </notes>
       <segment state="initial">
         <source>24 Std. </source>
@@ -2768,7 +2736,7 @@
     </unit>
     <unit id="chartSettingsTime72">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:149</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:150</note>
       </notes>
       <segment state="initial">
         <source>72 Std. </source>
@@ -2777,7 +2745,7 @@
     </unit>
     <unit id="chartSettingsTime7Days">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:152</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:153</note>
       </notes>
       <segment state="initial">
         <source>7 Tage </source>
@@ -2795,7 +2763,7 @@
     </unit>
     <unit id="chartSettingsGranularityDaily">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:161</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:162</note>
       </notes>
       <segment state="initial">
         <source>Täglich </source>
@@ -2849,7 +2817,7 @@
     </unit>
     <unit id="chartSettingsAgeGroupBinningManual">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:180,181</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:181</note>
       </notes>
       <segment state="initial">
         <source>Manuell </source>
@@ -2960,7 +2928,7 @@
     </unit>
     <unit id="chartSettingsOr">
       <notes>
-        <note category="location">src/app/overview/dashboard/settings/settings.component.html:233</note>
+        <note category="location">src/app/overview/dashboard/settings/settings.component.html:234</note>
       </notes>
       <segment state="initial">
         <source> ODER </source>
@@ -3325,7 +3293,7 @@
     </unit>
     <unit id="buttonPanelTooltipHelp">
       <notes>
-        <note category="location">src/app/button-panel/button-panel.component.html:18</note>
+        <note category="location">src/app/button-panel/button-panel.component.html:19</note>
       </notes>
       <segment state="initial">
         <source>Hilfe</source>
@@ -3334,7 +3302,7 @@
     </unit>
     <unit id="buttonPanelTooltipTeam">
       <notes>
-        <note category="location">src/app/button-panel/button-panel.component.html:28</note>
+        <note category="location">src/app/button-panel/button-panel.component.html:29</note>
       </notes>
       <segment state="initial">
         <source>Team</source>
@@ -3343,7 +3311,7 @@
     </unit>
     <unit id="buttonPanelTooltipShare">
       <notes>
-        <note category="location">src/app/button-panel/button-panel.component.html:39</note>
+        <note category="location">src/app/button-panel/button-panel.component.html:40</note>
       </notes>
       <segment state="initial">
         <source>Teilen</source>
@@ -3453,7 +3421,7 @@
     </unit>
     <unit id="subEmailCorrectError">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:27</note>
+        <note category="location">src/app/overview/subscription/subscription.component.html:28</note>
       </notes>
       <segment state="initial">
         <source> Bitte gib eine korrekte E-Mail-Adresse an. </source>
@@ -3464,7 +3432,7 @@
     </unit>
     <unit id="subEmailRequiredError">
       <notes>
-        <note category="location">src/app/overview/subscription/subscription.component.html:30</note>
+        <note category="location">src/app/overview/subscription/subscription.component.html:31</note>
       </notes>
       <segment state="initial">
         <source> Eine E-Mail-Adresse ist notwendig. </source>
@@ -3579,6 +3547,26 @@
       <segment state="initial">
         <source>E-Mail-Benachrichtungen abbestellen</source>
         <target>Unsubscribe</target>
+      </segment>
+    </unit>
+    <unit id="8415894095285503558">
+      <notes>
+        <note category="location">src/app/share-dialog/share-dialog.component.html:20,24</note>
+        <note category="description">@shareExplUrl</note>
+      </notes>
+      <segment state="initial">
+        <source>Mit der untenstehenden URL können Sie die Visualisierung mit ihren gewählten Einstellungen und dem momentanen Kartenausschnitt teilen. Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</source>
+        <target>Mit der untenstehenden URL können Sie die Visualisierung mit ihren gewählten Einstellungen und dem momentanen Kartenausschnitt teilen. Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</target>
+      </segment>
+    </unit>
+    <unit id="8933369121292358738">
+      <notes>
+        <note category="location">src/app/share-dialog/share-dialog.component.html:40,44</note>
+        <note category="description">@shareExplIframe</note>
+      </notes>
+      <segment state="initial">
+        <source>Mit dem IFrame können Sie die Visualisierung mit ihren gewählten Einstellungen und dem momentanen Kartenausschnitt in ihre Webseite einbetten. Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</source>
+        <target>Mit dem IFrame können Sie die Visualisierung mit ihren gewählten Einstellungen und dem momentanen Kartenausschnitt in ihre Webseite einbetten. Bitte beachten Sie, dass die Daten automatisch aktuell gehalten werden und sich dadurch die Darstellung verändern kann.</target>
       </segment>
     </unit>
   </file>
