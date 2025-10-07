@@ -12,6 +12,6 @@ RUN ls -la /var/run
 # test config syntax and debug
 RUN nginx -T
 
-COPY ./gis/dist /usr/share/nginx/html/
+COPY ./gis/dist/browser /usr/share/nginx/html/
 
 RUN ls -la /usr/share/nginx/html/

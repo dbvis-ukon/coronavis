@@ -304,9 +304,9 @@ frontend-install-dependencies:
   image: node:22
   script:
     - cd ./Frontend/gis
-    - yarn config set registry https://nexus.dbvis.de/repository/npmjs/
-    # if node_modules does not exist use yarn to create it
-    - test -d ./node_modules || yarn --frozen-lockfile --non-interactive --no-progress
+    # - npm set registry https://nexus.dbvis.de/repository/npmjs/
+    # if node_modules does not exist use npm to create it
+    - test -d ./node_modules || npm ci
   artifacts:
     expire_in: 1 day
     paths:
@@ -315,7 +315,7 @@ frontend-install-dependencies:
     key:
       files:
         - ./Frontend/gis/package.json
-        - ./Frontend/gis/yarn.lock
+        - ./Frontend/gis/package-lock.json
     paths:
       - ./Frontend/gis/node_modules
     policy: pull-push
@@ -344,7 +344,7 @@ frontend-lint:
   image: node:22
   script:
     - cd ./Frontend/gis
-    - yarn lint
+    - npm run lint
   dependencies:
     - frontend-install-dependencies
   needs:
@@ -406,7 +406,7 @@ check-missing-translations:
   image: node:22
   script:
     - cd ./Frontend/gis
-    - yarn extract-i18n
+    - npm run extract-i18n
     - git status
     - git diff
     - |
@@ -444,8 +444,8 @@ check-missing-translations:
     - export SENTRY_DSN
     - sh -c ./replace-environment-urls.sh
     - cd ./gis
-    - yarn ng version
-    - yarn build
+    - npm run ng version
+    - npm run build
   artifacts:
     expire_in: 1 day
     paths:

@@ -1,8 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CronJob } from 'cron';
-import { Duration } from 'luxon';
+import { DateTime, Duration } from 'luxon';
 import { BehaviorSubject, firstValueFrom, forkJoin, interval, merge, Observable, of } from 'rxjs';
 import { distinct, distinctUntilChanged, filter, map, mergeMap, tap, toArray } from 'rxjs/operators';
 import { BedTooltipComponent } from '../bed-tooltip/bed-tooltip.component';
@@ -161,33 +160,39 @@ export class InfoboxComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const cron = new CronJob('0,30 5-21 * * *', () => {
+    // const cron: CronJob = new CronJob(
+    //   '0,30 5-21 * * *', 
+    //   () => {
 
-      if (this._mo.covidNumberCaseOptions.dataSource !== 'risklayer') {
-        return;
-      }
+    //     if (this._mo.covidNumberCaseOptions.dataSource !== 'risklayer') {
+    //       return;
+    //     }
 
-      setTimeout(() => {
-        this.cache.empty();
+    //     setTimeout(() => {
+    //       this.cache.empty();
 
-        this.emitMapOptions();
+    //       this.emitMapOptions();
 
-        this.updateStatistics();
+    //       this.updateStatistics();
 
-      }, 30000);
-    }, null, true, 'UTC');
+    //     }, 30000);
+    //   }, 
+    //   null, //onComplete
+    //   true, // start
+    //   'UTC' //timeZone
+    // );
 
     const initTime = getDateTime('now');
 
     interval(5000)
       .subscribe(() => {
-        let nextDate = getDateTime('now').plus({minutes: 30});
+        const nextDate: DateTime = getDateTime('now').plus({minutes: 30});
 
-        try {
-          nextDate = cron.nextDate();
-        } catch (e) {
-          console.warn('Could not determine next cron. Fall back to now + 30 min.');
-        }
+        // try {
+        //   nextDate = cron.nextDate() as DateTime;
+        // } catch (e) {
+        //   console.warn('Could not determine next cron. Fall back to now + 30 min.');
+        // }
 
         const diffNext = nextDate.diff(getDateTime('now')).milliseconds + 30000;
 
