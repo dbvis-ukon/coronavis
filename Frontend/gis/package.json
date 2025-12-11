@@ -31,7 +31,7 @@
     "@sentry/browser": "10.29.0",
     "@sentry/tracing": "7.120.4",
     "core-js": "3.44.0",
-    "cron": "4.3.3",
+    "cron": "4.4.0",
     "css-element-queries": "1.2.3",
     "d3": "7.9.0",
     "es5-shim": "4.6.7",
