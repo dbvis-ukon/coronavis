@@ -1,6 +1,6 @@
 pandas==2.3.2
 numpy==2.4.0
-urllib3==2.5.0
+urllib3==2.6.2
 openpyxl==3.1.5
 requests==2.32.5
 shapely==2.1.2
