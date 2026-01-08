@@ -326,7 +326,7 @@ frontend-install-dependencies:
 
 syntax-check-crawler-scripts:
   stage: test
-  image: python:3.13-slim
+  image: python:3.14-slim
   script:
     - source var.env
     - cd Crawler
