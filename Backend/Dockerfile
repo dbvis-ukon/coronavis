@@ -1,6 +1,6 @@
 # Declare which image to pull
 # We use a minimal system with Python 3.7 installed
-FROM python:3.13-slim
+FROM python:3.14-slim
 
 # Set working directory location
 ENV APP_DIR=/var/opt/gis
