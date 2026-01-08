@@ -110,7 +110,7 @@
       "eslint --fix"
     ]
   },
-  "packageManager": "npm@11.5.1",
+  "packageManager": "npm@11.7.0",
   "browser":{
     "child_process": false
   }  
