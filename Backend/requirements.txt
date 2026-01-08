@@ -11,7 +11,7 @@ SQLAlchemy==1.4.54
 geojson==3.2.0
 GeoAlchemy2==0.18.1
 gunicorn==23.0.0
-Werkzeug==3.1.4
+Werkzeug==3.1.5
 sentry-sdk==2.49.0
 psycopg2-binary==2.9.11
 python-dotenv==1.2.1
