@@ -9,7 +9,7 @@ geojson==3.2.0
 SQLAlchemy==1.4.54
 GeoAlchemy2==0.18.1
 psycopg2-binary==2.9.11
-sentry_sdk==2.48.0
+sentry_sdk==2.49.0
 python-dotenv==1.2.1
 zeep==4.3.2
 holidays==0.88
