@@ -602,7 +602,7 @@ test-backend:
 .deploy-script-new: &deploy-template-new
   stage: deploy
   image:
-    name: alpine/helm:4.0.4
+    name: alpine/helm:4.0.5
     entrypoint: ["sh", "-c", "apk add bash sed && /bin/bash"]
   script:
     - echo $KUBECONFIG
@@ -872,7 +872,7 @@ deploy-tiles-production-new:
 .remove-deployment-new:
   stage: deploy
   image:
-    name: alpine/helm:4.0.4
+    name: alpine/helm:4.0.5
     entrypoint: ["sh", "-c", "apk add bash && /bin/bash"]
   variables:
     GIT_STRATEGY: none
