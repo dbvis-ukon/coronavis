@@ -15,4 +15,4 @@ zeep==4.3.3
 holidays==0.103
 jsonschema==4.26.0
 types-psycopg2==2.9.21.20260724
-pytz==2026.2
+pytz==2026.3.post1
